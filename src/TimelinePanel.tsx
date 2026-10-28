@@ -29,7 +29,16 @@ export function TimelinePanel({plan,selected,onSelect,onInput,currentFacts,focus
  useEffect(()=>{if(!focusedProblem)return;setMachine('');setOrder('');setState('');setQuery('');const ts=model.tasks.filter(t=>focusedProblem.taskIds?.includes(t.id)&&validInterval(t.start,t.end));const a=interval?.start??(ts.length?Math.min(...ts.map(t=>t.start)):null),b=interval?.end??(ts.length?Math.max(...ts.map(t=>t.end)):null);if(validInterval(a,b)){setFrom(String(a-10));setTo(String(b+10));setAcceptedWindow({start:a-10,end:b+10});}},[focusedProblem]);
  const hidden=selected.filter(id=>model.tasks.some(t=>t.id===id)&&!filtered.some(t=>t.id===id));
  function reset(){setMachine('');setOrder('');setState('');setQuery('');setFrom('');setTo('');setAcceptedWindow(null);}
- function reveal(){reset();requestAnimationFrame(()=>detail.current?.scrollIntoView?.({block:'nearest'}));}
+ function reveal(){
+  reset();
+  requestAnimationFrame(()=>{
+   // The reveal button disappears after reset. Move focus to the restored task
+   // before that removed control leaves keyboard users at the document root.
+   const target=host.current?.querySelector<HTMLElement>('[data-selected="true"]')||detail.current;
+   target?.scrollIntoView?.({block:'nearest',inline:'center'});
+   target?.focus({preventScroll:true});
+  });
+ }
  useEffect(()=>{
   const node=host.current?.querySelector<HTMLElement>('[data-selected="true"]');
   // Problem activation scrolls to the saved task. Carry keyboard focus with it,
