@@ -1,0 +1,86 @@
+FR034 finite canonical acceptance handoff
+Delivery dlv_7d3bf96b-8f3a-450b-987e-aa94b2595ee4
+Product pin 4e11da6c768e6eeb026f38e1d247191cbe3c2cf8
+
+Read FR-034-acceptance-matrix.json for 10 requirement rows, full exact SHAs,
+9 Dev/Test report+archive hashes, historical commands, gaps and original backlog
+readiness. FR-034-acceptance-live.json is a timestamped read-only GitHub snapshot.
+Original requirement authority: canonical PVTI_lAHOFM9WU84BpE1czhEHhDI,
+FR034 v0.3 and AC04/15/17/31, docs/FR-034-baseline-excerpts.txt.
+This reconciliation changes documentation and adds a host orchestration script;
+product/old harness bytes stay at the stated pin. No new product suite was run.
+
+Current handoff gate
+- Issue20 UNKNOWN01: independent round1 PASS at21ff4dd, closed.
+- Issue21 KBD01/02/03: independent round1 PASS at02a5e307, closed.
+- Issue22 KBD04: Dev round1 PASS at4e11da6; independent Test already assigned
+  dlv_c42875ac-c478-4bcc-a9e3-b6bc5656966b, result pending at snapshot time.
+  Do not start another repair or round2 unless a new Test failure requires it.
+- Ancestor independent PASS is not an independent verdict on current bytes.
+  Existing boundary Dev result14/14 and441 tests do not replace Test acceptance.
+- Original card stays In progress; no publication, full Done or issue closure.
+
+Reproduce from an authorized checkout of this handoff commit
+1. Preserve existing authorized SDK archives; no substitutes. Install no packages
+   on the VM host. Require git/python3/bash; Docker/network only for --run.
+2. From repository root:
+     bash qa/fr034-integrated-validation.sh --check
+   This verifies110 product hashes against disk AND4e11da6 Git objects,
+   historical SHA ancestry, matrix references and stored boundary JSON outcome.
+   It permits only docs/new-entrypoint changes over4e11da6, checks no live app,
+   and does not fetch Test reports or treat their hashes as new test execution.
+3. For an optional supported-scope replay, create a new empty absolute output
+   directory OUTSIDE the read-only source checkout, then run from repo root:
+     FR034_SDK='<absolute existing authorized SDK directory>' \
+     FR034_OUT='<absolute new empty output directory>' \
+       bash qa/fr034-integrated-validation.sh --run
+   The script pins current product hashes, sets fixed keyboard mode and the
+   boundary manifest, then sequentially invokes existing keyboard-r1-docker.sh
+   and boundary-docker.sh. Source/SDK read-only; only evidence host mount writable;
+   no host npm/server, exposed port, app binding/restart or publication.
+   npm/CSV/build/441 TAP precede keyboard/UNKNOWN01/history API; boundary is a
+   separate execution. Docker/source setup failures remain failures.
+4. Inspect regression.log, boundary.log, regression/tests/*.log and raw JSON.
+   Require keyboard completed=true/all6 dedicated defect assertions true;
+   UNKNOWN01 all24 groups true; history4 groups/19 expected responses;
+   boundary completed=true/allPassed=true/14 assertion groups true. Script gates
+   these JSON results as well as process exits. Measurements/audits are separate.
+   Do not sum441/440/416 historical runs, screenshots or overlapping scenarios.
+   Run date, resolved container image digest, Node/browser versions and product
+   SHA must accompany new evidence. Historical image/version is in the matrix;
+   inherited node:22-slim runner tag may resolve differently in the future.
+5. Review existing boundary checklist docs/FR-034-BOUNDARY-ACCEPTANCE.txt, native
+   AX, focus rectangles/hit tests and screenshots. Keyboard KBD01 allows <=1px
+   body-edge rounding; lower outline clipping remains, not perfect containment.
+   KBD04 non-chart fallback is not newly validated. Native AX is distinct from
+   DOM-derived ARIA. No full screen-reader/browser/accessibility certification.
+6. Independent acceptance belongs to APS-Test. Its earlier exact reproduction
+   scripts are in the existing hashed Test archives; the matrix preserves the
+   original failure/fixture/wait-recovery history. New entrypoint is Dev replay,
+   not a replacement for independently authored Test probes or complete UAT.
+
+Design next original dependencies (readiness only; no dispatch here)
+FR035: FR014/024/026/032 supported source is already integrated. After pending
+KBD04 is triaged, original query/export breadth+metadata+permission/page parity
+is executable. All-rule verifier and DEC02 approval are not blanket prerequisites
+for implementing truthful supported query/export scope. Full identity UAT later.
+FR038: FR018/024 supported source is available; original run/error/cancel UX is
+another executable backlog candidate after defect priority, independent of full
+FR034 Done. FR027 depends on FR025/026/033/034: wait for KBD04 Test result and
+keep drag/lock/recheck validity restricted to established rule scope. FR036
+follows original FR013/035 contracts; actual external-system integration is
+explicitly outside required P0/P1 scope. No feature implemented or assigned here.
+
+Remaining acceptance is distinct
+Supported task/problem/input evidence, half-open machine/precedence geometry,
+unknown defenses, saved demand/capacity provenance, immutable saved40/current50
+and synthetic role/API guards have evidence. All-rule independent verification
+(original FR017/025, issue13), unresolved DEC02/resource semantics (issue3/16),
+real signed gateway/SSO/member roles/durability (issue10), actual import/UI and
+full UAT01/02/15 (issues2/4/6/10/12/14/15) remain. Full card acceptance requires
+those applicable original outcomes; they consume no defect repair round.
+Old issue bodies require chronological interpretation: later FR030/history API
+has real submit/confirm/archive route execution with synthetic actors, so blanket
+'flow still501' is stale. FR006/013 prototype merges are already documented in
+issue comments; main-app UI acceptance is still open. FR034 App browser linkage
+now has independent ancestor evidence; this does not close the broader issues.

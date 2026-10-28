@@ -1,0 +1,12 @@
+{
+  "mode": "provenance-and-document-check",
+  "product_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+  "manifest_files": 110,
+  "requirements": 10,
+  "historical_reports": 9,
+  "stored_boundary_allPassed": true,
+  "new_product_execution": false,
+  "issue_snapshot_at": "2026-10-28T23:14:14.887851+00:00",
+  "shell_syntax": "bash -n PASS",
+  "scope": "documentation/provenance only; --run not executed this delivery"
+}

@@ -1,0 +1,494 @@
+{
+  "schema_version": 1,
+  "delivery_id": "dlv_7d3bf96b-8f3a-450b-987e-aa94b2595ee4",
+  "as_of_utc": "2026-10-28T23:14:14.887851+00:00",
+  "canonical_card_id": "PVTI_lAHOFM9WU84BpE1czhEHhDI",
+  "product_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+  "product_commit_url": "https://github.com/huiliangtao666/APS/commit/4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+  "overall": "finite reconciliation complete; original FR034 remains In progress; no full acceptance",
+  "new_execution": "documentation/provenance validation only; no repeated product suite or new Test round",
+  "original_source": {
+    "path": "docs/FR-034-baseline-excerpts.txt",
+    "docx_sha256": "4eb29f7cfaf4fe30f76329775d32930b806da941282098b7de163591807bc7d4",
+    "ac": [
+      "AC-04",
+      "AC-15",
+      "AC-17",
+      "AC-31"
+    ]
+  },
+  "sha_lineage": {
+    "initial": "72276614c0de122a6c45688e4f7b3cd7fbb129ed",
+    "unknown": "21ff4dd72d9583ec591436b160a0b79931d81900",
+    "keyboard_evidence": "910fdbcf8fb6dd312cac4cf31c2b1a7a1950b75f",
+    "keyboard": "02a5e307f4b731ebb2b1882ed02e16a7e20c52e3",
+    "integrated": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8"
+  },
+  "live_snapshot": "FR-034-acceptance-live.json",
+  "evidence": {
+    "dev_initial": {
+      "workspace": "APS-Dev",
+      "path": "FR-034-DELIVERY-REPORT.txt",
+      "sha256": "3b15b5c98225d22d68fbdb8536113b18fdc074f30e015c10d0977b0fe9550e2f",
+      "executed_product_sha": "72276614c0de122a6c45688e4f7b3cd7fbb129ed",
+      "executed_commands": [
+        "bash apps/aps-fr034/docs/FR-034-validation-command.sh (historical APS-Dev workspace root)",
+        "FR034_REPO=<checkout> FR034_SDK=<sdk> FR034_OUT=<empty-dir> bash qa/fr034-docker-browser.sh"
+      ],
+      "result": "416 TAP/build/CSV; 6 browser groups PASS",
+      "url": "https://github.com/huiliangtao666/APS/blob/72276614c0de122a6c45688e4f7b3cd7fbb129ed/docs/FR-034-HANDOFF.txt",
+      "archive": {
+        "workspace": "APS-Dev",
+        "path": "FR-034-DEV-EVIDENCE.zip",
+        "sha256": "0c5a47aa79439bdf3a5dea9d1ab959d4b8d23a6e4d66a921e429d1dbf0bfd023"
+      }
+    },
+    "test_initial": {
+      "workspace": "APS-Test",
+      "path": "FR-034-INDEPENDENT-REGRESSION.txt",
+      "sha256": "8733f36e01c793dc79622cde3e137d94fa987e8ba5adec9afdb8673ee24c1097",
+      "executed_product_sha": "72276614c0de122a6c45688e4f7b3cd7fbb129ed",
+      "executed_commands": [
+        "bash temp/fr034-evidence/reproduce.sh (from APS-Test workspace root after extracting FR-034-INDEPENDENT-EVIDENCE.zip)"
+      ],
+      "result": "416 TAP/build/CSV; 6 supplied browser and 11 independent positive groups; UNKNOWN01 FAIL",
+      "url": "https://github.com/huiliangtao666/APS/issues/20",
+      "archive": {
+        "workspace": "APS-Test",
+        "path": "FR-034-INDEPENDENT-EVIDENCE.zip",
+        "sha256": "ec9fa18cad33ea6eb69c39051a75a445bac53bbefcfbe1318eae76b4746c439b"
+      }
+    },
+    "dev_unknown": {
+      "workspace": "APS-Dev",
+      "path": "FR-034-UNKNOWN01-REPAIR-REPORT.txt",
+      "sha256": "7e71f4c8969cb8c8bfff8125d309b93f27b0a2e643023bc1dcb51364259b2ac5",
+      "executed_product_sha": "21ff4dd72d9583ec591436b160a0b79931d81900",
+      "executed_commands": [
+        "bash apps/aps-fr032/docs/FR-034-UNKNOWN01-validation-command.sh (historical APS-Dev workspace root)",
+        "FR034_REPO=<checkout> FR034_SDK=<sdk> FR034_OUT=<empty-dir> bash qa/fr034-unknown-docker-browser.sh"
+      ],
+      "result": "440 TAP/build/CSV; 24 unknown browser groups; history4 PASS",
+      "url": "https://github.com/huiliangtao666/APS/blob/21ff4dd72d9583ec591436b160a0b79931d81900/docs/FR-034-UNKNOWN01-HANDOFF.txt",
+      "archive": {
+        "workspace": "APS-Dev",
+        "path": "FR-034-UNKNOWN01-DEV-EVIDENCE.zip",
+        "sha256": "23e412cb31c10c58a5f3b07af3ef83fb29d257b7ee724856422450012aa0b9ea"
+      }
+    },
+    "test_unknown": {
+      "workspace": "APS-Test",
+      "path": "FR-034-UNKNOWN01-ROUND1-INDEPENDENT-RETEST.txt",
+      "sha256": "a592eba97e3704b0e6b194fd36024a158808fc0dd30ffc512415f27e85b9a16e",
+      "executed_product_sha": "21ff4dd72d9583ec591436b160a0b79931d81900",
+      "executed_commands": [
+        "bash temp/fr034-unknown01-test/run.sh",
+        "bash temp/fr034-unknown01-test/run-recovery.sh",
+        "bash temp/fr034-unknown01-test/reproduce.sh (clean reproduction)"
+      ],
+      "result": "round1 PASS; 440 TAP; original15 model/8 API; expanded68 model+68 API and38 structured contradictions PASS",
+      "url": "https://github.com/huiliangtao666/APS/issues/20",
+      "archive": {
+        "workspace": "APS-Test",
+        "path": "FR-034-UNKNOWN01-ROUND1-INDEPENDENT-EVIDENCE.zip",
+        "sha256": "726a3277cacba553748e6229cc67900c95eff3446b45fa0fed263dc04480b98d"
+      }
+    },
+    "dev_keyboard_evidence": {
+      "workspace": "APS-Dev",
+      "path": "FR-034-KEYBOARD-NARROW-REPORT.txt",
+      "sha256": "2fcab790c008a59b299958aaa481e7bc08eb1ac05a24dd0fa0c7bbe2711e849f",
+      "executed_product_sha": "910fdbcf8fb6dd312cac4cf31c2b1a7a1950b75f",
+      "executed_commands": [
+        "FR034_REPO=<checkout> FR034_SDK=<sdk> FR034_OUT=<empty-dir> bash qa/fr034-keyboard-docker-browser.sh"
+      ],
+      "result": "16 functional groups/8 targeted/build PASS; KBD01/02/03 observations, not focus acceptance",
+      "url": "https://github.com/huiliangtao666/APS/blob/910fdbcf8fb6dd312cac4cf31c2b1a7a1950b75f/docs/FR-034-KEYBOARD-NARROW-ACCEPTANCE.txt",
+      "archive": {
+        "workspace": "APS-Dev",
+        "path": "FR-034-KEYBOARD-NARROW-EVIDENCE.zip",
+        "sha256": "ad5448cf8f7d50ef1d0e7608030ad695a0502a85da8774f92ec74cf07ce39f8d"
+      }
+    },
+    "test_keyboard_confirmation": {
+      "workspace": "APS-Test",
+      "path": "FR-034-KEYBOARD-INDEPENDENT-CONFIRMATION.txt",
+      "sha256": "48813d942880e01d9aaccf9b83d779c9beecc8554aafb6ff1d8ec5bb6408ee28",
+      "executed_product_sha": "910fdbcf8fb6dd312cac4cf31c2b1a7a1950b75f",
+      "executed_commands": [
+        "bash temp/fr034-keyboard-test/run.sh"
+      ],
+      "result": "8 independent matrix cases confirm KBD01/02/03; 16 functional/8 targeted/build/24 UNKNOWN01 PASS",
+      "url": "https://github.com/huiliangtao666/APS/issues/21",
+      "archive": {
+        "workspace": "APS-Test",
+        "path": "FR-034-KEYBOARD-INDEPENDENT-EVIDENCE.zip",
+        "sha256": "090bb34a762d1de626642203a4cb959d166c7a55a4b1c894d787882ba128fff4"
+      }
+    },
+    "dev_keyboard": {
+      "workspace": "APS-Dev",
+      "path": "FR-034-KEYBOARD-R1-REPORT.txt",
+      "sha256": "b5f32903fd6f145d0567bfd00fc2dfaf56a659eb6a3596256d3d8f447b3be34e",
+      "executed_product_sha": "02a5e307f4b731ebb2b1882ed02e16a7e20c52e3",
+      "executed_commands": [
+        "FR034_SOURCE_MANIFEST=qa/fr034-keyboard-r1-source-sha256.json FR034_KBD_MODE=fixed FR034_REPO=<checkout> FR034_SDK=<sdk> FR034_OUT=<empty-dir> bash qa/fr034-keyboard-r1-docker.sh"
+      ],
+      "result": "441 TAP/build/CSV; 6 KBD assertions,20 functional groups; UNKNOWN01 24/history4 PASS",
+      "url": "https://github.com/huiliangtao666/APS/blob/02a5e307f4b731ebb2b1882ed02e16a7e20c52e3/docs/FR-034-KEYBOARD-R1-HANDOFF.txt",
+      "archive": {
+        "workspace": "APS-Dev",
+        "path": "FR-034-KEYBOARD-R1-EVIDENCE.zip",
+        "sha256": "624b469374ee3807a0eb4d63542f6da00c04b80b483311fca4c8df49f328ef7d"
+      }
+    },
+    "test_keyboard": {
+      "workspace": "APS-Test",
+      "path": "FR-034-KEYBOARD-ROUND1-INDEPENDENT-RETEST.txt",
+      "sha256": "78e4a4724e66c7bec7ffdc548fdfe5f1d1fc5045e495fe1cb39bf056500cc434",
+      "executed_product_sha": "02a5e307f4b731ebb2b1882ed02e16a7e20c52e3",
+      "executed_commands": [
+        "bash temp/fr034-keyboard-r1-test/run.sh",
+        "bash temp/fr034-keyboard-r1-test/mouse-run.sh"
+      ],
+      "result": "KBD01/02/03 round1 PASS; 441 TAP/build/CSV; 8 matrix cases; legacy immediate-window harness failed in run1; settled-wait mouse follow-up12/12 PASS, unchanged product",
+      "url": "https://github.com/huiliangtao666/APS/issues/21#issuecomment-6483110200",
+      "archive": {
+        "workspace": "APS-Test",
+        "path": "FR-034-KEYBOARD-ROUND1-INDEPENDENT-EVIDENCE.zip",
+        "sha256": "8915ffe18ede026f4801722d64c503f39a89296c44dfbf818af70a71b8b8facf"
+      }
+    },
+    "dev_boundary": {
+      "workspace": "APS-Dev",
+      "path": "FR-034-BOUNDARY-REPORT.txt",
+      "sha256": "e989062cf235b2a556b7802261a4bc9527c45b758b9a1f7d38ee5be3a5d055ad",
+      "executed_product_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+      "executed_commands": [
+        "FR034_SOURCE_MANIFEST=qa/fr034-boundary-source-sha256.json FR034_REPO=<checkout> FR034_SDK=<sdk> FR034_OUT=<empty-dir> FR034_PRODUCT_SHA=4e11da6c768e6eeb026f38e1d247191cbe3c2cf8 bash qa/fr034-boundary-docker.sh",
+        "check-only payload from qa/fr034-keyboard-r1-checks.sh, stopped before browser commands; exact recorded execution qa/evidence/fr034-boundary/checks-execution.log and checks.zip"
+      ],
+      "result": "14 boundary assertion groups PASS +6 measurements;441 TAP/build/CSV PASS; KBD04 round1 Dev only",
+      "url": "https://github.com/huiliangtao666/APS/blob/4e11da6c768e6eeb026f38e1d247191cbe3c2cf8/docs/FR-034-BOUNDARY-ACCEPTANCE.txt",
+      "archive": {
+        "workspace": "APS-Dev",
+        "path": "FR-034-BOUNDARY-EVIDENCE.zip",
+        "sha256": "78bf711fb4c5fd6d9cc66c1672e821d47f8d069386fdd465cccbaeece6dceae0"
+      }
+    }
+  },
+  "requirements": [
+    {
+      "id": "task-input",
+      "original_ac": [
+        "AC-04",
+        "AC-17"
+      ],
+      "requirement": "Same saved task resolves original frozen input, predecessor/successor and resource demand without export",
+      "integrated_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+      "evidence_ids": [
+        "dev_initial",
+        "test_initial",
+        "test_keyboard"
+      ],
+      "status": "supported_independent_pass",
+      "remaining": [
+        "Full original workflow UAT and real signed identity not established; missing historical input stays unknown, never substituted"
+      ]
+    },
+    {
+      "id": "problem-geometry",
+      "original_ac": [
+        "AC-04",
+        "AC-17"
+      ],
+      "requirement": "Machine intersection [20,30); precedence priorEnd30,nextStart20,violation10; same saved task IDs in chart/table/details",
+      "integrated_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+      "evidence_ids": [
+        "test_initial",
+        "test_unknown",
+        "test_keyboard",
+        "dev_boundary"
+      ],
+      "status": "supported_independent_pass",
+      "remaining": [
+        "Negative overlapping tasks are explicitly corrupted QA saved output; not scheduler-generated failures",
+        "No all-rule feasibility conclusion"
+      ]
+    },
+    {
+      "id": "active-check-filter",
+      "original_ac": [
+        "AC-04",
+        "AC-15",
+        "AC-17"
+      ],
+      "requirement": "Explicit independent verification and problem-only/search filters, supported pass/problem/not-checked states",
+      "integrated_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+      "evidence_ids": [
+        "test_initial",
+        "test_unknown",
+        "test_keyboard",
+        "dev_boundary"
+      ],
+      "status": "supported_independent_pass",
+      "remaining": [
+        "Verifier only line/machine/precedence; all enabled resource/material/calendar rules not independently rechecked"
+      ]
+    },
+    {
+      "id": "resource-material-evidence",
+      "original_ac": [
+        "AC-15",
+        "AC-17"
+      ],
+      "requirement": "Saved tooling/personnel/space declarations, demand/configured capacity/reservations, material allocation/shortage/feed/reason visible in UI",
+      "integrated_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+      "evidence_ids": [
+        "test_initial",
+        "test_keyboard",
+        "dev_boundary"
+      ],
+      "status": "supported_independent_pass",
+      "remaining": [
+        "Configured total capacity is not remaining availability",
+        "Complete per-rule resource/lot/business acceptance and DEC02/dynamic-release semantics remain separate"
+      ]
+    },
+    {
+      "id": "unknown-evidence",
+      "original_ac": [
+        "AC-04",
+        "AC-15",
+        "AC-17"
+      ],
+      "requirement": "Absent/null/blank/invalid times remain unknown; structured findings agree with saved endpoints; numeric0 remains valid",
+      "integrated_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+      "evidence_ids": [
+        "test_initial",
+        "dev_unknown",
+        "test_unknown",
+        "test_keyboard"
+      ],
+      "status": "repaired_independent_pass",
+      "remaining": [
+        "Issue20 initial failures retained as historical FAIL, superseded by independent repair PASS; no new endpoint defect"
+      ]
+    },
+    {
+      "id": "rule-configuration",
+      "original_ac": [
+        "AC-15"
+      ],
+      "requirement": "Rule sources, enabled scope, missing mandatory data and unsupported rules remain truthful",
+      "integrated_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+      "evidence_ids": [
+        "dev_initial",
+        "test_unknown",
+        "test_keyboard"
+      ],
+      "status": "partial_supported_evidence",
+      "remaining": [
+        "Full AC15 cross-rule enable/disable/parameter/missing-input matrix is unaccepted; original FR017/025 and issue13 remain; limited verification must not certify all business constraints"
+      ]
+    },
+    {
+      "id": "chinese-workflow",
+      "original_ac": [
+        "AC-31"
+      ],
+      "requirement": "Understandable Chinese states/reasons, task/problem navigation and source identity",
+      "integrated_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+      "evidence_ids": [
+        "dev_keyboard_evidence",
+        "test_keyboard_confirmation",
+        "test_keyboard",
+        "dev_boundary"
+      ],
+      "status": "partial_supported_evidence",
+      "remaining": [
+        "Import/calculate/check/submit full original Chinese workflow UAT not completed; issue4/10/12 and R1 issue2 remain relevant"
+      ]
+    },
+    {
+      "id": "keyboard-01-03",
+      "original_ac": [
+        "AC-17",
+        "AC-31"
+      ],
+      "requirement": "Useful visible focus after linkage/check, busy duplicate suppression without stealing Tab, named native saved-plan combobox",
+      "integrated_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+      "evidence_ids": [
+        "test_keyboard_confirmation",
+        "dev_keyboard",
+        "test_keyboard"
+      ],
+      "status": "repaired_independent_pass",
+      "remaining": [
+        "PASS applies to 02a5e307 ancestor, not independent acceptance of 4e11da6",
+        "Up to0.5px task-body bottom clipping and lower focus-outline clipping; repeated same selection may keep visible finding focus; no complete WCAG/screen-reader matrix"
+      ]
+    },
+    {
+      "id": "keyboard-04",
+      "original_ac": [
+        "AC-17",
+        "AC-31"
+      ],
+      "requirement": "Reveal filtered selected tasks without losing useful visible keyboard focus",
+      "integrated_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+      "evidence_ids": [
+        "dev_boundary"
+      ],
+      "status": "dev_pass_independent_pending",
+      "remaining": [
+        "Issue22 Test round1 result pending at integrated SHA",
+        "Non-chart/unplanned fallback not newly exercised; no new source repair or round2 without new Test failure"
+      ]
+    },
+    {
+      "id": "provenance-history",
+      "original_ac": [
+        "AC-04",
+        "AC-17",
+        "AC-31"
+      ],
+      "requirement": "Run/input/hash provenance, saved40/current50 separation, immutable saved/confirmed objects and existing role/stale guards",
+      "integrated_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+      "evidence_ids": [
+        "test_initial",
+        "test_unknown",
+        "test_keyboard",
+        "dev_boundary"
+      ],
+      "status": "supported_independent_pass",
+      "remaining": [
+        "Boundary execution did not rerun UNKNOWN01/history API; earlier executions retain their exact pins",
+        "Synthetic fixed actors/runtime alias do not validate real gateway/SSO/bootstrap/production durability"
+      ]
+    }
+  ],
+  "prerequisites": [
+    {
+      "id": "FR-014",
+      "available_sha": "db090453482261c386a6492e2106323e2100c20c",
+      "ancestor_verified": true,
+      "meaning": "supported source available, full card acceptance not implied"
+    },
+    {
+      "id": "FR-024",
+      "available_sha": "2375487b3d630190434fd4be4e3313de18d8df7a",
+      "ancestor_verified": true,
+      "meaning": "supported source available, full card acceptance not implied"
+    },
+    {
+      "id": "FR-033",
+      "available_sha": "9783e9de6e500f895dbe6084bcfda2690dcbad7d",
+      "ancestor_verified": true,
+      "meaning": "supported source available, full card acceptance not implied"
+    },
+    {
+      "id": "FR-026",
+      "available_sha": "e93fadce55d3f1deef0a602d3a01ebfe561a01b4",
+      "ancestor_verified": true,
+      "meaning": "supported source available, full card acceptance not implied"
+    },
+    {
+      "id": "FR-032",
+      "available_sha": "28ed8f8e422173f9b83d8a974e26ea9af6f09c8e",
+      "ancestor_verified": true,
+      "meaning": "supported source available, full card acceptance not implied"
+    },
+    {
+      "id": "FR-025",
+      "available_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+      "paths": [
+        "src/lib/independent-verification.mjs"
+      ],
+      "meaning": "Supported verifier integrated and independently exercised; all-rule extension remains original FR025 gap"
+    }
+  ],
+  "scope": {
+    "supported": "actual App/scheduler/Express API and saved JSON, Chromium synthetic fixed planner/runtime alias; line/machine/precedence independent checks",
+    "all_rule": "not accepted/implemented as full independent recheck; FR017/025 issue13; DEC02/issue3 and full resource/material semantics issue16",
+    "real_identity": "not executed: signed gateway/SSO, bootstrap/membership/role provisioning and durable deployed runtime; issue10",
+    "full_uat": "not executed: complete original ACs, UAT01/02/15 and full five-stage workflow; issues2/4/6/10/12/14/15"
+  },
+  "next_original_backlog": [
+    {
+      "id": "FR-035",
+      "original_dependencies": [
+        "FR-014",
+        "FR-024",
+        "FR-026",
+        "FR-032"
+      ],
+      "readiness": "supported source dependencies integrated; next executable original feature candidate AFTER issue22 independent result is triaged; no need for complete global all-rule/DEC02/identity acceptance to implement supported export scope",
+      "remaining": "query/export breadth, source/unit/date/simulation metadata, permission/current-range and page/export parity acceptance; real identity UAT later"
+    },
+    {
+      "id": "FR-038",
+      "original_dependencies": [
+        "FR-018",
+        "FR-024"
+      ],
+      "readiness": "supported source available; executable original backlog candidate after defect priority gate; independent of FR034 full Done",
+      "remaining": "run record/cancel/failure UX and reproducible provenance; use original card only"
+    },
+    {
+      "id": "FR-027",
+      "original_dependencies": [
+        "FR-025",
+        "FR-026",
+        "FR-033",
+        "FR-034"
+      ],
+      "readiness": "conditional supported-scope candidate after issue22 independent PASS; lower priority R6.1, do not infer full rule safety",
+      "remaining": "drag/lock preview and recheck original AC19/21, safe handling started/completed tasks; all-rule validity cannot be asserted by current limited verifier"
+    },
+    {
+      "id": "FR-036",
+      "original_dependencies": [
+        "data classification",
+        "FR-013",
+        "FR-035"
+      ],
+      "readiness": "depends on original FR035 interface/export contract; not next before it",
+      "remaining": "documentation/simulated interface scope; real ERP/WMS connection is explicitly not required"
+    }
+  ],
+  "stale_claims_resolved": [
+    {
+      "claim": "issue10 supervisor flow still501",
+      "current": "historical body; later FR030 and Test history API demonstrate synthetic planner-submit/supervisor-confirm/archive and409/403 guards; real identity/full workflow acceptance still absent"
+    },
+    {
+      "claim": "issue3/4 prototype sources not merged",
+      "current": "comments establish main merges58ad9401351eadbd62f60c3ab42a2149df19fd22 and f83cebeb2bc30e7cc0dce495aa17625908412312; actual main-app UI acceptance remains open"
+    },
+    {
+      "claim": "issue15 browser linkage missing",
+      "current": "FR034 independently exercises supported App linkage at exact ancestor SHAs; full AC/UAT/realidentity still open"
+    },
+    {
+      "claim": "all predecessor cards must be Done before any supported downstream work",
+      "current": "source availability permits finite supported downstream implementation; full product acceptance and unresolved semantics remain explicit gates on broader claims"
+    }
+  ],
+  "handoff_gate": {
+    "next_owner": "APS-Design reviews reconciliation; APS-Test already assigned issue22 round1",
+    "independent_pending_delivery": "dlv_c42875ac-c478-4bcc-a9e3-b6bc5656966b",
+    "no_actions": [
+      "no dispatch/card/feature",
+      "no new repair/round2 absent new Test failure",
+      "no publication/main merge/full Done/issue closure"
+    ]
+  },
+  "reproduction": {
+    "entrypoint": "qa/fr034-integrated-validation.sh",
+    "default": "--check only: product provenance and matrix references, not product tests",
+    "optional_run": "--run: existing 441 TAP/build/CSV, keyboard/UNKNOWN01/history, then boundary; all npm/server/browser work in disposable containers",
+    "historical_counts": "Never sum runs or count measurements as passes; exact historical commands remain in referenced reports/archives",
+    "runtime": "Historical Node22.23.2/Playwright1.56.1/Chromium141.0.7390.37 ARM64; existing runners use mutable node:22-slim tag, so record resolved image/version for each replay; source pin reproducible, container image not guaranteed byte-identical"
+  }
+}
