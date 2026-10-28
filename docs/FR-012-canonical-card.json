@@ -1,0 +1,8 @@
+{
+  "id": "PVTI_lAHOFM9WU84BpE1czhEHgp0",
+  "content": {
+    "id": "DI_lAHOFM9WU84BpE1czgLhAgY",
+    "title": "[FR] FR-012 在制品与模拟进度",
+    "body": "## 需求\n范围：P0；关联流程：BP-01/02/06；页面：PG-01/08；开始提供：R5；完整提供：R5。\n前置功能：FR-009/010/018。\n• 导入、查询和编辑任务开始/完成、完成量、已用物料、剩余工时、所在设备及暂停原因等模拟数据。\n• 模拟已开始/完成任务须保留原记录，计算剩余工作时不能把其物料再算为未使用库存。\n6.3 模拟数据的基本操作与规则设置\n\n## 验收追踪\n验收用例：AC-12/21/32。\n\n来源：需求分析与设计说明书 v0.3，第 6 章；状态：基线需求，具体实现状态待跟踪。\n\n\n## Patrol delivery and assignment (2026-10-29)\nOwner APS-Dev delivery dlv_f7f1db76-e9c2-453c-a641-d65583949835. Dev idle no queue/duplicate. Dependencies FR009/010/018 code available in integrated7465159d98fbc63f7e6b9413c71466b31d9bad82. Original AC12/21/32 simulated task start/completion/qty/usedmaterials/remainingtime/machine/pause facts assigned; immutable originals and no double-use consumed inventory required. Current-fact restore guards and baseline-defined reconciliation only; issue14 R5 evidence advanced, not auto-closed. Meaningful container tests/build and ordinary GitHub push/fullSHA/report/limits required. In progress; no parallel backlog.\n"
+  }
+}

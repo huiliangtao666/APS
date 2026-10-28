@@ -1,5 +1,8 @@
 export type TableDef = { key:string; label:string; file:string; fields:string[] };
 export const defs: TableDef[] = [
+  { key: 'executionFacts', label: '模拟任务执行事实（累计）', file: '25_模拟任务执行事实.csv', fields: ['事实编号','订单编号','工序编号','状态','开始分钟','完成分钟','观测分钟','工序完成数量','数量单位','剩余工时分钟','当前设备','暂停原因'] },
+  { key: 'executionMaterials', label: '模拟累计耗料（账面扣前口径）', file: '26_模拟累计耗料.csv', fields: ['记录编号','事实编号','批次编号','物料编号','累计已用数量','单位'] },
+
   { key: 'products', label: '产品与包装规格', file: '07_产品与包装规格.csv', fields: ['产品编号','产品名称','单支净重kg','每袋支数','总收率','模拟交付等待分钟'] },
   { key: 'materials', label: '物料主数据', file: '08_物料主数据.csv', fields: ['物料编号','物料名称','单位','类别'] },
   { key: 'supplies', label: '预计到料', file: '20_预计到料.csv', fields: ['供给编号','物料编号','批次编号','预计数量','预计到达时间','预计可用时间','质量状态','有效期'] },

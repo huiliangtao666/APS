@@ -8,7 +8,7 @@ test('FR026 compare retains duplicate material keys and ignores resource array o
 });
 test('FR026 missing evidence remains unknown and restore always requires actual versioned progress',()=>{
  const r=comparePlans({id:'old',tasks:[]},{},{id:'new',tasks:[]},{});for(const key of ['materials','resources','orders','unplanned'])assert.equal(r[key].known,false);assert.equal(r.orderOutcome,'unknown');
- const guard=restoreBlockers({data:{inventory:[]},revision:9},plan);assert.equal(guard.currentRevision,9);assert.equal(guard.executionFactsVersion,null);assert.equal(guard.confirmationReference,null);assert.ok(guard.blockers.some(b=>b.code==='STALE_STOCK_RESTORE_FORBIDDEN'));
+ const guard=restoreBlockers({data:{inventory:[]},revision:9},plan);assert.equal(guard.currentRevision,9);assert.match(guard.executionFactsVersion,/^[a-f0-9]{64}$/);assert.equal(guard.confirmationReference,null);assert.ok(guard.blockers.some(b=>b.code==='STALE_STOCK_RESTORE_FORBIDDEN'));
 });
 
 test('FR028 condition fields use business keys, ignore row order and preserve grouped duplicates',async()=>{

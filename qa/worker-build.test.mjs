@@ -58,3 +58,10 @@ test('FR023 built production Worker keeps completion distinct from conditional d
   finally{await worker.terminate();}
  }
 });
+
+import {executionFixture} from './execution-fixture.mjs';
+test('FR012 built production Worker preserves simulated partial facts and exact cumulative material conservation',async()=>{
+ const data=executionFixture(seed),frozen=freezeRunInput(data,{},'2026-10-29T00:00:00Z');const worker=new Worker(new URL('../dist/calculation-worker.mjs',import.meta.url),{workerData:{...frozen,revision:1,calculatedAt:'2026-10-29T00:00:00Z'}});
+ try{const p=await new Promise((resolve,reject)=>{worker.on('message',m=>{if(m.kind==='result')resolve(m.plan);if(m.kind==='failure')reject(Error(m.code));});worker.on('error',reject);});assert.equal(p.tasks[0].start,30);assert.equal(p.tasks[0].duration,20);assert.equal(p.execution.remaining[0].remainingQuantity,60);assert.equal(p.materialDemands[0].quantity,60);assert.equal(p.materialDemands[0].allocations[0].remaining,10);assert.equal(p.execution.facts[0]['开始分钟'],'0');}
+ finally{await worker.terminate();}
+});

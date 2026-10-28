@@ -1,0 +1,2 @@
+# Retain the exact user-provided UAT15 source bytes, including its CRLF.
+docs/FR-012-original-UAT15-progress.csv -text whitespace=cr-at-eol

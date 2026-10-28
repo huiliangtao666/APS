@@ -9,3 +9,6 @@ export function createMaterialAllocator(data:Record<string,Row[]>,policy:Record<
 export function orderHasRemaining(order:Row):boolean;
 
 export const quantityMath:any;
+
+export function executionInventory(data:Record<string,Row[]>):Row[];
+export function remainingExecutionDemand(data:Record<string,Row[]>,order:Row,operation:string,minute:number):ReturnType<typeof calculateMaterialDemand>;

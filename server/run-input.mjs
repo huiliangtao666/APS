@@ -1,3 +1,4 @@
+import {executionState,executionSummary} from '../src/lib/execution-facts.mjs';
 import {deliveryActive} from '../src/lib/delivery-policy.mjs';
 import {jointFlags} from '../src/lib/joint-resources.mjs';
 import {activeBatchRule} from '../src/lib/production-batches.mjs';
@@ -24,12 +25,15 @@ export function freezeRunInput(data, selection = {}, calculatedAt = new Date().t
   if(!Array.isArray(enabledRuleIds)||enabledRuleIds.some(id=>typeof id!=='string'||!data.rules.some(r=>r['规则编号']===id))||new Set(enabledRuleIds).size!==enabledRuleIds.length||ruleCatalog.some(c=>c.required&&!enabledRuleIds.includes(c.id)))throw Error('invalid_rule_selection');
   const executionData=structuredClone(data);
   executionData.orders=selected.map(o=>({...o}));
+  if((data.executionFacts||[]).length)executionData.executionContext=structuredClone(data);
   executionData.dependencies=executionData.dependencies.filter(r=>orderIds.includes(r['订单编号']));
   executionData.deliveryConditions=(executionData.deliveryConditions||[]).filter(r=>orderIds.includes(r['订单编号']));
   executionData.resourceClaims=(executionData.resourceClaims||[]).filter(r=>orderIds.includes(r['订单编号']));
   executionData.supplyUses=executionData.supplyUses.filter(r=>orderIds.includes(r['订单编号']));
   executionData.rules=executionData.rules.map(r=>({...r,'是否启用':enabledRuleIds.includes(r['规则编号'])?'是':'否'}));
+  if(executionData.executionContext)executionData.executionContext.rules=structuredClone(executionData.rules);
   checkScope=schedulingScope(checkScope.mode,executionData.rules.some(r=>r['规则编号']==='MATERIAL'&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(calculatedAt))),activeBatchRule(executionData,calculatedAt),jointFlags(executionData,calculatedAt),deliveryActive(executionData,calculatedAt));
-  const conditions={mode:checkScope.mode,checkScope,ruleEvaluationAt:calculatedAt,orderIds:selected.map(o=>o['订单编号']),lineId:selected[0]['产线编号'],startMinute,endMinute,priority,enabledRuleIds:[...enabledRuleIds],timeOrigin:'2026-11-02T08:00:00+08:00',interval:'[start,end)',horizonPolicy:'完整工序须在结束范围内；未排不代表全局无解'};
+  if((data.executionFacts||[]).length){checkScope.checked.push('模拟累计执行事实、原始保护区间与剩余工时/耗料（支持口径）');checkScope.unchecked=checkScope.unchecked.map(x=>x==='执行事实与主管确认'?'真实执行/质量确认、FR031事件恢复/转机/冲销':x);}
+  const conditions={executionFactsVersion:inputHash(executionState(data)),executionSummary:executionSummary(executionData.executionContext||executionData,calculatedAt),mode:checkScope.mode,checkScope,ruleEvaluationAt:calculatedAt,orderIds:selected.map(o=>o['订单编号']),lineId:selected[0]['产线编号'],startMinute,endMinute,priority,enabledRuleIds:[...enabledRuleIds],timeOrigin:'2026-11-02T08:00:00+08:00',interval:'[start,end)',horizonPolicy:'完整工序须在结束范围内；未排不代表全局无解'};
   return {conditions,executionData,snapshotHash:inputHash({conditions,executionData})};
 }

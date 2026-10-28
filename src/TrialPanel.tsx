@@ -25,7 +25,7 @@ export function TrialPanel(p:Props){
  {trial.retainedSnapshots?.map(x=><p key={x.id}>已保留修订 {x.trialRevision} · <button onClick={()=>p.onResult(x.planId)}>{x.planId}</button></p>)}
  {inputChanges?.trialId===trial.id&&<details open><summary>当前模拟输入差异（重算前可核对）</summary><pre style={{maxHeight:300,overflow:'auto'}}>{JSON.stringify(inputChanges,null,2)}</pre></details>}
  <label>试算输入类别<select aria-label="试算输入类别" value={table} onChange={e=>setTable(e.target.value)}>{defs.map(d=><option key={d.key} value={d.key}>{d.label}</option>)}</select></label>
- <DataEditor key={trial.id} def={def} rows={trial.data[table]||[]} revision={trial.revision} canWrite={p.canWrite&&trial.status==='active'} busy={disabled} reason={p.reason} onSave={async(tables,revision,operation)=>{await p.api('/trials/'+trial.id+'/inputs',{tables,revision,operation});await p.refresh();setComparison(null);setInputChanges(null);}}/>
+ <DataEditor key={trial.id} def={def} rows={trial.data[table]||[]} revision={trial.revision} canWrite={p.canWrite&&trial.status==='active'&&!['executionFacts','executionMaterials'].includes(table)} busy={disabled} reason={p.reason} onSave={async(tables,revision,operation)=>{await p.api('/trials/'+trial.id+'/inputs',{tables,revision,operation});await p.refresh();setComparison(null);setInputChanges(null);}}/>
  <RunPanel key={'run-'+trial.id} data={trial.data} initialSelection={trial.selection} runs={p.runs.filter(r=>(r as Run&{trialId?:string}).trialId===trial.id)} canWrite={p.canWrite&&trial.status==='active'&&!!p.reason.trim()} busy={disabled} onStart={selection=>p.onRun(trial,selection)} onCancel={p.onCancel} onInputs={id=>p.api('/runs/'+id+'/inputs')} onResult={p.onResult}/>
  </article>}
  </section>;

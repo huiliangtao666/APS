@@ -1,3 +1,6 @@
+import {executionState,executionTransition,executionAdmission,executionSummary,factTables,executionTrialIssues} from '../src/lib/execution-facts.mjs';
+import {executionInventory} from '../src/lib/material-allocation.mjs';
+import {queryInventoryAvailability} from '../src/lib/inventory.mjs';
 import {comparePlans,restoreBlockers,conditionChanges} from '../src/lib/plan-comparison.mjs';
 import {resultState,resultCsv} from '../src/lib/result-assessment.mjs';
 import { Worker } from 'node:worker_threads';
@@ -19,7 +22,7 @@ import { independentlyVerifyPlan } from '../src/lib/independent-verification.mjs
 export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, runTimeoutMs = 30000, workerFactory = workerData => new Worker(new URL('./calculation-worker.mjs',import.meta.url),{workerData}) }) {
   fs.mkdirSync(dataDir, { recursive: true });
   const file=path.join(dataDir,'business.json');
-  const read=()=>{try{return JSON.parse(fs.readFileSync(file,'utf8'));}catch(e){if(e.code!=='ENOENT')throw e;let legacy=[];try{legacy=JSON.parse(fs.readFileSync(path.join(dataDir,'plans.json'),'utf8'));}catch(old){if(old.code!=='ENOENT')throw old;}return {data:structuredClone(seed),revision:0,plans:legacy.map(p=>({...p,status:'legacy'})),records:[]};}};
+  const read=()=>{try{const s=JSON.parse(fs.readFileSync(file,'utf8'));s.data.executionFacts??=[];s.data.executionMaterials??=[];return s;}catch(e){if(e.code!=='ENOENT')throw e;let legacy=[];try{legacy=JSON.parse(fs.readFileSync(path.join(dataDir,'plans.json'),'utf8'));}catch(old){if(old.code!=='ENOENT')throw old;}return {data:structuredClone(seed),revision:0,plans:legacy.map(p=>({...p,status:'legacy'})),records:[]};}};
   const write=s=>{const tmp=`${file}.${randomUUID()}.tmp`;try{fs.writeFileSync(tmp,JSON.stringify(s),{mode:0o600,flag:'wx'});fs.renameSync(tmp,file);}finally{if(fs.existsSync(tmp))fs.unlinkSync(tmp);}};
   const activeWorkers=new Map();
   const terminal=new Set(['completed','partial','cancelled','timed_out','failed']);
@@ -55,6 +58,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   const inputs=(s,p)=>{const v=s.inputVersions?.[p.inputVersionId];return v&&v.data&&versionId(v.data)===p.inputVersionId?v:null;};
   router.get('/plans',permission('read'),(_req,res)=>{const s=read();res.json(s.plans.map(p=>({...p,inputSnapshot:inputs(s,p)?.data??null})));});
   router.get('/plans/:id/inputs',permission('read'),(req,res)=>{const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});const v=inputs(s,p);if(!v)return res.status(409).json({error:'historical_inputs_unavailable'});res.json(v);});
+  router.get('/execution',permission('read'),(_req,res)=>{const s=read();const history=s.records.filter(r=>!r.trialId&&factTables.includes(r.target));res.json({...executionSummary(s.data),version:inputHash(executionState(s.data)),revision:s.revision,history,inventory:queryInventoryAvailability(executionInventory(s.data),{rules:s.data.rules}).map(row=>({...row,'扣耗后余额':row['账面数量'],'扣耗前账面数量':s.data.inventory.find(b=>b['批次编号']===row['批次编号'])?.['账面数量'],'说明':'模拟账面减累计耗料，再减独立占用；不是真实库存'}))});});
   function saveInputs(req,res,tables,trialId){
     const {revision,operation}=req.body;
     const s=read(),target=trialId?s.trials?.find(t=>t.id===trialId):s;
@@ -70,6 +74,8 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
       if(rows.some(r=>Object.keys(r).some(f=>!def.fields.includes(f))))return res.status(400).json({error:'unknown_fields'});
       proposed[key]=rows.map(r=>Object.fromEntries(def.fields.map(f=>[f,r[f]??''])));
     }
+    if(trialId&&factTables.some(k=>tables[k]!==undefined))return res.status(409).json({error:'trial_execution_edit_forbidden'});
+    const transition=(trialId?executionTrialIssues(s.data,proposed):executionTransition(target.data,proposed));if(transition.length)return res.status(409).json({error:'execution_reconciliation_required',issues:transition});
     const newlyEnabled=(proposed.rules||[]).some(r=>r['是否启用']==='是'&&!(target.data.rules||[]).some(old=>old['规则编号']===r['规则编号']&&old['是否启用']==='是'));
     const issues=[...validateInputs(defs,proposed),...(newlyEnabled?assessRules(proposed,new Date().toISOString(),true).issues:[])];if(issues.length)return res.status(400).json({error:'invalid_input',issues});
     if(operation==='restore')return res.status(409).json({error:'restore_blocked',...restoreBlockers(s,null)});
@@ -116,6 +122,8 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(!plan||plan.trialId!==trial.id||plan.id!==trial.latestPlanId||plan.revision!==trial.revision||plan.copiedResult||plan.inputVersionId!==versionId(trial.data))return res.status(409).json({error:'recalculated_current_trial_required'});
     if(!source||!historical(s,source)||!historical(s,plan))return res.status(409).json({error:'historical_inputs_unavailable'});
     const comparison=comparePlans(source,inputs(s,source).data,plan,inputs(s,plan).data);
+    if(inputHash(executionState(trial.data))!==inputHash(executionState(s.data)))return res.status(409).json({error:'current_execution_changed'});
+    const protectedIssues=executionTrialIssues(s.data,trial.data);if(protectedIssues.length)return res.status(409).json({error:'execution_reconciliation_required',issues:protectedIssues});
     const retained={id:randomUUID(),planId:plan.id,runId:plan.runId,inputVersionId:plan.inputVersionId,snapshotHash:plan.snapshotHash,trialRevision:trial.revision,at:new Date().toISOString(),actor:subjectKey(req.praetorActor),comparison};
     trial.retainedSnapshots??=[];trial.retainedSnapshots.push(retained);
     record(s,req,'trial_retained',trial.id,{retainedId:retained.id,planId:plan.id,runId:plan.runId,inputVersionId:plan.inputVersionId,snapshotHash:plan.snapshotHash,sourcePlanId:source.id});write(s);
@@ -142,7 +150,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   router.post('/plans/:id/restore',permission('edit'),(req,res)=>{
     const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});
     if(req.body.revision!==s.revision)return res.status(409).json({error:'stale_input'});
-    // Current progress/consumption and confirmation contracts do not exist yet.
+    // Facts are versioned; historical replacement still requires FR031 and a real confirmation contract.
     // Even an unchanged input hash cannot prove that no execution has occurred.
     res.status(409).json({error:'restore_blocked',...restoreBlockers(s,p),historicalInputsAvailable:!!historical(s,p)});
   });
@@ -153,9 +161,11 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(trial?.status==='discarded'){res.status(409).json({error:'trial_discarded'});return;}
     const target=trial||s;
     if(req.body.revision!==target.revision){res.status(409).json({error:'stale_input'});return;}
+    if(trial&&inputHash(executionState(trial.data))!==inputHash(executionState(s.data))){res.status(409).json({error:'current_execution_changed',message:'试算执行事实已落后当前版本；保留旧记录，请从当前事实新算再复制'});return;}
+    if(trial){const reconciliation=executionTrialIssues(s.data,trial.data);if(reconciliation.length){res.status(409).json({error:'execution_reconciliation_required',issues:reconciliation});return;}}
     const calculatedAt=new Date().toISOString();let frozen;
     try{frozen=freezeRunInput(target.data,req.body.selection??trial?.selection,calculatedAt);}catch(e){res.status(400).json({error:e.message});return;}
-    const issues=[...validateInputs(defs,target.data),...assessRules(frozen.executionData,calculatedAt,true,frozen.conditions.mode).issues];
+    const issues=[...validateInputs(defs,target.data),...executionAdmission(frozen.executionData,frozen.conditions),...assessRules(frozen.executionData,calculatedAt,true,frozen.conditions.mode).issues];
     if(issues.length){res.status(422).json({error:'rule_configuration_blocked',issues});return;}
     const run={id:randomUUID(),status:'queued',phase:'等待计算线程',createdAt:calculatedAt,revision:target.revision,trialId:trial?.id||null,sourcePlanId:trial?.sourcePlanId||null,inputVersionId:preserve(s,target),...frozen,actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim(),timeoutMs:runTimeoutMs};
     s.runs??=[];s.runs.unshift(run);return {s,run};

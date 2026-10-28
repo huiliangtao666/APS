@@ -68,6 +68,7 @@ export function calculateMaterialDemand(data,order,operation,minute,remainingKg)
 }
 export function createMaterialAllocator(data,policy) {
  const used=new Map();let generation=0;
+ for(const c of data.executionMaterials||[]){const key="inventory:"+c["批次编号"];used.set(key,add(used.get(key)||zero,q(c["累计已用数量"])));}
  const resolved=resolveExpectedSupply(data.supplies||[],data.supplyDelays||[]);
  const collisions=resolved.filter(s=>(data.inventory||[]).some(b=>b['批次编号']===s['批次编号']));
  const futureMinutes=[...(data.inventory||[]).map(b=>b['预计可用时间']),...resolved.map(s=>s['生效可用时间'])].filter(Boolean).map(t=>(Date.parse(t)-Date.parse(PLAN_TIME_ORIGIN))/60000).filter(Number.isFinite).sort((a,b)=>a-b);
@@ -106,3 +107,14 @@ export function createMaterialAllocator(data,policy) {
 
 // Shared exact arithmetic for FR021; values remain rational until display.
 export const quantityMath={q,add,sub,mul,div,cmp,min,num,exact,fromExact,ceil,zero,one};
+
+// Decimal inputs subtract exactly; book stock remains the original pre-consumption basis.
+export function executionInventory(data){
+ const decimal=a=>{let n=a.n,d=a.d,s='';const whole=n/d;n%=d;if(n){s='.';while(n){n*=10n;s+=String(n/d);n%=d;}}return String(whole)+s;};
+ return (data.inventory||[]).map(lot=>{const consumed=(data.executionMaterials||[]).filter(c=>c['批次编号']===lot['批次编号']).reduce((v,c)=>add(v,q(c['累计已用数量'])),zero);return {...lot,'账面数量':decimal(sub(q(lot['账面数量']),consumed))};});
+}
+export function remainingExecutionDemand(data,order,operation,minute){
+ const fact=(data.executionFacts||[]).find(f=>f['订单编号']===order['订单编号']&&f['工序编号']===operation);
+ const demands=calculateMaterialDemand(data,order,operation,fact?Number(fact['开始分钟']):minute);
+ return demands.map(d=>{const consumed=(data.executionMaterials||[]).filter(c=>c['事实编号']===fact?.['事实编号']&&c['物料编号']===d.materialId).reduce((v,c)=>add(v,q(c['累计已用数量'])),zero);const amount=sub(fromExact(d.exactQuantity),consumed);if(cmp(amount,zero)<0)throw Error('耗料超定额，须核对');return {...d,feedMinute:minute,feedAt:feedTime(minute),quantity:num(amount),exactQuantity:exact(amount),executionConsumed:num(consumed),exactExecutionConsumed:exact(consumed),formula:d.formula+'；减同任务已记录累计耗料（不再扣减工序产出，避免双计）'};});
+}

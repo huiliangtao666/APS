@@ -690,7 +690,7 @@ test('FR026 restore current-state blockers preserve stock, completed quantities,
  const file=path.join(dir,'business.json'),s=JSON.parse(fs.readFileSync(file));
  s.plans[0].status='confirmed';s.data.inventory[0]['账面数量']='1';s.data.inventory[0]['已占用数量']='0';s.data.orders[0]['已完成合格数量']='10';s.executionFacts=[{id:'F1',taskId:p.tasks[0].id,startedAt:'2026-11-02T00:00:00Z',consumed:'5'}];s.revision++;
  fs.writeFileSync(file,JSON.stringify(s));const before=fs.readFileSync(file,'utf8');
- const r=await call('/plans/'+p.id+'/restore',{revision:1,currentProgressVersion:'invented',confirmed:true});assert.equal(r.status,409);assert.equal(r.body.error,'restore_blocked');assert.equal(r.body.currentRevision,1);assert.equal(r.body.currentProgressVersion,null);assert.equal(r.body.sourceInputVersionId,p.inputVersionId);assert.equal(r.body.blockers.length,3);
+ const r=await call('/plans/'+p.id+'/restore',{revision:1,currentProgressVersion:'invented',confirmed:true});assert.equal(r.status,409);assert.equal(r.body.error,'restore_blocked');assert.equal(r.body.currentRevision,1);assert.match(r.body.currentProgressVersion,/^[a-f0-9]{64}$/);assert.equal(r.body.sourceInputVersionId,p.inputVersionId);assert.equal(r.body.blockers.length,3);
  assert.equal((await call('/inputs',{revision:1,tables:(await call('/plans/'+p.id+'/inputs')).body.data,operation:'restore'})).status,409);
  assert.equal((await call('/tables/inventory',{revision:1,rows:s.data.inventory,operation:'restore'})).status,409);
  assert.equal((await call('/plans/'+p.id+'/restore',{revision:0})).body.error,'stale_input');assert.equal(fs.readFileSync(file,'utf8'),before);
@@ -769,4 +769,85 @@ test('FR028 API actual improved calendar bottleneck stays comparable across sepa
  const diff=(await call('/plans/'+original.id+'/compare/'+next.id)).body;assert.equal(diff.impact.orders[0].outcome,'earlier-conditional');assert.equal(diff.impact.orders[0].deliverableDeltaMinutes,-120);assert.ok(diff.impact.affectedTaskIds.length>0);
  const retained=await call('/trials/'+trial.id+'/retain',{revision:1,planId:next.id});assert.equal(retained.status,201);assert.deepEqual(retained.body.comparison,diff);
  assert.deepEqual((await call('/state')).body.data.downtime,d.downtime);assert.equal((await call('/plans/'+original.id+'/inputs')).body.data.downtime[0]['结束分钟'],'120');
+});
+
+import {executionFixture} from '../qa/execution-fixture.mjs';
+async function putExecution(call,state='部分完成'){
+ const s=(await call('/state')).body,d=executionFixture(s.data,state);
+ const r=await call('/inputs',{tables:d,revision:s.revision,operation:'import'});assert.equal(r.status,200,JSON.stringify(r.body));return r.body;
+}
+test('FR012 API atomic import, duplicate reimport idempotent, trusted audit and immutable original versions',async t=>{
+ const {call,dir}=await fixture(t);let s=await putExecution(call);assert.equal(s.revision,1);
+ const first=(await call('/execution')).body;assert.equal(first.simulation,true);assert.equal(first.remaining[0].remainingQuantity,60);assert.equal(first.history.length,2);assert.equal(first.inventory[0]['当前可用数量'],70);
+ let r=await call('/inputs',{tables:{executionFacts:s.data.executionFacts,executionMaterials:s.data.executionMaterials},revision:1,operation:'import'});assert.equal(r.status,200);assert.equal(r.body.unchanged,true);assert.equal(r.body.revision,1);assert.equal((await call('/execution')).body.history.length,2);
+ const original=JSON.parse(fs.readFileSync(path.join(dir,'business.json')));const oldVersion=Object.values(original.inputVersions).find(v=>v.data.executionFacts?.[0]);assert.ok(oldVersion);
+ const rows=structuredClone(s.data.executionFacts);Object.assign(rows[0],{'工序完成数量':'50','观测分钟':'35','剩余工时分钟':'15'});
+ r=await call('/tables/executionFacts',{rows,revision:1,operation:'edit',actor:'forged',at:'1900',role:'supervisor'});assert.equal(r.status,200);
+ const history=(await call('/execution',undefined,'query')).body;assert.equal(history.history.length,3);const e=history.history.at(-1);assert.equal(e.before[0]['工序完成数量'],'40');assert.equal(e.after[0]['工序完成数量'],'50');assert.equal(e.actor,'test#planner');assert.equal(e.requestId,'trusted-request');assert.equal(e.reason,'test reason');assert.ok(e.fromVersion&&e.toVersion);
+ const store=JSON.parse(fs.readFileSync(path.join(dir,'business.json')));assert.deepEqual(store.inputVersions[oldVersion.id],oldVersion);assert.equal(history.facts[0]['开始分钟'],'0');assert.notEqual(first.version,history.version);
+});
+test('FR012 API rollback, deletion, stale and invalid cumulative imports do not mutate facts, audit or version',async t=>{
+ const {call,dir}=await fixture(t);const s=await putExecution(call),before=fs.readFileSync(path.join(dir,'business.json'),'utf8');
+ const rollback=structuredClone(s.data.executionFacts);rollback[0]['工序完成数量']='39';
+ for(const body of [{rows:rollback,revision:1},{rows:[],revision:1},{rows:s.data.executionFacts,revision:0}])assert.equal((await call('/tables/executionFacts',body)).status,409);
+ const bad=structuredClone(s.data.executionFacts);bad[0]['工序完成数量']='101';assert.equal((await call('/tables/executionFacts',{rows:bad,revision:1})).status,400);
+ const consumption=structuredClone(s.data.executionMaterials);consumption[0]['单位']='g';assert.equal((await call('/tables/executionMaterials',{rows:consumption,revision:1})).status,409);
+ assert.equal(fs.readFileSync(path.join(dir,'business.json'),'utf8'),before);
+});
+test('FR012 API sync repeated runs keep facts and materials, snapshots and plan exports retain original execution',async t=>{
+ const {call}=await fixture(t);const s=await putExecution(call);const facts=(await call('/execution')).body;
+ const p=(await call('/calculate',{revision:s.revision})).body,q=(await call('/calculate',{revision:s.revision})).body;
+ assert.deepEqual(p.materialDemands,q.materialDemands);assert.deepEqual(p.execution,q.execution);assert.equal(p.tasks[0].duration,20);assert.equal(p.status,'draft');
+ const input=(await call('/plans/'+p.id+'/inputs')).body;assert.equal(input.data.executionMaterials[0]['累计已用数量'],'40');
+ const csv=await call('/export',{planId:p.id});assert.equal(csv.status,200);assert.match(csv.body,/模拟执行事实版本/);assert.match(csv.body,/累计已用数量/);
+ const now=(await call('/execution')).body;assert.equal(now.version,facts.version);assert.equal(now.history.length,2);assert.equal((await call('/state')).body.data.inventory[0]['账面数量'],'120');
+});
+test('FR012 API actual Worker freeze survives intervening forward correction and retains old/new execution snapshots',async t=>{
+ const {call}=await fixture(t);await putExecution(call);
+ const r=await call('/runs',{revision:1,selection:{orderIds:['A']}});assert.equal(r.status,202,JSON.stringify(r.body));
+ const rows=(await call('/state')).body.data.executionFacts;Object.assign(rows[0],{'工序完成数量':'50','剩余工时分钟':'15','观测分钟':'35'});assert.equal((await call('/tables/executionFacts',{rows,revision:1})).status,200);
+ let run;for(let n=0;n<100;n++){run=(await call('/runs/'+r.body.id)).body;if(['completed','partial','failed'].includes(run.status))break;await new Promise(r=>setTimeout(r,10));}
+ assert.equal(run.status,'completed',JSON.stringify(run));const plans=(await call('/plans')).body,p=plans.find(p=>p.id===run.planId);assert.equal(p.tasks[0].duration,20);assert.equal(p.execution.facts[0]['工序完成数量'],'40');
+ assert.equal((await call('/state')).body.data.executionFacts[0]['工序完成数量'],'50');const newer=await call('/calculate',{revision:2});assert.equal(newer.status,201);assert.equal(newer.body.tasks[0].duration,15);
+ const snapshot=(await call('/runs/'+run.id+'/inputs')).body;assert.equal(snapshot.originalInput.executionFacts[0]['工序完成数量'],'40');assert.notEqual(snapshot.conditions.executionFactsVersion,newer.body.conditions.executionFactsVersion);
+});
+test('FR012 API trial copy/edit/retain/discard never rewrites current facts; stale facts block recalculation and retention',async t=>{
+ const {call}=await fixture(t);await putExecution(call);const p=(await call('/calculate',{revision:1})).body;
+ const trial=(await call('/plans/'+p.id+'/copy',{revision:1})).body;assert.ok(trial.id);
+ assert.equal((await call('/trials/'+trial.id+'/inputs',{tables:{executionFacts:trial.data.executionFacts},revision:0})).status,409);
+ const q=await call('/calculate',{trialId:trial.id,revision:0});assert.equal(q.status,201,JSON.stringify(q.body));assert.equal((await call('/trials/'+trial.id+'/retain',{revision:0,planId:q.body.id})).status,201);
+ const rows=structuredClone(trial.data.executionFacts);rows[0]['剩余工时分钟']='15';assert.equal((await call('/tables/executionFacts',{rows,revision:1})).status,200);
+ assert.equal((await call('/calculate',{trialId:trial.id,revision:0})).body.error,'current_execution_changed');assert.equal((await call('/trials/'+trial.id+'/retain',{revision:0,planId:q.body.id})).body.error,'current_execution_changed');
+ const before=(await call('/state')).body;const restore=await call('/plans/'+p.id+'/restore',{revision:2});assert.equal(restore.status,409);assert.ok(restore.body.executionFactsVersion);assert.ok(restore.body.blockers.some(b=>b.code==='EXECUTION_RECONCILIATION_REQUIRED'));
+ assert.equal((await call('/trials/'+trial.id+'/discard',{revision:0})).status,200);assert.deepEqual((await call('/state')).body,before);assert.equal((await call('/plans/'+p.id+'/inputs')).body.data.executionFacts[0]['剩余工时分钟'],'20');
+});
+test('FR012 API old plan trial cannot reintroduce missing execution facts; restore/import/history retain current originals',async t=>{
+ const {call}=await fixture(t);const p=(await call('/calculate',{revision:0})).body;await putExecution(call);
+ const trial=(await call('/plans/'+p.id+'/copy',{revision:1})).body;assert.ok(trial.id);assert.equal((await call('/runs',{trialId:trial.id,revision:0})).body.error,'current_execution_changed');
+ const before=(await call('/state')).body;assert.equal((await call('/inputs',{tables:{executionFacts:[]},revision:1,operation:'restore'})).status,409);assert.deepEqual((await call('/state')).body,before);assert.equal((await call('/plans/'+p.id+'/inputs')).body.data.executionFacts.length,0);
+});
+test('FR012 API role, removal, CSRF and reason protections cover facts, history and query/export',async t=>{
+ const {call,store}=await fixture(t);const s=await putExecution(call);
+ assert.equal((await call('/execution',undefined,'query')).status,200);assert.equal((await call('/tables/executionFacts',{rows:s.data.executionFacts,revision:1},'query')).status,403);
+ assert.equal((await call('/tables/executionFacts',{rows:s.data.executionFacts,revision:1},'planner',{'sec-fetch-site':'cross-site'})).status,403);
+ assert.equal((await call('/tables/executionFacts',{rows:s.data.executionFacts,revision:1,reason:''})).status,400);
+ assert.equal((await call('/export',{query:{table:'executionFacts',revision:1,filters:{order:'A'}}},'query')).status,403);
+ assert.equal((await call('/auth/members/export',{key:'test#query',canExport:true},'admin')).status,200);
+ const csv=await call('/export',{query:{table:'executionFacts',revision:1,filters:{order:'A'}}},'query');assert.equal(csv.status,200);assert.match(csv.body,/F-A-MIX/);
+ store.remove('test#query');assert.equal((await call('/execution',undefined,'query')).status,403);
+});
+test('FR012 API pause and completed fact have truthful remaining-work outcomes and immutable completion',async t=>{
+ for(const state of ['暂停','已完成']){const {call}=await fixture(t);const s=await putExecution(call,state);const p=await call('/calculate',{revision:1});assert.equal(p.status,201,JSON.stringify(p.body));
+  if(state==='暂停'){assert.equal(p.body.tasks.length,0);assert.equal(p.body.findings.some(f=>f.code.includes('EXECUTION_PAUSED')),true);}else{assert.equal(p.body.tasks[0].start,0);assert.equal(p.body.tasks[0].end,30);const rows=structuredClone(s.data.executionFacts);rows[0]['完成分钟']='31';assert.equal((await call('/tables/executionFacts',{rows,revision:1})).status,409);}
+ }
+});
+test('FR012 raw original UAT15 aggregate CSV fields fail closed without task/material/lot reconciliation',async t=>{
+ const {call,dir}=await fixture(t);const before=(await call('/state')).body;
+ const r=await call('/tables/executionFacts',{revision:0,operation:'import',rows:[{'任务编号':'A-MIX','状态':'已完成','实际开始分钟':'0','实际结束分钟':'30','已用投入kg':'250','说明':'不可改写的模拟事实'}]});assert.equal(r.status,400);assert.equal(r.body.error,'unknown_fields');assert.deepEqual((await call('/state')).body,before);assert.equal((await call('/operations')).body.length,0);assert.equal(fs.existsSync(path.join(dir,'business.json')),false);
+});
+test('FR012 consumed-lot quality update flags execution while old trial cannot restore usable stock or clear current risk',async t=>{
+ const {call}=await fixture(t);const s=await putExecution(call);const p=(await call('/calculate',{revision:1})).body,trial=(await call('/plans/'+p.id+'/copy',{revision:1})).body;const q=await call('/calculate',{trialId:trial.id,revision:0});assert.equal(q.status,201);
+ const rows=structuredClone(s.data.inventory);rows[0]['质量状态']='冻结';assert.equal((await call('/tables/inventory',{rows,revision:1})).status,200);
+ const before=(await call('/state')).body;const blocked=await call('/calculate',{trialId:trial.id,revision:0});assert.equal(blocked.status,409);assert.equal(blocked.body.issues[0].code,'TRIAL_CONSUMED_STOCK_PROTECTED');assert.equal((await call('/trials/'+trial.id+'/retain',{revision:0,planId:q.body.id})).status,409);
+ const next=await call('/calculate',{revision:2});assert.equal(next.status,201);assert.equal(next.body.tasks.length,0);assert.ok(next.body.execution.risks.length);assert.deepEqual((await call('/state')).body,before);assert.equal((await call('/plans/'+p.id+'/inputs')).body.data.inventory[0]['质量状态'],'合格');
 });
