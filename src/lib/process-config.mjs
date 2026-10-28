@@ -1,12 +1,13 @@
 const resourceTypes = new Set(['设备', '模具', '工具', '人员技能', '空间', '投料', '物料']);
 
 /** FR-004 checks route/time/dependency configuration without assigning resource semantics. */
-export function validateProcessConfig({ products = [], orders = [], routes = [], times = [], dependencies = [], machines = [], materials = [] }) {
+export function validateProcessConfig({ products = [], orders = [], routes = [], times = [], dependencies = [], machines = [], materials = [], personnelGroups = [] }) {
   const findings = [];
   const productIds = new Set(products.map(row => (row['产品编号'] || '').trim()).filter(Boolean));
   const orderIds = new Set(orders.map(row => (row['订单编号'] || '').trim()).filter(Boolean));
   const machineIds = new Set(machines.map(row => (row['设备编号'] || '').trim()).filter(Boolean));
   const materialIds = new Set(materials.map(row => (row['物料编号'] || '').trim()).filter(Boolean));
+  const personnelGroupIds = new Set(personnelGroups.map(row => (row['人员组编号'] || '').trim()).filter(Boolean));
   const routeByProduct = new Map();
   routes.forEach((row, index) => {
     const product = (row['产品编号'] || '').trim();
@@ -72,6 +73,18 @@ export function validateProcessConfig({ products = [], orders = [], routes = [],
     if (!id) findings.push({ code:'INPUT / DEPENDENCY_ID', message:`${prefix}缺少资源编号` });
     if (type === '设备' && id && !machineIds.has(id)) findings.push({ code:'INPUT / DEPENDENCY_REFERENCE', message:`${prefix}引用未配置的设备 ${id}` });
     if (type === '物料' && id && !materialIds.has(id)) findings.push({ code:'INPUT / DEPENDENCY_REFERENCE', message:`${prefix}引用未配置的物料 ${id}` });
+    if (type === '人员技能' && id && personnelGroupIds.size && !personnelGroupIds.has(id)) findings.push({ code:'INPUT / DEPENDENCY_REFERENCE', message:`${prefix}引用未配置的人员组 ${id}` });
+    if (type === '人员技能') {
+      const required = Number(row['需求数量'] || 0), startOffset = Number(row['人员开始偏移'] || 0), endOffset = Number(row['人员结束偏移'] || 0);
+      if ((String(row['需求数量'] || '').trim() !== '' || personnelGroupIds.has(id)) && (!Number.isInteger(required) || required < 1)) findings.push({ code:'INPUT / PERSONNEL_COUNT', message:`${prefix}所需人数必须是正整数` });
+      if (![startOffset, endOffset].every(Number.isFinite) || startOffset < 0 || endOffset < 0) findings.push({ code:'INPUT / PERSONNEL_PHASE', message:`${prefix}人员参与阶段偏移必须是非负分钟数` });
+      if (Number.isFinite(startOffset) && Number.isFinite(endOffset) && startOffset + endOffset > 0) {
+        const orderRow = orders.find(item => (item['订单编号'] || '').trim() === order);
+        const product = (orderRow?.['产品编号'] || '').trim();
+        const duration = Number(times.find(t => t['产品编号'] === product && t['工序编号'] === operation)?.['固定分钟']);
+        if (Number.isFinite(duration) && startOffset + endOffset >= duration) findings.push({ code:'INPUT / PERSONNEL_PHASE', message:`${prefix}人员参与偏移必须短于工序工时` });
+      }
+    }
   });
   return findings;
 }
