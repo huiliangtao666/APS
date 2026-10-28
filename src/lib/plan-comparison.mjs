@@ -6,6 +6,29 @@ function changes(a,b,key){
  const left=index(a),right=index(b);
  return [...new Set([...left.keys(),...right.keys()])].sort().flatMap(id=>stable(left.get(id))===stable(right.get(id))?[]:[{id,before:clone(left.get(id)??null),after:clone(right.get(id)??null)}]);
 }
+// Match records by business identity; duplicate identities remain grouped, never overwritten.
+const identities={orders:['订单编号'],calendars:['日历编号','起始分钟','结束分钟'],tools:['工装编码'],personnelGroups:['人员组编号'],inventory:['批次编号'],supplies:['供给编号'],supplyDelays:['记录编号'],supplyUses:['引用编号'],rules:['规则编号'],products:['产品编号'],materials:['物料编号'],routes:['产品编号','工序编号'],times:['产品编号','工序编号'],machines:['设备编号'],bom:['版本编号','产品编号','投料工序编号','物料编号','用量类型'],dependencies:['订单编号','工序编号','资源类型','资源编号','人员参与阶段'],resourceClaims:['声明编号'],deliveryConditions:['订单编号'],batchResources:['资源编号'],downtime:['设备编号','起始分钟','结束分钟']};
+export function conditionChanges(a,b){
+ return Object.keys({...a,...b}).sort().flatMap(table=>changes(a[table]||[],b[table]||[],r=>JSON.stringify((identities[table]||Object.keys(r).sort()).map(k=>r[k]??null))).map(change=>{
+  const single=change.before?.length===1&&change.after?.length===1;
+  return {table,recordKey:change.id,kind:!change.before?'added':!change.after?'removed':single?'edited':'group-changed',before:change.before,after:change.after,fields:single?Object.keys({...change.before[0],...change.after[0]}).sort().filter(field=>stable(change.before[0][field])!==stable(change.after[0][field])).map(field=>({field,before:change.before[0][field]??null,after:change.after[0][field]??null})):null};
+ }));
+}
+function impact(a,ad,b,bd,scopeComparable,evidence){
+ const left=a.deliveryAssessment?.orders,right=b.deliveryAssessment?.orders;
+ const changed=conditionChanges(ad,bd);
+ const demandChanged=changed.some(c=>['orders','products','routes','bom','times','deliveryConditions'].includes(c.table));
+ const settings=c=>{const {ruleEvaluationAt,checkScope,...selection}=c||{};return selection;};
+ const settingsComparable=stable(settings(a.conditions))===stable(settings(b.conditions));
+ const orders=[...new Set([...(left||[]),...(right||[])].map(o=>o.orderId))].sort().map(orderId=>{
+  const before=left?.find(o=>o.orderId===orderId)??null,after=right?.find(o=>o.orderId===orderId)??null;
+  const finite=x=>typeof x==='number'&&Number.isFinite(x);
+  const delta=before&&after&&finite(before.expectedDeliverableMinute)&&finite(after.expectedDeliverableMinute)?after.expectedDeliverableMinute-before.expectedDeliverableMinute:null;
+  const comparable=!!before&&!!after&&scopeComparable&&settingsComparable&&!demandChanged&&before.remainingQuantity===after.remainingQuantity&&before.unit===after.unit&&before.dueMinute===after.dueMinute;
+  return {orderId,before:clone(before),after:clone(after),deliverableDeltaMinutes:delta,delayDeltaMinutes:before&&after&&finite(before.delayMinutes)&&finite(after.delayMinutes)?after.delayMinutes-before.delayMinutes:null,outcome:a.copiedResult||b.copiedResult?'copied-not-recalculated':!comparable?'not-comparable':delta===null?'unknown':delta<0?'earlier-conditional':delta>0?'later-conditional':'unchanged-no-delivery-improvement',promised:false};
+ });
+ return {changedConditions:changed,settings:{before:settings(a.conditions),after:settings(b.conditions),comparable:settingsComparable,ruleEvaluationAt:{before:a.conditions?.ruleEvaluationAt??null,after:b.conditions?.ruleEvaluationAt??null}},demandChanged,orders,affectedTaskIds:[...new Set([...(evidence.tasks.changes||[]).map(c=>c.id),...(evidence.unplanned.changes||[]).map(c=>c.id),...['resources','materials'].flatMap(key=>(evidence[key].changes||[]).flatMap(c=>[...(c.before||[]),...(c.after||[])].flatMap(row=>[...(row.taskIds||[]),...(row.taskId?[row.taskId]:[])])))])].sort(),copiedResults:!!a.copiedResult||!!b.copiedResult,claim:'仅保存结果的差异；不推断单项条件因果、全局最早或真实交付',noAutomaticImprovement:true};
+}
 function projection(p,data){
  return {
   tasks:(p.tasks||[]).map(t=>({id:t.id,orderId:t.orderId,operation:t.operation,productionBatchId:t.productionBatchId??null,start:t.start,end:t.end,duration:t.duration,machine:t.machine,predecessor:t.predecessor??null})),
@@ -27,7 +50,7 @@ export function comparePlans(a,ad,b,bd){
  }
  out.inputs=Object.keys({...ad,...bd}).sort().flatMap(table=>stable(ad[table])===stable(bd[table])?[]:[{table,before:clone(ad[table]??null),after:clone(bd[table]??null)}]);
  const orderKnown=out.orders.known,orderChanged=orderKnown&&out.orders.changes.length>0;
- return {version:'FR026-v1',left:{planId:a.id,runId:a.runId,inputVersionId:a.inputVersionId,snapshotHash:a.snapshotHash,trialId:a.trialId??null},right:{planId:b.id,runId:b.runId,inputVersionId:b.inputVersionId,snapshotHash:b.snapshotHash,trialId:b.trialId??null},conditions:{before:left.conditions,after:right.conditions,changed:stable(left.conditions)!==stable(right.conditions)},scope:{before:left.scope,after:right.scope,comparable:stable(left.scope)===stable(right.scope)},...out,orderOutcome:!orderKnown?'unknown':orderChanged?'changed-review-each-order':'unchanged-no-delivery-improvement',limits:['仅比较保存的模拟结果；不承诺全局最优或真实交付','未检查的物料分配保持未知，空数组不代表已检查','未排数量按任务/工序展示；不跨工序相加','交期变化可能来自需求或检查范围变化，须查看输入与条件差异','副本初始结果来自原运行；重算后有独立运行编号']};
+ return {version:'FR028-v1',impact:impact(a,ad,b,bd,stable(left.scope)===stable(right.scope),out),left:{kind:a.trialId?'trial':'saved-original',copiedResult:!!a.copiedResult,planId:a.id,runId:a.runId,inputVersionId:a.inputVersionId,snapshotHash:a.snapshotHash,trialId:a.trialId??null},right:{kind:b.trialId?'trial':'saved-original',copiedResult:!!b.copiedResult,planId:b.id,runId:b.runId,inputVersionId:b.inputVersionId,snapshotHash:b.snapshotHash,trialId:b.trialId??null},conditions:{before:left.conditions,after:right.conditions,changed:stable(left.conditions)!==stable(right.conditions)},scope:{before:left.scope,after:right.scope,comparable:stable(left.scope)===stable(right.scope)},...out,orderOutcome:!orderKnown?'unknown':orderChanged?'changed-review-each-order':'unchanged-no-delivery-improvement',limits:['仅比较保存的模拟结果；不承诺全局最优或真实交付','未检查的物料分配保持未知，空数组不代表已检查','未排数量按任务/工序展示；不跨工序相加','交期变化可能来自需求或检查范围变化，须查看输入与条件差异','副本初始结果来自原运行；重算后有独立运行编号']};
 }
 export function restoreBlockers(state,plan){
  return {currentRevision:state.revision,currentInputVersionId:inputHash(state.data),sourcePlanId:plan?.id??null,sourceRunId:plan?.runId??null,sourceInputVersionId:plan?.inputVersionId??null,currentProgressVersion:null,executionFactsVersion:null,confirmationReference:null,blockers:[{code:'CURRENT_PROGRESS_RECHECK_UNAVAILABLE',message:'R5当前任务开始/完成、剩余工时及耗料事实与版本接口尚未提供，不能安全复查恢复。'},{code:'CONFIRMATION_CONTRACT_UNAVAILABLE',message:'真实确认计划及执行保护接口尚未提供，不能替换确认计划。'},{code:'STALE_STOCK_RESTORE_FORBIDDEN',message:'禁止整表恢复历史库存、占用与进度；当前数据及执行事实必须保留。'}]};

@@ -735,3 +735,38 @@ test('FR026 two real parallel trial Workers freeze distinct inputs while later t
  for(let i=0;i<2;i++){const frozen=(await call('/runs/'+done[i].id+'/inputs')).body;assert.equal(frozen.originalInput.orders[0]['合格需求'],i===0?'241':'242');const plan=(await call('/plans')).body.find(p=>p.id===done[i].planId);assert.equal(plan.trialId,i===0?one.id:two.id);assert.equal(plan.revision,1);assert.equal(plan.runId,done[i].id);}
  assert.equal((await call('/trials')).body.find(t=>t.id===one.id).data.orders[0]['合格需求'],'243');assert.equal((await call('/state')).body.data.orders[0]['合格需求'],'444');assert.equal((await call('/plans/'+p.id+'/inputs')).body.data.orders[0]['合格需求'],'240');
 });
+
+test('FR028 retain freezes exact comparison, does not adopt inputs, survives edits/discard and is audited',async t=>{
+ const {call}=await fixture(t);const state=(await call('/state')).body,p=(await call('/calculate',{revision:0})).body,original=(await call('/plans')).body.find(x=>x.id===p.id),trial=(await call('/plans/'+p.id+'/copy',{})).body;
+ assert.equal((await call('/trials/'+trial.id+'/retain',{revision:0,planId:trial.basePlanId})).body.error,'recalculated_current_trial_required');
+ const orders=structuredClone(trial.data.orders);orders[0]['要求可交付分钟']='5';await call('/trials/'+trial.id+'/inputs',{revision:0,tables:{orders}});
+ const changes=(await call('/trials/'+trial.id+'/changes',undefined,'query')).body;assert.equal(changes.sourceSnapshotHash,p.snapshotHash);assert.equal(changes.revision,1);assert.ok(changes.changedConditions[0].fields.some(f=>f.field==='要求可交付分钟'&&f.after==='5'));
+ const next=(await call('/calculate',{trialId:trial.id,revision:1})).body;
+ const retained=await call('/trials/'+trial.id+'/retain',{revision:1,planId:next.id,actor:'fake',status:'confirmed'});assert.equal(retained.status,201);assert.equal(retained.body.actor,'test#planner');assert.equal(retained.body.snapshotHash,next.snapshotHash);assert.equal(retained.body.comparison.left.planId,p.id);assert.equal(retained.body.comparison.right.planId,next.id);
+ orders[0]['要求可交付分钟']='6';await call('/trials/'+trial.id+'/inputs',{revision:1,tables:{orders}});
+ assert.equal((await call('/trials/'+trial.id+'/retain',{revision:2,planId:next.id})).status,409);
+ assert.equal((await call('/trials/'+trial.id+'/discard',{revision:2})).status,200);
+ assert.deepEqual((await call('/trials')).body[0].retainedSnapshots,[retained.body]);assert.deepEqual((await call('/state')).body,state);assert.deepEqual((await call('/plans')).body.find(x=>x.id===p.id),original);
+ assert.equal((await call('/trials/'+trial.id+'/retain',{revision:3,planId:next.id})).body.error,'trial_discarded');
+ const audit=(await call('/operations')).body.find(x=>x.action==='trial_retained');assert.equal(audit.actor,'test#planner');assert.equal(audit.requestId,'trusted-request');assert.equal(audit.inputVersionId,next.inputVersionId);
+});
+test('FR028 retain requires server role, reason, CSRF, own current result and immutable source',async t=>{
+ const {call,dir}=await fixture(t),p=(await call('/calculate',{revision:0})).body,a=(await call('/plans/'+p.id+'/copy',{})).body,b=(await call('/plans/'+p.id+'/copy',{})).body;
+ const result=(await call('/calculate',{trialId:a.id,revision:0})).body,url='/trials/'+a.id+'/retain',body={revision:0,planId:result.id};
+ assert.equal((await call(url,body,'query')).status,403);assert.equal((await call(url,{...body,reason:''})).status,400);assert.equal((await call(url,body,'planner',{'sec-fetch-site':'cross-site'})).status,403);assert.equal((await call(url,{...body,revision:1})).status,409);
+ assert.equal((await call('/trials/'+b.id+'/retain',body)).status,409);assert.equal((await call('/trials/missing/changes')).status,404);assert.equal((await call('/trials/missing/retain',body)).status,404);
+ const file=path.join(dir,'business.json'),s=JSON.parse(fs.readFileSync(file));s.inputVersions[p.inputVersionId].data.orders[0]['合格需求']='forged';fs.writeFileSync(file,JSON.stringify(s));
+ assert.equal((await call(url,body)).status,409);assert.equal((await call('/trials/'+a.id+'/changes')).status,409);
+});
+
+
+test('FR028 API actual improved calendar bottleneck stays comparable across separately timed runs and retained source',async t=>{
+ const {deliveryFixture}=await import('../qa/delivery-fixture.mjs');const {call}=await fixture(t),state=(await call('/state')).body,d=deliveryFixture(state.data);
+ d.downtime=[{'设备编号':d.machines[0]['设备编号'],'起始分钟':'0','结束分钟':'120','原因':'试算瓶颈'}];assert.equal((await call('/inputs',{revision:0,tables:d})).status,200);
+ const original=(await call('/calculate',{revision:1})).body,trial=(await call('/plans/'+original.id+'/copy',{})).body;
+ assert.equal((await call('/trials/'+trial.id+'/inputs',{revision:0,tables:{downtime:[]}})).status,200);
+ const next=(await call('/calculate',{trialId:trial.id,revision:1})).body;assert.notEqual(original.conditions.ruleEvaluationAt,next.conditions.ruleEvaluationAt);
+ const diff=(await call('/plans/'+original.id+'/compare/'+next.id)).body;assert.equal(diff.impact.orders[0].outcome,'earlier-conditional');assert.equal(diff.impact.orders[0].deliverableDeltaMinutes,-120);assert.ok(diff.impact.affectedTaskIds.length>0);
+ const retained=await call('/trials/'+trial.id+'/retain',{revision:1,planId:next.id});assert.equal(retained.status,201);assert.deepEqual(retained.body.comparison,diff);
+ assert.deepEqual((await call('/state')).body.data.downtime,d.downtime);assert.equal((await call('/plans/'+original.id+'/inputs')).body.data.downtime[0]['结束分钟'],'120');
+});

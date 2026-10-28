@@ -1,4 +1,4 @@
-import {comparePlans,restoreBlockers} from '../src/lib/plan-comparison.mjs';
+import {comparePlans,restoreBlockers,conditionChanges} from '../src/lib/plan-comparison.mjs';
 import {resultState,resultCsv} from '../src/lib/result-assessment.mjs';
 import { Worker } from 'node:worker_threads';
 import { freezeRunInput, inputHash } from './run-input.mjs';
@@ -100,6 +100,26 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     delete copy.verification;
     const trial={id,status:'active',revision:0,createdAt:now,actor:subjectKey(req.praetorActor),sourcePlanId:p.id,sourceRunId:p.runId,sourceInputVersionId:p.inputVersionId,sourceSnapshotHash:p.snapshotHash,basePlanId:copy.id,latestPlanId:copy.id,data:structuredClone(inputs(s,p).data),selection:Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds'].map(k=>[k,structuredClone(p.conditions[k])]))};
     s.trials??=[];s.trials.unshift(trial);s.plans.unshift(copy);record(s,req,'trial_created',id,{sourcePlanId:p.id,planId:copy.id,inputVersionId:p.inputVersionId,snapshotHash:p.snapshotHash});write(s);res.status(201).json(trial);
+  });
+  router.get('/trials/:id/changes',permission('read'),(req,res)=>{
+    const s=read(),trial=s.trials?.find(t=>t.id===req.params.id),source=s.plans.find(p=>p.id===trial?.sourcePlanId);
+    if(!trial)return res.status(404).json({error:'trial_not_found'});
+    if(!source||!historical(s,source))return res.status(409).json({error:'historical_inputs_unavailable'});
+    res.json({trialId:trial.id,revision:trial.revision,sourcePlanId:source.id,sourceRunId:source.runId,sourceInputVersionId:source.inputVersionId,sourceSnapshotHash:source.snapshotHash,currentInputHash:inputHash(trial.data),changedConditions:conditionChanges(inputs(s,source).data,trial.data),scope:'模拟输入；尚不代表已重算，检查范围以保存运行结果为准'});
+  });
+  router.post('/trials/:id/retain',permission('edit'),(req,res)=>{
+    const s=read(),trial=s.trials?.find(t=>t.id===req.params.id);
+    if(!trial)return res.status(404).json({error:'trial_not_found'});
+    if(trial.status==='discarded')return res.status(409).json({error:'trial_discarded'});
+    if(req.body.revision!==trial.revision)return res.status(409).json({error:'stale_input'});
+    const plan=s.plans.find(p=>p.id===req.body.planId),source=s.plans.find(p=>p.id===trial.sourcePlanId);
+    if(!plan||plan.trialId!==trial.id||plan.id!==trial.latestPlanId||plan.revision!==trial.revision||plan.copiedResult||plan.inputVersionId!==versionId(trial.data))return res.status(409).json({error:'recalculated_current_trial_required'});
+    if(!source||!historical(s,source)||!historical(s,plan))return res.status(409).json({error:'historical_inputs_unavailable'});
+    const comparison=comparePlans(source,inputs(s,source).data,plan,inputs(s,plan).data);
+    const retained={id:randomUUID(),planId:plan.id,runId:plan.runId,inputVersionId:plan.inputVersionId,snapshotHash:plan.snapshotHash,trialRevision:trial.revision,at:new Date().toISOString(),actor:subjectKey(req.praetorActor),comparison};
+    trial.retainedSnapshots??=[];trial.retainedSnapshots.push(retained);
+    record(s,req,'trial_retained',trial.id,{retainedId:retained.id,planId:plan.id,runId:plan.runId,inputVersionId:plan.inputVersionId,snapshotHash:plan.snapshotHash,sourcePlanId:source.id});write(s);
+    res.status(201).json(retained);
   });
   router.post('/trials/:id/discard',permission('edit'),async(req,res,next)=>{try{
     let s=read(),trial=s.trials?.find(t=>t.id===req.params.id);if(!trial)return res.status(404).json({error:'trial_not_found'});
