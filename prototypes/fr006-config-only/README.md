@@ -18,3 +18,16 @@
 - `docs/FR-006-MERGE-BACK.md`：DEC-02 后回迁/合并步骤及当前待决项。
 
 当前数据接口只有浏览器 localStorage；本副本没有工装服务端 API、跨用户持久化或排程占用引擎。文档中的 REST 路由是待决后可采用的建议契约，不是已实现接口。
+
+## 自动回归与容器构建
+
+在 APS 仓库根目录执行：
+
+```sh
+npm test --prefix prototypes/fr006-config-only
+docker build -f prototypes/fr006-config-only/Dockerfile -t aps-fr006-config-only .
+```
+
+Docker 构建需要受信任的 Praetor SDK 包 `/.praetor/sdk/lite-app-{runtime,server}.tgz`（相对于仓库根目录）；这些 workspace SDK 包不纳入 Git。构建阶段执行 TypeScript 检查和 Vite/server bundle，运行阶段监听 3000 端口。不要把 SDK tarball 复制进提交。
+
+自动回归覆盖工装记录字段契约及必填、重复编码、数量、占用偏移和启用值校验；浏览器 CRUD、下载/上传交互仍由 APS-Test 按 `docs/APS-TEST-FR006.md` 执行。

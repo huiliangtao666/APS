@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "concurrently -k -n vite,api -c blue,green \"vite\" \"node server/index.mjs\"",
     "build": "tsc --noEmit && vite build && npx esbuild server/index.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs",
+    "test": "node --test src/*.test.mjs",
     "start": "NODE_ENV=production node dist/server.mjs",
     "preview": "vite preview"
   },

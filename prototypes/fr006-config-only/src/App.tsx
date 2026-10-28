@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import './index.css';
 import { usePraetorEmbedded } from './praetor-embedded';
+import { validateTools } from './tool-validation.mjs';
 
 type Row = Record<string, string>;
 type TableDef = { key: string; label: string; file: string; fields: string[] };
@@ -63,18 +64,6 @@ const storageKey = 'aps-fr006-foundation-data-v1';
 function loadData() { try { const v = localStorage.getItem(storageKey); if(!v)return structuredClone(seed); const saved=JSON.parse(v) as Record<string,Row[]>; const merged={...structuredClone(seed),...saved}; if(!merged.calendars?.length)merged.calendars=structuredClone(seed.calendars); if(!merged.downtime)merged.downtime=[]; const calendarRule=merged.rules?.find(r=>r['规则编号']==='CALENDAR'); if(calendarRule)calendarRule['是否启用']='是'; return merged; } catch { return structuredClone(seed); } }
 function uid() { return `R1-${new Date().toISOString().replace(/[-:.TZ]/g,'').slice(0,14)}`; }
 function parseCsv(text: string): string[][] { const rows: string[][]=[]; let row:string[]=[], cell='', quoted=false; for(let i=0;i<text.length;i++){const c=text[i]; if(quoted){if(c==='"'&&text[i+1]==='"'){cell+='"';i++;}else if(c==='"')quoted=false;else cell+=c;}else if(c==='"')quoted=true;else if(c===','){row.push(cell);cell='';}else if(c==='\n'){row.push(cell.replace(/\r$/,''));rows.push(row);row=[];cell='';}else cell+=c;} if(cell.length||row.length){row.push(cell.replace(/\r$/,''));rows.push(row);} return rows; }
-function validateTools(rows:Row[]):string[]{
-  const issues:string[]=[];const seen=new Set<string>();
-  rows.forEach((r,i)=>{const line=i+2,code=(r['工装编码']||'').trim();
-    if(!code)issues.push(`第 ${line} 行：工装编码必填`);
-    else if(seen.has(code))issues.push(`第 ${line} 行：工装编码 ${code} 重复`);else seen.add(code);
-    if(!(r['工装名称']||'').trim())issues.push(`第 ${line} 行：工装名称必填`);
-    if(!(r['适用任务']||'').trim())issues.push(`第 ${line} 行：适用任务必填（使用工序编号，多个值以 | 分隔）`);
-    for(const field of ['可用数量','每任务需求数量']){const n=Number(r[field]);if(!Number.isInteger(n)||n<1)issues.push(`第 ${line} 行：${field} 必须为大于 0 的整数`);}
-    for(const field of ['提前占用分钟','后延占用分钟']){const n=Number(r[field]);if(r[field]===''||!Number.isInteger(n)||n<0)issues.push(`第 ${line} 行：${field} 必须为大于等于 0 的整数`);}
-    if(!['是','否'].includes(r['是否启用']||''))issues.push(`第 ${line} 行：是否启用只能为“是”或“否”`);
-  });return issues;
-}
 function fmt(min: number) { const n=480+Math.round(min); return `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`; }
 function findCalendarWindow(calendarId:string, earliest:number, duration:number, calendars:Row[], downtime:Row[], machineId:string):{start:number|null;reason:string}{
   const valid=calendars.filter(r=>r['日历编号']===calendarId).map(r=>({start:Number(r['起始分钟']),end:Number(r['结束分钟']),work:r['是否工作']==='是'})).filter(r=>Number.isFinite(r.start)&&Number.isFinite(r.end)&&r.end>r.start);

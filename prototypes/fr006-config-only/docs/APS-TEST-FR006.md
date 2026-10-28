@@ -38,3 +38,11 @@
 - 执行人 / 日期：
 
 本代码交付没有代替 APS-Test 执行以上用例；请按其既有 UAT 审核流程记录结果。
+
+## 开发交付 handoff（2026-10-28）
+
+- Git 分支：`feat/fr006-tooling-config`；从已存在的 `test/fr006-config-only` 开发提交继续。
+- 本轮自动回归：`npm test --prefix prototypes/fr006-config-only`，覆盖字段契约和 CSV 行校验；另有 Docker 镜像构建定义，需 workspace 提供 Praetor SDK 包。
+- APS-Test 仍需执行上方 F006-CFG、F006-CSV 和 F006-SAFE 用例，并记录实际环境、结果和截图/日志；自动单测与构建不代表 UAT 通过。
+- 独立副本使用 `aps-fr006-foundation-data-v1` 本地存储键，不能覆盖 APS-R1 预览数据；不要发布。
+- DEC-02 未定：提前占用、后延归还、数量冲突均只存储/展示，FR-006 配置不进入排程资源计算，状态保持“未启用 / 未检查”。
