@@ -6,6 +6,7 @@ import { validateSingleLineScope } from './lib/line-scope.mjs';
 import { validateMasterData } from './lib/master-data.mjs';
 import { validateProcessConfig } from './lib/process-config.mjs';
 import { findDowntimeShiftReason } from './lib/downtime-shift-reason.mjs';
+import { appendOrderChange, isOrderSchedulable, validateOrders, type OrderChange } from './lib/orders.mjs';
 
 type Row = Record<string, string>;
 type TableDef = { key: string; label: string; file: string; fields: string[] };
@@ -17,7 +18,7 @@ type Plan = { id: string; name: string; createdAt: string; tasks: Task[]; findin
 const defs: TableDef[] = [
   { key: 'products', label: '产品与包装规格', file: '07_产品与包装规格.csv', fields: ['产品编号','产品名称','单支净重kg','每袋支数','总收率','模拟交付等待分钟'] },
   { key: 'materials', label: '物料主数据', file: '08_物料主数据.csv', fields: ['物料编号','物料名称','单位','类别'] },
-  { key: 'orders', label: '订单与交期', file: '17_生产订单与交期.csv', fields: ['订单编号','产品编号','产线编号','合格需求kg','要求可交付分钟','优先顺序'] },
+  { key: 'orders', label: '订单与交期', file: '17_生产订单与交期.csv', fields: ['订单编号','产品编号','产线编号','合格需求','数量单位','要求可交付分钟','优先顺序','是否允许拆分','需求类型','订单状态'] },
   { key: 'routes', label: '工艺路线', file: '10_工艺路线配置.csv', fields: ['产品编号','工序编号','工序名称','前序工序','最大等待分钟','程序编号'] },
   { key: 'times', label: '工序工时', file: '11_工序工时配置.csv', fields: ['产品编号','工序编号','计算方式','固定分钟','速度支每分钟'] },
   { key: 'machines', label: '设备资源', file: '03_设备资源配置.csv', fields: ['设备编号','设备名称','产线编号','工序编号','日历编号','最小装载kg','最大装载kg','装载计量基准'] },
@@ -35,8 +36,8 @@ const seed: Record<string, Row[]> = {
     ...[['LEAN','模拟瘦肉','kg','原料'],['FAT','模拟背膘','kg','原料'],['WATER','生产用水','kg','原料'],['PREMIX','复合辅料占位','kg','辅料'],['BAG','十支外包装袋','个','包材']].map(([id,name,unit,category])=>({'物料编号':id,'物料名称':name,'单位':unit,'类别':category})),
   ],
   orders: [
-    {'订单编号':'A','产品编号':'HC40','产线编号':'L01','合格需求kg':'240','要求可交付分钟':'480','优先顺序':'1'},
-    {'订单编号':'B','产品编号':'HC60','产线编号':'L01','合格需求kg':'240','要求可交付分钟':'480','优先顺序':'2'},
+    {'订单编号':'A','产品编号':'HC40','产线编号':'L01','合格需求':'240','数量单位':'kg','要求可交付分钟':'480','优先顺序':'1','是否允许拆分':'否','需求类型':'正式订单','订单状态':'有效'},
+    {'订单编号':'B','产品编号':'HC60','产线编号':'L01','合格需求':'240','数量单位':'kg','要求可交付分钟':'480','优先顺序':'2','是否允许拆分':'否','需求类型':'正式订单','订单状态':'有效'},
   ],
   routes: [
     {'产品编号':'HC40','工序编号':'MIX','工序名称':'混合','前序工序':'','最大等待分钟':'','程序编号':''},
@@ -70,7 +71,8 @@ const seed: Record<string, Row[]> = {
 };
 
 const storageKey = 'aps-r1-data-v1';
-function loadData() { try { const v = localStorage.getItem(storageKey); if(!v)return structuredClone(seed); const saved=JSON.parse(v) as Record<string,Row[]>; const merged={...structuredClone(seed),...saved}; if(!merged.calendars?.length)merged.calendars=structuredClone(seed.calendars); if(!merged.downtime)merged.downtime=[]; const calendarRule=merged.rules?.find(r=>r['规则编号']==='CALENDAR'); if(calendarRule)calendarRule['是否启用']='是'; return merged; } catch { return structuredClone(seed); } }
+const orderHistoryKey = 'aps-r1-order-change-history-v1';
+function loadData() { try { const v = localStorage.getItem(storageKey); if(!v)return structuredClone(seed); const saved=JSON.parse(v) as Record<string,Row[]>; const merged={...structuredClone(seed),...saved}; if(!merged.calendars?.length)merged.calendars=structuredClone(seed.calendars); if(!merged.downtime)merged.downtime=[]; merged.orders=(merged.orders||[]).map(r=>({'订单编号':r['订单编号']||'','产品编号':r['产品编号']||'','产线编号':r['产线编号']||'','合格需求':r['合格需求']||r['合格需求kg']||'','数量单位':r['数量单位']||'kg','要求可交付分钟':r['要求可交付分钟']||'','优先顺序':r['优先顺序']||'','是否允许拆分':r['是否允许拆分']||'否','需求类型':r['需求类型']||'正式订单','订单状态':r['订单状态']||'有效'})); const calendarRule=merged.rules?.find(r=>r['规则编号']==='CALENDAR'); if(calendarRule)calendarRule['是否启用']='是'; return merged; } catch { return structuredClone(seed); } }
 function uid() { return `R1-${new Date().toISOString().replace(/[-:.TZ]/g,'').slice(0,14)}`; }
 function rulesInputFingerprint(data:Record<string,Row[]>) { const source=JSON.stringify({orders:data.orders||[],rules:data.rules||[]});let hash=2166136261;for(let i=0;i<source.length;i++){hash^=source.charCodeAt(i);hash=Math.imul(hash,16777619);}return (hash>>>0).toString(16).padStart(8,'0'); }
 function parseCsv(text: string): string[][] { const rows: string[][]=[]; let row:string[]=[], cell='', quoted=false; for(let i=0;i<text.length;i++){const c=text[i]; if(quoted){if(c==='"'&&text[i+1]==='"'){cell+='"';i++;}else if(c==='"')quoted=false;else cell+=c;}else if(c==='"')quoted=true;else if(c===','){row.push(cell);cell='';}else if(c==='\n'){row.push(cell.replace(/\r$/,''));rows.push(row);row=[];cell='';}else cell+=c;} if(cell.length||row.length){row.push(cell.replace(/\r$/,''));rows.push(row);} return rows; }
@@ -105,6 +107,7 @@ export default function App() {
   const [message,setMessage]=useState('');
   const [issues,setIssues]=useState<Finding[]>([]);
   const [inputVersion,setInputVersion]=useState(0);
+  const [orderHistory,setOrderHistory]=useState<OrderChange[]>(()=>{try{return JSON.parse(localStorage.getItem(orderHistoryKey)||'[]');}catch{return [];}});
   const currentDef=defs.find(d=>d.key===tableKey)!;
   const currentRows=data[tableKey]||[];
   const enabledRules=(data.rules||[]).filter(r=>r['是否启用']==='是').map(r=>r['规则编号']);
@@ -113,15 +116,18 @@ export default function App() {
   const verificationStale=!!verification&&verification.inputFingerprint!==rulesInputFingerprint(data);
 
   useEffect(()=>{localStorage.setItem(storageKey,JSON.stringify(data));},[data]);
+  useEffect(()=>{localStorage.setItem(orderHistoryKey,JSON.stringify(orderHistory));},[orderHistory]);
   useEffect(()=>{fetch('/api/plans').then(r=>r.json()).then((list:Plan[])=>{setPlans(list);if(list.length){setActivePlan(list[0]);setVerification(list[0].verification||null);}}).catch(()=>{});},[]);
-  function replaceRow(index:number,field:string,value:string){setData(prev=>({...prev,[tableKey]:prev[tableKey].map((row,i)=>i===index?{...row,[field]:value}:row)}));setInputVersion(v=>v+1);}
+  function replaceRow(index:number,field:string,value:string){const prior=data[tableKey]?.[index];if(tableKey==='orders'&&prior&&['合格需求','数量单位','要求可交付分钟'].includes(field)){setOrderHistory(h=>appendOrderChange(h,prior['订单编号'],field,prior[field]||'',value));}setData(prev=>({...prev,[tableKey]:prev[tableKey].map((row,i)=>i===index?{...row,[field]:value}:row)}));setInputVersion(v=>v+1);}
   function addRow(){setData(prev=>({...prev,[tableKey]:[...(prev[tableKey]||[]),Object.fromEntries(currentDef.fields.map(f=>[f,'']))]}));setInputVersion(v=>v+1);}
   function removeRows(){setData(prev=>({...prev,[tableKey]:prev[tableKey].filter((_,i)=>!selected.includes(String(i)))}));setSelected([]);setInputVersion(v=>v+1);}
   async function importCsv(file?:File){if(!file)return;const rows=parseCsv(await file.text()).filter(r=>r.some(c=>c.trim()));if(rows.length<2){setMessage('CSV 需要表头和至少一行数据。');return;}const headers=rows[0].map(h=>h.replace(/^\ufeff/, '').trim());const missing=currentDef.fields.filter(f=>!headers.includes(f));if(missing.length){setMessage(`字段不匹配，缺少：${missing.join('、')}`);return;}const parsed=rows.slice(1).map(cells=>Object.fromEntries(currentDef.fields.map(f=>[f,cells[headers.indexOf(f)]||''])));setData(prev=>({...prev,[tableKey]:parsed}));setInputVersion(v=>v+1);setMessage(`已导入 ${parsed.length} 行 ${currentDef.file}；仅替换当前表。`);}
   function downloadCsv(){const rows=[currentDef.fields,...currentRows.map(r=>currentDef.fields.map(f=>r[f]||''))];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=currentDef.file;a.click();URL.revokeObjectURL(a.href);}
   function schedule(){
     const built:Task[]=[]; const findings:Finding[]=[]; const machineBusy=new Map<string,Task[]>();
-    const sorted=[...(data.orders||[])].sort((a,b)=>Number(a['优先顺序'])-Number(b['优先顺序']));
+    const sorted=[...(data.orders||[])].filter(o=>o['需求类型']!=='预测'&&isOrderSchedulable(o)).sort((a,b)=>Number(a['优先顺序'])-Number(b['优先顺序']));
+    const orderIssues=validateOrders(data.orders||[]).filter(issue=>issue.code!=='ORDER_MULTI_LINE');
+    if(orderIssues.length){findings.push(...orderIssues.map(issue=>({code:`FR-009 / ${issue.code}`,message:issue.message,taskIds:[]})));setIssues(findings);setActivePlan({id:uid(),name:'订单数据校验',createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules,inputVersion:`v${inputVersion}`});setVerification(null);setMessage(`FR-009 订单字段检查发现 ${orderIssues.length} 个问题，未生成任务。`);return;}
     const masterIssues=[...validateMasterData({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[]})];
     if(masterIssues.length){
       findings.push(...masterIssues.map(issue=>({...issue,taskIds:[]})));
@@ -164,7 +170,7 @@ export default function App() {
         }
         if(start===null){findings.push({code:'UNPLANNED / CALENDAR',message:`订单 ${oid} / 工序 ${operation} 未排：设备 ${machineId} 不可用。${reason||'找不到满足连续工作时长的窗口'}。任务要求连续 ${duration} 分钟；跨班或中断规则尚未配置。`,taskIds:[]});continue;}
         const stop=findDowntimeShiftReason(data.downtime||[],machineId,initialEarliest,duration,firstCalendarFit??start);
-        const calendarShift=firstCalendarFit!==null&&firstCalendarFit!==undefined&&firstCalendarFit>initialEarliest?(stop?`日历顺延：设备停机「${stop['原因']||'设备停机'}」${fmt(Number(stop['起始分钟']))}–${fmt(Number(stop['结束分钟']))}，安排至${fmt(start)}`:`日历顺延：工厂工作窗口，安排至${fmt(start)}`):'';
+        const calendarShift=firstCalendarFit!==null&&firstCalendarFit!==undefined&&firstCalendarFit>initialEarliest?(stop?`日历顺延：设备停机「${stop.reason}」${fmt(stop.start)}–${fmt(stop.end)}，安排至${fmt(start)}`:`日历顺延：工厂工作窗口，安排至${fmt(start)}`):'';
         const task:Task={id:`${oid}-${operation}`,orderId:oid,productId:product,operation,label:op['工序名称']||operation,machine:machineId,start,end:start+duration,duration,predecessor:predecessor?.id||'',source:`订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04${calendarShift?` · ${calendarShift}`:''}`};built.push(task);done.set(operation,task);busy.push(task);machineBusy.set(machineId,busy);
       }
     }
@@ -206,7 +212,11 @@ export default function App() {
       </>}
       {view==='data'&&<section className="panel data-panel"><div className="panel-head"><div><h2>主数据、单位与排程输入</h2><p>FR-002 新增产品/包装规格与物料主数据；同时维护 R1/R2.1 排程表。CSV 导入只替换当前表；时间字段使用分钟，0 = 2026-11-02 08:00 Asia/Shanghai。</p></div><div className="actions"><label className="upload">导入 CSV<input type="file" accept=".csv,text/csv" onChange={e=>importCsv(e.target.files?.[0])}/></label><button onClick={downloadCsv}>导出当前表</button><button onClick={addRow}>新增一行</button><button className="danger" onClick={removeRows} disabled={!selected.length}>删除选中</button></div></div>
         <div className="data-tabs">{defs.map(d=><button className={d.key===tableKey?'chosen':''} key={d.key} onClick={()=>{setTableKey(d.key);setSelected([]);}}>{d.label}<small>{data[d.key]?.length||0}</small></button>)}</div>
-        <div className="schema-note"><b>{currentDef.file}</b><span>必需字段：{currentDef.fields.join('、')}</span><span>可追溯：FR-013/014/015/016 · DT-09/11/13</span></div>
+        <div className="schema-note"><b>{currentDef.file}</b><span>必需字段：{currentDef.fields.join('、')}</span><span>可追溯：FR-009 · FR-013/014/015/016 · DT-09/11/13</span></div>
+        {tableKey==='orders'&&<>
+          <div className="hint-box"><b>FR-009 · 订单与需求</b><span>需求类型“正式订单”参与本次排程；“预测”独立保存且不混入正式排程。取消订单保留已有排程快照，之后不再生成新任务。数量单位只记录，不执行单位换算；“是否允许拆分”作为输入保存，工序任务仍按当前不可中断规则连续排程。</span></div>
+          {orderHistory.length>0&&<div className="table-wrap"><table><thead><tr><th>订单</th><th>变更字段</th><th>原值</th><th>新值</th><th>记录时间</th></tr></thead><tbody>{orderHistory.map((entry,i)=><tr key={`${entry.orderId}-${entry.changedAt}-${i}`}><td>{entry.orderId}</td><td>{entry.field}</td><td>{entry.before}</td><td>{entry.after}</td><td>{entry.changedAt}</td></tr>)}</tbody></table></div>}
+        </>}
         <div className="table-wrap edit-table"><table><thead><tr><th>选</th>{currentDef.fields.map(f=><th key={f}>{f}</th>)}</tr></thead><tbody>{currentRows.map((row,i)=><tr key={i}><td><input type="checkbox" checked={selected.includes(String(i))} onChange={e=>setSelected(e.target.checked?[...selected,String(i)]:selected.filter(x=>x!==String(i)))}/></td>{currentDef.fields.map(f=><td key={f}><input aria-label={`${currentDef.label} ${i+1} ${f}`} value={row[f]||''} onChange={e=>replaceRow(i,f,e.target.value)}/></td>)}</tr>)}</tbody></table>{!currentRows.length&&<div className="empty">当前表无记录。可导入 CSV 或新增行。</div>}</div>
         <div className="hint-box"><b>数据质量检查 · FR-004</b><span>校验产品路线工序编号/名称、重复工序、前序引用与循环，逐工序固定分钟工时，以及资源依赖的订单、工序、类型和资源编号。路线按可配置前序关系排序，CSV 行顺序不定义工艺顺序。设备依赖仍用于当前排程；模具、工具、人员技能、空间、投料依赖仅保存并检查引用完整性，不推断容量、占用、技能匹配、物料数量/可用时点或其他资源语义。</span></div>
         {[...validateMasterData({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[]})].length>0&&<div className="finding-list">{[...validateMasterData({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[]})].map((issue,i)=><div className="finding" key={`${issue.code}-${i}`}><b>{issue.code}</b><span>{issue.message}</span></div>)}</div>}
