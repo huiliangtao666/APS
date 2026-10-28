@@ -1,6 +1,8 @@
 export type VerificationStatus = 'pass' | 'problem' | 'not_checked';
 export type VerificationCheck = { status: VerificationStatus; details: string[] };
 export type VerificationReport = {
+  findings?: {code:string;message:string;taskIds:string[]}[];
+  scopeNote?:string;
   checkedAt: string;
   planId: string;
   inputVersion?: string;

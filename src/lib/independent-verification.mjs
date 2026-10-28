@@ -12,6 +12,7 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
   const routeRows = Array.isArray(routes) ? routes : [];
   const orderLines = new Map(orderRows.map((order) => [String(order['订单编号'] ?? '').trim(), String(order['产线编号'] ?? '').trim()]));
   const details = {};
+  const findings = [];
 
   const missingLineOrders = orderRows
     .filter((order) => !String(order['产线编号'] ?? '').trim())
@@ -48,7 +49,9 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
     for (let i = 0; i < list.length; i += 1) {
       for (let j = i + 1; j < list.length && Number(list[j].start) < Number(list[i].end); j += 1) {
         if (Number(list[i].start) < Number(list[j].end)) {
-          machineProblems.push(`${machine} 上 ${list[i].id} 与 ${list[j].id} 时间重叠。`);
+          const message=`${machine} 上 ${list[i].id} 与 ${list[j].id} 时间重叠 [${Math.max(Number(list[i].start),Number(list[j].start))},${Math.min(Number(list[i].end),Number(list[j].end))}) 分钟。`;
+          machineProblems.push(message);
+          if(enabledRules.includes('MACHINE'))findings.push({code:'VERIFY / MACHINE_OVERLAP',message,taskIds:[list[i].id,list[j].id]});
         }
       }
     }
@@ -86,7 +89,9 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
     } else if (![Number(task.start), Number(predecessor.end)].every(Number.isFinite)) {
       precedenceProblems.push(`任务 ${task.id} 或前序 ${predecessor.id} 的时间无效，无法核对先后关系。`);
     } else if (Number(task.start) < Number(predecessor.end)) {
-      precedenceProblems.push(`任务 ${task.id} 于 ${task.start} 开始，早于前序 ${predecessor.id} 于 ${predecessor.end} 完成。`);
+      const message=`任务 ${task.id} 于 ${task.start} 开始，早于前序 ${predecessor.id} 于 ${predecessor.end} 完成，提前 ${Number(predecessor.end)-Number(task.start)} 分钟。`;
+      precedenceProblems.push(message);
+      if(enabledRules.includes('PRECEDENCE'))findings.push({code:'VERIFY / PRECEDENCE',message,taskIds:[predecessor.id,task.id]});
     }
   }
   if (!enabledRules.includes('PRECEDENCE')) details.precedence = result('not_checked', ['规则 PRECEDENCE 当前未启用。']);
@@ -95,5 +100,5 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
   else if (!tasks.length || !precedenceLinks.length) details.precedence = result('not_checked', ['结果中没有可核对的前序任务关系。']);
   else details.precedence = result('pass', [`已核对 ${precedenceLinks.length} 条前序关系；后序均不早于前序完成。`]);
 
-  return { checkedAt, planId: plan?.id ?? '', checks: details };
+  return { checkedAt, planId: plan?.id ?? '', findings, scopeNote:'独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。', checks: details };
 }

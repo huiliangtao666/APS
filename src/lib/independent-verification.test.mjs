@@ -47,3 +47,9 @@ test('detects an omitted predecessor from the route input', () => {
   assert.equal(report.checks.precedence.status, 'problem');
   assert.match(report.checks.precedence.details[0], /要求前序 A-MIX/);
 });
+
+test('FR019 independent anomalies expose both task IDs, exact overlap interval and precedence shortfall for UI linkage',()=>{
+ const v=independentlyVerifyPlan({tasks:[task('A-MIX','A','M1',0,20),task('A-FILL','A','M1',10,30,'A-MIX')]},orders,routes);
+ assert.deepEqual(v.findings.map(f=>f.taskIds),[['A-MIX','A-FILL'],['A-MIX','A-FILL']]);assert.match(v.findings[0].message,/\[10,20\)/);assert.match(v.findings[1].message,/提前 10 分钟/);assert.match(v.scopeNote,/不代表完整业务/);
+ const off=independentlyVerifyPlan({tasks:[task('A-MIX','A','M1',0,20),task('A-FILL','A','M1',10,30,'A-MIX')]},orders,routes,[]);assert.equal(off.findings.length,0);
+});

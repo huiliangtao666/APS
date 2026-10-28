@@ -87,7 +87,7 @@ test('FR018 run controls select real scope/conditions and inspect immutable hist
  let tree:any;act(()=>{tree=create(<RunPanel {...props}/>);});
  const boxes=tree.root.findAllByType('input').filter((x:any)=>x.props.type==='checkbox');assert.equal(boxes.length,6);assert.equal(boxes[2].props.disabled,true);
  act(()=>boxes[1].props.onChange());act(()=>boxes[5].props.onChange());act(()=>input(tree,'开始分钟').props.onChange({target:{value:'60'}}));act(()=>input(tree,'计划结束分钟').props.onChange({target:{value:'100'}}));
- act(()=>tree.root.findByType('select').props.onChange({target:{value:'要求日期'}}));act(()=>button(tree,'另开计算（冻结当前输入）').props.onClick());assert.deepEqual(calls[0],{orderIds:['A'],startMinute:60,endMinute:100,priority:'要求日期',enabledRuleIds:['MACHINE','PRECEDENCE','CALENDAR']});
+ act(()=>tree.root.findAllByType('select').find((s:any)=>s.props['aria-label']==='任务排序').props.onChange({target:{value:'要求日期'}}));act(()=>button(tree,'另开计算（冻结当前输入）').props.onClick());assert.deepEqual(calls[0],{orderIds:['A'],startMinute:60,endMinute:100,priority:'要求日期',enabledRuleIds:['MACHINE','PRECEDENCE','CALENDAR']});
  const cancelButtons=tree.root.findAllByType('button').filter((b:any)=>b.children.join('')==='取消运行');assert.deepEqual(cancelButtons.map((b:any)=>b.props.disabled),[false,true,true]);act(()=>cancelButtons[0].props.onClick());assert.equal(calls[1],'live');act(()=>button(tree,'查看结果').props.onClick());assert.equal(calls[2],'p1');
  await act(async()=>{button(tree,'查看本次原始输入、实际规则与条件').props.onClick();});assert.ok(text(tree).includes('240'));assert.ok(text(tree).includes('用户取消'));assert.ok(text(tree).includes('不估算百分比'));
  act(()=>tree.update(<RunPanel {...props} canWrite={false}/>));assert.equal(button(tree,'另开计算（冻结当前输入）').props.disabled,true);assert.equal(button(tree,'取消运行').props.disabled,true);tree.unmount();
@@ -95,4 +95,14 @@ test('FR018 run controls select real scope/conditions and inspect immutable hist
 test('FR018 failed snapshot query is visible without replacing the selected conditions',async()=>{
  let tree:any;const props={data:{orders:[],rules:[]},runs:[{id:'r',status:'failed',phase:'failed',createdAt:'now',inputVersionId:'x',snapshotHash:'y',conditions:{orderIds:['A'],lineId:'L01',startMinute:0,endMinute:600,priority:'规则设置',enabledRuleIds:[],timeOrigin:'fixed'},failure:{code:'worker_error',message:'计算线程失败'}}],canWrite:false,busy:false,onStart:()=>{},onCancel:()=>{},onResult:()=>{},onInputs:async()=>{throw Error('historical_inputs_unavailable');}};
  act(()=>{tree=create(<RunPanel {...props}/>);});await act(async()=>{button(tree,'查看本次原始输入、实际规则与条件').props.onClick();});assert.ok(text(tree).includes('historical_inputs_unavailable'));assert.ok(text(tree).includes('计算线程失败'));tree.unmount();
+});
+
+test('FR019 mode is explicit in selection, historical scope stays visible and does not follow current controls',async()=>{
+ const {schedulingScope}=await import('../src/lib/scheduling-scope.mjs');const calls:any[]=[];
+ const conditions={mode:'minimal-r1',checkScope:schedulingScope('minimal-r1'),orderIds:['A'],lineId:'L01',startMinute:0,endMinute:600,priority:'规则设置',enabledRuleIds:['MACHINE','PRECEDENCE','CALENDAR'],timeOrigin:'fixed'};
+ const data={orders:[{'订单编号':'A','产线编号':'L01','需求类型':'正式订单','订单状态':'有效'}],rules:['MACHINE','PRECEDENCE','CALENDAR'].map(id=>({'规则编号':id,'中文名称':id,'是否启用':'是'}))};
+ let tree:any;act(()=>{tree=create(<RunPanel data={data} runs={[{id:'old',status:'completed',phase:'完成',createdAt:'now',inputVersionId:'h',snapshotHash:'s',conditions}]} canWrite={true} busy={false} onStart={s=>calls.push(s)} onCancel={()=>{}} onResult={()=>{}} onInputs={async()=>({})}/>);});
+ const mode=tree.root.findAllByType('select').find((s:any)=>s.props['aria-label']==='计算模式');assert.equal(mode.props.value,'supported');
+ act(()=>mode.props.onChange({target:{value:'minimal-r1'}}));act(()=>button(tree,'另开计算（冻结当前输入）').props.onClick());assert.equal(calls[0].mode,'minimal-r1');assert.ok(calls[0].enabledRuleIds.includes('CALENDAR'));
+ act(()=>mode.props.onChange({target:{value:'supported'}}));assert.ok(text(tree).includes('R1 最小模式'));for(const word of ['日历与停机','人员','模具与工装','物料','不代表完整业务'])assert.ok(text(tree).includes(word));tree.unmount();
 });

@@ -420,3 +420,82 @@ test('FR018 timeout or cancellation preserves a previously saved plan, and expor
  assert.deepEqual((await call('/plans')).body,before);assert.equal((await call('/state')).body.revision,0);
  const done=(await call('/runs/'+pending.body.id)).body;assert.ok(done.finishedAt);assert.equal((await call('/runs/'+pending.body.id+'/inputs',undefined,'query')).status,200);
 });
+
+// FR019: exercise the integrated authoritative API, not a second scheduler.
+async function minimalFixture(t){
+ const f=await fixture(t);const data=(await f.call('/state')).body.data;
+ data.machines=data.machines.filter(m=>['MIX01','FILL01'].includes(m['设备编号']));
+ data.dependencies.forEach(d=>d['资源编号']=d['工序编号']==='MIX'?'MIX01':'FILL01');
+ data.calendars[0]['起始分钟']='300';
+ data.downtime=[{'设备编号':'MIX01','起始分钟':'300','结束分钟':'330','原因':'最小模式不判断停机'}];
+ data.personnelGroups=[{'人员组编号':'G','人员组名称':'模拟人员','人员数量':'1','技能':'mix','班次':'day','可用起始分钟':'0','可用结束分钟':'600'}];
+ data.dependencies.push({'订单编号':'A','工序编号':'MIX','资源类型':'人员技能','资源编号':'G','需求数量':'2','所需技能':'mix','所需班次':'day','人员参与阶段':'全工序','人员开始偏移':'0','人员结束偏移':'0'});
+ data.supplies=[{'供给编号':'S','物料编号':'LEAN','批次编号':'LOT','预计数量':'100','预计到达时间':'2026-11-02T10:00:00+08:00','预计可用时间':'2026-11-02T11:00:00+08:00'}];
+ data.supplyUses=[{'引用编号':'U','订单编号':'A','工序编号':'MIX','供给编号':'S','使用数量':'10'}];
+ const r=await f.call('/inputs',{revision:0,tables:data});assert.equal(r.status,200,JSON.stringify(r.body));
+ return {...f,data,revision:r.body.revision};
+}
+test('FR019 explicit minimal mode uses two assigned machines, fixed durations, nonoverlap and precedence despite closed calendar, unavailable personnel and late supply',async t=>{
+ const {call,revision}=await minimalFixture(t);
+ const r=await call('/calculate',{revision,selection:{mode:'minimal-r1',endMinute:90},tasks:[{id:'forged'}],conditions:{mode:'supported'}});
+ assert.equal(r.status,201,JSON.stringify(r.body));const p=r.body;
+ assert.equal(p.tasks.length,4);assert.equal(p.findings.length,0);
+ assert.deepEqual(p.tasks.map(t=>[t.id,t.machine,t.start,t.end,t.duration]),[['A-MIX','MIX01',0,30,30],['A-FILL','FILL01',30,60,30],['B-MIX','MIX01',30,60,30],['B-FILL','FILL01',60,90,30]]);
+ assert.equal(p.conditions.mode,'minimal-r1');assert.match(p.conditions.checkScope.machineAvailability,/连续可用/);assert.ok(p.conditions.checkScope.unchecked.some(s=>s.includes('人员')));
+ assert.equal(p.ruleSnapshot.settings.find(s=>s.id==='CALENDAR').enabled,true);assert.equal(p.ruleSnapshot.settings.find(s=>s.id==='CALENDAR').active,false);assert.match(p.ruleSnapshot.settings.find(s=>s.id==='CALENDAR').status,/未检查/);
+ assert.deepEqual(p.rules,['MACHINE','PRECEDENCE']);assert.equal(p.supplyConditions.length,0);
+ assert.ok(p.tasks.every(t=>/最小模式/.test(t.source)&&!/工厂日历02/.test(t.source)));
+ const v=await call('/plans/'+p.id+'/verify',{});assert.equal(v.status,200);assert.deepEqual(Object.values(v.body.verification.checks).map(c=>c.status),['pass','pass','pass']);assert.match(v.body.verification.scopeNote,/不代表完整业务/);
+ for(const ruleSettings of [false,true]){const e=await call('/export',{planId:p.id,ruleSettings,conditions:{mode:'forged'}});assert.equal(e.status,200);for(const word of ['minimal-r1','日历与停机','人员','模具与工装','物料','不代表完整业务','运行快照'])assert.ok(e.body.includes(word),word);assert.ok(!e.body.includes('forged'));}
+ const queryExport=await call('/export',{query:{table:'tasks',planId:p.id,revision}});assert.equal(queryExport.status,200);for(const word of ['R1 最小模式','尚未检查','日历与停机','不代表完整业务'])assert.ok(queryExport.body.includes(word),word);
+ const run=(await call('/runs/'+p.runId)).body;assert.deepEqual(run.conditions,p.conditions);
+ const input=(await call('/runs/'+p.runId+'/inputs')).body;assert.deepEqual(input.conditions,p.conditions);assert.equal(input.originalInput.dependencies.length,5);assert.equal(input.executionData.dependencies.length,5);
+ const logs=(await call('/operations')).body;assert.ok(logs.every(l=>l.actor==='test#planner'&&l.reason==='test reason'));
+});
+test('FR019 supported default retains calendar, staffing and supply checks and never retries in minimal mode',async t=>{
+ const {call,revision,data}=await minimalFixture(t);
+ let p=(await call('/calculate',{revision})).body;assert.equal(p.conditions.mode,'supported');assert.ok(!p.tasks.some(t=>t.id==='A-MIX'));assert.ok(p.findings.some(f=>f.code.includes('PERSONNEL')));assert.equal(p.tasks.find(t=>t.id==='B-MIX').start,330);
+ // Remove personnel demand; supported mode still obeys explicit supply and calendar.
+ data.dependencies=data.dependencies.filter(d=>d['资源类型']==='设备');data.calendars[0]['起始分钟']='0';data.downtime=[];
+ const saved=await call('/inputs',{revision,tables:data});assert.equal(saved.status,200);
+ p=(await call('/calculate',{revision:saved.body.revision,selection:{mode:'supported',endMinute:120}})).body;
+ assert.ok(!p.tasks.some(t=>t.id==='A-MIX'));assert.ok(p.findings.some(f=>f.code.includes('HORIZON')));assert.equal(p.conditions.mode,'supported');assert.equal(p.ruleSnapshot.settings.find(s=>s.id==='CALENDAR').active,true);
+});
+test('FR019 mode is validated, necessary rule bypass denied, admission failures preserve storage, roles and CSRF apply',async t=>{
+ const {call,dir}=await fixture(t);await call('/calculate',{revision:0});const before=fs.readFileSync(path.join(dir,'business.json'),'utf8');
+ for(const mode of ['auto','full',null,{},1]){const r=await call('/runs',{revision:0,selection:{mode}});assert.equal(r.status,400);assert.equal(r.body.error,'invalid_mode');}
+ for(const mode of ['supported','minimal-r1'])for(const enabledRuleIds of [[],['MACHINE'],['MACHINE','PRECEDENCE']])assert.equal((await call('/calculate',{revision:0,selection:{mode,enabledRuleIds}})).status,400);
+ assert.equal((await call('/runs',{revision:0,selection:{mode:'minimal-r1'}},'query')).status,403);
+ assert.equal((await call('/runs',{revision:0,selection:{mode:'minimal-r1'}},'planner',{'sec-fetch-site':'cross-site'})).status,403);
+ assert.equal(fs.readFileSync(path.join(dir,'business.json'),'utf8'),before);
+});
+test('FR019 real Worker persists explicit scope and historical outputs after later edits and a supported run',async t=>{
+ const {call,revision,data}=await minimalFixture(t);
+ const r=await call('/runs',{revision,selection:{mode:'minimal-r1',orderIds:['A'],startMinute:600,endMinute:660}});assert.equal(r.status,202);
+ let run;for(let i=0;i<200;i++){run=(await call('/runs/'+r.body.id)).body;if(['completed','partial','failed'].includes(run.status))break;await new Promise(r=>setTimeout(r,10));}
+ assert.equal(run.status,'completed',JSON.stringify(run));let p=(await call('/plans')).body.find(p=>p.id===run.planId);assert.deepEqual(p.tasks.map(t=>[t.start,t.end]),[[600,630],[630,660]]);
+ const old=JSON.stringify(p);const snapshot=(await call('/runs/'+run.id+'/inputs')).body;
+ data.times[0]['固定分钟']='45';const saved=await call('/inputs',{revision,tables:data});assert.equal(saved.status,200);await call('/calculate',{revision:saved.body.revision});
+ p=(await call('/plans')).body.find(p=>p.id===run.planId);assert.equal(JSON.stringify(p),old);assert.deepEqual((await call('/runs/'+run.id+'/inputs')).body,snapshot);
+ assert.equal((await call('/plans/'+p.id+'/verify',{})).status,409);
+ assert.ok((await call('/export',{planId:p.id})).body.includes('minimal-r1'));
+ const created=(await call('/operations')).body.find(l=>l.action==='run_created');assert.equal(created.conditions.mode,'minimal-r1');
+});
+test('FR019 minimal horizon preserves exact duration and omits successors of unplanned tasks; cycles cannot pass',async t=>{
+ const {call,revision}=await minimalFixture(t);
+ const p=(await call('/calculate',{revision,selection:{mode:'minimal-r1',endMinute:30}})).body;
+ assert.deepEqual(p.tasks.map(t=>t.id),['A-MIX']);assert.equal(p.tasks[0].duration,30);assert.ok(p.findings.some(f=>f.code.includes('HORIZON')));assert.ok(p.findings.some(f=>f.code.includes('PREDECESSOR')));
+ const {calculate,seed}=await import('./planner.ts');const invalid=structuredClone(seed);invalid.routes[0]['前序工序']='FILL';
+ const result=calculate(invalid,0,new Date().toISOString(),{mode:'minimal-r1'});assert.equal(result.tasks.length,0);assert.ok(result.findings.some(f=>/循环/.test(f.message)));
+});
+test('FR019 constructive scheduling remains valid for unsorted routes, shared machines, independent steps and fractional fixed durations',async()=>{
+ const {calculate,seed}=await import('./planner.ts');const {independentlyVerifyPlan}=await import('../src/lib/independent-verification.mjs');
+ for(let size=1;size<=20;size++){
+  const d=structuredClone(seed);d.orders=Array.from({length:size},(_,i)=>({...d.orders[0],'订单编号':'T'+i,'优先顺序':String(size-i)}));
+  d.routes=d.routes.filter(r=>r['产品编号']==='HC40').reverse();d.times=d.times.filter(r=>r['产品编号']==='HC40');d.times[0]['固定分钟']='0.5';
+  d.dependencies=d.orders.flatMap(o=>['MIX','FILL'].map(op=>({'订单编号':o['订单编号'],'工序编号':op,'资源类型':'设备','资源编号':op+'01'})));
+  const p=calculate(d,0,new Date().toISOString(),{mode:'minimal-r1',startMinute:7});assert.equal(p.tasks.length,size*2);assert.equal(p.findings.length,0);
+  assert.ok(p.tasks.every(t=>t.start>=7&&t.end-t.start===Number(d.times.find(r=>r['工序编号']===t.operation)['固定分钟'])&&t.machine===t.operation+'01'));
+  const v=independentlyVerifyPlan(p,d.orders,d.routes,p.rules);assert.deepEqual(Object.values(v.checks).map(c=>c.status),['pass','pass','pass']);
+ }
+});

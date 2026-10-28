@@ -110,8 +110,9 @@ function validate(tasks: Task[]): Finding[] {
   return out;
 }
 
-export function calculate(data:Record<string,Row[]>, inputVersion:number, calculatedAt=new Date().toISOString(), conditions:{startMinute?:number;endMinute?:number|null;priority?:string}={}) {
- const ruleSnapshot=assessRules(data,calculatedAt,true);
+export function calculate(data:Record<string,Row[]>, inputVersion:number, calculatedAt=new Date().toISOString(), conditions:{startMinute?:number;endMinute?:number|null;priority?:string;mode?:string}={}) {
+ const minimal=conditions.mode==='minimal-r1';
+ const ruleSnapshot=assessRules(data,calculatedAt,true,conditions.mode);
  let result:Plan|null=null;
  const setActivePlan=(p:Plan)=>{result={...p,ruleSnapshot,rules:ruleSnapshot.settings.filter(r=>r.active).map(r=>r.id)};};
  const setIssues=(_x:Finding[])=>{}; const setVerification=(_x:null)=>{};const setMessage=(_x:string)=>{};
@@ -158,11 +159,11 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
         if(!dep||!machine){findings.push({code:'INPUT / MACHINE_DEPENDENCY',message:`订单 ${oid} / 工序 ${operation} 缺少有效设备依赖（12_工序资源与物料依赖.csv）`,taskIds:[]});continue;}
         const time=(data.times||[]).find(t=>t['产品编号']===product&&t['工序编号']===operation);const duration=Number(time?.['固定分钟']);if(!time||!Number.isFinite(duration)||duration<=0){findings.push({code:'INPUT / PROCESS_TIME',message:`产品 ${product} / 工序 ${operation} 工时缺失或无效`,taskIds:[]});continue;}
         const predecessor=op['前序工序']?done.get(op['前序工序']):undefined; if(op['前序工序']&&!predecessor){findings.push({code:'INPUT / PREDECESSOR',message:`${operation} 引用的前序 ${op['前序工序']} 未排入`,taskIds:[]});continue;}
-        const busy=machineBusy.get(machineId)||[];let candidate=Math.max(conditions.startMinute??0,predecessor?.end||0,supplyEarliestMinute(oid,operation,resolvedSupplies,data.supplyUses||[]));const initialEarliest=candidate;let start:number|null=null;let reason='';
+        const busy=machineBusy.get(machineId)||[];let candidate=Math.max(conditions.startMinute??0,predecessor?.end||0,minimal?0:supplyEarliestMinute(oid,operation,resolvedSupplies,data.supplyUses||[]));const initialEarliest=candidate;let start:number|null=null;let reason='';
         const calendarId=machine['日历编号']?.trim()||(data.calendars||[])[0]?.['日历编号']||'';
-        const firstCalendarFit=findCalendarWindow(calendarId,initialEarliest,duration,data.calendars||[],data.downtime||[],machineId).start;
+        const firstCalendarFit=minimal?initialEarliest:findCalendarWindow(calendarId,initialEarliest,duration,data.calendars||[],data.downtime||[],machineId).start;
         for(let attempt=0;attempt<1000;attempt++){
-          const fit=findCalendarWindow(calendarId,candidate,duration,data.calendars||[],data.downtime||[],machineId);
+          const fit=minimal?{start:candidate,reason:''}:findCalendarWindow(calendarId,candidate,duration,data.calendars||[],data.downtime||[],machineId);
           if(fit.start===null){reason=fit.reason;break;}
           const overlap=busy.find(t=>fit.start!<t.end&&fit.start!+duration>t.start);
           if(overlap){candidate=overlap.end;continue;}
@@ -170,17 +171,17 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
         }
         if(start===null){findings.push({code:'UNPLANNED / CALENDAR',message:`订单 ${oid} / 工序 ${operation} 未排：设备 ${machineId} 不可用。${reason||'找不到满足连续工作时长的窗口'}。任务要求连续 ${duration} 分钟；跨班或中断规则尚未配置。`,taskIds:[]});continue;}
         if(conditions.endMinute!=null&&start+duration>conditions.endMinute){findings.push({code:'UNPLANNED / HORIZON',message:`订单 ${oid} / 工序 ${operation} 完整工序超出计划结束分钟 ${conditions.endMinute}，未排；不代表无可行排法。`,taskIds:[]});continue;}
-        const stop=findDowntimeShiftReason(data.downtime||[],machineId,initialEarliest,duration,firstCalendarFit??start);
+        const stop=minimal?null:findDowntimeShiftReason(data.downtime||[],machineId,initialEarliest,duration,firstCalendarFit??start);
         const calendarShift=firstCalendarFit!==null&&firstCalendarFit!==undefined&&firstCalendarFit>initialEarliest?(stop?`日历顺延：设备停机「${stop.reason}」${fmt(stop.start)}–${fmt(stop.end)}，安排至${fmt(start)}`:`日历顺延：工厂工作窗口，安排至${fmt(start)}`):'';
-        const personnelRequirements=(data.dependencies||[]).filter(d=>d['订单编号']===oid&&d['工序编号']===operation&&d['资源类型']==='人员技能');
+        const personnelRequirements=minimal?[]:(data.dependencies||[]).filter(d=>d['订单编号']===oid&&d['工序编号']===operation&&d['资源类型']==='人员技能');
         const personnel=allocatePersonnel(personnelRequirements,data.personnelGroups||[],start,start+duration,personnelReservations);
         if(!personnel.ok){findings.push({code:'UNPLANNED / PERSONNEL',message:`订单 ${oid} / 工序 ${operation} 未排：${personnel.reason}。人数充足但技能、班次或可用时段不匹配时仍视为不可用。`,taskIds:[]});continue;}
         personnelReservations.push(...(personnel.allocations||[]));
         const participation=personnelRequirements.filter(r=>Number(r['需求数量']||0)>0).map(r=>`${r['人员参与阶段']||'全工序'} ${r['人员开始偏移']||0}–${duration-Number(r['人员结束偏移']||0)} 分钟`).join('、');
-        const task:Task={id:`${oid}-${operation}`,orderId:oid,productId:product,operation,label:op['工序名称']||operation,machine:machineId,start,end:start+duration,duration,predecessor:predecessor?.id||'',source:`订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04${personnelRequirements.length?` · 人员阶段：${participation}`:''}${calendarShift?` · ${calendarShift}`:''}`};built.push(task);done.set(operation,task);busy.push(task);machineBusy.set(machineId,busy);
+        const task:Task={id:`${oid}-${operation}`,orderId:oid,productId:product,operation,label:op['工序名称']||operation,machine:machineId,start,end:start+duration,duration,predecessor:predecessor?.id||'',source:minimal?'R1 最小模式 · 订单17 · 路线10 · 固定工时11 · 给定机器12 · 机器连续可用；日历/人员/工装/物料未检查':`订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04${personnelRequirements.length?` · 人员阶段：${participation}`:''}${calendarShift?` · ${calendarShift}`:''}`};built.push(task);done.set(operation,task);busy.push(task);machineBusy.set(machineId,busy);
       }
     }
-    const hard=validate(built);const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:built,supplyConditions:buildSupplyConditions(built,resolvedSupplies,data.supplyUses||[]),supplyInput,findings:[...findings,...hard],rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
+    const hard=validate(built);const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:built,supplyConditions:minimal?[]:buildSupplyConditions(built,resolvedSupplies,data.supplyUses||[]),supplyInput:minimal?undefined:supplyInput,findings:[...findings,...hard],rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
     setIssues(plan.findings);setActivePlan(plan);setVerification(null);setMessage(plan.findings.length?`生成 ${built.length} 项任务，并发现 ${plan.findings.length} 个需处理的问题。`:`生成 ${built.length} 项任务；当前启用的机器与顺序检查通过。`);
   }
  schedule(); return result!;

@@ -1,3 +1,4 @@
+import { schedulingScope } from './scheduling-scope.mjs';
 // Versioned capability contract. Configuration storage is not execution support.
 export const ruleCatalog = [
  ['MACHINE','BR-03','机器不重叠',true,'全部设备；独占、单台，不支持批处理/并行','{}','无','固定'],
@@ -14,7 +15,8 @@ export function validRuleTime(value) {
  const date=new Date(parts[1]+'T00:00:00Z');
  return Number.isFinite(date.getTime())&&date.toISOString().slice(0,10)===parts[1]&&Number(parts[2])<24&&Number(parts[3])<60&&Number(parts[4])<60&&Number.isFinite(Date.parse(value));
 }
-export function assessRules(data, at=new Date().toISOString(), checkCoverage=false) {
+export function assessRules(data, at=new Date().toISOString(), checkCoverage=false, mode='supported') {
+ const checkScope=schedulingScope(mode), minimal=mode==='minimal-r1';
  const issues=[],settings=[];const rows=data.rules||[];
  const add=(index,field,message)=>issues.push({table:'rules',file:'16_排程规则配置.csv',row:index<0?0:index+2,field,message});
  for(const c of ruleCatalog.filter(c=>c.required))if(!rows.some(r=>r['规则编号']===c.id))add(-1,'规则编号',`必要规则 ${c.id} 不得删除`);
@@ -39,8 +41,9 @@ export function assessRules(data, at=new Date().toISOString(), checkCoverage=fal
    const needed={MACHINE:['machines','dependencies'],PRECEDENCE:['routes','times'],CALENDAR:['calendars']}[c.id]||[];
    for(const key of needed)if(!data[key]?.length)add(i,'是否启用',`${c.id} 缺少必要数据 ${key}`);
   }
-  const active=enabled&&!!c?.supported&&(!effectiveFrom||Date.parse(effectiveFrom)<=Date.parse(at));
-  settings.push({id:r['规则编号'],category:c?.category||'未知类别',name:r['中文名称'],enabled,active,supported:!!c?.supported,required:!!c?.required,effectiveFrom,scope,parameters,status:!c?.supported?'未实现/未检查':!enabled?'未启用':active?'采用':'待生效'});
+  const inScope=!minimal||['MACHINE','PRECEDENCE','SORT'].includes(c?.id);
+  const active=inScope&&enabled&&!!c?.supported&&(!effectiveFrom||Date.parse(effectiveFrom)<=Date.parse(at));
+  settings.push({id:r['规则编号'],category:c?.category||'未知类别',name:r['中文名称'],enabled,active,supported:!!c?.supported,required:!!c?.required,effectiveFrom,scope,parameters,status:!inScope?'本次最小模式未检查':!c?.supported?'未实现/未检查':!enabled?'未启用':active?'采用':'待生效'});
  });
  if(checkCoverage){
   for(const order of (data.orders||[]).filter(o=>o['需求类型']!=='预测'&&!['取消','已取消','完成','已完成'].includes(o['订单状态']))){
@@ -52,9 +55,9 @@ export function assessRules(data, at=new Date().toISOString(), checkCoverage=fal
     const dep=(data.dependencies||[]).filter(d=>d['订单编号']===order['订单编号']&&d['工序编号']===r['工序编号']&&d['资源类型']==='设备');
     const machine=dep.length===1&&(data.machines||[]).find(m=>m['设备编号']===dep[0]['资源编号']&&m['工序编号']===r['工序编号']);
     if(!machine)add(-1,'是否启用',`订单 ${order['订单编号']} / ${r['工序编号']} 须配置唯一、有效的设备依赖`);
-    else if(!machine['日历编号']||(data.calendars||[]).filter(c=>c['日历编号']===machine['日历编号']).length===0)add(-1,'是否启用',`设备 ${machine['设备编号']} 缺少明确引用的日历`);
+    else if(!minimal&&(!machine['日历编号']||(data.calendars||[]).filter(c=>c['日历编号']===machine['日历编号']).length===0))add(-1,'是否启用',`设备 ${machine['设备编号']} 缺少明确引用的日历`);
    }
   }
  }
- return {capabilityVersion:'FR017-v1',at,settings,issues,intrinsicChecks:['单产线','机器不重叠','工序先后与固定工时','日历与停机','已配置人员依赖（即使 LABOR 开关关闭也保留）','显式预计供给引用可用时点'],independentChecks:['单产线','机器不重叠','工序先后'],note:'规则采用不等于独立复核通过；INVENTORY 仅用于可用量查询，不检查完整物料平衡。生效时间按服务端计算发起时刻判断，不是任务分钟轴。'};
+ return {checkScope,capabilityVersion:minimal?'FR019-minimal-v1':'FR017-v1',at,settings,issues,intrinsicChecks:minimal?checkScope.checked:['单产线','机器不重叠','工序先后与固定工时','日历与停机','已配置人员依赖（即使 LABOR 开关关闭也保留）','显式预计供给引用可用时点'],independentChecks:['单产线','机器不重叠','工序先后'],note:checkScope.note+' 规则采用不等于独立复核通过；INVENTORY 仅用于可用量查询，不检查完整物料平衡。生效时间按服务端计算发起时刻判断，不是任务分钟轴。'};
 }
