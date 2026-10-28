@@ -4,6 +4,11 @@ import {validateInputs} from './input-validation.mjs';
 import {assessRules} from '../src/lib/business-rules.mjs';
 import {independentlyVerifyPlan} from '../src/lib/independent-verification.mjs';
 
+// All immutable confirmation reads share the same fail-closed digest check.
+export function validConfirmation(c){
+ return !!c && !!c.snapshot && typeof c.snapshot==='object' && !Array.isArray(c.snapshot)
+  && typeof c.snapshotHash==='string' && inputHash(c.snapshot)===c.snapshotHash;
+}
 export const contentHash=p=>inputHash(Object.fromEntries(Object.entries(p).filter(([k])=>!['status','verification'].includes(k))));
 const selection=c=>Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds'].map(k=>[k,c[k]]));
 // A replay checks the supported scheduler contract, not an independent proof of

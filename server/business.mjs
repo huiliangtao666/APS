@@ -1,4 +1,4 @@
-import {reviewPlan,contentHash} from './confirmation.mjs';
+import {reviewPlan,contentHash,validConfirmation} from './confirmation.mjs';
 import {stageEvents} from '../src/lib/simulation-events.mjs';
 import {executionState,executionTransition,executionAdmission,executionSummary,factTables,executionTrialIssues} from '../src/lib/execution-facts.mjs';
 import {executionInventory} from '../src/lib/material-allocation.mjs';
@@ -250,12 +250,18 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   });
   router.get('/plans/:id/review',permission('read'),(req,res)=>{
     const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});
-    res.json({...reviewPlan(s,p),workflow:s.workflows?.[p.id]||{revision:0,state:p.status,events:[]},confirmation:s.confirmations?.find(c=>c.planId===p.id)||null});
+    const confirmation=s.confirmations?.find(c=>c.planId===p.id)||null;
+    if(confirmation&&!validConfirmation(confirmation))return res.status(409).json({error:'protected_history_unavailable'});
+    res.json({...reviewPlan(s,p),workflow:s.workflows?.[p.id]||{revision:0,state:p.status,events:[]},confirmation});
   });
-  router.get('/confirmations',permission('read'),(_req,res)=>res.json(read().confirmations||[]));
+  router.get('/confirmations',permission('read'),(_req,res)=>{
+    const confirmations=read().confirmations||[];
+    if(!confirmations.every(validConfirmation))return res.status(409).json({error:'protected_history_unavailable'});
+    res.json(confirmations);
+  });
   router.get('/confirmations/:id',permission('read'),(req,res)=>{
     const c=read().confirmations?.find(c=>c.id===req.params.id);if(!c)return res.status(404).json({error:'confirmation_not_found'});
-    if(inputHash(c.snapshot)!==c.snapshotHash)return res.status(409).json({error:'protected_history_unavailable'});res.json(c);
+    if(!validConfirmation(c))return res.status(409).json({error:'protected_history_unavailable'});res.json(c);
   });
   for(const action of ['submit','confirm','return','release','archive'])router.post(`/plans/:id/${action}`,permission(action),(req,res)=>{
     const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});
@@ -289,7 +295,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
       s.confirmations??=[];s.confirmations.push(c);w.confirmationId=c.id;
     }else{
       const c=s.confirmations?.find(c=>c.id===w.confirmationId);
-      if(!c||inputHash(c.snapshot)!==c.snapshotHash||contentHash(c.snapshot.plan)!==contentHash(p))return res.status(409).json({error:'protected_history_unavailable'});
+      if(!validConfirmation(c)||contentHash(c.snapshot.plan)!==contentHash(p))return res.status(409).json({error:'protected_history_unavailable'});
       // Release/archive metadata is separate: confirmed plan bytes never change.
       w.state=action==='release'?'released':'archived';
     }
@@ -300,7 +306,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const s=read();let csv,target;
     if(req.body.confirmationId){
       const c=s.confirmations?.find(c=>c.id===req.body.confirmationId);if(!c)return res.status(404).json({error:'confirmation_not_found'});
-      if(inputHash(c.snapshot)!==c.snapshotHash)return res.status(409).json({error:'protected_history_unavailable'});
+      if(!validConfirmation(c))return res.status(409).json({error:'protected_history_unavailable'});
       record(s,req,'export',c.planId,{confirmationId:c.id,snapshotHash:c.snapshotHash});write(s);return res.type('application/json').send(JSON.stringify({...c,workflow:s.workflows?.[c.planId]},null,2));
     }
     if(req.body.runId){

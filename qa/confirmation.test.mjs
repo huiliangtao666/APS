@@ -131,9 +131,9 @@ test('FR030 time-based rule activation after submission invalidates approval wit
 test('FR030 actual asynchronous worker result can be verified/submitted/confirmed and archived snapshot detects corruption',async t=>{
  const {call,dir}=await fixture(t),r=await call('/runs',{revision:0});assert.equal(r.status,202);let run;
  for(let n=0;n<100;n++){run=(await call('/runs/'+r.body.id)).body;if(['completed','partial','failed'].includes(run.status))break;await new Promise(resolve=>setTimeout(resolve,20));}
- assert.ok(run.planId);const id=run.planId;assert.equal((await call('/plans/'+id+'/verify',{})).status,200);await submit(call,id);assert.equal((await act(call,id,'confirm')).status,200);const c=(await review(call,id)).confirmation;
+ assert.ok(run.planId);const id=run.planId;assert.equal((await call('/plans/'+id+'/verify',{})).status,200);await submit(call,id);assert.equal((await act(call,id,'confirm')).status,200);const prior=await review(call,id),c=prior.confirmation;
  const file=path.join(dir,'business.json'),s=JSON.parse(fs.readFileSync(file));s.confirmations[0].snapshot.originalInput.orders=[];fs.writeFileSync(file,JSON.stringify(s));const bytes=fs.readFileSync(file,'utf8');
- assert.equal((await call('/confirmations/'+c.id)).status,409);assert.equal((await call('/export',{confirmationId:c.id})).status,409);assert.equal((await act(call,id,'archive')).status,409);assert.equal(fs.readFileSync(file,'utf8'),bytes);
+ assert.equal((await call('/confirmations/'+c.id)).status,409);assert.equal((await call('/export',{confirmationId:c.id})).status,409);assert.equal((await call('/plans/'+id+'/archive',decision(prior),'supervisor')).status,409);assert.equal((await call('/confirmations')).status,409);assert.equal((await call('/plans/'+id+'/review')).status,409);assert.equal(fs.readFileSync(file,'utf8'),bytes);
 });
 test('FR030 enabled delivery quality/remaining-life failure and unsupported declared maximum wait cannot be acknowledged away',async t=>{
  const {deliveryFixture}=await import('./delivery-fixture.mjs'),{seed}=await import('../server/planner.ts');
