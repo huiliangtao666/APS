@@ -1,3 +1,4 @@
+import { assessRules, type RuleSnapshot } from '../src/lib/business-rules.mjs';
 // Extracted existing scheduler; server uses canonical data only.
 import { independentlyVerifyPlan, type VerificationReport, type VerificationStatus } from '../src/lib/independent-verification.mjs';
 import { validateSingleLineScope } from '../src/lib/line-scope.mjs';
@@ -15,7 +16,7 @@ type TableDef = { key: string; label: string; file: string; fields: string[] };
 type Task = { id: string; orderId: string; productId: string; operation: string; label: string; machine: string; start: number; end: number; duration: number; predecessor: string; source: string };
 type Finding = { code: string; message: string; taskIds: string[] };
 type StoredVerificationReport = VerificationReport & { inputFingerprint?: string };
-type Plan = { id: string; name: string; createdAt: string; tasks: Task[]; findings: Finding[]; rules: string[]; inputVersion: string; verification?: StoredVerificationReport; supplyConditions?: SupplyCondition[]; supplyInput?: string };
+type Plan = { id: string; name: string; createdAt: string; tasks: Task[]; findings: Finding[]; rules: string[]; inputVersion: string; verification?: StoredVerificationReport; supplyConditions?: SupplyCondition[]; supplyInput?: string; ruleSnapshot?: RuleSnapshot };
 
 export const defs: TableDef[] = [
   { key: 'products', label: '产品与包装规格', file: '07_产品与包装规格.csv', fields: ['产品编号','产品名称','单支净重kg','每袋支数','总收率','模拟交付等待分钟'] },
@@ -33,7 +34,7 @@ export const defs: TableDef[] = [
   { key: 'downtime', label: '设备停机例外', file: '04_设备停机与例外日历.csv', fields: ['设备编号','起始分钟','结束分钟','原因'] },
   { key: 'dependencies', label: '工序资源依赖', file: '12_工序资源与物料依赖.csv', fields: ['订单编号','工序编号','资源类型','资源编号','需求数量','提前占用分钟','后延占用分钟','所需技能','所需班次','人员参与阶段','人员开始偏移','人员结束偏移'] },
   { key: 'personnelGroups', label: '人员组与可用时间', file: '19_人员组与可用时间.csv', fields: ['人员组编号','人员组名称','人员数量','技能','班次','可用起始分钟','可用结束分钟'] },
-  { key: 'rules', label: '排程规则', file: '16_排程规则配置.csv', fields: ['规则编号','中文名称','是否启用','参数JSON'] },
+  { key: 'rules', label: '排程规则', file: '16_排程规则配置.csv', fields: ['规则编号','中文名称','是否启用','参数JSON','适用对象','生效时间'] },
 ];
 export const seed: Record<string, Row[]> = {
   products: [
@@ -109,9 +110,10 @@ function validate(tasks: Task[]): Finding[] {
   return out;
 }
 
-export function calculate(data:Record<string,Row[]>, inputVersion:number) {
+export function calculate(data:Record<string,Row[]>, inputVersion:number, calculatedAt=new Date().toISOString()) {
+ const ruleSnapshot=assessRules(data,calculatedAt,true);
  let result:Plan|null=null;
- const setActivePlan=(p:Plan)=>{result=p;};
+ const setActivePlan=(p:Plan)=>{result={...p,ruleSnapshot,rules:ruleSnapshot.settings.filter(r=>r.active).map(r=>r.id)};};
  const setIssues=(_x:Finding[])=>{}; const setVerification=(_x:null)=>{};const setMessage=(_x:string)=>{};
  const enabledRules=(data.rules||[]).filter(r=>r['是否启用']==='是').map(r=>r['规则编号']);
  const supplyInput=JSON.stringify({supplies:data.supplies||[],delays:data.supplyDelays||[],uses:data.supplyUses||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[]});
@@ -120,7 +122,9 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number) {
  const resolvedSupplies=resolveExpectedSupply(data.supplies||[],data.supplyDelays||[]);
   function schedule(){
     const built:Task[]=[]; const findings:Finding[]=[]; const machineBusy=new Map<string,Task[]>(); const personnelReservations:PersonnelReservation[]=[];
-    const sorted=[...(data.orders||[])].filter(o=>o['需求类型']!=='预测'&&isOrderSchedulable(o)).sort((a,b)=>Number(a['优先顺序'])-Number(b['优先顺序']));
+    if(ruleSnapshot.issues.length){setActivePlan({id:uid(),name:"规则配置阻止计算",createdAt:calculatedAt,tasks:[],findings:ruleSnapshot.issues.map(i=>({code:"RULE / CONFIG",message:i.message,taskIds:[]})),rules:[],inputVersion:`v${inputVersion}`});return;}
+    const sortBy=ruleSnapshot.settings.find(r=>r.id==='SORT'&&r.active)?.parameters['排序方式'];
+    const sorted=[...(data.orders||[])].filter(o=>o['需求类型']!=='预测'&&isOrderSchedulable(o)).sort((a,b)=>sortBy==='要求日期'?Number(a['要求可交付分钟'])-Number(b['要求可交付分钟'])||Number(a['优先顺序'])-Number(b['优先顺序']):Number(a['优先顺序'])-Number(b['优先顺序']));
     const orderIssues=validateOrders(data.orders||[]).filter(issue=>issue.code!=='ORDER_MULTI_LINE');
     if(orderIssues.length){findings.push(...orderIssues.map(issue=>({code:`FR-009 / ${issue.code}`,message:issue.message,taskIds:[]})));setIssues(findings);setActivePlan({id:uid(),name:'订单数据校验',createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules,inputVersion:`v${inputVersion}`});setVerification(null);setMessage(`FR-009 订单字段检查发现 ${orderIssues.length} 个问题，未生成任务。`);return;}
     const masterIssues=[...validateBomConfig({products:data.products||[],materials:data.materials||[],routes:data.routes||[],bom:data.bom||[]}),...supplyIssues,...inventoryIssues,...validateMasterData({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[],personnelGroups:data.personnelGroups||[]})];

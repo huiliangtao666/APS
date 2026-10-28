@@ -1,3 +1,4 @@
+import { validRuleTime } from './business-rules.mjs';
 /** FR-010 inventory accounting and availability rules. Quantities stay in the material's configured unit. */
 export const DEFAULT_USABLE_QUALITY_STATUSES = ['合格'];
 
@@ -36,9 +37,9 @@ export function validateInventoryBatches(batches = [], materials = []) {
   return findings;
 }
 
-export function getUsableQualityStatuses(rules = []) {
+export function getUsableQualityStatuses(rules = [], materialId = '', at = new Date().toISOString()) {
   const rule = rules.find(row => row['规则编号'] === 'INVENTORY');
-  if (!rule) return DEFAULT_USABLE_QUALITY_STATUSES;
+  if (!rule || rule['是否启用']==='否' || (rule['适用对象'] && rule['适用对象']!=='*' && !rule['适用对象'].split(',').includes(materialId)) || (rule['生效时间'] && (!validRuleTime(rule['生效时间']) || Date.parse(rule['生效时间'])>Date.parse(at)))) return DEFAULT_USABLE_QUALITY_STATUSES;
   try {
     const configured = JSON.parse(rule['参数JSON'] || '{}')['可用质量状态'];
     return Array.isArray(configured) ? configured.filter(value => typeof value === 'string') : DEFAULT_USABLE_QUALITY_STATUSES;
@@ -48,13 +49,13 @@ export function getUsableQualityStatuses(rules = []) {
 export function queryInventoryAvailability(batches = [], { materialId = '', asOf = new Date().toISOString(), rules = [] } = {}) {
   const at = Date.parse(asOf);
   const date = Number.isFinite(at) ? new Date(at).toISOString().slice(0, 10) : String(asOf).slice(0, 10);
-  const usableStatuses = getUsableQualityStatuses(rules);
+
   return batches.filter(batch => !materialId || batch['物料编号'] === materialId).map(batch => {
     const onHand = Number(batch['账面数量']) || 0;
     const reserved = Number(batch['已占用数量']) || 0;
     const readyAt = batch['预计可用时间'] ? Date.parse(batch['预计可用时间']) : -Infinity;
     const expiry = batch['有效期'] || '';
-    const available = usableStatuses.includes(batch['质量状态']) && (!expiry || (validExpiry(expiry) && expiry >= date)) && (!Number.isFinite(at) || readyAt <= at);
+    const available = getUsableQualityStatuses(rules,batch['物料编号'],asOf).includes(batch['质量状态']) && (!expiry || (validExpiry(expiry) && expiry >= date)) && (!Number.isFinite(at) || readyAt <= at);
     return { ...batch, '当前可用数量': available ? Math.max(0, onHand - reserved) : 0, '账面数量': onHand, '已占用数量': reserved };
   });
 }

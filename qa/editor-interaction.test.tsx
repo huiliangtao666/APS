@@ -55,3 +55,25 @@ test('historical query toggle renders and exports old inputs, current toggle res
  act(()=>button(tree,'导出筛选结果（1）').props.onClick());assert.equal(calls[0].sourcePlanId,'p1');assert.equal(calls[0].planId,'p1');
  act(()=>checkbox.props.onChange({target:{checked:false}}));assert.ok(text(tree).includes('222'));act(()=>button(tree,'导出筛选结果（1）').props.onClick());assert.equal(calls[1].sourcePlanId,undefined);
 });
+
+test('FR017 rule editor stages scope/time/parameters, preserves rejected drafts, and used settings remain historical',async()=>{
+ const {RulePanel,UsedRules}=await import('../src/RulePanel');
+ const {assessRules}=await import('../src/lib/business-rules.mjs');
+ const def=defs.find(d=>d.key==='rules')!;
+ const rows=[{'规则编号':'SORT','中文名称':'任务排序','是否启用':'是','参数JSON':'{"排序方式":"优先顺序"}','适用对象':'*','生效时间':''}];
+ const calls:any[]=[];let reject=true;let editor:any;
+ act(()=>{editor=create(<DataEditor def={def} rows={rows} revision={4} canWrite={true} busy={false} reason="变更排序" onSave={async(...args)=>{calls.push(args);if(reject)throw Error('生效时间无效');}}/>);});
+ act(()=>input(editor,'排程规则 1 生效时间').props.onChange({target:{value:'2099-01-01T00:00:00Z'}}));
+ act(()=>input(editor,'排程规则 1 参数JSON').props.onChange({target:{value:'{"排序方式":"要求日期"}'}}));
+ assert.equal(calls.length,0);await act(async()=>{await button(editor,'保存修改').props.onClick();});
+ assert.ok(text(editor).includes('生效时间无效'));assert.equal(input(editor,'排程规则 1 生效时间').props.value,'2099-01-01T00:00:00Z');
+ reject=false;await act(async()=>{await button(editor,'保存修改').props.onClick();});
+ assert.equal(calls[1][0].rules[0]['参数JSON'],'{"排序方式":"要求日期"}');assert.equal(calls[1][1],4);
+ const data={rules:rows};const old=assessRules(data,'2026-10-29T00:00:00Z');
+ let used:any;act(()=>{used=create(<UsedRules snapshot={old}/>);});
+ const original=text(used);assert.ok(original.includes('优先顺序'));assert.ok(!original.includes('要求日期'));
+ rows[0]['参数JSON']='{"排序方式":"要求日期"}';act(()=>used.update(<UsedRules snapshot={old}/>));assert.equal(text(used),original);
+ let panel:any;act(()=>{panel=create(<RulePanel data={data} history={[{id:'h',at:'2026-10-29T00:00:00Z',actor:'test#planner',reason:'变更排序',target:'rules',before:[],after:rows}]}/>);});
+ assert.ok(text(panel).includes('未支持可配置启用'));assert.ok(text(panel).includes('BR-18'));assert.ok(text(panel).includes('变更排序'));assert.ok(text(panel).includes('test#planner'));
+ act(()=>used.update(<UsedRules/>));assert.ok(text(used).includes('无法重建'));
+});

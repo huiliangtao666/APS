@@ -1,3 +1,4 @@
+import { assessRules } from '../src/lib/business-rules.mjs';
 import { validateMasterData } from '../src/lib/master-data.mjs';
 import { validateProcessConfig } from '../src/lib/process-config.mjs';
 import { validateSingleLineScope } from '../src/lib/line-scope.mjs';
@@ -56,5 +57,6 @@ export function validateInputs(defs,data){
  }};
  collect('orders',validateOrders(data.orders));collect('machines',validateSingleLineScope(data.orders,data.machines));collect('products',validateMasterData(data));collect('routes',validateProcessConfig(data));collect('bom',validateBomConfig(data));collect('inventory',validateInventoryBatches(data.inventory,data.materials));
  collect('supplies',validateExpectedSupply({supplies:data.supplies,delays:data.supplyDelays,uses:data.supplyUses,materials:data.materials,orders:data.orders,routes:data.routes}));
+ issues.push(...assessRules(data).issues);
  return issues;
 }

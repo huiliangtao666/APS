@@ -193,7 +193,7 @@ test('FR015 snapshots preserve original full inputs across edit/delete/recompute
  const {call,dir}=await fixture(t);const start=(await call('/state')).body;
  const p=(await call('/calculate',{revision:0})).body;assert.match(p.inputVersionId,/^[a-f0-9]{64}$/);
  const old=(await call('/plans/'+p.id+'/inputs',undefined,'query')).body;assert.deepEqual(old.data,start.data);
- const tables=structuredClone(start.data);tables.orders[0]['合格需求']='481';tables.rules[0]['是否启用']='否';tables.inventory=[];
+ const tables=structuredClone(start.data);tables.orders[0]['合格需求']='481';tables.rules.find(r=>r['规则编号']==='INVENTORY')['参数JSON']='{"可用质量状态":["合格","条件放行"]}';tables.inventory=[];
  let r=await call('/inputs',{tables,revision:0});assert.equal(r.status,200);const rev=r.body.revision;
  assert.deepEqual((await call('/plans/'+p.id+'/inputs')).body,old);
  assert.equal((await call('/plans/'+p.id+'/verify',{})).status,409);
@@ -266,4 +266,58 @@ test('FR014 issue11 D1 authenticated current and historical export reject imposs
  for(const source of [{},{planId:p.id,sourcePlanId:p.id}]){
   const r=await call('/export',{query:{table:'inventory',revision:0,...source,filters:{dateField:'有效期',from:'2026-02-30',to:'2026-02-30'}}});assert.equal(r.status,200);assert.equal(r.body.split('\r\n').length,1);
  }
+});
+
+test('FR017 server rejects unsupported enablement, mandatory bypass and missing data through both writes; no audit/version mutation',async t=>{
+ const {call,dir}=await fixture(t);await call('/calculate',{revision:0});
+ const before=fs.readFileSync(path.join(dir,'business.json'),'utf8');const state=(await call('/state')).body;
+ for(const operation of ['edit','import','restore'])for(const id of ['MACHINE','PRECEDENCE','CALENDAR','MOLD','MATERIAL','UNKNOWN']){
+  const rules=structuredClone(state.data.rules);let r=rules.find(r=>r['规则编号']===id);
+  if(!r){r={'规则编号':id,'中文名称':'unknown','是否启用':'否','参数JSON':'{}'};rules.push(r);}
+  r['是否启用']=['MACHINE','PRECEDENCE','CALENDAR'].includes(id)?'否':'是';
+  for(const [url,body] of [['/inputs',{tables:{rules}}],['/tables/rules',{rows:rules}]])assert.equal((await call(url,{...body,revision:0,operation})).status,400,id);
+ }
+ const rules=structuredClone(state.data.rules);rules.find(r=>r['规则编号']==='LABOR')['是否启用']='是';
+ assert.equal((await call('/inputs',{tables:{rules},revision:0})).status,400);
+ assert.equal(fs.readFileSync(path.join(dir,'business.json'),'utf8'),before);
+ assert.equal((await call('/rules/capabilities',undefined,'query')).body.length,20);
+});
+test('FR017 actual sorting, future effective time, old settings, historical export and immutable audit are server-derived',async t=>{
+ const {call,dir}=await fixture(t);const initial=(await call('/state')).body.data;
+ const old=(await call('/calculate',{revision:0,ruleSnapshot:{forged:true}})).body;
+ assert.ok(old.ruleSnapshot.settings.length);assert.ok(!old.ruleSnapshot.forged);
+ const rules=[...initial.rules,{'规则编号':'SORT','中文名称':'任务排序','是否启用':'是','参数JSON':'{"排序方式":"要求日期"}','适用对象':'*','生效时间':''}];
+ const orders=structuredClone(initial.orders);orders[0]['要求可交付分钟']='500';orders[1]['要求可交付分钟']='100';
+ const dependencies=structuredClone(initial.dependencies);dependencies.find(r=>r['订单编号']==='B'&&r['工序编号']==='MIX')['资源编号']='MIX01';
+ let r=await call('/inputs',{tables:{rules,orders,dependencies},revision:0});assert.equal(r.status,200,JSON.stringify(r.body));
+ const p=(await call('/calculate',{revision:1})).body;assert.equal(p.tasks[0].orderId,'B');assert.equal(p.tasks.find(t=>t.id==='A-MIX').start,30);
+ assert.ok(p.rules.includes('SORT'));assert.equal(p.ruleSnapshot.settings.find(r=>r.id==='SORT').active,true);
+ const snapshot=structuredClone(p.ruleSnapshot);
+ rules.at(-1)['生效时间']='2099-01-01T00:00:00Z';r=await call('/inputs',{tables:{rules},revision:1});assert.equal(r.status,200);
+ const future=(await call('/calculate',{revision:2})).body;assert.equal(future.tasks[0].orderId,'A');assert.ok(!future.rules.includes('SORT'));assert.equal(future.ruleSnapshot.settings.find(r=>r.id==='SORT').status,'待生效');
+ const list=(await call('/plans')).body;assert.deepEqual(list.find(x=>x.id===p.id).ruleSnapshot,snapshot);assert.deepEqual(list.find(x=>x.id===old.id).ruleSnapshot,old.ruleSnapshot);
+ const exp=await call('/export',{planId:p.id,ruleSettings:true,settings:[{forged:true}]});assert.equal(exp.status,200);assert.ok(exp.body.includes('要求日期'));assert.ok(!exp.body.includes('2099'));assert.ok(!exp.body.includes('forged'));assert.ok(exp.body.includes(p.inputVersionId));
+ const record=(await call('/operations')).body.find(r=>r.target==='rules');assert.equal(record.before.length,initial.rules.length);assert.equal(record.after.length,rules.length);assert.ok(record.fromVersion&&record.toVersion&&record.batchId);assert.equal(record.actor,'test#planner');
+ assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dir,'business.json'))).plans.find(x=>x.id===p.id).ruleSnapshot,snapshot);
+});
+test('FR017 corrupt or incomplete stored inputs fail calculation without damaging previous plan; valid infeasibility does not disable constraints',async t=>{
+ const {call,dir}=await fixture(t);const old=(await call('/calculate',{revision:0})).body;
+ const file=path.join(dir,'business.json');const pristine=JSON.parse(fs.readFileSync(file));
+ for(const mutate of [s=>s.data.rules.push({'规则编号':'MOLD','中文名称':'工装','是否启用':'是','参数JSON':'{}'}),s=>s.data.dependencies=[],s=>s.data.times[0]['固定分钟']='',s=>s.data.machines[0]['日历编号']='']){
+  const s=structuredClone(pristine);mutate(s);fs.writeFileSync(file,JSON.stringify(s));const before=fs.readFileSync(file,'utf8');
+  const r=await call('/calculate',{revision:0});assert.equal(r.status,422,JSON.stringify(r.body));assert.ok(r.body.issues.length);assert.equal(fs.readFileSync(file,'utf8'),before);assert.deepEqual((await call('/plans')).body[0].ruleSnapshot,old.ruleSnapshot);
+ }
+ fs.writeFileSync(file,JSON.stringify(pristine));const calendars=pristine.data.calendars.map(r=>({...r,'结束分钟':'1'}));
+ assert.equal((await call('/inputs',{tables:{calendars},revision:0})).status,200);
+ const p=(await call('/calculate',{revision:1})).body;assert.equal(p.tasks.length,0);assert.ok(p.findings.some(f=>f.code.includes('CALENDAR')));assert.ok(p.rules.includes('CALENDAR'));assert.equal(p.ruleSnapshot.settings.find(r=>r.id==='CALENDAR').active,true);
+ assert.equal((await call('/state')).body.data.rules.find(r=>r['规则编号']==='CALENDAR')['是否启用'],'是');
+});
+test('FR017 enabled personnel constraint with complete data cannot auto-disable on capacity shortage',async t=>{
+ const {call}=await fixture(t);const data=(await call('/state')).body.data;
+ const group={'人员组编号':'G1','人员组名称':'组1','人员数量':'1','技能':'mix','班次':'day','可用起始分钟':'0','可用结束分钟':'600'};
+ const need={'订单编号':'A','工序编号':'MIX','资源类型':'人员技能','资源编号':'G1','需求数量':'2','所需技能':'mix','所需班次':'day','人员开始偏移':'0','人员结束偏移':'0'};
+ const rules=structuredClone(data.rules);rules.find(r=>r['规则编号']==='LABOR')['是否启用']='是';
+ const saved=await call('/inputs',{revision:0,tables:{rules,personnelGroups:[group],dependencies:[...data.dependencies,need]}});assert.equal(saved.status,200,JSON.stringify(saved.body));
+ const p=(await call('/calculate',{revision:1})).body;assert.ok(p.findings.some(f=>f.code.includes('PERSONNEL')));assert.ok(!p.tasks.some(t=>t.id==='A-MIX'));assert.ok(p.rules.includes('LABOR'));
+ assert.equal(p.ruleSnapshot.settings.find(r=>r.id==='LABOR').active,true);assert.equal((await call('/state')).body.data.rules.find(r=>r['规则编号']==='LABOR')['是否启用'],'是');
 });
