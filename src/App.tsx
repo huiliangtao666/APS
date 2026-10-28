@@ -1,3 +1,4 @@
+import {DeliveryPanel,type DeliveryPlan} from './DeliveryPanel';
 import {ResourcePanel,type JointPlan} from './ResourcePanel';
 import {BatchPanel,type BatchPlan} from './BatchPanel';
 import {MaterialPanel} from './MaterialPanel';
@@ -24,7 +25,7 @@ type Row = Record<string, string>;
 type Task = { productionBatchId?:string;resourceBatchId?:string; id: string; orderId: string; productId: string; operation: string; label: string; machine: string; start: number; end: number; duration: number; predecessor: string; source: string };
 type Finding = { code: string; message: string; taskIds: string[] };
 type StoredVerificationReport = VerificationReport & { inputFingerprint?: string };
-type Plan = JointPlan & BatchPlan & { id: string; name: string; createdAt: string; tasks: Task[]; findings: Finding[]; rules: string[]; inputVersion: string; verification?: StoredVerificationReport; supplyConditions?: SupplyCondition[]; supplyInput?: string; materialChecked?:boolean;materialDemands?:MaterialDemandRow[]; ruleSnapshot?: RuleSnapshot; inputSnapshot?:Record<string,Row[]>;runId?:string;conditions?:Run["conditions"] };
+type Plan = DeliveryPlan & JointPlan & BatchPlan & { id: string; name: string; createdAt: string; tasks: Task[]; findings: Finding[]; rules: string[]; inputVersion: string; verification?: StoredVerificationReport; supplyConditions?: SupplyCondition[]; supplyInput?: string; materialChecked?:boolean;materialDemands?:MaterialDemandRow[]; ruleSnapshot?: RuleSnapshot; inputSnapshot?:Record<string,Row[]>;runId?:string;conditions?:Run["conditions"] };
 
 function rulesInputFingerprint(data:Record<string,Row[]>) { const source=JSON.stringify({orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],personnelGroups:data.personnelGroups||[],machines:data.machines||[],calendars:data.calendars||[],downtime:data.downtime||[],rules:data.rules||[]});let hash=2166136261;for(let i=0;i<source.length;i++){hash^=source.charCodeAt(i);hash=Math.imul(hash,16777619);}return (hash>>>0).toString(16).padStart(8,'0'); }
 function fmt(min: number) { const n=480+Math.round(min); return `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`; }
@@ -97,6 +98,7 @@ export default function App() {
         <RunPanel data={data} runs={runs} canWrite={!!session?.canWrite&&!!reason.trim()} busy={busy} onStart={startRun} onCancel={cancelRun} onInputs={id=>api('/runs/'+id+'/inputs')} onResult={id=>{const p=plans.find(p=>p.id===id);if(p){setActivePlan(p);setIssues(p.findings);setVerification(p.verification||null);}}}/>
         <div className="metrics"><article><span>单线订单</span><b>{data.orders?.length||0}</b><small>FR-009 / BR-01</small></article><article><span>已排任务</span><b>{tasks.length}</b><small>机器 + 前后序</small></article><article><span>问题定位</span><b className={visibleFindings.length?'warn-text':''}>{visibleFindings.length}</b><small>问题与甘特联动</small></article><article><span>保存方案</span><b>{plans.length}</b><small>快照保留输入版本</small></article></div>
         {activePlan&&<CheckScope scope={activePlan.conditions?.checkScope}/>}
+        {activePlan&&<DeliveryPanel plan={activePlan} plans={plans} onTask={ids=>setSelected(ids)}/>}
         {activePlan&&<ResourcePanel plan={activePlan} onTask={ids=>setSelected(ids)}/>}
         {activePlan&&<BatchPanel plan={activePlan} onTask={ids=>setSelected(ids)}/>}
         {activePlan&&<MaterialPanel plan={activePlan} onTask={id=>setSelected([id])}/>}

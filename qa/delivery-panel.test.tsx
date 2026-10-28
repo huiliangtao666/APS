@@ -1,0 +1,20 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import React from 'react';
+import {create,act} from 'react-test-renderer';
+import {DeliveryPanel} from '../src/DeliveryPanel';
+import {calculate,seed} from '../server/planner';
+import {deliveryFixture} from './delivery-fixture.mjs';
+const at='2026-10-29T00:00:00Z';
+const plan=(startMinute=180)=>({...calculate(deliveryFixture(seed),0,at,{startMinute}),id:'P'+startMinute});
+test('FR023 delivery UI distinguishes completed/deliverable, locates tasks and truthfully compares unchanged/worse/unknown saved results',()=>{
+ const p=plan(),base=plan(120);let selected:string[]=[];let view:any;
+ act(()=>{view=create(<DeliveryPanel plan={p} plans={[base]} onTask={ids=>selected=ids}/>);});
+ assert.match(JSON.stringify(view.toJSON()),/找到的可行时间/);assert.match(JSON.stringify(view.toJSON()),/conditional-late/);assert.match(JSON.stringify(view.toJSON()),/360/);assert.match(JSON.stringify(view.toJSON()),/240/);
+ act(()=>view.root.findAllByType('button')[0].props.onClick());assert.deepEqual(selected,p.deliveryAssessment.orders[0].taskIds);
+ act(()=>view.root.findByType('select').props.onChange({target:{value:base.id}}));assert.match(JSON.stringify(view.toJSON()),/无交期改善/);assert.match(JSON.stringify(view.toJSON()),/60 分钟/);
+ act(()=>view.update(<DeliveryPanel plan={p} plans={[{...base,deliveryAssessment:p.deliveryAssessment}]} onTask={()=>{}}/>));assert.match(JSON.stringify(view.toJSON()),/无交期改善/);
+ const unknown={...base,deliveryAssessment:{...base.deliveryAssessment,orders:base.deliveryAssessment.orders.map((o:any)=>({...o,delayMinutes:null}))}};
+ act(()=>view.update(<DeliveryPanel plan={p} plans={[unknown]} onTask={()=>{}}/>));assert.match(JSON.stringify(view.toJSON()),/比较未知/);
+ act(()=>view.update(<DeliveryPanel plan={{id:'legacy'}} plans={[]} onTask={()=>{}}/>));assert.match(JSON.stringify(view.toJSON()),/历史方案未保存/);assert.ok(!JSON.stringify(view.toJSON()).includes('conditional-late'));
+});

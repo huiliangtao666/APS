@@ -48,3 +48,13 @@ test('FR022 built production Worker enforces saved joint declarations with two-s
  assert.deepEqual(p.tasks.filter(t=>t.operation==='MIX').map(t=>t.start),[0,0,30]);assert.equal(p.resourceReservations.filter(r=>r.type==='工装').length,3);assert.equal(p.ruleSnapshot.capabilityVersion,'FR022-v1');assert.ok(p.resourceReservations.every(r=>r.taskIds.length));
  }finally{await worker.terminate();}
 });
+
+import {deliveryFixture} from './delivery-fixture.mjs';
+test('FR023 built production Worker keeps completion distinct from conditional deliverable and unknown partial work',async()=>{
+ for(const endMinute of [600,220]){
+  const d=deliveryFixture(seed),frozen=freezeRunInput(d,{startMinute:180,endMinute},'2026-10-29T00:00:00Z');
+  const worker=new Worker(new URL('../dist/calculation-worker.mjs',import.meta.url),{workerData:{...frozen,revision:0,calculatedAt:'2026-10-29T00:00:00Z'}});
+  try{const p=await new Promise((resolve,reject)=>{worker.on('message',m=>{if(m.kind==='result')resolve(m.plan);if(m.kind==='failure')reject(Error(m.code));});worker.on('error',reject);});const o=p.deliveryAssessment.orders[0];assert.equal(o.expectedDeliverableMinute,endMinute===600?360:null);assert.equal(o.delayMinutes,endMinute===600?60:null);assert.equal(o.promised,false);assert.equal(p.deliveryAssessment.version,'FR023-v1');assert.ok(p.tasks.every(t=>Array.isArray(t.timingReasons)));}
+  finally{await worker.terminate();}
+ }
+});

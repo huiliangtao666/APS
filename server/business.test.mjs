@@ -595,3 +595,29 @@ test('FR022 canonical async runs persist joint occupancy, immutable histories an
  const next=(await call('/calculate',{revision:2})).body;assert.deepEqual(next.tasks.filter(t=>t.operation==='MIX').map(t=>t.start),[0,0,40]);
  const records=(await call('/operations')).body;assert.ok(records.some(r=>r.action==='run_completed'));assert.ok(records.every(r=>r.actor==='test#planner'&&r.reason==='test reason'&&r.requestId==='trusted-request'));
 });
+
+import {deliveryFixture} from '../qa/delivery-fixture.mjs';
+test('FR023 canonical sync/async delivery reports, simulated-quality CRUD, immutable history, roles and audited export',async t=>{
+ const {call}=await fixture(t),d=deliveryFixture((await call('/state')).body.data);
+ assert.equal((await call('/inputs',{revision:0,tables:d})).status,200);
+ const initial=(await call('/state')).body;
+ assert.equal((await call('/tables/deliveryConditions',{revision:1,rows:[{...d.deliveryConditions[0],'模拟质量可用时间':'2026-02-30T01:00:00Z'}]})).status,400);
+ assert.deepEqual((await call('/state')).body,initial);
+ for(const [sub,headers]of [['query',{}],['planner',{'sec-fetch-site':'cross-site'}]])assert.equal((await call('/tables/deliveryConditions',{revision:1,rows:d.deliveryConditions},sub,headers)).status,403);
+ const selection={startMinute:180,endMinute:600};
+ const sync=await call('/calculate',{revision:1,selection,deliveryAssessment:{orders:[{delayMinutes:0,promised:true}]}});assert.equal(sync.status,201);assert.equal(sync.body.deliveryAssessment.orders[0].delayMinutes,60);assert.equal(sync.body.deliveryAssessment.promised,false);
+ const old=(await call('/plans')).body.find(p=>p.id===sync.body.id),snap=(await call('/runs/'+old.runId+'/inputs')).body;
+ const async=await call('/runs',{revision:1,selection,deliveryAssessment:{promised:true}});assert.equal(async.status,202);const done=await waitRun(call,async.body.id);assert.equal(done.status,'completed');const p=(await call('/plans')).body.find(p=>p.id===done.planId);assert.deepEqual(p.deliveryAssessment,old.deliveryAssessment);assert.deepEqual(p.productionBatches,old.productionBatches);assert.deepEqual(p.materialDemands,old.materialDemands);
+ assert.deepEqual(snap.executionData.deliveryConditions,d.deliveryConditions);assert.ok(p.conditions.checkScope.checked.some(x=>x.includes('交付')));
+ assert.equal((await call('/export',{planId:p.id},'query')).status,403);
+ const csv=await call('/export',{planId:p.id});assert.equal(csv.status,200);assert.match(csv.body,/订单完成与交期影响/);assert.match(csv.body,/conditional-late/);assert.match(csv.body,/模拟合格/);assert.match(csv.body,/FR023-v1/);
+ const queried=await call('/export',{query:{table:'tasks',planId:p.id,revision:1,filters:{order:'A'}}});assert.equal(queried.status,200);assert.match(queried.body,/订单完成与交期影响/);
+ const rows=[{...d.deliveryConditions[0],'模拟质量状态':'模拟预计可用','模拟质量可用时间':'2026-11-02T15:00:00+08:00'}];assert.equal((await call('/tables/deliveryConditions',{revision:1,rows})).status,200);
+ const next=(await call('/calculate',{revision:2,selection})).body;assert.equal(next.deliveryAssessment.orders[0].expectedDeliverableMinute,420);
+ assert.deepEqual((await call('/plans')).body.find(p=>p.id===old.id),old);assert.deepEqual((await call('/runs/'+old.runId+'/inputs')).body,snap);
+ const audit=(await call('/operations')).body;assert.ok(audit.some(a=>a.action==='run_completed'));assert.ok(audit.some(a=>a.action==='export'));assert.ok(audit.every(a=>a.actor==='test#planner'&&a.reason==='test reason'&&a.requestId==='trusted-request'));
+});
+test('FR023 legacy plans and missing optional delivery table remain historical and exportable without invented assessment',async t=>{
+ const {call,dir}=await fixture(t);const p=(await call('/calculate',{revision:0})).body,file=path.join(dir,'business.json'),s=JSON.parse(fs.readFileSync(file));delete s.data.deliveryConditions;delete s.plans[0].deliveryAssessment;fs.writeFileSync(file,JSON.stringify(s));
+ const before=(await call('/plans')).body;assert.equal(before[0].deliveryAssessment,undefined);assert.equal((await call('/export',{table:'deliveryConditions'})).status,200);assert.equal((await call('/export',{planId:p.id})).status,200);assert.deepEqual((await call('/plans')).body,before);
+});

@@ -1,0 +1,15 @@
+import {useState} from 'react';
+export type DeliveryPlan={id:string;deliveryAssessment?:any};
+const show=(n:number|null|undefined)=>n==null?'未知':String(n);
+export function DeliveryPanel({plan,plans,onTask}:{plan:DeliveryPlan;plans:DeliveryPlan[];onTask:(ids:string[])=>void}){
+ const [baselineId,setBaselineId]=useState('');
+ const report=plan.deliveryAssessment,baseline=plans.find(p=>p.id===baselineId)?.deliveryAssessment;
+ if(!report)return <section className="panel"><h2>完成与交期影响</h2><p>历史方案未保存交付评估，不能按当前输入补算旧结论。</p></section>;
+ return <section className="panel"><h2>完成与交期影响 · {report.label}</h2><p>分钟0：{report.timeOrigin}；日期显示为 UTC ISO。{report.mode==='minimal-r1'?'R1最小模式，交付条件未检查。':'仅在保存的检查范围与模拟条件下评估。'} 所有结果均不作为真实交付承诺。</p>
+ <label>比较已保存方案 <select value={baselineId} onChange={e=>setBaselineId(e.target.value)}><option value="">不比较</option>{plans.filter(p=>p.id!==plan.id).map(p=><option key={p.id} value={p.id}>{p.id}</option>)}</select></label>
+ {baselineId&&!baseline&&<p>所选历史方案没有交付评估，无法比较。</p>}
+ <div className="table-wrap"><table><thead><tr><th>订单 / 单位</th><th>任务与生产完成</th><th>要求 / 条件预计可交付</th><th>延后数量（生产批候选）/ 分钟</th><th>未知数量 / 状态</th><th>保存证据与原因</th></tr></thead><tbody>{report.orders.map((o:any)=>{
+  const old=baseline?.orders.find((b:any)=>b.orderId===o.orderId),delta=old?.delayMinutes!=null&&o.delayMinutes!=null?o.delayMinutes-old.delayMinutes:null;
+  return <tr key={o.orderId}><td><button onClick={()=>onTask(o.taskIds)}>{o.orderId}</button> / {o.unit}<p>要求 {show(o.requiredQuantity)}；本次余量 {show(o.remainingQuantity)}</p></td><td>{show(o.completionMinute)} 分钟<p>{o.completionAt||'完成时间未知'}</p>{o.batches.map((b:any)=><p key={b.productionBatchId||o.orderId}>{b.productionBatchId||'未拆批'}：{b.quantity}{b.unit}；完成 {show(b.completionMinute)}；可交付 {show(b.deliverableMinute)}；缺工序 {b.missingOperations.join('、')||'无'}</p>)}</td><td>要求 {show(o.dueMinute)} / 可交付 {show(o.expectedDeliverableMinute)} 分钟<p>{o.expectedDeliverableAt||'可交付时间未知'}</p><p>后续等待 {o.waitMinutes??'未知'} 分钟</p></td><td>{show(o.delayedQuantity)} {o.unit} / {show(o.delayMinutes)} 分钟<p>已知延后下界 {show(o.knownLateQuantity)} {o.unit}</p></td><td>{show(o.unknownDeliverableQuantity)} {o.unit}<p>{o.status} · 附条件，无承诺</p>{old&&<p>{delta===null?'比较未知，不能认定改善':delta>=0?`无交期改善；延后变化 +${delta} 分钟`:`延后减少 ${-delta} 分钟（仍附条件）`}</p>}</td><td>{o.reasons.map((r:any,i:number)=><p key={i}>{r.code}：{r.message}</p>)}<details><summary>输入、质量、供给、物料与任务因果证据</summary><pre>{JSON.stringify({quality:o.qualityCondition,supply:o.supplyConditions,allocations:o.materialAllocations,timing:o.timingReasons,findings:o.findings,scope:report.scope,comparison:old?{baseline:baselineId,old:{due:old.dueMinute,wait:old.waitMinutes,quality:old.qualityCondition,supply:old.supplyConditions,allocations:old.materialAllocations,timing:old.timingReasons},current:{due:o.dueMinute,wait:o.waitMinutes,quality:o.qualityCondition,supply:o.supplyConditions},delayDelta:delta}:null},null,2)}</pre></details></td></tr>;
+ })}</tbody></table></div><p>{report.limits.join('；')}</p></section>;
+}
