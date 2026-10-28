@@ -1,3 +1,4 @@
+import {scopedReport,reportCsv} from './scoped-report.mjs';
 import {resourceLoad,loadCsv} from '../src/lib/resource-load.mjs';
 import {validInterval} from '../src/lib/timetable.mjs';
 import {reviewPlan,contentHash,validConfirmation} from './confirmation.mjs';
@@ -304,8 +305,21 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     event.submissionId=w.submission?.id;w.events.push(event);w.revision++;s.workflows??={};s.workflows[p.id]=w;
     record(s,req,action,p.id,{workflowRevision:w.revision,submissionId:w.submission?.id,confirmationId:w.confirmationId,reviewHash:review.reviewHash,inputVersionId:p.inputVersionId,snapshotHash:p.snapshotHash});write(s);res.json({plan:p,workflow:w});
   });
+  router.get('/reports',permission('read'),(req,res)=>{
+    try{res.json(scopedReport(read(),JSON.parse(req.query.query)));}
+    catch(e){res.status(e.status||400).json({error:e.status?e.message:'invalid_report_query'});}
+  });
   router.post('/export',permission('export'),(req,res)=>{
     const s=read();let csv,target;
+    if(req.body.report){
+      try{
+        if(Object.keys(req.body).some(k=>!['report','viewId','reason'].includes(k)))return res.status(400).json({error:'invalid_report_export'});
+        const r=scopedReport(s,req.body.report);
+        if(req.body.viewId!==r.viewId)return res.status(409).json({error:'stale_report',message:'查询快照已变化，请重新查询后导出'});
+        record(s,req,'export',r.provenance.planId,{query:r.query,viewId:r.viewId,inputVersionId:r.provenance.inputVersionId,snapshotHash:r.provenance.snapshotHash});write(s);
+        return res.set('Content-Disposition','attachment; filename="FR035.csv"').type('text/csv').send('\ufeff'+reportCsv(r));
+      }catch(e){return res.status(e.status||400).json({error:e.status?e.message:'invalid_report_query'});}
+    }
     if(req.body.confirmationId){
       const c=s.confirmations?.find(c=>c.id===req.body.confirmationId);if(!c)return res.status(404).json({error:'confirmation_not_found'});
       if(!validConfirmation(c))return res.status(409).json({error:'protected_history_unavailable'});
