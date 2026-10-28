@@ -49,11 +49,11 @@ test('import/edit/calculate/save/verify/export records actor, server time and re
  assert.equal(records[0].before[0]['合格需求'],'240');assert.equal(records[0].after[0]['合格需求'],'241');
  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dir,'business.json'))).records,records);
 });
-test('supervisor-only downstream gates fail closed without inventing R7 confirmation',async t=>{
+test('supervisor-only downstream gates reject unknown plans without state changes',async t=>{
  const {call}=await fixture(t);
  for(const action of ['confirm','return','release']){
   assert.equal((await call('/plans/x/'+action,{},'planner')).status,403);
-  const r=await call('/plans/x/'+action,{},'supervisor');assert.equal(r.status,501);assert.equal(r.body.error,'workflow_not_supported');
+  const r=await call('/plans/x/'+action,{},'supervisor');assert.equal(r.status,404);assert.equal(r.body.error,'plan_not_found');
  }
  assert.equal((await call('/operations')).body.length,0);
 });
@@ -208,7 +208,7 @@ test('FR015 snapshots preserve original full inputs across edit/delete/recompute
 test('FR015 simulated confirmed storage fixture protects original inputs; missing or corrupt historical inputs fail closed',async t=>{
  const {call,dir}=await fixture(t);const p=(await call('/calculate',{revision:0})).body;
  const file=path.join(dir,'business.json');let s=JSON.parse(fs.readFileSync(file));
- // Test-only persistence fixture: no product route creates a confirmed plan.
+ // Legacy test-only persistence fixture; real FR030 lifecycle is tested separately.
  s.plans[0].status='confirmed';fs.writeFileSync(file,JSON.stringify(s));
  const tables=structuredClone(s.data);tables.inventory=[];
  assert.equal((await call('/inputs',{tables,revision:0})).status,200);
@@ -217,7 +217,7 @@ test('FR015 simulated confirmed storage fixture protects original inputs; missin
  s=JSON.parse(fs.readFileSync(file));s.inputVersions[p.inputVersionId].data.inventory=[];fs.writeFileSync(file,JSON.stringify(s));
  assert.equal((await call('/plans/'+p.id+'/inputs')).status,409);
  const before=fs.readFileSync(file,'utf8');assert.equal((await call('/inputs',{tables,revision:1})).status,409);assert.equal(fs.readFileSync(file,'utf8'),before);
- assert.equal((await call('/plans/x/confirm',{},'supervisor')).status,501);
+ assert.equal((await call('/plans/x/confirm',{},'supervisor')).status,404);
 });
 test('FR015 concurrent stale actions, alternate endpoints and forged audit/plan fields cannot mutate history',async t=>{
  const {call}=await fixture(t);const s=(await call('/state')).body;

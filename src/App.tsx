@@ -1,3 +1,4 @@
+import {ConfirmationPanel} from './ConfirmationPanel';
 import {ExecutionPanel} from './ExecutionPanel';
 import {executionInventory} from './lib/material-allocation.mjs';
 import {TrialPanel,type Trial} from './TrialPanel';
@@ -103,6 +104,7 @@ export default function App() {
       <section className="hero"><div><p className="eyebrow">单线排程 · R1 最小模式 / 已有支持模式</p><h1>{view==='schedule'?'排程计算与范围核对':view==='data'?'日历与排程数据':view==='query'?'模拟数据与关联查询':'实现范围与业务决策'}</h1><p className="sub">基于 v0.3 UAT-02 / 2026-11-02 08:00（Asia/Shanghai）；样例业务值均为虚构，仅用于软件验证。</p></div><div className="hero-source"><span>追溯基线</span><b>FR-008 · UAT-02 · AC-05</b><small>工厂窗口继承 · 设备停机例外 · 连续工作窗口</small></div></section>
       {message&&<div className="toast" role="status">{message}<button onClick={()=>setMessage('')}>×</button></div>}
       {view==='schedule'&&<>
+        <ConfirmationPanel plans={plans} role={session?.role} busy={busy} reason={reason} api={api} refresh={refresh} onExport={session?.canExport?id=>download({confirmationId:id},id+'-确认副本.json'):undefined}/>
         <TrialPanel plans={plans} activeId={activePlan?.id} trials={trials} runs={runs} revision={inputVersion} canWrite={!!session?.canWrite} busy={busy} reason={reason} api={api} refresh={refresh} onResult={id=>{api('/plans').then(list=>{const p=list.find((x:Plan)=>x.id===id);if(p){setActivePlan(p);setIssues(p.findings);setVerification(p.verification||null);}}).catch(e=>setMessage(e.message));}} onRun={(trial,selection)=>perform(async()=>{const run=await api('/runs',{trialId:trial.id,revision:trial.revision,selection});pendingRun.current=run.id;await refresh();})} onCancel={cancelRun}/>
         {activePlan&&<ResultPanel plan={activePlan} onTask={id=>setSelected([id])} onInput={(table,row)=>{setQueryInputTable(table);setQueryInputRow(row);setSelected([]);setView('query');}}/>}
         <RunPanel data={data} runs={runs} canWrite={!!session?.canWrite&&!!reason.trim()} busy={busy} onExport={session?.canExport&&!busy&&!!reason.trim()?id=>download({runId:id},id+'-结果原因.csv'):undefined} onStart={startRun} onCancel={cancelRun} onInputs={id=>api('/runs/'+id+'/inputs')} onResult={id=>{const p=plans.find(p=>p.id===id);if(p){setActivePlan(p);setIssues(p.findings);setVerification(p.verification||null);}}}/>

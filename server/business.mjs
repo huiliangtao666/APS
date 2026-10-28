@@ -1,3 +1,4 @@
+import {reviewPlan,contentHash} from './confirmation.mjs';
 import {stageEvents} from '../src/lib/simulation-events.mjs';
 import {executionState,executionTransition,executionAdmission,executionSummary,factTables,executionTrialIssues} from '../src/lib/execution-facts.mjs';
 import {executionInventory} from '../src/lib/material-allocation.mjs';
@@ -39,17 +40,18 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   router.use(actorMiddleware,requireMember(['planner','supervisor','query']));
   const permission=(action)=> (req,res,next)=>{
     const m=req.member;
-    const allowed= action==='read' || (action==='export' ? m.role!=='query'||m.canExport===true : ['confirm','return','release'].includes(action) ? m.role==='supervisor' : ['planner','supervisor'].includes(m.role));
+    const allowed= action==='read' || (action==='export' ? m.role!=='query'||m.canExport===true : ['confirm','return','release','archive'].includes(action) ? m.role==='supervisor' : ['planner','supervisor'].includes(m.role));
     if(!allowed){console.info(JSON.stringify({action,decision:'deny',requestId:req.praetorActor.requestId,actor:subjectKey(req.praetorActor)}));return res.status(403).json({error:'forbidden'});}
     if(req.method!=='GET'){
       const site=req.get('sec-fetch-site');const origin=req.get('origin');
-      if((site&&!['same-origin','none'].includes(site))||(!site&&origin&&new URL(origin).host!==req.get('host')))return res.status(403).json({error:'csrf'});
+      let badOrigin=false;try{if(origin){const parsed=new URL(origin);badOrigin=!['http:','https:'].includes(parsed.protocol)||parsed.host!==req.get('host');}}catch{badOrigin=true;}
+      if((site&&!['same-origin','none'].includes(site))||badOrigin)return res.status(403).json({error:'csrf'});
       if(typeof req.body?.reason!=='string'||!req.body.reason.trim()||req.body.reason.length>1000)return res.status(400).json({error:'reason_required'});
     }
     next();
   };
   const record=(s,req,action,target,details={})=>s.records.push({id:randomUUID(),action,target,actor:subjectKey(req.praetorActor),role:req.member.role,at:new Date().toISOString(),reason:req.body.reason.trim(),requestId:req.praetorActor.requestId,...details});
-  router.get('/meta',permission('read'),(_req,res)=>res.json({release:'R1 prototype + FR-037 supported-flow slice',baseline:'APS v0.3 review draft',supportedRules:['BR-02 precedence','BR-03 exclusive machine overlap','FR-008 calendar','FR-007 personnel','FR-022 explicit joint occupancy'],timeOrigin:'2026-11-02T08:00:00+08:00',interval:'[start,end)',unsupportedWorkflows:['confirm','return','release']}));
+  router.get('/meta',permission('read'),(_req,res)=>res.json({release:'R1 prototype + FR-037 supported-flow slice',baseline:'APS v0.3 review draft',supportedRules:['BR-02 precedence','BR-03 exclusive machine overlap','FR-008 calendar','FR-007 personnel','FR-022 explicit joint occupancy'],timeOrigin:'2026-11-02T08:00:00+08:00',interval:'[start,end)',unsupportedWorkflows:['external-dispatch','historical-restore'],confirmation:'FR030-v1 internal only'}));
   router.get('/rules/capabilities',permission('read'),(_req,res)=>res.json(ruleCatalog));
   router.get('/session',permission('read'),(req,res)=>res.json({role:req.member.role,canWrite:['planner','supervisor'].includes(req.member.role),canExport:req.member.role!=='query'||req.member.canExport===true}));
   router.get('/state',permission('read'),(_req,res)=>{const s=read();res.json({data:s.data,revision:s.revision});});
@@ -82,7 +84,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const issues=[...validateInputs(defs,proposed),...(newlyEnabled?assessRules(proposed,new Date().toISOString(),true).issues:[])];if(issues.length)return res.status(400).json({error:'invalid_input',issues});
     if(operation==='restore')return res.status(409).json({error:'restore_blocked',...restoreBlockers(s,null)});
     // A missing original confirmed snapshot cannot be reconstructed from today's data.
-    if(s.plans.some(p=>['confirmed','released'].includes(p.status)&&!inputs(s,p)))return res.status(409).json({error:'protected_history_unavailable'});
+    if(s.plans.some(p=>['confirmed','released','archived'].includes(p.status)&&!inputs(s,p)))return res.status(409).json({error:'protected_history_unavailable'});
     const changes=defs.map(d=>d.key).filter(key=>JSON.stringify(target.data[key])!==JSON.stringify(proposed[key]));
     if(!changes.length)return res.json({data:target.data,revision:target.revision,unchanged:true});
     const before=target.data;const fromVersion=preserve(s,target);
@@ -244,13 +246,63 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const run=p.runId?s.runs?.find(r=>r.id===p.runId):null;
     if(p.runId&&(!run||run.snapshotHash!==p.snapshotHash||inputHash({conditions:run.conditions,executionData:run.executionData})!==p.snapshotHash||!inputs(s,p)))return res.status(409).json({error:'historical_inputs_unavailable'});
     const execution=run?.executionData;
-    p.verification=independentlyVerifyPlan(p,execution?.orders??s.data.orders,execution?.routes??s.data.routes,p.rules);record(s,req,'edit',p.id,{kind:'verify'});write(s);res.json(p);
+    p.verification={...independentlyVerifyPlan(p,execution?.orders??s.data.orders,execution?.routes??s.data.routes,p.rules),contentHash:contentHash(p)};record(s,req,'edit',p.id,{kind:'verify'});write(s);res.json(p);
   });
-  // FR-025/030 submission, conflict/partial/staleness confirmation and return
-  // are not implemented in this slice. Never turn a client status into release.
-  for(const action of ['confirm','return','release'])router.post(`/plans/:id/${action}`,permission(action),(_req,res)=>res.status(501).json({error:'workflow_not_supported',action}));
+  router.get('/plans/:id/review',permission('read'),(req,res)=>{
+    const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});
+    res.json({...reviewPlan(s,p),workflow:s.workflows?.[p.id]||{revision:0,state:p.status,events:[]},confirmation:s.confirmations?.find(c=>c.planId===p.id)||null});
+  });
+  router.get('/confirmations',permission('read'),(_req,res)=>res.json(read().confirmations||[]));
+  router.get('/confirmations/:id',permission('read'),(req,res)=>{
+    const c=read().confirmations?.find(c=>c.id===req.params.id);if(!c)return res.status(404).json({error:'confirmation_not_found'});
+    if(inputHash(c.snapshot)!==c.snapshotHash)return res.status(409).json({error:'protected_history_unavailable'});res.json(c);
+  });
+  for(const action of ['submit','confirm','return','release','archive'])router.post(`/plans/:id/${action}`,permission(action),(req,res)=>{
+    const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});
+    const w=s.workflows?.[p.id]||{revision:0,state:p.status,events:[]};
+    if(req.body.revision!==s.revision||req.body.workflowRevision!==w.revision)return res.status(409).json({error:'stale_input'});
+    const allowed={submit:['draft','returned'],confirm:['submitted'],return:['submitted'],release:['confirmed'],archive:['confirmed','released']};
+    if(!allowed[action].includes(w.state))return res.status(409).json({error:'invalid_transition'});
+    const review=reviewPlan(s,p);
+    if(req.body.reviewHash!==review.reviewHash)return res.status(409).json({error:'stale_review',message:'复核内容已变化，请刷新后重新核对'});
+    if(['submit','confirm','release'].includes(action)&&review.blockers.length)return res.status(409).json({error:'confirmation_blocked',blockers:review.blockers});
+    if(['confirm','return'].includes(action)&&req.body.submissionId!==w.submission?.id)return res.status(409).json({error:'stale_submission'});
+    if(['confirm','release'].includes(action)&&(!w.submission||w.submission.contentHash!==contentHash(p)||w.submission.inputVersionId!==p.inputVersionId))return res.status(409).json({error:'resubmission_required'});
+    if(['submit','confirm'].includes(action)){
+      const expected=review.unplanned.map(t=>t.id).sort();const ids=req.body.unplannedIds;
+      if(!Array.isArray(ids)||ids.some(id=>typeof id!=='string')||inputHash([...ids].sort())!==inputHash(expected)||expected.length&&req.body.acceptPartial!==true)return res.status(400).json({error:'explicit_unplanned_required'});
+      if(review.conditionalSupply.length&&req.body.acceptConditionalSupply!==true)return res.status(400).json({error:'conditional_supply_ack_required'});
+      if(req.body.acknowledgeScope!==true)return res.status(400).json({error:'check_scope_ack_required'});
+    }
+    const at=new Date().toISOString(),actor=subjectKey(req.praetorActor);
+    const event={id:randomUUID(),action,at,actor,role:req.member.role,reason:req.body.reason.trim(),requestId:req.praetorActor.requestId,reviewHash:review.reviewHash,contentHash:contentHash(p)};
+    if(action==='submit'){
+      if(!p.verification||p.verification.contentHash!==contentHash(p))return res.status(409).json({error:'verification_required'});
+      w.submission={...event,id:randomUUID(),inputVersionId:p.inputVersionId,contentHash:contentHash(p),review};
+      w.submissions??=[];w.submissions.push(structuredClone(w.submission));
+      w.state='submitted';p.status='submitted';
+    }else if(action==='return'){w.state='returned';p.status='draft';}
+    else if(action==='confirm'){
+      p.status='confirmed';w.state='confirmed';
+      const snapshot=structuredClone({plan:p,originalInput:inputs(s,p).data,run:s.runs.find(r=>r.id===p.runId),submission:w.submission,review,decision:event});
+      const c={id:randomUUID(),planId:p.id,createdAt:at,actor,snapshot,snapshotHash:inputHash(snapshot)};
+      s.confirmations??=[];s.confirmations.push(c);w.confirmationId=c.id;
+    }else{
+      const c=s.confirmations?.find(c=>c.id===w.confirmationId);
+      if(!c||inputHash(c.snapshot)!==c.snapshotHash||contentHash(c.snapshot.plan)!==contentHash(p))return res.status(409).json({error:'protected_history_unavailable'});
+      // Release/archive metadata is separate: confirmed plan bytes never change.
+      w.state=action==='release'?'released':'archived';
+    }
+    event.submissionId=w.submission?.id;w.events.push(event);w.revision++;s.workflows??={};s.workflows[p.id]=w;
+    record(s,req,action,p.id,{workflowRevision:w.revision,submissionId:w.submission?.id,confirmationId:w.confirmationId,reviewHash:review.reviewHash,inputVersionId:p.inputVersionId,snapshotHash:p.snapshotHash});write(s);res.json({plan:p,workflow:w});
+  });
   router.post('/export',permission('export'),(req,res)=>{
     const s=read();let csv,target;
+    if(req.body.confirmationId){
+      const c=s.confirmations?.find(c=>c.id===req.body.confirmationId);if(!c)return res.status(404).json({error:'confirmation_not_found'});
+      if(inputHash(c.snapshot)!==c.snapshotHash)return res.status(409).json({error:'protected_history_unavailable'});
+      record(s,req,'export',c.planId,{confirmationId:c.id,snapshotHash:c.snapshotHash});write(s);return res.type('application/json').send(JSON.stringify({...c,workflow:s.workflows?.[c.planId]},null,2));
+    }
     if(req.body.runId){
       const run=s.runs?.find(r=>r.id===req.body.runId);if(!run)return res.status(404).json({error:'run_not_found'});
       const plan=s.plans.find(p=>p.id===run.planId);csv=resultCsv(run,plan);target=run.id;
