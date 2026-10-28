@@ -1,0 +1,77 @@
+const resourceTypes = new Set(['设备', '模具', '工具', '人员技能', '空间', '投料', '物料']);
+
+/** FR-004 checks route/time/dependency configuration without assigning resource semantics. */
+export function validateProcessConfig({ products = [], orders = [], routes = [], times = [], dependencies = [], machines = [], materials = [] }) {
+  const findings = [];
+  const productIds = new Set(products.map(row => (row['产品编号'] || '').trim()).filter(Boolean));
+  const orderIds = new Set(orders.map(row => (row['订单编号'] || '').trim()).filter(Boolean));
+  const machineIds = new Set(machines.map(row => (row['设备编号'] || '').trim()).filter(Boolean));
+  const materialIds = new Set(materials.map(row => (row['物料编号'] || '').trim()).filter(Boolean));
+  const routeByProduct = new Map();
+  routes.forEach((row, index) => {
+    const product = (row['产品编号'] || '').trim();
+    const operation = (row['工序编号'] || '').trim();
+    const prefix = `工艺路线第 ${index + 1} 行`;
+    if (!product) findings.push({ code:'INPUT / ROUTE_REQUIRED', message:`${prefix}缺少产品编号` });
+    if (!operation) findings.push({ code:'INPUT / ROUTE_REQUIRED', message:`${prefix}缺少工序编号` });
+    if (operation && !(row['工序名称'] || '').trim()) findings.push({ code:'INPUT / ROUTE_REQUIRED', message:`${prefix}（${product}/${operation}）缺少工序名称` });
+    if (product && productIds.has(product) && operation) {
+      const list = routeByProduct.get(product) || [];
+      if (list.some(existing => (existing['工序编号'] || '').trim() === operation)) findings.push({ code:'INPUT / ROUTE_DUPLICATE', message:`产品 ${product} 的工序编号 ${operation} 重复` });
+      else list.push(row);
+      routeByProduct.set(product, list);
+    }
+  });
+  for (const [product, list] of routeByProduct) {
+    const opIds = new Set(list.map(row => (row['工序编号'] || '').trim()));
+    for (const row of list) {
+      const operation = row['工序编号'].trim();
+      const predecessor = (row['前序工序'] || '').trim();
+      if (predecessor && !opIds.has(predecessor)) findings.push({ code:'INPUT / ROUTE_PREDECESSOR', message:`产品 ${product} / 工序 ${operation} 引用不存在的前序工序 ${predecessor}` });
+    }
+    const visiting = new Set(), visited = new Set();
+    const visit = id => {
+      if (visiting.has(id)) { findings.push({ code:'INPUT / ROUTE_CYCLE', message:`产品 ${product} 的路线存在循环依赖，涉及工序 ${id}` }); return; }
+      if (visited.has(id)) return;
+      visiting.add(id);
+      const row = list.find(item => item['工序编号'].trim() === id);
+      const predecessor = (row?.['前序工序'] || '').trim();
+      if (predecessor && opIds.has(predecessor)) visit(predecessor);
+      visiting.delete(id); visited.add(id);
+    };
+    for (const id of opIds) visit(id);
+  }
+
+  const timeKeys = new Set();
+  times.forEach((row, index) => {
+    const product = (row['产品编号'] || '').trim(), operation = (row['工序编号'] || '').trim();
+    const key = `${product}\u0000${operation}`;
+    if (!product || !operation) findings.push({ code:'INPUT / PROCESS_TIME_REQUIRED', message:`工序工时第 ${index + 1} 行缺少产品编号或工序编号` });
+    if (timeKeys.has(key)) findings.push({ code:'INPUT / PROCESS_TIME_DUPLICATE', message:`产品 ${product} / 工序 ${operation} 工时重复` });
+    timeKeys.add(key);
+    const value = Number((row['固定分钟'] || '').trim());
+    if (row['计算方式'] !== '固定' || !Number.isFinite(value) || value <= 0) findings.push({ code:'INPUT / PROCESS_TIME_INVALID', message:`产品 ${product} / 工序 ${operation} 需配置正数固定分钟；速度换算暂不支持` });
+  });
+  for (const [product, list] of routeByProduct) for (const row of list) {
+    const operation = row['工序编号'].trim();
+    if (!timeKeys.has(`${product}\u0000${operation}`)) findings.push({ code:'INPUT / PROCESS_TIME_MISSING', message:`产品 ${product} / 工序 ${operation} 缺少工时配置` });
+  }
+
+  dependencies.forEach((row, index) => {
+    const order = (row['订单编号'] || '').trim(), operation = (row['工序编号'] || '').trim();
+    const type = (row['资源类型'] || '').trim(), id = (row['资源编号'] || '').trim();
+    const prefix = `工序资源依赖第 ${index + 1} 行`;
+    if (!order || !orderIds.has(order)) findings.push({ code:'INPUT / DEPENDENCY_ORDER', message:`${prefix}缺少有效订单编号` });
+    if (!operation) findings.push({ code:'INPUT / DEPENDENCY_OPERATION', message:`${prefix}缺少工序编号` });
+    else {
+      const orderRow = orders.find(item => (item['订单编号'] || '').trim() === order);
+      const product = (orderRow?.['产品编号'] || '').trim();
+      if (product && !routeByProduct.get(product)?.some(item => (item['工序编号'] || '').trim() === operation)) findings.push({ code:'INPUT / DEPENDENCY_OPERATION', message:`${prefix}引用订单 ${order} 产品路线中不存在的工序 ${operation}` });
+    }
+    if (!resourceTypes.has(type)) findings.push({ code:'INPUT / DEPENDENCY_TYPE', message:`${prefix}资源类型为空或不支持` });
+    if (!id) findings.push({ code:'INPUT / DEPENDENCY_ID', message:`${prefix}缺少资源编号` });
+    if (type === '设备' && id && !machineIds.has(id)) findings.push({ code:'INPUT / DEPENDENCY_REFERENCE', message:`${prefix}引用未配置的设备 ${id}` });
+    if (type === '物料' && id && !materialIds.has(id)) findings.push({ code:'INPUT / DEPENDENCY_REFERENCE', message:`${prefix}引用未配置的物料 ${id}` });
+  });
+  return findings;
+}
