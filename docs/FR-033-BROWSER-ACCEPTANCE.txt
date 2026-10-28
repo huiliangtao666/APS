@@ -1,0 +1,119 @@
+FR033 canonical acceptance/delivery continuation — Dev browser observations
+Delivery dlv_602dc44e-e479-4ae8-b394-91554cf9e67c / APS-Design -> APS-Dev
+Canonical Project2 item PVTI_lAHOFM9WU84BpE1czhEHhB4; no parallel card/app.
+Product source tested: 50a32ef716f4bcd3f72993a2f0125afac9fabce2.
+Acceptance commit adds harness/reproduction/report only. All product source,
+HISTORY01 and round1 zoom/window repair remain byte-for-byte unchanged.
+
+Outcome: actual browser evidence obtained. This is a component-level display
+and keyboard acceptance continuation, NOT full FR033/AC/UAT completion.
+24 actual DOM measurements; 9 labelled JPEG screenshots; console/network;
+DOM/accessibility snapshots; source/HTML/screenshot hashes; validation logs.
+Low-zoom date labels overlap/clip: concrete remaining layout acceptance gap.
+No second defect repair round or product fix undertaken.
+
+Environment and method
+Workspace remote-VM, connected platform Chrome browser, page
+6689B4E5CCD4E2029C8C7A901209890B, generation b1e89091-6ceb-4366-88ee-ca83eea2665f.
+Viewport1920x937 CSS pixels, DPR1. Measurements2026-10-28T21:19:54.433Z through
+21:21:48.966Z. No mobile viewport, browser zoom, screen-reader or OS keyboard
+assessment claimed. Browser capabilities and coverage are preserved in logs.
+
+Inspected workspace-app-builder skill, bound-app list and dev diagnosis.
+Only existing binding aps-r1 exists: cwd/workspace/apps/aps-r1, publishedtrue,
+service20820, older R2.1 frontend. Dev was stopped by five-minute inactivity.
+Authorized app-restart.sh --dev produced Agent Browser URL
+https://praetor-office-sg.eniot.io/praetor-app/20820/dev/ . Browser safely
+rewrote this URL; no internal origin guessed or token added to browser.
+No permissions blocker: static harness became reachable after dev refresh.
+
+Bundled exact pinned TimelinePanel.tsx, timetable.mjs and index.css in disposable
+app-exec --validate source copies; production React bundle, labelled synthetic
+saved plan and distinct current facts, deeply frozen fixture, no API/auth calls.
+Generated single static file placed in existing preview public/fr033-acceptance/
+index.html. First attempts returned HTTP200 old SPA fallback; dev refresh
+resolved it. Successful harness title and full source SHA verified before any
+assertion. Production binding/artifacts/data were not changed or restarted.
+No new app registration, publication/deployment, daemon or identity change.
+The static harness is reviewable offline and not part of the product runtime.
+
+Observed browser results (CSS pixels, not inline style assertions)
+Zoom       Axis[0,120)   SHORT[0,30)   TINY[90,90.5)
+0.25       30           7.5           0.125
+1          120          30            0.5
+3          360          90            1.5
+8          960          240           4
+NEXT[60,90) widths match SHORT. At0.25 text is intentionally unreadable inside
+tiny bars; semantic names/table contain complete task and time information.
+Zoom1 original screenshot was overwritten by zoom3 within the tool's same
+second filename; zoom1 was recaptured separately. Labelled ZIP files are unique.
+
+WINDOW02: selected SHORT using Enter. Valid end90 at zoom8 gives axis720 and
+two bars. Invalid end1000000000000 gives Chinese rolealert; axis720, bars and
+selected details remain usable. End120 recovers axis960/noalert; clear resets
+window/filter values and keeps selected zoom8. No exception/blank chart.
+Upper extent240000 gives axis60000, actual0.25 vs requested8 explanation,
+native zoom1/3/8 options disabled. Reset restores960.
+
+Keyboard/layout: timeline ArrowRight/PageDown moved scrollLeft40/scrollTop279.
+After button +500, left540/top279; machine labels remained x448 and CSSsticky.
+Purple focus ring captured. Date axis is NOT vertically sticky and scrolls out
+of view. Tab from search reaches zoom; Tab from zoom reaches windowstart.
+Enter activates chart/table tasks, hidden-selection reveal, predecessor,
+saved-input callback and current-facts disclosure. Two ambiguous locator
+attempts failed before dispatch; corrected unique selectors succeeded; logs
+retain both tool errors. These are harness locator failures, not product bugs.
+
+Filters/details: machineN leaves NEXT and explicitly marks selectedSHORT hidden;
+reveal resets filters. SearchTINY/orderB each leave TINY; unplanned leaves zero
+bars. Synthetic problem button selects NEXT, then predecessor Enter selects
+SHORT. Saved orders/A/10 callback observed exactly. This does not exercise the
+real problem/query/input-edit page integration; no integrated AC17 pass.
+
+Provenance: plan/run/inputv7/hash/saved-factsv1 labelled. Current facts9 then999
+do not change saved4kg, task intervals, resource geometry or frozen JSON.
+All24 measurements immutabletrue and captured runtime errors[]. Simulation30
+states explicitly non-factual; never equated to execution or delivery.
+
+AC observations and limits
+AC04: displayed predecessor arrow/intervals and exact task selection work on
+synthetic saved output. No browser-executed actual scheduler/independent
+feasibility or abnormal overlapping-task/conflict-region acceptance.
+AC05: frozen stop[30,60), contiguous NEXT[60,90), preserved reason visible;
+browser confirms display only. Original calculation/UAT02 acceptance still open.
+AC06: G40 quantity1, available1, acquire55/release100 for task60..90 visible.
+No real1vs2 tooling runs/capacity solver/FR034 problem acceptance in browser.
+AC07: personnel2, available2, skillmix, shiftD, availability60..120 and distinct
+participation60..65 visible; space3m2/capacity10 visible. No actual2+1 versus2
+capacity/late-skilled-worker calculation or cross-shift acceptance in browser.
+AC17: chart/table/resource/predecessor and saved callback same IDs observed;
+problem callback is synthetic. Integrated three-page linkage remains open.
+AC31: Chinese labels, states, validation, keyboard, focus, scroll and semantic
+task names observed. Axis date labels visibly overlap at1 and clip at0.25;
+full low-zoom layout acceptance NOT passed. Main five-stage workflow, real
+signed identity/gateway, role permissions, screen-reader and UAT remain open.
+Large spans/performance/virtualization/production persistence not certified.
+
+Logs: network includes earlier preview-refresh502 and favicon403; these are
+not hidden or called product exceptions. Successful harness document200 and
+zero captured harness runtime errors. Measurement field "table" captures
+resource table; task table is separately captured in snapshots/screenshots.
+
+Verification
+Re-executed complete round1 reproduction command in disposable container:
+429 tests passed, zero failed/skipped/cancelled/todo. TypeScript, Vite,
+Express bundle, separate production Worker, built Worker regression and CSV
+verification pass. HISTORY01 remains included and source unchanged. No new
+test cases claimed. Harness bundle built and its independent reproduction
+script executed successfully. Reproduction HTML wrapper differs by10 bytes
+from observed HTML; both import identical pinned component/CSS and harness.
+Evidence contains observed HTML hash and the reproduction-build log separately.
+Initial unminified/large stdout artifact extraction exceeded exec's ~64KB tail;
+compressed bounded chunks solved this without live installs or host builds.
+Inherited npm audit3 moderate/1high unchanged; no dependency version edit.
+
+Live final issue checkpoint: issue18 OPEN, independent Test retest still pending
+in available comments; no newly confirmed Test failure found. HISTORY01 issue17
+already CLOSED with independent Test pass comment; this turn changed neither.
+No issue/card closure, fullDone claim, new feature, main merge or PR.
+Exact final acceptance commit/push/remoteSHA are in root delivery report/ZIP.
