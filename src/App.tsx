@@ -1,3 +1,4 @@
+import {ResultPanel,type ResultPlan} from './ResultPanel';
 import {DeliveryPanel,type DeliveryPlan} from './DeliveryPanel';
 import {ResourcePanel,type JointPlan} from './ResourcePanel';
 import {BatchPanel,type BatchPlan} from './BatchPanel';
@@ -25,7 +26,7 @@ type Row = Record<string, string>;
 type Task = { productionBatchId?:string;resourceBatchId?:string; id: string; orderId: string; productId: string; operation: string; label: string; machine: string; start: number; end: number; duration: number; predecessor: string; source: string };
 type Finding = { code: string; message: string; taskIds: string[] };
 type StoredVerificationReport = VerificationReport & { inputFingerprint?: string };
-type Plan = DeliveryPlan & JointPlan & BatchPlan & { id: string; name: string; createdAt: string; tasks: Task[]; findings: Finding[]; rules: string[]; inputVersion: string; verification?: StoredVerificationReport; supplyConditions?: SupplyCondition[]; supplyInput?: string; materialChecked?:boolean;materialDemands?:MaterialDemandRow[]; ruleSnapshot?: RuleSnapshot; inputSnapshot?:Record<string,Row[]>;runId?:string;conditions?:Run["conditions"] };
+type Plan = ResultPlan & DeliveryPlan & JointPlan & BatchPlan & { id: string; name: string; createdAt: string; tasks: Task[]; findings: Finding[]; rules: string[]; inputVersion: string; verification?: StoredVerificationReport; supplyConditions?: SupplyCondition[]; supplyInput?: string; materialChecked?:boolean;materialDemands?:MaterialDemandRow[]; ruleSnapshot?: RuleSnapshot; inputSnapshot?:Record<string,Row[]>;runId?:string;conditions?:Run["conditions"] };
 
 function rulesInputFingerprint(data:Record<string,Row[]>) { const source=JSON.stringify({orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],personnelGroups:data.personnelGroups||[],machines:data.machines||[],calendars:data.calendars||[],downtime:data.downtime||[],rules:data.rules||[]});let hash=2166136261;for(let i=0;i<source.length;i++){hash^=source.charCodeAt(i);hash=Math.imul(hash,16777619);}return (hash>>>0).toString(16).padStart(8,'0'); }
 function fmt(min: number) { const n=480+Math.round(min); return `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`; }
@@ -34,7 +35,10 @@ export default function App() {
   const requestGeneration=useRef(0);
   const embedded = usePraetorEmbedded();
   const [data,setData]=useState<Record<string,Row[]>>({});
+  const [queryInputRow,setQueryInputRow]=useState<Row|undefined>();
+  const [queryInputTable,setQueryInputTable]=useState<string|undefined>();
   const [view,setView]=useState<'schedule'|'data'|'query'|'decisions'>('schedule');
+  useEffect(()=>{if(view!=='query')setQueryInputTable(undefined);},[view]);
   const [tableKey,setTableKey]=useState('orders');
   const [inventoryAsOf,setInventoryAsOf]=useState(new Date().toISOString().slice(0,16));
   const [selected,setSelected]=useState<string[]>([]);
@@ -95,7 +99,8 @@ export default function App() {
       <section className="hero"><div><p className="eyebrow">单线排程 · R1 最小模式 / 已有支持模式</p><h1>{view==='schedule'?'排程计算与范围核对':view==='data'?'日历与排程数据':view==='query'?'模拟数据与关联查询':'实现范围与业务决策'}</h1><p className="sub">基于 v0.3 UAT-02 / 2026-11-02 08:00（Asia/Shanghai）；样例业务值均为虚构，仅用于软件验证。</p></div><div className="hero-source"><span>追溯基线</span><b>FR-008 · UAT-02 · AC-05</b><small>工厂窗口继承 · 设备停机例外 · 连续工作窗口</small></div></section>
       {message&&<div className="toast" role="status">{message}<button onClick={()=>setMessage('')}>×</button></div>}
       {view==='schedule'&&<>
-        <RunPanel data={data} runs={runs} canWrite={!!session?.canWrite&&!!reason.trim()} busy={busy} onStart={startRun} onCancel={cancelRun} onInputs={id=>api('/runs/'+id+'/inputs')} onResult={id=>{const p=plans.find(p=>p.id===id);if(p){setActivePlan(p);setIssues(p.findings);setVerification(p.verification||null);}}}/>
+        {activePlan&&<ResultPanel plan={activePlan} onTask={id=>setSelected([id])} onInput={(table,row)=>{setQueryInputTable(table);setQueryInputRow(row);setSelected([]);setView('query');}}/>}
+        <RunPanel data={data} runs={runs} canWrite={!!session?.canWrite&&!!reason.trim()} busy={busy} onExport={session?.canExport&&!busy&&!!reason.trim()?id=>download({runId:id},id+'-结果原因.csv'):undefined} onStart={startRun} onCancel={cancelRun} onInputs={id=>api('/runs/'+id+'/inputs')} onResult={id=>{const p=plans.find(p=>p.id===id);if(p){setActivePlan(p);setIssues(p.findings);setVerification(p.verification||null);}}}/>
         <div className="metrics"><article><span>单线订单</span><b>{data.orders?.length||0}</b><small>FR-009 / BR-01</small></article><article><span>已排任务</span><b>{tasks.length}</b><small>机器 + 前后序</small></article><article><span>问题定位</span><b className={visibleFindings.length?'warn-text':''}>{visibleFindings.length}</b><small>问题与甘特联动</small></article><article><span>保存方案</span><b>{plans.length}</b><small>快照保留输入版本</small></article></div>
         {activePlan&&<CheckScope scope={activePlan.conditions?.checkScope}/>}
         {activePlan&&<DeliveryPanel plan={activePlan} plans={plans} onTask={ids=>setSelected(ids)}/>}
@@ -124,7 +129,7 @@ export default function App() {
           <div className="table-wrap"><table><thead><tr><th>任务</th><th>订单 / 产品</th><th>工序</th><th>机器</th><th>开始</th><th>结束</th><th>工时</th><th>前序</th><th>来源</th><th>预计供给条件</th></tr></thead><tbody>{tasks.map(t=><tr key={t.id} onClick={()=>setSelected([t.id])}><td><b>{t.id}</b></td><td>{t.orderId} / {t.productId}</td><td>{t.label} <small>{t.operation}</small></td><td>{t.machine}</td><td>{fmt(t.start)}</td><td>{fmt(t.end)}</td><td>{t.duration} 分</td><td>{t.predecessor||'—'}</td><td>{t.source}</td><td>{activePlan?.supplyConditions?.filter(c=>c['订单编号']===t.orderId&&c['工序编号']===t.operation).map(c=>c['条件说明']).join('；')||'未引用预计供给'}</td></tr>)}</tbody></table>{!tasks.length&&<div className="empty">暂无任务明细</div>}</div>
         </section>
       </>}
-      {view==='query'&&<DataQueries key={inputVersion+'-'+plans.map(p=>p.id).join(',')} data={data} plans={plans} revision={inputVersion} initialPlan={activePlan?.id} initialTask={selected.find(id=>activePlan?.tasks.some(t=>t.id===id))} canExport={!!session?.canExport} reason={reason} onExport={(query)=>download({query},'模拟数据查询.csv')} onRestore={session?.canWrite?(tables)=>perform(async()=>{await api('/inputs',{tables,revision:inputVersion,operation:'restore'});await refresh();setMessage('已恢复为新输入版本；历史方案保持原值。');}):undefined} onTask={(planId,taskId)=>{const plan=plans.find(p=>p.id===planId);if(plan){setActivePlan(plan);setIssues(plan.findings);setVerification(plan.verification||null);setSelected([taskId]);setView('schedule');}}}/>}
+      {view==='query'&&<DataQueries key={inputVersion+'-'+plans.map(p=>p.id).join(',')} data={data} plans={plans} revision={inputVersion} initialTable={queryInputTable} initialRow={queryInputTable?queryInputRow:undefined} initialPlan={activePlan?.id} initialTask={selected.find(id=>activePlan?.tasks.some(t=>t.id===id))} canExport={!!session?.canExport} reason={reason} onExport={(query)=>download({query},'模拟数据查询.csv')} onRestore={session?.canWrite?(tables)=>perform(async()=>{await api('/inputs',{tables,revision:inputVersion,operation:'restore'});await refresh();setMessage('已恢复为新输入版本；历史方案保持原值。');}):undefined} onTask={(planId,taskId)=>{const plan=plans.find(p=>p.id===planId);if(plan){setActivePlan(plan);setIssues(plan.findings);setVerification(plan.verification||null);setSelected([taskId]);setView('schedule');}}}/>}
       {view==='data'&&<section className="panel data-panel"><div className="panel-head"><div><h2>主数据、单位与排程输入</h2><p>FR-002 新增产品/包装规格与物料主数据；同时维护 R1/R2.1 排程表。CSV 导入只替换当前表；预计供给使用带时区 ISO 时间，其余排程时间字段使用分钟，0 = 2026-11-02 08:00 Asia/Shanghai。</p></div><div className="actions"><label className="upload">导入 CSV<input type="file" disabled={!session?.canWrite||busy||!reason.trim()} accept=".csv,text/csv" onChange={e=>importCsv(e.target.files?.[0])}/></label><button onClick={downloadCsv} disabled={!session?.canExport||busy||!reason.trim()}>导出当前表</button></div></div>
         <div className="data-tabs">{defs.map(d=><button className={d.key===tableKey?'chosen':''} key={d.key} onClick={()=>{setTableKey(d.key);setSelected([]);}}>{d.label}<small>{data[d.key]?.length||0}</small></button>)}</div>
         {tableKey==='rules'&&<RulePanel data={data} history={operations}/>}

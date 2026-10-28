@@ -621,3 +621,25 @@ test('FR023 legacy plans and missing optional delivery table remain historical a
  const {call,dir}=await fixture(t);const p=(await call('/calculate',{revision:0})).body,file=path.join(dir,'business.json'),s=JSON.parse(fs.readFileSync(file));delete s.data.deliveryConditions;delete s.plans[0].deliveryAssessment;fs.writeFileSync(file,JSON.stringify(s));
  const before=(await call('/plans')).body;assert.equal(before[0].deliveryAssessment,undefined);assert.equal((await call('/export',{table:'deliveryConditions'})).status,200);assert.equal((await call('/export',{planId:p.id})).status,200);assert.deepEqual((await call('/plans')).body,before);
 });
+test('FR024 real partial Worker result exports frozen task reasons with permission, audit and later-run integrity',async t=>{
+ const {call}=await fixture(t);const input=(await call('/state')).body;
+ const started=await call('/runs',{revision:0,selection:{orderIds:['A'],endMinute:45}});const run=await waitRun(call,started.body.id);
+ assert.equal(run.resultState.code,'partial-unplanned');assert.equal(run.resultState.hasSavedResult,true);assert.equal(run.resultState.globalFeasibility,'unknown');
+ const p=(await call('/plans')).body.find(p=>p.id===run.planId),snapshot=JSON.stringify(p);assert.equal(p.tasks.length,1);assert.equal(p.resultAssessment.unplannedCount,1);assert.ok(p.resultAssessment.tasks.find(t=>t.id==='A-FILL').reasons.some(r=>r.code.includes('HORIZON')));
+ const denied=await call('/export',{runId:run.id},'query');assert.equal(denied.status,403);
+ const out=await call('/export',{runId:run.id});assert.equal(out.status,200);for(const v of [run.id,run.snapshotHash,run.inputVersionId,'HORIZON','A-FILL','partial-unplanned'])assert.ok(out.body.includes(v));
+ assert.equal((await call('/export',{runId:'missing'})).status,404);assert.equal((await call('/runs/'+run.id+'/cancel',{})).status,409);
+ const rows=input.data.orders.map(o=>({...o,'合格需求':'241'}));assert.equal((await call('/tables/orders',{rows,revision:0})).status,200);
+ const next=await call('/runs',{revision:1,selection:{orderIds:['A']}});assert.equal((await waitRun(call,next.body.id)).resultState.code,'scheduled');assert.equal(JSON.stringify((await call('/plans')).body.find(x=>x.id===p.id)),snapshot);
+ const operations=(await call('/operations')).body;const exports=operations.filter(x=>x.action==='export'&&x.target===run.id);assert.equal(exports.length,1);assert.equal(exports[0].actor,'test#planner');assert.ok(operations.some(x=>x.action==='run_partial'&&x.snapshotHash===run.snapshotHash));
+});
+test('FR024 cancellation, timeout and crash preserve existing partial result and export distinct terminal evidence',async t=>{
+ for(const mode of ['cancel','timeout','failure']){
+  let count=0;const {call}=await fixture(t,false,{runTimeoutMs:mode==='timeout'?500:5000,workerFactory:data=>++count===1?new Worker(new URL('./calculation-worker.mjs',import.meta.url),{workerData:data}):new Worker(mode==='failure'?'throw Error("private data")':'while(true){}',{eval:true})});
+  const first=await call('/runs',{revision:0,selection:{orderIds:['A'],endMinute:45}}),partial=await waitRun(call,first.body.id);assert.ok(partial.planId);const plans=(await call('/plans')).body,inputs=(await call('/state')).body;
+  const second=await call('/runs',{revision:0});if(mode==='cancel')assert.equal((await call('/runs/'+second.body.id+'/cancel',{})).status,200);
+  const done=await waitRun(call,second.body.id);assert.equal(done.resultState.code,{cancel:'user-cancellation',timeout:'time-limit-no-result',failure:'calculation-failure'}[mode]);assert.equal(done.resultState.hasSavedResult,false);assert.equal(done.resultState.globalFeasibility,'unknown');assert.equal(done.planId,undefined);
+  const csv=await call('/export',{runId:done.id});assert.equal(csv.status,200);assert.ok(csv.body.includes(done.resultState.code));assert.ok(!csv.body.includes('private data'));if(mode==='timeout')assert.match(csv.body,/不代表业务无解/);
+  assert.deepEqual((await call('/plans')).body,plans);assert.deepEqual((await call('/state')).body,inputs);assert.equal((await call('/runs/'+done.id+'/inputs')).status,200);assert.equal((await call('/runs/'+done.id+'/cancel',{})).status,409);
+ }
+});

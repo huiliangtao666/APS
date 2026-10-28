@@ -2,14 +2,14 @@ import {useMemo,useState} from 'react';
 import {defs} from './data-defs';
 import {queryData,taskDef,filterOptions,filterRows,related,displayValue,type Filters,type Row} from './lib/data-query.mjs';
 type Query={table:string;planId:string;filters:Filters;revision:number;sourcePlanId?:string};
-type Props={data:Record<string,Row[]>;plans:any[];revision:number;canExport:boolean;reason:string;onExport:(q:Query)=>void;onTask:(plan:string,task:string)=>void;initialPlan?:string;initialTask?:string;onRestore?:(tables:Record<string,Row[]>)=>void};
-export function DataQueries({data,plans,revision,canExport,reason,onExport,onTask,initialPlan,initialTask,onRestore}:Props){
+type Props={data:Record<string,Row[]>;plans:any[];revision:number;canExport:boolean;reason:string;onExport:(q:Query)=>void;onTask:(plan:string,task:string)=>void;initialRow?:Row;initialTable?:string;initialPlan?:string;initialTask?:string;onRestore?:(tables:Record<string,Row[]>)=>void};
+export function DataQueries({data,plans,revision,canExport,reason,onExport,onTask,initialPlan,initialTask,onRestore,initialTable,initialRow}:Props){
  const categories=[...defs,taskDef];
- const [table,setTable]=useState(initialTask?'tasks':'orders');
+ const [table,setTable]=useState(initialTable|| (initialTask?'tasks':'orders'));
  const [planId,setPlan]=useState(initialPlan||plans[0]?.id||'');
- const [historical,setHistorical]=useState(false);
+ const [historical,setHistorical]=useState(!!initialTable);
  const [filters,setFilters]=useState<Filters>({});
- const [focus,setFocus]=useState<number|null>(()=>initialTask?Math.max(0,(plans.find(p=>p.id===initialPlan)?.tasks||[]).findIndex((t:any)=>t.id===initialTask)):null);
+ const [focus,setFocus]=useState<number|null>(()=>initialRow&&initialTable?(()=>{const i=(plans.find(p=>p.id===initialPlan)?.inputSnapshot?.[initialTable]||[]).findIndex((row:Row)=>Object.entries(initialRow).every(([key,value])=>row[key]===value));return i<0?null:i;})():initialTask?Math.max(0,(plans.find(p=>p.id===initialPlan)?.tasks||[]).findIndex((t:any)=>t.id===initialTask)):null);
  const [page,setPage]=useState(0);
  const selectedPlan=plans.find(p=>p.id===planId);
  const inputData:Record<string,Row[]>=historical?(selectedPlan?.inputSnapshot||{}):data;

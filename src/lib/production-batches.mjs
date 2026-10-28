@@ -5,7 +5,7 @@ export {batchParameters,activeBatchRule} from './batch-policy.mjs';
 // kg/BOM total input is explicitly selected; arbitrary operation load nodes remain blocked.
 export function prepareProductionBatches(source,orders,minute){
  const records=[],groups=[],findings=[];let serial=0,productionCount=0;
- const issue=(order,message)=>findings.push({code:'UNPLANNED / BATCH_CONFIG',message:`订单 ${order['订单编号']}：${message}`,taskIds:[]});
+ const issue=(order,message)=>findings.push({code:'UNPLANNED / BATCH_CONFIG',message:`订单 ${order['订单编号']}：${message}`,taskIds:[],context:{orderId:order['订单编号']}});
  for(const order of orders.filter(isOrderSchedulable)){
   try{
    if(order['数量单位']!=='kg')throw Error('拆批仅支持显式 kg 订单；其他单位的拆分粒度未决定');
@@ -59,7 +59,7 @@ export function prepareProductionBatches(source,orders,minute){
  for(const g of groups){
   g.load=Q.num(g.exactLoad);g.exactInputKg=Q.exact(g.exactLoad);g.minimum=Q.num(g.low);g.maximum=Q.num(g.high);
   g.status=Q.cmp(g.exactLoad,g.low)<0n?'blocked-under-min':'candidate';
-  if(g.status!=='candidate'){findings.push({code:'UNPLANNED / UNDER_MIN_LOAD',message:`资源批 ${g.id} 装载 ${g.load}kg 低于下限 ${g.minimum}kg；尾批报问题，未自动超产或占用物料`,taskIds:[]});continue;}
+  if(g.status!=='candidate'){findings.push({code:'UNPLANNED / UNDER_MIN_LOAD',message:`资源批 ${g.id} 装载 ${g.load}kg 低于下限 ${g.minimum}kg；尾批报问题，未自动超产或占用物料`,taskIds:g.members.flatMap(m=>g.route.map(op=>JSON.stringify([m.orderId,m.index,op['工序编号']]))),context:{load:g.load,minimum:g.minimum,maximum:g.maximum,unit:'kg'}});continue;}
   const first=g.members[0].order;
   data.orders.push({...first,'订单编号':g.id,'合格需求':'1','数量单位':'kg','已完成合格数量':'0'});byId.set(g.id,g);
   for(const op of g.route){

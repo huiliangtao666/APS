@@ -1,3 +1,4 @@
+import {resultState,resultCsv} from '../src/lib/result-assessment.mjs';
 import { Worker } from 'node:worker_threads';
 import { freezeRunInput, inputHash } from './run-input.mjs';
 import { assessRules, ruleCatalog } from '../src/lib/business-rules.mjs';
@@ -88,7 +89,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const run={id:randomUUID(),status:'queued',phase:'等待计算线程',createdAt:calculatedAt,revision:s.revision,inputVersionId:preserve(s),...frozen,actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim(),timeoutMs:runTimeoutMs};
     s.runs??=[];s.runs.unshift(run);return {s,run};
   }
-  const publicRun=run=>{const {executionData,...summary}=run;return summary;};
+  const publicRun=run=>{const {executionData,...summary}=run;const plan=run.planId?read().plans.find(p=>p.id===run.planId):null;return {...summary,resultState:resultState(run,plan?.resultAssessment)};};
   function makePlan(result,run){return {...result,id:randomUUID(),status:'draft',revision:run.revision,inputVersionId:run.inputVersionId,runId:run.id,conditions:run.conditions,snapshotHash:run.snapshotHash};}
   function finish(id,req,status,details={}){
     const s=read(),run=s.runs?.find(r=>r.id===id);if(!run||terminal.has(run.status))return;
@@ -117,7 +118,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
         if(message.kind==='progress'){
           const current=read(),r=current.runs?.find(r=>r.id===run.id);if(!r||terminal.has(r.status))return;
           r.status='running';r.phase='计算中';r.startedAt=new Date().toISOString();record(current,req,'run_started',r.id,{snapshotHash:r.snapshotHash});write(current);
-        }else if(message.kind==='result')finish(run.id,req,message.plan.findings.length?'partial':'completed',{result:message.plan});
+        }else if(message.kind==='result')finish(run.id,req,message.plan.resultAssessment?.status==='partial-unplanned'||message.plan.findings.length?'partial':'completed',{result:message.plan});
         else if(message.kind==='failure')finish(run.id,req,'failed',{failure:{code:message.code,message:message.message}});
       });
       worker.on('error',()=>finish(run.id,req,'failed',{failure:{code:'worker_error',message:'计算线程失败，未保存结果；可另开计算。'}}));
@@ -137,7 +138,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const prepared=prepare(req,res);if(!prepared)return;const {s,run}=prepared;
     try{
       const result=calculate(run.executionData,run.revision,run.createdAt,run.conditions),plan=makePlan(result,run);
-      run.status=result.findings.length?'partial':'completed';run.phase='同步计算完成';run.finishedAt=new Date().toISOString();run.planId=plan.id;
+      run.status=result.resultAssessment?.status==='partial-unplanned'||result.findings.length?'partial':'completed';run.phase='同步计算完成';run.finishedAt=new Date().toISOString();run.planId=plan.id;
       s.plans.unshift(plan);record(s,req,'calculate',plan.id,{runId:run.id,snapshotHash:run.snapshotHash});write(s);res.status(201).json(plan);
     }catch{
       run.status='failed';run.phase='同步计算失败';run.finishedAt=new Date().toISOString();run.failure={code:'calculation_error',message:'同步计算失败，未保存结果。'};
@@ -165,7 +166,11 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   for(const action of ['confirm','return','release'])router.post(`/plans/:id/${action}`,permission(action),(_req,res)=>res.status(501).json({error:'workflow_not_supported',action}));
   router.post('/export',permission('export'),(req,res)=>{
     const s=read();let csv,target;
-    if(req.body.query){
+    if(req.body.runId){
+      const run=s.runs?.find(r=>r.id===req.body.runId);if(!run)return res.status(404).json({error:'run_not_found'});
+      const plan=s.plans.find(p=>p.id===run.planId);csv=resultCsv(run,plan);target=run.id;
+    }
+    else if(req.body.query){
       const q=req.body.query;
       if(!q||typeof q!=='object'||typeof q.table!=='string'||(q.planId!==undefined&&typeof q.planId!=='string')||(q.filters!==undefined&&(q.filters===null||typeof q.filters!=='object'||Array.isArray(q.filters)||Object.values(q.filters).some(v=>typeof v!=='string'))))return res.status(400).json({error:'invalid_query'});
       if(q.revision!==s.revision)return res.status(409).json({error:'stale_input'});
@@ -173,7 +178,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
       if(q.sourcePlanId!==undefined){if(typeof q.sourcePlanId!=='string'||q.planId!==q.sourcePlanId)return res.status(400).json({error:'invalid_query'});const p=s.plans.find(p=>p.id===q.sourcePlanId);if(!p)return res.status(404).json({error:'plan_not_found'});const v=inputs(s,p);if(!v)return res.status(409).json({error:'historical_inputs_unavailable'});source=v.data;}
       try{csv=queryCsv(defs,source,s.plans,s.revision,q);}catch(e){if(['unknown_table','plan_not_found'].includes(e.message))return res.status(404).json({error:e.message});return res.status(500).json({error:'internal_error'});}target=q.table;
     }
-    else if(req.body.planId){const p=s.plans.find(p=>p.id===req.body.planId);if(!p)return res.status(404).json({error:'plan_not_found'});if(req.body.ruleSettings===true){if(!p.ruleSnapshot)return res.status(409).json({error:'historical_rules_unavailable'});const fields=['id','category','name','enabled','active','status','scope','effectiveFrom','parameters'];csv=[['运行编号',p.runId||'旧方案无记录'],['运行快照',p.snapshotHash||'旧方案无记录'],['计算条件',p.conditions?JSON.stringify(p.conditions):'旧方案无记录'],['能力版本',p.ruleSnapshot.capabilityVersion],['计算时刻',p.ruleSnapshot.at],['输入版本',p.inputVersionId],['始终执行',p.ruleSnapshot.intrinsicChecks.join('；')],['独立复核范围',p.ruleSnapshot.independentChecks.join('；')],['说明',p.ruleSnapshot.note],fields,...p.ruleSnapshot.settings.map(r=>fields.map(f=>typeof r[f]==='object'?JSON.stringify(r[f]):String(r[f])))].map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');}else csv=exportSupplyPlanCsv(p);if(p.conditions){const scope=p.conditions.checkScope;csv=[['运行编号',p.runId],['运行快照',p.snapshotHash],['计算条件',JSON.stringify(p.conditions)],['检查范围',scope?JSON.stringify(scope):'旧方案无记录']].map(row=>row.map(v=>'\"'+String(v).replace(/\"/g,'\"\"')+'\"').join(',')).join('\r\n')+'\r\n'+csv;}target=p.id;}
+    else if(req.body.planId){const p=s.plans.find(p=>p.id===req.body.planId);if(!p)return res.status(404).json({error:'plan_not_found'});if(req.body.ruleSettings===true){if(!p.ruleSnapshot)return res.status(409).json({error:'historical_rules_unavailable'});const fields=['id','category','name','enabled','active','status','scope','effectiveFrom','parameters'];csv=[['运行编号',p.runId||'旧方案无记录'],['运行快照',p.snapshotHash||'旧方案无记录'],['计算条件',p.conditions?JSON.stringify(p.conditions):'旧方案无记录'],['能力版本',p.ruleSnapshot.capabilityVersion],['计算时刻',p.ruleSnapshot.at],['输入版本',p.inputVersionId],['始终执行',p.ruleSnapshot.intrinsicChecks.join('；')],['独立复核范围',p.ruleSnapshot.independentChecks.join('；')],['说明',p.ruleSnapshot.note],fields,...p.ruleSnapshot.settings.map(r=>fields.map(f=>typeof r[f]==='object'?JSON.stringify(r[f]):String(r[f])))].map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');}else csv=exportSupplyPlanCsv(p)+'\r\n'+resultCsv(s.runs?.find(r=>r.id===p.runId),p);if(p.conditions){const scope=p.conditions.checkScope;csv=[['运行编号',p.runId],['运行快照',p.snapshotHash],['计算条件',JSON.stringify(p.conditions)],['检查范围',scope?JSON.stringify(scope):'旧方案无记录']].map(row=>row.map(v=>'\"'+String(v).replace(/\"/g,'\"\"')+'\"').join(',')).join('\r\n')+'\r\n'+csv;}target=p.id;}
     else{const d=defs.find(d=>d.key===req.body.table);if(!d)return res.status(404).json({error:'unknown_table'});csv=[d.fields,...(s.data[d.key]||[]).map(r=>d.fields.map(f=>r[f]||''))].map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');target=d.key;}
     record(s,req,'export',target,req.body.query?{query:req.body.query}:{});write(s);res.type('text/csv').send('\ufeff'+csv);
   });
