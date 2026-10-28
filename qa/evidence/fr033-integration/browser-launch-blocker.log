@@ -1,0 +1,71 @@
+vite v5.4.21 building for production...
+transforming...
+✓ 67 modules transformed.
+rendering chunks...
+computing gzip size...
+../../fr033-real-app-CDuUd5/dist/index.html                   0.73 kB │ gzip:   0.52 kB
+../../fr033-real-app-CDuUd5/dist/assets/index-CttT1MU9.css   19.84 kB │ gzip:   5.41 kB
+../../fr033-real-app-CDuUd5/dist/assets/index-R2h1seeB.js   283.05 kB │ gzip: 103.87 kB
+✓ built in 1.20s
+
+[validation] disposable source/dependencies/output; no publish or restart
+FR033_BROWSER_FAILURE browserType.launch:
+╔══════════════════════════════════════════════════════╗
+║ Host system is missing dependencies to run browsers. ║
+║ Missing libraries:                                   ║
+║     libglib-2.0.so.0                                 ║
+║     libgobject-2.0.so.0                              ║
+║     libnspr4.so                                      ║
+║     libnss3.so                                       ║
+║     libnssutil3.so                                   ║
+║     libdbus-1.so.3                                   ║
+║     libgio-2.0.so.0                                  ║
+║     libatk-1.0.so.0                                  ║
+║     libexpat.so.1                                    ║
+║     libatspi.so.0                                    ║
+║     libX11.so.6                                      ║
+║     libXcomposite.so.1                               ║
+║     libXdamage.so.1                                  ║
+║     libXext.so.6                                     ║
+║     libXfixes.so.3                                   ║
+║     libXrandr.so.2                                   ║
+║     libgbm.so.1                                      ║
+║     libxcb.so.1                                      ║
+║     libxkbcommon.so.0                                ║
+║     libasound.so.2                                   ║
+╚══════════════════════════════════════════════════════╝
+    at /tmp/praetor-app-validate-606BYB/project/qa/fr033-integration-browser.mjs:9:25
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+browserType.launch:
+╔══════════════════════════════════════════════════════╗
+║ Host system is missing dependencies to run browsers. ║
+║ Missing libraries:                                   ║
+║     libglib-2.0.so.0                                 ║
+║     libgobject-2.0.so.0                              ║
+║     libnspr4.so                                      ║
+║     libnss3.so                                       ║
+║     libnssutil3.so                                   ║
+║     libdbus-1.so.3                                   ║
+║     libgio-2.0.so.0                                  ║
+║     libatk-1.0.so.0                                  ║
+║     libexpat.so.1                                    ║
+║     libatspi.so.0                                    ║
+║     libX11.so.6                                      ║
+║     libXcomposite.so.1                               ║
+║     libXdamage.so.1                                  ║
+║     libXext.so.6                                     ║
+║     libXfixes.so.3                                   ║
+║     libXrandr.so.2                                   ║
+║     libgbm.so.1                                      ║
+║     libxcb.so.1                                      ║
+║     libxkbcommon.so.0                                ║
+║     libasound.so.2                                   ║
+╚══════════════════════════════════════════════════════╝
+    at /tmp/praetor-app-validate-606BYB/project/qa/fr033-integration-browser.mjs:9:25 {
+  name: 'Error'
+}
+
+Node.js v22.23.2
