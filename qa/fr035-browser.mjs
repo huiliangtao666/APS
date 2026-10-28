@@ -19,7 +19,12 @@ try{
   if(kind==='differences')await page.getByLabel('对比方案',{exact:true}).selectOption(run.manifest.historicalPlanId);
   await read();const q=query(kind,id,kind==='differences'?{otherPlanId:run.manifest.historicalPlanId}:{}),r=await api(q);
   assert.equal(await page.locator('table[data-fr035-view]').getAttribute('data-fr035-view'),r.viewId);
-  assert.deepEqual(await page.locator('table[data-fr035-view] tbody tr').evaluateAll(es=>es.map(e=>[...e.querySelectorAll('td')].map(c=>c.textContent))),r.rows);
+  assert.deepEqual(await page.locator('table[data-fr035-view] tbody tr').evaluateAll(es=>es.map(e=>[...e.querySelectorAll('td')].map(c=>c.querySelector('[data-fr035-cell]')?.textContent??c.textContent))),r.rows);
+  if(r.rows.length){const saved=JSON.parse(r.rows[0][1]),summary=await page.locator('table[data-fr035-view] tbody tr').first().locator('td').nth(1).locator('p').first().innerText();
+   const quantity=kind==='orders'?saved.inputRecord['合格需求']:kind==='tasks'?saved.assessment?.quantity:kind==='occupation'?saved.record.busyMinutes:['materials','unplanned'].includes(kind)?saved.record.quantity:undefined;
+   if(quantity!=null)assert.ok(summary.includes(String(quantity)),summary);if(kind==='tasks')assert.ok(summary.includes(saved.startAt)&&summary.includes(saved.endAt));
+   assert.equal(await page.locator('table[data-fr035-view] tbody tr').first().locator('details').getAttribute('open'),null);
+  }
   const promise=page.waitForEvent('download');await page.getByRole('button',{name:'导出当前报表 CSV',exact:true}).click();const download=await promise;await download.saveAs(output+'/'+kind+'.csv');const bytes=fs.readFileSync(output+'/'+kind+'.csv'),expected=Buffer.from('\ufeff'+reportCsv(r));assert.deepEqual(bytes,expected);assert.deepEqual(parseInputCsv(bytes.toString()).slice(6),r.rows);report.downloads.push({kind,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),viewId:r.viewId,rows:r.rows.length});
  });
  await check('keyboard filters, empty transitions, window, exact order scope, invalidation and CSV',async()=>{

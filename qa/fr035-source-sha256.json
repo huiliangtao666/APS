@@ -4,7 +4,7 @@
   "files": {
     "src/RunPanel.tsx": "46fe0a5418507450326ac448a8c1a817eeeda9546d14d429447df849eee454e7",
     "src/BatchPanel.tsx": "f65bd61ca187abaafeb63ae1a32ab4331123a194edb8cd1061190a4e1c8fae61",
-    "src/App.tsx": "152356aaab680c80da193616f4f8b3004d7de231ad2751eb55728f94382dd5f3",
+    "src/App.tsx": "517db70fc41933b31f945247a9cc7e9a7c68a358fca4f269fe16158bac0c800a",
     "src/DeliveryPanel.tsx": "aedb190ebf7c96cbc759e8435b1e5ea2c15ebd9d422af92054c95db3959dd08c",
     "src/main.tsx": "e190eb4a820c29ada0d0f8c29380b17bbe8c67de6dd5307fe3a36f5e51a3a37c",
     "src/ResourcePanel.tsx": "869bb547bfcc6e11eb6256c0506127b246b5a5ea1fbabc4b8af03c81475b69eb",
@@ -12,7 +12,7 @@
     "src/TrialPanel.tsx": "87670277b0c1d105ca188f20e2f921479a2513f1b3258976c3e5099014265111",
     "src/query-ui.test.tsx": "0b89ea65abec2884e9b9b9637197aa7c2e92dc17ce5118deb67ff49e1c302290",
     "src/DataEditor.tsx": "7f4990004f6a940e468c1d2d9765bc46984088e39e3bdde227172fd977374a9e",
-    "src/ReportPanel.tsx": "b2efc490fe545b0a57c4fc72e24ec4f90f5f86f6f82dddded338d7dd081d2407",
+    "src/ReportPanel.tsx": "fafcac2792136f46bd997ae0f405316fc17a2ec3abf031d0e5f56952a5540199",
     "src/RulePanel.tsx": "79e08c855ea83fbed72ab55339a3cbb625f59ab3b73acfa8ed88f63f9b169c8a",
     "src/praetor-bridge.ts": "b1f5148f7bb2e6f44d05f3916fc197bf03d0af0a136a5c68b78109a5373e9f05",
     "src/LoadPanel.tsx": "8c01e4e32c1d6f3c9de4c3c0937138f94e6c27d4274bd83f40f65e230251eaf8",
