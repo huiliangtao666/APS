@@ -1,3 +1,4 @@
+import {TrialPanel,type Trial} from './TrialPanel';
 import {ResultPanel,type ResultPlan} from './ResultPanel';
 import {DeliveryPanel,type DeliveryPlan} from './DeliveryPanel';
 import {ResourcePanel,type JointPlan} from './ResourcePanel';
@@ -44,6 +45,7 @@ export default function App() {
   const [selected,setSelected]=useState<string[]>([]);
   const [runs,setRuns]=useState<Run[]>([]);
   const pendingRun=useRef<string|null>(null);
+  const [trials,setTrials]=useState<Trial[]>([]);
   const [plans,setPlans]=useState<Plan[]>([]);
   const [activePlan,setActivePlan]=useState<Plan|null>(null);
   const [verification,setVerification]=useState<StoredVerificationReport|null>(null);
@@ -54,7 +56,7 @@ export default function App() {
   const [busy,setBusy]=useState(false);
   const [session,setSession]=useState<{role:string;canWrite:boolean;canExport:boolean}|null>(null);
   const [operations,setOperations]=useState<{id:string;action:string;actor:string;at:string;reason:string;target?:string;before?:Row[];after?:Row[]}[]>([]);
-  const orderHistory=operations.flatMap(r=>{const x=r as typeof r & {target?:string;before?:Row[];after?:Row[]};if(x.target!=='orders'||!x.before||!x.after)return [];return x.after.flatMap(row=>{const before=x.before!.find(b=>b['订单编号']===row['订单编号']);return before?['合格需求','数量单位','要求可交付分钟'].filter(f=>before[f]!==row[f]).map(f=>({orderId:row['订单编号'],field:f,before:before[f],after:row[f],changedAt:x.at})):[];});});
+  const orderHistory=operations.flatMap(r=>{const x=r as typeof r & {target?:string;before?:Row[];after?:Row[]};if((x as typeof x & {trialId?:string}).trialId||x.target!=='orders'||!x.before||!x.after)return [];return x.after.flatMap(row=>{const before=x.before!.find(b=>b['订单编号']===row['订单编号']);return before?['合格需求','数量单位','要求可交付分钟'].filter(f=>before[f]!==row[f]).map(f=>({orderId:row['订单编号'],field:f,before:before[f],after:row[f],changedAt:x.at})):[];});});
   const currentDef=defs.find(d=>d.key===tableKey)!;
   const currentRows=data[tableKey]||[];
   const inventoryQuery=useMemo(()=>queryInventoryAvailability(data.inventory||[],{asOf:inventoryAsOf,rules:data.rules||[]}),[data.inventory,data.rules,inventoryAsOf]);
@@ -71,10 +73,10 @@ export default function App() {
   async function api(path:string,body?:object) {
     const generation=requestGeneration.current;
     const r=await fetch('/api'+path,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,reason})}:{cache:'no-store'});
-    if(!r.ok){const e=await r.json();throw new Error(e.error==='stale_input'?'输入已变化，请刷新并重新编辑':e.error==='protected_history_unavailable'?'已确认方案缺少原始输入，已阻止修改，请先修复历史记录':e.issues?.length?e.issues.map((x:any)=>`${x.file} 第${x.row}行 ${x.field}：${x.message}`).join('；'):e.error||`HTTP ${r.status}`);}const result=await r.json();if(generation!==requestGeneration.current)throw new Error('身份已变化，请刷新');return result;
+    if(!r.ok){const e=await r.json();throw new Error(e.blockers?.length?e.blockers.map((b:any)=>`${b.code}：${b.message}`).join('；'):e.error==='stale_input'?'输入已变化，请刷新并重新编辑':e.error==='protected_history_unavailable'?'已确认方案缺少原始输入，已阻止修改，请先修复历史记录':e.issues?.length?e.issues.map((x:any)=>`${x.file} 第${x.row}行 ${x.field}：${x.message}`).join('；'):e.error||`HTTP ${r.status}`);}const result=await r.json();if(generation!==requestGeneration.current)throw new Error('身份已变化，请刷新');return result;
   }
-  async function refresh(){const [state,list,who,log,history]=await Promise.all([api('/state'),api('/plans'),api('/session'),api('/operations'),api('/runs')]);setData(state.data);setInputVersion(state.revision);setPlans(list);setActivePlan(current=>current?(list.find((p:Plan)=>p.id===current.id)??current):current);setSession(who);setOperations(log);setRuns(history);const done=history.find((r:Run)=>r.id===pendingRun.current&&r.planId);if(done){pendingRun.current=null;const p=list.find((p:Plan)=>p.id===done.planId);if(p){setActivePlan(p);setIssues(p.findings);setVerification(null);}}}
-  useEffect(()=>{requestGeneration.current++;if(membership.state.kind==='member'){refresh().catch(e=>setMessage(e.message));}else{setData({});setRuns([]);pendingRun.current=null;setPlans([]);setActivePlan(null);setSession(null);}},[membership.state]);
+  async function refresh(){const [state,list,who,log,history,trialList]=await Promise.all([api('/state'),api('/plans'),api('/session'),api('/operations'),api('/runs'),api('/trials')]);setTrials(trialList);setData(state.data);setInputVersion(state.revision);setPlans(list);setActivePlan(current=>current?(list.find((p:Plan)=>p.id===current.id)??current):current);setSession(who);setOperations(log);setRuns(history);const done=history.find((r:Run)=>r.id===pendingRun.current&&r.planId);if(done){pendingRun.current=null;const p=list.find((p:Plan)=>p.id===done.planId);if(p){setActivePlan(p);setIssues(p.findings);setVerification(null);}}}
+  useEffect(()=>{requestGeneration.current++;if(membership.state.kind==='member'){refresh().catch(e=>setMessage(e.message));}else{setData({});setTrials([]);setRuns([]);pendingRun.current=null;setPlans([]);setActivePlan(null);setSession(null);}},[membership.state]);
   const hasActiveRun=runs.some(r=>['queued','running'].includes(r.status));
   useEffect(()=>{if(!hasActiveRun||membership.state.kind!=='member')return;const timer=window.setInterval(()=>{refresh().catch(e=>setMessage(e.message));},750);return ()=>window.clearInterval(timer);},[hasActiveRun,membership.state]);
   function startRun(selection:object){perform(async()=>{const run=await api('/runs',{revision:inputVersion,selection});pendingRun.current=run.id;await refresh();});}
@@ -99,6 +101,7 @@ export default function App() {
       <section className="hero"><div><p className="eyebrow">单线排程 · R1 最小模式 / 已有支持模式</p><h1>{view==='schedule'?'排程计算与范围核对':view==='data'?'日历与排程数据':view==='query'?'模拟数据与关联查询':'实现范围与业务决策'}</h1><p className="sub">基于 v0.3 UAT-02 / 2026-11-02 08:00（Asia/Shanghai）；样例业务值均为虚构，仅用于软件验证。</p></div><div className="hero-source"><span>追溯基线</span><b>FR-008 · UAT-02 · AC-05</b><small>工厂窗口继承 · 设备停机例外 · 连续工作窗口</small></div></section>
       {message&&<div className="toast" role="status">{message}<button onClick={()=>setMessage('')}>×</button></div>}
       {view==='schedule'&&<>
+        <TrialPanel plans={plans} activeId={activePlan?.id} trials={trials} runs={runs} revision={inputVersion} canWrite={!!session?.canWrite} busy={busy} reason={reason} api={api} refresh={refresh} onResult={id=>{api('/plans').then(list=>{const p=list.find((x:Plan)=>x.id===id);if(p){setActivePlan(p);setIssues(p.findings);setVerification(p.verification||null);}}).catch(e=>setMessage(e.message));}} onRun={(trial,selection)=>perform(async()=>{const run=await api('/runs',{trialId:trial.id,revision:trial.revision,selection});pendingRun.current=run.id;await refresh();})} onCancel={cancelRun}/>
         {activePlan&&<ResultPanel plan={activePlan} onTask={id=>setSelected([id])} onInput={(table,row)=>{setQueryInputTable(table);setQueryInputRow(row);setSelected([]);setView('query');}}/>}
         <RunPanel data={data} runs={runs} canWrite={!!session?.canWrite&&!!reason.trim()} busy={busy} onExport={session?.canExport&&!busy&&!!reason.trim()?id=>download({runId:id},id+'-结果原因.csv'):undefined} onStart={startRun} onCancel={cancelRun} onInputs={id=>api('/runs/'+id+'/inputs')} onResult={id=>{const p=plans.find(p=>p.id===id);if(p){setActivePlan(p);setIssues(p.findings);setVerification(p.verification||null);}}}/>
         <div className="metrics"><article><span>单线订单</span><b>{data.orders?.length||0}</b><small>FR-009 / BR-01</small></article><article><span>已排任务</span><b>{tasks.length}</b><small>机器 + 前后序</small></article><article><span>问题定位</span><b className={visibleFindings.length?'warn-text':''}>{visibleFindings.length}</b><small>问题与甘特联动</small></article><article><span>保存方案</span><b>{plans.length}</b><small>快照保留输入版本</small></article></div>

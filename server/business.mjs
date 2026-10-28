@@ -1,3 +1,4 @@
+import {comparePlans,restoreBlockers} from '../src/lib/plan-comparison.mjs';
 import {resultState,resultCsv} from '../src/lib/result-assessment.mjs';
 import { Worker } from 'node:worker_threads';
 import { freezeRunInput, inputHash } from './run-input.mjs';
@@ -50,51 +51,101 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   router.get('/state',permission('read'),(_req,res)=>{const s=read();res.json({data:s.data,revision:s.revision});});
   router.get('/operations',permission('read'),(_req,res)=>res.json(read().records));
   const versionId=data=>createHash('sha256').update(JSON.stringify(data)).digest('hex');
-  const preserve=s=>{s.inputVersions??={};const id=versionId(s.data);if(!s.inputVersions[id])s.inputVersions[id]={id,revision:s.revision,data:structuredClone(s.data)};return id;};
+  const preserve=(s,target=s)=>{s.inputVersions??={};const id=versionId(target.data);if(!s.inputVersions[id])s.inputVersions[id]={id,revision:target.revision,data:structuredClone(target.data)};return id;};
   const inputs=(s,p)=>{const v=s.inputVersions?.[p.inputVersionId];return v&&v.data&&versionId(v.data)===p.inputVersionId?v:null;};
   router.get('/plans',permission('read'),(_req,res)=>{const s=read();res.json(s.plans.map(p=>({...p,inputSnapshot:inputs(s,p)?.data??null})));});
   router.get('/plans/:id/inputs',permission('read'),(req,res)=>{const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});const v=inputs(s,p);if(!v)return res.status(409).json({error:'historical_inputs_unavailable'});res.json(v);});
-  function saveInputs(req,res,tables){
+  function saveInputs(req,res,tables,trialId){
     const {revision,operation}=req.body;
-    const s=read();if(revision!==s.revision)return res.status(409).json({error:'stale_input'});
+    const s=read(),target=trialId?s.trials?.find(t=>t.id===trialId):s;
+    if(!target)return res.status(404).json({error:'trial_not_found'});
+    if(target.status==='discarded')return res.status(409).json({error:'trial_discarded'});
+    if(revision!==target.revision)return res.status(409).json({error:'stale_input'});
     if(operation!==undefined&&!['import','edit','add','copy','delete','restore'].includes(operation))return res.status(400).json({error:'invalid_operation'});
     if(!tables||typeof tables!=='object'||Array.isArray(tables)||!Object.keys(tables).length)return res.status(400).json({error:'invalid_tables'});
-    const proposed={...s.data};
+    const proposed={...target.data};
     for(const [key,rows] of Object.entries(tables)){
       const def=defs.find(d=>d.key===key);if(!def)return res.status(404).json({error:'unknown_table'});
       if(!Array.isArray(rows)||rows.length>10000||rows.some(r=>!r||typeof r!=='object'||Array.isArray(r)||Object.values(r).some(v=>typeof v!=='string')))return res.status(400).json({error:'invalid_rows'});
       if(rows.some(r=>Object.keys(r).some(f=>!def.fields.includes(f))))return res.status(400).json({error:'unknown_fields'});
       proposed[key]=rows.map(r=>Object.fromEntries(def.fields.map(f=>[f,r[f]??''])));
     }
-    const newlyEnabled=(proposed.rules||[]).some(r=>r['是否启用']==='是'&&!(s.data.rules||[]).some(old=>old['规则编号']===r['规则编号']&&old['是否启用']==='是'));
+    const newlyEnabled=(proposed.rules||[]).some(r=>r['是否启用']==='是'&&!(target.data.rules||[]).some(old=>old['规则编号']===r['规则编号']&&old['是否启用']==='是'));
     const issues=[...validateInputs(defs,proposed),...(newlyEnabled?assessRules(proposed,new Date().toISOString(),true).issues:[])];if(issues.length)return res.status(400).json({error:'invalid_input',issues});
+    if(operation==='restore')return res.status(409).json({error:'restore_blocked',...restoreBlockers(s,null)});
     // A missing original confirmed snapshot cannot be reconstructed from today's data.
     if(s.plans.some(p=>['confirmed','released'].includes(p.status)&&!inputs(s,p)))return res.status(409).json({error:'protected_history_unavailable'});
-    const changes=Object.keys(tables).filter(key=>JSON.stringify(s.data[key])!==JSON.stringify(proposed[key]));
-    if(!changes.length)return res.json({data:s.data,revision:s.revision,unchanged:true});
-    const before=s.data;const fromVersion=preserve(s);
-    s.data=proposed;s.revision++;const toVersion=preserve(s);
+    const changes=Object.keys(tables).filter(key=>JSON.stringify(target.data[key])!==JSON.stringify(proposed[key]));
+    if(!changes.length)return res.json({data:target.data,revision:target.revision,unchanged:true});
+    const before=target.data;const fromVersion=preserve(s,target);
+    target.data=proposed;target.revision++;const toVersion=preserve(s,target);
     const batchId=randomUUID();
-    for(const key of changes)record(s,req,operation||'edit',key,{before:before[key],after:proposed[key],fromVersion,toVersion,batchId});
-    write(s);res.json({data:s.data,revision:s.revision,inputVersionId:toVersion});
+    for(const key of changes)record(s,req,operation||'edit',key,{before:before[key],after:proposed[key],fromVersion,toVersion,batchId,trialId:trialId||null});
+    write(s);res.json({data:target.data,revision:target.revision,inputVersionId:toVersion});
   }
   router.post('/tables/:table',permission('edit'),(req,res)=>saveInputs(req,res,{[req.params.table]:req.body.rows}));
   router.post('/inputs',permission('edit'),(req,res)=>saveInputs(req,res,req.body.tables));
+  router.get('/trials',permission('read'),(_req,res)=>res.json(read().trials||[]));
+  router.post('/trials/:id/inputs',permission('edit'),(req,res)=>saveInputs(req,res,req.body.tables,req.params.id));
+  function historical(s,p){
+    const run=s.runs?.find(r=>r.id===p.runId);
+    return inputs(s,p)&&run&&run.inputVersionId===p.inputVersionId&&run.snapshotHash===p.snapshotHash&&inputHash({conditions:run.conditions,executionData:run.executionData})===p.snapshotHash?run:null;
+  }
+  router.post('/plans/:id/copy',permission('edit'),(req,res)=>{
+    const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});
+    if(p.trialId&&s.trials?.find(t=>t.id===p.trialId)?.status==='discarded')return res.status(409).json({error:'trial_discarded'});
+    if(!historical(s,p))return res.status(409).json({error:'historical_inputs_unavailable'});
+    const id=randomUUID(),now=new Date().toISOString();
+    const copy={...structuredClone(p),id:randomUUID(),status:'draft',revision:0,sourceRevision:p.revision,trialId:id,sourcePlanId:p.id,sourceRunId:p.runId,sourceCreatedAt:p.createdAt,sourceVerification:p.verification??null,createdAt:now,name:p.name+' · 独立试算',copiedResult:true};
+    delete copy.verification;
+    const trial={id,status:'active',revision:0,createdAt:now,actor:subjectKey(req.praetorActor),sourcePlanId:p.id,sourceRunId:p.runId,sourceInputVersionId:p.inputVersionId,sourceSnapshotHash:p.snapshotHash,basePlanId:copy.id,latestPlanId:copy.id,data:structuredClone(inputs(s,p).data),selection:Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds'].map(k=>[k,structuredClone(p.conditions[k])]))};
+    s.trials??=[];s.trials.unshift(trial);s.plans.unshift(copy);record(s,req,'trial_created',id,{sourcePlanId:p.id,planId:copy.id,inputVersionId:p.inputVersionId,snapshotHash:p.snapshotHash});write(s);res.status(201).json(trial);
+  });
+  router.post('/trials/:id/discard',permission('edit'),async(req,res,next)=>{try{
+    let s=read(),trial=s.trials?.find(t=>t.id===req.params.id);if(!trial)return res.status(404).json({error:'trial_not_found'});
+    if(req.body.revision!==trial.revision)return res.status(409).json({error:'stale_input'});
+    if(trial.status==='discarded')return res.json(trial);
+    const pending=(s.runs||[]).filter(run=>run.trialId===trial.id&&!terminal.has(run.status)).map(run=>run.id);
+    // Commit the gate before awaiting termination, so concurrent requests cannot
+    // start or edit this trial while a worker is shutting down.
+    trial.status='discarded';trial.discardedAt=new Date().toISOString();trial.revision++;
+    record(s,req,'trial_discarded',trial.id,{sourcePlanId:trial.sourcePlanId});write(s);
+    for(const id of pending)await finish(id,req,'cancelled',{failure:{code:'trial_discarded',message:'试算已放弃，保留此前历史结果。'}});
+    res.json(trial);
+  }catch(e){next(e);}});
+  router.get('/plans/:id/compare/:other',permission('read'),(req,res)=>{
+    const s=read(),a=s.plans.find(p=>p.id===req.params.id),b=s.plans.find(p=>p.id===req.params.other);
+    if(!a||!b)return res.status(404).json({error:'plan_not_found'});
+    if(!historical(s,a)||!historical(s,b))return res.status(409).json({error:'historical_inputs_unavailable'});
+    res.json(comparePlans(a,inputs(s,a).data,b,inputs(s,b).data));
+  });
+  router.post('/plans/:id/restore',permission('edit'),(req,res)=>{
+    const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});
+    if(req.body.revision!==s.revision)return res.status(409).json({error:'stale_input'});
+    // Current progress/consumption and confirmation contracts do not exist yet.
+    // Even an unchanged input hash cannot prove that no execution has occurred.
+    res.status(409).json({error:'restore_blocked',...restoreBlockers(s,p),historicalInputsAvailable:!!historical(s,p)});
+  });
   function prepare(req,res) {
-    const s=read();if(req.body.revision!==s.revision){res.status(409).json({error:'stale_input'});return;}
+    if(req.body.trialId!==undefined&&(typeof req.body.trialId!=='string'||!req.body.trialId)){res.status(400).json({error:'invalid_trial'});return;}
+    const s=read(),trial=req.body.trialId?s.trials?.find(t=>t.id===req.body.trialId):null;
+    if(req.body.trialId&&!trial){res.status(404).json({error:'trial_not_found'});return;}
+    if(trial?.status==='discarded'){res.status(409).json({error:'trial_discarded'});return;}
+    const target=trial||s;
+    if(req.body.revision!==target.revision){res.status(409).json({error:'stale_input'});return;}
     const calculatedAt=new Date().toISOString();let frozen;
-    try{frozen=freezeRunInput(s.data,req.body.selection,calculatedAt);}catch(e){res.status(400).json({error:e.message});return;}
-    const issues=[...validateInputs(defs,s.data),...assessRules(frozen.executionData,calculatedAt,true,frozen.conditions.mode).issues];
+    try{frozen=freezeRunInput(target.data,req.body.selection??trial?.selection,calculatedAt);}catch(e){res.status(400).json({error:e.message});return;}
+    const issues=[...validateInputs(defs,target.data),...assessRules(frozen.executionData,calculatedAt,true,frozen.conditions.mode).issues];
     if(issues.length){res.status(422).json({error:'rule_configuration_blocked',issues});return;}
-    const run={id:randomUUID(),status:'queued',phase:'等待计算线程',createdAt:calculatedAt,revision:s.revision,inputVersionId:preserve(s),...frozen,actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim(),timeoutMs:runTimeoutMs};
+    const run={id:randomUUID(),status:'queued',phase:'等待计算线程',createdAt:calculatedAt,revision:target.revision,trialId:trial?.id||null,sourcePlanId:trial?.sourcePlanId||null,inputVersionId:preserve(s,target),...frozen,actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim(),timeoutMs:runTimeoutMs};
     s.runs??=[];s.runs.unshift(run);return {s,run};
   }
   const publicRun=run=>{const {executionData,...summary}=run;const plan=run.planId?read().plans.find(p=>p.id===run.planId):null;return {...summary,resultState:resultState(run,plan?.resultAssessment)};};
-  function makePlan(result,run){return {...result,id:randomUUID(),status:'draft',revision:run.revision,inputVersionId:run.inputVersionId,runId:run.id,conditions:run.conditions,snapshotHash:run.snapshotHash};}
+  function makePlan(result,run){return {...result,trialId:run.trialId,sourcePlanId:run.sourcePlanId,id:randomUUID(),status:'draft',revision:run.revision,inputVersionId:run.inputVersionId,runId:run.id,conditions:run.conditions,snapshotHash:run.snapshotHash};}
   function finish(id,req,status,details={}){
     const s=read(),run=s.runs?.find(r=>r.id===id);if(!run||terminal.has(run.status))return;
     Object.assign(run,details,{status,finishedAt:new Date().toISOString(),phase:status==='completed'?'计算完成':status==='partial'?'计算完成，有未排或问题':status});
-    if(details.result){const plan=makePlan(details.result,run);delete run.result;s.plans.unshift(plan);run.planId=plan.id;}
+    if(details.result){const plan=makePlan(details.result,run);delete run.result;s.plans.unshift(plan);run.planId=plan.id;if(run.trialId){const trial=s.trials.find(t=>t.id===run.trialId);if(trial.status==='active'&&trial.revision===run.revision)trial.latestPlanId=plan.id;}}
     record(s,req,'run_'+status,id,{inputVersionId:run.inputVersionId,snapshotHash:run.snapshotHash,failure:run.failure,planId:run.planId});write(s);
     const job=activeWorkers.get(id);if(job){clearTimeout(job.timer);activeWorkers.delete(id);return job.worker.terminate();}
   }
@@ -139,7 +190,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     try{
       const result=calculate(run.executionData,run.revision,run.createdAt,run.conditions),plan=makePlan(result,run);
       run.status=result.resultAssessment?.status==='partial-unplanned'||result.findings.length?'partial':'completed';run.phase='同步计算完成';run.finishedAt=new Date().toISOString();run.planId=plan.id;
-      s.plans.unshift(plan);record(s,req,'calculate',plan.id,{runId:run.id,snapshotHash:run.snapshotHash});write(s);res.status(201).json(plan);
+      s.plans.unshift(plan);if(run.trialId){const trial=s.trials.find(t=>t.id===run.trialId);trial.latestPlanId=plan.id;}record(s,req,'calculate',plan.id,{runId:run.id,snapshotHash:run.snapshotHash});write(s);res.status(201).json(plan);
     }catch{
       run.status='failed';run.phase='同步计算失败';run.finishedAt=new Date().toISOString();run.failure={code:'calculation_error',message:'同步计算失败，未保存结果。'};
       record(s,req,'run_failed',run.id,{failure:run.failure});write(s);res.status(500).json({error:'calculation_error',runId:run.id});
@@ -149,12 +200,14 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   router.post('/plans',permission('edit'),(req,res)=>{
     const s=read(),p=s.plans.find(p=>p.id===req.body.id);if(!p)return res.status(404).json({error:'plan_not_found'});
     if(p.status!=='draft')return res.status(409).json({error:'immutable_plan'});
+    if(p.trialId&&s.trials?.find(t=>t.id===p.trialId)?.status==='discarded')return res.status(409).json({error:'trial_discarded'});
     record(s,req,'edit',p.id,{kind:'save_snapshot'});write(s);res.status(201).json(p);
   });
   router.post('/plans/:id/verify',permission('edit'),(req,res)=>{
     const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});
     if(p.status!=='draft')return res.status(409).json({error:'immutable_plan'});
-    if(p.revision!==s.revision)return res.status(409).json({error:'stale_input'});
+    if(p.trialId&&s.trials?.find(t=>t.id===p.trialId)?.status==='discarded')return res.status(409).json({error:'trial_discarded'});
+    if(p.revision!==(p.trialId?s.trials?.find(t=>t.id===p.trialId)?.revision:s.revision))return res.status(409).json({error:'stale_input'});
     if(!p.ruleSnapshot)return res.status(409).json({error:'historical_rules_unavailable'});
     const run=p.runId?s.runs?.find(r=>r.id===p.runId):null;
     if(p.runId&&(!run||run.snapshotHash!==p.snapshotHash||inputHash({conditions:run.conditions,executionData:run.executionData})!==p.snapshotHash||!inputs(s,p)))return res.status(409).json({error:'historical_inputs_unavailable'});

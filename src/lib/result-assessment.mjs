@@ -62,6 +62,6 @@ export function assessResult(data,plan,conditions={}){
 }
 export function resultCsv(run,plan){
  const report=plan?.resultAssessment;
- const rows=[['FR024 运行结果与原因'],['运行编号',run?.id||plan?.runId||'未知'],['输入版本',run?.inputVersionId||plan?.inputVersionId||'未知'],['快照',run?.snapshotHash||plan?.snapshotHash||'未知'],['运行状态',JSON.stringify(resultState(run||{status:'unknown'},report))],['结果报告',report?JSON.stringify(report):run&&!run.planId?'本次无已保存结果；未使用当前输入生成任务或补算原因':'历史结果原因未知；未使用当前输入补算'],['交付评估',plan?.deliveryAssessment?JSON.stringify(plan.deliveryAssessment):'未知']];
+ const rows=[['FR024 运行结果与原因'],['试算编号',plan?.trialId||run?.trialId||'非试算'],['源方案',plan?.sourcePlanId||run?.sourcePlanId||'原始方案'],['结果来源',plan?.copiedResult?'复制保存的原结果；尚未重算':'服务端运行记录'],['原运行',plan?.sourceRunId||'不适用'],['运行编号',run?.id||plan?.runId||'未知'],['输入版本',run?.inputVersionId||plan?.inputVersionId||'未知'],['快照',run?.snapshotHash||plan?.snapshotHash||'未知'],['运行状态',JSON.stringify(resultState(run||{status:'unknown'},report))],['结果报告',report?JSON.stringify(report):run&&!run.planId?'本次无已保存结果；未使用当前输入生成任务或补算原因':'历史结果原因未知；未使用当前输入补算'],['交付评估',plan?.deliveryAssessment?JSON.stringify(plan.deliveryAssessment):'未知']];
  return rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
 }

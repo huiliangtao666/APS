@@ -190,7 +190,7 @@ test('FR015 all 16 categories accept atomic creation and edits, valid copies, an
  for(const key of Object.keys(initial))assert.equal(r.body.data[key].length,initial[key].length,key);
 });
 
-test('FR015 snapshots preserve original full inputs across edit/delete/recompute/restore and restart',async t=>{
+test('FR015 snapshots preserve original full inputs across edit/delete/recompute and guarded restore',async t=>{
  const {call,dir}=await fixture(t);const start=(await call('/state')).body;
  const p=(await call('/calculate',{revision:0})).body;assert.match(p.inputVersionId,/^[a-f0-9]{64}$/);
  const old=(await call('/plans/'+p.id+'/inputs',undefined,'query')).body;assert.deepEqual(old.data,start.data);
@@ -202,7 +202,7 @@ test('FR015 snapshots preserve original full inputs across edit/delete/recompute
  const snap=(await call('/plans/'+newPlan.id+'/inputs')).body;assert.equal(snap.data.orders[0]['合格需求'],'481');assert.equal(snap.data.inventory.length,0);
  const exp=await call('/export',{query:{table:'orders',planId:p.id,sourcePlanId:p.id,revision:rev},rows:[{fake:'forged'}]});assert.equal(exp.status,200);assert.ok(exp.body.includes('"240"'));assert.ok(!exp.body.includes('"481"'));assert.ok(exp.body.includes(p.inputVersionId));assert.ok(exp.body.includes('原始输入快照'));
  const json=JSON.parse(fs.readFileSync(path.join(dir,'business.json')));assert.deepEqual(json.inputVersions[p.inputVersionId].data,start.data);
- r=await call('/inputs',{tables:old.data,revision:rev,operation:'restore'});assert.equal(r.status,200);assert.equal(r.body.data.orders[0]['合格需求'],'240');assert.equal(r.body.data.inventory.length,2);
+ r=await call('/inputs',{tables:old.data,revision:rev,operation:'restore'});assert.equal(r.status,409);assert.equal(r.body.error,'restore_blocked');assert.equal((await call('/state')).body.data.inventory.length,0);
  assert.equal((await call('/plans')).body.find(x=>x.id===p.id).inputSnapshot.orders[0]['合格需求'],'240');
 });
 test('FR015 simulated confirmed storage fixture protects original inputs; missing or corrupt historical inputs fail closed',async t=>{
@@ -642,4 +642,96 @@ test('FR024 cancellation, timeout and crash preserve existing partial result and
   const csv=await call('/export',{runId:done.id});assert.equal(csv.status,200);assert.ok(csv.body.includes(done.resultState.code));assert.ok(!csv.body.includes('private data'));if(mode==='timeout')assert.match(csv.body,/不代表业务无解/);
   assert.deepEqual((await call('/plans')).body,plans);assert.deepEqual((await call('/state')).body,inputs);assert.equal((await call('/runs/'+done.id+'/inputs')).status,200);assert.equal((await call('/runs/'+done.id+'/cancel',{})).status,409);
  }
+});
+
+test('FR026 exact copied inputs/results, isolated edits and current workspace unchanged, trusted provenance and audit',async t=>{
+ const {call}=await fixture(t);const state=(await call('/state')).body,p=(await call('/calculate',{revision:0})).body;
+ const original=(await call('/plans')).body.find(x=>x.id===p.id);
+ const made=await call('/plans/'+p.id+'/copy',{actor:'forged',status:'confirmed',data:{},sourcePlanId:'forged'});assert.equal(made.status,201);const trial=made.body;
+ assert.equal(trial.actor,'test#planner');assert.equal(trial.sourcePlanId,p.id);assert.equal(trial.sourceRunId,p.runId);assert.deepEqual(trial.data,state.data);
+ const copied=(await call('/plans')).body.find(x=>x.id===trial.basePlanId);assert.notEqual(copied.id,p.id);assert.equal(copied.status,'draft');assert.deepEqual(copied.tasks,p.tasks);assert.deepEqual(copied.materialDemands,p.materialDemands);assert.deepEqual(copied.resultAssessment,p.resultAssessment);assert.deepEqual(copied.deliveryAssessment,p.deliveryAssessment);
+ const rows=structuredClone(trial.data.orders);rows[0]['合格需求']='241';
+ const edit=await call('/trials/'+trial.id+'/inputs',{revision:0,tables:{orders:rows}});assert.equal(edit.status,200);assert.equal(edit.body.revision,1);
+ assert.equal((await call('/trials/'+trial.id+'/inputs',{revision:0,tables:{orders:rows}})).status,409);
+ assert.deepEqual((await call('/state')).body,state);assert.deepEqual((await call('/plans')).body.find(x=>x.id===p.id),original);
+ assert.deepEqual((await call('/plans/'+copied.id+'/inputs')).body.data,state.data);
+ const exported=await call('/export',{planId:copied.id});assert.equal(exported.status,200);assert.ok(exported.body.includes(trial.id)&&exported.body.includes(p.id)&&exported.body.includes('尚未重算'));
+ const calc=await call('/calculate',{revision:1,trialId:trial.id});assert.equal(calc.status,201);assert.equal(calc.body.trialId,trial.id);assert.notEqual(calc.body.runId,p.runId);assert.notEqual(calc.body.inputVersionId,p.inputVersionId);
+ assert.equal((await call('/plans/'+calc.body.id+'/inputs')).body.data.orders[0]['合格需求'],'241');
+ const logs=(await call('/operations')).body;assert.equal(logs.find(x=>x.action==='trial_created').sourcePlanId,p.id);assert.equal(logs.find(x=>x.trialId===trial.id).actor,'test#planner');
+});
+
+test('FR026 compare unchanged copies truthfully and edited runs expose input, task, allocation, due and unplanned differences',async t=>{
+ const {call}=await fixture(t);const p=(await call('/calculate',{revision:0})).body,trial=(await call('/plans/'+p.id+'/copy',{})).body;
+ let diff=(await call('/plans/'+p.id+'/compare/'+trial.basePlanId,undefined,'query')).body;
+ assert.equal(diff.orderOutcome,'unchanged-no-delivery-improvement');assert.equal(diff.tasks.changes.length,0);assert.equal(diff.inputs.length,0);assert.equal(diff.materials.known,false);assert.equal(diff.materials.changes,null);
+ const orders=structuredClone(trial.data.orders);orders[0]['要求可交付分钟']='10';orders[0]['合格需求']='241';
+ assert.equal((await call('/trials/'+trial.id+'/inputs',{revision:0,tables:{orders}})).status,200);
+ const next=(await call('/calculate',{trialId:trial.id,revision:1,selection:{...trial.selection,startMinute:500,endMinute:510}})).body;
+ diff=(await call('/plans/'+p.id+'/compare/'+next.id)).body;
+ assert.equal(diff.conditions.changed,true);assert.ok(diff.tasks.changes.length);assert.ok(diff.resources.changes.length);assert.ok(diff.orders.changes.length);assert.ok(diff.unplanned.changes.length);assert.deepEqual(diff.inputs.map(x=>x.table),['orders']);assert.ok(diff.unplanned.after.every(x=>x.quantity!==null&&x.unit));
+ assert.equal((await call('/plans/'+p.id+'/compare/missing')).status,404);
+});
+
+test('FR026 material shortage survives capacity-only trial, allocations retain exact quantities and never deduct current stock',async t=>{
+ const {call}=await fixture(t);const s=(await call('/state')).body,d=materialFixture(s.data);Object.assign(d.inventory[0],{'账面数量':'400','已占用数量':'100'});
+ assert.equal((await call('/inputs',{revision:0,tables:d})).status,200);
+ const p=(await call('/calculate',{revision:1})).body,trial=(await call('/plans/'+p.id+'/copy',{})).body;assert.equal(p.materialChecked,true);assert.equal(p.materialDemands[0].quantity,325);assert.equal(p.materialDemands[0].shortage,25);
+ const groups=[{'人员组编号':'G-X','人员组名称':'增人试算','人员数量':'100','技能':'mix','班次':'day','可用起始分钟':'0','可用结束分钟':'600'}];
+ assert.equal((await call('/trials/'+trial.id+'/inputs',{revision:0,tables:{personnelGroups:groups}})).status,200);
+ const next=(await call('/calculate',{trialId:trial.id,revision:1})).body;
+ const diff=(await call('/plans/'+p.id+'/compare/'+next.id)).body;assert.equal(diff.materials.known,true);assert.deepEqual(next.materialDemands,p.materialDemands);assert.equal(diff.orderOutcome,'unchanged-no-delivery-improvement');assert.deepEqual((await call('/state')).body.data.inventory,d.inventory);
+ const changed=structuredClone(trial.data.inventory);changed[0]['账面数量']='425';assert.equal((await call('/trials/'+trial.id+'/inputs',{revision:1,tables:{inventory:changed}})).status,200);
+ const filled=(await call('/calculate',{trialId:trial.id,revision:2})).body,diff2=(await call('/plans/'+p.id+'/compare/'+filled.id)).body;assert.ok(diff2.materials.changes.length);assert.equal(filled.materialDemands[0].shortage,0);assert.deepEqual((await call('/state')).body.data.inventory,d.inventory);
+});
+
+test('FR026 restore current-state blockers preserve stock, completed quantities, facts, confirmed originals and all history byte-for-byte',async t=>{
+ const {call,dir}=await fixture(t);const p=(await call('/calculate',{revision:0})).body;
+ const file=path.join(dir,'business.json'),s=JSON.parse(fs.readFileSync(file));
+ s.plans[0].status='confirmed';s.data.inventory[0]['账面数量']='1';s.data.inventory[0]['已占用数量']='0';s.data.orders[0]['已完成合格数量']='10';s.executionFacts=[{id:'F1',taskId:p.tasks[0].id,startedAt:'2026-11-02T00:00:00Z',consumed:'5'}];s.revision++;
+ fs.writeFileSync(file,JSON.stringify(s));const before=fs.readFileSync(file,'utf8');
+ const r=await call('/plans/'+p.id+'/restore',{revision:1,currentProgressVersion:'invented',confirmed:true});assert.equal(r.status,409);assert.equal(r.body.error,'restore_blocked');assert.equal(r.body.currentRevision,1);assert.equal(r.body.currentProgressVersion,null);assert.equal(r.body.sourceInputVersionId,p.inputVersionId);assert.equal(r.body.blockers.length,3);
+ assert.equal((await call('/inputs',{revision:1,tables:(await call('/plans/'+p.id+'/inputs')).body.data,operation:'restore'})).status,409);
+ assert.equal((await call('/tables/inventory',{revision:1,rows:s.data.inventory,operation:'restore'})).status,409);
+ assert.equal((await call('/plans/'+p.id+'/restore',{revision:0})).body.error,'stale_input');assert.equal(fs.readFileSync(file,'utf8'),before);
+ const trial=(await call('/plans/'+p.id+'/copy',{})).body;assert.equal((await call('/trials/'+trial.id+'/discard',{revision:0})).status,200);
+ const after=JSON.parse(fs.readFileSync(file));assert.deepEqual(after.plans.find(x=>x.id===p.id),s.plans[0]);assert.deepEqual(after.data,s.data);assert.deepEqual(after.executionFacts,s.executionFacts);
+});
+
+test('FR026 discard cancels real worker and preserves immutable originals/results across late messages and restart',async t=>{
+ const {call,dir}=await fixture(t,false,{workerFactory:()=>new Worker(`const {parentPort}=require('node:worker_threads');parentPort.postMessage({kind:'progress'});setInterval(()=>{},1000);`,{eval:true})});
+ const p=(await call('/calculate',{revision:0})).body,trial=(await call('/plans/'+p.id+'/copy',{})).body;
+ const original=(await call('/plans')).body.find(x=>x.id===p.id),state=(await call('/state')).body;
+ const run=(await call('/runs',{trialId:trial.id,revision:0})).body;assert.ok(run.id);
+ assert.equal((await call('/trials/'+trial.id+'/discard',{revision:0})).status,200);
+ const terminal=(await call('/runs/'+run.id)).body;assert.equal(terminal.status,'cancelled');assert.equal(terminal.failure.code,'trial_discarded');assert.equal(terminal.planId,undefined);
+ for(const [url,body] of [['/calculate',{trialId:trial.id,revision:1}],['/runs',{trialId:trial.id,revision:1}],['/trials/'+trial.id+'/inputs',{revision:1,tables:{orders:[]}}],['/plans/'+trial.basePlanId+'/copy',{}],['/plans/'+trial.basePlanId+'/verify',{}],['/plans',{id:trial.basePlanId}]])assert.equal((await call(url,body)).body.error,'trial_discarded');
+ assert.equal((await call('/trials/'+trial.id+'/discard',{revision:1})).status,200);
+ assert.deepEqual((await call('/state')).body,state);assert.deepEqual((await call('/plans')).body.find(x=>x.id===p.id),original);
+ assert.equal((await call('/runs/'+run.id+'/inputs')).status,200);
+ const stored=JSON.parse(fs.readFileSync(path.join(dir,'business.json')));assert.equal(stored.trials[0].status,'discarded');assert.equal(stored.plans.length,2);
+ const bytes=fs.readFileSync(path.join(dir,'business.json'),'utf8');createBusinessRouter({dataDir:dir,actorMiddleware:(_q,_s,next)=>next(),requireMember:()=> (_q,_s,next)=>next()});assert.equal(fs.readFileSync(path.join(dir,'business.json'),'utf8'),bytes);
+});
+
+test('FR026 all trial mutation routes require server write roles/reasons/CSRF and reject corrupt legacy copies',async t=>{
+ const {call,dir}=await fixture(t);const p=(await call('/calculate',{revision:0})).body;
+ const trial=(await call('/plans/'+p.id+'/copy',{})).body;
+ for(const [url,body] of [['/plans/'+p.id+'/copy',{}],['/plans/'+p.id+'/restore',{revision:0}],['/trials/'+trial.id+'/inputs',{revision:0,tables:{orders:trial.data.orders}}],['/trials/'+trial.id+'/discard',{revision:0}],['/runs',{revision:0,trialId:trial.id}]]){
+  assert.equal((await call(url,{...body,role:'supervisor'},'query')).status,403);assert.equal((await call(url,{...body,reason:''})).status,400);assert.equal((await call(url,body,'planner',{'sec-fetch-site':'cross-site'})).status,403);
+ }
+ const file=path.join(dir,'business.json'),s=JSON.parse(fs.readFileSync(file));delete s.runs[0].executionData;fs.writeFileSync(file,JSON.stringify(s));
+ assert.equal((await call('/plans/'+p.id+'/copy',{})).status,409);assert.equal((await call('/plans/'+p.id+'/compare/'+trial.basePlanId)).status,409);
+ assert.equal((await call('/calculate',{revision:0,trialId:'missing'})).status,404);
+});
+
+test('FR026 two real parallel trial Workers freeze distinct inputs while later trial and workspace edits remain isolated',async t=>{
+ const {call}=await fixture(t);const p=(await call('/calculate',{revision:0})).body;
+ const one=(await call('/plans/'+p.id+'/copy',{})).body,two=(await call('/plans/'+p.id+'/copy',{})).body;
+ for(const [trial,quantity] of [[one,'241'],[two,'242']]){const orders=structuredClone(trial.data.orders);orders[0]['合格需求']=quantity;assert.equal((await call('/trials/'+trial.id+'/inputs',{revision:0,tables:{orders}})).status,200);}
+ const started=await Promise.all([one,two].map(trial=>call('/runs',{trialId:trial.id,revision:1})));assert.ok(started.every(r=>r.status===202),JSON.stringify(started));
+ const edited=structuredClone(one.data.orders);edited[0]['合格需求']='243';assert.equal((await call('/trials/'+one.id+'/inputs',{revision:1,tables:{orders:edited}})).status,200);
+ const live=structuredClone(one.data.orders);live[0]['合格需求']='444';assert.equal((await call('/inputs',{revision:0,tables:{orders:live}})).status,200);
+ const done=await Promise.all(started.map(r=>waitRun(call,r.body.id)));assert.ok(done.every(r=>['completed','partial'].includes(r.status)),JSON.stringify(done));
+ for(let i=0;i<2;i++){const frozen=(await call('/runs/'+done[i].id+'/inputs')).body;assert.equal(frozen.originalInput.orders[0]['合格需求'],i===0?'241':'242');const plan=(await call('/plans')).body.find(p=>p.id===done[i].planId);assert.equal(plan.trialId,i===0?one.id:two.id);assert.equal(plan.revision,1);assert.equal(plan.runId,done[i].id);}
+ assert.equal((await call('/trials')).body.find(t=>t.id===one.id).data.orders[0]['合格需求'],'243');assert.equal((await call('/state')).body.data.orders[0]['合格需求'],'444');assert.equal((await call('/plans/'+p.id+'/inputs')).body.data.orders[0]['合格需求'],'240');
 });
