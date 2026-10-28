@@ -72,3 +72,15 @@ test('AXIS-LABEL-03 narrow axis has readable external dates and wider ticks carr
  }
  assert.equal(JSON.stringify(p),before);
 });
+test('FR034 focus resets obstructing filters and shows exact overlap while problem-only hides unrelated tasks',()=>{
+ const p=fixture();p.tasks[1]={...p.tasks[1],machine:'M',start:20,end:60};
+ const finding={code:'VERIFY / MACHINE_OVERLAP',taskIds:['A-MIX','A-FILL'],interval:{kind:'machine-overlap',machine:'M',start:20,end:30}};
+ let ui:any;const selected=['A-MIX','A-FILL'];
+ act(()=>{ui=Renderer.create(<TimelinePanel plan={p} selected={selected} onSelect={()=>{}} onInput={()=>{}} currentFacts={[]} problemTaskIds={['A-MIX','A-FILL']}/>);});
+ change(ui,'搜索任务','hidden');
+ act(()=>ui.update(<TimelinePanel plan={p} selected={selected} onSelect={()=>{}} onInput={()=>{}} currentFacts={[]} focusedProblem={finding} problemTaskIds={['A-MIX','A-FILL']}/>));
+ assert.equal(field(ui,'搜索任务').props.value,'');assert.equal(field(ui,'窗口开始分钟').props.value,'10');
+ assert.equal(ui.root.findByProps({className:'fr034-interval'}).props['aria-label'],'问题区间 20 至 30，10 分钟');
+ act(()=>ui.update(<TimelinePanel plan={p} selected={selected} onSelect={()=>{}} onInput={()=>{}} currentFacts={[]} problemTaskIds={[]}/>));
+ assert.equal(bars(ui).length,0);
+});

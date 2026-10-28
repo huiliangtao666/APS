@@ -1,8 +1,9 @@
+import {problemInterval} from './lib/task-linkage.mjs';
 import {useEffect,useMemo,useRef,useState} from 'react';
 import {clip,filterTasks,lanes,projection,timeLabel,timetable,validMinute,validInterval,axisTicks} from './lib/timetable.mjs';
-type Props={plan:any;selected:string[];onSelect:(ids:string[])=>void;onInput:(table:string,row:Record<string,string>)=>void;currentFacts:Record<string,string>[]};
+type Props={focusedProblem?:any;problemTaskIds?:string[];plan:any;selected:string[];onSelect:(ids:string[])=>void;onInput:(table:string,row:Record<string,string>)=>void;currentFacts:Record<string,string>[]};
 const show=(v:any)=>v==null?'未知':String(v);
-export function TimelinePanel({plan,selected,onSelect,onInput,currentFacts}:Props){
+export function TimelinePanel({plan,selected,onSelect,onInput,currentFacts,focusedProblem,problemTaskIds}:Props){
  const model=useMemo(()=>timetable(plan),[plan]);
  const [machine,setMachine]=useState(''),[order,setOrder]=useState(''),[state,setState]=useState(''),[query,setQuery]=useState('');
  const [zoom,setZoom]=useState(1),[from,setFrom]=useState(''),[to,setTo]=useState(''),[cursor,setCursor]=useState('');
@@ -23,7 +24,9 @@ export function TimelinePanel({plan,selected,onSelect,onInput,currentFacts}:Prop
  }
  const minute=valid(cursor)&&validMinute(Number(cursor))?Number(cursor):null;
  const width=Math.min(60000,(end-start)*zoom),actualZoom=width/(end-start);
- const filtered=filterTasks(model.tasks,{machine,order,state,query,start,end,minute});
+ const interval=problemInterval(plan,focusedProblem);
+ const filtered=filterTasks(model.tasks,{machine,order,state,query,start,end,minute}).filter(t=>!problemTaskIds||problemTaskIds.includes(t.id));
+ useEffect(()=>{if(!focusedProblem)return;setMachine('');setOrder('');setState('');setQuery('');const ts=model.tasks.filter(t=>focusedProblem.taskIds?.includes(t.id)&&validInterval(t.start,t.end));const a=interval?.start??(ts.length?Math.min(...ts.map(t=>t.start)):null),b=interval?.end??(ts.length?Math.max(...ts.map(t=>t.end)):null);if(validInterval(a,b)){setFrom(String(a-10));setTo(String(b+10));setAcceptedWindow({start:a-10,end:b+10});}},[focusedProblem]);
  const hidden=selected.filter(id=>model.tasks.some(t=>t.id===id)&&!filtered.some(t=>t.id===id));
  function reset(){setMachine('');setOrder('');setState('');setQuery('');setFrom('');setTo('');setAcceptedWindow(null);}
  function reveal(){reset();requestAnimationFrame(()=>detail.current?.scrollIntoView?.({block:'nearest'}));}
@@ -67,6 +70,7 @@ export function TimelinePanel({plan,selected,onSelect,onInput,currentFacts}:Prop
  <div className="fr033-axis" style={{width,left:160}}>{ticks.map(n=><time key={n} title={timeLabel(n)} aria-label={timeLabel(n)} style={{left:(n-start)/(end-start)*width}}>{timeLabel(n).split(" ")[0]}<br/>{timeLabel(n).split(" ")[1].split("（")[0]}</time>)}</div>
  {rows.map(row=><div className="fr033-machine" key={row.id} style={{top:row.top,height:row.height,width:width+160}}><div className="fr033-machine-label">{row.id}<small>{model.input?.machines?.find(m=>m['设备编号']===row.id)?.['设备名称']||'名称未知'}</small></div><div className="fr033-track" style={{left:160,width,height:row.height}}>
  {model.downtime.filter(d=>d.machine===row.id).map((d,i)=>{const g=geometry(d.start,d.end);return g&&<div className="fr033-downtime" style={{...g,height:'100%'}} key={i} title={`停机 ${timeLabel(d.start)}—${timeLabel(d.end)} ${d.reason}`}>停机：{d.reason}</div>;})}
+ {interval&&(!interval.machine||interval.machine===row.id)&&row.layout.items.some((t:any)=>focusedProblem?.taskIds?.includes(t.id))&&(()=>{const g=geometry(interval.start,interval.end);return g&&<div className="fr034-interval" role="img" aria-label={`问题区间 ${interval.start} 至 ${interval.end}，${interval.end-interval.start} 分钟`} style={{...g,height:'100%'}}>问题 [{interval.start},{interval.end})</div>;})()}
  {row.layout.items.map((t:any)=>{const g=geometry(t.start,t.end);return g&&<button key={t.id} data-selected={selected.includes(t.id)} className="fr033-task" style={{...g,top:28+t.lane*48}} onClick={()=>onSelect([t.id])} aria-label={`${t.id} ${t.orderId} ${t.operation} ${timeLabel(t.start)} 至 ${timeLabel(t.end)} ${projection(t,minute)}`} aria-pressed={selected.includes(t.id)} title={`${t.id} ${projection(t,minute)}`}><b>{t.id} · {t.operation}</b><span>{projection(t,minute)}</span></button>;})}
  {row.facts.map((f:any,i:number)=>{const a=Number(f['开始分钟']),b=Number(f['完成分钟']||f['观测分钟']),g=geometry(a,b);return g&&<div className="fr033-fact" key={f['事实编号']} style={{...g,top:28+row.layout.count*48+i*28}} title={JSON.stringify(f)}>模拟事实 {f['事实编号']}：{f['状态']} · 观测 {f['观测分钟']}</div>;})}
  </div></div>)}

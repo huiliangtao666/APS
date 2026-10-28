@@ -1,3 +1,4 @@
+import {TaskLinkage} from './TaskLinkage';
 import {TimelinePanel} from './TimelinePanel';
 import {ConfirmationPanel} from './ConfirmationPanel';
 import {ExecutionPanel} from './ExecutionPanel';
@@ -47,11 +48,15 @@ export default function App() {
   const [tableKey,setTableKey]=useState('orders');
   const [inventoryAsOf,setInventoryAsOf]=useState(new Date().toISOString().slice(0,16));
   const [selected,setSelected]=useState<string[]>([]);
+  const [focusedProblem,setFocusedProblem]=useState<any>(null);
+  const [problemOnly,setProblemOnly]=useState(false);
+
   const [runs,setRuns]=useState<Run[]>([]);
   const pendingRun=useRef<string|null>(null);
   const [trials,setTrials]=useState<Trial[]>([]);
   const [plans,setPlans]=useState<Plan[]>([]);
   const [activePlan,setActivePlan]=useState<Plan|null>(null);
+  useEffect(()=>{setFocusedProblem(null);setProblemOnly(false);},[activePlan?.id]);
   const [verification,setVerification]=useState<StoredVerificationReport|null>(null);
   const [message,setMessage]=useState('');
   const [issues,setIssues]=useState<Finding[]>([]);
@@ -94,7 +99,7 @@ export default function App() {
   function savePlan(){if(activePlan)perform(async()=>{await api('/plans',{id:activePlan.id});setMessage('服务端排程快照已保存。');await refresh();});}
   function exportPlan(){if(activePlan)download({planId:activePlan.id},activePlan.id+'-tasks.csv');}
   const visibleFindings=useMemo(()=>[...(issues.length?issues:(activePlan?.findings||[])),...(activePlan?.verification?.findings||[])],[issues,activePlan]);
-  function locate(f:Finding){setSelected(f.taskIds);setView('schedule');}
+  function locate(f:Finding){setFocusedProblem(f);setSelected(f.taskIds);setView('schedule');}
 
   if(membership.state.kind!=='member')return <main className="panel"><h1>APS · 模拟排程</h1><p>身份状态：{membership.state.kind}</p><p>需要托管身份和已授权业务成员。</p><button onClick={()=>membership.signIn()}>登录</button></main>;
   return <div className="app-shell">
@@ -122,7 +127,8 @@ export default function App() {
             ['lineScope','单线约束'],['machineOverlap','机器不重叠'],['precedence','优先关系'],
           ] as const).map(([key,label])=>{const check=verification.checks[key];const statusLabel:Record<VerificationStatus,string>={pass:'通过',problem:'问题',not_checked:'未检查'};return <article className={`verification-check ${check.status}`} key={key}><div><b>{label}</b><strong>{statusLabel[check.status]}</strong></div><ul>{check.details.map((detail,i)=><li key={i}>{detail}</li>)}</ul></article>;})}</div><small className="verification-note">本报告只复核上述三项已确认约束；保存的结果不代替主管确认。输入变更后需重新复核。</small></>}
         </section>
-        <TimelinePanel key={activePlan?.id||'none'} plan={activePlan} selected={selected} onSelect={setSelected} currentFacts={data.executionFacts||[]} onInput={(table,row)=>{setQueryInputTable(table);setQueryInputRow(row);setView('query');}}/>
+        <TaskLinkage plan={activePlan} selected={selected} findings={visibleFindings} focused={focusedProblem} onProblem={locate} onSelect={ids=>{setFocusedProblem(null);setSelected(ids);}} onCheck={verifyPlan} busy={busy||!session?.canWrite||!reason.trim()} problemOnly={problemOnly} onFilter={setProblemOnly}/>
+        <TimelinePanel focusedProblem={focusedProblem} problemTaskIds={problemOnly?visibleFindings.flatMap(f=>f.taskIds):undefined} key={activePlan?.id||'none'} plan={activePlan} selected={selected} onSelect={setSelected} currentFacts={data.executionFacts||[]} onInput={(table,row)=>{setQueryInputTable(table);setQueryInputRow(row);setView('query');}}/>
         <div className="content-grid">
         <aside className="panel issues-panel"><div className="panel-head"><div><h2>问题定位</h2><p>点击问题突出关联任务；输入错误定位到表格更正。</p></div><span className={`count ${visibleFindings.length?'error':''}`}>{visibleFindings.length}</span></div>
           {visibleFindings.length?visibleFindings.map((f,i)=><button className="finding" key={`${f.code}-${i}`} onClick={()=>{if(f.taskIds.length)locate(f);else{setTableKey(f.code.includes('JOINT_RESOURCE')?'resourceClaims':f.code.startsWith('RULE')?'rules':f.code.startsWith('SUPPLY_')?'supplies':f.code.startsWith('INVENTORY_')?'inventory':f.code.includes('ROUTE')?'routes':f.code.includes('PROCESS_TIME')?'times':f.code.includes('MACHINE')?'dependencies':f.code.includes('CALENDAR')?'calendars':f.code.includes('DOWNTIME')?'downtime':f.code.includes('PERSONNEL')?'dependencies':'orders');setView('data');setMessage(`问题来源已定位：${f.message}`);}}}><b>{f.code}</b><span>{f.message}</span>{f.taskIds.length>0&&<small>定位任务：{f.taskIds.join(' / ')}</small>}</button>):<div className="clear-state"><span>✓</span><b>{activePlan?'当前结果未报告问题':'尚无计算结果'}</b><small>检查范围见当前方案记录；无问题不代表全订单覆盖或完整业务可执行。</small></div>}

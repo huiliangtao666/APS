@@ -1,0 +1,8 @@
+{
+  "id": "PVTI_lAHOFM9WU84BpE1czhEHhDI",
+  "content": {
+    "id": "DI_lAHOFM9WU84BpE1czgLhAjc",
+    "title": "[FR] FR-034 甘特、明细与问题联动核对",
+    "body": "## 需求\n范围：P0优先；关联流程：BP-05；页面：PG-04/05；开始提供：R1；完整提供：R4。\n前置功能：FR-014/024/025/033。\n• 点击任务可查原始输入、前后工序和资源需求；点击问题同时定位相关任务及区间。机器问题显示交叠，顺序问题显示前序结束、后序开始及违反时长。\n• 可主动运行检查并筛选问题任务。新增模具、人员、物料等规则时，对应显示需求/可用值及判断依据，不要求用户先导出再核对。\n\n## 验收追踪\n验收用例：AC-04/15/17/31。\n\n来源：需求分析与设计说明书 v0.3，第 6 章；状态：基线需求，具体实现状态待跟踪。\n\n\n## Patrol independent browser result and immediate continuation\nOwner APS-Dev; delivery dlv_86769ae9-c432-4d50-8611-8730654fbbed. Immediately assigned after Devcompleted/idle no executablequeue/duplicate. Confirmed defectscan: issue19 independently fixedround1 and closed, no other unresolved productdefects. Original AC04/15/17/31 task-to-originalinput/predecessor/resources and problem-to-task/interval evidence, overlap/precedence durations, active checks/filter/detail required. FR014/024/025/033 supportedcode prerequisites available in9783e9de6e500f895dbe6084bcfda2690dcbad7d; fullacceptance gaps remain separate. Preserve immutable snapshots/currentfacts/sourceprovenance, truthful supported rule evidence. Container tests/build/CSV/browser wherepossible/ordinarypush/fullSHA/report/limits required. In progress; no parallel backlog/publication.\n"
+  }
+}

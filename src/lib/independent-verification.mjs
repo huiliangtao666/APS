@@ -53,7 +53,7 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
           if(a.resourceBatchId&&a.resourceBatchId===b.resourceBatchId&&a.start===b.start&&a.end===b.end&&a.machine===b.machine&&a.operation===b.operation&&a.productId===b.productId&&a.productionBatchId&&b.productionBatchId&&a.productionBatchId!==b.productionBatchId)continue;
           const message=`${machine} 上 ${list[i].id} 与 ${list[j].id} 时间重叠 [${Math.max(Number(list[i].start),Number(list[j].start))},${Math.min(Number(list[i].end),Number(list[j].end))}) 分钟。`;
           machineProblems.push(message);
-          if(enabledRules.includes('MACHINE'))findings.push({code:'VERIFY / MACHINE_OVERLAP',message,taskIds:[list[i].id,list[j].id]});
+          if(enabledRules.includes('MACHINE'))findings.push({code:'VERIFY / MACHINE_OVERLAP',message,taskIds:[list[i].id,list[j].id],interval:{kind:'machine-overlap',machine,start:Math.max(Number(list[i].start),Number(list[j].start)),end:Math.min(Number(list[i].end),Number(list[j].end))}});
         }
       }
     }
@@ -93,7 +93,7 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
     } else if (Number(task.start) < Number(predecessor.end)) {
       const message=`任务 ${task.id} 于 ${task.start} 开始，早于前序 ${predecessor.id} 于 ${predecessor.end} 完成，提前 ${Number(predecessor.end)-Number(task.start)} 分钟。`;
       precedenceProblems.push(message);
-      if(enabledRules.includes('PRECEDENCE'))findings.push({code:'VERIFY / PRECEDENCE',message,taskIds:[predecessor.id,task.id]});
+      if(enabledRules.includes('PRECEDENCE'))findings.push({code:'VERIFY / PRECEDENCE',message,taskIds:[predecessor.id,task.id],interval:{kind:'precedence',start:Number(task.start),end:Number(predecessor.end),priorEnd:Number(predecessor.end),nextStart:Number(task.start),violationDuration:Number(predecessor.end)-Number(task.start)}});
     }
   }
   if (!enabledRules.includes('PRECEDENCE')) details.precedence = result('not_checked', ['规则 PRECEDENCE 当前未启用。']);

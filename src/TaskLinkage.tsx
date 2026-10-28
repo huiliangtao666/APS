@@ -1,0 +1,19 @@
+import {taskEvidence,problemInterval} from './lib/task-linkage.mjs';
+import {timeLabel} from './lib/timetable.mjs';
+const value=(v:any)=>v==null?'未知':String(v);
+export function TaskLinkage({plan,selected,findings,focused,onProblem,onSelect,onCheck,busy,problemOnly,onFilter}:{plan:any;selected:string[];findings:any[];focused:any;onProblem:(f:any)=>void;onSelect:(ids:string[])=>void;onCheck:()=>void;busy:boolean;problemOnly:boolean;onFilter:(v:boolean)=>void}){
+ const interval=problemInterval(plan,focused);
+ return <section className="panel fr034" aria-label="任务与问题联动核对"><h2>任务与问题联动核对 · FR034</h2>
+ <p>方案 {plan?.id||'未知'} · 来源方案 {plan?.sourcePlanId||'原始 / 未记录'} · 来源运行 {plan?.sourceRunId||'未记录'} · 运行 {plan?.runId||'未知'} · 输入 {plan?.inputVersionId||plan?.inputVersion||'未知'} · 快照哈希 {plan?.snapshotHash||'未知'}</p>
+ <button disabled={!plan||busy} onClick={onCheck}>主动运行独立检查</button><label><input aria-label="仅显示问题任务" type="checkbox" checked={problemOnly} onChange={e=>onFilter(e.target.checked)}/>仅显示问题任务</label>
+ <p>主动检查仅核对单线、机器与前后序，沿用保存/过期/已确认保护。下列资源证据来自保存的计算记录，未再次验证全部规则。当前输入不补写历史。问题任务 {new Set(findings.flatMap(f=>f.taskIds||[])).size} 个。</p>
+ <div className="fr034-problems">{findings.map((f,i)=><button key={i} className="finding" aria-pressed={focused===f} onClick={()=>onProblem(f)}><b>{f.code}</b><span>{f.message}</span><small>关联任务 {(f.taskIds||[]).join(' / ')||'未记录；全局或输入问题'}</small></button>)}</div>
+ {focused&&<div role="status" aria-label="问题区间详情"><b>{focused.code}</b><p>{focused.message}</p>{interval?<><p>{interval.kind==='machine-overlap'?`机器 ${interval.machine} 交叠`:'前后序违反'} [{interval.start},{interval.end}) · 时长 {interval.end-interval.start} 分钟</p><p>{timeLabel(interval.start)} — {timeLabel(interval.end)}</p>{interval.kind==='precedence'&&<p>前序结束 {value(interval.priorEnd)} · 后序开始 {value(interval.nextStart)} · 违反时长 {value(interval.violationDuration)} 分钟</p>}</>:<p>没有可验证的已排问题区间；未排候选时点不视为安排。请查看关联任务保存的原因与原始输入。</p>}</div>}
+ {selected.map(id=>{const e=taskEvidence(plan,id);return e?<article key={id}><h3>资源需求与判断依据：{id}</h3><p>前序 {e.predecessor?<button onClick={()=>onSelect([e.predecessor.id])}>{e.predecessor.id}</button>:e.task.predecessor||'无记录'} · 后序 {e.successors.map((t:any)=><button key={t.id} onClick={()=>onSelect([t.id])}>{t.id}</button>)}</p>
+ {!e.hasInput&&<p>保存的输入未知；禁止使用当前输入推算资源需求。</p>}
+ <div className="table-wrap"><table><caption>需求与保存容量：窗口、技能、班次及占用是判断依据；总量不等于剩余可用量</caption><thead><tr><th>类型 / 资源</th><th>需求 / 配置总量</th><th>判断依据</th></tr></thead><tbody>{e.resources.map((r:any,i:number)=><tr key={i}><td>{r.type} / {r.resourceId}</td><td>需求 {value(r.demand)} {value(r.unit)} · 配置总量 {value(r.available)}</td><td>{r.decision}<details><summary>声明 / 配置 / 保存占用</summary><pre>{JSON.stringify(r,null,2)}</pre></details></td></tr>)}</tbody></table></div>
+ {!e.resources.length&&<p>本任务保存的资源需求未记录；未知不表示充足。</p>}
+ <h4>物料判断证据</h4>{e.materials.length?e.materials.map((m:any,i:number)=><div key={i}><p>{m.materialId} · 需求 {value(m.quantity)} {m.unit} · 本次分配可用 {value(m.allocated)} · 缺口 {value(m.shortage)} · 投料分钟 {value(m.feedMinute)} · {m.committed?'已提交计划分配':'未提交 / 候选检查'}</p><details><summary>BOM公式 / 批次质量与效期 / 条件供给依据</summary><pre>{JSON.stringify(m,null,2)}</pre></details></div>):<p>无保存的物料判断记录；未检查 / 未知。</p>}
+ </article>:<p key={id}>任务 {id} 未保存，关联输入和区间未知。</p>;})}
+ </section>;
+}
