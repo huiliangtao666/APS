@@ -164,7 +164,7 @@ export default function App() {
         }
         if(start===null){findings.push({code:'UNPLANNED / CALENDAR',message:`订单 ${oid} / 工序 ${operation} 未排：设备 ${machineId} 不可用。${reason||'找不到满足连续工作时长的窗口'}。任务要求连续 ${duration} 分钟；跨班或中断规则尚未配置。`,taskIds:[]});continue;}
         const stop=findDowntimeShiftReason(data.downtime||[],machineId,initialEarliest,duration,firstCalendarFit??start);
-        const calendarShift=firstCalendarFit!==null&&firstCalendarFit!==undefined&&firstCalendarFit>initialEarliest?(stop?`日历顺延：设备停机「${stop['原因']||'设备停机'}」${fmt(Number(stop['起始分钟']))}–${fmt(Number(stop['结束分钟']))}，安排至${fmt(start)}`:`日历顺延：工厂工作窗口，安排至${fmt(start)}`):'';
+        const calendarShift=firstCalendarFit!==null&&firstCalendarFit!==undefined&&firstCalendarFit>initialEarliest?(stop?`日历顺延：设备停机「${stop.reason||'设备停机'}」${fmt(stop.start)}–${fmt(stop.end)}，安排至${fmt(start)}`:`日历顺延：工厂工作窗口，安排至${fmt(start)}`):'';
         const task:Task={id:`${oid}-${operation}`,orderId:oid,productId:product,operation,label:op['工序名称']||operation,machine:machineId,start,end:start+duration,duration,predecessor:predecessor?.id||'',source:`订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04${calendarShift?` · ${calendarShift}`:''}`};built.push(task);done.set(operation,task);busy.push(task);machineBusy.set(machineId,busy);
       }
     }
