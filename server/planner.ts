@@ -1,3 +1,4 @@
+import {orderHasRemaining,calculateMaterialDemand,createMaterialAllocator,materialPolicy,type MaterialDemandRow} from '../src/lib/material-allocation.mjs';
 import { assessRules, type RuleSnapshot } from '../src/lib/business-rules.mjs';
 // Extracted existing scheduler; server uses canonical data only.
 import { independentlyVerifyPlan, type VerificationReport, type VerificationStatus } from '../src/lib/independent-verification.mjs';
@@ -16,17 +17,17 @@ type TableDef = { key: string; label: string; file: string; fields: string[] };
 type Task = { id: string; orderId: string; productId: string; operation: string; label: string; machine: string; start: number; end: number; duration: number; predecessor: string; source: string };
 type Finding = { code: string; message: string; taskIds: string[] };
 type StoredVerificationReport = VerificationReport & { inputFingerprint?: string };
-type Plan = { id: string; name: string; createdAt: string; tasks: Task[]; findings: Finding[]; rules: string[]; inputVersion: string; verification?: StoredVerificationReport; supplyConditions?: SupplyCondition[]; supplyInput?: string; ruleSnapshot?: RuleSnapshot };
+type Plan = { id: string; name: string; createdAt: string; tasks: Task[]; findings: Finding[]; rules: string[]; inputVersion: string; verification?: StoredVerificationReport; supplyConditions?: SupplyCondition[]; supplyInput?: string; materialDemands?:MaterialDemandRow[]; materialChecked?:boolean; ruleSnapshot?: RuleSnapshot };
 
 export const defs: TableDef[] = [
   { key: 'products', label: '产品与包装规格', file: '07_产品与包装规格.csv', fields: ['产品编号','产品名称','单支净重kg','每袋支数','总收率','模拟交付等待分钟'] },
   { key: 'materials', label: '物料主数据', file: '08_物料主数据.csv', fields: ['物料编号','物料名称','单位','类别'] },
-  { key: 'supplies', label: '预计到料', file: '20_预计到料.csv', fields: ['供给编号','物料编号','批次编号','预计数量','预计到达时间','预计可用时间'] },
+  { key: 'supplies', label: '预计到料', file: '20_预计到料.csv', fields: ['供给编号','物料编号','批次编号','预计数量','预计到达时间','预计可用时间','质量状态','有效期'] },
   { key: 'supplyDelays', label: '延期模拟记录', file: '21_延期模拟记录.csv', fields: ['记录编号','供给编号','记录时间','调整后到达时间','调整后可用时间','原因'] },
   { key: 'supplyUses', label: '计划供给引用', file: '22_计划供给引用.csv', fields: ['引用编号','订单编号','工序编号','供给编号','使用数量'] },
   { key: 'inventory', label: '库存批次', file: '09_库存批次.csv', fields: ['批次编号','物料编号','账面数量','已占用数量','有效期','位置','质量状态','预计可用时间'] },
-  { key: 'orders', label: '订单与交期', file: '17_生产订单与交期.csv', fields: ['订单编号','产品编号','产线编号','合格需求','数量单位','要求可交付分钟','优先顺序','是否允许拆分','需求类型','订单状态'] },
-  { key: 'bom', label: 'BOM 与包装用量', file: '09_BOM与包装用量.csv', fields: ['版本编号','产品编号','生效日期','投料工序编号','用量类型','物料编号','配置用量','用量单位','用量基准','收率/损耗口径备注'] },
+  { key: 'orders', label: '订单与交期', file: '17_生产订单与交期.csv', fields: ['订单编号','产品编号','产线编号','合格需求','数量单位','要求可交付分钟','优先顺序','是否允许拆分','需求类型','订单状态','已完成合格数量'] },
+  { key: 'bom', label: 'BOM 与包装用量', file: '09_BOM与包装用量.csv', fields: ['版本编号','产品编号','生效日期','投料工序编号','用量类型','物料编号','配置用量','用量单位','用量基准','收率/损耗口径备注','损坏比例'] },
   { key: 'routes', label: '工艺路线', file: '10_工艺路线配置.csv', fields: ['产品编号','工序编号','工序名称','前序工序','最大等待分钟','程序编号'] },
   { key: 'times', label: '工序工时', file: '11_工序工时配置.csv', fields: ['产品编号','工序编号','计算方式','固定分钟','速度支每分钟'] },
   { key: 'machines', label: '设备资源', file: '03_设备资源配置.csv', fields: ['设备编号','设备名称','产线编号','工序编号','日历编号','最小装载kg','最大装载kg','装载计量基准'] },
@@ -112,9 +113,11 @@ function validate(tasks: Task[]): Finding[] {
 
 export function calculate(data:Record<string,Row[]>, inputVersion:number, calculatedAt=new Date().toISOString(), conditions:{startMinute?:number;endMinute?:number|null;priority?:string;mode?:string}={}) {
  const minimal=conditions.mode==='minimal-r1';
+ const policy=minimal?null:materialPolicy(data,calculatedAt);
+ const materialDemands:MaterialDemandRow[]=[];const allocator=policy?createMaterialAllocator(data,policy):null;
  const ruleSnapshot=assessRules(data,calculatedAt,true,conditions.mode);
  let result:Plan|null=null;
- const setActivePlan=(p:Plan)=>{result={...p,ruleSnapshot,rules:ruleSnapshot.settings.filter(r=>r.active).map(r=>r.id)};};
+ const setActivePlan=(p:Plan)=>{result={...p,materialChecked:!!policy,materialDemands,ruleSnapshot,rules:ruleSnapshot.settings.filter(r=>r.active).map(r=>r.id)};};
  const setIssues=(_x:Finding[])=>{}; const setVerification=(_x:null)=>{};const setMessage=(_x:string)=>{};
  const enabledRules=(data.rules||[]).filter(r=>r['是否启用']==='是').map(r=>r['规则编号']);
  const supplyInput=JSON.stringify({supplies:data.supplies||[],delays:data.supplyDelays||[],uses:data.supplyUses||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[]});
@@ -141,6 +144,11 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
       const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
       setIssues(findings);setActivePlan(plan);setVerification(null);setMessage(findings.map(f=>f.message).join(' '));return;
     }
+    const retainBlockedDemand=(order:Row,operation:string,minute:number,blockedReason:string)=>{
+     if(!allocator)return;
+     try{const preview=allocator.preview(calculateMaterialDemand(data,order,operation,minute),minute);materialDemands.push(...preview.rows.map(r=>({...r,blockedReason})));}
+     catch(e){findings.push({code:'UNPLANNED / MATERIAL_CONFIG',message:e instanceof Error?e.message:'物料配置无效',taskIds:[`${order['订单编号']}-${operation}`]});}
+    };
     for(const order of sorted){const oid=order['订单编号'], product=order['产品编号'];const route=(data.routes||[]).filter(r=>r['产品编号']===product);
       if(!route.length){findings.push({code:'INPUT / ROUTE_MISSING',message:`订单 ${oid} 的产品 ${product} 没有工艺路线`,taskIds:[]});continue;}
       const routeByOperation=new Map<string,Row>(); const routeProblems:string[]=[];
@@ -154,34 +162,47 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
       // Keep the source row order among independent steps, while always placing predecessors first.
       const orderedRoute:Row[]=[];const remaining=[...route];const completedOperations=new Set<string>();
       while(remaining.length){const index=remaining.findIndex(op=>!op['前序工序']?.trim()||completedOperations.has(op['前序工序'].trim()));if(index<0)break;const [next]=remaining.splice(index,1);orderedRoute.push(next);completedOperations.add(next['工序编号'].trim());}
+      if(policy && !orderHasRemaining(order))continue;
       const done=new Map<string,Task>();
       for(const op of orderedRoute){const operation=op['工序编号'];const dep=(data.dependencies||[]).find(d=>d['订单编号']===oid&&d['工序编号']===operation&&d['资源类型']==='设备');const machineId=dep?.['资源编号']||'';const machine=(data.machines||[]).find(m=>m['设备编号']===machineId&&m['工序编号']===operation);
         if(!dep||!machine){findings.push({code:'INPUT / MACHINE_DEPENDENCY',message:`订单 ${oid} / 工序 ${operation} 缺少有效设备依赖（12_工序资源与物料依赖.csv）`,taskIds:[]});continue;}
         const time=(data.times||[]).find(t=>t['产品编号']===product&&t['工序编号']===operation);const duration=Number(time?.['固定分钟']);if(!time||!Number.isFinite(duration)||duration<=0){findings.push({code:'INPUT / PROCESS_TIME',message:`产品 ${product} / 工序 ${operation} 工时缺失或无效`,taskIds:[]});continue;}
-        const predecessor=op['前序工序']?done.get(op['前序工序']):undefined; if(op['前序工序']&&!predecessor){findings.push({code:'INPUT / PREDECESSOR',message:`${operation} 引用的前序 ${op['前序工序']} 未排入`,taskIds:[]});continue;}
-        const busy=machineBusy.get(machineId)||[];let candidate=Math.max(conditions.startMinute??0,predecessor?.end||0,minimal?0:supplyEarliestMinute(oid,operation,resolvedSupplies,data.supplyUses||[]));const initialEarliest=candidate;let start:number|null=null;let reason='';
+        const predecessor=op['前序工序']?done.get(op['前序工序']):undefined; if(op['前序工序']&&!predecessor){retainBlockedDemand(order,operation,conditions.startMinute??0,'前序未排；投料分钟仅为候选检查时点');findings.push({code:'INPUT / PREDECESSOR',message:`${operation} 引用的前序 ${op['前序工序']} 未排入`,taskIds:[]});continue;}
+        const busy=machineBusy.get(machineId)||[];let candidate=Math.max(conditions.startMinute??0,predecessor?.end||0,minimal||policy?0:supplyEarliestMinute(oid,operation,resolvedSupplies,data.supplyUses||[]));const initialEarliest=candidate;let start:number|null=null;let reason='';
         const calendarId=machine['日历编号']?.trim()||(data.calendars||[])[0]?.['日历编号']||'';
         const firstCalendarFit=minimal?initialEarliest:findCalendarWindow(calendarId,initialEarliest,duration,data.calendars||[],data.downtime||[],machineId).start;
+        let materialPreview:ReturnType<ReturnType<typeof createMaterialAllocator>['preview']>|null=null;
+        let materialError='';
         for(let attempt=0;attempt<1000;attempt++){
           const fit=minimal?{start:candidate,reason:''}:findCalendarWindow(calendarId,candidate,duration,data.calendars||[],data.downtime||[],machineId);
           if(fit.start===null){reason=fit.reason;break;}
           const overlap=busy.find(t=>fit.start!<t.end&&fit.start!+duration>t.start);
           if(overlap){candidate=overlap.end;continue;}
+          if(allocator){
+           try{materialPreview=allocator.preview(calculateMaterialDemand(data,order,operation,fit.start),fit.start);}
+           catch(e){materialError=e instanceof Error?e.message:'物料口径无效';break;}
+           if(!materialPreview.ok){const next=allocator.futureMinutes.find(m=>m>fit.start!);if(next!==undefined){candidate=next;continue;}materialError='物料不足';break;}
+          }
           start=fit.start;break;
         }
-        if(start===null){findings.push({code:'UNPLANNED / CALENDAR',message:`订单 ${oid} / 工序 ${operation} 未排：设备 ${machineId} 不可用。${reason||'找不到满足连续工作时长的窗口'}。任务要求连续 ${duration} 分钟；跨班或中断规则尚未配置。`,taskIds:[]});continue;}
-        if(conditions.endMinute!=null&&start+duration>conditions.endMinute){findings.push({code:'UNPLANNED / HORIZON',message:`订单 ${oid} / 工序 ${operation} 完整工序超出计划结束分钟 ${conditions.endMinute}，未排；不代表无可行排法。`,taskIds:[]});continue;}
+        if(allocator && (materialError||start===null&&materialPreview&&!materialPreview.ok)){
+         if(materialPreview)materialDemands.push(...materialPreview.rows);
+         findings.push({code:'UNPLANNED / MATERIAL',message:`订单 ${oid} / 工序 ${operation} 未排：${materialError||'物料不足'}。${materialPreview?.rows.filter(r=>r.shortage>0).map(r=>`${r.materialId} 需求 ${r.quantity} ${r.unit}，缺口 ${r.shortage} ${r.unit}，投料分钟 ${r.feedMinute}`).join('；')||''} 建议采购/备料或推迟；未生成采购单。`,taskIds:[`${oid}-${operation}`]});continue;
+        }
+        if(start===null){retainBlockedDemand(order,operation,candidate,'无可用日历窗口；投料分钟仅为候选检查时点');findings.push({code:'UNPLANNED / CALENDAR',message:`订单 ${oid} / 工序 ${operation} 未排：设备 ${machineId} 不可用。${reason||'找不到满足连续工作时长的窗口'}。任务要求连续 ${duration} 分钟；跨班或中断规则尚未配置。`,taskIds:[]});continue;}
+        if(conditions.endMinute!=null&&start+duration>conditions.endMinute){if(materialPreview)materialDemands.push(...materialPreview.rows.map(r=>({...r,blockedReason:'完整工序超出计划范围'})));findings.push({code:'UNPLANNED / HORIZON',message:`订单 ${oid} / 工序 ${operation} 完整工序超出计划结束分钟 ${conditions.endMinute}，未排；不代表无可行排法。`,taskIds:[]});continue;}
         const stop=minimal?null:findDowntimeShiftReason(data.downtime||[],machineId,initialEarliest,duration,firstCalendarFit??start);
         const calendarShift=firstCalendarFit!==null&&firstCalendarFit!==undefined&&firstCalendarFit>initialEarliest?(stop?`日历顺延：设备停机「${stop.reason}」${fmt(stop.start)}–${fmt(stop.end)}，安排至${fmt(start)}`:`日历顺延：工厂工作窗口，安排至${fmt(start)}`):'';
         const personnelRequirements=minimal?[]:(data.dependencies||[]).filter(d=>d['订单编号']===oid&&d['工序编号']===operation&&d['资源类型']==='人员技能');
         const personnel=allocatePersonnel(personnelRequirements,data.personnelGroups||[],start,start+duration,personnelReservations);
-        if(!personnel.ok){findings.push({code:'UNPLANNED / PERSONNEL',message:`订单 ${oid} / 工序 ${operation} 未排：${personnel.reason}。人数充足但技能、班次或可用时段不匹配时仍视为不可用。`,taskIds:[]});continue;}
+        if(!personnel.ok){if(materialPreview)materialDemands.push(...materialPreview.rows.map(r=>({...r,blockedReason:'人员不可用'})));findings.push({code:'UNPLANNED / PERSONNEL',message:`订单 ${oid} / 工序 ${operation} 未排：${personnel.reason}。人数充足但技能、班次或可用时段不匹配时仍视为不可用。`,taskIds:[]});continue;}
+        if(materialPreview){materialPreview.commit();materialDemands.push(...materialPreview.rows);}
         personnelReservations.push(...(personnel.allocations||[]));
         const participation=personnelRequirements.filter(r=>Number(r['需求数量']||0)>0).map(r=>`${r['人员参与阶段']||'全工序'} ${r['人员开始偏移']||0}–${duration-Number(r['人员结束偏移']||0)} 分钟`).join('、');
         const task:Task={id:`${oid}-${operation}`,orderId:oid,productId:product,operation,label:op['工序名称']||operation,machine:machineId,start,end:start+duration,duration,predecessor:predecessor?.id||'',source:minimal?'R1 最小模式 · 订单17 · 路线10 · 固定工时11 · 给定机器12 · 机器连续可用；日历/人员/工装/物料未检查':`订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04${personnelRequirements.length?` · 人员阶段：${participation}`:''}${calendarShift?` · ${calendarShift}`:''}`};built.push(task);done.set(operation,task);busy.push(task);machineBusy.set(machineId,busy);
       }
     }
-    const hard=validate(built);const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:built,supplyConditions:minimal?[]:buildSupplyConditions(built,resolvedSupplies,data.supplyUses||[]),supplyInput:minimal?undefined:supplyInput,findings:[...findings,...hard],rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
+    const hard=validate(built);const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:built,supplyConditions:minimal?[]:buildSupplyConditions(built,resolvedSupplies,policy?materialDemands.filter(r=>r.committed).flatMap(r=>r.allocations.filter(a=>a.conditional).map((a,i)=>({'引用编号':`FR020-${r.taskId}-${r.materialId}-${i}`,'订单编号':r.orderId,'工序编号':r.operation,'供给编号':a.supplyId,'使用数量':String(a.quantity)}))):data.supplyUses||[]),supplyInput:minimal?undefined:supplyInput,findings:[...findings,...hard],rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
     setIssues(plan.findings);setActivePlan(plan);setVerification(null);setMessage(plan.findings.length?`生成 ${built.length} 项任务，并发现 ${plan.findings.length} 个需处理的问题。`:`生成 ${built.length} 项任务；当前启用的机器与顺序检查通过。`);
   }
  schedule(); return result!;

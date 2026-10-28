@@ -1,5 +1,7 @@
 import { validRuleTime } from './business-rules.mjs';
 /** FR-010 inventory accounting and availability rules. Quantities stay in the material's configured unit. */
+// v0.3 factory timezone Asia/Shanghai; inherited minute origin is +08:00.
+export const inventoryBusinessDate = raw => new Date(Date.parse(raw)+8*60*60000).toISOString().slice(0,10);
 export const DEFAULT_USABLE_QUALITY_STATUSES = ['合格'];
 
 function validExpiry(raw) {
@@ -48,7 +50,7 @@ export function getUsableQualityStatuses(rules = [], materialId = '', at = new D
 
 export function queryInventoryAvailability(batches = [], { materialId = '', asOf = new Date().toISOString(), rules = [] } = {}) {
   const at = Date.parse(asOf);
-  const date = Number.isFinite(at) ? new Date(at).toISOString().slice(0, 10) : String(asOf).slice(0, 10);
+  const date = Number.isFinite(at) ? inventoryBusinessDate(asOf) : String(asOf).slice(0, 10);
 
   return batches.filter(batch => !materialId || batch['物料编号'] === materialId).map(batch => {
     const onHand = Number(batch['账面数量']) || 0;

@@ -106,3 +106,11 @@ test('FR019 mode is explicit in selection, historical scope stays visible and do
  act(()=>mode.props.onChange({target:{value:'minimal-r1'}}));act(()=>button(tree,'另开计算（冻结当前输入）').props.onClick());assert.equal(calls[0].mode,'minimal-r1');assert.ok(calls[0].enabledRuleIds.includes('CALENDAR'));
  act(()=>mode.props.onChange({target:{value:'supported'}}));assert.ok(text(tree).includes('R1 最小模式'));for(const word of ['日历与停机','人员','模具与工装','物料','不代表完整业务'])assert.ok(text(tree).includes(word));tree.unmount();
 });
+
+test('FR020 material panel shows saved quantities/conditional lots/shortages and links task without relabelling unchecked plans',async()=>{
+ const {MaterialPanel}=await import('../src/MaterialPanel');const {materialFixture}=await import('./material-fixture.mjs');const {seed,calculate}=await import('../server/planner.ts');
+ const d=materialFixture(seed);d.inventory[0]['账面数量']='400';d.inventory[0]['已占用数量']='100';const p=calculate(d,0,'2026-10-29T00:00:00Z'),calls:string[]=[];let tree:any;
+ act(()=>{tree=create(<MaterialPanel plan={p} onTask={id=>calls.push(id)}/>);});for(const value of ['325','25','LEAN-LOT','未排候选','未占用','建议采购','仅形成建议'])assert.ok(text(tree).includes(value),value);
+ act(()=>tree.root.findAllByType('tr')[1].props.onClick());assert.equal(calls[0],'A-MIX');
+ act(()=>tree.update(<MaterialPanel plan={{materialChecked:false,materialDemands:[]}} onTask={()=>{}}/>));assert.ok(text(tree).includes('物料未检查'));assert.ok(!text(tree).includes('325'));tree.unmount();
+});

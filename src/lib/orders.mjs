@@ -11,6 +11,7 @@ export function validateOrders(rows = []) {
     if (id) seen.add(id);
     const quantity = Number(row['合格需求']);
     if (row['合格需求'] !== '' && (!Number.isFinite(quantity) || quantity <= 0)) issues.push({ code: 'ORDER_QUANTITY', line, field: '合格需求', message: `订单第 ${line} 行数量必须为正数` });
+    if(row['已完成合格数量'] && (!/^(?:\d+(?:\.\d*)?|\.\d+)$/.test(row['已完成合格数量']) || !Number.isFinite(Number(row['已完成合格数量'])) || Number(row['已完成合格数量'])>quantity)) issues.push({code:'ORDER_COMPLETED',line,field:'已完成合格数量',message:`订单第 ${line} 行已完成合格数量须为同数量单位的非负数且不超过需求；这是模拟累计完成量`});
     const priority = Number(row['优先顺序']);
     if (row['优先顺序'] !== '' && (!Number.isFinite(priority) || priority < 0)) issues.push({ code: 'ORDER_PRIORITY', line, field: '优先顺序', message: `订单第 ${line} 行优先顺序必须为非负数` });
     const due = Number(row['要求可交付分钟']);

@@ -11,9 +11,9 @@ export function RunPanel({data,runs,canWrite,busy,onStart,onCancel,onResult,onIn
  const selected=(orders??eligible.map(o=>o['订单编号'])).filter(id=>eligible.some(o=>o['订单编号']===id));const enabled=(rules??(data.rules||[]).filter(r=>r['是否启用']==='是').map(r=>r['规则编号'])).filter(id=>(data.rules||[]).some(r=>r['规则编号']===id));
  const toggle=(list:string[],id:string)=>list.includes(id)?list.filter(x=>x!==id):[...list,id];
  const states:Record<string,string>={queued:'等待线程',running:'正在计算',completed:'完成',partial:'完成，有未排或问题',cancelled:'已取消',timed_out:'已超时（不代表无解）',failed:'失败'};
- return <section className="panel"><h2>计算范围与运行记录 · FR-018</h2><p>时间使用分钟轴，0 = 2026-11-02 08:00 +08:00。开始时间不移动原日历、停机、供给或人员窗口；完整工序须在结束范围内。执行事实与剩余工作计算尚未实现。</p>
- <label>计算模式<select aria-label="计算模式" value={mode} onChange={e=>setMode(e.target.value)}><option value="supported">已有支持模式（日历、人员与预计供给保护）</option><option value="minimal-r1">R1 最小模式（机器连续可用，仅机器与顺序）</option></select></label>
- <CheckScope scope={schedulingScope(mode)}/>
+ return <section className="panel"><h2>计算范围与运行记录 · FR-018</h2><p>时间使用分钟轴，0 = 2026-11-02 08:00 +08:00。开始时间不移动原日历、停机、供给或人员窗口；完整工序须在结束范围内。已完成合格数量用于同单位模拟订单余量；R5执行事实、已投料核销与剩余工时未实现。</p>
+ <label>计算模式<select aria-label="计算模式" value={mode} onChange={e=>setMode(e.target.value)}><option value="supported">已有支持模式（日历、人员、预计供给；物料须启用）</option><option value="minimal-r1">R1 最小模式（机器连续可用，仅机器与顺序）</option></select></label>
+ <CheckScope scope={schedulingScope(mode,enabled.includes('MATERIAL')&&!(data.rules.find(r=>r['规则编号']==='MATERIAL')?.['生效时间']&&Date.parse(data.rules.find(r=>r['规则编号']==='MATERIAL')!['生效时间'])>Date.now()))}/>
  <fieldset><legend>本产线有效正式订单</legend>{eligible.map(o=><label key={o['订单编号']}><input type="checkbox" checked={selected.includes(o['订单编号'])} onChange={()=>setOrders(toggle(selected,o['订单编号']))}/>{o['订单编号']} · {o['产线编号']} · 优先 {o['优先顺序']}</label>)}</fieldset>
  <label>开始分钟<input aria-label="开始分钟" type="number" min="0" value={start} onChange={e=>setStart(e.target.value)}/></label>
  <label>计划结束分钟<input aria-label="计划结束分钟" type="number" min="1" value={end} onChange={e=>setEnd(e.target.value)}/></label>

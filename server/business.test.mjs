@@ -499,3 +499,44 @@ test('FR019 constructive scheduling remains valid for unsorted routes, shared ma
   const v=independentlyVerifyPlan(p,d.orders,d.routes,p.rules);assert.deepEqual(Object.values(v.checks).map(c=>c.status),['pass','pass','pass']);
  }
 });
+
+// FR020 uses the real asynchronous Worker and canonical server input paths.
+import {materialFixture} from '../qa/material-fixture.mjs';
+test('FR020 inventory integration: server-authoritative25kg shortage, no deduction, repeat runs and immutable exports',async t=>{
+ const {call}=await fixture(t);const initial=(await call('/state')).body,d=materialFixture(initial.data);
+ Object.assign(d.inventory[0],{'账面数量':'400','已占用数量':'100'});
+ const saved=await call('/inputs',{revision:0,tables:d});assert.equal(saved.status,200,JSON.stringify(saved.body));
+ const state=(await call('/state')).body;
+ const start=await call('/runs',{revision:1,selection:{endMinute:600},materialDemands:[{quantity:0}],materialChecked:false});assert.equal(start.status,202);
+ const done=await waitRun(call,start.body.id);assert.equal(done.status,'partial');
+ const p=(await call('/plans')).body.find(p=>p.id===done.planId);assert.equal(p.tasks.length,0);assert.equal(p.materialChecked,true);assert.equal(p.materialDemands[0].quantity,325);assert.equal(p.materialDemands[0].shortage,25);assert.equal(p.materialDemands[0].committed,false);assert.equal(p.materialDemands.find(r=>r.materialId==='BAG').quantity,1213);assert.equal(p.materialDemands.find(r=>r.materialId==='BAG').committed,false);assert.ok(p.findings.some(f=>f.code.includes('MATERIAL')&&f.message.includes('25')));
+ assert.ok(p.conditions.checkScope.checked.some(s=>s.includes('BOM需求')));assert.equal(p.ruleSnapshot.settings.find(r=>r.id==='MATERIAL').active,true);
+ assert.deepEqual((await call('/state')).body.data,state.data);
+ const repeat=await call('/runs',{revision:1,selection:{endMinute:600}});const again=await waitRun(call,repeat.body.id);const p2=(await call('/plans')).body.find(p=>p.id===again.planId);assert.deepEqual(p.materialDemands,p2.materialDemands);
+ const exported=await call('/export',{planId:p.id});assert.equal(exported.status,200);assert.ok(exported.body.includes('shortage')&&exported.body.includes('25')&&exported.body.includes('LEAN-LOT'));
+ const snapshot=(await call('/runs/'+start.body.id+'/inputs')).body;
+ const inventory=d.inventory.map(r=>({...r,'账面数量':'10000'}));assert.equal((await call('/tables/inventory',{revision:1,rows:inventory})).status,200);
+ assert.deepEqual((await call('/runs/'+start.body.id+'/inputs')).body,snapshot);assert.deepEqual((await call('/plans')).body.find(x=>x.id===p.id),p);
+ assert.equal((await call('/runs',{revision:2},'query')).status,403);assert.equal((await call('/export',{planId:p.id},'query')).status,403);
+ assert.equal((await call('/runs',{revision:2},'planner',{'sec-fetch-site':'cross-site'})).status,403);
+ const audit=(await call('/operations')).body;assert.ok(audit.some(a=>a.action==='run_partial'&&a.target===start.body.id));assert.ok(audit.every(a=>a.actor==='test#planner'&&a.reason));
+});
+test('FR020 expected supply readiness/delay and policy produce conditional allocations; minimal retains unchecked',async t=>{
+ const {call}=await fixture(t);const initial=(await call('/state')).body,d=materialFixture(initial.data);
+ d.inventory[0]['账面数量']='0';const rule=d.rules.find(r=>r['规则编号']==='MATERIAL');rule['参数JSON']=rule['参数JSON'].replace('false','true');
+ d.supplies=[{'供给编号':'S','物料编号':'LEAN','批次编号':'EXPECTED','预计数量':'325','预计到达时间':'2026-11-02T10:00:00+08:00','预计可用时间':'2026-11-02T11:00:00+08:00','质量状态':'预计可用','有效期':'2026-12-31'}];d.supplyUses=[{'引用编号':'U','订单编号':'A','工序编号':'MIX','供给编号':'S','使用数量':'325'}];
+ assert.equal((await call('/inputs',{revision:0,tables:d})).status,200);
+ const old=(await call('/calculate',{revision:1})).body;const storedOld=(await call('/plans')).body.find(x=>x.id===old.id);assert.equal(old.tasks[0].start,180);assert.equal(old.materialDemands[0].allocations[0].conditional,true);assert.equal(old.supplyConditions[0]['使用数量'],'325');assert.match(old.supplyConditions[0]['条件说明'],/未确认真实到货/);
+ assert.equal((await call('/tables/supplyDelays',{revision:1,rows:[{'记录编号':'D','供给编号':'S','记录时间':'2026-11-01T00:00:00Z','调整后到达时间':'2026-11-02T11:00:00+08:00','调整后可用时间':'2026-11-02T12:00:00+08:00','原因':'延期模拟'}]})).status,200);
+ const run=await call('/runs',{revision:2,selection:{endMinute:600}}),done=await waitRun(call,run.body.id);const p=(await call('/plans')).body.find(x=>x.id===done.planId);assert.equal(p.tasks[0].start,240);assert.equal(p.materialDemands[0].feedMinute,240);assert.ok(p.supplyConditions[0]['延期记录'].length);const csv=(await call('/export',{query:{table:'tasks',planId:p.id,revision:2,filters:{order:'A'}}})).body;assert.ok(csv.includes('物料需求与批次分配')&&csv.includes('EXPECTED')&&csv.includes('325'));
+ assert.deepEqual((await call('/plans')).body.find(x=>x.id===old.id),storedOld);
+ const minimal=await call('/runs',{revision:2,selection:{mode:'minimal-r1',endMinute:600}}),m=await waitRun(call,minimal.body.id);const mp=(await call('/plans')).body.find(x=>x.id===m.planId);assert.equal(mp.tasks[0].start,0);assert.equal(mp.materialChecked,false);assert.deepEqual(mp.materialDemands,[]);assert.ok(mp.conditions.checkScope.unchecked.includes('完整物料/BOM/库存分配'));assert.equal(mp.ruleSnapshot.settings.find(r=>r.id==='MATERIAL').active,false);
+});
+test('FR020 shared lots, feed-date recheck after machine/calendar shifts, rollback on horizon and remaining quantity',async t=>{
+ const {calculate,seed}=await import('./planner.ts');const d=materialFixture(seed);
+ d.orders.push({...d.orders[0],'订单编号':'B','优先顺序':'2'});d.dependencies.push(...d.dependencies.map(r=>({...r,'订单编号':'B'})));d.inventory[0]['账面数量']='325';
+ let p=calculate(d,0,'2026-10-29T00:00:00Z');assert.equal(p.tasks.filter(t=>t.operation==='MIX').length,1);assert.equal(p.materialDemands.find(r=>r.orderId==='B').shortage,325);assert.equal(p.materialDemands.filter(r=>r.committed&&r.materialId==='LEAN').reduce((n,r)=>n+r.allocations.reduce((a,b)=>a+b.quantity,0),0),325);
+ const fresh=materialFixture(seed);fresh.orders[0]['已完成合格数量']='240';p=calculate(fresh,0,'2026-10-29T00:00:00Z');assert.equal(p.materialDemands[0].quantity,162.5);
+ p=calculate(fresh,0,'2026-10-29T00:00:00Z',{endMinute:10});assert.equal(p.tasks.length,0);assert.equal(fresh.inventory[0]['账面数量'],'10000');
+ fresh.inventory[0]['有效期']='2026-11-02';fresh.calendars[0]['起始分钟']='1440';fresh.calendars[0]['结束分钟']='1600';p=calculate(fresh,0,'2026-10-29T00:00:00Z');assert.equal(p.tasks.length,0);assert.equal(p.materialDemands[0].shortage,162.5);
+});

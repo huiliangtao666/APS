@@ -6,7 +6,7 @@ export const inputHash = value => createHash('sha256').update(JSON.stringify(val
 // supply and personnel. Selecting a start never rebases those inputs.
 export function freezeRunInput(data, selection = {}, calculatedAt = new Date().toISOString()) {
   if (!selection || typeof selection !== 'object' || Array.isArray(selection) || Object.keys(selection).some(k=>!['orderIds','startMinute','endMinute','priority','enabledRuleIds','mode'].includes(k))) throw Error('invalid_selection');
-  const checkScope=schedulingScope(selection.mode);
+  let checkScope=schedulingScope(selection.mode);
   const eligible=data.orders.filter(o=>o['需求类型']==='正式订单'&&o['订单状态']==='有效');
   const orderIds=selection.orderIds??eligible.map(o=>o['订单编号']);
   if(!Array.isArray(orderIds)||!orderIds.length||orderIds.some(id=>typeof id!=='string'||!eligible.some(o=>o['订单编号']===id))||new Set(orderIds).size!==orderIds.length)throw Error('invalid_orders');
@@ -24,6 +24,7 @@ export function freezeRunInput(data, selection = {}, calculatedAt = new Date().t
   executionData.dependencies=executionData.dependencies.filter(r=>orderIds.includes(r['订单编号']));
   executionData.supplyUses=executionData.supplyUses.filter(r=>orderIds.includes(r['订单编号']));
   executionData.rules=executionData.rules.map(r=>({...r,'是否启用':enabledRuleIds.includes(r['规则编号'])?'是':'否'}));
+  checkScope=schedulingScope(checkScope.mode,executionData.rules.some(r=>r['规则编号']==='MATERIAL'&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(calculatedAt))));
   const conditions={mode:checkScope.mode,checkScope,ruleEvaluationAt:calculatedAt,orderIds:selected.map(o=>o['订单编号']),lineId:selected[0]['产线编号'],startMinute,endMinute,priority,enabledRuleIds:[...enabledRuleIds],timeOrigin:'2026-11-02T08:00:00+08:00',interval:'[start,end)',horizonPolicy:'完整工序须在结束范围内；未排不代表全局无解'};
   return {conditions,executionData,snapshotHash:inputHash({conditions,executionData})};
 }

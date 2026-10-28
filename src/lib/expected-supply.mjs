@@ -28,6 +28,7 @@ export function validateExpectedSupply({ supplies = [], delays = [], uses = [], 
     unique(id, ids, '供给编号');
     unique(`${value(row, '物料编号')}/${value(row, '批次编号')}`, lots, '物料/批次');
     if (!materialIds.has(value(row, '物料编号'))) add('MATERIAL', `${label}引用未配置物料`);
+    if(value(row,'有效期')){const d=new Date(row['有效期']+'T00:00:00Z');if(!/^\d{4}-\d{2}-\d{2}$/.test(row['有效期'])||!Number.isFinite(d.getTime())||d.toISOString().slice(0,10)!==row['有效期'])add('EXPIRY',label+'有效期须为有效日历日期');}
     positive(value(row, '预计数量'), label + '预计数量');
     times(row, '预计到达时间', '预计可用时间', label);
   });
@@ -85,7 +86,8 @@ export function buildSupplyConditions(tasks = [], supplies = [], uses = []) {
   });
 }
 export function exportSupplyPlanCsv(plan) {
-  const rows = [['任务编号', '订单编号', '产品编号', '工序编号', '设备编号', '开始分钟', '结束分钟', '工时分钟', '前序任务', '供给条件']];
-  for (const t of plan.tasks) rows.push([t.id, t.orderId, t.productId, t.operation, t.machine, t.start, t.end, t.duration, t.predecessor, (plan.supplyConditions || []).filter(c => value(c, '订单编号') === t.orderId.trim() && value(c, '工序编号') === t.operation.trim()).map(c => c['条件说明']).join('；')]);
+  const rows = [['任务编号', '订单编号', '产品编号', '工序编号', '设备编号', '开始分钟', '结束分钟', '工时分钟', '前序任务', '供给条件','物料检查','物料需求与批次分配（含未排）']];
+  for (const t of plan.tasks) rows.push([t.id, t.orderId, t.productId, t.operation, t.machine, t.start, t.end, t.duration, t.predecessor, (plan.supplyConditions || []).filter(c => value(c, '订单编号') === t.orderId.trim() && value(c, '工序编号') === t.operation.trim()).map(c => c['条件说明']).join('；'),plan.materialChecked?'已检查（支持口径）':'物料未检查',JSON.stringify((plan.materialDemands||[]).filter(r=>r.taskId===t.id))]);
+  for(const r of plan.materialDemands||[])if(!r.committed)rows.push([r.taskId,r.orderId,r.productId,r.operation,'','','','','','',plan.materialChecked?'已检查（未排候选，未占用）':'物料未检查',JSON.stringify(r)]);
   return rows.map(row => row.map(v => '"' + String(v ?? '').replace(/"/g, '""') + '"').join(',')).join('\r\n');
 }

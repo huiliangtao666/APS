@@ -15,6 +15,7 @@ export function validateBomConfig({ products = [], materials = [], routes = [], 
     const material = (row['物料编号'] || '').trim();
     const type = (row['用量类型'] || '').trim();
     const qty = (row['配置用量'] || '').trim();
+    if(row['损坏比例'] && (!Number.isFinite(Number(row['损坏比例'])) || Number(row['损坏比例'])<0 || Number(row['损坏比例'])>=1)) findings.push({code:'INPUT / BOM_LOSS',message:`${prefix}损坏比例须为0到1之间（不含1）的比例`});
     const unit = (row['用量单位'] || '').trim();
     const basis = (row['用量基准'] || '').trim();
     const required = [['版本编号',version],['产品编号',product],['生效日期',effective],['投料工序编号',operation],['用量类型',type],['物料编号',material],['配置用量',qty],['用量单位',unit],['用量基准',basis]];

@@ -65,3 +65,9 @@ test('FR-010 D2 query never reports positive availability for impossible expiry'
   const [batch] = queryInventoryAvailability([base({ '有效期': '2026-02-30' })], { asOf: '2026-02-01T08:00:00Z' });
   assert.equal(batch['当前可用数量'], 0);
 });
+test('FR020 integrated expiry uses factory+08 day at midnight rather than the previous UTC date',()=>{
+ const b=base({'有效期':'2026-11-02'});
+ assert.equal(queryInventoryAvailability([b],{asOf:'2026-11-02T23:59:59+08:00'})[0]['当前可用数量'],75);
+ assert.equal(queryInventoryAvailability([b],{asOf:'2026-11-03T00:00:00+08:00'})[0]['当前可用数量'],0);
+ assert.equal(queryInventoryAvailability([b],{asOf:'2026-11-02T16:00:00Z'})[0]['当前可用数量'],0);
+});

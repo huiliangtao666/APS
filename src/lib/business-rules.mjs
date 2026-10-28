@@ -7,8 +7,9 @@ export const ruleCatalog = [
  ['LABOR','BR-07','人员技能与数量',false,'全部人员依赖；关闭开关仍保留既有依赖保护','{}','人/分钟','正整数人数及有效参与窗口'],
  ['INVENTORY','BR-08','库存质量可用性查询',false,'* 或物料编号逗号列表；仅查询，不代表物料平衡','{"可用质量状态":["合格"]}','物料单位','非空、无重复状态列表'],
  ['SORT','BR-15','任务排序',false,'全部订单；稳定排序，不改变硬约束','{"排序方式":"优先顺序"}','无','优先顺序 或 要求日期'],
- ...[['LINE','BR-01','单线范围（始终检查）'],['SPEED','BR-04','速度与效率'],['MOLD','BR-06','模具/工装'],['MATERIAL','BR-09','库存分配与物料平衡'],['BOM','BR-10','BOM数量计算'],['CAPACITY','BR-11','拆合批与容量'],['PROGRAM','BR-11','程序兼容'],['MAX_LAG','BR-12','最大等待'],['STORAGE','BR-12','空间容量'],['CLEANING','BR-13','换型清洗'],['DELIVERY','BR-14','预计可交付与余保'],['PROGRESS','BR-16','执行保护'],['CONFIRM','BR-17','主管确认条件'],['ROUNDING','BR-18','时间单位与取整']].map(([id,category,name])=>[id,category,name,false,'不支持可配置启用；字段保存不等于检查通过','{}','见v0.3第7章','后续完整验收'])
+ ...[['LINE','BR-01','单线范围（始终检查）'],['SPEED','BR-04','速度与效率'],['MOLD','BR-06','模具/工装'],['BOM','BR-10','BOM数量计算'],['CAPACITY','BR-11','拆合批与容量'],['PROGRAM','BR-11','程序兼容'],['MAX_LAG','BR-12','最大等待'],['STORAGE','BR-12','空间容量'],['CLEANING','BR-13','换型清洗'],['DELIVERY','BR-14','预计可交付与余保'],['PROGRESS','BR-16','执行保护'],['CONFIRM','BR-17','主管确认条件'],['ROUNDING','BR-18','时间单位与取整']].map(([id,category,name])=>[id,category,name,false,'不支持可配置启用；字段保存不等于检查通过','{}','见v0.3第7章','后续完整验收'])
 ].map(([id,category,name,required,scope,parameters,unit,range],i)=>({id,category,name,required,supported:i<6,scope,parameters,unit,range}));
+ruleCatalog.push({id:'MATERIAL',category:'BR-09',name:'BOM需求与批次分配',required:false,supported:true,scope:'全部订单；仅损失配方及每袋包材，库存FEFO；预计供给须显式引用',parameters:'{"允许预计供给":false,"可用状态":["合格"],"预计状态":["预计可用"],"不可用状态":["待检","冻结","不合格"]}',unit:'BOM物料单位',range:'v0.3每1000kg投入/每袋，其他口径拒绝推断'});
 export function validRuleTime(value) {
  if(!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?(?:Z|[+-]\d{2}:\d{2})$/.test(value))return false;
  const parts=value.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2}):(\d{2})/);
@@ -16,7 +17,8 @@ export function validRuleTime(value) {
  return Number.isFinite(date.getTime())&&date.toISOString().slice(0,10)===parts[1]&&Number(parts[2])<24&&Number(parts[3])<60&&Number(parts[4])<60&&Number.isFinite(Date.parse(value));
 }
 export function assessRules(data, at=new Date().toISOString(), checkCoverage=false, mode='supported') {
- const checkScope=schedulingScope(mode), minimal=mode==='minimal-r1';
+ const material=(data.rules||[]).some(r=>r['规则编号']==='MATERIAL'&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at)));
+ const checkScope=schedulingScope(mode,material), minimal=mode==='minimal-r1';
  const issues=[],settings=[];const rows=data.rules||[];
  const add=(index,field,message)=>issues.push({table:'rules',file:'16_排程规则配置.csv',row:index<0?0:index+2,field,message});
  for(const c of ruleCatalog.filter(c=>c.required))if(!rows.some(r=>r['规则编号']===c.id))add(-1,'规则编号',`必要规则 ${c.id} 不得删除`);
@@ -30,13 +32,19 @@ export function assessRules(data, at=new Date().toISOString(), checkCoverage=fal
   if(enabled&&!c?.supported)add(i,'是否启用',`${r['规则编号']} 尚未实现，不得启用；保存字段不代表检查通过`);
   if(c?.required&&(!enabled||(effectiveFrom&&Date.parse(effectiveFrom)>Date.parse(at))))add(i,'是否启用',`${c.id} 是始终有效的必要约束，不得关闭或延后生效`);
   if(enabled&&c?.supported){
-   const allowed=c.id==='INVENTORY'?['可用质量状态']:c.id==='SORT'?['排序方式']:[];
+   const allowed=c.id==='INVENTORY'?['可用质量状态']:c.id==='SORT'?['排序方式']:c.id==='MATERIAL'?['允许预计供给','可用状态','预计状态','不可用状态']:[];
    if(Object.keys(parameters).some(k=>!allowed.includes(k)))add(i,'参数JSON','包含当前执行器不支持的参数');
    if(c.id==='INVENTORY'){
     const p=parameters['可用质量状态'];if(!Array.isArray(p)||!p.length||p.some(x=>typeof x!=='string'||!x.trim()||x!==x.trim())||new Set(p).size!==p.length)add(i,'参数JSON','可用质量状态须为非空、无重复的状态列表');
     const objects=scope.split(',');if(scope!=='*'&&(new Set(objects).size!==objects.length||objects.some(id=>!data.materials?.some(m=>m['物料编号']===id))))add(i,'适用对象','须为 * 或已配置物料编号的无重复逗号列表');
    }else if(scope!=='*')add(i,'适用对象','此规则当前只支持 *（全部对象），不允许遗漏必要约束');
    if(c.id==='SORT'&&!['优先顺序','要求日期'].includes(parameters['排序方式']))add(i,'参数JSON','排序方式须为优先顺序或要求日期');
+   if(c.id==='MATERIAL'){
+    if(typeof parameters['允许预计供给']!=='boolean')add(i,'参数JSON','须显式声明允许预计供给 true/false');
+    for(const k of ['可用状态','预计状态','不可用状态']){const p=parameters[k];if(!Array.isArray(p)||!p.length||p.some(x=>typeof x!=='string'||!x.trim()||x!==x.trim())||new Set(p).size!==p.length)add(i,'参数JSON',`${k}须为非空、无重复状态列表`);}
+    const groups=['可用状态','预计状态','不可用状态'].map(k=>Array.isArray(parameters[k])?parameters[k]:[]);const combined=groups.flat();if(new Set(combined).size!==combined.length)add(i,'参数JSON','可用/预计/不可用状态不能重叠');
+    if(!data.bom?.length)add(i,'是否启用','启用物料规则须先配置 BOM');
+   }
    if(c.id==='LABOR'&&(!data.dependencies?.some(d=>d['资源类型']==='人员技能')||!data.personnelGroups?.length))add(i,'是否启用','启用人员规则须先配置人员需求及人员组');
    const needed={MACHINE:['machines','dependencies'],PRECEDENCE:['routes','times'],CALENDAR:['calendars']}[c.id]||[];
    for(const key of needed)if(!data[key]?.length)add(i,'是否启用',`${c.id} 缺少必要数据 ${key}`);
@@ -59,5 +67,5 @@ export function assessRules(data, at=new Date().toISOString(), checkCoverage=fal
    }
   }
  }
- return {checkScope,capabilityVersion:minimal?'FR019-minimal-v1':'FR017-v1',at,settings,issues,intrinsicChecks:minimal?checkScope.checked:['单产线','机器不重叠','工序先后与固定工时','日历与停机','已配置人员依赖（即使 LABOR 开关关闭也保留）','显式预计供给引用可用时点'],independentChecks:['单产线','机器不重叠','工序先后'],note:checkScope.note+' 规则采用不等于独立复核通过；INVENTORY 仅用于可用量查询，不检查完整物料平衡。生效时间按服务端计算发起时刻判断，不是任务分钟轴。'};
+ return {checkScope,capabilityVersion:minimal?'FR019-minimal-v1':'FR020-v1',at,settings,issues,intrinsicChecks:minimal?checkScope.checked:['单产线','机器不重叠','工序先后与固定工时','日历与停机','已配置人员依赖（即使 LABOR 开关关闭也保留）','显式预计供给引用可用时点',...(material?['已声明口径的BOM需求、库存及条件供给分配']:[])],independentChecks:['单产线','机器不重叠','工序先后'],note:checkScope.note+' 规则采用不等于独立复核通过；INVENTORY 用于可用量查询；MATERIAL 启用时使用其独立显式状态规则分配，仅覆盖声明的BOM口径。生效时间按服务端计算发起时刻判断，不是任务分钟轴。'};
 }

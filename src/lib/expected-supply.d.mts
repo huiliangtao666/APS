@@ -8,4 +8,4 @@ export function validateExpectedSupply(input?: { supplies?: Row[]; delays?: Row[
 export function resolveExpectedSupply(supplies?: Row[], delays?: Row[]): ResolvedSupply[];
 export function supplyEarliestMinute(orderId: string, operation: string, supplies?: ResolvedSupply[], uses?: Row[]): number;
 export function buildSupplyConditions(tasks?: Task[], supplies?: ResolvedSupply[], uses?: Row[]): SupplyCondition[];
-export function exportSupplyPlanCsv(plan: { tasks: Task[]; supplyConditions?: SupplyCondition[] }): string;
+export function exportSupplyPlanCsv(plan: { tasks: Task[]; supplyConditions?: SupplyCondition[];materialChecked?:boolean;materialDemands?:import('./material-allocation.mjs').MaterialDemandRow[] }): string;
