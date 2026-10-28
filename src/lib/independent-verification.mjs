@@ -49,6 +49,8 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
     for (let i = 0; i < list.length; i += 1) {
       for (let j = i + 1; j < list.length && Number(list[j].start) < Number(list[i].end); j += 1) {
         if (Number(list[i].start) < Number(list[j].end)) {
+          const a=list[i],b=list[j];
+          if(a.resourceBatchId&&a.resourceBatchId===b.resourceBatchId&&a.start===b.start&&a.end===b.end&&a.machine===b.machine&&a.operation===b.operation&&a.productId===b.productId&&a.productionBatchId&&b.productionBatchId&&a.productionBatchId!==b.productionBatchId)continue;
           const message=`${machine} 上 ${list[i].id} 与 ${list[j].id} 时间重叠 [${Math.max(Number(list[i].start),Number(list[j].start))},${Math.min(Number(list[i].end),Number(list[j].end))}) 分钟。`;
           machineProblems.push(message);
           if(enabledRules.includes('MACHINE'))findings.push({code:'VERIFY / MACHINE_OVERLAP',message,taskIds:[list[i].id,list[j].id]});
@@ -72,7 +74,7 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
       continue;
     }
     const expectedOperation = String(route['前序工序'] ?? '').trim();
-    const expectedId = expectedOperation ? `${task.orderId}-${expectedOperation}` : '';
+    const expectedId = expectedOperation ? task.productionBatchIndex?JSON.stringify([task.orderId,task.productionBatchIndex,expectedOperation]):`${task.orderId}-${expectedOperation}` : '';
     if (!expectedId && String(task.predecessor ?? '').trim()) {
       precedenceProblems.push(`任务 ${task.id} 的路线未定义前序，但结果引用了 ${task.predecessor}。`);
       continue;

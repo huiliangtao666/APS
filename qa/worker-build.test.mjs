@@ -30,3 +30,12 @@ test('FR020 production Worker calculates BOM,FEFO lots and packaging from frozen
   assert.equal(p.tasks.length,2);assert.equal(p.materialChecked,true);assert.deepEqual(p.materialDemands.map(r=>r.quantity),[325,75,75,25,1213]);assert.ok(p.materialDemands.every(r=>r.committed&&r.shortage===0));assert.equal(p.ruleSnapshot.capabilityVersion,'FR020-v1');
  }finally{await worker.terminate();}
 });
+
+import {batchFixture} from './batch-fixture.mjs';
+test('FR021 production Worker preserves exact split/resource identities and material conservation',async()=>{
+ const data=batchFixture(seed),frozen=freezeRunInput(data,{endMinute:600});
+ const worker=new Worker(new URL('../dist/calculation-worker.mjs',import.meta.url),{workerData:{...frozen,revision:0,calculatedAt:new Date().toISOString()}});
+ try{const p=await new Promise((resolve,reject)=>{worker.on('message',m=>{if(m.kind==='result')resolve(m.plan);if(m.kind==='failure')reject(Error(m.code));});worker.on('error',reject);});
+ assert.equal(p.tasks.length,4);assert.ok(p.tasks.every(t=>t.duration===30));assert.deepEqual(p.productionBatches.map(b=>b.load),[250,250]);assert.equal(p.materialDemands.reduce((n,r)=>n+r.quantity,0),500);assert.ok(p.materialDemands.every(r=>r.committed));assert.equal(p.ruleSnapshot.capabilityVersion,'FR021-v1');
+ }finally{await worker.terminate();}
+});

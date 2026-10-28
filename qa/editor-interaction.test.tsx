@@ -114,3 +114,11 @@ test('FR020 material panel shows saved quantities/conditional lots/shortages and
  act(()=>tree.root.findAllByType('tr')[1].props.onClick());assert.equal(calls[0],'A-MIX');
  act(()=>tree.update(<MaterialPanel plan={{materialChecked:false,materialDemands:[]}} onTask={()=>{}}/>));assert.ok(text(tree).includes('物料未检查'));assert.ok(!text(tree).includes('325'));tree.unmount();
 });
+
+import {BatchPanel} from '../src/BatchPanel';
+test('FR021 saved batch display shows original quantities, blocked tails, unchecked mode and selects production tasks',()=>{
+ let ids:string[]=[];let tree:any;
+ const p={batchChecked:true,productionBatches:[{id:'P1',orderId:'A',index:1,quantity:240,load:250,unit:'kg',qualifiedKg:{numerator:'240',denominator:'1'},inputKg:{numerator:'250',denominator:'1'}}],resourceBatches:[{id:'RB1',members:['P1'],loadKg:250,minimum:280,maximum:300,basis:'BOM总投入',status:'blocked-under-min'}],tasks:[{id:'T1',productionBatchId:'P1'}]};
+ act(()=>{tree=create(<BatchPanel plan={p} onTask={v=>ids=v}/>);});assert.match(text(tree),/240/);assert.match(text(tree),/低于下限/);assert.match(text(tree),/不自动超产/);assert.match(text(tree),/尚未检查/);
+ act(()=>tree.root.findAllByType('tr')[1].props.onClick());assert.deepEqual(ids,['T1']);act(()=>tree.update(<BatchPanel plan={{tasks:[]}} onTask={v=>ids=v}/>));assert.match(text(tree),/程序未检查/);
+});

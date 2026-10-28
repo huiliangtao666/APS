@@ -1,3 +1,4 @@
+import {validateBatchResources} from '../src/lib/batch-policy.mjs';
 import { assessRules } from '../src/lib/business-rules.mjs';
 import { validateMasterData } from '../src/lib/master-data.mjs';
 import { validateProcessConfig } from '../src/lib/process-config.mjs';
@@ -7,7 +8,7 @@ import { validateBomConfig } from '../src/lib/bom-config.mjs';
 import { validateInventoryBatches } from '../src/lib/inventory.mjs';
 import { validateExpectedSupply } from '../src/lib/expected-supply.mjs';
 
-const keys={products:['产品编号'],materials:['物料编号'],supplies:['供给编号'],supplyDelays:['记录编号'],supplyUses:['引用编号'],inventory:['批次编号'],orders:['订单编号'],bom:['产品编号','版本编号','投料工序编号','物料编号'],routes:['产品编号','工序编号'],times:['产品编号','工序编号'],machines:['设备编号'],calendars:['日历编号','起始分钟','结束分钟','是否工作'],downtime:['设备编号','起始分钟','结束分钟'],dependencies:['订单编号','工序编号','资源类型','资源编号'],personnelGroups:['人员组编号'],rules:['规则编号']};
+const keys={batchResources:['资源编号'],products:['产品编号'],materials:['物料编号'],supplies:['供给编号'],supplyDelays:['记录编号'],supplyUses:['引用编号'],inventory:['批次编号'],orders:['订单编号'],bom:['产品编号','版本编号','投料工序编号','物料编号'],routes:['产品编号','工序编号'],times:['产品编号','工序编号'],machines:['设备编号'],calendars:['日历编号','起始分钟','结束分钟','是否工作'],downtime:['设备编号','起始分钟','结束分钟'],dependencies:['订单编号','工序编号','资源类型','资源编号'],personnelGroups:['人员组编号'],rules:['规则编号']};
 export const recordKeys=keys;
 // Both imports and edits validate the complete proposed state, before any write.
 export function validateInputs(defs,data){
@@ -57,6 +58,7 @@ export function validateInputs(defs,data){
  }};
  collect('orders',validateOrders(data.orders));collect('machines',validateSingleLineScope(data.orders,data.machines));collect('products',validateMasterData(data));collect('routes',validateProcessConfig(data));collect('bom',validateBomConfig(data));collect('inventory',validateInventoryBatches(data.inventory,data.materials));
  collect('supplies',validateExpectedSupply({supplies:data.supplies,delays:data.supplyDelays,uses:data.supplyUses,materials:data.materials,orders:data.orders,routes:data.routes}));
+ collect('batchResources',validateBatchResources(data));
  issues.push(...assessRules(data).issues);
  return issues;
 }

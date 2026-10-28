@@ -26,7 +26,7 @@ export function materialPolicy(data,at) {
  const r=(data.rules||[]).find(r=>r['规则编号']==='MATERIAL'&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at)));
  if(!r)return null;try{return JSON.parse(r['参数JSON']||'{}');}catch{return null;}
 }
-export function calculateMaterialDemand(data,order,operation,minute) {
+export function calculateMaterialDemand(data,order,operation,minute,remainingKg) {
  const product=(data.products||[]).find(p=>p['产品编号']===order['产品编号']);
  const fail=message=>{throw Error(`订单 ${order['订单编号']} / 工序 ${operation}：${message}`);};
  const all=(data.bom||[]).filter(b=>b['产品编号']===order['产品编号']&&b['生效日期']<=dateAt(minute));
@@ -44,6 +44,7 @@ export function calculateMaterialDemand(data,order,operation,minute) {
  if(order['数量单位']==='支')kg=mul(kg,weight);
  else if(order['数量单位']==='袋')kg=mul(mul(kg,bag),weight);
  else if(order['数量单位']!=='kg')fail('数量单位缺少明确换算；箱不支持');
+ if(remainingKg)kg=fromExact(remainingKg);
  const raw=bom.filter(b=>b['用量类型']==='BOM物料');
  if(raw.length){
   if(raw.some(b=>b['用量基准']!=='每1000kg投入'||b['用量单位']!=='kg'||b['收率/损耗口径备注']?.trim()||(String(b['损坏比例']||'').trim()&&cmp(q(b['损坏比例']),zero)!==0n)))fail('仅支持无加料的每1000kg投入；备注口径须先明确，不能推断');
@@ -102,3 +103,6 @@ export function createMaterialAllocator(data,policy) {
   }
  };
 }
+
+// Shared exact arithmetic for FR021; values remain rational until display.
+export const quantityMath={q,add,sub,mul,div,cmp,min,num,exact,fromExact,ceil,zero,one};

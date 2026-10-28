@@ -540,3 +540,35 @@ test('FR020 shared lots, feed-date recheck after machine/calendar shifts, rollba
  p=calculate(fresh,0,'2026-10-29T00:00:00Z',{endMinute:10});assert.equal(p.tasks.length,0);assert.equal(fresh.inventory[0]['账面数量'],'10000');
  fresh.inventory[0]['有效期']='2026-11-02';fresh.calendars[0]['起始分钟']='1440';fresh.calendars[0]['结束分钟']='1600';p=calculate(fresh,0,'2026-10-29T00:00:00Z');assert.equal(p.tasks.length,0);assert.equal(p.materialDemands[0].shortage,162.5);
 });
+
+import {batchFixture} from '../qa/batch-fixture.mjs';
+test('FR021 real Worker saved split identities, exports, input immutability and trusted role/audit paths',async t=>{
+ const {call}=await fixture(t);const state=(await call('/state')).body,d=batchFixture(state.data);
+ assert.equal((await call('/inputs',{revision:0,tables:d})).status,200);
+ const r=await call('/runs',{revision:1,selection:{endMinute:600},batchChecked:false,resourceBatches:[],tasks:[]});assert.equal(r.status,202);
+ const done=await waitRun(call,r.body.id);assert.equal(done.status,'completed',JSON.stringify(done));
+ const p=(await call('/plans')).body.find(p=>p.id===done.planId);assert.equal(p.batchChecked,true);assert.equal(p.tasks.length,4);assert.equal(p.productionBatches.length,2);assert.equal(p.materialDemands.reduce((n,r)=>n+r.quantity,0),500);
+ const canonical=(await call('/state')).body.data;const historical=(await call('/runs/'+r.body.id+'/inputs')).body;assert.deepEqual(historical.executionData.orders,canonical.orders);
+ const csv=(await call('/export',{query:{table:'tasks',planId:p.id,revision:1,filters:{order:'A'}}})).body;assert.ok(csv.includes('生产批编号')&&csv.includes('FR021-RB')&&csv.includes('240'));
+ const verified=await call('/plans/'+p.id+'/verify',{});assert.equal(verified.status,200);assert.equal(verified.body.verification.checks.machineOverlap.status,'pass');assert.equal(verified.body.verification.checks.precedence.status,'pass');
+ const saved=(await call('/plans')).body.find(x=>x.id===p.id);
+ const inputBefore=(await call('/state')).body.data;assert.deepEqual(inputBefore,canonical);
+ const again=await call('/runs',{revision:1,selection:{endMinute:600}});const againDone=await waitRun(call,again.body.id);const repeated=(await call('/plans')).body.find(x=>x.id===againDone.planId);assert.deepEqual(repeated.productionBatches,p.productionBatches);assert.deepEqual(repeated.materialDemands,p.materialDemands);
+ const times=d.times.map(t=>({...t,'固定分钟':'45'}));assert.equal((await call('/tables/times',{revision:1,rows:times})).status,200);
+ assert.deepEqual((await call('/runs/'+r.body.id+'/inputs')).body,historical);assert.deepEqual((await call('/plans')).body.find(x=>x.id===p.id),saved);
+ assert.equal((await call('/runs',{revision:2},'query')).status,403);assert.equal((await call('/export',{planId:p.id},'query')).status,403);assert.equal((await call('/runs',{revision:2},'planner',{'sec-fetch-site':'cross-site'})).status,403);
+ const logs=(await call('/operations')).body;assert.ok(logs.some(l=>l.action==='run_completed'&&l.target===r.body.id));assert.ok(logs.every(l=>l.actor==='test#planner'&&l.reason));
+});
+
+test('FR021 group/program table validated atomically with actor grants and legacy empty-table export',async t=>{
+ const {call,dir}=await fixture(t);const state=(await call('/state')).body;
+ // Existing pre-FR021 states need not be rewritten just to expose an empty optional table.
+ await call('/calculate',{revision:0});const file=path.join(dir,'business.json'),stored=JSON.parse(fs.readFileSync(file));delete stored.data.batchResources;fs.writeFileSync(file,JSON.stringify(stored));
+ assert.equal((await call('/export',{table:'batchResources'})).status,200);
+ const d=batchFixture(state.data);assert.equal((await call('/inputs',{revision:0,tables:d})).status,200);
+ const before=(await call('/state')).body;
+ assert.equal((await call('/tables/batchResources',{revision:1,rows:[{...d.batchResources[0],'容量':'299'}]})).status,400);
+ assert.deepEqual((await call('/state')).body,before);
+ assert.equal((await call('/tables/batchResources',{revision:1,rows:d.batchResources},'query')).status,403);
+ assert.equal((await call('/tables/batchResources',{revision:1,rows:[{...d.batchResources[0],'允许程序':'P;P'}]})).status,400);
+});

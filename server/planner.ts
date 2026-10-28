@@ -1,3 +1,4 @@
+import {activeBatchRule,prepareProductionBatches,batchSummary} from '../src/lib/production-batches.mjs';
 import {orderHasRemaining,calculateMaterialDemand,createMaterialAllocator,materialPolicy,type MaterialDemandRow} from '../src/lib/material-allocation.mjs';
 import { assessRules, type RuleSnapshot } from '../src/lib/business-rules.mjs';
 // Extracted existing scheduler; server uses canonical data only.
@@ -31,6 +32,7 @@ export const defs: TableDef[] = [
   { key: 'routes', label: '工艺路线', file: '10_工艺路线配置.csv', fields: ['产品编号','工序编号','工序名称','前序工序','最大等待分钟','程序编号'] },
   { key: 'times', label: '工序工时', file: '11_工序工时配置.csv', fields: ['产品编号','工序编号','计算方式','固定分钟','速度支每分钟'] },
   { key: 'machines', label: '设备资源', file: '03_设备资源配置.csv', fields: ['设备编号','设备名称','产线编号','工序编号','日历编号','最小装载kg','最大装载kg','装载计量基准'] },
+  { key: 'batchResources', label: '空间与组批配置（存储不代表检查）', file: '15_空间与组批规则配置.csv', fields: ['资源编号','资源类型','容量','单位','允许程序','说明'] },
   { key: 'calendars', label: '工厂工作日历', file: '02_工厂工作日历.csv', fields: ['日历编号','工厂编号','起始分钟','结束分钟','是否工作','说明'] },
   { key: 'downtime', label: '设备停机例外', file: '04_设备停机与例外日历.csv', fields: ['设备编号','起始分钟','结束分钟','原因'] },
   { key: 'dependencies', label: '工序资源依赖', file: '12_工序资源与物料依赖.csv', fields: ['订单编号','工序编号','资源类型','资源编号','需求数量','提前占用分钟','后延占用分钟','所需技能','所需班次','人员参与阶段','人员开始偏移','人员结束偏移'] },
@@ -81,6 +83,7 @@ export const seed: Record<string, Row[]> = {
     {'订单编号':'B','工序编号':'MIX','资源类型':'设备','资源编号':'MIX02','需求数量':'1','提前占用分钟':'0','后延占用分钟':'0','所需技能':''},
     {'订单编号':'B','工序编号':'FILL','资源类型':'设备','资源编号':'FILL02','需求数量':'1','提前占用分钟':'0','后延占用分钟':'0','所需技能':''},
   ],
+  batchResources: [],
   personnelGroups: [],
   rules: [
     {'规则编号':'MACHINE','中文名称':'机器不重叠','是否启用':'是','参数JSON':'{}'},
@@ -112,12 +115,14 @@ function validate(tasks: Task[]): Finding[] {
 }
 
 export function calculate(data:Record<string,Row[]>, inputVersion:number, calculatedAt=new Date().toISOString(), conditions:{startMinute?:number;endMinute?:number|null;priority?:string;mode?:string}={}) {
+ const sourceData=data;let batches:ReturnType<typeof prepareProductionBatches>|null=null;
+ const demandFor=(order:Row,operation:string,minute:number)=>batches?batches.demands(order,operation,minute):calculateMaterialDemand(sourceData,order,operation,minute);
  const minimal=conditions.mode==='minimal-r1';
  const policy=minimal?null:materialPolicy(data,calculatedAt);
  const materialDemands:MaterialDemandRow[]=[];const allocator=policy?createMaterialAllocator(data,policy):null;
  const ruleSnapshot=assessRules(data,calculatedAt,true,conditions.mode);
  let result:Plan|null=null;
- const setActivePlan=(p:Plan)=>{result={...p,materialChecked:!!policy,materialDemands,ruleSnapshot,rules:ruleSnapshot.settings.filter(r=>r.active).map(r=>r.id)};};
+ const setActivePlan=(p:Plan)=>{result={...p,materialChecked:!!policy,materialDemands,...(batches?{batchChecked:true,...batchSummary(batches,p.tasks)}:{batchChecked:false}),ruleSnapshot,rules:ruleSnapshot.settings.filter(r=>r.active).map(r=>r.id)};};
  const setIssues=(_x:Finding[])=>{}; const setVerification=(_x:null)=>{};const setMessage=(_x:string)=>{};
  const enabledRules=(data.rules||[]).filter(r=>r['是否启用']==='是').map(r=>r['规则编号']);
  const supplyInput=JSON.stringify({supplies:data.supplies||[],delays:data.supplyDelays||[],uses:data.supplyUses||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[]});
@@ -129,7 +134,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
     if(ruleSnapshot.issues.length){setActivePlan({id:uid(),name:"规则配置阻止计算",createdAt:calculatedAt,tasks:[],findings:ruleSnapshot.issues.map(i=>({code:"RULE / CONFIG",message:i.message,taskIds:[]})),rules:[],inputVersion:`v${inputVersion}`});return;}
     const sortBy=conditions.priority&&conditions.priority!=='规则设置'?conditions.priority:ruleSnapshot.settings.find(r=>r.id==='SORT'&&r.active)?.parameters['排序方式'];
     ruleSnapshot.note+=` 实际任务排序：${sortBy==='要求日期'?'要求日期':'优先顺序'}；来源：${conditions.priority&&conditions.priority!=='规则设置'?'本次计算条件（覆盖 SORT 的排序方式）':'本次规则设置或默认优先顺序'}。`;
-    const sorted=[...(data.orders||[])].filter(o=>o['需求类型']!=='预测'&&isOrderSchedulable(o)).sort((a,b)=>sortBy==='要求日期'?Number(a['要求可交付分钟'])-Number(b['要求可交付分钟'])||Number(a['优先顺序'])-Number(b['优先顺序']):Number(a['优先顺序'])-Number(b['优先顺序']));
+    let sorted=[...(data.orders||[])].filter(o=>o['需求类型']!=='预测'&&isOrderSchedulable(o)).sort((a,b)=>sortBy==='要求日期'?Number(a['要求可交付分钟'])-Number(b['要求可交付分钟'])||Number(a['优先顺序'])-Number(b['优先顺序']):Number(a['优先顺序'])-Number(b['优先顺序']));
     const orderIssues=validateOrders(data.orders||[]).filter(issue=>issue.code!=='ORDER_MULTI_LINE');
     if(orderIssues.length){findings.push(...orderIssues.map(issue=>({code:`FR-009 / ${issue.code}`,message:issue.message,taskIds:[]})));setIssues(findings);setActivePlan({id:uid(),name:'订单数据校验',createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules,inputVersion:`v${inputVersion}`});setVerification(null);setMessage(`FR-009 订单字段检查发现 ${orderIssues.length} 个问题，未生成任务。`);return;}
     const masterIssues=[...validateBomConfig({products:data.products||[],materials:data.materials||[],routes:data.routes||[],bom:data.bom||[]}),...supplyIssues,...inventoryIssues,...validateMasterData({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[],personnelGroups:data.personnelGroups||[]})];
@@ -144,9 +149,15 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
       const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
       setIssues(findings);setActivePlan(plan);setVerification(null);setMessage(findings.map(f=>f.message).join(' '));return;
     }
+    if(!minimal&&activeBatchRule(data,calculatedAt)){
+     batches=prepareProductionBatches(data,sorted,conditions.startMinute??0);findings.push(...batches.findings);data=batches.data;sorted=batches.orders;
+     for(const g of batches.groups.filter((g:any)=>g.status==='blocked-under-min'))for(const op of g.route){
+      try{const demands=g.members.flatMap((m:any)=>calculateMaterialDemand(sourceData,m.order,op['工序编号'],conditions.startMinute??0,m.qualifiedKg).map(d=>({...d,taskId:JSON.stringify([m.orderId,m.index,op['工序编号']])})));if(allocator)materialDemands.push(...allocator.preview(demands,conditions.startMinute??0).rows.map(r=>({...r,blockedReason:'低于最小装载；候选未占用'})));}catch(e){findings.push({code:'UNPLANNED / BATCH_MATERIAL',message:String(e),taskIds:[]});}
+     }
+    }
     const retainBlockedDemand=(order:Row,operation:string,minute:number,blockedReason:string)=>{
      if(!allocator)return;
-     try{const preview=allocator.preview(calculateMaterialDemand(data,order,operation,minute),minute);materialDemands.push(...preview.rows.map(r=>({...r,blockedReason})));}
+     try{const preview=allocator.preview(demandFor(order,operation,minute),minute);materialDemands.push(...preview.rows.map(r=>({...r,blockedReason})));}
      catch(e){findings.push({code:'UNPLANNED / MATERIAL_CONFIG',message:e instanceof Error?e.message:'物料配置无效',taskIds:[`${order['订单编号']}-${operation}`]});}
     };
     for(const order of sorted){const oid=order['订单编号'], product=order['产品编号'];const route=(data.routes||[]).filter(r=>r['产品编号']===product);
@@ -179,7 +190,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
           const overlap=busy.find(t=>fit.start!<t.end&&fit.start!+duration>t.start);
           if(overlap){candidate=overlap.end;continue;}
           if(allocator){
-           try{materialPreview=allocator.preview(calculateMaterialDemand(data,order,operation,fit.start),fit.start);}
+           try{materialPreview=allocator.preview(demandFor(order,operation,fit.start),fit.start);}
            catch(e){materialError=e instanceof Error?e.message:'物料口径无效';break;}
            if(!materialPreview.ok){const next=allocator.futureMinutes.find(m=>m>fit.start!);if(next!==undefined){candidate=next;continue;}materialError='物料不足';break;}
           }
@@ -202,7 +213,8 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
         const task:Task={id:`${oid}-${operation}`,orderId:oid,productId:product,operation,label:op['工序名称']||operation,machine:machineId,start,end:start+duration,duration,predecessor:predecessor?.id||'',source:minimal?'R1 最小模式 · 订单17 · 路线10 · 固定工时11 · 给定机器12 · 机器连续可用；日历/人员/工装/物料未检查':`订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04${personnelRequirements.length?` · 人员阶段：${participation}`:''}${calendarShift?` · ${calendarShift}`:''}`};built.push(task);done.set(operation,task);busy.push(task);machineBusy.set(machineId,busy);
       }
     }
-    const hard=validate(built);const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:built,supplyConditions:minimal?[]:buildSupplyConditions(built,resolvedSupplies,policy?materialDemands.filter(r=>r.committed).flatMap(r=>r.allocations.filter(a=>a.conditional).map((a,i)=>({'引用编号':`FR020-${r.taskId}-${r.materialId}-${i}`,'订单编号':r.orderId,'工序编号':r.operation,'供给编号':a.supplyId,'使用数量':String(a.quantity)}))):data.supplyUses||[]),supplyInput:minimal?undefined:supplyInput,findings:[...findings,...hard],rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
+    const hard=validate(built);if(batches){const expanded=batches.expand(built);built.splice(0,built.length,...expanded);for(const f of findings)f.taskIds=f.taskIds.flatMap((id:string)=>batches.taskIds(id));}
+    const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:built,supplyConditions:minimal?[]:buildSupplyConditions(built,resolvedSupplies,policy?materialDemands.filter(r=>r.committed).flatMap(r=>r.allocations.filter(a=>a.conditional).map((a,i)=>({'引用编号':`FR020-${r.taskId}-${r.materialId}-${i}`,'订单编号':r.orderId,'工序编号':r.operation,'供给编号':a.supplyId,'使用数量':String(a.quantity)}))):sourceData.supplyUses||[]),supplyInput:minimal?undefined:supplyInput,findings:[...findings,...hard],rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
     setIssues(plan.findings);setActivePlan(plan);setVerification(null);setMessage(plan.findings.length?`生成 ${built.length} 项任务，并发现 ${plan.findings.length} 个需处理的问题。`:`生成 ${built.length} 项任务；当前启用的机器与顺序检查通过。`);
   }
  schedule(); return result!;

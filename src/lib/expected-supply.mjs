@@ -86,8 +86,8 @@ export function buildSupplyConditions(tasks = [], supplies = [], uses = []) {
   });
 }
 export function exportSupplyPlanCsv(plan) {
-  const rows = [['任务编号', '订单编号', '产品编号', '工序编号', '设备编号', '开始分钟', '结束分钟', '工时分钟', '前序任务', '供给条件','物料检查','物料需求与批次分配（含未排）']];
-  for (const t of plan.tasks) rows.push([t.id, t.orderId, t.productId, t.operation, t.machine, t.start, t.end, t.duration, t.predecessor, (plan.supplyConditions || []).filter(c => value(c, '订单编号') === t.orderId.trim() && value(c, '工序编号') === t.operation.trim()).map(c => c['条件说明']).join('；'),plan.materialChecked?'已检查（支持口径）':'物料未检查',JSON.stringify((plan.materialDemands||[]).filter(r=>r.taskId===t.id))]);
+  const rows = [['任务编号', '订单编号', '产品编号', '工序编号', '设备编号', '开始分钟', '结束分钟', '工时分钟', '前序任务', '供给条件','物料检查','物料需求与批次分配（含未排）','生产批编号','资源批编号','合格数量kg','精确合格数量','投入装载kg','精确投入装载','拆合批检查']];
+  for (const t of plan.tasks) rows.push([t.id, t.orderId, t.productId, t.operation, t.machine, t.start, t.end, t.duration, t.predecessor, (plan.supplyConditions || []).filter(c => value(c, '订单编号') === t.orderId.trim() && value(c, '工序编号') === t.operation.trim()).map(c => c['条件说明']).join('；'),plan.materialChecked?'已检查（支持口径）':'物料未检查',JSON.stringify((plan.materialDemands||[]).filter(r=>r.taskId===t.id)),t.productionBatchId,t.resourceBatchId,t.quantity,JSON.stringify(t.exactQuantity),t.loadKg,JSON.stringify(t.exactLoadKg),plan.batchChecked?'已检查（支持口径）':'拆合批/程序未检查']);
   for(const r of plan.materialDemands||[])if(!r.committed)rows.push([r.taskId,r.orderId,r.productId,r.operation,'','','','','','',plan.materialChecked?'已检查（未排候选，未占用）':'物料未检查',JSON.stringify(r)]);
   return rows.map(row => row.map(v => '"' + String(v ?? '').replace(/"/g, '""') + '"').join(',')).join('\r\n');
 }
