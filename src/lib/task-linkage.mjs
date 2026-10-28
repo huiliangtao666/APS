@@ -1,23 +1,31 @@
+import {savedInterval} from './verification-endpoints.mjs';
 import {timetable,validInterval} from './timetable.mjs';
 // A read-only explanation of frozen evidence; never a solver or a live-capacity check.
 export function problemInterval(plan,finding){
  if(!finding)return null;
- const tasks=(plan?.tasks||[]).filter(t=>finding.taskIds?.includes(t.id));
- if(finding.interval&&validInterval(finding.interval.start,finding.interval.end))return {...finding.interval};
- // Legacy saved findings can be explained only when exactly two real endpoints exist.
+ const ids=finding.taskIds;
+ if(!Array.isArray(ids)||ids.length!==2||new Set(ids).size!==2)return null;
+ const tasks=(plan?.tasks||[]).filter(t=>ids.includes(t.id));
  if(tasks.length!==2)return null;
- const [a,b]=tasks;
- if(/MACHINE_OVERLAP/.test(finding.code)&&a.machine===b.machine){
-  if(!validInterval(a.start,a.end)||!validInterval(b.start,b.end))return null;
-  const start=Math.max(a.start,b.start),end=Math.min(a.end,b.end);
-  if(validInterval(start,end))return {kind:'machine-overlap',machine:a.machine,start,end};
+ const [a,b]=tasks,ai=savedInterval(a),bi=savedInterval(b);
+ // Raw saved tasks are authoritative, even when a persisted finding claims numeric geometry.
+ if(!ai||!bi)return null;
+ let derived=null;
+ if(/MACHINE_OVERLAP/.test(finding.code)&&a.machine&&a.machine===b.machine){
+  const start=Math.max(ai.start,bi.start),end=Math.min(ai.end,bi.end);
+  if(validInterval(start,end))derived={kind:'machine-overlap',machine:a.machine,start,end};
  }
  if(/PRECEDENCE/.test(finding.code)){
   const next=a.predecessor===b.id?a:b.predecessor===a.id?b:null;
-  const prior=next===a?b:a;
-  if(next&&validInterval(next.start,prior.end))return {kind:'precedence',start:next.start,end:prior.end,priorEnd:prior.end,nextStart:next.start,violationDuration:prior.end-next.start};
+  const ni=next===a?ai:bi,pi=next===a?bi:ai;
+  if(next&&validInterval(ni.start,pi.end))derived={kind:'precedence',start:ni.start,end:pi.end,priorEnd:pi.end,nextStart:ni.start,violationDuration:pi.end-ni.start};
  }
- return null;
+ if(!derived)return null;
+ if(finding.interval){
+  // Reject stale, unsupported or contradictory structured evidence instead of drawing it.
+  for(const [key,value] of Object.entries(derived))if(finding.interval[key]!==value)return null;
+ }
+ return derived;
 }
 export function taskEvidence(plan,id){
  const model=timetable(plan),task=model.tasks.find(t=>t.id===id);

@@ -1,3 +1,5 @@
+import {savedInterval} from './verification-endpoints.mjs';
+
 function result(status, details) {
   return { status, details };
 }
@@ -32,16 +34,17 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
   const machineProblems = [];
   for (const task of tasks) {
     if (!String(task.machine ?? '').trim()) machineProblems.push(`任务 ${task.id} 未指定设备。`);
-    if (!Number.isFinite(Number(task.start)) || !Number.isFinite(Number(task.end)) || Number(task.end) <= Number(task.start)) {
+    if (!savedInterval(task)) {
       machineProblems.push(`任务 ${task.id} 的时间区间无效。`);
     }
   }
   const byMachine = new Map();
   for (const task of tasks) {
     const machine = String(task.machine ?? '').trim();
-    if (!machine) continue;
+    const interval = savedInterval(task);
+    if (!machine || !interval) continue;
     const list = byMachine.get(machine) ?? [];
-    list.push(task);
+    list.push({...task, ...interval});
     byMachine.set(machine, list);
   }
   for (const [machine, list] of byMachine) {
@@ -88,7 +91,7 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
     const predecessor = byId.get(expectedId);
     if (!predecessor) {
       precedenceProblems.push(`任务 ${task.id} 的前序任务 ${expectedId} 不在结果中。`);
-    } else if (![Number(task.start), Number(predecessor.end)].every(Number.isFinite)) {
+    } else if (!savedInterval(task) || !savedInterval(predecessor)) {
       precedenceProblems.push(`任务 ${task.id} 或前序 ${predecessor.id} 的时间无效，无法核对先后关系。`);
     } else if (Number(task.start) < Number(predecessor.end)) {
       const message=`任务 ${task.id} 于 ${task.start} 开始，早于前序 ${predecessor.id} 于 ${predecessor.end} 完成，提前 ${Number(predecessor.end)-Number(task.start)} 分钟。`;

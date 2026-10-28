@@ -1,0 +1,67 @@
+{
+  "results": [
+    {
+      "name": "exact structured20/30 overlap and30/20/10 precedence, shared taskIDs, input unchanged",
+      "pass": true
+    },
+    {
+      "name": "300 deterministic overlap/precedence cases versus independent integer interval oracle",
+      "pass": true
+    },
+    {
+      "name": "half-open abutment produces no overlap or precedence finding",
+      "pass": true
+    },
+    {
+      "name": "geometry20..30 remains10px at scale1 and clips honestly to5px",
+      "pass": true
+    },
+    {
+      "name": "legacy endpoints all undefined/null/blank/NaN/infinite variants remain unknown for overlap",
+      "pass": true
+    },
+    {
+      "name": "legacy precedence missing relevant end/start remain unknown",
+      "pass": true
+    },
+    {
+      "name": "unplanned finding cannot fabricate interval from known task pair",
+      "pass": true
+    },
+    {
+      "name": "resource declaration/config/reservation links same task, separates totals and saved material allocation",
+      "pass": true
+    },
+    {
+      "name": "missing saved input remains absent; no current fallback",
+      "pass": true
+    },
+    {
+      "name": "active verifier must not coerce unknown start null to0",
+      "pass": true
+    },
+    {
+      "name": "active verifier must not coerce unknown start \"\" to0",
+      "pass": true
+    },
+    {
+      "name": "active verifier must not coerce unknown start \" \" to0",
+      "pass": true
+    },
+    {
+      "name": "active verifier must not certify unknown first start null",
+      "pass": true
+    },
+    {
+      "name": "active verifier must not certify unknown first start \"\"",
+      "pass": true
+    },
+    {
+      "name": "active verifier must not certify unknown first start \" \"",
+      "pass": true
+    }
+  ],
+  "total": 15,
+  "passed": 15,
+  "failed": 0
+}

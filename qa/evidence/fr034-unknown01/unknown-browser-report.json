@@ -1,0 +1,1533 @@
+{
+  "results": [
+    {
+      "scenario": "persisted fabricated structured interval over raw null",
+      "passed": true
+    },
+    {
+      "variant": "null",
+      "taskId": "A-MIX",
+      "endpoint": "start",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:36.864Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-MIX 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "11844b02d51b8c4f784d6d04c3991fdb509139c970d80d4aaa3b505f40701a4b"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": null,
+          "end": 30,
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": 30,
+          "end": 45,
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "null",
+      "taskId": "A-MIX",
+      "endpoint": "end",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:37.058Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-MIX 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "727c992ddef5ed80bc391c03506d997f70ab2594e859fc2d53beb1e9951a974c"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": 0,
+          "end": null,
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": 20,
+          "end": 45,
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "null",
+      "taskId": "A-FILL",
+      "endpoint": "start",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:37.259Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "4c00cb6693742e3489059e25d0cf76183cda8fa9007614dbd9e66b1094517913"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": 0,
+          "end": 30,
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": null,
+          "end": 45,
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "null",
+      "taskId": "A-FILL",
+      "endpoint": "end",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:37.543Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "9ee2b027541b68ba5a1008e55e9de03d83b6597b5d02d2cbb9dad5d2e32b8ed2"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": 0,
+          "end": 30,
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": 20,
+          "end": null,
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "empty",
+      "taskId": "A-MIX",
+      "endpoint": "start",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:37.750Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-MIX 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "89afe948b373e80c273f0e271b2cb11e2f39d194a37f46d114d8a55548313ad2"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": "",
+          "end": 30,
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": 30,
+          "end": 45,
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "empty",
+      "taskId": "A-MIX",
+      "endpoint": "end",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:37.948Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-MIX 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "0d08040d046fce3f8d904d861b657f0ec4df8ca404627aae3152bba6bb8f8c0d"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": 0,
+          "end": "",
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": 20,
+          "end": 45,
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "empty",
+      "taskId": "A-FILL",
+      "endpoint": "start",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:38.125Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "049992b63693e062d7c9331419cb9aca169dbe995269f3ea41d2982185734dd8"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": 0,
+          "end": 30,
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": "",
+          "end": 45,
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "empty",
+      "taskId": "A-FILL",
+      "endpoint": "end",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:38.325Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "74b1661c1147ea4a2d6d2bdfa4d3e590033d2aae437ad6a364b8efbf8d59eeb4"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": 0,
+          "end": 30,
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": 20,
+          "end": "",
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "whitespace",
+      "taskId": "A-MIX",
+      "endpoint": "start",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:38.546Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-MIX 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "4e7b971fc60d9660442b7068e1c240689bca93cbccbe27f5fa3efa8d9b894e12"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": " \t ",
+          "end": 30,
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": 30,
+          "end": 45,
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "whitespace",
+      "taskId": "A-MIX",
+      "endpoint": "end",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:38.747Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-MIX 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "2ebee45b5b390e65b525c56d0468f00baee8414e84de8758426a0e4845de3b53"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": 0,
+          "end": " \t ",
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": 20,
+          "end": 45,
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "whitespace",
+      "taskId": "A-FILL",
+      "endpoint": "start",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:38.982Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "42fab1a5ceb90486c50288a4b03d3f30640ad7c9544b223a8ae255d5f6a97872"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": 0,
+          "end": 30,
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": " \t ",
+          "end": 45,
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "whitespace",
+      "taskId": "A-FILL",
+      "endpoint": "end",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:39.192Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "d4088d03a735a7154ce9408ab357e1e1d1b0f73a7e5ec3561b2f12eaaab0d519"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": 0,
+          "end": 30,
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": 20,
+          "end": " \t ",
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "absent",
+      "taskId": "A-MIX",
+      "endpoint": "start",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:39.397Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-MIX 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "c9ba0bcb63daba9b0526e3ed530e5c2a647c821fe3f922d39a50ac4321e12b62"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "end": 30,
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": 30,
+          "end": 45,
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "absent",
+      "taskId": "A-MIX",
+      "endpoint": "end",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:39.593Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-MIX 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "422ae6b4b29b1d5c81d361b0eae1fabd58f07396466580505d66fe947fb9629f"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": 0,
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": 20,
+          "end": 45,
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "absent",
+      "taskId": "A-FILL",
+      "endpoint": "start",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:39.792Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "10e9fc631fce779bf338d08d7b1b1f49d9dd76b817ef3eb0cd9b1cf746167b37"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": 0,
+          "end": 30,
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "end": 45,
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "absent",
+      "taskId": "A-FILL",
+      "endpoint": "end",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:40.009Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "a59027267f90bdb87b913f6f3526bd7a975a6b9a95c8d0209ad6271962e33e9b"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": 0,
+          "end": 30,
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": 20,
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "nonfinite-string",
+      "taskId": "A-MIX",
+      "endpoint": "start",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:40.226Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-MIX 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "13fd25a9c48cc460fb061cd96d1b99f1bb0a36b234cacf715b210e566f8397bc"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": "Infinity",
+          "end": 30,
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": 30,
+          "end": 45,
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "nonfinite-string",
+      "taskId": "A-MIX",
+      "endpoint": "end",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:40.424Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-MIX 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "849361fd5b977e1f03b22555c7954cc8a1a2ea6e217e410453fa7e1fd57fa145"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": 0,
+          "end": "Infinity",
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": 20,
+          "end": 45,
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "nonfinite-string",
+      "taskId": "A-FILL",
+      "endpoint": "start",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:40.645Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "8acdb79073e34cb1f2c54c45ad27076979f586f516b5779f72dc76dcd71ac632"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": 0,
+          "end": 30,
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": "Infinity",
+          "end": 45,
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "variant": "nonfinite-string",
+      "taskId": "A-FILL",
+      "endpoint": "end",
+      "passed": true,
+      "verification": {
+        "checkedAt": "2026-10-28T22:30:40.842Z",
+        "planId": "FR034-SYNTHETIC-CORRUPT",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 1 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 的时间区间无效。"
+            ]
+          },
+          "precedence": {
+            "status": "problem",
+            "details": [
+              "任务 A-FILL 或前序 A-MIX 的时间无效，无法核对先后关系。"
+            ]
+          }
+        },
+        "contentHash": "f22b52261d9e4acc4421733b8233290c4439fc2c3259289108950686fba64179"
+      },
+      "tasks": [
+        {
+          "timingReasons": [],
+          "id": "A-MIX",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "MIX",
+          "label": "混合",
+          "machine": "FILL01",
+          "start": 0,
+          "end": 30,
+          "duration": 20,
+          "predecessor": "",
+          "source": "模拟剩余工作 F-A-MIX（非合格入库） · 订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        },
+        {
+          "timingReasons": [
+            {
+              "code": "PRECEDENCE",
+              "source": "A-MIX",
+              "from": 0,
+              "to": 50
+            }
+          ],
+          "id": "A-FILL",
+          "orderId": "A",
+          "productId": "HC40",
+          "operation": "FILL",
+          "label": "灌装",
+          "machine": "FILL01",
+          "start": 20,
+          "end": "Infinity",
+          "duration": 30,
+          "predecessor": "A-MIX",
+          "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04"
+        }
+      ]
+    },
+    {
+      "scenario": "valid zero 0",
+      "passed": true
+    },
+    {
+      "scenario": "valid zero \"0\"",
+      "passed": true
+    },
+    {
+      "scenario": "valid zero \" 0.0 \"",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "browser": "141.0.7390.37",
+  "source": "FR034 working source; parent 9783e9de6e500f895dbe6084bcfda2690dcbad7d",
+  "hashes": {
+    "index.html": "de7c0a69bb3cabc4c7eefa2dd7f7409a7dbbcec2cfa654da4209433b25ad2396",
+    "postcss.config.js": "e32657baf631d7c5f4dc67b4b2ee0ec8e7d5b3c41860e09cddce7c0377cd80bc",
+    "server/auth/auth.test.mjs": "3a3bfe0cb0d4462c4827d60e198e3f85c08935d18af2d885342fcf0ad5bbaf50",
+    "server/auth/init-admin.mjs": "7c835f1f844296d6e213ddf4c1a5c48488a228e1607276a81980e4e6430b401c",
+    "server/auth/routes.mjs": "f419f40e60655053c93e898ab2e71d045174dfc2a4f3549888a5e27f67de5513",
+    "server/auth/store.mjs": "eb40f08954d49b3ea7cea78e65aad33d64cec003218ff1c4770d3db51daa3258",
+    "server/auth/ws-guard.mjs": "5f831e0f2df3d32bf1f6372af300a8e033bbf793451963c7a7ef38388c897fd6",
+    "server/business.mjs": "8a29748e63ed0a3295927a20bff1b34c52fe150c8748e90b2b3143866bcd31a9",
+    "server/business.test.mjs": "7bdd9a23fbc10bbce2eacf5b7aeb0669ce81a4a04f7daaa5685a0b1f82db81ad",
+    "server/calculation-worker.mjs": "25619d27957b1f6074b03282b2da38e4bfed0e7f1b0327b46b8dff994907cf21",
+    "server/confirmation.mjs": "2d7ed2758dc9765964a32d94731157cbd0393198b62f9a1c89a88b94698d8165",
+    "server/index.mjs": "b726235232876ae7528880e55249023d47c0018c5dd3360f6dd57acc742186d5",
+    "server/input-validation.mjs": "1915f59a4952c47850a17e033a5c0d360b22b6b0310ef398114867f3d94a4dba",
+    "server/planner.ts": "8cf7289d10bdc929b382f99a2639e170b3e492f98a3111a1d3a8d806e0d99cd8",
+    "server/run-input.mjs": "091c3b64c3a6d672e4722921de84e726605aede43545aef7e719a013c9155f2a",
+    "src/App.tsx": "5a90bcf4dab25c1a92481fff032b89b0c607bb23091c7e7af0295da448d4b747",
+    "src/BatchPanel.tsx": "f65bd61ca187abaafeb63ae1a32ab4331123a194edb8cd1061190a4e1c8fae61",
+    "src/ConfirmationPanel.tsx": "998e7bce904b9ad04e278462e127e3e21ceb5b7b25996dfd14d9cbec9b3a5b3d",
+    "src/DataEditor.tsx": "7f4990004f6a940e468c1d2d9765bc46984088e39e3bdde227172fd977374a9e",
+    "src/DataQueries.tsx": "5aafda603f6a7a2baa8f285a1efd1506a872d4c853f54bb88e58551d87e05e97",
+    "src/DeliveryPanel.tsx": "aedb190ebf7c96cbc759e8435b1e5ea2c15ebd9d422af92054c95db3959dd08c",
+    "src/ExecutionPanel.tsx": "67eb73fedc8512d4725c66f55af30ad5262d10813827dfaf3eca0c2be167c35f",
+    "src/MaterialPanel.tsx": "87a6b5ee0f8dc24dda191bda7d71350e3e9af91b72dadf0203394ead13f3c4d3",
+    "src/ResourcePanel.tsx": "869bb547bfcc6e11eb6256c0506127b246b5a5ea1fbabc4b8af03c81475b69eb",
+    "src/ResultPanel.tsx": "d027d81e3ab8abff90c9a6472406db80d5f4dc642af465d5843d9ca679f869c9",
+    "src/RulePanel.tsx": "79e08c855ea83fbed72ab55339a3cbb625f59ab3b73acfa8ed88f63f9b169c8a",
+    "src/RunPanel.tsx": "46fe0a5418507450326ac448a8c1a817eeeda9546d14d429447df849eee454e7",
+    "src/TimelinePanel.tsx": "306d41102758966df6c5de36cd762957b226fbd32afe94a4ef7aa298ea026ccc",
+    "src/TrialPanel.tsx": "87670277b0c1d105ca188f20e2f921479a2513f1b3258976c3e5099014265111",
+    "src/auth/useAppMembership.ts": "2af87bf231b39703b16eb5fd60e1a41b579ed30dd5d2198c9b77475f318854ce",
+    "src/data-defs.ts": "f228c438ab0f3c2fad9539308a8704a613107eb21bd6ef80170ec33d467a07b0",
+    "src/index.css": "21e15e93f12accef8c86837831a32cbf6fdff7f4f54f2805b0cdf462ab0c0aa5",
+    "src/lib/batch-policy.mjs": "0433b4ec3f9545173001eb7069b70f42ae901dece6dfa16ef9f09db3e6c5c4ba",
+    "src/lib/bom-config.d.mts": "1fc6c33eabaaa89bde69d65e7a901d5b2910aa0f9bfca7bbb5f38e1a4c9c3ae1",
+    "src/lib/bom-config.mjs": "5130489c7874c150c31f6227daf94cb1a4ab03ca0ff85028db290dda259688f6",
+    "src/lib/bom-config.test.mjs": "7159e93367c7cc3de6acc56b33e07d5f1e056233cc1c53a7c66835d174a6bf0f",
+    "src/lib/business-rules.d.mts": "74222b9546c8bdbd0346a19248b8d9e84a59922521a2de0d355295ea2c9f88d9",
+    "src/lib/business-rules.mjs": "39bfaf9f80a8cab6dde0b4f8f3233f8753102ece7aa72b534b0251560d298883",
+    "src/lib/business-rules.test.mjs": "2f69b978276b3ec8fe12796facfe2eadbce298780040189f7ce01ff23a2f5f8f",
+    "src/lib/data-query.d.mts": "4811fddf3e3c60e18f6b1811f8ed5fcccb7312651e124c26ff14990ef24b5890",
+    "src/lib/data-query.mjs": "81853699f4e182a5eaaaafe4b235ab1a2a77f0f2f11761e1483b19395e643aa1",
+    "src/lib/data-query.test.mjs": "f01ee1d6aca60439d58ed1eee31b91e2f0ab870d2ce15e6b27d0b09b72eaaca5",
+    "src/lib/delivery-assessment.d.mts": "74f5195d0874a6bd3df72c4eefa77829b6166c42ea63aae3f3ee4f5ed801e5c8",
+    "src/lib/delivery-assessment.mjs": "976eb7fc517fc637d01b2d93b7b18d4fe4de11bd350464dc259fdc1c0db36b99",
+    "src/lib/delivery-policy.d.mts": "132152611d3c67381e89c8121f016a7f883ca2645b8dc095bda4e7f4a81a6ddf",
+    "src/lib/delivery-policy.mjs": "4bb35d25f43554e2f10fec124286e48997acc0f151bbba389020d01ef14b0108",
+    "src/lib/downtime-shift-reason.d.mts": "9a0b00bfb3a33339e60a3245c6be0624b84d3876f8e7621cffa2a4998be71903",
+    "src/lib/downtime-shift-reason.mjs": "be359d0f2ef402b8fa60c1ee4a69f7c7a5e2af0524c89cbe5768c777fea49da0",
+    "src/lib/downtime-shift-reason.test.mjs": "e18c4801db83e49eca4af5e5b0da5e7112c5fcf16d4dfb9a0f02dd148c6b5331",
+    "src/lib/execution-facts.d.mts": "7fc5447533141944c7c57cc63617a77d5b10abf18f5a20278af8a18c3ea4fc6b",
+    "src/lib/execution-facts.mjs": "efde051decbe60e3ac45e75639dca44f56eadcede62bb60e240cd768d0970d71",
+    "src/lib/expected-supply.d.mts": "b900aed36c50988f48a5821ff1872a654f83c1e5fa2c218ca828fa29dd5e5139",
+    "src/lib/expected-supply.mjs": "4832a7aff7ac2f2cc6c597d20c7fe11054670c6905c3cf6e85b27714eaa4a6a4",
+    "src/lib/expected-supply.test.mjs": "826de3ad32133a12db7c5c1325e6beda541c5e46609d4f99a1fa8aedca61ba19",
+    "src/lib/independent-verification.d.mts": "70af0a7c27747d196c0e872176c52e1f9863224c16f0986d2fcaa094d0d7e854",
+    "src/lib/independent-verification.mjs": "3d53e8c89a5ff12fb438ee2e977207980c07fddbf59ec7bd387b0e90df7e6b71",
+    "src/lib/independent-verification.test.mjs": "b5ac7ef28e6c7cd398b3220c65462cc1c14c2e0133017a0ac0aab1da1b73dda0",
+    "src/lib/input-csv.d.mts": "475509b2722167f86b8fb4ee6f14dac6e3e38f940d04a6c508392232b7a3b923",
+    "src/lib/input-csv.mjs": "17796a6f0c4d1716f2f4f7dda9c9dfc510e46f531a7a86d0011ff15a95dac03a",
+    "src/lib/input-csv.test.mjs": "f13455cb72ad3c9f5b64b0a9acad18ce1ef14906ac420100b16ac34696067045",
+    "src/lib/inventory.d.mts": "729b4c0c3e0885e57c264b9f2b6cf16da46d1c2f376d384cca91a71bbb19208b",
+    "src/lib/inventory.mjs": "12c177718c3a1cfa6ea967faca35a462f8e0b0794f32f27009f776a26587c03d",
+    "src/lib/inventory.test.mjs": "e8a0843049836cf811e6c5b8785a67ef09bb859b589ba810611af819c4bab5da",
+    "src/lib/joint-policy.mjs": "04383b89643e2b12f52d0a16d31b15dbf7f277fa095f5d2f3cf52b09b038654c",
+    "src/lib/joint-resources.d.mts": "976dc69e33d06ccbdb1b82328fe57d6b07834a6d2a470f9cea391e04744f2e77",
+    "src/lib/joint-resources.mjs": "52bb49fa0207d8cb9e28a37aa74656451851ff08d96b6e6acfcaa30c1323dba2",
+    "src/lib/line-scope.d.mts": "57420aa71a518b2557cd007b13476490d1efa886d5c36904cbc90040a62c18b1",
+    "src/lib/line-scope.mjs": "c144492fe24ca75574d06c385872da81b95b2a04489589143eb87f2360d2d7d5",
+    "src/lib/line-scope.test.mjs": "6eda6c7474c4ba7f280c17022404af9530c2b9dd815a015f4f5ddd34c2648c01",
+    "src/lib/master-data.d.mts": "f42f36bd311dae326939cca17abf1bd8b3af4b02a4e5f803a43787278bbf0d75",
+    "src/lib/master-data.mjs": "3f553c6cf0f970768774f4551f4eb2451918ca26fb3291e6fbefed3ed2480b4c",
+    "src/lib/master-data.test.mjs": "8d7a81072d02aaa46cf0cf7a11985822799478f0deee81ea31047dac950293ad",
+    "src/lib/material-allocation.d.mts": "bff1c351e56fa5594e07e5d5baf4396c013282df6bcd214f59a2de7b17f38f4c",
+    "src/lib/material-allocation.mjs": "a144238497857c5af45028fc670328767017c98de9b56db4ef7cd686d8b41d18",
+    "src/lib/material-allocation.test.mjs": "0c28647babaa45427f036413962ab2d32f90a0a97d07f88c5891b4c8eb8d3c3a",
+    "src/lib/orders.d.mts": "b6ada4ba2fe03b88a7676036310c9478ec772fc5c959cbdad614da9742b4f685",
+    "src/lib/orders.mjs": "333bed9cdc094137736ef71f156dcc5f7f6576237c173608e0d293cc30f6b55a",
+    "src/lib/orders.test.mjs": "6ad98ef7140b7a6e12bcbbda120795f690ab5abec73fe7633c71f9bc7f29b268",
+    "src/lib/plan-comparison.mjs": "552f3e48248ac782009640d546cf60b239e2c30e9abe29e8e8b71052f41caca3",
+    "src/lib/plan-comparison.test.mjs": "71e67605b1411760d97d6ad56f57a37dfa50103e0e910b6d14697a8ddb175056",
+    "src/lib/praetor/praetor.d.ts": "fee19a0b1785db7cff9cbc8fefab28c16ecd122bda0a5f9729ff751bd0615e26",
+    "src/lib/praetor/praetor.js": "94632c7a93dcfcadff1bb0bf5c07abd6e93625be50465f70ac1478c8af443e69",
+    "src/lib/process-config.d.mts": "e3232717dfe69d033f5c101c6f023ac88d2afb9b8dacbd5ffe460cde0efd25a5",
+    "src/lib/process-config.mjs": "942daa735ef686a932bc6d777b40847e21966079e4059f47f8475d5daffad9e2",
+    "src/lib/process-config.test.mjs": "39e4a901e467ea326196469263588b92da812d326bfc2566eb192c99e7a70266",
+    "src/lib/production-batches.d.mts": "47f2a9c60ebace553634fb4a5ec115aff93b227174872222ac72889efc5f3ada",
+    "src/lib/production-batches.mjs": "0fa912081863e308ccab2c4b82cb6626f67c7467c90a5bafd1cc52a7a810cacd",
+    "src/lib/result-assessment.d.mts": "c7c710910566a5776b14f5e338e3f2fd02edecab38e3036c6b7deac33aace7bf",
+    "src/lib/result-assessment.mjs": "e699e58c71dd30a63c86eddb857fd3e03ed8f9c674c17cbb8ebb6b9e7308d79c",
+    "src/lib/scheduling-scope.d.mts": "5e1156c4814fcfa146d3ab86601a7cea826e28a65d517922f7bef7119f94b6d0",
+    "src/lib/scheduling-scope.mjs": "85197c4103150170a83b8965ac3d258a6bb6d861e71555c6cda62401fe04d266",
+    "src/lib/simulation-events.mjs": "904634e80394729d783e40a581e2cb3d54e84a14f0c7d8ebcf69af1d903de364",
+    "src/lib/staffing.d.mts": "eef2c73d1bd0fedda27fbd382ee32268bc3de6820410e031c731ced7aec717a7",
+    "src/lib/staffing.mjs": "604bfa837eff51e2753c5c35aaa1feedaea86c47c1099e0ab0f9a65602321130",
+    "src/lib/staffing.test.mjs": "51eeaa3062e101167f64b88e715b92507fa622499716016bfdd4da65922eb5b7",
+    "src/lib/timetable.d.mts": "e0aecd28264d0445ab73a408662724acd87395153d2b71099ad0af642280a22f",
+    "src/lib/timetable.mjs": "c5acd1812fb8bff29621b3a826d026969163f499ebdc0ceab7ccaccff1813a8b",
+    "src/main.tsx": "e190eb4a820c29ada0d0f8c29380b17bbe8c67de6dd5307fe3a36f5e51a3a37c",
+    "src/praetor-bridge.ts": "b1f5148f7bb2e6f44d05f3916fc197bf03d0af0a136a5c68b78109a5373e9f05",
+    "src/praetor-embedded.ts": "fb8e41589f0d7bd06c6e8c275a4345e132002b0980806606a19453d497fab25f",
+    "src/query-ui.test.tsx": "0b89ea65abec2884e9b9b9637197aa7c2e92dc17ce5118deb67ff49e1c302290",
+    "src/vite-env.d.ts": "87a86cf372206e045c90d3469fafed94e5d4d970f68e8e0b50bec9382021f898",
+    "tailwind.config.js": "2602482ccb36064bc55ccfd0b12486eddc74213fc945694210fdef0a66f9c00e",
+    "tsconfig.json": "f155a425b85481a7c3e14ab208b06063f3b94d38a409b681b37b110dbd223124",
+    "vite.config.ts": "5781f968c075230c4c6ce93c493489c792a16820d0cfab9c5d2add30990c1946",
+    "src/TaskLinkage.tsx": "391c1f926e491a08debbf766341781f618103d758659e1ebfa98ca3294ae9697",
+    "src/lib/task-linkage.mjs": "67927a67e08f5ea8b5a5a80df697cd097a881f038236072ee46d0f96ddfdd664",
+    "src/lib/task-linkage.d.mts": "fdf4735e8b226d8644934f3f10d0d498a4d60ca9cc400cdce72f27bca6a4aed7",
+    "src/lib/verification-endpoints.mjs": "b148a4660529a225e6ef2ec436a82828765afbf2f4eb3ddea7768cbe44c392c2",
+    "qa/unknown-endpoints.test.mjs": "50a01123b941d3b4b1edac6e73ce4ad81843cc18921816c873da8b2daf336797"
+  },
+  "identity": "synthetic fixed planner; no signed gateway identity",
+  "fixture": "only deliberately corrupted disposable saved output; not scheduler-generated malformed data"
+}

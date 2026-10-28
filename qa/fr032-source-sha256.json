@@ -56,7 +56,7 @@
     "src/lib/expected-supply.mjs": "4832a7aff7ac2f2cc6c597d20c7fe11054670c6905c3cf6e85b27714eaa4a6a4",
     "src/lib/expected-supply.test.mjs": "826de3ad32133a12db7c5c1325e6beda541c5e46609d4f99a1fa8aedca61ba19",
     "src/lib/independent-verification.d.mts": "70af0a7c27747d196c0e872176c52e1f9863224c16f0986d2fcaa094d0d7e854",
-    "src/lib/independent-verification.mjs": "6856073cfc436345db52d487f57cd29cc4b4b3d5c7f413de2059fad140051b1e",
+    "src/lib/independent-verification.mjs": "3d53e8c89a5ff12fb438ee2e977207980c07fddbf59ec7bd387b0e90df7e6b71",
     "src/lib/independent-verification.test.mjs": "b5ac7ef28e6c7cd398b3220c65462cc1c14c2e0133017a0ac0aab1da1b73dda0",
     "src/lib/input-csv.d.mts": "475509b2722167f86b8fb4ee6f14dac6e3e38f940d04a6c508392232b7a3b923",
     "src/lib/input-csv.mjs": "17796a6f0c4d1716f2f4f7dda9c9dfc510e46f531a7a86d0011ff15a95dac03a",
@@ -107,7 +107,7 @@
     "tsconfig.json": "f155a425b85481a7c3e14ab208b06063f3b94d38a409b681b37b110dbd223124",
     "vite.config.ts": "5781f968c075230c4c6ce93c493489c792a16820d0cfab9c5d2add30990c1946",
     "src/TaskLinkage.tsx": "391c1f926e491a08debbf766341781f618103d758659e1ebfa98ca3294ae9697",
-    "src/lib/task-linkage.mjs": "bc30816c05399d04c31c5bdb57e71969590ea5d209eebf5cd61c90e7e534fe53",
+    "src/lib/task-linkage.mjs": "67927a67e08f5ea8b5a5a80df697cd097a881f038236072ee46d0f96ddfdd664",
     "src/lib/task-linkage.d.mts": "fdf4735e8b226d8644934f3f10d0d498a4d60ca9cc400cdce72f27bca6a4aed7",
     "src/LoadPanel.tsx": "8c01e4e32c1d6f3c9de4c3c0937138f94e6c27d4274bd83f40f65e230251eaf8",
     "src/lib/resource-load.mjs": "a08cf117cebb62fea98e5fc232ac79a32c58d0d83322b834a23535dd14e7ce96",
@@ -115,6 +115,8 @@
     "qa/resource-load.test.mjs": "1cdb273455f5f544449d4e96ebe73fad1cc11fedc15e014130e1ddb0f847935c",
     "qa/load-panel.test.tsx": "7cc049a7febd1d24b295ae9db680faaabaec36cf2d230553897e4641f0e1a75c",
     "qa/fr032-integration-runner.mjs": "8f7fbccefb64eae6a5dff919de075bc9faff74fed5666faf5cc4ae2b092b9a44",
-    "qa/fr032-browser.mjs": "4a3ab3a60ea99270808c55c96240026fa93f8d59ee68ac4ca15c22249cb01636"
+    "qa/fr032-browser.mjs": "4a3ab3a60ea99270808c55c96240026fa93f8d59ee68ac4ca15c22249cb01636",
+    "src/lib/verification-endpoints.mjs": "b148a4660529a225e6ef2ec436a82828765afbf2f4eb3ddea7768cbe44c392c2",
+    "qa/unknown-endpoints.test.mjs": "50a01123b941d3b4b1edac6e73ce4ad81843cc18921816c873da8b2daf336797"
   }
 }

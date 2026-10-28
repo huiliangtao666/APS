@@ -1,0 +1,45 @@
+{
+  "TAP": {
+    "groups": [
+      89,
+      124,
+      142,
+      22,
+      5,
+      9,
+      10,
+      1,
+      1,
+      3,
+      6,
+      4,
+      7,
+      12,
+      2,
+      3
+    ],
+    "total": 440,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0
+  },
+  "csv": "six-table valid + CSV-DEF-01..04 passed",
+  "build": "TypeScript / Vite / Express / Worker passed",
+  "browser": {
+    "originalFR034": 6,
+    "unknown01": 24,
+    "FR032": 6,
+    "errors": 0
+  },
+  "historyAPI": {
+    "groups": 4,
+    "responses": 19
+  },
+  "modelReplay": {
+    "groups": 15,
+    "passed": 15,
+    "failed": 0
+  },
+  "attribution": "All this repair evidence is APS-Dev; independent APS-Test pending"
+}
