@@ -1,3 +1,4 @@
+import {eventSummary,eventAbsences,validateEvents} from '../src/lib/simulation-events.mjs';
 import {factFor,executionSummary,executionAdmission,validateExecution,executionRisks} from '../src/lib/execution-facts.mjs';
 import {remainingExecutionDemand} from '../src/lib/material-allocation.mjs';
 import {assessResult} from '../src/lib/result-assessment.mjs';
@@ -26,6 +27,7 @@ type StoredVerificationReport = VerificationReport & { inputFingerprint?: string
 type Plan = { id: string; name: string; createdAt: string; tasks: Task[]; findings: Finding[]; rules: string[]; inputVersion: string; verification?: StoredVerificationReport; supplyConditions?: SupplyCondition[]; supplyInput?: string; materialDemands?:MaterialDemandRow[]; materialChecked?:boolean; ruleSnapshot?: RuleSnapshot };
 
 export const defs: TableDef[] = [
+  { key: 'simulationEvents', label: '模拟异常事件（先更新时点事实）', file: '28_模拟异常事件.csv', fields: ['事件编号','事件分钟','保护截止分钟','保护策略','事件类型','参数JSON','原因','需处理事实JSON'] },
   { key: 'executionSources', label: '模拟进度来源对账（显式映射）', file: '27_模拟进度来源对账.csv', fields: ['来源编号','原始任务编号','事实编号','原始汇总耗料','耗料单位','来源说明','原始分配JSON'] },
   { key: 'executionFacts', label: '模拟任务执行事实（累计）', file: '25_模拟任务执行事实.csv', fields: ['事实编号','订单编号','工序编号','状态','开始分钟','完成分钟','观测分钟','工序完成数量','数量单位','剩余工时分钟','当前设备','暂停原因','累计报废数量','报废补做口径'] },
   { key: 'executionMaterials', label: '模拟累计耗料（账面扣前口径）', file: '26_模拟累计耗料.csv', fields: ['记录编号','事实编号','批次编号','物料编号','累计已用数量','单位'] },
@@ -52,7 +54,7 @@ export const defs: TableDef[] = [
   { key: 'rules', label: '排程规则', file: '16_排程规则配置.csv', fields: ['规则编号','中文名称','是否启用','参数JSON','适用对象','生效时间'] },
 ];
 export const seed: Record<string, Row[]> = {
-  executionFacts: [], executionMaterials: [], executionSources: [],
+  simulationEvents: [], executionFacts: [], executionMaterials: [], executionSources: [],
   products: [
     {'产品编号':'HC40','产品名称':'模拟火腿肠40g','单支净重kg':'0.04','每袋支数':'10','总收率':'0.96','模拟交付等待分钟':'0'},
     {'产品编号':'HC60','产品名称':'模拟火腿肠60g','单支净重kg':'0.06','每袋支数':'10','总收率':'0.96','模拟交付等待分钟':'0'},
@@ -149,10 +151,12 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
  const resolvedSupplies=resolveExpectedSupply(data.supplies||[],data.supplyDelays||[]);
   function schedule(){
     const built:Task[]=[]; const findings:Finding[]=[]; const machineBusy=new Map<string,Task[]>(); const personnelReservations:PersonnelReservation[]=[];
-    const executionIssues=[...validateExecution((sourceData as any).executionContext||sourceData),...executionAdmission(sourceData,{...conditions,ruleEvaluationAt:calculatedAt,enabledRuleIds:enabledRules})];if(executionIssues.length){setActivePlan({id:uid(),name:'模拟执行须核对',createdAt:calculatedAt,tasks:[],findings:executionIssues.map(i=>({code:i.code,message:i.message,taskIds:[]})),rules:[],inputVersion:`v${inputVersion}`});return;}
+    const executionIssues=[...validateEvents(sourceData),...validateExecution((sourceData as any).executionContext||sourceData),...executionAdmission(sourceData,{...conditions,ruleEvaluationAt:calculatedAt,enabledRuleIds:enabledRules})];if(executionIssues.length){setActivePlan({id:uid(),name:'模拟执行须核对',createdAt:calculatedAt,tasks:[],findings:executionIssues.map(i=>({code:i.code,message:i.message,taskIds:[]})),rules:[],inputVersion:`v${inputVersion}`});return;}
     const risks=executionRisks((sourceData as any).executionContext||sourceData,calculatedAt);
     for(const risk of risks)findings.push({code:'UNPLANNED / EXECUTION_EVENT_REVIEW',message:risk.message,taskIds:[`${risk.orderId}-${risk.operation}`]});
-    const observation=Math.max(0,...(sourceData.executionFacts||[]).map(f=>Number(f['观测分钟'])));
+    personnelReservations.push(...eventAbsences(sourceData));
+    const eventState=eventSummary(sourceData);
+    const observation=Math.max(eventState.eventMinute,...(sourceData.executionFacts||[]).map(f=>Number(f['观测分钟'])));
     for(const f of sourceData.executionFacts||[]){const selected=(sourceData.orders||[]).some(o=>o['订单编号']===f['订单编号']);const end=f['状态']==='暂停'||(!selected&&f['状态']!=='已完成')?Number.POSITIVE_INFINITY:(f['状态']==='已完成'?Number(f['完成分钟']):Number(f['观测分钟'])+Number(f['剩余工时分钟']));const busy=machineBusy.get(f['当前设备'])||[];busy.push({id:'事实:'+f['事实编号'],orderId:f['订单编号'],productId:'',operation:f['工序编号'],label:'模拟执行保护',machine:f['当前设备'],start:Number(f['开始分钟']),end,duration:end-Number(f['开始分钟']),predecessor:'',source:'保留原始模拟事实'});machineBusy.set(f['当前设备'],busy);}
     if(ruleSnapshot.issues.length){setActivePlan({id:uid(),name:"规则配置阻止计算",createdAt:calculatedAt,tasks:[],findings:ruleSnapshot.issues.map(i=>({code:"RULE / CONFIG",message:i.message,taskIds:[]})),rules:[],inputVersion:`v${inputVersion}`});return;}
     const sortBy=conditions.priority&&conditions.priority!=='规则设置'?conditions.priority:ruleSnapshot.settings.find(r=>r.id==='SORT'&&r.active)?.parameters['排序方式'];
@@ -207,7 +211,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
         if(fact?.['状态']==='暂停'){findings.push({code:'UNPLANNED / EXECUTION_PAUSED',message:`模拟暂停 ${fact['事实编号']}：${fact['暂停原因']}；恢复时点及质量处置未定，保留设备占用，须处理`,taskIds:[`${oid}-${operation}`]});continue;}
         const predecessor=op['前序工序']?done.get(op['前序工序']):undefined; if(op['前序工序']&&!predecessor){retainBlockedDemand(order,operation,conditions.startMinute??0,'前序未排；投料分钟仅为候选检查时点');findings.push({code:'INPUT / PREDECESSOR',message:`${operation} 引用的前序 ${op['前序工序']} 未排入`,taskIds:[`${oid}-${operation}`]});continue;}
         const failureContext=(candidateMinute:number|null)=>({orderId:oid,operation,machineId,requiredDuration:duration,candidateMinute,horizonEnd:conditions.endMinute??null,dependencies:(data.dependencies||[]).filter(d=>d['订单编号']===oid&&d['工序编号']===operation)});
-        const busy=machineBusy.get(machineId)||[];let candidate=Math.max(observation,conditions.startMinute??0,predecessor?.end||0,minimal||policy?0:supplyEarliestMinute(oid,operation,resolvedSupplies,data.supplyUses||[]));const timingReasons:any[]=[];if(predecessor)timingReasons.push({code:'PRECEDENCE',source:predecessor.id,from:conditions.startMinute??0,to:predecessor.end});if(!minimal&&!policy){const uses=(sourceData.supplyUses||[]).filter(u=>u['订单编号']===oid&&u['工序编号']===operation);if(uses.length)timingReasons.push({code:'EXPECTED_SUPPLY',source:uses,readyMinute:supplyEarliestMinute(oid,operation,resolvedSupplies,sourceData.supplyUses||[]),candidateMinute:candidate});}const initialEarliest=candidate;let start:number|null=null;let reason='';
+        const busy=machineBusy.get(machineId)||[];let candidate=Math.max(observation,fact?0:eventState.protectionUntil,conditions.startMinute??0,predecessor?.end||0,minimal||policy?0:supplyEarliestMinute(oid,operation,resolvedSupplies,data.supplyUses||[]));const timingReasons:any[]=[];if(predecessor)timingReasons.push({code:'PRECEDENCE',source:predecessor.id,from:conditions.startMinute??0,to:predecessor.end});if(!minimal&&!policy){const uses=(sourceData.supplyUses||[]).filter(u=>u['订单编号']===oid&&u['工序编号']===operation);if(uses.length)timingReasons.push({code:'EXPECTED_SUPPLY',source:uses,readyMinute:supplyEarliestMinute(oid,operation,resolvedSupplies,sourceData.supplyUses||[]),candidateMinute:candidate});}const initialEarliest=candidate;let start:number|null=null;let reason='';
         const calendarId=machine['日历编号']?.trim()||(data.calendars||[])[0]?.['日历编号']||'';
         if(fact&&(candidate!==Number(fact['观测分钟'])||findCalendarWindow(calendarId,candidate,duration,data.calendars||[],data.downtime||[],machineId).start!==candidate)){const hold=machineBusy.get(machineId)||[];hold.push({id:'待核对:'+fact['事实编号'],orderId:oid,productId:product,operation,label:'执行待核对',machine:machineId,start:Number(fact['开始分钟']),end:Number.POSITIVE_INFINITY,duration:Number.POSITIVE_INFINITY,predecessor:'',source:'不自动恢复'});machineBusy.set(machineId,hold);findings.push({code:'UNPLANNED / EXECUTION_EVENT_REVIEW',message:'已开始任务与观测/日历/停机或选择时点不一致；保留事实与设备占用，事件时点协调待FR031',taskIds:[`${oid}-${operation}`]});continue;}
         const firstCalendarFit=minimal?initialEarliest:findCalendarWindow(calendarId,initialEarliest,duration,data.calendars||[],data.downtime||[],machineId).start;

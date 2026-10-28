@@ -1,0 +1,1 @@
+export const event=(type='设备故障',params={machineId:'MIX01',endMinute:60},extra={})=>({'事件编号':'E1','事件分钟':'30','保护截止分钟':'45','保护策略':'禁止未开始任务开工','事件类型':type,'参数JSON':JSON.stringify(params),'原因':'模拟异常','需处理事实JSON':'',...extra});

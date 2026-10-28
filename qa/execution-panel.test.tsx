@@ -33,3 +33,9 @@ test('FR031 editor submits cumulative scrap and explicit policy without mutating
 test('FR031 source query role cannot edit immutable original mapping',()=>{
  const def=defs.find(d=>d.key==='executionSources')!;const ui=Renderer.create(<DataEditor def={def} rows={[{'来源编号':'raw','原始分配JSON':'[]'}]} revision={1} canWrite={false} busy={false} reason="" onSave={async()=>{throw Error('forbidden');}}/>);assert.ok(ui.root.findAllByType('input').every(i=>i.props.disabled));assert.ok(JSON.stringify(ui.toJSON()).includes('不自动分批'));ui.unmount();
 });
+
+test('FR029 UI shows event-time/protection/handling history and forbids query editing events',()=>{
+ const e={'事件编号':'EV-fault','事件分钟':'30','保护截止分钟':'45','保护策略':'禁止未开始任务开工','事件类型':'设备故障','参数JSON':'{"machineId":"MIX01","endMinute":60}','原因':'测试故障原因','需处理事实JSON':'["F1"]'};
+ const ui=Renderer.create(<ExecutionPanel data={{...data,simulationEvents:[e]}} operations={[{id:'ev',target:'simulationEvents',actor:'trusted#planner',reason:'导入故障事件',at:'now',action:'import',fromVersion:'old',toVersion:'new',before:[],after:[e]}]}/>);const text=JSON.stringify(ui.toJSON());for(const value of ['EV-fault','45','测试故障原因','禁止未开始任务开工','导入故障事件','不自动恢复','不承诺冻结旧方案'])assert.ok(text.includes(value),value);ui.unmount();
+ const def=defs.find(d=>d.key==='simulationEvents')!,editor=Renderer.create(<DataEditor def={def} rows={[e]} revision={2} canWrite={false} busy={false} reason="" onSave={async()=>{throw Error('forbidden');}}/>);assert.ok(editor.root.findAllByType('input').every(i=>i.props.disabled));assert.ok(JSON.stringify(editor.toJSON()).includes('不代表QA在线放行'));editor.unmount();
+});

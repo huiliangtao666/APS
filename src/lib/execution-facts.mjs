@@ -1,6 +1,7 @@
 import {quantityMath as Q,executionMaterialDemand,materialPolicy} from './material-allocation.mjs';
 import {getUsableQualityStatuses} from './inventory.mjs';
-export const factTables=['executionFacts','executionMaterials','executionSources'];
+import {eventRisks,eventSummary} from './simulation-events.mjs';
+export const factTables=['executionFacts','executionMaterials','executionSources','simulationEvents'];
 export const executionState=data=>Object.fromEntries(factTables.map(k=>[k,data[k]||[]]));
 const compare=(a,b)=>{try{return Q.cmp(Q.q(a),Q.q(b));}catch{return null;}};
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
@@ -88,6 +89,7 @@ export function validateExecution(data){
 export function executionTransition(before,after){
  const issues=[],bad=message=>issues.push({code:'EXECUTION_RECONCILIATION_REQUIRED',table:'executionFacts',file:'25_模拟任务执行事实.csv',row:0,field:'原始事实',message});
  for(const key of factTables)for(const old of before[key]||[]){
+  if(key==='simulationEvents'){const next=(after[key]||[]).find(e=>e['事件编号']===old['事件编号']);if(!next||!same(old,next))bad('已接纳事件不可删除或改写；恢复/撤销策略未定');continue;}
   const id=key==='executionFacts'?'事实编号':key==='executionSources'?'来源编号':'记录编号',next=(after[key]||[]).find(f=>f[id]===old[id]);
   if(!next){bad('已记录模拟执行/耗料不能删除；须人工核对，原记录保留');continue;}
   if(key==='executionSources'){if(!same(old,next))bad('原始来源汇总及映射不可覆盖；请保留来源并用独立核对记录处理');continue;}
@@ -106,13 +108,14 @@ export function executionTransition(before,after){
   const old=(before.orders||[]).find(o=>o['订单编号']===f['订单编号']),next=(after.orders||[]).find(o=>o['订单编号']===f['订单编号']);
   if(!next||['产品编号','产线编号','合格需求','数量单位','已完成合格数量','订单状态','需求类型'].some(k=>(old?.[k]||'')!==(next[k]||'')))bad('已有执行事实的订单需求/状态/合格量不可自动重基；请核对');
  }
- if(facts(before).length)for(const key of ['products','materials','bom','routes','times','dependencies','machines'])if(!same(before[key]||[],after[key]||[]))bad(key+'已关联执行事实，改版及实际/剩余范围映射待FR031核对');
+ if(facts(before).length)for(const key of ['products','materials','bom','routes','times','dependencies','machines'])if(!same(before[key]||[],key==='dependencies'?(after[key]||[]).filter(d=>(before.orders||[]).some(o=>o['订单编号']===d['订单编号'])):after[key]||[]))bad(key+'已关联执行事实，改版及实际/剩余范围映射待FR031核对');
  for(const c of before.executionMaterials||[]){const old=before.inventory.find(b=>b['批次编号']===c['批次编号']),next=after.inventory.find(b=>b['批次编号']===c['批次编号']);if(!next||['账面数量','已占用数量','物料编号'].some(k=>old?.[k]!==next[k]))bad('已耗批次账面/占用口径不可重写；防止账面已扣后再次扣耗');}
  return issues;
 }
 export function executionAdmission(data,conditions){
- if(!facts(data).length)return [];
- const issues=[],bad=message=>issues.push({code:'EXECUTION_SCOPE_UNDECIDED',table:'executionFacts',file:'25_模拟任务执行事实.csv',row:0,field:'计算口径',message});
+ const eventIssues=[];if((data.simulationEvents||[]).length){const ids=(conditions.enabledRuleIds||(data.rules||[]).filter(r=>r['是否启用']==='是').map(r=>r['规则编号'])).filter(id=>{const r=(data.rules||[]).find(r=>r['规则编号']===id);return !r?.['生效时间']||Date.parse(r['生效时间'])<=Date.parse(conditions.ruleEvaluationAt||new Date().toISOString());});if(conditions.mode==='minimal-r1'||!ids.includes('CALENDAR')||(data.simulationEvents||[]).some(e=>['物料状态变化','到料延期'].includes(e['事件类型']))&&!ids.includes('MATERIAL'))eventIssues.push({code:'EVENT_POLICY_REQUIRED',message:'异常事件须使用完整支持模式及日历；物料/延期事件须启用物料规则，不得绕过事件约束'});}
+ if(!facts(data).length)return eventIssues;
+ const issues=[...eventIssues],bad=message=>issues.push({code:'EXECUTION_SCOPE_UNDECIDED',table:'executionFacts',file:'25_模拟任务执行事实.csv',row:0,field:'计算口径',message});
  for(const f of facts(data))if(compare(f['累计报废数量']||'0','0')>0n&&f['报废补做口径']!=='按本工序BOM补做')bad('报废任务 '+f['事实编号']+' 的补做/补料口径待核对；不自动推断替代品、合格量或释放材料');
  if(conditions.mode==='minimal-r1')bad('有执行事实不能使用忽略保护的最小模式');
  const enabled=(conditions.enabledRuleIds||[]).filter(id=>{const row=(data.rules||[]).find(r=>r['规则编号']===id);return !row?.['生效时间']||Date.parse(row['生效时间'])<=Date.parse(conditions.ruleEvaluationAt||new Date().toISOString());});
@@ -124,11 +127,11 @@ export function executionAdmission(data,conditions){
  return issues;
 }
 export function executionSummary(data,at=new Date().toISOString()){
- return {simulation:true,sources:structuredClone(data.executionSources||[]),orderImpact:executionOrderImpact(data),risks:executionRisks(data,at),protection:facts(data).map(f=>({factId:f['事实编号'],machine:f['当前设备'],originalStart:Number(f['开始分钟']),originalEnd:f['完成分钟']?Number(f['完成分钟']):null,observedUntil:Number(f['观测分钟']),policy:f['状态']==='已完成'?'保留原始完成区间':f['状态']==='暂停'?'暂停恢复未知，保留设备占用':'仅显式剩余投影；异常或失败时保留设备占用待核对'})),quantityMeaning:'工序累计产出，不是合格入库；不跨工序累加，不自动改订单合格完成量',facts:structuredClone(facts(data)),consumption:structuredClone(data.executionMaterials||[]),remaining:facts(data).map(f=>{const o=data.orders.find(o=>o['订单编号']===f['订单编号']);return {factId:f['事实编号'],orderId:f['订单编号'],operation:f['工序编号'],remainingQuantity:o?Q.num(Q.sub(Q.q(o['合格需求']),Q.q(f['工序完成数量']))):null,unit:f['数量单位'],usableOutput:Number(f['工序完成数量']),scrapQuantity:Number(f['累计报废数量']||0),scrapPolicy:f['报废补做口径']||'待核对',remainingMinutes:Number(f['剩余工时分钟']),paused:f['状态']==='暂停'};})};
+ return {simulation:true,events:eventSummary(data),sources:structuredClone(data.executionSources||[]),orderImpact:executionOrderImpact(data),risks:executionRisks(data,at),protection:facts(data).map(f=>({factId:f['事实编号'],machine:f['当前设备'],originalStart:Number(f['开始分钟']),originalEnd:f['完成分钟']?Number(f['完成分钟']):null,observedUntil:Number(f['观测分钟']),policy:f['状态']==='已完成'?'保留原始完成区间':f['状态']==='暂停'?'暂停恢复未知，保留设备占用':'仅显式剩余投影；异常或失败时保留设备占用待核对'})),quantityMeaning:'工序累计产出，不是合格入库；不跨工序累加，不自动改订单合格完成量',facts:structuredClone(facts(data)),consumption:structuredClone(data.executionMaterials||[]),remaining:facts(data).map(f=>{const o=data.orders.find(o=>o['订单编号']===f['订单编号']);return {factId:f['事实编号'],orderId:f['订单编号'],operation:f['工序编号'],remainingQuantity:o?Q.num(Q.sub(Q.q(o['合格需求']),Q.q(f['工序完成数量']))):null,unit:f['数量单位'],usableOutput:Number(f['工序完成数量']),scrapQuantity:Number(f['累计报废数量']||0),scrapPolicy:f['报废补做口径']||'待核对',remainingMinutes:Number(f['剩余工时分钟']),paused:f['状态']==='暂停'};})};
 }
 // Current unusable consumed material or overlapping fault cannot silently become good product.
 export function executionRisks(data,at=new Date().toISOString()){
- const risks=[];
+ const risks=eventRisks(data);
  for(const f of facts(data)){
   const ids=(data.executionMaterials||[]).filter(c=>c['事实编号']===f['事实编号']).filter(c=>{
    const lot=(data.inventory||[]).find(b=>b['批次编号']===c['批次编号']);
@@ -152,7 +155,7 @@ export function executionOrderImpact(data){
  return (data.orders||[]).map(o=>{
   const operations=(data.routes||[]).filter(r=>r['产品编号']===o['产品编号']).map(r=>{
    const f=factFor(data,o['订单编号'],r['工序编号']),scrap=Number(f?.['累计报废数量']||0);
-   return {operation:r['工序编号'],predecessor:r['前序工序']||null,factId:f?.['事实编号']||null,state:f?.['状态']||'未开始',usableOutput:Number(f?.['工序完成数量']||0),scrapQuantity:scrap,remainingQuantity:Q.num(Q.sub(Q.q(o['合格需求']),Q.q(f?.['工序完成数量']||'0'))),remainingMinutes:f?Number(f['剩余工时分钟']):null,reconciliationRequired:!!f&&(f['状态']==='暂停'||scrap>0&&f['报废补做口径']!=='按本工序BOM补做')};
+   return {operation:r['工序编号'],predecessor:r['前序工序']||null,factId:f?.['事实编号']||null,state:f?.['状态']||'未开始',usableOutput:Number(f?.['工序完成数量']||0),scrapQuantity:scrap,remainingQuantity:Q.num(Q.sub(Q.q(o['合格需求']),Q.q(f?.['工序完成数量']||'0'))),remainingMinutes:f?Number(f['剩余工时分钟']):null,reconciliationRequired:!!f&&(eventRisks(data).some(r=>r.factId===f['事实编号'])||f['状态']==='暂停'||scrap>0&&f['报废补做口径']!=='按本工序BOM补做')};
   });
   return {orderId:o['订单编号'],unit:o['数量单位'],qualifiedCompleted:Number(o['已完成合格数量']||0),remainingQualifiedOrder:Q.num(Q.sub(Q.q(o['合格需求']),Q.q(o['已完成合格数量']||'0'))),operations,unfinishedOperations:operations.filter(op=>op.state!=='已完成').map(op=>op.operation),reconciliationRequired:operations.some(op=>op.reconciliationRequired),meaning:'工序可用产出不等于订单合格入库；报废不抵扣需求；剩余分钟仅使用显式输入，不按数量比例推算'};
  });

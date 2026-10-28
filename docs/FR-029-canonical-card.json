@@ -1,0 +1,8 @@
+{
+  "id": "PVTI_lAHOFM9WU84BpE1czhEHg9s",
+  "content": {
+    "id": "DI_lAHOFM9WU84BpE1czgLhAi0",
+    "title": "[FR] FR-029 模拟异常与重新排程",
+    "body": "## 需求\n范围：P0后期；关联流程：BP-06；页面：PG-06/08；开始提供：R6.3；完整提供：R6.3。\n前置功能：FR-012/024/025/026/028/031。\n• 通过CSV或模拟数据编辑引入插单、设备故障、人员缺勤、到料延期及物料状态变化。先更新事件时点的模拟执行数据，再安排剩余工作。\n• 保留已完成/已投料/已开始事实及设定保护时段。故障中任务或被不可用物料影响的任务应标为需处理，不能自动认定质量合格。\n\n## 验收追踪\n验收用例：AC-12/21/24。\n\n来源：需求分析与设计说明书 v0.3，第 6 章；状态：基线需求，具体实现状态待跟踪。\n\n\n## Patrol delivery and assignment update\nOwner APS-Dev; delivery dlv_a4406202-036e-495d-a8f2-d31d6747d5a1. Dev was idle with no active/queued duplicate. Canonical source dependencies FR012/024/025/026/028/031 available in06895745273cde80ac681d2bb12bd388b297b04f. AC12/21/24 event simulation and remaining-work rescheduling assigned, with event-time facts, protection horizon, immutable history/material conservation, explicit handling of faults/unavailable materials and no inferred quality. Ordinary push/fullSHA/container tests/build/report/limits required. Open issues checked: acceptance gaps; no confirmed unresolved product defect or new failed repair round. Independent Test runs in parallel.\n"
+  }
+}

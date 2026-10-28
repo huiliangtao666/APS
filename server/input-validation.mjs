@@ -9,11 +9,12 @@ import { validateInventoryBatches } from '../src/lib/inventory.mjs';
 import { validateExpectedSupply } from '../src/lib/expected-supply.mjs';
 
 import {validateExecution} from '../src/lib/execution-facts.mjs';
-const keys={executionSources:['来源编号'],executionFacts:['事实编号'],executionMaterials:['记录编号'],deliveryConditions:["订单编号"],tools:["工装编码"],resourceClaims:["声明编号"],batchResources:['资源编号'],products:['产品编号'],materials:['物料编号'],supplies:['供给编号'],supplyDelays:['记录编号'],supplyUses:['引用编号'],inventory:['批次编号'],orders:['订单编号'],bom:['产品编号','版本编号','投料工序编号','物料编号'],routes:['产品编号','工序编号'],times:['产品编号','工序编号'],machines:['设备编号'],calendars:['日历编号','起始分钟','结束分钟','是否工作'],downtime:['设备编号','起始分钟','结束分钟'],dependencies:['订单编号','工序编号','资源类型','资源编号'],personnelGroups:['人员组编号'],rules:['规则编号']};
+import {validateEvents} from '../src/lib/simulation-events.mjs';
+const keys={simulationEvents:['事件编号'],executionSources:['来源编号'],executionFacts:['事实编号'],executionMaterials:['记录编号'],deliveryConditions:["订单编号"],tools:["工装编码"],resourceClaims:["声明编号"],batchResources:['资源编号'],products:['产品编号'],materials:['物料编号'],supplies:['供给编号'],supplyDelays:['记录编号'],supplyUses:['引用编号'],inventory:['批次编号'],orders:['订单编号'],bom:['产品编号','版本编号','投料工序编号','物料编号'],routes:['产品编号','工序编号'],times:['产品编号','工序编号'],machines:['设备编号'],calendars:['日历编号','起始分钟','结束分钟','是否工作'],downtime:['设备编号','起始分钟','结束分钟'],dependencies:['订单编号','工序编号','资源类型','资源编号'],personnelGroups:['人员组编号'],rules:['规则编号']};
 export const recordKeys=keys;
 // Both imports and edits validate the complete proposed state, before any write.
 export function validateInputs(defs,data){
- const issues=[];
+ const issues=[...validateEvents(data)];
  const add=(table,index,field,message)=>issues.push({table,file:defs.find(d=>d.key===table).file,row:index+2,field,message});
  for(const def of defs){
   const seen=new Set();

@@ -70,3 +70,12 @@ test('FR031 built production Worker keeps scrap replacement and order/task proje
  try{const p=await new Promise((resolve,reject)=>{worker.on('message',m=>{if(m.kind==='result')resolve(m.plan);if(m.kind==='failure')reject(Error(m.code));});worker.on('error',reject);});assert.equal(p.execution.remaining[0].scrapQuantity,10);assert.equal(p.execution.orderImpact[0].remainingQualifiedOrder,100);assert.equal(p.execution.orderImpact[0].operations[0].remainingQuantity,60);assert.equal(p.materialDemands[0].quantity,60);assert.equal(p.materialDemands[0].allocations[0].remaining,20);assert.ok(p.execution.projectedTasks.some(t=>t.taskId==='A-FILL'&&t.start===50));assert.equal(p.ruleSnapshot.capabilityVersion,'FR031-v1');}
  finally{await worker.terminate();}
 });
+
+import {stageEvents} from '../src/lib/simulation-events.mjs';
+import {event} from './event-fixture.mjs';
+test('FR029 built production Worker retains event-time facts, explicit horizon, handling reasons and unchanged consumption',async()=>{
+ const original=executionFixture(seed),staged=stageEvents(original,{...original,simulationEvents:[event()]},['executionFacts']),frozen=freezeRunInput(staged.data,{},'2026-10-29T00:00:00Z');assert.deepEqual(staged.issues,[]);staged.data.simulationEvents=[];
+ const worker=new Worker(new URL('../dist/calculation-worker.mjs',import.meta.url),{workerData:{...frozen,revision:2,calculatedAt:'2026-10-29T00:00:00Z'}});
+ try{const p=await new Promise((resolve,reject)=>{worker.on('message',m=>{if(m.kind==='result')resolve(m.plan);if(m.kind==='failure')reject(Error(m.code));});worker.on('error',reject);});assert.equal(p.tasks.length,0);assert.equal(p.execution.events.rows[0]['事件编号'],'E1');assert.equal(p.ruleSnapshot.capabilityVersion,'FR029-v1');assert.equal(p.execution.events.protectionUntil,45);assert.equal(p.execution.facts[0]['开始分钟'],'0');assert.equal(p.execution.consumption[0]['累计已用数量'],'40');assert.equal(p.execution.orderImpact[0].qualifiedCompleted,0);assert.ok(p.findings.some(f=>f.message.includes('E1')));}
+ finally{await worker.terminate();}
+});
