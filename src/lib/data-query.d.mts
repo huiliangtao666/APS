@@ -7,4 +7,4 @@ export function related(data:Record<string,Row[]>,table:string,index:number):{ta
 export function filterOptions(fields:string[]):{dateFields:string[];statusFields:string[]};
 export function filterRows(data:Record<string,Row[]>,table:string,filters?:Filters):{row:Row;index:number}[];
 export function displayValue(field:string,value?:string):string;
-export function queryCsv(defs:Def[],data:Record<string,Row[]>,plans:any[],revision:number,query:{table:string;planId?:string;filters?:Filters}):string;
+export function queryCsv(defs:Def[],data:Record<string,Row[]>,plans:any[],revision:number,query:{table:string;planId?:string;sourcePlanId?:string;filters?:Filters}):string;

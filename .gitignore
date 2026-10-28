@@ -12,3 +12,5 @@ dist/
 /server/data/business.json.*
 
 .qa-query-ui.cjs
+
+.qa-editor-ui.cjs

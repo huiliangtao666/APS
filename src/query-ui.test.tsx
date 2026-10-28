@@ -23,3 +23,24 @@ test('task list with no saved plan explains missing data without fabricated task
  const html=renderToStaticMarkup(<DataQueries {...props} initialTask="missing"/>);
  assert.ok(html.includes('没有匹配记录'));assert.ok(html.includes('不代表下游能力已经完成'));assert.ok(!html.includes('记录详情'));
 });
+
+test('FR015 editor exposes explicit staged add/copy/delete/save/cancel and read-only role disables mutation controls',async()=>{
+ const {DataEditor}=await import('./DataEditor');
+ const def=defs.find(d=>d.key==='orders')!;
+ for(const canWrite of [true,false]){
+  const html=renderToStaticMarkup(<DataEditor def={def} rows={data.orders} revision={2} canWrite={canWrite} busy={false} reason="" onSave={async()=>{throw Error('render must never save');}}/>);
+  for(const text of ['新增一行','复制选中','删除选中','保存修改','取消修改','全部草稿一起保存','质量状态均为模拟状态'])assert.ok(html.includes(text),text);
+  assert.match(html,/disabled="">保存修改/);
+  if(!canWrite){assert.match(html,/disabled="">新增一行/);assert.match(html,/disabled="" aria-label="订单与交期 1 订单编号"/);}
+ }
+});
+test('FR015 legacy plans explain unavailable inputs; new plans expose original input review and authorized restore',()=>{
+ const old={id:'old',revision:1,name:'旧方案',tasks:[]};
+ let html=renderToStaticMarkup(<DataQueries {...props} plans={[old]}/>);
+ assert.ok(html.includes('无法恢复'));assert.ok(!html.includes('恢复该方案输入为新版本'));
+ const p={...old,inputSnapshot:data,inputVersionId:'trusted-sha'};
+ html=renderToStaticMarkup(<DataQueries {...props} plans={[p]} onRestore={()=>{}}/>);
+ assert.ok(html.includes('查看所选方案计算时的输入'));assert.match(html,/disabled="">恢复该方案输入为新版本/);
+ html=renderToStaticMarkup(<DataQueries {...props} plans={[p]} reason="模拟恢复"/>);
+ assert.ok(!html.includes('恢复该方案输入为新版本'));
+});

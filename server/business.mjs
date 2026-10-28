@@ -1,11 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { Router } from 'express';
+import { validateInputs } from './input-validation.mjs';
 import { queryCsv } from '../src/lib/data-query.mjs';
 import { subjectKey } from './auth/store.mjs';
 import { defs, seed, calculate } from './planner.ts';
-import { validateExpectedSupply, exportSupplyPlanCsv } from '../src/lib/expected-supply.mjs';
+import { exportSupplyPlanCsv } from '../src/lib/expected-supply.mjs';
 import { independentlyVerifyPlan } from '../src/lib/independent-verification.mjs';
 
 // One local application process; mutation + audit are one atomic rename.
@@ -34,22 +35,39 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember }
   router.get('/session',permission('read'),(req,res)=>res.json({role:req.member.role,canWrite:['planner','supervisor'].includes(req.member.role),canExport:req.member.role!=='query'||req.member.canExport===true}));
   router.get('/state',permission('read'),(_req,res)=>{const s=read();res.json({data:s.data,revision:s.revision});});
   router.get('/operations',permission('read'),(_req,res)=>res.json(read().records));
-  router.get('/plans',permission('read'),(_req,res)=>res.json(read().plans));
-  router.post('/tables/:table',permission('edit'),(req,res)=>{
-    const def=defs.find(d=>d.key===req.params.table);if(!def)return res.status(404).json({error:'unknown_table'});
-    const {rows,revision,operation}=req.body;
-    if(!Array.isArray(rows)||rows.length>10000||rows.some(r=>!r||typeof r!=='object'||Array.isArray(r)||Object.values(r).some(v=>typeof v!=='string')))return res.status(400).json({error:'invalid_rows'});
+  const versionId=data=>createHash('sha256').update(JSON.stringify(data)).digest('hex');
+  const preserve=s=>{s.inputVersions??={};const id=versionId(s.data);if(!s.inputVersions[id])s.inputVersions[id]={id,revision:s.revision,data:structuredClone(s.data)};return id;};
+  const inputs=(s,p)=>{const v=s.inputVersions?.[p.inputVersionId];return v&&v.data&&versionId(v.data)===p.inputVersionId?v:null;};
+  router.get('/plans',permission('read'),(_req,res)=>{const s=read();res.json(s.plans.map(p=>({...p,inputSnapshot:inputs(s,p)?.data??null})));});
+  router.get('/plans/:id/inputs',permission('read'),(req,res)=>{const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});const v=inputs(s,p);if(!v)return res.status(409).json({error:'historical_inputs_unavailable'});res.json(v);});
+  function saveInputs(req,res,tables){
+    const {revision,operation}=req.body;
     const s=read();if(revision!==s.revision)return res.status(409).json({error:'stale_input'});
-    if(operation==='import'&&['supplies','supplyDelays','supplyUses'].includes(def.key)){
-      const n={...s.data,[def.key]:rows};const issues=validateExpectedSupply({supplies:n.supplies,delays:n.supplyDelays,uses:n.supplyUses,materials:n.materials,orders:n.orders,routes:n.routes});
-      if(issues.length)return res.status(400).json({error:'invalid_supply',issues});
+    if(operation!==undefined&&!['import','edit','add','copy','delete','restore'].includes(operation))return res.status(400).json({error:'invalid_operation'});
+    if(!tables||typeof tables!=='object'||Array.isArray(tables)||!Object.keys(tables).length)return res.status(400).json({error:'invalid_tables'});
+    const proposed={...s.data};
+    for(const [key,rows] of Object.entries(tables)){
+      const def=defs.find(d=>d.key===key);if(!def)return res.status(404).json({error:'unknown_table'});
+      if(!Array.isArray(rows)||rows.length>10000||rows.some(r=>!r||typeof r!=='object'||Array.isArray(r)||Object.values(r).some(v=>typeof v!=='string')))return res.status(400).json({error:'invalid_rows'});
+      if(rows.some(r=>Object.keys(r).some(f=>!def.fields.includes(f))))return res.status(400).json({error:'unknown_fields'});
+      proposed[key]=rows.map(r=>Object.fromEntries(def.fields.map(f=>[f,r[f]??''])));
     }
-    const before=s.data[def.key];s.data[def.key]=rows;s.revision++;
-    record(s,req,operation==='import'?'import':'edit',def.key,{before,after:rows});write(s);res.json({data:s.data,revision:s.revision});
-  });
+    const issues=validateInputs(defs,proposed);if(issues.length)return res.status(400).json({error:'invalid_input',issues});
+    // A missing original confirmed snapshot cannot be reconstructed from today's data.
+    if(s.plans.some(p=>['confirmed','released'].includes(p.status)&&!inputs(s,p)))return res.status(409).json({error:'protected_history_unavailable'});
+    const changes=Object.keys(tables).filter(key=>JSON.stringify(s.data[key])!==JSON.stringify(proposed[key]));
+    if(!changes.length)return res.json({data:s.data,revision:s.revision,unchanged:true});
+    const before=s.data;const fromVersion=preserve(s);
+    s.data=proposed;s.revision++;const toVersion=preserve(s);
+    const batchId=randomUUID();
+    for(const key of changes)record(s,req,operation||'edit',key,{before:before[key],after:proposed[key],fromVersion,toVersion,batchId});
+    write(s);res.json({data:s.data,revision:s.revision,inputVersionId:toVersion});
+  }
+  router.post('/tables/:table',permission('edit'),(req,res)=>saveInputs(req,res,{[req.params.table]:req.body.rows}));
+  router.post('/inputs',permission('edit'),(req,res)=>saveInputs(req,res,req.body.tables));
   router.post('/calculate',permission('calculate'),(req,res)=>{
     const s=read();if(req.body.revision!==s.revision)return res.status(409).json({error:'stale_input'});
-    const plan={...calculate(s.data,s.revision),id:randomUUID(),status:'draft',revision:s.revision};
+    const plan={...calculate(s.data,s.revision),id:randomUUID(),status:'draft',revision:s.revision,inputVersionId:preserve(s)};
     s.plans.unshift(plan);record(s,req,'calculate',plan.id);write(s);res.status(201).json(plan);
   });
   // The old arbitrary-snapshot POST is closed: only save a calculated server plan.
@@ -73,7 +91,9 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember }
       const q=req.body.query;
       if(!q||typeof q!=='object'||typeof q.table!=='string'||(q.planId!==undefined&&typeof q.planId!=='string')||(q.filters&&(typeof q.filters!=='object'||Array.isArray(q.filters)||Object.values(q.filters).some(v=>typeof v!=='string'))))return res.status(400).json({error:'invalid_query'});
       if(q.revision!==s.revision)return res.status(409).json({error:'stale_input'});
-      try{csv=queryCsv(defs,s.data,s.plans,s.revision,q);}catch(e){return res.status(404).json({error:e.message});}target=q.table;
+      let source=s.data;
+      if(q.sourcePlanId!==undefined){if(typeof q.sourcePlanId!=='string'||q.planId!==q.sourcePlanId)return res.status(400).json({error:'invalid_query'});const p=s.plans.find(p=>p.id===q.sourcePlanId);if(!p)return res.status(404).json({error:'plan_not_found'});const v=inputs(s,p);if(!v)return res.status(409).json({error:'historical_inputs_unavailable'});source=v.data;}
+      try{csv=queryCsv(defs,source,s.plans,s.revision,q);}catch(e){return res.status(404).json({error:e.message});}target=q.table;
     }
     else if(req.body.planId){const p=s.plans.find(p=>p.id===req.body.planId);if(!p)return res.status(404).json({error:'plan_not_found'});csv=exportSupplyPlanCsv(p);target=p.id;}
     else{const d=defs.find(d=>d.key===req.body.table);if(!d)return res.status(404).json({error:'unknown_table'});csv=[d.fields,...s.data[d.key].map(r=>d.fields.map(f=>r[f]||''))].map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');target=d.key;}

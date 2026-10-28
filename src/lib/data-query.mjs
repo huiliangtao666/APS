@@ -68,8 +68,8 @@ export function queryCsv(defs,data,plans,revision,query){
  const def=[...defs,taskDef].find(d=>d.key===query.table);if(!def)throw new Error('unknown_table');
  if(query.planId&&!plans.some(p=>p.id===query.planId))throw new Error('plan_not_found');
  const all=queryData(data,plans,query.planId);const rows=filterRows(all,def.key,query.filters);
- const fields=[...def.fields,'查询输入版本','关联方案编号','模拟说明','分钟基准'];
- const csv=[fields,...rows.map(({row})=>[...def.fields.map(f=>displayValue(f,row[f])),revision,query.planId||'未选择','模拟数据；关联输入为当前版本，非历史输入快照','0=2026-11-02T08:00:00+08:00；区间[开始,结束)'])];
+ const fields=[...def.fields,'查询输入版本','关联方案编号','模拟说明','分钟基准',...(query.sourcePlanId?['原始输入版本SHA256']:[])];
+ const csv=[fields,...rows.map(({row})=>[...def.fields.map(f=>displayValue(f,row[f])),revision,query.planId||'未选择',query.sourcePlanId?'模拟数据；所选方案计算时的原始输入快照':'模拟数据；关联输入为当前版本，非历史输入快照','0=2026-11-02T08:00:00+08:00；区间[开始,结束)',...(query.sourcePlanId?[plans.find(p=>p.id===query.sourcePlanId)?.inputVersionId]:[])])];
  // Spreadsheet formula injection must not turn imported text into executable cells.
  return csv.map(r=>r.map(v=>'"'+String(v??'').replace(/^[=+@\t\r]/,"'$&").replace(/^-([^0-9]|$)/,"'$&").replace(/"/g,'""')+'"').join(',')).join('\r\n');
 }
