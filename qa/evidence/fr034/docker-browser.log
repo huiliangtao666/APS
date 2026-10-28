@@ -1,12 +1,12 @@
+
+added 246 packages in 3s
 npm notice
 npm notice New major version of npm available! 10.9.8 -> 12.2.1
 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
 npm notice To update run: npm install -g npm@12.2.1
 npm notice
 
-added 246 packages in 3s
-
-added 2 packages, changed 4 packages, and audited 248 packages in 8s
+added 2 packages, changed 4 packages, and audited 248 packages in 9s
 
 47 packages are looking for funding
   run `npm fund` for details
@@ -24,7 +24,7 @@ Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [34.8 kB
 Get:4 http://deb.debian.org/debian bookworm/main arm64 Packages [8689 kB]
 Get:5 http://deb.debian.org/debian bookworm-updates/main arm64 Packages [6936 B]
 Get:6 http://deb.debian.org/debian-security bookworm-security/main arm64 Packages [356 kB]
-Fetched 9294 kB in 1s (8725 kB/s)
+Fetched 9294 kB in 1s (8653 kB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
@@ -185,7 +185,7 @@ Get:107 http://deb.debian.org/debian bookworm/main arm64 xfonts-scalable all 1:1
 Get:108 http://deb.debian.org/debian-security bookworm-security/main arm64 xserver-common all 2:21.1.7-3+deb12u13 [2384 kB]
 Get:109 http://deb.debian.org/debian-security bookworm-security/main arm64 xvfb arm64 2:21.1.7-3+deb12u13 [3085 kB]
 debconf: delaying package configuration, since apt-utils is not installed
-Fetched 94.4 MB in 4s (26.9 MB/s)
+Fetched 94.4 MB in 3s (32.1 MB/s)
 Selecting previously unselected package fonts-ipafont-gothic.
 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 6090 files and directories currently installed.)
 Preparing to unpack .../000-fonts-ipafont-gothic_00303-23_all.deb ...
@@ -685,8 +685,8 @@ transforming...
 ✓ 69 modules transformed.
 rendering chunks...
 computing gzip size...
-../../../tmp/fr033-real-app-FyMnO5/dist/index.html                   0.76 kB │ gzip:   0.54 kB
-../../../tmp/fr033-real-app-FyMnO5/dist/assets/index-CPKwIIVN.css   20.25 kB │ gzip:   5.50 kB
-../../../tmp/fr033-real-app-FyMnO5/dist/assets/index-Ygs94Woh.js   289.85 kB │ gzip: 106.27 kB
-✓ built in 1.39s
+../../../tmp/fr033-real-app-tKQTHY/dist/index.html                   0.76 kB │ gzip:   0.54 kB
+../../../tmp/fr033-real-app-tKQTHY/dist/assets/index-CPKwIIVN.css   20.25 kB │ gzip:   5.50 kB
+../../../tmp/fr033-real-app-tKQTHY/dist/assets/index-CdH7VVwF.js   289.90 kB │ gzip: 106.30 kB
+✓ built in 1.32s
 FR034_BROWSER_PASS ["real verify API reports two structured findings without changing tasks","machine problem click selects both actual tasks and reveals exact overlap20..30","precedence priorEnd30/nextStart20/duration10 and problem-task filter","selected task shows saved personnel/tool demand and opens actual historical input query","real material-shortage run links unplanned task to saved demand/allocation/shortage and does not invent scheduled interval","saved40/current50 retained and original two complete server-saved JSON snapshots unchanged"]

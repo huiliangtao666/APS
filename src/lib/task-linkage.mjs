@@ -8,6 +8,7 @@ export function problemInterval(plan,finding){
  if(tasks.length!==2)return null;
  const [a,b]=tasks;
  if(/MACHINE_OVERLAP/.test(finding.code)&&a.machine===b.machine){
+  if(!validInterval(a.start,a.end)||!validInterval(b.start,b.end))return null;
   const start=Math.max(a.start,b.start),end=Math.min(a.end,b.end);
   if(validInterval(start,end))return {kind:'machine-overlap',machine:a.machine,start,end};
  }

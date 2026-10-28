@@ -15,7 +15,7 @@ CHECK: npm test
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 154.950945
+# duration_ms 176.346565
 # Subtest: FR012 API atomic import, duplicate reimport idempotent, trusted audit and immutable original versions
 ok 65 - FR012 API atomic import, duplicate reimport idempotent, trusted audit and immutable original versions
 # Subtest: FR012 API rollback, deletion, stale and invalid cumulative imports do not mutate facts, audit or version
@@ -59,7 +59,7 @@ ok 82 - FR031 API actual Worker freezes scrap and aggregate source across interv
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 6417.838446
+# duration_ms 7246.353519
 
 CHECK: node --experimental-strip-types --test qa/timetable.test.mjs qa/confirmation.test.mjs qa/production-batches.test.mjs qa/joint-resources.test.mjs qa/delivery.test.mjs qa/result-assessment.test.mjs qa/condition-trials.test.mjs qa/execution-facts.test.mjs qa/progress-impact.test.mjs qa/simulation-events.test.mjs
 # Subtest: FR012 partial calculates20 remaining minutes from30, preserves original0 and40 output without qualified credit
@@ -171,7 +171,7 @@ ok 140 - FR033 exact filters and cursor projection share IDs, exclude touching w
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 2814.088992
+# duration_ms 2880.841138
 
 CHECK: node --experimental-strip-types --test qa/task-linkage.test.mjs
 # tests 3
@@ -181,7 +181,7 @@ CHECK: node --experimental-strip-types --test qa/task-linkage.test.mjs
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 43.743187
+# duration_ms 55.962741
 
 CHECK: npm run test:query-ui
 > aps-r1@0.1.0 test:query-ui
@@ -195,7 +195,7 @@ ok 2 - task detail renders saved times, current input warning, related inputs, f
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 64.727562
+# duration_ms 81.209353
 
 CHECK: node --experimental-strip-types prototypes/fr013-batch-import/verify.mjs
 CSV validation regression checks passed: valid six-table batch + CSV-DEF-01..04.
@@ -206,8 +206,8 @@ CHECK: npm run build
 ✓ 72 modules transformed.
 dist/index.html                   0.45 kB │ gzip:   0.30 kB
 dist/assets/index-CPKwIIVN.css   20.25 kB │ gzip:   5.50 kB
-dist/assets/index-sJ6ONhRE.js   293.34 kB │ gzip: 107.52 kB
-✓ built in 1.37s
+dist/assets/index-C9m5aTvQ.js   293.40 kB │ gzip: 107.55 kB
+✓ built in 1.28s
 
 CHECK: node --experimental-strip-types --test qa/worker-build.test.mjs
 # Subtest: FR012 built production Worker preserves simulated partial facts and exact cumulative material conservation
@@ -221,7 +221,7 @@ ok 8 - FR031 built production Worker keeps scrap replacement and order/task proj
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 385.057784
+# duration_ms 394.451694
 
 CHECK: npm install --no-save --package-lock=false --ignore-scripts react-test-renderer@18.3.1
 4 vulnerabilities (3 moderate, 1 high)
@@ -230,7 +230,7 @@ CHECK: npx esbuild qa/editor-interaction.test.tsx --jsx=automatic --bundle --pla
 
   .qa-editor-ui.cjs  324.1kb
 
-⚡ Done in 11ms
+⚡ Done in 10ms
 
 
 CHECK: node --test .qa-editor-ui.cjs
@@ -241,7 +241,7 @@ CHECK: node --test .qa-editor-ui.cjs
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 137.992021
+# duration_ms 146.254984
 
 CHECK: npx esbuild qa/resource-panel.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-resource-ui.cjs
 
@@ -258,13 +258,13 @@ CHECK: node --test .qa-resource-ui.cjs
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 53.052701
+# duration_ms 54.087555
 
 CHECK: npx esbuild qa/delivery-panel.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-delivery-ui.cjs
 
   .qa-delivery-ui.cjs  225.2kb
 
-⚡ Done in 11ms
+⚡ Done in 8ms
 
 
 CHECK: node --test .qa-delivery-ui.cjs
@@ -275,7 +275,7 @@ CHECK: node --test .qa-delivery-ui.cjs
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 84.954654
+# duration_ms 84.883767
 
 CHECK: npx esbuild qa/result-panel.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-result-ui.cjs
 
@@ -292,7 +292,7 @@ CHECK: node --test .qa-result-ui.cjs
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 56.268454
+# duration_ms 62.837074
 
 CHECK: npx esbuild qa/trial-panel.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-trial-ui.cjs
 
@@ -309,13 +309,13 @@ CHECK: node --test .qa-trial-ui.cjs
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 113.955266
+# duration_ms 92.813171
 
 CHECK: npx esbuild qa/confirmation-panel.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-confirmation-ui.cjs
 
   .qa-confirmation-ui.cjs  16.9kb
 
-⚡ Done in 2ms
+⚡ Done in 3ms
 
 
 CHECK: node --test .qa-confirmation-ui.cjs
@@ -326,13 +326,13 @@ CHECK: node --test .qa-confirmation-ui.cjs
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 78.16036
+# duration_ms 91.081566
 
 CHECK: npx esbuild qa/execution-panel.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-execution-ui.cjs
 
   .qa-execution-ui.cjs  59.1kb
 
-⚡ Done in 8ms
+⚡ Done in 5ms
 
 
 CHECK: node --test .qa-execution-ui.cjs
@@ -355,13 +355,13 @@ ok 6 - FR031 source query role cannot edit immutable original mapping
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 75.036355
+# duration_ms 84.316856
 
 CHECK: npx esbuild qa/timeline-panel.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-timeline-ui.cjs
 
-  .qa-timeline-ui.cjs  56.4kb
+  .qa-timeline-ui.cjs  56.5kb
 
-⚡ Done in 4ms
+⚡ Done in 3ms
 
 
 CHECK: node --test .qa-timeline-ui.cjs
@@ -386,13 +386,13 @@ ok 6 - FR033 unplanned and missing selected task have explicit text without inve
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 189.264535
+# duration_ms 157.06902
 
 CHECK: npx esbuild qa/task-linkage-panel.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-linkage.cjs
 
-  .qa-linkage.cjs  18.2kb
+  .qa-linkage.cjs  18.3kb
 
-⚡ Done in 2ms
+⚡ Done in 3ms
 
 
 CHECK: node --test .qa-linkage.cjs
@@ -403,6 +403,6 @@ CHECK: node --test .qa-linkage.cjs
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 54.061189
+# duration_ms 54.78038
 
 [validation] disposable source/dependencies/output; no publish or restart

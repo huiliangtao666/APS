@@ -1,7 +1,7 @@
 {
-  "docker-browser.log": "69bc07c0715143da582bc10e8fecb566775282b3594fe06915ed4b799907df23",
-  "01-problem.png": "07496fa90046f075e3251e0c96335900caba860b9cc5519c2deb202cd2f7927b",
-  "02-task-evidence.png": "265a4e4df2c87266c3f0b4e487ab252db35067a5ef24c1d441ffc452ef5fc893",
-  "browser-report.json": "8d40568e2e625e884e7d1df28aa9d96aa279dc7bdbeb3df972b202b7472e9e40",
+  "docker-browser.log": "255c96e8f608634a940305f8c60e7f327350b74c17fa4fd82719817bea80fec7",
+  "01-problem.png": "d1290e76044395016918da416ac9aae6b63ebc8603e09c9871f04b3a6999cbef",
+  "02-task-evidence.png": "ff97ca0a8a27ca98e40f99f1ba3b01546e73c23aa5d5cb39c6193fc959468419",
+  "browser-report.json": "509b9f4cc6e742d8dc450a8522db2c77c79866f9380f699a8669bb2f01df672b",
   "intermediate-protected-fixture-rejection.log": "5cb915e92db47eb18ea2c9449fdccf2f758af409cae41205d5ff089ad765c074"
 }

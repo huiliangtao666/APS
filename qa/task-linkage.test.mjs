@@ -15,6 +15,7 @@ test('legacy evidence is derived only from real related endpoints; missing and u
  const p=fixture();assert.equal(problemInterval(p,{code:'MACHINE_OVERLAP',taskIds:['missing']}),null);
  assert.equal(problemInterval(p,{code:'UNPLANNED / PERSONNEL',taskIds:['A-MIX','A-FILL']}),null);
  assert.equal(problemInterval(p,{code:'PRECEDENCE',taskIds:['A-MIX','A-FILL']}).violationDuration,10);
+ const legacy=structuredClone(p);legacy.tasks[0].start=null;assert.equal(problemInterval(legacy,{code:'MACHINE_OVERLAP',taskIds:['A-MIX','A-FILL']}),null);
  assert.equal(taskEvidence(p,'missing'),null);assert.equal(taskEvidence({tasks:p.tasks},'A-MIX').hasInput,false);
 });
 test('resource evidence separates demand, configured capacity and committed material allocation without modifying history',()=>{

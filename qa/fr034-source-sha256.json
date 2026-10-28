@@ -107,7 +107,7 @@
     "tsconfig.json": "f155a425b85481a7c3e14ab208b06063f3b94d38a409b681b37b110dbd223124",
     "vite.config.ts": "5781f968c075230c4c6ce93c493489c792a16820d0cfab9c5d2add30990c1946",
     "src/TaskLinkage.tsx": "391c1f926e491a08debbf766341781f618103d758659e1ebfa98ca3294ae9697",
-    "src/lib/task-linkage.mjs": "65c0376061fb9ac27880216f44b54ffbcec6218eb43d07a18b3ff5aa469f3e48",
+    "src/lib/task-linkage.mjs": "bc30816c05399d04c31c5bdb57e71969590ea5d209eebf5cd61c90e7e534fe53",
     "src/lib/task-linkage.d.mts": "fdf4735e8b226d8644934f3f10d0d498a4d60ca9cc400cdce72f27bca6a4aed7"
   }
 }

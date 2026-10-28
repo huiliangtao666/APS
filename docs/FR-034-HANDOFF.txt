@@ -114,3 +114,12 @@ undecided DEC02/dynamic release/full material/business feasibility, durable
 production storage, full five-stage UAT and main integration remain separate.
 No new application/card, FR027 drag feature, publication or main merge.
 No request to mark the full original card Done; independent Test review needed.
+
+FINAL DEV REVIEW
+A nullable legacy machine endpoint could otherwise be normalized to zero by
+Math.max/Math.min. The legacy interval adapter now validates both complete
+source intervals before deriving their intersection. The existing unknowns
+test includes that regression. One Dev review correction, no independent Test
+confirmed defect, no second repair round. Final 416-test command and browser
+were rerun against the guarded source; final evidence replaces earlier logs.
+The final issue rescan has the same12 open acceptance items and no new issue.
