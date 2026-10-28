@@ -45,3 +45,21 @@ test('filtered CSV matches rows and preserves fields, plan, revision, units/time
  assert.throws(()=>queryCsv([],data,plans,0,{table:'missing'}),/unknown_table/);
  assert.throws(()=>queryCsv([{key:'orders',fields:[]}],data,plans,0,{table:'orders',planId:'nope'}),/plan_not_found/);
 });
+
+test('FR014 issue11 D1 rejects impossible dates in filters and records without normalizing to another day',()=>{
+ const rows={inventory:[{'有效期':'2026-03-02'},{'有效期':'2026-02-30'}]};
+ for(const bad of ['2026-02-30','2026-02-29','2026-04-31','2026-13-01','2026-00-01']){
+  assert.equal(filterRows(rows,'inventory',{dateField:'有效期',from:bad}).length,0,bad);
+  assert.equal(filterRows(rows,'inventory',{dateField:'有效期',to:bad}).length,0,bad);
+ }
+ assert.equal(filterRows(rows,'inventory',{dateField:'有效期',from:'2026-03-02',to:'2026-03-02'}).length,1);
+ const csv=queryCsv([{key:'inventory',fields:['有效期']}],rows,[],0,{table:'inventory',filters:{dateField:'有效期',from:'2026-02-30',to:'2026-02-30'}});assert.equal(csv.split('\r\n').length,1);
+});
+test('FR014 issue11 D1 preserves leap years and offset-equivalent timestamps, validates local rather than UTC calendar',()=>{
+ const leap={inventory:[{'有效期':'2024-02-29'},{'有效期':'2024-03-01'}]};
+ assert.equal(filterRows(leap,'inventory',{dateField:'有效期',from:'2024-02-29',to:'2024-02-29'}).length,1);
+ const supplied={supplies:[{'预计可用时间':'2024-03-01T00:30:00+08:00'},{'预计可用时间':'2024-02-29T23:30:00-08:00'}]};
+ assert.equal(filterRows(supplied,'supplies',{dateField:'预计可用时间',from:'2024-02-29T16:30:00Z',to:'2024-02-29T16:30:00Z'}).length,1);
+ assert.equal(filterRows(supplied,'supplies',{dateField:'预计可用时间',from:'2024-03-01T07:30:00Z',to:'2024-03-01T07:30:00Z'}).length,1);
+ for(const bad of ['2026-02-30T00:30:00+08:00','2026-02-29T23:30:00-08:00','2024-03-01T24:00:00Z','2024-03-01T10:60:00Z','2024-03-01T10:10:60Z','2024-03-01T10:10:00'])assert.equal(filterRows(supplied,'supplies',{dateField:'预计可用时间',from:bad}).length,0,bad);
+});

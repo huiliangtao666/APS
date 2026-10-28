@@ -41,6 +41,19 @@ export function related(data,table,index){
  return [...new Map(results.map(r=>[r.table+':'+r.index,r])).values()];
 }
 export function filterOptions(fields){return {dateFields:fields.filter(f=>/日期|时间|有效期|分钟$/.test(f)&&!/^固定|^最大等待|^提前|^后延|^工时|^模拟交付等待/.test(f)),statusFields:fields.filter(f=>/状态|是否启用|是否工作/.test(f))};}
+// Date.parse normalizes impossible days. Validate the local calendar first,
+// then use the supplied offset to compare instants without changing its date.
+function queryTime(raw,field){
+ const value=String(raw??'').trim();
+ if(/分钟$/.test(field))return value===''?NaN:Number(value);
+ const date=value.slice(0,10);
+ const validDate=/^\d{4}-\d{2}-\d{2}$/.test(date)&&Number.isFinite(Date.parse(date+'T00:00:00Z'))&&new Date(date+'T00:00:00Z').toISOString().slice(0,10)===date;
+ if(!validDate)return NaN;
+ if(/有效期|日期/.test(field))return value===date?Date.parse(date+'T00:00:00Z'):NaN;
+ const match=value.match(/^\d{4}-\d{2}-\d{2}T(\d{2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?(Z|[+-]\d{2}:\d{2})$/);
+ if(!match||Number(match[1])>23||Number(match[2])>59||Number(match[3]||0)>59)return NaN;
+ return Date.parse(value);
+}
 export function filterRows(data,table,filters={}){
  const {text='',product='',order='',status='',statusField='',dateField='',from='',to=''}=filters;
  const linked=(row,kind,value)=>{
@@ -50,7 +63,7 @@ export function filterRows(data,table,filters={}){
   if(kind==='订单编号'&&row['产品编号'])return (data.orders||[]).some(o=>o[kind]===value&&equal(o,row,'产品编号'));
   return false;
  };
- const time=v=>/分钟$/.test(dateField)?(String(v).trim()===''?NaN:Number(v)) : /有效期|日期/.test(dateField)?Date.parse(String(v).slice(0,10)+'T00:00:00Z'):Date.parse(v);
+ const time=v=>queryTime(v,dateField);
  return (data[table]||[]).map((row,index)=>({row,index})).filter(({row})=>{
   if(text&&!Object.values(row).some(v=>String(v).toLocaleLowerCase().includes(text.toLocaleLowerCase())))return false;
   if(!linked(row,'产品编号',product)||!linked(row,'订单编号',order))return false;

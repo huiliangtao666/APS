@@ -1,0 +1,2 @@
+#!/bin/bash
+bash .codex/skills/workspace-app-builder/scripts/app-exec.sh --validate --mode standalone --cwd /workspace/apps/aps-fr014 --timeout-ms 240000 'node -e '\''const fs=require("fs");for(const f of ["package.json","package-lock.json"])fs.writeFileSync(f,fs.readFileSync(f,"utf8").replaceAll("file:../../.praetor/sdk/","file:/workspace/.praetor/sdk/"));'\'' && node --version && npm ci && npm ls @praetor/lite-app-server && npm test && npm run test:query-ui && node --experimental-strip-types prototypes/fr013-batch-import/verify.mjs && npm run build'
