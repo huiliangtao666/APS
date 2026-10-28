@@ -1,0 +1,16 @@
+FR-014 issue #11 repair round 1 of maximum 2
+Delivery dlv_635d2a6c-a7e4-4aa5-b531-5008c5ae8d38; canonical Project2 original item PVTI_lAHOFM9WU84BpE1czhEHgs4 only.
+Baseline a4601ef19d9d4e950481475ea753d9e2b508d81a; branch feat/fr-014-data-queries.
+Issue https://github.com/huiliangtao666/APS/issues/11 remains open pending APS-Test independent retest.
+
+D1: validate Gregorian local calendar before Date.parse; impossible endpoints/record dates do not match or export normalized March2 records. Invalid ranges yield zero matches, preserving the existing UI contract. Valid leap days, inclusive instants and explicit offsets retain semantics. Invalid clocks are rejected.
+D2: explicit null, primitive and array filters return 400 {error:invalid_query}; missing filters and {} remain accepted. Rejected exports do not append export audit. Known unknown_table/plan_not_found errors alone map to404; unexpected export errors return500 internal_error without exception text.
+Four dedicated tests added: two library and two API, including invalid dates in query/CSV and permissioned export, selected plans, leap dates, offset boundaries, malformed filters and genuine404 separation. Uses existing fixture actor injection for API coverage; real signed gateway identity acceptance is not claimed.
+
+Safe-checkpoint source: same repair already committed in FR015 at 4dea41d34f2e4eee15b95a093c346fc483f04bfa. FR015 work was preserved. This backport includes no FR015 editing/history features. FR015 independently revalidated:135/135 (65 library +61 auth/API +5 UI +4 interaction), FR013 harness and build pass. Exact FR015 command remains docs/FR-015-validation-command.sh on that branch.
+
+Final FR014 validation:92/92 (63 library +26 auth/API +3 React static UI), zero failures/skips; original FR013 six-table and CSV-DEF01..04 harness separately pass; TypeScript/Vite/server build pass. Disposable container app-exec --validate --mode standalone, no live install/build or publishing. Exact command and full log adjacent to this report. SDK file dependency paths adapted only in disposable copy. git diff --check passed.
+
+Evidence access: GitHub issue11 and live canonical Project2 original card read. APS-Test Files API attempts for FR-014-INDEPENDENT-REGRESSION.md and evidence directory returned403 Workspace token cannot act for another workspace; independent report/zip unavailable directly. Sender and issue report independent12pass2fail at baseline; this Dev run does not replace independent retest.
+
+Limits: full AC02/17/26/31, actual browser, real identity/gateway and UAT01/02 remain unexecuted/incomplete. No new cards, issue edits, force push, main merge, application publish/restart or secrets output. Existing npm audit3moderate+1high unchanged. No authorization bypass claimed. Final remote fullSHAs and affected branches are in workspace FR-014-REPAIR-R1-REPORT.txt.
