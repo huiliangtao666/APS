@@ -1,0 +1,123 @@
+FR-034 UNKNOWN01 round 1 independent retest — APS-Test
+Delivery dlv_bbc23e68-1493-4bb9-929b-9732fe5bcb5d, APS-Design -> APS-Test
+
+VERDICT: PASS for issue20 / FR034-UNKNOWN-01 round1 repair at the exact SHA below.
+No new defect found in the executed scope. Full FR034 acceptance remains separate.
+
+PIN AND SCOPE
+Fresh independent clone: temp/fr034-unknown01-r1
+Repository: https://github.com/huiliangtao666/APS.git
+Branch: fix/fr-034-unknown-01
+Detached exact SHA: 21ff4dd72d9583ec591436b160a0b79931d81900
+Direct parent/integrated FR032: 28ed8f8e422173f9b83d8a974e26ea9af6f09c8e
+Remote branch equals requested SHA; ancestry exit0; clean checkout.
+FR034 110/110 and FR032 117/117 source manifest entries match both working
+bytes and pinned Git objects. Inherited harness banner SHAs are lineage labels,
+not the exact tested product commit. Exact pin and manifests identify the bytes.
+Read UNKNOWN01 handoff and repair command, FR032 handoff, original Test report,
+original model/API/browser/component probes and live issue20/body/comments.
+Issue20 was read-only; state open. See evidence issue20*.json and provenance.json.
+
+COUNTS
+Canonical final command: 440/440 TAP pass; zero failed/skipped/cancelled/todo.
+Breakdown 89+124+142+22+5+9+10+1+1+3+6+4+7+12+2+3=440.
+CSV valid six-table batch and CSV-DEF-01..04 pass. TypeScript, Vite, Express
+and built production Worker pass. Counts are separate from added independent
+and browser executions below; no cumulative/repeated run totals.
+
+EXECUTION BOUNDARY
+All npm installs/builds, app servers and Chromium run in disposable Docker,
+node:22-slim, image sha256:48e4b67d85f87bd551df43704e24d252f56cc5f8e9718841aace50f19948f0f9.
+Read-only source, SDK and test-script mounts; only fresh evidence host mount
+writable. No host npm/server, published port, application bind/restart or publish.
+Browser/model/API probes execute as nobody. Browser sandbox disabled only in
+this disposable test container. Fixed synthetic actor/runtime alias, actual App,
+scheduler, auth/membership/business routes and local temporary persistence.
+Nonfinite JS numbers are tested directly in model; JSON persistence serializes
+NaN/+Infinity/-Infinity to null. API cases explicitly record that distinction;
+nonfinite and NaN strings are separately exercised without serialization loss.
+
+ATTEMPT ACCOUNTING
+Initial canonical440 and original model/API replays passed. New independent
+matrix then stopped on a QA fixture error: IDs P/N did not satisfy the verifier's
+order-operation predecessor identity A-M. Corrected only the new test fixture to
+A-M/A-F; no product source/guard change. Initial failed log is retained. Recovery
+runs install/build and remaining checks without repeating canonical440. Report
+uses only final completed matrix/browser totals, not partial-attempt sums.
+
+LIMITS
+This retest addresses the single issue20/FR034-UNKNOWN-01 repair in round1.
+Malformed endpoints are deliberately injected ONLY into disposable saved output;
+not evidence that normal scheduling or supported imports produce bad output.
+Real signed gateway/SSO identity, production persistence, full all-rule business
+feasibility, DEC02/DEC03 and complete original AC/UAT remain separate gaps.
+No GitHub mutation, issue closure, new issue/card, main merge, new round, full
+Done or publication. Existing npm audit3 moderate/1 high and React key warning
+are retained as inherited limitations, not newly attributed product defects.
+
+INDEPENDENT RESULTS — FINAL COMPLETED EXECUTIONS
+* Original unchanged assertion logic: model15/15, including all6 formerly failed
+  invariants and300 oracle interval pairs. Original unknown API8/8 (previous2/8).
+* Added independent matrix:68 model +68 actual verify API endpoint cases, all pass.
+  17 forms x2 tasks x2 endpoints in each layer: null, missing, empty, whitespace,
+  NaN, +Infinity, -Infinity, Infinity-string, NaN-string, false, true, object,
+  array, nonnumeric, numeric0, numeric-string20, trimmed numeric-string20.0.
+  Invalid raw values produce problem for machine and precedence, no structured
+  numeric findings and no changed tasks. Valid numeric values obey complete
+  positive-interval semantics; zero end causing empty/reversed interval remains
+  invalid. Other zero/numeric-string controls retain valid overlap/precedence.
+* Added independent structured contradiction checks38/38: forged/missing/null
+  fields, task identity, machine, predecessor, extra IDs and raw unknown reject
+  geometry. Guarded legacy findings remain unknown. Inputs remain deep-equal.
+* Independent component4/4. Independent actual-App browser12/12 groups, zero
+  defects/page exceptions. Exact overlap20..30 at1px/min and8px/min; precedence
+  30/20/10; filters/selects both IDs; saved resource/material and original input;
+  history saved40/current50; all3 positive saved plans deep-equal;8 rendered
+  axis cases at1100/640px and scales0.25/1/3/8 (6 disabled-option programmatic
+  stress cases explicitly labelled); invalid window retains60000px canvas.
+  Original active-null reproducer now keeps raw start:null, machine/precedence
+  problem, zero findings and zero overlays: no fabricated [0,30).
+* Independently executed supplied actual-App browser checks: original FR0346/6;
+  UNKNOWN0124/24 (20 unknown endpoint cases,1 stale structured defense before
+  recheck,3 valid numeric/string-zero controls). All checks use actual App/route.
+  Persisted old [0,30) finding over raw null renders explicit unknown/no overlay.
+* Independently executed FR032 actual-App6/6: tooling1/personnel2/space600 peaks;
+  material325/allocated300/gap25kg,0 committed; simulated65kg arrival delay;
+  late96kg/60min; summary -> saved task -> historical input; selected180..240
+  alerts CSV download byte-identical to server projection; invalid-window export
+  disabled;4 complete saved JSON snapshots unchanged, saved40/current50 distinct.
+* Original independent confirmation/history API4 groups/19 responses pass:
+  calculate/verify/submit/supervisor-confirm; confirmed verify/save409 and role
+  spoof403; current input edits/archive/disk keep complete confirmation and saved
+  plan JSON bytes unchanged. HISTORY-01 regression20/20 pass, including mixed
+  corrupt/valid histories and missing snapshot/hash fail-closed reads.
+
+EVIDENCE AND EXACT COMMANDS
+Archive FR-034-UNKNOWN01-ROUND1-INDEPENDENT-EVIDENCE.zip contains:
+  temp/fr034-unknown01-test/: canonical.sh (exact delivered440 payload), all
+  independent probes, container.sh, container-recovery.sh, run.sh,
+  run-recovery.sh and reproduce.sh (fresh-clone executable reproduction).
+  temp/fr034-unknown01-evidence/: all per-case raw tasks/verification JSON,
+  original model/API replay JSON, original issue20 report/probes for comparison,
+  canonical.log/counts, history01.log,19 confirmation responses, actual browser
+  reports/measurements, downloaded fr032/load-alerts.csv, source manifests/diff,
+  initial QA fixture failure and final logs. Supplied browser reports have
+  separate output directories, preventing inherited filename overwrite.
+Executed from workspace root:
+  git clone --branch fix/fr-034-unknown-01 --single-branch
+    https://github.com/huiliangtao666/APS.git temp/fr034-unknown01-r1
+  git -C temp/fr034-unknown01-r1 checkout --detach
+    21ff4dd72d9583ec591436b160a0b79931d81900
+  bash temp/fr034-unknown01-test/run.sh
+  bash temp/fr034-unknown01-test/run-recovery.sh
+Final recovery container exit0. Test scripts contain exact internal commands.
+For a clean single run after extracting evidence, use
+  bash temp/fr034-unknown01-test/reproduce.sh
+Review JSON failed counts as well as process exits: original model/API runners
+retain invariant failures in JSON and are not alone reliable exit-code gates.
+
+Screenshots captured: 12; visually inspected independent
+null-fixed screenshot and stale structured unknown screenshot. Zero browser
+page exceptions in all completed browser reports. Node22.23.2 / Playwright1.56.1 /
+Chromium141.0.7390.37 / Linux ARM64; independent viewport1280x1000 and640/1100,
+supplied browser viewport1280x900. Final remote pin unchanged; checkout clean.

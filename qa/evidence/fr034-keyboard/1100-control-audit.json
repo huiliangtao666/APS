@@ -1,0 +1,303 @@
+[
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "主动运行独立检查",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<button>主动运行独立检查</button>"
+  },
+  {
+    "tag": "INPUT",
+    "type": "checkbox",
+    "text": "仅显示问题任务",
+    "labels": [
+      "仅显示问题任务"
+    ],
+    "labelledby": null,
+    "title": "",
+    "outer": "<input aria-label=\"仅显示问题任务\" type=\"checkbox\" style=\"\">"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "A-FILL",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<button>A-FILL</button>"
+  },
+  {
+    "tag": "SELECT",
+    "type": "select-one",
+    "text": "机器筛选",
+    "labels": [
+      "机器筛选\n全部机器\nMIX01\nMIX02\nMIX03\nFILL01\nFILL02\nFILL03"
+    ],
+    "labelledby": null,
+    "title": "",
+    "outer": "<select aria-label=\"机器筛选\"><option value=\"\">全部机器</option><option>MIX01</option><option>MIX02</option><option>MIX03</option><option>FILL01</option><option>FILL02</option><option>FILL03</option></select>"
+  },
+  {
+    "tag": "SELECT",
+    "type": "select-one",
+    "text": "订单筛选",
+    "labels": [
+      "订单筛选\n全部订单\nA"
+    ],
+    "labelledby": null,
+    "title": "",
+    "outer": "<select aria-label=\"订单筛选\"><option value=\"\">全部订单</option><option>A</option></select>"
+  },
+  {
+    "tag": "SELECT",
+    "type": "select-one",
+    "text": "计划状态",
+    "labels": [
+      "计划状态\n全部状态\n已排计划\n未排"
+    ],
+    "labelledby": null,
+    "title": "",
+    "outer": "<select aria-label=\"计划状态\"><option value=\"\">全部状态</option><option value=\"scheduled\">已排计划</option><option value=\"unplanned\">未排</option></select>"
+  },
+  {
+    "tag": "INPUT",
+    "type": "text",
+    "text": "搜索任务",
+    "labels": [
+      "搜索任务"
+    ],
+    "labelledby": null,
+    "title": "",
+    "outer": "<input aria-label=\"搜索任务\" value=\"\" style=\"\">"
+  },
+  {
+    "tag": "SELECT",
+    "type": "select-one",
+    "text": "缩放",
+    "labels": [
+      "缩放\n0.25 像素/分钟\n1 像素/分钟\n3 像素/分钟\n8 像素/分钟"
+    ],
+    "labelledby": null,
+    "title": "",
+    "outer": "<select aria-label=\"缩放\"><option value=\"0.25\">0.25 像素/分钟</option><option value=\"1\">1 像素/分钟</option><option value=\"3\">3 像素/分钟</option><option value=\"8\">8 像素/分钟</option></select>"
+  },
+  {
+    "tag": "INPUT",
+    "type": "number",
+    "text": "窗口开始分钟",
+    "labels": [
+      "窗口开始分钟"
+    ],
+    "labelledby": null,
+    "title": "",
+    "outer": "<input aria-label=\"窗口开始分钟\" type=\"number\" placeholder=\"0\" value=\"20\" style=\"\">"
+  },
+  {
+    "tag": "INPUT",
+    "type": "number",
+    "text": "窗口结束分钟",
+    "labels": [
+      "窗口结束分钟"
+    ],
+    "labelledby": null,
+    "title": "",
+    "outer": "<input aria-label=\"窗口结束分钟\" type=\"number\" placeholder=\"120\" value=\"60\" style=\"\">"
+  },
+  {
+    "tag": "INPUT",
+    "type": "number",
+    "text": "模拟时点分钟",
+    "labels": [
+      "模拟时点分钟"
+    ],
+    "labelledby": null,
+    "title": "",
+    "outer": "<input aria-label=\"模拟时点分钟\" type=\"number\" placeholder=\"未启用\" value=\"\" style=\"\">"
+  },
+  {
+    "tag": "INPUT",
+    "type": "checkbox",
+    "text": "",
+    "labels": [
+      "前后序连线"
+    ],
+    "labelledby": null,
+    "title": "",
+    "outer": "<input type=\"checkbox\" checked=\"\" style=\"\">"
+  },
+  {
+    "tag": "INPUT",
+    "type": "checkbox",
+    "text": "",
+    "labels": [
+      "资源占用"
+    ],
+    "labelledby": null,
+    "title": "",
+    "outer": "<input type=\"checkbox\" checked=\"\" style=\"\">"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "清除筛选与窗口",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<button>清除筛选与窗口</button>"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "向前滚动",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<button>向前滚动</button>"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "向后滚动",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<button>向后滚动</button>"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "A-MIX A MIX 2026-11-02 08:30:00（分钟 30） 至 2026-11-02 08:50:00（分钟 50） 已排计划 · 执行未知",
+    "labels": [],
+    "labelledby": null,
+    "title": "A-MIX 已排计划 · 执行未知",
+    "outer": "<button data-selected=\"true\" class=\"fr033-task\" aria-label=\"A-MIX A MIX 2026-11-02 08:30:00（分钟 30） 至 2026-11-02 08:50:00（分钟 50） 已排计划 · 执行未知\" aria-pressed=\"true\" title=\"A-MIX 已排计划 · 执行未知\" style=\"left: 10px; width: 20px; top: 28px;\"><b>A-MIX · MIX</b><span>已排计划 · 执行未知</span></button>"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "A-FILL A FILL 2026-11-02 08:50:00（分钟 50） 至 2026-11-02 09:20:00（分钟 80） 已排计划 · 执行未知",
+    "labels": [],
+    "labelledby": null,
+    "title": "A-FILL 已排计划 · 执行未知",
+    "outer": "<button data-selected=\"false\" class=\"fr033-task\" aria-label=\"A-FILL A FILL 2026-11-02 08:50:00（分钟 50） 至 2026-11-02 09:20:00（分钟 80） 已排计划 · 执行未知\" aria-pressed=\"false\" title=\"A-FILL 已排计划 · 执行未知\" style=\"left: 30px; width: 10px; top: 28px;\"><b>A-FILL · FILL</b><span>已排计划 · 执行未知</span></button>"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "A-MIX",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<button aria-pressed=\"true\">A-MIX</button>"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "A-FILL",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<button aria-pressed=\"false\">A-FILL</button>"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "A-FILL",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<button>A-FILL</button>"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "查看方案输入 orders / A · HC40",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<button>查看方案输入 orders / A · HC40</button>"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "查看方案输入 routes / HC40 · MIX",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<button>查看方案输入 routes / HC40 · MIX</button>"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "查看方案输入 dependencies / A · MIX",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<button>查看方案输入 dependencies / A · MIX</button>"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "查看方案输入 times / HC40 · MIX",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<button>查看方案输入 times / HC40 · MIX</button>"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "查看方案输入 machines / MIX01 · 混合设备1",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<button>查看方案输入 machines / MIX01 · 混合设备1</button>"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "查看方案输入 calendars / FC01 · F01",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<button>查看方案输入 calendars / FC01 · F01</button>"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "查看方案输入 bom / EX-B1 · HC40",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<button>查看方案输入 bom / EX-B1 · HC40</button>"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "查看方案输入 inventory / EX-LOT · LEAN",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<button>查看方案输入 inventory / EX-LOT · LEAN</button>"
+  },
+  {
+    "tag": "BUTTON",
+    "type": "submit",
+    "text": "查询关联输入与任务",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<button>查询关联输入与任务</button>"
+  },
+  {
+    "tag": "SELECT",
+    "type": "select-one",
+    "text": "当前计算\n单线计算 2026/10/28 22:41:31\n单线计算 2026/10/28 22:41:31\n单线计算 2026/10/28 22:41:31\nFR034 synthetic deliberately invalid saved output",
+    "labels": [],
+    "labelledby": null,
+    "title": "",
+    "outer": "<select><option value=\"\">当前计算</option><option value=\"80401987-23df-4568-afe6-fa73e3ef8e39\">单线计算 2026/10/28 22:41:31</option><option value=\"673b411b-1756-4115-bf4a-965e316ca2fa\">单线计算 2026/10/28 22:41:31</option><option value=\"62065241-8eb2-4d55-9c91-93d045543354\">单线计算 2026/10/28 22:41:31</option><option value=\"FR034-SYNTHETIC-CORRUPT\">FR034 synthetic deliberately invalid saved output</option></select>"
+  }
+]

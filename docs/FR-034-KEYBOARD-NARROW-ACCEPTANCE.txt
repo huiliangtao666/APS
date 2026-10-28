@@ -1,0 +1,154 @@
+FR034 original AC17/AC31 — finite keyboard/narrow-screen acceptance
+Delivery dlv_973c9af3-bd10-4c38-b846-d1810ba937e1; APS-Design -> APS-Dev
+Original card PVTI_lAHOFM9WU84BpE1czhEHhDI. No new card or issue.
+Product tested: 21ff4dd72d9583ec591436b160a0b79931d81900
+Evidence branch: test/fr-034-keyboard-narrow
+Overall keyboard/focus acceptance: NOT PASS. Functional linkage: PASS in scope.
+No product code changed. New findings below are Dev reproductions pending Test.
+
+RESULTS
+At640x900 and1100x900,8 functional groups each pass,16 total:
+1. Keyboard-only Tab navigation and entry of a240-character Chinese operation
+   reason (8 repeated30-character phrases), retained exactly in the input.
+2. Saved-plan selection by native arrow keys; Enter active independent check;
+   actual verify/refresh API; two findings, raw task array remains deep-equal.
+3. Enter machine-overlap problem selects exactly A-MIX/A-FILL and [20,30).
+4. Enter precedence shows priorEnd30/nextStart20/violation10; Space problem
+   filter and typed task search apply to the same chart/task identities.
+5. Task row -> saved successor A-FILL -> predecessor A-MIX using Enter.
+6. Saved task -> actual query view, correct source plan, historical-input
+   checkbox checked and explicit saved-original-snapshot provenance; run/input/
+   snapshot hash present in linkage UI before navigation.
+7. Actual scheduler material-shortage problem -> matching saved unplanned task,
+   LEAN demand/allocation/gap and explicit no-verifiable-interval, no overlay.
+   Text and aria-pressed supplement state/color. No false material pass claim.
+8. Historical task saved40kg/current50 remain distinct. All3 normally generated
+   saved plan JSON objects remain deep-equal after all interactions.
+Two additional no-banner control executions retain the product focus failure
+while checking current input/revision unchanged. Two horizontal-scroll
+measurements:12 ArrowRight presses scroll the long-quantity task table480px at
+both widths; its client widths557/970 and content width6881 are recorded.
+The long Chinese quantityMeaning is210characters (6 repeated35-character
+phrases); saved QA reason is240characters. Full text appears in DOM/ARIA and
+is keyboard-scrollable in the existing table; no wrapping acceptance claimed.
+The raw runner's final line says20 functional groups; that is20 result records,
+including2 measurements and2 controls. Authoritative count is16 functional
+passes, not20 assertions. The2 no-banner records do NOT assert focus passes.
+
+SEPARATE DEFECT REGISTER — DEV REPRODUCTION ROUND1, NOT TEST-CONFIRMED
+No product fix, issue creation or repair round started. Severity is proposed
+medium/P2 for each, pending APS-Test triage. These are observed failures, not
+renamed coverage gaps. Reproduce with the command below and synthetic data.
+
+FR034-KBD-01 / medium P2 / round1 reproduction
+Keyboard focus remains on an offscreen problem button after problem activation.
+Steps: choose FR034-SYNTHETIC-CORRUPT with keyboard; run independent check;
+Tab to VERIFY / MACHINE_OVERLAP; press Enter. Task identity/interval are right,
+but automatic selected-task scrolling moves the focused problem out of view.
+Expected: visible focus at the activated control or a suitable visible target.
+Observed without QA banner: activeElement remains the problem BUTTON and
+:focus-visible=true, yet button top/bottom are -853.98/-774.98 at640 and
+-618.34/-539.34 at1100. No part is in the900px viewport. Same failure with
+banner. See *-no-banner-overlap-focus.png/html/aria.txt and review.json.
+Relevant existing code: TimelinePanel.tsx selected-task scrollIntoView effect.
+This is a hypothesis for cause, not a product patch or independent verdict.
+
+FR034-KBD-02 / medium P2 / round1 reproduction
+Active independent check loses keyboard focus after completing the request.
+Steps: select the corrupt saved plan; Tab to 主动运行独立检查; press Enter;
+wait for actual findings/refresh. Expected: visible useful keyboard focus
+retained/restored after busy state. Observed at both widths: document active
+is BODY; completed check button active=false/:focus-visible=false, despite
+being back in view and enabled. See keyboard-report.json focus entries named
+active check completed and corresponding DOM API/log records. Actual active
+check data result is correct. QA banner was present for this observation;
+only KBD01 received an explicit no-banner control. Test should confirm this
+focus-restoration expectation independently before any product fix.
+
+FR034-KBD-03 / medium P2 / round1 reproduction
+Saved-plan combobox lacks an accessible name/control association.
+Steps: Tab to .plan-list select in existing task-details/saved-plan section at
+either width. DOM has no wrapping/for label, aria-label, aria-labelledby or
+title; labels.length=0; actual ARIA snapshot renders bare "combobox:".
+Expected: an associated Chinese name identifying the saved-plan selector.
+Options/current selected value are not its accessible name. Verify in
+*-control-audit.json and *-history-current.aria.txt. App.tsx plan-list select
+is the existing source. Initial raw audit's unnamed-control heuristic uses
+innerText and misses this native-select case; review.json corrects that
+omission from actual DOM plus ARIA, rather than treating option text as label.
+Other timeline filter/reason/problem-filter controls in this scoped audit have
+explicit aria-label or wrapping labels; task/problem/input buttons have text.
+This is not a claim that every existing application control has been audited.
+
+AUDIT CLASSIFICATION
+66 focus samples,16 raw focus observations. Eight observations correspond to
+KBD01/02 (two widths, immediate/completed or banner/no-banner). Four top-nav
+samples are obscured by the sticky QA banner and excluded from product defect
+attribution. Four task-row samples intentionally stay outside the table after
+keyboard horizontal scrolling and are excluded. KBD03 is separately reviewed
+from native select DOM/ARIA. Small640 document overflow652 is measured only;
+it is not escalated to a defect without an established failed expectation.
+Unknown material and selected task states have explicit text/pressed states;
+no comprehensive contrast or screen-reader certification is claimed.
+
+PIN / EXECUTION / VALIDATION
+110 source manifest entries match working bytes AND Git objects at21ff4dd.
+Three harness file hashes match the executed QA scripts. review.json records
+these checks. Exact evidence-delivery full SHA is in the root delivery report.
+Node22.23.2 / Playwright1.56.1 / Chromium141.0.7390.37 / Linux ARM64.
+node:22-slim image sha256:48e4b67d85f87bd551df43704e24d252f56cc5f8e9718841aace50f19948f0f9.
+Final disposable Docker command exits0. Targeted task-linkage/UNKNOWN01
+regression8/8 TAP passes; npm run build passes TS/Vite/Express/Worker. No
+production source change, so the prior440 baseline is not claimed as rerun.
+Real App entry, real membership/business/verify/query routes and scheduler,
+synthetic fixed planner identity/runtime alias, local temporary JSON storage.
+Read-only source/SDK mounts; only fresh evidence host directory writable.
+No host npm install/server, published port, app bind/restart or publication.
+--no-sandbox applies only to this disposable browser container.
+14 new screenshots plus HTML DOM/ARIA,66 focus samples,200-only API network
+responses; zero page exceptions and zero browser warning/error console entries.
+Visual inspection:640 no-banner overlap focus and1100 long-Chinese quantity.
+Banner is inherited FR033/older-parent lineage, not the tested pin; manifests
+and productSHA identify the exact product bytes. No geometry packaging repeated.
+
+ATTEMPT ACCOUNTING
+Attempt1 passed640 first3 functional groups then stopped because QA mistakenly
+placed quantityMeaning on raw task rather than resultAssessment.tasks. Corrected
+only the disposable fixture. Attempt2 passed640 first6 groups then stopped
+because native Home selected the empty current-calculation option, which the
+existing controlled selector intentionally handles by retaining active plan.
+Corrected QA to move directly from current selectedIndex using arrow keys.
+Final attempt3 completes both widths. Counts use only attempt3. Earlier logs
+and partial reports are retained under attempts/. During dependency installation
+in attempts1/2/3, updated QA instrumentation was copied from the read-only source
+mount into that run's disposable checkout before browser execution. Final
+attempt3 records exact executed script hashes; reproduction starts with these
+final files and needs no mid-run copy. No product source/guard was changed.
+
+REPRODUCE FROM WORKSPACE ROOT
+Create a NEW EMPTY absolute evidence directory, then:
+FR034_REPO="$PWD/apps/aps-fr032" FR034_SDK="$PWD/.praetor/sdk" \
+ FR034_OUT="<absolute new empty evidence directory>" \
+ bash apps/aps-fr032/qa/fr034-keyboard-docker-browser.sh
+Requires Docker/network and the existing authorized2 SDK tgz files. The script
+repeats targeted regression/build and finite real-App browser scenarios. Treat
+functional process exit0 separately from focus/a11y audit failures. review.json
+is the inspected classification of this execution; inspect raw DOM/ARIA and
+focus records when reproducing instead of accepting the process exit alone.
+
+INDEPENDENT UNKNOWN01 RESULT READ DURING THIS DELIVERY
+APS-Test/FR-034-UNKNOWN01-ROUND1-INDEPENDENT-RETEST.txt became available and was
+read in full. It independently reports PASS for issue20 round1 repair at exact
+21ff4dd,440/440 canonical, original failed invariants now passing, expanded
+model/API/component/browser and history checks. Copy retained here as
+APS-Test-UNKNOWN01-verdict.txt. Those are Test's counts, not added to this Dev
+run. No issue closure or full card acceptance is implied. New KBD findings are
+outside that completed UNKNOWN01 verdict and await their own Test confirmation.
+
+LIMITS / CONTINUATION
+Same original FR034 AC17/31 acceptance, no FR035/027 feature, no new card,
+publication, main merge, issue closure or full Done. Remaining full workflow/UAT,
+real signed gateway/SSO, browser/assistive-tech matrix, production durability,
+all-rule business/material feasibility and DEC02/dynamic release are coverage
+gaps. They are not asserted product defects. This finite pass supplies linkage
+coverage and three explicit Dev repros; Test confirmation is the next authority.
