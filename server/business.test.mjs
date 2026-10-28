@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { Worker } from 'node:worker_threads';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -9,13 +10,13 @@ import { openStore } from './auth/store.mjs';
 import { createAuthRouter } from './auth/routes.mjs';
 import { createBusinessRouter } from './business.mjs';
 
-async function fixture(t,real=false){
+async function fixture(t,real=false,runOptions={}){
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'fr037-'));const store=openStore(dir);store.initFirstAdmin('test#admin');
  for(const role of ['planner','supervisor','query']){const i=store.createInvite({role,createdBy:'test#admin',requireApproval:false});store.acceptInvite(i.token,'test#'+role);}
  // Fixture actor injection exists ONLY here; production uses SDK verification.
  const actor=real?praetorActor():(req,_res,next)=>{req.praetorActor={kind:'user',issuer:'test',sub:req.get('test-sub')||'query',requestId:'trusted-request'};next();};
  const {router,requireMember}=createAuthRouter({actorMiddleware:actor,sendActorError:()=>{},store});
- const app=express();app.use(express.json());app.use('/api/auth',router);app.use('/api',createBusinessRouter({dataDir:dir,actorMiddleware:actor,requireMember}));
+ const app=express();app.use(express.json());app.use('/api/auth',router);app.use('/api',createBusinessRouter({dataDir:dir,actorMiddleware:actor,requireMember,...runOptions}));
  const server=app.listen(0,'127.0.0.1');await new Promise(r=>server.once('listening',r));
  t.after(()=>{server.close();fs.rmSync(dir,{recursive:true,force:true});});
  const call=async(url,body,sub='planner',headers={})=>{const r=await fetch(`http://127.0.0.1:${server.address().port}/api`+url,{method:body?'POST':'GET',headers:{'Content-Type':'application/json','test-sub':sub,...headers},body:body?JSON.stringify({reason:'test reason',...body}):undefined});return {status:r.status,body:r.headers.get('content-type')?.includes('json')?await r.json():await r.text()};};
@@ -320,4 +321,102 @@ test('FR017 enabled personnel constraint with complete data cannot auto-disable 
  const saved=await call('/inputs',{revision:0,tables:{rules,personnelGroups:[group],dependencies:[...data.dependencies,need]}});assert.equal(saved.status,200,JSON.stringify(saved.body));
  const p=(await call('/calculate',{revision:1})).body;assert.ok(p.findings.some(f=>f.code.includes('PERSONNEL')));assert.ok(!p.tasks.some(t=>t.id==='A-MIX'));assert.ok(p.rules.includes('LABOR'));
  assert.equal(p.ruleSnapshot.settings.find(r=>r.id==='LABOR').active,true);assert.equal((await call('/state')).body.data.rules.find(r=>r['规则编号']==='LABOR')['是否启用'],'是');
+});
+
+async function waitRun(call,id){
+ for(let i=0;i<250;i++){const r=await call('/runs/'+id);if(!['queued','running'].includes(r.body.status))return r.body;await new Promise(resolve=>setTimeout(resolve,20));}
+ throw Error('run did not finish');
+}
+test('FR018 actual worker freezes selected input, horizon, ordering and adopted rules; edits allow a new run',async t=>{
+ const {call}=await fixture(t);const initial=(await call('/state')).body;
+ const selection={orderIds:['A'],startMinute:60,endMinute:100,priority:'要求日期',enabledRuleIds:['MACHINE','PRECEDENCE','CALENDAR']};
+ const created=await call('/runs',{revision:0,selection,tasks:[{id:'forged'}],actor:'spoof'});assert.equal(created.status,202);const id=created.body.id;
+ const rows=initial.data.orders.map(o=>({...o,'合格需求':'241'}));assert.equal((await call('/tables/orders',{rows,revision:0})).status,200);
+ const done=await waitRun(call,id);assert.equal(done.status,'partial');assert.ok(done.planId);assert.equal(done.actor,'test#planner');
+ const snapshot=(await call('/runs/'+id+'/inputs')).body;
+ assert.equal(snapshot.originalInput.orders[0]['合格需求'],'240');assert.equal(snapshot.executionData.orders.length,1);assert.deepEqual(snapshot.conditions.orderIds,['A']);assert.equal(snapshot.executionData.rules.find(r=>r['规则编号']==='INVENTORY')['是否启用'],'否');
+ const p=(await call('/plans')).body.find(p=>p.id===done.planId);assert.equal(p.runId,id);assert.equal(p.revision,0);assert.deepEqual(p.conditions,snapshot.conditions);assert.equal(p.snapshotHash,snapshot.snapshotHash);
+ assert.deepEqual(p.tasks.map(t=>t.id),['A-MIX']);assert.equal(p.tasks[0].start,60);assert.ok(p.tasks[0].end<=100);assert.ok(p.findings.some(f=>f.code.includes('HORIZON')));assert.ok(!p.ruleSnapshot.settings.find(r=>r.id==='INVENTORY').active);
+ assert.equal((await call('/runs/'+id+'/cancel',{})).status,409);
+ const next=await call('/runs',{revision:1,selection:{orderIds:['B'],startMinute:0,endMinute:600}});assert.equal(next.status,202);assert.notEqual(next.body.id,id);assert.equal((await waitRun(call,next.body.id)).status,'completed');
+ assert.deepEqual((await call('/runs/'+id+'/inputs')).body,snapshot);
+ const log=(await call('/operations')).body;assert.ok(log.some(r=>r.action==='run_created'&&r.target===id&&r.snapshotHash===snapshot.snapshotHash));assert.ok(log.some(r=>r.action==='run_partial'&&r.target===id));
+});
+test('FR018 selection guards, role, CSRF and stale checks protect all run paths',async t=>{
+ const {call}=await fixture(t);const s=(await call('/state')).body;
+ for(const selection of [{orderIds:[]},{orderIds:['NO']},{orderIds:['A','A']},{startMinute:-1},{startMinute:'1'},{startMinute:60,endMinute:60},{endMinute:1e9},{priority:'optimize'},{enabledRuleIds:[]},{enabledRuleIds:['MACHINE','PRECEDENCE','CALENDAR','MOLD']},{unknown:1}]){
+  const r=await call('/runs',{revision:0,selection});assert.ok([400,422].includes(r.status),JSON.stringify(r));
+ }
+ assert.equal((await call('/runs',{revision:99})).status,409);
+ assert.equal((await call('/runs',{revision:0},'query')).status,403);
+ assert.equal((await call('/runs/x/cancel',{},'query')).status,403);
+ assert.equal((await call('/runs',{revision:0},'planner',{'sec-fetch-site':'cross-site'})).status,403);
+ assert.equal((await call('/runs',{revision:0,reason:''})).status,400);
+ assert.equal((await call('/runs/x')).status,404);assert.equal((await call('/runs/x/inputs')).status,404);
+ assert.deepEqual((await call('/state')).body,s);assert.equal((await call('/runs')).body.length,0);assert.equal((await call('/operations')).body.length,0);
+});
+test('FR018 meaningful cancellation terminates a busy thread, preserves history and produces no result',async t=>{
+ let worker,exited;const {call}=await fixture(t,false,{workerFactory:()=>{worker=new Worker('while(true){}',{eval:true});exited=new Promise(resolve=>worker.once('exit',resolve));return worker;}});
+ const r=await call('/runs',{revision:0});const before=(await call('/state')).body;
+ const cancelled=await call('/runs/'+r.body.id+'/cancel',{reason:'stop this computation'});assert.equal(cancelled.status,200);assert.equal(cancelled.body.status,'cancelled');
+ await exited;assert.equal(worker.threadId,-1);assert.equal((await call('/runs/'+r.body.id)).body.failure.code,'user_cancelled');
+ assert.equal((await call('/plans')).body.length,0);assert.deepEqual((await call('/state')).body,before);assert.equal((await call('/runs/'+r.body.id+'/cancel',{})).status,409);
+ const log=(await call('/operations')).body;assert.equal(log.filter(r=>r.action==='run_cancelled').length,1);assert.equal(log.at(-1).reason,'stop this computation');assert.equal((await call('/runs/'+r.body.id+'/inputs')).status,200);
+});
+test('FR018 timeout kills computation and never asserts infeasibility; worker crash is a separate recorded failure',async t=>{
+ const {call}=await fixture(t,false,{runTimeoutMs:30,workerFactory:()=>new Worker('while(true){}',{eval:true})});
+ const created=await call('/runs',{revision:0});const done=await waitRun(call,created.body.id);assert.equal(done.status,'timed_out');assert.equal(done.failure.code,'time_limit');assert.match(done.failure.message,/不代表无可行/);assert.equal((await call('/plans')).body.length,0);
+ const crash=await fixture(t,false,{workerFactory:()=>new Worker('throw Error("private input must not leak")',{eval:true})});
+ const r=await crash.call('/runs',{revision:0});const failed=await waitRun(crash.call,r.body.id);assert.equal(failed.status,'failed');assert.equal(failed.failure.code,'worker_error');assert.ok(!JSON.stringify(failed).includes('private input'));assert.equal((await crash.call('/plans')).body.length,0);
+});
+test('FR018 two real active threads permit another run and enforce bounded capacity; cancel both',async t=>{
+ const {call}=await fixture(t,false,{workerFactory:()=>new Worker('while(true){}',{eval:true})});
+ const a=await call('/runs',{revision:0}),b=await call('/runs',{revision:0});assert.equal(a.status,202);assert.equal(b.status,202);assert.equal((await call('/runs',{revision:0})).status,429);
+ for(const r of [a,b])assert.equal((await call('/runs/'+r.body.id+'/cancel',{})).body.status,'cancelled');
+ assert.equal((await call('/plans')).body.length,0);
+});
+test('FR018 restart marks interrupted runs failed and detects corrupted persisted snapshots',async t=>{
+ const {call,dir}=await fixture(t);const p=(await call('/calculate',{revision:0})).body;
+ const file=path.join(dir,'business.json'),s=JSON.parse(fs.readFileSync(file));const run=s.runs.find(r=>r.id===p.runId);run.status='running';delete run.finishedAt;fs.writeFileSync(file,JSON.stringify(s));
+ createBusinessRouter({dataDir:dir,actorMiddleware:(_q,_s,next)=>next(),requireMember:()=> (_q,_s,next)=>next()});
+ assert.equal((await call('/runs/'+run.id)).body.failure.code,'process_interrupted');assert.equal((await call('/plans')).body.length,1);
+ const stored=JSON.parse(fs.readFileSync(file));stored.runs[0].executionData.orders[0]['合格需求']='999';fs.writeFileSync(file,JSON.stringify(stored));
+ assert.equal((await call('/runs/'+run.id+'/inputs')).status,409);assert.equal((await call('/plans/'+p.id+'/verify',{})).status,409);
+});
+test('FR018 selected ordering changes actual machine schedule, fixed-axis start and immutable synchronous run',async t=>{
+ const {call}=await fixture(t);const s=(await call('/state')).body;
+ const deps=s.data.dependencies.map(r=>r['订单编号']==='B'&&r['工序编号']==='MIX'?{...r,'资源编号':'MIX01'}:r);
+ const orders=s.data.orders.map(r=>({...r,'要求可交付分钟':r['订单编号']==='B'?'100':'480'}));
+ assert.equal((await call('/inputs',{revision:0,tables:{dependencies:deps,orders}})).status,200);
+ const byPriority=(await call('/calculate',{revision:1,selection:{startMinute:120,endMinute:600,priority:'优先顺序'}})).body;
+ const byDue=(await call('/calculate',{revision:1,selection:{startMinute:120,endMinute:600,priority:'要求日期'}})).body;
+ assert.equal(byPriority.tasks.find(t=>t.id==='A-MIX').start,120);assert.equal(byDue.tasks.find(t=>t.id==='B-MIX').start,120);assert.equal(byDue.tasks.find(t=>t.id==='A-MIX').start,150);
+ assert.equal((await call('/runs/'+byDue.runId)).body.status,'completed');assert.equal((await call('/plans/'+byDue.id+'/verify',{})).status,200);
+ const scoped=(await call('/calculate',{revision:1,selection:{orderIds:['A']}})).body;assert.equal((await call('/plans/'+scoped.id+'/verify',{})).status,200);
+ const run=(await call('/runs/'+scoped.runId+'/inputs')).body;assert.equal(run.executionData.orders.length,1);assert.equal(run.originalInput.orders.length,2);
+});
+test('FR018 edit during a demonstrably active calculation and a second run cannot replace either frozen result',async t=>{
+ const gate=new SharedArrayBuffer(4);const threads=[];
+ const {call}=await fixture(t,false,{workerFactory:data=>{
+  const worker=new Worker(`(async()=>{const {parentPort,workerData}=require('node:worker_threads');const {calculate}=await import(workerData.plannerUrl);parentPort.postMessage({kind:'progress'});Atomics.wait(new Int32Array(workerData.gate),0,0,5000);parentPort.postMessage({kind:'result',plan:calculate(workerData.executionData,workerData.revision,workerData.calculatedAt,workerData.conditions)});})().catch(()=>process.exit(1));`,{eval:true,workerData:{...data,gate,plannerUrl:new URL('./planner.ts',import.meta.url).href}});threads.push(worker);return worker;
+ }});
+ t.after(()=>Promise.all(threads.map(w=>w.terminate())));
+ const initial=(await call('/state')).body;const first=await call('/runs',{revision:0,selection:{orderIds:['A']}});assert.equal(first.status,202);
+ assert.ok(['queued','running'].includes((await call('/runs/'+first.body.id)).body.status));
+ const times=initial.data.times.map(r=>({...r,'固定分钟':'45'}));assert.equal((await call('/tables/times',{rows:times,revision:0})).status,200);
+ assert.ok(['queued','running'].includes((await call('/runs/'+first.body.id)).body.status));
+ const second=await call('/runs',{revision:1,selection:{orderIds:['A']}});assert.equal(second.status,202);assert.notEqual(first.body.snapshotHash,second.body.snapshotHash);
+ const original=(await call('/runs/'+first.body.id+'/inputs')).body;assert.equal(original.executionData.times[0]['固定分钟'],'30');
+ Atomics.store(new Int32Array(gate),0,1);Atomics.notify(new Int32Array(gate),0);
+ const a=await waitRun(call,first.body.id),b=await waitRun(call,second.body.id);assert.equal(a.status,'completed');assert.equal(b.status,'completed');
+ const plans=(await call('/plans')).body;assert.equal(plans.find(p=>p.id===a.planId).tasks[0].duration,30);assert.equal(plans.find(p=>p.id===b.planId).tasks[0].duration,45);
+ assert.deepEqual((await call('/runs/'+first.body.id+'/inputs')).body,original);
+});
+test('FR018 timeout or cancellation preserves a previously saved plan, and exports exact run conditions',async t=>{
+ const {call}=await fixture(t,false,{runTimeoutMs:25,workerFactory:()=>new Worker('while(true){}',{eval:true})});
+ const p=(await call('/calculate',{revision:0,selection:{orderIds:['A'],startMinute:90,endMinute:300,priority:'要求日期'}})).body;
+ const before=(await call('/plans')).body;const exported=await call('/export',{planId:p.id,ruleSettings:true});assert.equal(exported.status,200);assert.ok(exported.body.includes(p.runId));assert.ok(exported.body.includes('startMinute'));assert.ok(exported.body.includes('本次计算条件'));
+ const pending=await call('/runs',{revision:0});assert.equal((await waitRun(call,pending.body.id)).status,'timed_out');
+ assert.deepEqual((await call('/plans')).body,before);assert.equal((await call('/state')).body.revision,0);
+ const done=(await call('/runs/'+pending.body.id)).body;assert.ok(done.finishedAt);assert.equal((await call('/runs/'+pending.body.id+'/inputs',undefined,'query')).status,200);
 });

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently -k -n vite,api -c blue,green \"vite\" \"node --experimental-strip-types server/index.mjs\"",
-    "build": "tsc --noEmit && vite build && npx esbuild server/index.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs",
+    "build": "tsc --noEmit && vite build && npx esbuild server/index.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs && npx esbuild server/calculation-worker.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/calculation-worker.mjs",
     "test": "node --test src/lib/*.test.mjs && node --experimental-strip-types --test server/auth/auth.test.mjs server/business.test.mjs",
     "test:verification": "node --test src/lib/independent-verification.test.mjs",
     "start": "NODE_ENV=production node dist/server.mjs",
