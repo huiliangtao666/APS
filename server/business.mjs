@@ -30,11 +30,12 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   const read=()=>{try{const s=JSON.parse(fs.readFileSync(file,'utf8'));s.data.simulationEvents??=[];s.data.executionFacts??=[];s.data.executionMaterials??=[];s.data.executionSources??=[];return s;}catch(e){if(e.code!=='ENOENT')throw e;let legacy=[];try{legacy=JSON.parse(fs.readFileSync(path.join(dataDir,'plans.json'),'utf8'));}catch(old){if(old.code!=='ENOENT')throw old;}return {data:structuredClone(seed),revision:0,plans:legacy.map(p=>({...p,status:'legacy'})),records:[]};}};
   const write=s=>{const tmp=`${file}.${randomUUID()}.tmp`;try{fs.writeFileSync(tmp,JSON.stringify(s),{mode:0o600,flag:'wx'});fs.renameSync(tmp,file);}finally{if(fs.existsSync(tmp))fs.unlinkSync(tmp);}};
   const activeWorkers=new Map();
+  const stopping=new Map();
   const terminal=new Set(['completed','partial','cancelled','timed_out','failed']);
   // A new process cannot resume a lost thread. Preserve the snapshot and explain it.
   const recovered=read();let changed=false;
   for(const run of recovered.runs||[])if(!terminal.has(run.status)){
-    run.status='failed';run.finishedAt=new Date().toISOString();run.failure={code:'process_interrupted',message:'应用进程中断，原运行未恢复；可使用新运行重新计算。'};run.phase='已中断';
+    run.status='failed';run.finishedAt=new Date().toISOString();run.failure={code:'process_interrupted',message:'应用进程中断，原运行未恢复；可使用新运行重新计算。'};run.phase='已中断';run.durationMs=Math.max(0,Date.parse(run.finishedAt)-Date.parse(run.createdAt));run.outcome='orphaned';
     recovered.records.push({id:randomUUID(),action:'run_failed',target:run.id,actor:'system',role:'system',at:run.finishedAt,reason:run.failure.message,requestId:run.requestId});changed=true;
   }
   if(changed)write(recovered);
@@ -145,7 +146,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     // start or edit this trial while a worker is shutting down.
     trial.status='discarded';trial.discardedAt=new Date().toISOString();trial.revision++;
     record(s,req,'trial_discarded',trial.id,{sourcePlanId:trial.sourcePlanId});write(s);
-    for(const id of pending)await finish(id,req,'cancelled',{failure:{code:'trial_discarded',message:'试算已放弃，保留此前历史结果。'}});
+    for(const id of pending)await stop(id,req,'cancelled',{failure:{code:'trial_discarded',message:'试算已放弃，保留此前历史结果。'}});
     res.json(trial);
   }catch(e){next(e);}});
   router.get('/plans/:id/compare/:other',permission('read'),(req,res)=>{
@@ -177,11 +178,12 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const run={id:randomUUID(),status:'queued',phase:'等待计算线程',createdAt:calculatedAt,revision:target.revision,trialId:trial?.id||null,sourcePlanId:trial?.sourcePlanId||null,inputVersionId:preserve(s,target),...frozen,actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim(),timeoutMs:runTimeoutMs};
     s.runs??=[];s.runs.unshift(run);return {s,run};
   }
-  const publicRun=run=>{const {executionData,...summary}=run;const plan=run.planId?read().plans.find(p=>p.id===run.planId):null;return {...summary,resultState:resultState(run,plan?.resultAssessment)};};
+  const publicRun=run=>{const {executionData,...summary}=run;const plan=run.planId?read().plans.find(p=>p.id===run.planId):null;return {...summary,durationMs:run.durationMs??Math.max(0,Date.parse(run.finishedAt||new Date().toISOString())-Date.parse(run.createdAt)),outcome:run.outcome??({completed:'succeeded',partial:'succeeded',timed_out:'timed_out'}[run.status]||run.status),resultState:resultState(run,plan?.resultAssessment)};};
   function makePlan(result,run){return {...result,trialId:run.trialId,sourcePlanId:run.sourcePlanId,id:randomUUID(),status:'draft',revision:run.revision,inputVersionId:run.inputVersionId,runId:run.id,conditions:run.conditions,snapshotHash:run.snapshotHash};}
   function finish(id,req,status,details={}){
-    const s=read(),run=s.runs?.find(r=>r.id===id);if(!run||terminal.has(run.status))return;
+    const s=read(),run=s.runs?.find(r=>r.id===id);if(!run||terminal.has(run.status)||stopping.has(id))return;
     Object.assign(run,details,{status,finishedAt:new Date().toISOString(),phase:status==='completed'?'计算完成':status==='partial'?'计算完成，有未排或问题':status});
+    run.durationMs=Math.max(0,Date.parse(run.finishedAt)-Date.parse(run.createdAt));
     if(details.result){const plan=makePlan(details.result,run);delete run.result;s.plans.unshift(plan);run.planId=plan.id;if(run.trialId){const trial=s.trials.find(t=>t.id===run.trialId);if(trial.status==='active'&&trial.revision===run.revision)trial.latestPlanId=plan.id;}}
     record(s,req,'run_'+status,id,{inputVersionId:run.inputVersionId,snapshotHash:run.snapshotHash,failure:run.failure,planId:run.planId});write(s);
     const job=activeWorkers.get(id);if(job){clearTimeout(job.timer);activeWorkers.delete(id);return job.worker.terminate();}
@@ -194,30 +196,58 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(!original||inputHash(original.data)!==run.inputVersionId||inputHash({conditions:run.conditions,executionData:run.executionData})!==run.snapshotHash)return res.status(409).json({error:'historical_inputs_unavailable'});
     res.json({runId:run.id,inputVersionId:run.inputVersionId,snapshotHash:run.snapshotHash,originalInput:original.data,executionData:run.executionData,conditions:run.conditions});
   });
-  router.post('/runs',permission('calculate'),(req,res)=>{
-    if(activeWorkers.size>=2)return res.status(429).json({error:'run_capacity',message:'最多同时计算两次，请稍后另开计算。'});
-    const prepared=prepare(req,res);if(!prepared)return;const {s,run}=prepared;
-    record(s,req,'run_created',run.id,{inputVersionId:run.inputVersionId,snapshotHash:run.snapshotHash,conditions:run.conditions});write(s);
+  function launch(req,run){
     try{
-      const worker=workerFactory({executionData:run.executionData,revision:run.revision,conditions:run.conditions,calculatedAt:run.createdAt});
-      const timer=setTimeout(()=>finish(run.id,req,'timed_out',{failure:{code:'time_limit',message:'达到计算时限；超时不代表无可行排法，可另开计算。'}}),runTimeoutMs);
+      const worker=workerFactory({executionData:run.executionData,revision:run.revision,conditions:run.conditions,calculatedAt:run.conditions.ruleEvaluationAt||run.createdAt});
+      const timer=setTimeout(()=>stop(run.id,req,'timed_out',{failure:{code:'time_limit',message:'达到计算时限；超时不代表无可行排法，可另开计算。'}}),runTimeoutMs);
       activeWorkers.set(run.id,{worker,timer});
       worker.on('message',message=>{
-        if(message.kind==='progress'){
-          const current=read(),r=current.runs?.find(r=>r.id===run.id);if(!r||terminal.has(r.status))return;
+        if(message?.kind==='progress'){
+          const current=read(),r=current.runs?.find(r=>r.id===run.id);if(!r||terminal.has(r.status)||stopping.has(run.id)||r.startedAt)return;
           r.status='running';r.phase='计算中';r.startedAt=new Date().toISOString();record(current,req,'run_started',r.id,{snapshotHash:r.snapshotHash});write(current);
-        }else if(message.kind==='result')finish(run.id,req,message.plan.resultAssessment?.status==='partial-unplanned'||message.plan.findings.length?'partial':'completed',{result:message.plan});
-        else if(message.kind==='failure')finish(run.id,req,'failed',{failure:{code:message.code,message:message.message}});
+        }else if(message?.kind==='result'&&message.plan&&Array.isArray(message.plan.tasks)&&Array.isArray(message.plan.findings))finish(run.id,req,message.plan.resultAssessment?.status==='partial-unplanned'||message.plan.findings.length?'partial':'completed',{result:message.plan});
+        else if(message?.kind==='failure')finish(run.id,req,'failed',{failure:{code:'calculation_error',message:'计算发生内部错误，请展开详情并联系维护人员。'}});
+        else finish(run.id,req,'failed',{failure:{code:'invalid_worker_message',message:'计算返回内容不完整，未保存结果。'}});
       });
       worker.on('error',()=>finish(run.id,req,'failed',{failure:{code:'worker_error',message:'计算线程失败，未保存结果；可另开计算。'}}));
       worker.on('exit',()=>finish(run.id,req,'failed',{failure:{code:'worker_exit',message:'计算线程在返回结果前退出；可另开计算。'}}));
     }catch{finish(run.id,req,'failed',{failure:{code:'worker_start',message:'无法启动计算线程；可另开计算。'}});}
+  }
+  async function stop(id,req,status,details){
+    if(stopping.has(id))return stopping.get(id);
+    const s=read(),run=s.runs?.find(r=>r.id===id);if(!run||terminal.has(run.status))return;
+    const job=activeWorkers.get(id);
+    run.status=status==='cancelled'?'cancel_requested':'stopping';run.phase=status==='cancelled'?'已请求取消，正在停止计算':'达到时限，正在停止计算';run.stopRequestedAt=new Date().toISOString();
+    record(s,req,'run_stop_requested',id,{requestedOutcome:status,snapshotHash:run.snapshotHash});write(s);
+    if(job)clearTimeout(job.timer);
+    // Persist intent before terminating. Late results/progress/exit cannot win once stop owns the run.
+    const pending=Promise.resolve().then(()=>job?.worker.terminate()).then(()=>{
+      stopping.delete(id);activeWorkers.delete(id);finish(id,req,status,details);
+    },()=>{
+      stopping.delete(id);activeWorkers.delete(id);finish(id,req,'failed',{failure:{code:'termination_unconfirmed',message:'无法确认计算线程已停止，请联系维护人员；本次不保存结果。'}});
+    });stopping.set(id,pending);return pending;
+  }
+  router.post('/runs',permission('calculate'),(req,res)=>{
+    if(activeWorkers.size>=2)return res.status(429).json({error:'run_capacity',message:'最多同时计算两次，请稍后另开计算。'});
+    const prepared=prepare(req,res);if(!prepared)return;const {s,run}=prepared;
+    record(s,req,'run_created',run.id,{inputVersionId:run.inputVersionId,snapshotHash:run.snapshotHash,conditions:run.conditions});write(s);launch(req,run);
     res.status(202).json(publicRun(read().runs.find(r=>r.id===run.id)));
+  });
+  router.post('/runs/:id/retry',permission('calculate'),(req,res)=>{
+    if(activeWorkers.size>=2)return res.status(429).json({error:'run_capacity'});
+    const s=read(),old=s.runs?.find(r=>r.id===req.params.id);if(!old)return res.status(404).json({error:'run_not_found'});
+    if(!terminal.has(old.status))return res.status(409).json({error:'run_active',message:'请等原运行结束后再复查。'});
+    const original=s.inputVersions?.[old.inputVersionId];
+    if(!original||inputHash(original.data)!==old.inputVersionId||inputHash({conditions:old.conditions,executionData:old.executionData})!==old.snapshotHash)return res.status(409).json({error:'historical_inputs_unavailable',message:'原始输入记录不完整，不能复算。'});
+    if(old.trialId&&s.trials?.find(t=>t.id===old.trialId)?.status!=='active')return res.status(409).json({error:'trial_discarded'});
+    if(old.conditions.executionFactsVersion!==inputHash(executionState(s.data)))return res.status(409).json({error:'current_execution_changed',message:'当前执行事实已变化；请从当前事实另开计算，原记录保留。'});
+    const run={id:randomUUID(),retryOf:old.id,status:'queued',phase:'等待计算线程',createdAt:new Date().toISOString(),revision:old.revision,trialId:old.trialId,sourcePlanId:old.sourcePlanId,inputVersionId:old.inputVersionId,executionData:structuredClone(old.executionData),conditions:structuredClone(old.conditions),snapshotHash:old.snapshotHash,timeoutMs:runTimeoutMs,actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim()};
+    s.runs.unshift(run);record(s,req,'run_created',run.id,{retryOf:old.id,inputVersionId:run.inputVersionId,snapshotHash:run.snapshotHash});write(s);launch(req,run);res.status(202).json(publicRun(read().runs.find(r=>r.id===run.id)));
   });
   router.post('/runs/:id/cancel',permission('calculate'),async(req,res,next)=>{try{
     const run=read().runs?.find(r=>r.id===req.params.id);if(!run)return res.status(404).json({error:'run_not_found'});
     if(terminal.has(run.status))return res.status(409).json({error:'run_finished',status:run.status});
-    await finish(run.id,req,'cancelled',{failure:{code:'user_cancelled',message:'用户取消，计算线程已终止；未保存结果。'}});
+    await stop(run.id,req,'cancelled',{failure:{code:'user_cancelled',message:'用户取消，计算线程已终止；未保存结果。'}});
     res.json(publicRun(read().runs.find(r=>r.id===run.id)));
   }catch(e){next(e);}});
   // Compatibility: this route computes synchronously and reports only a terminal
@@ -227,10 +257,10 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     try{
       const result=calculate(run.executionData,run.revision,run.createdAt,run.conditions),plan=makePlan(result,run);
       run.status=result.resultAssessment?.status==='partial-unplanned'||result.findings.length?'partial':'completed';run.phase='同步计算完成';run.finishedAt=new Date().toISOString();run.planId=plan.id;
-      s.plans.unshift(plan);if(run.trialId){const trial=s.trials.find(t=>t.id===run.trialId);trial.latestPlanId=plan.id;}record(s,req,'calculate',plan.id,{runId:run.id,snapshotHash:run.snapshotHash});write(s);res.status(201).json(plan);
+      run.durationMs=Math.max(0,Date.parse(run.finishedAt)-Date.parse(run.createdAt));s.plans.unshift(plan);if(run.trialId){const trial=s.trials.find(t=>t.id===run.trialId);trial.latestPlanId=plan.id;}record(s,req,'calculate',plan.id,{runId:run.id,snapshotHash:run.snapshotHash});write(s);res.status(201).json(plan);
     }catch{
       run.status='failed';run.phase='同步计算失败';run.finishedAt=new Date().toISOString();run.failure={code:'calculation_error',message:'同步计算失败，未保存结果。'};
-      record(s,req,'run_failed',run.id,{failure:run.failure});write(s);res.status(500).json({error:'calculation_error',runId:run.id});
+      run.durationMs=Math.max(0,Date.parse(run.finishedAt)-Date.parse(run.createdAt));record(s,req,'run_failed',run.id,{failure:run.failure});write(s);res.status(500).json({error:'calculation_error',runId:run.id});
     }
   });
   // The old arbitrary-snapshot POST is closed: only save a calculated server plan.

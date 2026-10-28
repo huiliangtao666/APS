@@ -324,7 +324,7 @@ test('FR017 enabled personnel constraint with complete data cannot auto-disable 
 });
 
 async function waitRun(call,id){
- for(let i=0;i<250;i++){const r=await call('/runs/'+id);if(!['queued','running'].includes(r.body.status))return r.body;await new Promise(resolve=>setTimeout(resolve,20));}
+ for(let i=0;i<250;i++){const r=await call('/runs/'+id);if(['completed','partial','cancelled','failed','timed_out'].includes(r.body.status))return r.body;await new Promise(resolve=>setTimeout(resolve,20));}
  throw Error('run did not finish');
 }
 test('FR018 actual worker freezes selected input, horizon, ordering and adopted rules; edits allow a new run',async t=>{

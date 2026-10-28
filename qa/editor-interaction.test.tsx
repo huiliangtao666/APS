@@ -94,7 +94,7 @@ test('FR018 run controls select real scope/conditions and inspect immutable hist
 });
 test('FR018 failed snapshot query is visible without replacing the selected conditions',async()=>{
  let tree:any;const props={data:{orders:[],rules:[]},runs:[{id:'r',status:'failed',phase:'failed',createdAt:'now',inputVersionId:'x',snapshotHash:'y',conditions:{orderIds:['A'],lineId:'L01',startMinute:0,endMinute:600,priority:'规则设置',enabledRuleIds:[],timeOrigin:'fixed'},failure:{code:'worker_error',message:'计算线程失败'}}],canWrite:false,busy:false,onStart:()=>{},onCancel:()=>{},onResult:()=>{},onInputs:async()=>{throw Error('historical_inputs_unavailable');}};
- act(()=>{tree=create(<RunPanel {...props}/>);});await act(async()=>{button(tree,'查看本次原始输入、实际规则与条件').props.onClick();});assert.ok(text(tree).includes('historical_inputs_unavailable'));assert.ok(text(tree).includes('计算线程失败'));tree.unmount();
+ act(()=>{tree=create(<RunPanel {...props}/>);});await act(async()=>{button(tree,'查看本次原始输入、实际规则与条件').props.onClick();});assert.ok(text(tree).includes('无法读取完整的原始输入'));assert.ok(text(tree).includes('计算线程失败'));tree.unmount();
 });
 
 test('FR019 mode is explicit in selection, historical scope stays visible and does not follow current controls',async()=>{

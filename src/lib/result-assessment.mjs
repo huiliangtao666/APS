@@ -3,7 +3,7 @@ const date=m=>Number.isFinite(m)?new Date(Date.parse(PLAN_TIME_ORIGIN)+m*60000).
 const ref=(table,row)=>({table,row:structuredClone(row)});
 const suggestion=(kind,message)=>({kind,message,guaranteed:false,requiresNewRun:true});
 export function resultState(run,report){
- const states={queued:['queued','等待计算'],running:['running','计算中'],timed_out:['time-limit-no-result','规定时间内未找到可用结果；不代表业务无解'],failed:['calculation-failure','计算失败'],cancelled:['user-cancellation','用户取消']};
+ const states={cancel_requested:['cancel-requested','已请求取消，正在停止计算'],stopping:['stopping','正在停止计算'],queued:['queued','等待计算'],running:['running','计算中'],timed_out:['time-limit-no-result','规定时间内未找到可用结果；不代表业务无解'],failed:['calculation-failure','计算失败'],cancelled:['user-cancellation','用户取消']};
  const [code,label]=states[run.status]||[report?.status||'unknown',report?.status==='scheduled'?'已得到安排（仅本次检查范围）':report?.status==='partial-unplanned'?'存在未排任务或问题':'历史结果状态未知'];
  return {code,label,globalFeasibility:'unknown',planId:run.planId||null,hasSavedResult:!!run.planId,failure:run.failure||null};
 }

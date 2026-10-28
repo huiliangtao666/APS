@@ -17,7 +17,7 @@ import {materialFixture} from './material-fixture.mjs';
 import {executionFixture} from './execution-fixture.mjs';
 
 export const sourceSHA=process.env.FR034_PRODUCT_LABEL||'FR034 working source; parent 9783e9de6e500f895dbe6084bcfda2690dcbad7d';
-export async function startValidation(){
+export async function startValidation({runOptions={}}={}){
  assert.equal(process.env.FR033_DISPOSABLE_VALIDATION,'1','Set FR033_DISPOSABLE_VALIDATION=1 explicitly');
  const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
  const scratch=fs.mkdtempSync(path.join(os.tmpdir(),'fr033-real-app-'));
@@ -38,7 +38,7 @@ export async function startValidation(){
  const actor=(req,_res,next)=>{req.praetorActor={kind:'user',issuer:'fr033-test',sub:'synthetic-planner',requestId:'fr033-disposable'};next();};
  const {router,requireMember}=createAuthRouter({actorMiddleware:actor,sendActorError:()=>{},store});
  const app=express();app.use(express.json({limit:'2mb'}));
- app.use('/api/auth',router);app.use('/api',createBusinessRouter({dataDir,actorMiddleware:actor,requireMember}));
+ app.use('/api/auth',router);app.use('/api',createBusinessRouter({dataDir,actorMiddleware:actor,requireMember,...runOptions}));
  app.use(express.static(dist));app.get('*',(_req,res)=>res.sendFile(path.join(dist,'index.html')));
  server=app.listen(0,'127.0.0.1');await new Promise(r=>server.once('listening',r));
  const url=`http://127.0.0.1:${server.address().port}`;
