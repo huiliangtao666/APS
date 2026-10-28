@@ -1,3 +1,4 @@
+import {TimelinePanel} from './TimelinePanel';
 import {ConfirmationPanel} from './ConfirmationPanel';
 import {ExecutionPanel} from './ExecutionPanel';
 import {executionInventory} from './lib/material-allocation.mjs';
@@ -33,7 +34,7 @@ type StoredVerificationReport = VerificationReport & { inputFingerprint?: string
 type Plan = ResultPlan & DeliveryPlan & JointPlan & BatchPlan & { id: string; name: string; createdAt: string; tasks: Task[]; findings: Finding[]; rules: string[]; inputVersion: string; verification?: StoredVerificationReport; supplyConditions?: SupplyCondition[]; supplyInput?: string; materialChecked?:boolean;materialDemands?:MaterialDemandRow[]; ruleSnapshot?: RuleSnapshot; inputSnapshot?:Record<string,Row[]>;runId?:string;conditions?:Run["conditions"] };
 
 function rulesInputFingerprint(data:Record<string,Row[]>) { const source=JSON.stringify({orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],personnelGroups:data.personnelGroups||[],machines:data.machines||[],calendars:data.calendars||[],downtime:data.downtime||[],rules:data.rules||[]});let hash=2166136261;for(let i=0;i<source.length;i++){hash^=source.charCodeAt(i);hash=Math.imul(hash,16777619);}return (hash>>>0).toString(16).padStart(8,'0'); }
-function fmt(min: number) { const n=480+Math.round(min); return `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`; }
+
 export default function App() {
   const membership=useAppMembership();
   const requestGeneration=useRef(0);
@@ -70,7 +71,6 @@ export default function App() {
   const supplyStale=!!activePlan && (activePlan.supplyInput ? activePlan.supplyInput!==supplyInput : (data.supplyUses||[]).length>0);
   const enabledRules=(data.rules||[]).filter(r=>r['是否启用']==='是').map(r=>r['规则编号']);
   const tasks=activePlan?.tasks||[];
-  const maxTime=Math.max(120,...tasks.map(t=>t.end));
   const verificationStale=!!verification&&(activePlan?.inputVersion!==`v${inputVersion}`||verification.inputFingerprint!==rulesInputFingerprint(data));
 
   async function api(path:string,body?:object) {
@@ -122,18 +122,14 @@ export default function App() {
             ['lineScope','单线约束'],['machineOverlap','机器不重叠'],['precedence','优先关系'],
           ] as const).map(([key,label])=>{const check=verification.checks[key];const statusLabel:Record<VerificationStatus,string>={pass:'通过',problem:'问题',not_checked:'未检查'};return <article className={`verification-check ${check.status}`} key={key}><div><b>{label}</b><strong>{statusLabel[check.status]}</strong></div><ul>{check.details.map((detail,i)=><li key={i}>{detail}</li>)}</ul></article>;})}</div><small className="verification-note">本报告只复核上述三项已确认约束；保存的结果不代替主管确认。输入变更后需重新复核。</small></>}
         </section>
-        <div className="content-grid"><section className="panel gantt-panel"><div className="panel-head"><div><h2>机器甘特图</h2><p>时间以 2026-11-02 08:00（Asia/Shanghai）为分钟 0；区间按 [开始,结束)。</p></div><span className="tag">{activePlan?.name||'尚无方案'}</span></div>
-          <div className="timeline"><div className="time-labels"><span>设备 / 任务</span>{Array.from({length:Math.min(8,Math.ceil(maxTime/60))},(_,i)=><span key={i}>{fmt(i*60)}</span>)}</div>
-          {(activePlan?.inputSnapshot?.machines||data.machines||[]).filter(m=>tasks.some(t=>t.machine===m['设备编号'])).map(m=><div className="machine-row" key={m['设备编号']}><div className="machine-name"><b>{m['设备编号']}</b><small>{m['设备名称']}</small></div><div className="track">{tasks.filter(t=>t.machine===m['设备编号']).map(t=><button key={t.id} className={`task-bar ${selected.includes(t.id)?'selected':''}`} style={{left:`${Math.max(0,t.start)/Math.max(240,maxTime)*100}%`,width:`${Math.max(5,t.duration/Math.max(240,maxTime)*100)}%`}} onClick={()=>setSelected([t.id])} title={`${t.id} · ${fmt(t.start)}–${fmt(t.end)}`}><b>{t.id}</b><small>{fmt(t.start)}–{fmt(t.end)}</small></button>)}</div></div>)}
-          {!tasks.length&&<div className="empty">先运行计算，生成任务甘特图。</div>}</div>
-          {selected.length>0&&<div className="task-focus"><b>选中任务：{selected.join('、')}</b><span>来源：17_订单 → 10_路线 → 11_工时 → 12_资源依赖</span><button onClick={()=>setSelected([])}>清除定位</button></div>}
-        </section>
+        <TimelinePanel key={activePlan?.id||'none'} plan={activePlan} selected={selected} onSelect={setSelected} currentFacts={data.executionFacts||[]} onInput={(table,row)=>{setQueryInputTable(table);setQueryInputRow(row);setView('query');}}/>
+        <div className="content-grid">
         <aside className="panel issues-panel"><div className="panel-head"><div><h2>问题定位</h2><p>点击问题突出关联任务；输入错误定位到表格更正。</p></div><span className={`count ${visibleFindings.length?'error':''}`}>{visibleFindings.length}</span></div>
           {visibleFindings.length?visibleFindings.map((f,i)=><button className="finding" key={`${f.code}-${i}`} onClick={()=>{if(f.taskIds.length)locate(f);else{setTableKey(f.code.includes('JOINT_RESOURCE')?'resourceClaims':f.code.startsWith('RULE')?'rules':f.code.startsWith('SUPPLY_')?'supplies':f.code.startsWith('INVENTORY_')?'inventory':f.code.includes('ROUTE')?'routes':f.code.includes('PROCESS_TIME')?'times':f.code.includes('MACHINE')?'dependencies':f.code.includes('CALENDAR')?'calendars':f.code.includes('DOWNTIME')?'downtime':f.code.includes('PERSONNEL')?'dependencies':'orders');setView('data');setMessage(`问题来源已定位：${f.message}`);}}}><b>{f.code}</b><span>{f.message}</span>{f.taskIds.length>0&&<small>定位任务：{f.taskIds.join(' / ')}</small>}</button>):<div className="clear-state"><span>✓</span><b>{activePlan?'当前结果未报告问题':'尚无计算结果'}</b><small>检查范围见当前方案记录；无问题不代表全订单覆盖或完整业务可执行。</small></div>}
           <div className="scope-note"><b>检查边界</b><p>R1 最小模式不判断日历、停机、人员、工装或物料；已有支持模式保留既有依赖保护。跨班和可中断策略尚无已确认业务口径；显式声明的工装/空间以及物料/拆合批是否检查见本方案范围；动态释放、最大等待、执行事实及主管确认尚未实现；显式预计供给引用按可用时点等待。</p></div>
         </aside></div>
         <section className="panel plan-list"><div className="panel-head"><div><h2>任务明细 / 已保存方案</h2><button onClick={()=>setView('query')}>查询关联输入与任务</button><p>任务时间、资源和前序引用支持核查；保存方案在此回看。</p></div><select value={activePlan?.id||''} onChange={e=>{const plan=plans.find(p=>p.id===e.target.value)||activePlan;setActivePlan(plan);setIssues([]);setVerification(plan?.verification||null);}}><option value="">当前计算</option>{plans.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></div>
-          <div className="table-wrap"><table><thead><tr><th>任务</th><th>订单 / 产品</th><th>工序</th><th>机器</th><th>开始</th><th>结束</th><th>工时</th><th>前序</th><th>来源</th><th>预计供给条件</th></tr></thead><tbody>{tasks.map(t=><tr key={t.id} onClick={()=>setSelected([t.id])}><td><b>{t.id}</b></td><td>{t.orderId} / {t.productId}</td><td>{t.label} <small>{t.operation}</small></td><td>{t.machine}</td><td>{fmt(t.start)}</td><td>{fmt(t.end)}</td><td>{t.duration} 分</td><td>{t.predecessor||'—'}</td><td>{t.source}</td><td>{activePlan?.supplyConditions?.filter(c=>c['订单编号']===t.orderId&&c['工序编号']===t.operation).map(c=>c['条件说明']).join('；')||'未引用预计供给'}</td></tr>)}</tbody></table>{!tasks.length&&<div className="empty">暂无任务明细</div>}</div>
+
         </section>
       </>}
       {view==='query'&&<DataQueries key={inputVersion+'-'+plans.map(p=>p.id).join(',')} data={data} plans={plans} revision={inputVersion} initialTable={queryInputTable} initialRow={queryInputTable?queryInputRow:undefined} initialPlan={activePlan?.id} initialTask={selected.find(id=>activePlan?.tasks.some(t=>t.id===id))} canExport={!!session?.canExport} reason={reason} onExport={(query)=>download({query},'模拟数据查询.csv')} onRestore={session?.canWrite?(tables)=>perform(async()=>{await api('/inputs',{tables,revision:inputVersion,operation:'restore'});await refresh();setMessage('已恢复为新输入版本；历史方案保持原值。');}):undefined} onTask={(planId,taskId)=>{const plan=plans.find(p=>p.id===planId);if(plan){setActivePlan(plan);setIssues(plan.findings);setVerification(plan.verification||null);setSelected([taskId]);setView('schedule');}}}/>}
