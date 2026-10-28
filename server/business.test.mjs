@@ -250,3 +250,20 @@ test('FR015 invalid cross references, calendar ranges, route cycles, rule parame
  });
  assert.equal((await call('/state')).body.revision,0);assert.equal((await call('/operations')).body.length,0);
 });
+
+test('FR014 issue11 D2 malformed explicit filters return 400 invalid_query, no internal details or export audit',async t=>{
+ const {call}=await fixture(t);
+ for(const filters of [null,[],false,true,0,'',42,'text',{from:null}]){
+  const r=await call('/export',{query:{table:'orders',revision:0,filters}});assert.equal(r.status,400,JSON.stringify(filters));assert.deepEqual(r.body,{error:'invalid_query'});
+ }
+ assert.equal((await call('/operations')).body.length,0);
+ for(const table of ['missing'])assert.equal((await call('/export',{query:{table,revision:0}})).status,404);
+ assert.equal((await call('/export',{query:{table:'orders',planId:'missing',revision:0}})).status,404);
+ for(const filters of [undefined,{}])assert.equal((await call('/export',{query:{table:'orders',revision:0,filters}})).status,200);
+});
+test('FR014 issue11 D1 authenticated current and historical export reject impossible filter dates',async t=>{
+ const {call}=await fixture(t);const p=(await call('/calculate',{revision:0})).body;
+ for(const source of [{},{planId:p.id,sourcePlanId:p.id}]){
+  const r=await call('/export',{query:{table:'inventory',revision:0,...source,filters:{dateField:'有效期',from:'2026-02-30',to:'2026-02-30'}}});assert.equal(r.status,200);assert.equal(r.body.split('\r\n').length,1);
+ }
+});
