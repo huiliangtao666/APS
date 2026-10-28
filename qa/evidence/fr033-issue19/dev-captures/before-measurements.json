@@ -1,0 +1,354 @@
+[
+  {
+    "viewport": {
+      "width": 640,
+      "height": 820,
+      "dpr": 1
+    },
+    "zoom": "0.25",
+    "axis": {
+      "x": 193,
+      "width": 30
+    },
+    "labels": [
+      {
+        "text": "2026-11-02 08:00:00（分钟 0）",
+        "x": 193,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 113.921875,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 09:00:00（分钟 60）",
+        "x": 208,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 113.96875,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 10:00:00（分钟 120）",
+        "x": 223,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 111.71875,
+        "inkHeight": 32
+      }
+    ],
+    "minimumGap": -109,
+    "axisOverflow": true
+  },
+  {
+    "viewport": {
+      "width": 640,
+      "height": 820,
+      "dpr": 1
+    },
+    "zoom": "1",
+    "axis": {
+      "x": 193,
+      "width": 120
+    },
+    "labels": [
+      {
+        "text": "2026-11-02 08:00:00（分钟 0）",
+        "x": 193,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 113.921875,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 09:00:00（分钟 60）",
+        "x": 253,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 113.96875,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 10:00:00（分钟 120）",
+        "x": 313,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 111.71875,
+        "inkHeight": 32
+      }
+    ],
+    "minimumGap": -64,
+    "axisOverflow": true
+  },
+  {
+    "viewport": {
+      "width": 640,
+      "height": 820,
+      "dpr": 1
+    },
+    "zoom": "3",
+    "axis": {
+      "x": 193,
+      "width": 360
+    },
+    "labels": [
+      {
+        "text": "2026-11-02 08:00:00（分钟 0）",
+        "x": 193,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 113.921875,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 08:45:00（分钟 45）",
+        "x": 328,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 114.078125,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 09:30:00（分钟 90）",
+        "x": 463,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 114,
+        "inkHeight": 32
+      }
+    ],
+    "minimumGap": 11,
+    "axisOverflow": true
+  },
+  {
+    "viewport": {
+      "width": 640,
+      "height": 820,
+      "dpr": 1
+    },
+    "zoom": "8",
+    "axis": {
+      "x": 193,
+      "width": 960
+    },
+    "labels": [
+      {
+        "text": "2026-11-02 08:00:00（分钟 0）",
+        "x": 193,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 113.921875,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 08:30:00（分钟 30）",
+        "x": 433,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 113.953125,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 09:00:00（分钟 60）",
+        "x": 673,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 113.96875,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 09:30:00（分钟 90）",
+        "x": 913,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 114,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 10:00:00（分钟 120）",
+        "x": 1153,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 111.71875,
+        "inkHeight": 32
+      }
+    ],
+    "minimumGap": 116,
+    "axisOverflow": true
+  },
+  {
+    "viewport": {
+      "width": 1100,
+      "height": 820,
+      "dpr": 1
+    },
+    "zoom": "0.25",
+    "axis": {
+      "x": 198,
+      "width": 30
+    },
+    "labels": [
+      {
+        "text": "2026-11-02 08:00:00（分钟 0）",
+        "x": 198,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 113.921875,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 09:00:00（分钟 60）",
+        "x": 213,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 113.96875,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 10:00:00（分钟 120）",
+        "x": 228,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 111.71875,
+        "inkHeight": 32
+      }
+    ],
+    "minimumGap": -109,
+    "axisOverflow": true
+  },
+  {
+    "viewport": {
+      "width": 1100,
+      "height": 820,
+      "dpr": 1
+    },
+    "zoom": "1",
+    "axis": {
+      "x": 198,
+      "width": 120
+    },
+    "labels": [
+      {
+        "text": "2026-11-02 08:00:00（分钟 0）",
+        "x": 198,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 113.921875,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 09:00:00（分钟 60）",
+        "x": 258,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 113.96875,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 10:00:00（分钟 120）",
+        "x": 318,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 111.71875,
+        "inkHeight": 32
+      }
+    ],
+    "minimumGap": -64,
+    "axisOverflow": true
+  },
+  {
+    "viewport": {
+      "width": 1100,
+      "height": 820,
+      "dpr": 1
+    },
+    "zoom": "3",
+    "axis": {
+      "x": 198,
+      "width": 360
+    },
+    "labels": [
+      {
+        "text": "2026-11-02 08:00:00（分钟 0）",
+        "x": 198,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 113.921875,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 08:45:00（分钟 45）",
+        "x": 333,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 114.078125,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 09:30:00（分钟 90）",
+        "x": 468,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 114,
+        "inkHeight": 32
+      }
+    ],
+    "minimumGap": 11,
+    "axisOverflow": true
+  },
+  {
+    "viewport": {
+      "width": 1100,
+      "height": 820,
+      "dpr": 1
+    },
+    "zoom": "8",
+    "axis": {
+      "x": 198,
+      "width": 960
+    },
+    "labels": [
+      {
+        "text": "2026-11-02 08:00:00（分钟 0）",
+        "x": 198,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 113.921875,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 08:30:00（分钟 30）",
+        "x": 438,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 113.953125,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 09:00:00（分钟 60）",
+        "x": 678,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 113.96875,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 09:30:00（分钟 90）",
+        "x": 918,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 114,
+        "inkHeight": 32
+      },
+      {
+        "text": "2026-11-02 10:00:00（分钟 120）",
+        "x": 1158,
+        "width": 124,
+        "height": 40,
+        "inkWidth": 111.71875,
+        "inkHeight": 32
+      }
+    ],
+    "minimumGap": 116,
+    "axisOverflow": true
+  }
+]

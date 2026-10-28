@@ -1,0 +1,62 @@
+[
+  {
+    "file": "source/before/src/TimelinePanel.tsx",
+    "commit": "50a32ef716f4bcd3f72993a2f0125afac9fabce2",
+    "repositoryPath": "src/TimelinePanel.tsx",
+    "sha256": "707cb6b2f3a940e3e42bba6e287590676b3c8ace5f84ff044b9d1a8c629efd1d"
+  },
+  {
+    "file": "source/before/src/lib/timetable.mjs",
+    "commit": "50a32ef716f4bcd3f72993a2f0125afac9fabce2",
+    "repositoryPath": "src/lib/timetable.mjs",
+    "sha256": "1481421b676a63dc3e5ba5d26913b3845c2c4cc1572e07f137d464029c0495d6"
+  },
+  {
+    "file": "source/before/src/lib/timetable.d.mts",
+    "commit": "50a32ef716f4bcd3f72993a2f0125afac9fabce2",
+    "repositoryPath": "src/lib/timetable.d.mts",
+    "sha256": "69e782b7ede518c17e00fe8dc9a21633599c66370e6fb5d8bf462092efe8d928"
+  },
+  {
+    "file": "source/before/src/index.css",
+    "commit": "50a32ef716f4bcd3f72993a2f0125afac9fabce2",
+    "repositoryPath": "src/index.css",
+    "sha256": "d818c1805d1890adb1bac5d1ee84677b8af175ebf3dffe6db9f94d02473e8e7b"
+  },
+  {
+    "file": "source/before/qa/browser-acceptance.tsx",
+    "commit": "8b91a49a9e94290127a264748b0036c50396454f",
+    "repositoryPath": "qa/browser-acceptance.tsx",
+    "sha256": "1da99506c4dd5780633f7ecad1d6e94ee596b1fe94225924fb5a3681a4db8e2b"
+  },
+  {
+    "file": "source/after/src/TimelinePanel.tsx",
+    "commit": "a4dfa263f7cf8ca832243d153e39efaf771c6b2e",
+    "repositoryPath": "src/TimelinePanel.tsx",
+    "sha256": "f8af2a43c7bfaaf509aedbd8d5644bdb2f683dcb31ba7458ef24556db7531c3a"
+  },
+  {
+    "file": "source/after/src/lib/timetable.mjs",
+    "commit": "a4dfa263f7cf8ca832243d153e39efaf771c6b2e",
+    "repositoryPath": "src/lib/timetable.mjs",
+    "sha256": "c5acd1812fb8bff29621b3a826d026969163f499ebdc0ceab7ccaccff1813a8b"
+  },
+  {
+    "file": "source/after/src/lib/timetable.d.mts",
+    "commit": "a4dfa263f7cf8ca832243d153e39efaf771c6b2e",
+    "repositoryPath": "src/lib/timetable.d.mts",
+    "sha256": "e0aecd28264d0445ab73a408662724acd87395153d2b71099ad0af642280a22f"
+  },
+  {
+    "file": "source/after/src/index.css",
+    "commit": "a4dfa263f7cf8ca832243d153e39efaf771c6b2e",
+    "repositoryPath": "src/index.css",
+    "sha256": "526affa3862fa7f17e04753ea2f0e1908175d7aa13a3f4f5731a016775e57a56"
+  },
+  {
+    "file": "source/after/qa/axis-browser.tsx",
+    "commit": "a4dfa263f7cf8ca832243d153e39efaf771c6b2e",
+    "repositoryPath": "qa/axis-browser.tsx",
+    "sha256": "2516eaab01b899f1a1373771b2b5e5727fba49d59e3b19622e82a400686c5dc9"
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "scope": "portable package bytes; pattern + current injected secret value scan; screenshots visually inspected separately",
+  "findings": [],
+  "rawSessionEnvelopesIncluded": false,
+  "liveBusinessDataIncluded": false,
+  "note": "Synthetic source, fixture, unchanged captures; no claim of complete original-session error/network audit."
+}
