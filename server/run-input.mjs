@@ -1,3 +1,4 @@
+import {jointFlags} from '../src/lib/joint-resources.mjs';
 import {activeBatchRule} from '../src/lib/production-batches.mjs';
 import { createHash } from 'node:crypto';
 import { schedulingScope } from '../src/lib/scheduling-scope.mjs';
@@ -23,9 +24,10 @@ export function freezeRunInput(data, selection = {}, calculatedAt = new Date().t
   const executionData=structuredClone(data);
   executionData.orders=selected.map(o=>({...o}));
   executionData.dependencies=executionData.dependencies.filter(r=>orderIds.includes(r['订单编号']));
+  executionData.resourceClaims=(executionData.resourceClaims||[]).filter(r=>orderIds.includes(r['订单编号']));
   executionData.supplyUses=executionData.supplyUses.filter(r=>orderIds.includes(r['订单编号']));
   executionData.rules=executionData.rules.map(r=>({...r,'是否启用':enabledRuleIds.includes(r['规则编号'])?'是':'否'}));
-  checkScope=schedulingScope(checkScope.mode,executionData.rules.some(r=>r['规则编号']==='MATERIAL'&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(calculatedAt))),activeBatchRule(executionData,calculatedAt));
+  checkScope=schedulingScope(checkScope.mode,executionData.rules.some(r=>r['规则编号']==='MATERIAL'&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(calculatedAt))),activeBatchRule(executionData,calculatedAt),jointFlags(executionData,calculatedAt));
   const conditions={mode:checkScope.mode,checkScope,ruleEvaluationAt:calculatedAt,orderIds:selected.map(o=>o['订单编号']),lineId:selected[0]['产线编号'],startMinute,endMinute,priority,enabledRuleIds:[...enabledRuleIds],timeOrigin:'2026-11-02T08:00:00+08:00',interval:'[start,end)',horizonPolicy:'完整工序须在结束范围内；未排不代表全局无解'};
   return {conditions,executionData,snapshotHash:inputHash({conditions,executionData})};
 }

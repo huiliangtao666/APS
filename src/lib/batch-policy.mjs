@@ -9,7 +9,8 @@ export function validateBatchResources(data){
   const id=r['资源编号'];const fail=message=>issues.push({code:'INPUT / BATCH_RESOURCE',message:`组批资源 ${id||'（空）'}：${message}`});
   if(!id||seen.has(id))fail('资源编号须非空且唯一');seen.add(id);
   if(!['批处理装载','共享冷却空间'].includes(r['资源类型']))fail('资源类型未支持；不得推断处理方式');
-  if(r['单位']!=='kg'||!/^\d+(?:\.\d+)?$/.test(r['容量']||'')||!(Number(r['容量'])>0)||!Number.isFinite(Number(r['容量'])))fail('容量须为正有限 kg；其他单位语义未决定');
+  if(!(r['单位']==='kg'||r['资源类型']==='共享冷却空间'&&r['单位']==='位置')||!/^\d+(?:\.\d+)?$/.test(r['容量']||'')||!(Number(r['容量'])>0)||!Number.isFinite(Number(r['容量'])))fail('容量须为正有限 kg 或空间位置数；其他单位语义未决定');
+  if(r['单位']==='位置'&&!Number.isSafeInteger(Number(r['容量'])))fail('位置容量须为安全正整数');
   if(r['资源类型']==='批处理装载'){
    const machine=(data.machines||[]).find(m=>m['设备编号']===id);
    if(!machine)fail('批处理装载须引用有效设备');

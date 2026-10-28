@@ -166,7 +166,7 @@ test('FR015 all 16 categories accept atomic creation and edits, valid copies, an
  let current=r.body.data,revision=1;
  const fields={products:'产品名称',materials:'物料名称',supplies:'预计数量',supplyDelays:'原因',supplyUses:'使用数量',inventory:'位置',orders:'合格需求',bom:'收率/损耗口径备注',routes:'工序名称',times:'固定分钟',machines:'设备名称',calendars:'说明',downtime:'原因',dependencies:'需求数量',personnelGroups:'人员组名称',rules:'中文名称'};
  for(const [key,field] of Object.entries(fields))await t.test(key,async()=>{
-  const rows=structuredClone(current[key]);rows.at(-1)[field]=['预计数量','使用数量','合格需求','固定分钟','需求数量'].includes(field)?'2':'模拟修改';
+  const rows=structuredClone(current[key]);rows.at(-1)[field]=key==='dependencies'?'1.0':['预计数量','使用数量','合格需求','固定分钟','需求数量'].includes(field)?'2':'模拟修改';
   r=await call('/tables/'+key,{rows,revision,operation:'edit'},'supervisor');assert.equal(r.status,200,JSON.stringify(r.body));current=r.body.data;revision=r.body.revision;
  });
  // Copy all sixteen additions, changing their unique keys; route/time copies travel together.
@@ -571,4 +571,27 @@ test('FR021 group/program table validated atomically with actor grants and legac
  assert.deepEqual((await call('/state')).body,before);
  assert.equal((await call('/tables/batchResources',{revision:1,rows:d.batchResources},'query')).status,403);
  assert.equal((await call('/tables/batchResources',{revision:1,rows:[{...d.batchResources[0],'允许程序':'P;P'}]})).status,400);
+});
+
+import {jointFixture} from '../qa/joint-fixture.mjs';
+test('FR022 canonical async runs persist joint occupancy, immutable histories and audited atomic declarations',async t=>{
+ const {call}=await fixture(t);const initial=(await call('/state')).body.data;const d=jointFixture(initial);
+ let s=await call('/inputs',{revision:0,tables:{tools:d.tools,resourceClaims:d.resourceClaims,orders:d.orders,dependencies:d.dependencies,rules:d.rules}});assert.equal(s.status,200,JSON.stringify(s.body));
+ const bad=structuredClone(d.resourceClaims);bad[0]['后延占用分钟']='';
+ const oldState=(await call('/state')).body,oldLog=(await call('/operations')).body;
+ assert.equal((await call('/inputs',{revision:1,tables:{tools:[{...d.tools[0],'可用数量':'1'}],resourceClaims:bad}})).status,400);
+ assert.deepEqual((await call('/state')).body,oldState);assert.deepEqual((await call('/operations')).body,oldLog);
+ assert.equal((await call('/tables/tools',{revision:1,rows:d.tools},'query')).status,403);
+ assert.equal((await call('/tables/resourceClaims',{revision:1,rows:d.resourceClaims},'planner',{'sec-fetch-site':'cross-site'})).status,403);
+ let run=await call('/runs',{revision:1,selection:{endMinute:600},resourceReservations:[{resourceId:'forged'}],actor:'spoof'});assert.equal(run.status,202,JSON.stringify(run.body));
+ for(let i=0;i<200;i++){run=await call('/runs/'+run.body.id);if(['completed','partial','failed'].includes(run.body.status))break;await new Promise(r=>setTimeout(r,10));}
+ assert.equal(run.body.status,'completed',JSON.stringify(run.body));
+ const plans=(await call('/plans')).body,p=plans.find(p=>p.id===run.body.planId);assert.deepEqual(p.tasks.filter(t=>t.operation==='MIX').map(t=>t.start),[0,0,30]);
+ assert.equal(p.jointResourceChecks.MOLD,true);assert.ok(!p.resourceReservations.some(r=>r.resourceId==='forged'));assert.equal(p.ruleSnapshot.capabilityVersion,'FR022-v1');
+ const snapshot=(await call('/runs/'+run.body.id+'/inputs')).body;assert.deepEqual(snapshot.executionData.resourceClaims,d.resourceClaims);assert.equal(snapshot.conditions.checkScope.checked.some(x=>x.includes('工装')),true);
+ const csv=await call('/export',{planId:p.id});assert.equal(csv.status,200);assert.match(csv.body,/G40/);assert.match(csv.body,/联合资源占用/);
+ const claims=structuredClone(d.resourceClaims);claims.forEach(c=>c['后延占用分钟']='10');assert.equal((await call('/tables/resourceClaims',{revision:1,rows:claims})).status,200);
+ const oldAgain=(await call('/plans')).body.find(x=>x.id===p.id);assert.deepEqual(oldAgain,p);assert.deepEqual((await call('/runs/'+run.body.id+'/inputs')).body,snapshot);
+ const next=(await call('/calculate',{revision:2})).body;assert.deepEqual(next.tasks.filter(t=>t.operation==='MIX').map(t=>t.start),[0,0,40]);
+ const records=(await call('/operations')).body;assert.ok(records.some(r=>r.action==='run_completed'));assert.ok(records.every(r=>r.actor==='test#planner'&&r.reason==='test reason'&&r.requestId==='trusted-request'));
 });

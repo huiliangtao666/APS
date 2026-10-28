@@ -39,3 +39,12 @@ test('FR021 production Worker preserves exact split/resource identities and mate
  assert.equal(p.tasks.length,4);assert.ok(p.tasks.every(t=>t.duration===30));assert.deepEqual(p.productionBatches.map(b=>b.load),[250,250]);assert.equal(p.materialDemands.reduce((n,r)=>n+r.quantity,0),500);assert.ok(p.materialDemands.every(r=>r.committed));assert.equal(p.ruleSnapshot.capabilityVersion,'FR021-v1');
  }finally{await worker.terminate();}
 });
+
+import {jointFixture} from './joint-fixture.mjs';
+test('FR022 built production Worker enforces saved joint declarations with two-set capacity',async()=>{
+ const d=jointFixture(seed),frozen=freezeRunInput(d,{endMinute:600});
+ const worker=new Worker(new URL('../dist/calculation-worker.mjs',import.meta.url),{workerData:{...frozen,revision:0,calculatedAt:new Date().toISOString()}});
+ try{const p=await new Promise((resolve,reject)=>{worker.on('message',m=>{if(m.kind==='result')resolve(m.plan);if(m.kind==='failure')reject(Error(m.code));});worker.on('error',reject);});
+ assert.deepEqual(p.tasks.filter(t=>t.operation==='MIX').map(t=>t.start),[0,0,30]);assert.equal(p.resourceReservations.filter(r=>r.type==='工装').length,3);assert.equal(p.ruleSnapshot.capabilityVersion,'FR022-v1');assert.ok(p.resourceReservations.every(r=>r.taskIds.length));
+ }finally{await worker.terminate();}
+});

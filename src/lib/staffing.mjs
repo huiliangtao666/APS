@@ -31,8 +31,9 @@ export function allocatePersonnel(requirements, groups, start, end, reservations
     let remaining = count;
     for (const group of candidates) {
       const groupId = group['人员组编号'];
-      const busy = [...reservations, ...allocations].filter(r => r.groupId === groupId && r.start < until && r.end > from)
-        .reduce((sum, r) => sum + r.count, 0);
+      const relevant = [...reservations, ...allocations].filter(r => r.groupId === groupId && r.start < until && r.end > from);
+      const points = [from,...relevant.map(r=>r.start).filter(t=>t>=from&&t<until)];
+      const busy = Math.max(0,...points.map(t=>relevant.filter(r=>r.start<=t&&r.end>t).reduce((sum,r)=>sum+r.count,0)));
       const available = Math.max(0, Number(group['人员数量']) - busy);
       const assigned = Math.min(remaining, available);
       if (assigned) {

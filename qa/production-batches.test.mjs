@@ -86,8 +86,8 @@ test('FR021 table15 whitelist is authoritative; unconfigured resources split but
  d.batchResources[0]['容量']='200';p=plan(d);assert.equal(p.tasks.length,0);assert.ok(p.findings.some(f=>f.message.includes('冲突')));
 });
 
-test('FR021 AC14 unsupported waiting/space rules cannot be silently ignored and capacity conflicts use exact decimals',()=>{
- for(const id of ['MAX_LAG','STORAGE']){const d=batchFixture(seed);d.rules.find(r=>r['规则编号']===id)['是否启用']='是';const p=plan(d);assert.equal(p.tasks.length,0);assert.ok(p.findings.some(f=>f.message.includes('尚未实现')));}
+test('FR021 AC14 waiting and undeclared space rules cannot be silently ignored and capacity conflicts use exact decimals',()=>{
+ for(const id of ['MAX_LAG','STORAGE']){const d=batchFixture(seed);d.rules.find(r=>r['规则编号']===id)['是否启用']='是';const p=plan(d);assert.equal(p.tasks.length,0);assert.ok(p.findings.some(f=>id==='STORAGE'?/显式|缺少/.test(f.message):f.message.includes('尚未实现')));}
  const d=batchFixture(seed);d.batchResources.find(r=>r['资源编号']==='MIX01')['容量']='300.000000000000000001';const p=plan(d);assert.equal(p.tasks.length,0);assert.ok(p.findings.some(f=>f.message.includes('冲突')));
 });
 test('FR021 delayed feed BOM rechecks split rounding and preserves uncommitted downstream evidence',()=>{
