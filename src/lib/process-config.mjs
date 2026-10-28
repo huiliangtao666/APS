@@ -5,7 +5,8 @@ export function validateProcessConfig({ products = [], orders = [], routes = [],
   const findings = [];
   const productIds = new Set(products.map(row => (row['产品编号'] || '').trim()).filter(Boolean));
   const orderIds = new Set(orders.map(row => (row['订单编号'] || '').trim()).filter(Boolean));
-  const machineIds = new Set(machines.map(row => (row['设备编号'] || '').trim()).filter(Boolean));
+  const machineIds = new Set();
+  const routeOperationKeys = new Set();
   const materialIds = new Set(materials.map(row => (row['物料编号'] || '').trim()).filter(Boolean));
   const personnelGroupIds = new Set(personnelGroups.map(row => (row['人员组编号'] || '').trim()).filter(Boolean));
   const routeByProduct = new Map();
@@ -17,6 +18,7 @@ export function validateProcessConfig({ products = [], orders = [], routes = [],
     if (!operation) findings.push({ code:'INPUT / ROUTE_REQUIRED', message:`${prefix}缺少工序编号` });
     if (operation && !(row['工序名称'] || '').trim()) findings.push({ code:'INPUT / ROUTE_REQUIRED', message:`${prefix}（${product}/${operation}）缺少工序名称` });
     if (product && productIds.has(product) && operation) {
+      routeOperationKeys.add(`${product}\u0000${operation}`);
       const list = routeByProduct.get(product) || [];
       if (list.some(existing => (existing['工序编号'] || '').trim() === operation)) findings.push({ code:'INPUT / ROUTE_DUPLICATE', message:`产品 ${product} 的工序编号 ${operation} 重复` });
       else list.push(row);
@@ -48,6 +50,7 @@ export function validateProcessConfig({ products = [], orders = [], routes = [],
     const product = (row['产品编号'] || '').trim(), operation = (row['工序编号'] || '').trim();
     const key = `${product}\u0000${operation}`;
     if (!product || !operation) findings.push({ code:'INPUT / PROCESS_TIME_REQUIRED', message:`工序工时第 ${index + 1} 行缺少产品编号或工序编号` });
+    else if (!productIds.has(product) || !routeOperationKeys.has(key)) findings.push({ code:'INPUT / PROCESS_TIME_REFERENCE', message:`工序工时第 ${index + 1} 行引用不存在的产品/工序 ${product}/${operation}` });
     if (timeKeys.has(key)) findings.push({ code:'INPUT / PROCESS_TIME_DUPLICATE', message:`产品 ${product} / 工序 ${operation} 工时重复` });
     timeKeys.add(key);
     const value = Number((row['固定分钟'] || '').trim());
@@ -57,6 +60,17 @@ export function validateProcessConfig({ products = [], orders = [], routes = [],
     const operation = row['工序编号'].trim();
     if (!timeKeys.has(`${product}\u0000${operation}`)) findings.push({ code:'INPUT / PROCESS_TIME_MISSING', message:`产品 ${product} / 工序 ${operation} 缺少工时配置` });
   }
+
+  machines.forEach((row, index) => {
+    const id = (row['设备编号'] || '').trim();
+    const operation = (row['工序编号'] || '').trim();
+    const prefix = `设备资源第 ${index + 1} 行`;
+    if (!id) findings.push({ code:'INPUT / MACHINE_REQUIRED', message:`${prefix}缺少设备编号` });
+    else if (machineIds.has(id)) findings.push({ code:'INPUT / MACHINE_DUPLICATE', message:`设备编号 ${id} 重复` });
+    else machineIds.add(id);
+    if (!operation) findings.push({ code:'INPUT / MACHINE_OPERATION_REQUIRED', message:`${prefix}（${id || '未编号'}）缺少适用工序编号` });
+    else if (![...routeOperationKeys].some(key => key.endsWith(`\u0000${operation}`))) findings.push({ code:'INPUT / MACHINE_OPERATION_REFERENCE', message:`${prefix}（${id || '未编号'}）适用工序 ${operation} 未出现在任何产品工艺路线中` });
+  });
 
   dependencies.forEach((row, index) => {
     const order = (row['订单编号'] || '').trim(), operation = (row['工序编号'] || '').trim();

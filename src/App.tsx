@@ -10,6 +10,7 @@ import { queryInventoryAvailability, validateInventoryBatches } from './lib/inve
 import { findDowntimeShiftReason } from './lib/downtime-shift-reason.mjs';
 import { appendOrderChange, isOrderSchedulable, validateOrders, type OrderChange } from './lib/orders.mjs';
 import { allocatePersonnel, type PersonnelReservation } from './lib/staffing.mjs';
+import { validateBomConfig } from './lib/bom-config.mjs';
 
 type Row = Record<string, string>;
 type TableDef = { key: string; label: string; file: string; fields: string[] };
@@ -26,6 +27,7 @@ const defs: TableDef[] = [
   { key: 'supplyUses', label: '计划供给引用', file: '22_计划供给引用.csv', fields: ['引用编号','订单编号','工序编号','供给编号','使用数量'] },
   { key: 'inventory', label: '库存批次', file: '09_库存批次.csv', fields: ['批次编号','物料编号','账面数量','已占用数量','有效期','位置','质量状态','预计可用时间'] },
   { key: 'orders', label: '订单与交期', file: '17_生产订单与交期.csv', fields: ['订单编号','产品编号','产线编号','合格需求','数量单位','要求可交付分钟','优先顺序','是否允许拆分','需求类型','订单状态'] },
+  { key: 'bom', label: 'BOM 与包装用量', file: '09_BOM与包装用量.csv', fields: ['版本编号','产品编号','生效日期','投料工序编号','用量类型','物料编号','配置用量','用量单位','用量基准','收率/损耗口径备注'] },
   { key: 'routes', label: '工艺路线', file: '10_工艺路线配置.csv', fields: ['产品编号','工序编号','工序名称','前序工序','最大等待分钟','程序编号'] },
   { key: 'times', label: '工序工时', file: '11_工序工时配置.csv', fields: ['产品编号','工序编号','计算方式','固定分钟','速度支每分钟'] },
   { key: 'machines', label: '设备资源', file: '03_设备资源配置.csv', fields: ['设备编号','设备名称','产线编号','工序编号','日历编号','最小装载kg','最大装载kg','装载计量基准'] },
@@ -50,6 +52,7 @@ const seed: Record<string, Row[]> = {
     {'批次编号':'LEAN-LOT-001','物料编号':'LEAN','账面数量':'500','已占用数量':'120','有效期':'2026-12-31','位置':'冷库 A-01','质量状态':'合格','预计可用时间':''},
     {'批次编号':'LEAN-LOT-002','物料编号':'LEAN','账面数量':'200','已占用数量':'0','有效期':'2026-12-31','位置':'待检区 Q-01','质量状态':'待检','预计可用时间':''},
   ],
+  bom: [],
   orders: [
     {'订单编号':'A','产品编号':'HC40','产线编号':'L01','合格需求':'240','数量单位':'kg','要求可交付分钟':'480','优先顺序':'1','是否允许拆分':'否','需求类型':'正式订单','订单状态':'有效'},
     {'订单编号':'B','产品编号':'HC60','产线编号':'L01','合格需求':'240','数量单位':'kg','要求可交付分钟':'480','优先顺序':'2','是否允许拆分':'否','需求类型':'正式订单','订单状态':'有效'},
@@ -152,7 +155,7 @@ export default function App() {
     const sorted=[...(data.orders||[])].filter(o=>o['需求类型']!=='预测'&&isOrderSchedulable(o)).sort((a,b)=>Number(a['优先顺序'])-Number(b['优先顺序']));
     const orderIssues=validateOrders(data.orders||[]).filter(issue=>issue.code!=='ORDER_MULTI_LINE');
     if(orderIssues.length){findings.push(...orderIssues.map(issue=>({code:`FR-009 / ${issue.code}`,message:issue.message,taskIds:[]})));setIssues(findings);setActivePlan({id:uid(),name:'订单数据校验',createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules,inputVersion:`v${inputVersion}`});setVerification(null);setMessage(`FR-009 订单字段检查发现 ${orderIssues.length} 个问题，未生成任务。`);return;}
-    const masterIssues=[...supplyIssues,...inventoryIssues,...validateMasterData({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[],personnelGroups:data.personnelGroups||[]})];
+    const masterIssues=[...validateBomConfig({products:data.products||[],materials:data.materials||[],routes:data.routes||[],bom:data.bom||[]}),...supplyIssues,...inventoryIssues,...validateMasterData({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[],personnelGroups:data.personnelGroups||[]})];
     if(masterIssues.length){
       findings.push(...masterIssues.map(issue=>({...issue,taskIds:[]})));
       const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
@@ -264,6 +267,7 @@ export default function App() {
           ['D-05','缺少机器依赖','不擅自分配兼容设备；当前作为数据错误中止该任务，默认候选设备策略待决。'],
           ['D-06','数据保存与版本','输入数据保存在浏览器 localStorage；服务端持久化已保存排程快照。后续需确定共享用户/数据库及旧方案完整输入快照格式。'],
           ['D-07','单位换算与精度','产品净重、每袋支数及物料单位目前只保存配置；kg/支/袋/箱的换算方向与链、计算/展示精度、取整时点和误差范围待 APS-Design 按 BR-18 确认。当前不换算订单/工时/包材/BOM数量。'],
+          ['D-08','BOM 生效与收率/损耗','FR-003 保存产品/版本/生效日期/投料工序/物料及配置用量。生效日的区间边界、历史版本追溯方式、订单适用版本选择、用量基准，以及总收率与逐工序收率/损耗的口径均待 APS-Design 确认；当前仅做结构校验，不选版本、不展开或计算需求。'],
         ].map(([id,title,body])=><article className="decision" key={id}><b>{id} · {title}</b><p>{body}</p></article>)}</section>
         <section className="panel"><h2>待决与未实现（不作隐式默认）</h2><ul className="not-in">{['跨班任务：是否允许跨日历窗口衔接，待业务确认；当前要求单个连续窗口容纳完整工序。','可中断工序：是否允许拆分、最小连续段和中断恢复规则待确认；当前不拆分任务。','开始/结束所需人员：角色、技能、人数及占用边界待配置/确认；本切片不计人员容量。','R2.2 工装和 R2.3/2.4 人员容量、工装、物料、空间、批处理及多线均未实现。','工厂日历的有效日期/周循环、节假日优先级和跨日窗口表达尚待确认；当前时间为 v0.3 单日分钟轴。','全局优化、真实工艺/质量参数、主管确认和外部 ERP/MES/WMS 集成不在此切片。'] .map(x=><li key={x}>{x}</li>)}</ul></section></div>}
       <footer>APS-Dev 原型 · R2.1 阶段预览 · 未发布上线 · v0.3 UAT-02 虚构数据</footer>
