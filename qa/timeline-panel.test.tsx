@@ -59,3 +59,16 @@ test('WINDOW02 round1: mixed malformed saved times across tasks, downtime, resou
  act(()=>ui.update(<TimelinePanel plan={{id:'NEXT',tasks:[{id:'OK',machine:'M',start:0,end:45}]}} selected={[]} currentFacts={[]} onSelect={()=>{}} onInput={()=>{}}/>));
  assert.equal(chart(ui),120);assert.equal(bars(ui).length,1);assert.ok(!text(ui).includes('BAD-G'));
 });
+
+test('AXIS-LABEL-03 narrow axis has readable external dates and wider ticks carry full time names',()=>{
+ const p=fixture(),before=JSON.stringify(p),{ui}=setup(p);
+ for(const zoom of [0.25,1,3,8]){
+  change(ui,'缩放',String(zoom));
+  const summary=field(ui,'时间轴窗口，Asia/Shanghai');assert.ok(summary);assert.ok(text(ui).includes('2026-11-02'));
+  const labels=ui.root.findAllByType('time');
+  if(zoom<=1){assert.equal(labels.length,0);assert.ok(text(ui).includes('轴宽不足'));}
+  else{assert.ok(labels.length>0);assert.ok(labels.every((n:any)=>n.props['aria-label'].includes('分钟')));}
+  assert.equal(chart(ui),120*zoom);assert.equal(bars(ui)[0].props.style.width,30*zoom);
+ }
+ assert.equal(JSON.stringify(p),before);
+});

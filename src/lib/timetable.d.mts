@@ -7,3 +7,5 @@ export function timetable(plan:any):{tasks:any[];facts:any[];reservations:any[];
 export function filterTasks(tasks:any[],filters?:any):any[];
 export function lanes(items:any[]):{items:any[];count:number};
 export function clip(start:number,end:number,from:number,to:number,width:number):{left:number;width:number}|null;
+
+export function axisTicks(start:number,end:number,width:number):number[];

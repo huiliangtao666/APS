@@ -50,3 +50,20 @@ test('WINDOW02 round1: date-safe bounds and invalid values never throw; extended
  const p={tasks:[{id:'valid',start:0,end:30,reasons:[]},{id:'bad',start:0,end:1e12,reasons:[]}]},before=JSON.stringify(p),m=timetable(p);
  assert.deepEqual(m.extent,[0,120]);assert.deepEqual(filterTasks(m.tasks,{start:0,end:120}).map(t=>t.id),['valid','bad']);assert.match(projection(m.tasks[1],10),/时间未知/);assert.equal(JSON.stringify(p),before);
 });
+
+// AXIS-LABEL-03: independent pixel budget assertions, including negative/date bounds.
+test('AXIS-LABEL-03 date labels fit at supported scales without changing geometry',async()=>{
+ const {axisTicks,validMinute}=await import('../src/lib/timetable.mjs');
+ for(const [start,end] of [[0,120],[-1500,3000],[0,240000],[-100000000000,100000000000],[0,0.01]]){
+  for(const zoom of [0.25,1,3,8]){
+   const width=Math.min(60000,(end-start)*zoom),ticks=axisTicks(start,end,width);
+   if(width<152)assert.deepEqual(ticks,[]);
+   for(let i=0;i<ticks.length;i++){
+    const x=(ticks[i]-start)*width/(end-start);
+    assert.ok(validMinute(ticks[i]));assert.ok(x>=0&&x+152<=width+1e-6);
+    if(i)assert.ok((ticks[i]-ticks[i-1])*width/(end-start)>=152-1e-6);
+   }
+   assert.ok(ticks.length<=395);
+  }
+ }
+});

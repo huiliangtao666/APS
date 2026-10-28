@@ -46,3 +46,19 @@ export function clip(start,end,from,to,width){
  if(!validInterval(start,end)||!validInterval(from,to)||!Number.isFinite(width)||width<=0||end<=from||start>=to)return null;
  return {left:(Math.max(start,from)-from)/(to-from)*width,width:(Math.min(end,to)-Math.max(start,from))/(to-from)*width};
 }
+
+// Each two-line date/time label owns 152 CSS pixels, including its tick/padding.
+// Do not force labels into a narrower axis or put a label beyond its right edge.
+export function axisTicks(start,end,width){
+ if(!validInterval(start,end)||!Number.isFinite(width)||width<152)return [];
+ const scale=width/(end-start),step=Math.max(15,Math.ceil(152/scale/15)*15);
+ const ticks=[];
+ // Indexed iteration stays bounded even at the Date limits (no accumulating floats).
+ const first=Math.ceil(start/step)*step;
+ for(let i=0;i<Math.min(400,Math.floor(width/152)+1);i++){
+  const n=first+i*step;
+  if(n>end||(n-start)*scale+152>width+1e-7)break;
+  if(validMinute(n))ticks.push(n);
+ }
+ return ticks;
+}
