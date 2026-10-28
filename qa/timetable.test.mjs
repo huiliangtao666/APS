@@ -41,3 +41,12 @@ test('FR033 exact filters and cursor projection share IDs, exclude touching wind
  assert.deepEqual(filterTasks(tasks,{machine:'M',order:'A',query:'mix'}).map(t=>t.id),['a']);assert.deepEqual(filterTasks(tasks,{start:30,end:60,state:'scheduled'}).map(t=>t.id),['b']);assert.deepEqual(filterTasks(tasks,{state:'unplanned'}).map(t=>t.id),['c']);
  assert.match(projection(tasks[0],0),/进行中/);assert.match(projection(tasks[0],30),/已结束.*非执行事实/);assert.match(projection(tasks[0],null),/执行未知/);
 });
+test('WINDOW02 round1: date-safe bounds and invalid values never throw; extended ISO years retain complete dates',async()=>{
+ const {validMinute,validInterval,origin}=await import('../src/lib/timetable.mjs');
+ const lo=Math.ceil((-8640000000000000-origin-8*3600000)/60000),hi=Math.floor((8640000000000000-origin-8*3600000)/60000);
+ for(const n of [lo,lo+1,-1,0,hi-1,hi]){assert.equal(validMinute(n),true);assert.doesNotThrow(()=>timeLabel(n));assert.ok(timeLabel(n).includes(`分钟 ${n}`));}
+ for(const n of [lo-1,hi+1,1e12,-1e12,Infinity,-Infinity,NaN,null,undefined,'30']){assert.equal(validMinute(n),false);assert.doesNotThrow(()=>timeLabel(n));assert.match(timeLabel(n),/未知/);}
+ assert.match(timeLabel(hi),/^\+275760-/);assert.equal(validInterval(0,1e12),false);assert.equal(clip(0,1e12,0,120,120),null);
+ const p={tasks:[{id:'valid',start:0,end:30,reasons:[]},{id:'bad',start:0,end:1e12,reasons:[]}]},before=JSON.stringify(p),m=timetable(p);
+ assert.deepEqual(m.extent,[0,120]);assert.deepEqual(filterTasks(m.tasks,{start:0,end:120}).map(t=>t.id),['valid','bad']);assert.match(projection(m.tasks[1],10),/时间未知/);assert.equal(JSON.stringify(p),before);
+});

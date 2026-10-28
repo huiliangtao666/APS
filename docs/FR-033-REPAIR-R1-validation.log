@@ -1,0 +1,645 @@
+
+CHECK: node --version
+v22.23.2
+
+CHECK: npm ci
+4 vulnerabilities (3 moderate, 1 high)
+
+CHECK: npm test
+> aps-r1@0.1.0 test
+> node --test src/lib/*.test.mjs && node --experimental-strip-types --test server/auth/auth.test.mjs server/business.test.mjs
+# tests 89
+# suites 0
+# pass 89
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 150.964888
+# Subtest: FR012 API atomic import, duplicate reimport idempotent, trusted audit and immutable original versions
+ok 65 - FR012 API atomic import, duplicate reimport idempotent, trusted audit and immutable original versions
+# Subtest: FR012 API rollback, deletion, stale and invalid cumulative imports do not mutate facts, audit or version
+ok 66 - FR012 API rollback, deletion, stale and invalid cumulative imports do not mutate facts, audit or version
+# Subtest: FR012 API sync repeated runs keep facts and materials, snapshots and plan exports retain original execution
+ok 67 - FR012 API sync repeated runs keep facts and materials, snapshots and plan exports retain original execution
+# Subtest: FR012 API actual Worker freeze survives intervening forward correction and retains old/new execution snapshots
+ok 68 - FR012 API actual Worker freeze survives intervening forward correction and retains old/new execution snapshots
+# Subtest: FR012 API trial copy/edit/retain/discard never rewrites current facts; stale facts block recalculation and retention
+ok 69 - FR012 API trial copy/edit/retain/discard never rewrites current facts; stale facts block recalculation and retention
+# Subtest: FR012 API old plan trial cannot reintroduce missing execution facts; restore/import/history retain current originals
+ok 70 - FR012 API old plan trial cannot reintroduce missing execution facts; restore/import/history retain current originals
+# Subtest: FR012 API role, removal, CSRF and reason protections cover facts, history and query/export
+ok 71 - FR012 API role, removal, CSRF and reason protections cover facts, history and query/export
+# Subtest: FR012 API pause and completed fact have truthful remaining-work outcomes and immutable completion
+ok 72 - FR012 API pause and completed fact have truthful remaining-work outcomes and immutable completion
+# Subtest: FR012 raw original UAT15 aggregate CSV fields fail closed without task/material/lot reconciliation
+ok 73 - FR012 raw original UAT15 aggregate CSV fields fail closed without task/material/lot reconciliation
+# Subtest: FR012 consumed-lot quality update flags execution while old trial cannot restore usable stock or clear current risk
+ok 74 - FR012 consumed-lot quality update flags execution while old trial cannot restore usable stock or clear current risk
+# Subtest: FR031 API mapped source/scrap reimport is idempotent; exports and history preserve source originals
+ok 75 - FR031 API mapped source/scrap reimport is idempotent; exports and history preserve source originals
+# Subtest: FR031 API source intake lacking explicit lot mapping blocks atomically with file/row/field details
+ok 76 - FR031 API source intake lacking explicit lot mapping blocks atomically with file/row/field details
+# Subtest: FR031 API correction history retains original mapping while current consumed/scrap/remainder advance
+ok 77 - FR031 API correction history retains original mapping while current consumed/scrap/remainder advance
+# Subtest: FR031 API negative scrap, regression and overorder output never mutate accepted facts
+ok 78 - FR031 API negative scrap, regression and overorder output never mutate accepted facts
+# Subtest: FR031 API pending scrap keeps source facts but prevents both synchronous and asynchronous scheduling
+ok 79 - FR031 API pending scrap keeps source facts but prevents both synchronous and asynchronous scheduling
+# Subtest: FR031 API facts/source protections enforce membership, CSRF, reason, stale writes and immutable originals
+ok 80 - FR031 API facts/source protections enforce membership, CSRF, reason, stale writes and immutable originals
+# Subtest: FR031 API changed scrap stales trial retain/recalculate; discard and restore cannot erase current simulated facts
+ok 81 - FR031 API changed scrap stales trial retain/recalculate; discard and restore cannot erase current simulated facts
+# Subtest: FR031 API actual Worker freezes scrap and aggregate source across intervening correction
+ok 82 - FR031 API actual Worker freezes scrap and aggregate source across intervening correction
+# tests 123
+# suites 7
+# pass 123
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6699.197708
+
+CHECK: node --experimental-strip-types --test qa/timetable.test.mjs qa/confirmation.test.mjs qa/production-batches.test.mjs qa/joint-resources.test.mjs qa/delivery.test.mjs qa/result-assessment.test.mjs qa/condition-trials.test.mjs qa/execution-facts.test.mjs qa/progress-impact.test.mjs qa/simulation-events.test.mjs
+# Subtest: FR012 partial calculates20 remaining minutes from30, preserves original0 and40 output without qualified credit
+ok 36 - FR012 partial calculates20 remaining minutes from30, preserves original0 and40 output without qualified credit
+# Subtest: FR012 started zero output can retain consumed40, full100 output remaining and explicit20 minutes
+ok 37 - FR012 started zero output can retain consumed40, full100 output remaining and explicit20 minutes
+# Subtest: FR012 completed retains actual0..30 and does not repeat its work or consumption
+ok 38 - FR012 completed retains actual0..30 and does not repeat its work or consumption
+# Subtest: FR012 pause preserves cause, does not invent resume or downstream completion
+ok 39 - FR012 pause preserves cause, does not invent resume or downstream completion
+# Subtest: FR012 exact material conservation:120=40 consumed+60 remaining plan+10 reserved+10 untouched
+ok 40 - FR012 exact material conservation:120=40 consumed+60 remaining plan+10 reserved+10 untouched
+# Subtest: FR012 repeated calculations and previews never multiply consumption or produce qualified inventory
+ok 41 - FR012 repeated calculations and previews never multiply consumption or produce qualified inventory
+# Subtest: FR012 fractions subtract as exact rational quantities and not rounded completed percentages
+ok 42 - FR012 fractions subtract as exact rational quantities and not rounded completed percentages
+# Subtest: FR012 valid forward correction preserves originals; numeric corrections never erase history
+ok 43 - FR012 valid forward correction preserves originals; numeric corrections never erase history
+# Subtest: FR012 reject deletion, altered original start/machine/completion, qty rollback and consumed rollback
+ok 44 - FR012 reject deletion, altered original start/machine/completion, qty rollback and consumed rollback
+# Subtest: FR012 pause resume has no decided semantics and cannot auto-confirm execution
+ok 45 - FR012 pause resume has no decided semantics and cannot auto-confirm execution
+# Subtest: FR012 validate states, units, references, times, duplicate identities and overcompletion
+ok 46 - FR012 validate states, units, references, times, duplicate identities and overcompletion
+# Subtest: FR012 consumption exceeds available pre-consumption stock blocked; missing BOM and undefined reconciliation blocked
+ok 47 - FR012 consumption exceeds available pre-consumption stock blocked; missing BOM and undefined reconciliation blocked
+# Subtest: FR012 prevent changing executed demand, qualified completion, units, BOM or already-consumed stock basis
+ok 48 - FR012 prevent changing executed demand, qualified completion, units, BOM or already-consumed stock basis
+# Subtest: FR012 completed material demand must have matching full declared cumulative consumption
+ok 49 - FR012 completed material demand must have matching full declared cumulative consumption
+# Subtest: FR012 unsupported joint/batch/quality/minimal reconciliation fails closed, not fake completed output
+ok 50 - FR012 unsupported joint/batch/quality/minimal reconciliation fails closed, not fake completed output
+# Subtest: FR012 historical actual machine intervals protect other orders even outside selection
+ok 51 - FR012 historical actual machine intervals protect other orders even outside selection
+# Subtest: FR012 active projection owns machine before priority orders; no machine overlap
+ok 52 - FR012 active projection owns machine before priority orders; no machine overlap
+# Subtest: FR012 fault at active remainder does not move original execution or declare quality, blocks with reason
+ok 53 - FR012 fault at active remainder does not move original execution or declare quality, blocks with reason
+# Subtest: FR012 downstream execution requires completed predecessor; cannot invent missing facts
+ok 54 - FR012 downstream execution requires completed predecessor; cannot invent missing facts
+# Subtest: FR012 non-selected completed order consumption is unavailable to selected order, never restored as free stock
+ok 55 - FR012 non-selected completed order consumption is unavailable to selected order, never restored as free stock
+# Subtest: FR012 exact overcompletion cannot hide in floating precision at a large demand
+ok 56 - FR012 exact overcompletion cannot hide in floating precision at a large demand
+# Subtest: FR012 unavailable consumed lot flags both completed and partial facts without good-product inference
+ok 57 - FR012 unavailable consumed lot flags both completed and partial facts without good-product inference
+# Subtest: FR012 frozen rule evaluation determines consumed-lot risk, not later Worker wall time or future policy
+ok 58 - FR012 frozen rule evaluation determines consumed-lot risk, not later Worker wall time or future policy
+# Subtest: FR012 selected rule flags are frozen into global execution-risk context and condition summary
+ok 59 - FR012 selected rule flags are frozen into global execution-risk context and condition summary
+# Subtest: FR031 scrap is separate from usable output; replacement demand is explicit and material conserved
+ok 88 - FR031 scrap is separate from usable output; replacement demand is explicit and material conserved
+# Subtest: FR031 repeated scrap calculations do not add outputs or deduct source inventory
+ok 89 - FR031 repeated scrap calculations do not add outputs or deduct source inventory
+# Subtest: FR031 pending scrap is recorded but blocks automatic remaining scheduling with order cause
+ok 90 - FR031 pending scrap is recorded but blocks automatic remaining scheduling with order cause
+# Subtest: FR031 missing policy cannot invent replacement stock even when MATERIAL is disabled
+ok 91 - FR031 missing policy cannot invent replacement stock even when MATERIAL is disabled
+# Subtest: FR031 scrap and supplementary consumption forward correction changes remainder without erasing original start
+ok 92 - FR031 scrap and supplementary consumption forward correction changes remainder without erasing original start
+# Subtest: FR031 scrap rollback, invalid values and unrecognized replacement policy require reconciliation
+ok 93 - FR031 scrap rollback, invalid values and unrecognized replacement policy require reconciliation
+# Subtest: FR031 overorder usable output is blocked while scrap never gives order qualified completion
+ok 94 - FR031 overorder usable output is blocked while scrap never gives order qualified completion
+# Subtest: FR031 completed with scrap retains original actual interval and requires full replacement consumption
+ok 95 - FR031 completed with scrap retains original actual interval and requires full replacement consumption
+# Subtest: FR031 replacement is same-operation only and does not silently change downstream time
+ok 96 - FR031 replacement is same-operation only and does not silently change downstream time
+# Subtest: FR031 exact fractional scrap adds replacement material without float drift
+ok 97 - FR031 exact fractional scrap adds replacement material without float drift
+# Subtest: FR031 source aggregate with explicit conserved mapping is accepted and frozen in summary
+ok 98 - FR031 source aggregate with explicit conserved mapping is accepted and frozen in summary
+# Subtest: FR031 aggregate without explicit mapping is blocked instead of fabricating batch allocation
+ok 99 - FR031 aggregate without explicit mapping is blocked instead of fabricating batch allocation
+# Subtest: FR031 aggregate mapping rejects mismatched sum, unit, lot, material, reference and duplicate records
+ok 100 - FR031 aggregate mapping rejects mismatched sum, unit, lot, material, reference and duplicate records
+# Subtest: FR031 original multi-lot mapping is explicit, sums exactly and later cumulative correction preserves source
+ok 101 - FR031 original multi-lot mapping is explicit, sums exactly and later cumulative correction preserves source
+# Subtest: FR031 source originals cannot be deleted or rewritten and duplicate task sources fail closed
+ok 102 - FR031 source originals cannot be deleted or rewritten and duplicate task sources fail closed
+# Subtest: FR031 run snapshot freezes scrap, source and policy across newer corrections
+ok 103 - FR031 run snapshot freezes scrap, source and policy across newer corrections
+# Subtest: FR031 query follows explicit fact/source/consumption links and exports matching order only
+ok 104 - FR031 query follows explicit fact/source/consumption links and exports matching order only
+# Subtest: FR031 explicit scrap replacement re-evaluates original BOM packaging rounding rather than scaling rounded quantities
+ok 105 - FR031 explicit scrap replacement re-evaluates original BOM packaging rounding rather than scaling rounded quantities
+# Subtest: FR031 scrap units follow order piece conversion exactly without converting cumulative stock units
+ok 106 - FR031 scrap units follow order piece conversion exactly without converting cumulative stock units
+# Subtest: FR031 delivered quoted-JSON CSV samples roundtrip to explicitly mapped, conserved simulated execution
+ok 107 - FR031 delivered quoted-JSON CSV samples roundtrip to explicitly mapped, conserved simulated execution
+# Subtest: FR033 original AC05 downtime30..60 and shifted continuous task agree with saved timetable and reasons
+ok 134 - FR033 original AC05 downtime30..60 and shifted continuous task agree with saved timetable and reasons
+# Subtest: FR033 original identities, batch quantities and saved links never rebuilt or summed
+ok 135 - FR033 original identities, batch quantities and saved links never rebuilt or summed
+# Subtest: FR033 explicit tooling release, personnel phase and space reservations retain precise saved windows and task IDs
+ok 136 - FR033 explicit tooling release, personnel phase and space reservations retain precise saved windows and task IDs
+# Subtest: FR033 snapshot and confirmed envelope remain byte-identical after all presentation operations and changed live inputs
+ok 137 - FR033 snapshot and confirmed envelope remain byte-identical after all presentation operations and changed live inputs
+# Subtest: FR033 legacy missing input/reasons/quantities stay unknown; unplanned never gets timeline coordinates
+ok 138 - FR033 legacy missing input/reasons/quantities stay unknown; unplanned never gets timeline coordinates
+# Subtest: FR033 half-open boundaries, exact tiny geometry, overlapping sublanes and >24h labels
+ok 139 - FR033 half-open boundaries, exact tiny geometry, overlapping sublanes and >24h labels
+# Subtest: FR033 exact filters and cursor projection share IDs, exclude touching windows and never claim actual completion
+ok 140 - FR033 exact filters and cursor projection share IDs, exclude touching windows and never claim actual completion
+# tests 141
+# suites 0
+# pass 141
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2491.985519
+
+CHECK: npm run test:query-ui
+> aps-r1@0.1.0 test:query-ui
+> esbuild src/query-ui.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-query-ui.cjs && node --test .qa-query-ui.cjs
+# Subtest: task detail renders saved times, current input warning, related inputs, findings and Gantt action without raw JSON
+ok 2 - task detail renders saved times, current input warning, related inputs, findings and Gantt action without raw JSON
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 57.346241
+
+CHECK: node --experimental-strip-types prototypes/fr013-batch-import/verify.mjs
+CSV validation regression checks passed: valid six-table batch + CSV-DEF-01..04.
+
+CHECK: npm run build
+> aps-r1@0.1.0 build
+> tsc --noEmit && vite build && npx esbuild server/index.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs && npx esbuild server/calculation-worker.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/calculation-worker.mjs
+✓ 70 modules transformed.
+dist/index.html                   0.45 kB │ gzip:   0.30 kB
+dist/assets/index-qccsw2pK.css   19.68 kB │ gzip:   5.36 kB
+dist/assets/index-BjAT6jsP.js   286.08 kB │ gzip: 104.89 kB
+✓ built in 1.11s
+
+CHECK: node --experimental-strip-types --test qa/worker-build.test.mjs
+# Subtest: FR012 built production Worker preserves simulated partial facts and exact cumulative material conservation
+ok 7 - FR012 built production Worker preserves simulated partial facts and exact cumulative material conservation
+# Subtest: FR031 built production Worker keeps scrap replacement and order/task projections frozen
+ok 8 - FR031 built production Worker keeps scrap replacement and order/task projections frozen
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 365.044408
+
+CHECK: npm install --no-save --package-lock=false --ignore-scripts react-test-renderer@18.3.1
+4 vulnerabilities (3 moderate, 1 high)
+
+CHECK: npx esbuild qa/editor-interaction.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-editor-ui.cjs
+
+  .qa-editor-ui.cjs  324.1kb
+
+⚡ Done in 9ms
+
+
+CHECK: node --test .qa-editor-ui.cjs
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 126.928796
+
+CHECK: npx esbuild qa/resource-panel.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-resource-ui.cjs
+
+  .qa-resource-ui.cjs  6.2kb
+
+⚡ Done in 2ms
+
+
+CHECK: node --test .qa-resource-ui.cjs
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 47.466566
+
+CHECK: npx esbuild qa/delivery-panel.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-delivery-ui.cjs
+
+  .qa-delivery-ui.cjs  225.2kb
+
+⚡ Done in 8ms
+
+
+CHECK: node --test .qa-delivery-ui.cjs
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 76.704097
+
+CHECK: npx esbuild qa/result-panel.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-result-ui.cjs
+
+  .qa-result-ui.cjs  51.0kb
+
+⚡ Done in 4ms
+
+
+CHECK: node --test .qa-result-ui.cjs
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 53.773116
+
+CHECK: npx esbuild qa/trial-panel.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-trial-ui.cjs
+
+  .qa-trial-ui.cjs  57.5kb
+
+⚡ Done in 3ms
+
+
+CHECK: node --test .qa-trial-ui.cjs
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 86.464648
+
+CHECK: npx esbuild qa/confirmation-panel.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-confirmation-ui.cjs
+
+  .qa-confirmation-ui.cjs  16.9kb
+
+⚡ Done in 2ms
+
+
+CHECK: node --test .qa-confirmation-ui.cjs
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 68.217946
+
+CHECK: npx esbuild qa/execution-panel.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-execution-ui.cjs
+
+  .qa-execution-ui.cjs  59.1kb
+
+⚡ Done in 5ms
+
+
+CHECK: node --test .qa-execution-ui.cjs
+# Subtest: FR012 UI current remaining, original correction history, historical snapshot and simulation boundaries remain visible
+ok 1 - FR012 UI current remaining, original correction history, historical snapshot and simulation boundaries remain visible
+# Subtest: FR012 execution editor submits cumulative full table and preserves server reconciliation errors
+ok 2 - FR012 execution editor submits cumulative full table and preserves server reconciliation errors
+# Subtest: FR012 query membership keeps execution editor inputs and save disabled
+ok 3 - FR012 query membership keeps execution editor inputs and save disabled
+# Subtest: FR031 UI shows scrap separately, unfinished task/order impact, pending reconciliation and mapped source history
+ok 4 - FR031 UI shows scrap separately, unfinished task/order impact, pending reconciliation and mapped source history
+# Subtest: FR031 editor submits cumulative scrap and explicit policy without mutating input and shows reconciliation errors
+ok 5 - FR031 editor submits cumulative scrap and explicit policy without mutating input and shows reconciliation errors
+# Subtest: FR031 source query role cannot edit immutable original mapping
+ok 6 - FR031 source query role cannot edit immutable original mapping
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 69.859219
+
+CHECK: npx esbuild qa/timeline-panel.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-timeline-ui.cjs
+
+  .qa-timeline-ui.cjs  50.1kb
+
+⚡ Done in 3ms
+
+
+CHECK: node --test .qa-timeline-ui.cjs
+# Warning: Each child in a list should have a unique "key" prop.
+# Check the render method of `TimelinePanel`. See https://reactjs.org/link/warning-keys for more information.
+# Subtest: FR033 machine rows, full dates, frozen provenance, exact bar width and textual alternatives
+ok 1 - FR033 machine rows, full dates, frozen provenance, exact bar width and textual alternatives
+# Subtest: FR033 task buttons, predecessor and saved input callbacks use exact saved IDs and rows
+ok 2 - FR033 task buttons, predecessor and saved input callbacks use exact saved IDs and rows
+# Subtest: FR033 machine/status/search filters act on timetable and bars and expose hidden selection
+ok 3 - FR033 machine/status/search filters act on timetable and bars and expose hidden selection
+# Subtest: FR033 zoom changes geometry without duration edits, invalid window warns and cursor remains simulated
+ok 4 - FR033 zoom changes geometry without duration edits, invalid window warns and cursor remains simulated
+# Subtest: FR033 legacy plan missing input is unknown and never replaced by current facts
+ok 5 - FR033 legacy plan missing input is unknown and never replaced by current facts
+# Subtest: FR033 unplanned and missing selected task have explicit text without invented bars
+ok 6 - FR033 unplanned and missing selected task have explicit text without invented bars
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 126.206138
+
+[validation] disposable source/dependencies/output; no publish or restart
+
+SUPPLEMENT: HISTORY01 preservation check (14 overlapping confirmation +20 additional independent-probe replay tests)
+
+added 246 packages in 2s
+TAP version 13
+# {"action":"export","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# Subtest: FR030 actual planner submit / supervisor return / resubmit / confirm / release / archive preserves immutable source and query/export provenance
+ok 1 - FR030 actual planner submit / supervisor return / resubmit / confirm / release / archive preserves immutable source and query/export provenance
+  ---
+  duration_ms: 435.356538
+  type: 'test'
+  ...
+# {"action":"submit","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"action":"confirm","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"action":"confirm","decision":"deny","requestId":"trusted-request","actor":"test\#planner"}
+# {"action":"return","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"action":"return","decision":"deny","requestId":"trusted-request","actor":"test\#planner"}
+# {"action":"release","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"action":"release","decision":"deny","requestId":"trusted-request","actor":"test\#planner"}
+# {"action":"archive","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"action":"archive","decision":"deny","requestId":"trusted-request","actor":"test\#planner"}
+# Subtest: FR030 role and CSRF gates cover every lifecycle path, audit cannot be body forged
+ok 2 - FR030 role and CSRF gates cover every lifecycle path, audit cannot be body forged
+  ---
+  duration_ms: 163.482991
+  type: 'test'
+  ...
+# Subtest: FR030 missing independent verification and minimal unchecked enabled rules fail closed
+ok 3 - FR030 missing independent verification and minimal unchecked enabled rules fail closed
+  ---
+  duration_ms: 66.196053
+  type: 'test'
+  ...
+# Subtest: FR030 explicit partial task list, quantities and reasons required from both actors
+ok 4 - FR030 explicit partial task list, quantities and reasons required from both actors
+  ---
+  duration_ms: 146.514483
+  type: 'test'
+  ...
+# Subtest: FR030 stale input requires new calculation/verification/submission; return remains available and old confirmation stays queryable
+ok 5 - FR030 stale input requires new calculation/verification/submission; return remains available and old confirmation stays queryable
+  ---
+  duration_ms: 202.538156
+  type: 'test'
+  ...
+# Subtest: FR030 concurrent/replayed decisions and old submission IDs fail without audit mutations
+ok 6 - FR030 concurrent/replayed decisions and old submission IDs fail without audit mutations
+  ---
+  duration_ms: 154.878884
+  type: 'test'
+  ...
+# Subtest: FR030 rejected running/failed/cancelled/infeasible/unchecked/conflicting/corrupt result leaves bytes and audit unchanged
+ok 7 - FR030 rejected running/failed/cancelled/infeasible/unchecked/conflicting/corrupt result leaves bytes and audit unchanged
+  ---
+  duration_ms: 513.112164
+  type: 'test'
+  ...
+# Subtest: FR030 source input changes and rule activation cannot bypass revision checks by restoring the old numeric revision
+ok 8 - FR030 source input changes and rule activation cannot bypass revision checks by restoring the old numeric revision
+  ---
+  duration_ms: 48.515595
+  type: 'test'
+  ...
+# Subtest: FR030 copied result and changed trial input cannot be promoted without current-input reconciliation
+ok 9 - FR030 copied result and changed trial input cannot be promoted without current-input reconciliation
+  ---
+  duration_ms: 125.714686
+  type: 'test'
+  ...
+# Subtest: FR030 conditional supply needs two explicit acknowledgments and preserves the original conditions
+ok 10 - FR030 conditional supply needs two explicit acknowledgments and preserves the original conditions
+  ---
+  duration_ms: 115.453515
+  type: 'test'
+  ...
+# Subtest: FR030 excluded effective demand is never silently accepted as a complete plan
+ok 11 - FR030 excluded effective demand is never silently accepted as a complete plan
+  ---
+  duration_ms: 23.723137
+  type: 'test'
+  ...
+# Subtest: FR030 time-based rule activation after submission invalidates approval without an input edit
+ok 12 - FR030 time-based rule activation after submission invalidates approval without an input edit
+  ---
+  duration_ms: 34.814382
+  type: 'test'
+  ...
+# Subtest: FR030 actual asynchronous worker result can be verified/submitted/confirmed and archived snapshot detects corruption
+ok 13 - FR030 actual asynchronous worker result can be verified/submitted/confirmed and archived snapshot detects corruption
+  ---
+  duration_ms: 145.599951
+  type: 'test'
+  ...
+# Subtest: FR030 enabled delivery quality/remaining-life failure and unsupported declared maximum wait cannot be acknowledged away
+ok 14 - FR030 enabled delivery quality/remaining-life failure and unsupported declared maximum wait cannot be acknowledged away
+  ---
+  duration_ms: 102.21463
+  type: 'test'
+  ...
+# I01 evidence {"state":"archived","submissions":2,"snapshotHash":"d55e62bfea5922119863c961aac611cda3451b9fa3b810f51c3cb4c10b5a3df5","events":["submit","return","submit","confirm","release","archive"]}
+# Subtest: I01 lifecycle exact token replay, append-only submissions, immutable envelope and no inventory debit
+ok 15 - I01 lifecycle exact token replay, append-only submissions, immutable envelope and no inventory debit
+  ---
+  duration_ms: 275.057593
+  type: 'test'
+  ...
+# I02 unplanned [{"id":"A-FILL","quantity":240,"unit":"kg","reasons":[{"code":"UNPLANNED / HORIZON","message":"订单 A / 工序 FILL 完整工序超出计划结束分钟 35，未排；不代表无可行排法。","taskIds":["A-FILL"],"context":{"orderId":"A","operation":"FILL","machineId":"FILL01","requiredDuration":30,"candidateMinute":30,"horizonEnd":35,"dependencies":[{"订单编号":"A","工序编号":"FILL","资源类型":"设备","资源编号":"FILL01","需求数量":"1","提前占用分钟":"0","后延占用分钟":"0","所需技能":""}]},"classification":"observed-blocker"}]},{"id":"B-FILL","quantity":240,"unit":"kg","reasons":[{"code":"UNPLANNED / HORIZON","message":"订单 B / 工序 FILL 完整工序超出计划结束分钟 35，未排；不代表无可行排法。","taskIds":["B-FILL"],"context":{"orderId":"B","operation":"FILL","machineId":"FILL02","requiredDuration":30,"candidateMinute":30,"horizonEnd":35,"dependencies":[{"订单编号":"B","工序编号":"FILL","资源类型":"设备","资源编号":"FILL02","需求数量":"1","提前占用分钟":"0","后延占用分钟":"0","所需技能":""}]},"classification":"observed-blocker"}]}]
+# Subtest: I02 exact partial list rejects duplicates, omissions, extras, wrong types and absent acknowledgments for both actors
+ok 16 - I02 exact partial list rejects duplicates, omissions, extras, wrong types and absent acknowledgments for both actors
+  ---
+  duration_ms: 272.666371
+  type: 'test'
+  ...
+# I03 conditions [{"引用编号":"FR020-[\\"A\\",1,\\"MIX\\"]-LEAN-0","订单编号":"A","工序编号":"MIX","供给编号":"EXPECT","使用数量":"65","物料编号":"LEAN","批次编号":"LOT","预计数量":"65","预计到达时间":"2026-11-02T10:00:00+08:00","预计可用时间":"2026-11-02T11:00:00+08:00","质量状态":"预计可用","有效期":"2026-12-31","生效到达时间":"2026-11-02T10:00:00+08:00","生效可用时间":"2026-11-02T11:00:00+08:00","延期记录":[],"供给性质":"条件性预计供给（未确认到货）","条件说明":"条件性供给：EXPECT / 批次 LOT / 65；预计到达 2026-11-02T10:00:00+08:00，预计可用 2026-11-02T11:00:00+08:00。须按期到达且满足可用条件；未确认真实到货。"}]
+# Subtest: I03 conditional supply cannot be authorized by truthy strings and snapshot preserves quantities and conditions
+ok 17 - I03 conditional supply cannot be authorized by truthy strings and snapshot preserves quantities and conditions
+  ---
+  duration_ms: 119.932171
+  type: 'test'
+  ...
+# I04 current facts {"old":"40","current":"50","confirmed":{"事实编号":"F-A-MIX","订单编号":"A","工序编号":"MIX","状态":"部分完成","开始分钟":"0","完成分钟":"","观测分钟":"35","工序完成数量":"50","数量单位":"kg","剩余工时分钟":"15","当前设备":"MIX01","暂停原因":"","累计报废数量":"","报废补做口径":""}}
+# Subtest: I04 changed current execution facts block old confirmation, preserve historical run and allow fresh recomputation
+ok 18 - I04 changed current execution facts block old confirmation, preserve historical run and allow fresh recomputation
+  ---
+  duration_ms: 163.944235
+  type: 'test'
+  ...
+# I05 future activation [{"code":"rule_effectivity_changed","message":"规则生效状态已变化，须另开运行并重新提交"}]
+# Subtest: I05 rule activation changes review token without numeric input revision
+ok 19 - I05 rule activation changes review token without numeric input revision
+  ---
+  duration_ms: 47.987435
+  type: 'test'
+  ...
+# I06 excluded/unchecked [[{"code":"unlisted_demand","message":"当前有效需求未全部纳入计算范围；须纳入重算并明示未排清单"}],[{"code":"unchecked_rules","message":"本次运行遗漏当前启用规则"}]]
+# Subtest: I06 selected-out effective demand and omitted enabled rules cannot become accepted partial plans
+ok 20 - I06 selected-out effective demand and omitted enabled rules cannot become accepted partial plans
+  ---
+  duration_ms: 83.421559
+  type: 'test'
+  ...
+# {"action":"submit","decision":"deny","requestId":"independent-request","actor":"ind\#query"}
+# {"action":"confirm","decision":"deny","requestId":"independent-request","actor":"ind\#query"}
+# {"action":"return","decision":"deny","requestId":"independent-request","actor":"ind\#query"}
+# {"action":"release","decision":"deny","requestId":"independent-request","actor":"ind\#query"}
+# {"action":"archive","decision":"deny","requestId":"independent-request","actor":"ind\#query"}
+# Subtest: I07 forged request actor/role/time/status/review cannot override trusted supervisor or immutable server calculation
+ok 21 - I07 forged request actor/role/time/status/review cannot override trusted supervisor or immutable server calculation
+  ---
+  duration_ms: 215.829832
+  type: 'test'
+  ...
+# {"action":"confirm","decision":"deny","requestId":"independent-request","actor":"ind\#supervisor"}
+# {"action":"export","decision":"deny","requestId":"independent-request","actor":"ind\#query"}
+# {"action":"export","decision":"deny","requestId":"independent-request","actor":"ind\#query"}
+# {"at":"2026-10-28T21:09:24.225Z","action":"deny","requestId":"independent-request","actor":"user","reason":"membership_required"}
+# Subtest: I08 supervisor revocation and export revocation are honored after review without business writes
+ok 22 - I08 supervisor revocation and export revocation are honored after review without business writes
+  ---
+  duration_ms: 89.199782
+  type: 'test'
+  ...
+# Subtest: I09 CSRF, malformed/conflicting origins, missing/oversized reasons deny lifecycle and export atomically
+ok 23 - I09 CSRF, malformed/conflicting origins, missing/oversized reasons deny lifecycle and export atomically
+  ---
+  duration_ms: 454.031944
+  type: 'test'
+  ...
+# Subtest: I10 stale numeric revision and same-revision current-data hash alteration require fresh computation
+ok 24 - I10 stale numeric revision and same-revision current-data hash alteration require fresh computation
+  ---
+  duration_ms: 110.188744
+  type: 'test'
+  ...
+# I11 blocked running ["invalid_run"]
+# I11 blocked failed ["invalid_run"]
+# I11 blocked cancelled ["invalid_run"]
+# I11 blocked timedout ["invalid_run"]
+# I11 blocked orphan ["invalid_run"]
+# I11 blocked empty ["unchecked_result","verification_required"]
+# I11 blocked unchecked ["verification_required"]
+# I11 blocked ruleSnapshot ["unchecked_result","verification_required"]
+# I11 blocked overlap ["result_mismatch","independent_conflict","unchecked_result","verification_required"]
+# I11 blocked finding ["rule_conflict","verification_required"]
+# I11 blocked original ["history_unavailable"]
+# I11 blocked runinput ["history_unavailable"]
+# I11 blocked condition ["history_unavailable","verification_required"]
+# Subtest: I11 failed/running/corrupt/unchecked/conflicting saved plans fail closed and reject without touching disk
+ok 25 - I11 failed/running/corrupt/unchecked/conflicting saved plans fail closed and reject without touching disk
+  ---
+  duration_ms: 517.768692
+  type: 'test'
+  ...
+# I12 verification scope {"independent":["lineScope","machineOverlap","precedence"],"replayBlockers":[{"code":"result_mismatch","message":"结果与原始输入、条件和规则重新检查不一致"}],"scope":"仅本系统模拟计划；重放已有支持规则及独立单线/机器/顺序复核；不代表完整业务可执行或真实质量放行"}
+# Subtest: I12 fresh R1 verification can pass after allocation tamper; supported scheduler replay still rejects it
+ok 26 - I12 fresh R1 verification can pass after allocation tamper; supported scheduler replay still rejects it
+  ---
+  duration_ms: 58.417229
+  type: 'test'
+  ...
+# Subtest: I13 historical input edits, copying/discarding, restore denial retain confirmation and current facts
+ok 27 - I13 historical input edits, copying/discarding, restore denial retain confirmation and current facts
+  ---
+  duration_ms: 183.973541
+  type: 'test'
+  ...
+# I14 integrity evidence {"detail":409,"export":409,"archive":409,"list":409,"review":409}
+# Subtest: I14 corrupt confirmation is rejected consistently by detail/export/lifecycle/list/review queries
+ok 28 - I14 corrupt confirmation is rejected consistently by detail/export/lifecycle/list/review queries
+  ---
+  duration_ms: 93.455774
+  type: 'test'
+  ...
+# I15 Worker {"runId":"b1c35331-26fb-460c-9afd-7fa43e7dd271","status":"completed","workflow":"archived"}
+# Subtest: I15 real calculation Worker terminal result supports full internal workflow without external services
+ok 29 - I15 real calculation Worker terminal result supports full internal workflow without external services
+  ---
+  duration_ms: 136.446851
+  type: 'test'
+  ...
+# I16 unsupported quality [{"code":"delivery_condition_blocked","message":"已启用交付规则存在质量、效期、关键数据或未支持条件，不能确认"}]
+# I16 unsupported life [{"code":"delivery_condition_blocked","message":"已启用交付规则存在质量、效期、关键数据或未支持条件，不能确认"}]
+# I16 unsupported maxwait [{"code":"delivery_condition_blocked","message":"已启用交付规则存在质量、效期、关键数据或未支持条件，不能确认"},{"code":"unsupported_semantics","message":"路线声明的最大等待尚未实现，不能确认"}]
+# Subtest: I16 delivery quality/life and declared maximum waiting semantics cannot be bypassed with all acknowledgments
+ok 30 - I16 delivery quality/life and declared maximum waiting semantics cannot be bypassed with all acknowledgments
+  ---
+  duration_ms: 131.978778
+  type: 'test'
+  ...
+# Subtest: I17 submitted trial cannot be confirmed after discard or revised trial input
+ok 31 - I17 submitted trial cannot be confirmed after discard or revised trial input
+  ---
+  duration_ms: 160.873772
+  type: 'test'
+  ...
+# Subtest: HISTORY-01 mixed valid/corrupt histories (corrupt index 0)
+ok 32 - HISTORY-01 mixed valid/corrupt histories (corrupt index 0)
+  ---
+  duration_ms: 335.757795
+  type: 'test'
+  ...
+# Subtest: HISTORY-01 mixed valid/corrupt histories (corrupt index 1)
+ok 33 - HISTORY-01 mixed valid/corrupt histories (corrupt index 1)
+  ---
+  duration_ms: 308.837862
+  type: 'test'
+  ...
+# Subtest: HISTORY-01 missing snapshot/hash fails closed across every confirmation read
+ok 34 - HISTORY-01 missing snapshot/hash fails closed across every confirmation read
+  ---
+  duration_ms: 217.573979
+  type: 'test'
+  ...
+1..34
+# tests 34
+# suites 0
+# pass 34
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4106.90512
+
+[validation] disposable source/dependencies/output; no publish or restart
