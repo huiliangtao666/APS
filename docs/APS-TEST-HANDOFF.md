@@ -139,3 +139,9 @@ FR-001 产线/工位/资源归属沿用可编辑的订单与设备资源表：�
 **FR-003 容器验收：**运行 `$WAB_DIR/scripts/app-exec.sh --validate --app-id aps-r1 'npm ci && npm test && npm run build'`。应用保持 unpublished；产品级 BOM 导入/编辑 UAT 由 APS-Test 独立执行并记录。GitHub 仓库为 `huiliangtao666/APS`。公开 Issue API 未列出 FR-003 卡片且环境没有 `gh` CLI。代码已提交到本地分支 `feat/fr-003-bom-packaging-config`；推送被 GitHub 拒绝（HTTP 403：当前凭证账号 `s1e9y0ng` 对 `huiliangtao666/APS` 无写权限），因此尚无远端分支/PR，也不能关联该卡。需仓库管理员授权写权限或由有权限者推送此分支；APS-Dev 不修改 Issue 状态。
 
 本轮实际验证结果：容器隔离命令退出码 0，`npm test` 22/22 通过，`npm run build` TypeScript、Vite 和 server bundle 成功。保留构建期间 CSS minifier 对 `-: .TZ` 的既有 warning；`npm ci` 报告 4 条 audit advisories（3 moderate、1 high），未升级依赖。`publish-app.sh status` 确认 `aps-r1` 仍为 `published: false`。验证未发布、未重启服务。
+
+## 12. FR-005 机器能力及适用范围（R1 初期）
+
+设备资源表 `03_设备资源配置.csv` 按设备编号登记产线、适用工序及日历；工序工时表 `11_工序工时配置.csv` 按产品/工序登记正数固定分钟；订单工序资源依赖 `12_工序资源与物料依赖.csv` 指定实际设备。新增校验确保设备编号唯一、设备适用工序出现在至少一条产品路线中，且固定工时只能引用已配置的产品/工序；设备依赖继续检查目标设备存在，排程仍要求依赖设备适用当前工序。
+
+FR-005 自动化覆盖位于 `src/lib/process-config.test.mjs`。本切片只启用设备及固定工时配置。速度单位与产品规格的速度换算、处理方式差异、最小/最大装载量与容量约束尚未参与排程；不得据当前示例的装载字段推算任务批量或排程时长，需待 BR-18/业务口径确认后再扩展。APS-Test 可检查重复设备编号、空/无效适用工序、未配置的产品工时引用和设备依赖错误拦截，并继续独立记录产品级 UAT。
