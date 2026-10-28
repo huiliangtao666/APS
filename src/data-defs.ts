@@ -1,6 +1,7 @@
 export type TableDef = { key:string; label:string; file:string; fields:string[] };
 export const defs: TableDef[] = [
-  { key: 'executionFacts', label: '模拟任务执行事实（累计）', file: '25_模拟任务执行事实.csv', fields: ['事实编号','订单编号','工序编号','状态','开始分钟','完成分钟','观测分钟','工序完成数量','数量单位','剩余工时分钟','当前设备','暂停原因'] },
+  { key: 'executionSources', label: '模拟进度来源对账（显式映射）', file: '27_模拟进度来源对账.csv', fields: ['来源编号','原始任务编号','事实编号','原始汇总耗料','耗料单位','来源说明','原始分配JSON'] },
+  { key: 'executionFacts', label: '模拟任务执行事实（累计）', file: '25_模拟任务执行事实.csv', fields: ['事实编号','订单编号','工序编号','状态','开始分钟','完成分钟','观测分钟','工序完成数量','数量单位','剩余工时分钟','当前设备','暂停原因','累计报废数量','报废补做口径'] },
   { key: 'executionMaterials', label: '模拟累计耗料（账面扣前口径）', file: '26_模拟累计耗料.csv', fields: ['记录编号','事实编号','批次编号','物料编号','累计已用数量','单位'] },
 
   { key: 'products', label: '产品与包装规格', file: '07_产品与包装规格.csv', fields: ['产品编号','产品名称','单支净重kg','每袋支数','总收率','模拟交付等待分钟'] },

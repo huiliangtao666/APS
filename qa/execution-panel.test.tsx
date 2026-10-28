@@ -21,3 +21,15 @@ test('FR012 execution editor submits cumulative full table and preserves server 
 test('FR012 query membership keeps execution editor inputs and save disabled',()=>{
  const ui=Renderer.create(<DataEditor def={defs.find(d=>d.key==='executionFacts')!} rows={[fact]} revision={1} canWrite={false} busy={false} reason="" onSave={async()=>{throw Error('forbidden');}}/>);assert.ok(ui.root.findAllByType('input').every(i=>i.props.disabled));assert.ok(ui.root.findAllByType('button').slice(0,4).every(b=>b.props.disabled));ui.unmount();
 });
+test('FR031 UI shows scrap separately, unfinished task/order impact, pending reconciliation and mapped source history',()=>{
+ const current={...data,routes:[{'产品编号':'P','工序编号':'MIX','前序工序':''},{'产品编号':'P','工序编号':'FILL','前序工序':'MIX'}],orders:[{'订单编号':'A','产品编号':'P','合格需求':'100','数量单位':'kg'}],executionFacts:[{...fact,'累计报废数量':'10','报废补做口径':'待核对'}],executionSources:[{'来源编号':'raw-uat15','原始汇总耗料':'50','原始分配JSON':'explicit mapping'}]};
+ const history=[{id:'s1',target:'executionSources',actor:'trusted#planner',reason:'显式核对来源映射',at:'now',action:'import',fromVersion:'old',toVersion:'new',after:current.executionSources}];const ui=Renderer.create(<ExecutionPanel data={current} operations={history}/>),text=JSON.stringify(ui.toJSON());for(const value of ['累计报废','10','补做口径','待核对','需核对，阻断重排','订单待合格数量','100','MIX、FILL','raw-uat15','显式核对来源映射','不推断其他工序返工'])assert.ok(text.includes(value),value);ui.unmount();
+});
+test('FR031 editor submits cumulative scrap and explicit policy without mutating input and shows reconciliation errors',async()=>{
+ const def=defs.find(d=>d.key==='executionFacts')!,input={...fact,'累计报废数量':'10','报废补做口径':'待核对'};let submitted:any;
+ const ui=Renderer.create(<DataEditor def={def} rows={[input]} revision={2} canWrite={true} busy={false} reason="核对补做" onSave={async(tables,rev)=>{submitted={tables,rev};}}/>);
+ act(()=>ui.root.findByProps({'aria-label':`${def.label} 1 累计报废数量`}).props.onChange({target:{value:'20'}}));act(()=>ui.root.findByProps({'aria-label':`${def.label} 1 报废补做口径`}).props.onChange({target:{value:'按本工序BOM补做'}}));await act(async()=>{await ui.root.findAllByType('button').find(b=>b.children.includes('保存修改'))!.props.onClick();});assert.equal(submitted.rev,2);assert.equal(submitted.tables.executionFacts[0]['累计报废数量'],'20');assert.equal(submitted.tables.executionFacts[0]['报废补做口径'],'按本工序BOM补做');assert.equal(input['累计报废数量'],'10');ui.unmount();
+});
+test('FR031 source query role cannot edit immutable original mapping',()=>{
+ const def=defs.find(d=>d.key==='executionSources')!;const ui=Renderer.create(<DataEditor def={def} rows={[{'来源编号':'raw','原始分配JSON':'[]'}]} revision={1} canWrite={false} busy={false} reason="" onSave={async()=>{throw Error('forbidden');}}/>);assert.ok(ui.root.findAllByType('input').every(i=>i.props.disabled));assert.ok(JSON.stringify(ui.toJSON()).includes('不自动分批'));ui.unmount();
+});

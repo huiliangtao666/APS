@@ -115,6 +115,21 @@ export function executionInventory(data){
 }
 export function remainingExecutionDemand(data,order,operation,minute){
  const fact=(data.executionFacts||[]).find(f=>f['订单编号']===order['订单编号']&&f['工序编号']===operation);
- const demands=calculateMaterialDemand(data,order,operation,fact?Number(fact['开始分钟']):minute);
+ const demands=executionMaterialDemand(data,order,operation,fact?Number(fact['开始分钟']):minute);
  return demands.map(d=>{const consumed=(data.executionMaterials||[]).filter(c=>c['事实编号']===fact?.['事实编号']&&c['物料编号']===d.materialId).reduce((v,c)=>add(v,q(c['累计已用数量'])),zero);const amount=sub(fromExact(d.exactQuantity),consumed);if(cmp(amount,zero)<0)throw Error('耗料超定额，须核对');return {...d,feedMinute:minute,feedAt:feedTime(minute),quantity:num(amount),exactQuantity:exact(amount),executionConsumed:num(consumed),exactExecutionConsumed:exact(consumed),formula:d.formula+'；减同任务已记录累计耗料（不再扣减工序产出，避免双计）'};});
+}
+
+// Scrap is cumulative unusable operation output in the order unit, separate from usable output.
+// This explicit simulation assumption applies only to this operation; never to other stages.
+export function executionMaterialDemand(data,order,operation,minute){
+ const fact=(data.executionFacts||[]).find(f=>f['订单编号']===order['订单编号']&&f['工序编号']===operation);
+ const scrap=q(fact?.['累计报废数量']||'0');
+ if(cmp(scrap,zero)===0n)return calculateMaterialDemand(data,order,operation,minute);
+ if(fact['报废补做口径']!=='按本工序BOM补做')throw Error('报废补做口径未核对，禁止推断补料');
+ const demand=q(order['合格需求']);if(cmp(demand,zero)<=0)throw Error('报废订单需求无效');
+ // Re-evaluate the original BOM with an exact expanded order-unit quantity so package rounding,
+ // declared yield and kg/piece/bag conversion remain in the canonical demand calculator.
+ const expanded=add(demand,scrap);let n=expanded.n%expanded.d;let text=String(expanded.n/expanded.d);
+ if(n){text+='.';while(n){n*=10n;text+=String(n/expanded.d);n%=expanded.d;}}
+ return calculateMaterialDemand(data,{...order,'合格需求':text},operation,minute).map(row=>({...row,formula:row.formula+'；显式模拟仅本工序（需求+累计报废）重新按BOM计算；非质量确认'}));
 }

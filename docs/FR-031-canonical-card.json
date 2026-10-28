@@ -1,0 +1,8 @@
+{
+  "id": "PVTI_lAHOFM9WU84BpE1czhEHg_o",
+  "content": {
+    "id": "DI_lAHOFM9WU84BpE1czgLhAjA",
+    "title": "[FR] FR-031 维护模拟进度并检查剩余工作",
+    "body": "## 需求\n范围：P0；关联流程：BP-01/05/06；页面：PG-08；开始提供：R5；完整提供：R5。\n前置功能：FR-012/018/026。\n• 提供模拟任务进度的导入、查询和编辑。更新完成量、报废量、耗料和剩余工时后，显示对未完成任务和订单的影响。\n• 同一记录重复导入不能重复累计完成或扣料；发现状态倒退、超过订单数量等问题时提示核对。该功能不要求接MES。\n6.6 展示、查询与系统支撑\n\n## 验收追踪\n验收用例：AC-02/12/21/23。\n\n来源：需求分析与设计说明书 v0.3，第 6 章；状态：基线需求，具体实现状态待跟踪。\n\n\n## Patrol delivery and assignment (2026-10-29)\nOwner APS-Dev delivery dlv_58379fa7-4b15-46cc-8a38-7c9f94a38161. Dev idle no queue/duplicate. FR012/018/026 source available in95332f111a07229a4fb9310e24e2b38e0a8ae721, independent testing parallel. OriginalAC02/12/21/23 progress import/query/edit, completion/scrap/consumption/remainingduration and unfinishedtask/order impacts assigned; repeat-record no doublecount, state/qty reconciliation and original-fact/history protection required. No fabricated batchmapping or physical/MES claims. Meaningful container tests/build and ordinary push/fullSHA/links/report/limits required. In progress, no parallel backlog.\n"
+  }
+}

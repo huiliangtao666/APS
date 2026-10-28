@@ -2,14 +2,17 @@ import {executionInventory} from './lib/material-allocation.mjs';
 import {executionSummary} from './lib/execution-facts.mjs';
 type Row=Record<string,string>;
 export function ExecutionPanel({data,operations,historical}:{data:Record<string,Row[]>;operations:any[];historical?:any}){
- const summary=executionSummary(data),history=operations.filter(r=>!r.trialId&&['executionFacts','executionMaterials'].includes(r.target));
+ const summary=executionSummary(data),history=operations.filter(r=>!r.trialId&&['executionFacts','executionMaterials','executionSources'].includes(r.target));
  return <section aria-label="模拟执行事实与历史"><h2>模拟执行事实 / R5</h2><p>所有记录均为离线模拟输入。工序产出不代表质量合格或真实车间执行，不跨工序累加。已耗材料从扣耗前账面中一次扣除；重算只分配余料，不写库存、不入完成量。</p>
  <p>事实 {summary.facts.length} 条 · 累计耗料 {summary.consumption.length} 条。查询页可按订单、状态、分钟查询两表；数据页可导入模板/示例及编辑。开始/完成原记录、历次修改及操作原因保留。</p>
  {summary.risks.map((risk:any)=><p role="alert" key={risk.factId}>{risk.message}</p>)}
- <table><thead><tr><th>模拟事实</th><th>订单 / 工序</th><th>状态</th><th>工序余量</th><th>剩余分钟</th><th>当前设备</th><th>暂停原因</th></tr></thead><tbody>{summary.remaining.map((x:any)=>{const f=summary.facts.find((f:Row)=>f['事实编号']===x.factId);return <tr key={x.factId}><td>{x.factId}</td><td>{x.orderId} / {x.operation}</td><td>{f['状态']}</td><td>{x.remainingQuantity??'未知'} {x.unit}</td><td>{x.remainingMinutes}</td><td>{f['当前设备']}</td><td>{f['暂停原因']||'—'}</td></tr>;})}</tbody></table>
+ <table><thead><tr><th>模拟事实</th><th>订单 / 工序</th><th>状态</th><th>工序余量</th><th>累计报废</th><th>补做口径</th><th>剩余分钟</th><th>当前设备</th><th>暂停原因</th></tr></thead><tbody>{summary.remaining.map((x:any)=>{const f=summary.facts.find((f:Row)=>f['事实编号']===x.factId);return <tr key={x.factId}><td>{x.factId}</td><td>{x.orderId} / {x.operation}</td><td>{f['状态']}</td><td>{x.remainingQuantity??'未知'} {x.unit}</td><td>{x.scrapQuantity} {x.unit}</td><td>{x.scrapPolicy}</td><td>{x.remainingMinutes}</td><td>{f['当前设备']}</td><td>{f['暂停原因']||'—'}</td></tr>;})}</tbody></table>
+ <h3>未完成任务与订单影响</h3><p>更新后从当前版本重算，结果中的投影任务、阻断原因与事实版本一同保存。下表展示当前累计口径；工序完成量不跨工序相加，报废不抵扣订单需求。</p>
+ {summary.orderImpact.map((o:any)=><article key={o.orderId}><h4>订单 {o.orderId}</h4><p>订单待合格数量 {o.remainingQualifiedOrder} {o.unit} · 未完成工序 {o.unfinishedOperations.join('、')||'无'} · {o.reconciliationRequired?'需核对，阻断重排':'显式剩余工时可重算，非交付承诺'}</p><table><thead><tr><th>工序 / 前序</th><th>状态</th><th>可用产出</th><th>报废</th><th>待完成</th><th>剩余分钟</th></tr></thead><tbody>{o.operations.map((op:any)=><tr key={op.operation}><td>{op.operation} / {op.predecessor||'—'}</td><td>{op.state}</td><td>{op.usableOutput}</td><td>{op.scrapQuantity}</td><td>{op.remainingQuantity}</td><td>{op.remainingMinutes??'未提供'}</td></tr>)}</tbody></table></article>)}
+ <details><summary>原始汇总耗料显式映射（{summary.sources.length}）</summary><p>UAT15 原始汇总缺批次映射时阻断；在来源对账表填原始任务、汇总、单位及原始分配JSON，再关联任务事实与耗料。分配数组每项为记录编号、物料编号、批次编号、数量、单位，总数须守恒。来源及原始分配保留，后续累计修订有历史。</p><pre>{JSON.stringify(summary.sources,null,2)}</pre></details>
  <details><summary>模拟耗料与账面守恒（扣耗前账面、独立占用）</summary><table><thead><tr><th>批次</th><th>扣耗前账面</th><th>扣耗后余额</th><th>独立占用</th></tr></thead><tbody>{executionInventory(data).map(lot=><tr key={lot['批次编号']}><td>{lot['批次编号']}</td><td>{data.inventory.find(b=>b['批次编号']===lot['批次编号'])?.['账面数量']}</td><td>{lot['账面数量']}</td><td>{lot['已占用数量']}</td></tr>)}</tbody></table><p>可用数量还受质量、有效期及可用时点约束；扣耗后余额不等于当前可用。</p></details>
  <details><summary>原记录与修改历史（{history.length}）</summary>{history.map(e=><article key={e.id}><p>{e.at} · {e.actor} · {e.reason} · {e.action} · {e.fromVersion} → {e.toVersion}</p><pre>{JSON.stringify({before:e.before,after:e.after},null,2)}</pre></article>)}</details>
  {historical?.executionFactsVersion&&<details><summary>所选方案运行时执行事实（历史，不代表当前）</summary><p>版本 {historical.executionFactsVersion}</p><pre>{JSON.stringify(historical.executionSummary,null,2)}</pre></details>}
- <p>状态倒退/超量、退料/转机、暂停恢复、事件时点重排、拆合批与执行/质量协调由后续 FR031 确定；未定口径阻断。旧方案恢复仍受保护；试算保留/放弃不修改当前事实。</p>
+ <p>FR031：累计报废与可用产出分开；正报废量未指定补做口径时阻断。选择“按本工序BOM补做”仅按本工序定额增加模拟补料，不推断其他工序返工，剩余工时须显式填写。状态倒退/超量提示核对；退料/转机、暂停恢复与拆合批/联合占用/质量协调未定时阻断。旧方案恢复仍受保护；试算保留/放弃不修改当前事实。</p>
  </section>;
 }

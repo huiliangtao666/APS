@@ -8,3 +8,5 @@ export function executionAdmission(data:Data,conditions:any):any[];
 export function executionSummary(data:Data,at?:string):any;
 export function executionRisks(data:Data,at?:string):any[];
 export function executionTrialIssues(current:Data,trial:Data):any[];
+
+export function executionOrderImpact(data:Data):any[];

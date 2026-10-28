@@ -851,3 +851,48 @@ test('FR012 consumed-lot quality update flags execution while old trial cannot r
  const before=(await call('/state')).body;const blocked=await call('/calculate',{trialId:trial.id,revision:0});assert.equal(blocked.status,409);assert.equal(blocked.body.issues[0].code,'TRIAL_CONSUMED_STOCK_PROTECTED');assert.equal((await call('/trials/'+trial.id+'/retain',{revision:0,planId:q.body.id})).status,409);
  const next=await call('/calculate',{revision:2});assert.equal(next.status,201);assert.equal(next.body.tasks.length,0);assert.ok(next.body.execution.risks.length);assert.deepEqual((await call('/state')).body,before);assert.equal((await call('/plans/'+p.id+'/inputs')).body.data.inventory[0]['质量状态'],'合格');
 });
+
+async function putProgress(call,{mapped=false,pending=false}={}){
+ const s=(await call('/state')).body,d=executionFixture(s.data);Object.assign(d.executionFacts[0],{'累计报废数量':'10','报废补做口径':pending?'待核对':'按本工序BOM补做'});d.executionMaterials[0]['累计已用数量']='50';d.inventory[0]['账面数量']='140';
+ if(mapped)d.executionSources=[{'来源编号':'UAT15-1','原始任务编号':'original-A-MIX','事实编号':'F-A-MIX','原始汇总耗料':'50','耗料单位':'kg','来源说明':'手动核对原始累计来源，仅模拟','原始分配JSON':JSON.stringify([{'记录编号':'C1','批次编号':'EX-LOT','物料编号':'LEAN','数量':'50','单位':'kg'}])}];
+ const r=await call('/inputs',{tables:d,revision:s.revision,operation:'import'});assert.equal(r.status,200,JSON.stringify(r.body));return r.body;
+}
+test('FR031 API mapped source/scrap reimport is idempotent; exports and history preserve source originals',async t=>{
+ const {call,dir}=await fixture(t);const s=await putProgress(call,{mapped:true}),first=(await call('/execution')).body;assert.equal(first.sources[0]['原始汇总耗料'],'50');assert.equal(first.history.length,3);const disk=fs.readFileSync(path.join(dir,'business.json'),'utf8');
+ const repeated=await call('/inputs',{revision:1,operation:'import',tables:{executionFacts:s.data.executionFacts,executionMaterials:s.data.executionMaterials,executionSources:s.data.executionSources}});assert.equal(repeated.status,200);assert.equal(repeated.body.unchanged,true);assert.equal(fs.readFileSync(path.join(dir,'business.json'),'utf8'),disk);
+ const p=await call('/calculate',{revision:1});assert.equal(p.status,201);assert.equal(p.body.materialDemands[0].quantity,60);assert.equal(p.body.execution.orderImpact[0].remainingQualifiedOrder,100);assert.ok(p.body.execution.projectedTasks.some(x=>x.taskId==='A-FILL'&&x.start===50));
+ for(const table of ['executionFacts','executionSources']){const csv=await call('/export',{query:{table,revision:1,filters:{}}});assert.equal(csv.status,200);assert.match(csv.body,table==='executionFacts'?/累计报废数量/:/原始分配JSON/);}
+ const ex=await call('/export',{planId:p.body.id});assert.equal(ex.status,200);assert.match(ex.body,/scrapQuantity/);assert.match(ex.body,/UAT15-1/);
+});
+test('FR031 API source intake lacking explicit lot mapping blocks atomically with file/row/field details',async t=>{
+ const {call,dir}=await fixture(t);const s=await putProgress(call,{mapped:true}),before=fs.readFileSync(path.join(dir,'business.json'),'utf8');
+ const raw=[{...s.data.executionSources[0],'来源编号':'another','事实编号':'missing','原始分配JSON':''}];
+ const r=await call('/tables/executionSources',{revision:1,rows:[...s.data.executionSources,...raw]});assert.equal(r.status,400);assert.ok(r.body.issues.some(i=>i.code==='EXECUTION_SOURCE_MAPPING_REQUIRED'&&i.row===3&&i.file==='27_模拟进度来源对账.csv'));assert.equal(fs.readFileSync(path.join(dir,'business.json'),'utf8'),before);
+});
+test('FR031 API correction history retains original mapping while current consumed/scrap/remainder advance',async t=>{
+ const {call}=await fixture(t);const s=await putProgress(call,{mapped:true}),first=(await call('/execution')).body;const f=structuredClone(s.data.executionFacts),c=structuredClone(s.data.executionMaterials);Object.assign(f[0],{'累计报废数量':'20','工序完成数量':'50','观测分钟':'35','剩余工时分钟':'25'});c[0]['累计已用数量']='70';
+ const r=await call('/inputs',{revision:1,operation:'edit',tables:{executionFacts:f,executionMaterials:c},reason:'核对后累计补做修订'});assert.equal(r.status,200,JSON.stringify(r.body));const current=(await call('/execution')).body;assert.notEqual(current.version,first.version);assert.equal(current.revision,2);assert.deepEqual(current.sources,first.sources);assert.equal(current.history.length,5);assert.equal(current.history.at(-2).before[0]['累计报废数量'],'10');assert.equal(current.history.at(-2).after[0]['累计报废数量'],'20');assert.equal(current.history.at(-1).actor,'test#planner');
+ const p=await call('/calculate',{revision:2});assert.equal(p.status,201);assert.equal(p.body.tasks[1].start,60);assert.equal(p.body.materialDemands[0].quantity,50);
+});
+test('FR031 API negative scrap, regression and overorder output never mutate accepted facts',async t=>{
+ const {call,dir}=await fixture(t);const s=await putProgress(call),disk=fs.readFileSync(path.join(dir,'business.json'),'utf8');
+ for(const [patch,status] of [[{'累计报废数量':'9'},409],[{'工序完成数量':'101'},400],[{'状态':'已开始'},409],[{'累计报废数量':'-1'},400]]){const rows=structuredClone(s.data.executionFacts);Object.assign(rows[0],patch);const r=await call('/tables/executionFacts',{revision:1,rows});assert.equal(r.status,status,JSON.stringify(r));assert.ok(r.body.issues.length);assert.equal(fs.readFileSync(path.join(dir,'business.json'),'utf8'),disk);}
+});
+test('FR031 API pending scrap keeps source facts but prevents both synchronous and asynchronous scheduling',async t=>{
+ const {call}=await fixture(t);await putProgress(call,{pending:true});const ex=(await call('/execution')).body;assert.equal(ex.orderImpact[0].reconciliationRequired,true);for(const url of ['/calculate','/runs']){const r=await call(url,{revision:1});assert.equal(r.status,422,JSON.stringify(r.body));assert.match(JSON.stringify(r.body),/报废/);}assert.equal((await call('/plans')).body.length,0);assert.equal((await call('/execution')).body.version,ex.version);
+});
+test('FR031 API facts/source protections enforce membership, CSRF, reason, stale writes and immutable originals',async t=>{
+ const {call,store}=await fixture(t);const s=await putProgress(call,{mapped:true});const body={revision:1,rows:s.data.executionSources};assert.equal((await call('/tables/executionSources',body,'query')).status,403);assert.equal((await call('/tables/executionSources',body,'planner',{'sec-fetch-site':'cross-site'})).status,403);assert.equal((await call('/tables/executionSources',{...body,reason:''})).status,400);assert.equal((await call('/tables/executionSources',{...body,revision:0})).status,409);
+ const original=(await call('/execution')).body;for(const rows of [[],[{...body.rows[0],'原始汇总耗料':'40'}]])assert.equal((await call('/tables/executionSources',{revision:1,rows})).status,409);assert.equal((await call('/execution')).body.version,original.version);
+ assert.equal((await call('/export',{query:{table:'executionSources',revision:1,filters:{}}},'query')).status,403);assert.equal((await call('/auth/members/export',{key:'test#query',canExport:true},'admin')).status,200);assert.equal((await call('/export',{query:{table:'executionSources',revision:1,filters:{}}},'query')).status,200);store.remove('test#query');assert.equal((await call('/execution',undefined,'query')).status,403);
+});
+test('FR031 API changed scrap stales trial retain/recalculate; discard and restore cannot erase current simulated facts',async t=>{
+ const {call}=await fixture(t);const s=await putProgress(call,{mapped:true});const p=(await call('/calculate',{revision:1})).body,trial=(await call('/plans/'+p.id+'/copy',{revision:1})).body,q=(await call('/calculate',{trialId:trial.id,revision:0})).body;
+ assert.equal((await call('/trials/'+trial.id+'/inputs',{revision:0,tables:{executionSources:trial.data.executionSources}})).status,409);
+ const rows=structuredClone(s.data.executionFacts);rows[0]['累计报废数量']='20';rows[0]['剩余工时分钟']='25';assert.equal((await call('/tables/executionFacts',{revision:1,rows})).status,200);const current=(await call('/execution')).body;
+ assert.equal((await call('/runs',{trialId:trial.id,revision:0})).body.error,'current_execution_changed');assert.equal((await call('/trials/'+trial.id+'/retain',{revision:0,planId:q.id})).body.error,'current_execution_changed');assert.equal((await call('/plans/'+p.id+'/restore',{revision:2})).status,409);assert.equal((await call('/trials/'+trial.id+'/discard',{revision:0})).status,200);assert.equal((await call('/execution')).body.version,current.version);assert.equal((await call('/plans/'+p.id+'/inputs')).body.data.executionFacts[0]['累计报废数量'],'10');
+});
+test('FR031 API actual Worker freezes scrap and aggregate source across intervening correction',async t=>{
+ const {call}=await fixture(t);const s=await putProgress(call,{mapped:true});const r=await call('/runs',{revision:1});assert.equal(r.status,202,JSON.stringify(r.body));const rows=structuredClone(s.data.executionFacts);rows[0]['累计报废数量']='20';rows[0]['剩余工时分钟']='25';assert.equal((await call('/tables/executionFacts',{rows,revision:1})).status,200);
+ let run;for(let n=0;n<100;n++){run=(await call('/runs/'+r.body.id)).body;if(['completed','partial','failed'].includes(run.status))break;await new Promise(r=>setTimeout(r,10));}assert.equal(run.status,'completed',JSON.stringify(run));const p=(await call('/plans')).body.find(p=>p.id===run.planId);assert.equal(p.execution.remaining[0].scrapQuantity,10);assert.equal(p.execution.sources[0]['原始汇总耗料'],'50');assert.equal(p.materialDemands[0].quantity,60);const next=(await call('/calculate',{revision:2})).body;assert.equal(next.materialDemands[0].quantity,70);assert.equal(next.tasks[0].duration,25);assert.notEqual(p.conditions.executionFactsVersion,next.conditions.executionFactsVersion);
+});

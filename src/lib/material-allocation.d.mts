@@ -12,3 +12,5 @@ export const quantityMath:any;
 
 export function executionInventory(data:Record<string,Row[]>):Row[];
 export function remainingExecutionDemand(data:Record<string,Row[]>,order:Row,operation:string,minute:number):ReturnType<typeof calculateMaterialDemand>;
+
+export function executionMaterialDemand(data:Record<string,Row[]>,order:Row,operation:string,minute:number):ReturnType<typeof calculateMaterialDemand>;

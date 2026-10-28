@@ -12,7 +12,7 @@ export function related(data,table,index){
  if(table==='rules'&&row['规则编号'])(data.tasks||[]).forEach((r,i)=>{if((r['方案记录规则']||'').split('、').includes(row['规则编号']))results.push({table:'tasks',index:i});});
  if(table==='tasks')(data.rules||[]).forEach((r,i)=>{if(r['规则编号']&&(row['方案记录规则']||'').split('、').includes(r['规则编号']))results.push({table:'rules',index:i});});
  const edges=[
- ['orders','executionFacts',['订单编号']],['executionFacts','executionMaterials',['事实编号']],['materials','executionMaterials',['物料编号']],['inventory','executionMaterials',['批次编号']],
+ ['executionFacts','executionSources',['事实编号']],['executionSources','executionMaterials',['事实编号']],['orders','executionFacts',['订单编号']],['executionFacts','executionMaterials',['事实编号']],['materials','executionMaterials',['物料编号']],['inventory','executionMaterials',['批次编号']],
  ['products','orders',['产品编号']],['products','routes',['产品编号']],['products','times',['产品编号']],['products','bom',['产品编号']],['products','tasks',['产品编号']],
  ['materials','inventory',['物料编号']],['materials','supplies',['物料编号']],['materials','bom',['物料编号']],
  ['orders','deliveryConditions',['订单编号']],['orders','dependencies',['订单编号']],['orders','supplyUses',['订单编号']],['orders','tasks',['订单编号']],
@@ -60,6 +60,7 @@ export function filterRows(data,table,filters={}){
  const linked=(row,kind,value)=>{
   if(!value)return true;if(row[kind])return row[kind]===value;
   // Only explicit order/product references; machines/materials have no implicit product ownership.
+  if(row['事实编号']&&!row['订单编号']){const fact=(data.executionFacts||[]).find(f=>f['事实编号']===row['事实编号']);if(fact)return linked(fact,kind,value);}
   if(kind==='产品编号'&&row['订单编号'])return (data.orders||[]).some(o=>equal(o,row,'订单编号')&&o[kind]===value);
   if(kind==='订单编号'&&row['产品编号'])return (data.orders||[]).some(o=>o[kind]===value&&equal(o,row,'产品编号'));
   return false;
