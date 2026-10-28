@@ -1,0 +1,13 @@
+{
+  "docker-browser.log": "aad7f570d70e2e37f0f47dc5214e4c2d8e007869501518ec33083b0afc97f50e",
+  "tested-source-sha256.json": "7da24b5d29931753abbf124331cd6e5773ea9b2b1e7f5b3c7371f9ebda5697d2",
+  "original-source-sha256.txt": "f877d1c7954418e6fd8d2f3e4b1f3187d9252272a6d95a157e1e7a54f9fc1664",
+  "canonical-card.json": "b71b69add070bd61f84e7ab2d7ae5cb92a391a419a14f348517880f7f2c7e3db",
+  "browser-report.json": "9f22e04d873b7f3e665174dafea714f33872dcb01d488d4eb205c5ced5600563",
+  "container-validation.log": "ee5d12fa6172a923749299dedf47809e49782cdbc3668852a13f829b364adc28",
+  "02-resource-load.png": "3fe5fb0c442d8ff89d5786de6e7c3898048464208b0c7e7526ee7eb12cf45f56",
+  "load-alerts.csv": "ffc8ef4a0346fb0a457e5116b8fdd68da2caf7c0071891a7a5f42c850d79999a",
+  "01-material-alerts.png": "ff213bd38df62fb6db71614516d66c0a1788ec64a8a4a64d6875a6a6fe11134f",
+  "issues-summary.json": "40a0de81c5a9fa3eec3bcdf3794001522252db5ac5ad00a70a3086e9eb806cc1",
+  "original-AC06-07-10-14-26-DEC02-03.txt": "179e78cb8eeea46f10c248db18c1e6a36f1af147991b0adb11de388a5daec58f"
+}

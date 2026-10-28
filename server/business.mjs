@@ -1,3 +1,5 @@
+import {resourceLoad,loadCsv} from '../src/lib/resource-load.mjs';
+import {validInterval} from '../src/lib/timetable.mjs';
 import {reviewPlan,contentHash,validConfirmation} from './confirmation.mjs';
 import {stageEvents} from '../src/lib/simulation-events.mjs';
 import {executionState,executionTransition,executionAdmission,executionSummary,factTables,executionTrialIssues} from '../src/lib/execution-facts.mjs';
@@ -309,7 +311,13 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
       if(!validConfirmation(c))return res.status(409).json({error:'protected_history_unavailable'});
       record(s,req,'export',c.planId,{confirmationId:c.id,snapshotHash:c.snapshotHash});write(s);return res.type('application/json').send(JSON.stringify({...c,workflow:s.workflows?.[c.planId]},null,2));
     }
-    if(req.body.runId){
+    if(req.body.resourceLoad){
+      const p=s.plans.find(p=>p.id===req.body.planId);if(!p)return res.status(404).json({error:'plan_not_found'});
+      const w=req.body.resourceLoad;
+      if(!validInterval(w.start,w.end)||!['all','machines','resources','materials','alerts'].includes(w.kind))return res.status(400).json({error:'invalid_load_view'});
+      csv=loadCsv(resourceLoad({...p,inputSnapshot:inputs(s,p)?.data??null},w),w.kind);target=p.id;
+    }
+    else if(req.body.runId){
       const run=s.runs?.find(r=>r.id===req.body.runId);if(!run)return res.status(404).json({error:'run_not_found'});
       const plan=s.plans.find(p=>p.id===run.planId);csv=resultCsv(run,plan);target=run.id;
     }
@@ -323,7 +331,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     }
     else if(req.body.planId){const p=s.plans.find(p=>p.id===req.body.planId);if(!p)return res.status(404).json({error:'plan_not_found'});if(req.body.ruleSettings===true){if(!p.ruleSnapshot)return res.status(409).json({error:'historical_rules_unavailable'});const fields=['id','category','name','enabled','active','status','scope','effectiveFrom','parameters'];csv=[['运行编号',p.runId||'旧方案无记录'],['运行快照',p.snapshotHash||'旧方案无记录'],['计算条件',p.conditions?JSON.stringify(p.conditions):'旧方案无记录'],['能力版本',p.ruleSnapshot.capabilityVersion],['计算时刻',p.ruleSnapshot.at],['输入版本',p.inputVersionId],['始终执行',p.ruleSnapshot.intrinsicChecks.join('；')],['独立复核范围',p.ruleSnapshot.independentChecks.join('；')],['说明',p.ruleSnapshot.note],fields,...p.ruleSnapshot.settings.map(r=>fields.map(f=>typeof r[f]==='object'?JSON.stringify(r[f]):String(r[f])))].map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');}else csv=exportSupplyPlanCsv(p)+'\r\n'+resultCsv(s.runs?.find(r=>r.id===p.runId),p);if(p.conditions){const scope=p.conditions.checkScope;csv=[['运行编号',p.runId],['运行快照',p.snapshotHash],['计算条件',JSON.stringify(p.conditions)],['检查范围',scope?JSON.stringify(scope):'旧方案无记录']].map(row=>row.map(v=>'\"'+String(v).replace(/\"/g,'\"\"')+'\"').join(',')).join('\r\n')+'\r\n'+csv;}target=p.id;}
     else{const d=defs.find(d=>d.key===req.body.table);if(!d)return res.status(404).json({error:'unknown_table'});csv=[d.fields,...(s.data[d.key]||[]).map(r=>d.fields.map(f=>r[f]||''))].map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');target=d.key;}
-    record(s,req,'export',target,req.body.query?{query:req.body.query}:{});write(s);res.type('text/csv').send('\ufeff'+csv);
+    record(s,req,'export',target,req.body.query?{query:req.body.query}:req.body.resourceLoad?{resourceLoad:req.body.resourceLoad}:{});write(s);res.type('text/csv').send('\ufeff'+csv);
   });
   router.use((_req,res)=>res.status(404).json({error:'unsupported_action'}));
   router.use((err,_req,res,_next)=>{console.error('business request failed',err.code||'internal_error');res.status(500).json({error:'internal_error'});});

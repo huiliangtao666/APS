@@ -925,3 +925,19 @@ test('FR029 API actual asynchronous Worker freezes pre-event facts while new run
  const {call}=await fixture(t),s=await putExecution(call);const r=await call('/runs',{revision:1});assert.equal(r.status,202);assert.equal((await call('/inputs',{revision:1,tables:eventTables(s)})).status,200);
  let run;for(let n=0;n<100;n++){run=(await call('/runs/'+r.body.id)).body;if(['completed','partial','failed'].includes(run.status))break;await new Promise(r=>setTimeout(r,10));}assert.equal(run.status,'completed',JSON.stringify(run));const p=(await call('/plans')).body.find(p=>p.id===run.planId);assert.equal(p.execution.events.rows.length,0);assert.equal(p.tasks[0].start,30);const fresh=(await call('/calculate',{revision:2})).body;assert.equal(fresh.execution.events.rows.length,1);assert.equal(fresh.tasks.length,0);assert.notEqual(p.conditions.executionFactsVersion,fresh.conditions.executionFactsVersion);
 });
+
+test('FR032 load export uses saved snapshot/window/category, preserves history and enforces permission/reason/audit',async t=>{
+ const {call,store}=await fixture(t);const p=(await call('/calculate',{revision:0})).body;assert.equal((await call('/plans',{id:p.id})).status,201);
+ const prior=(await call('/plans')).body;const target={planId:p.id,resourceLoad:{start:0,end:100,kind:'machines'}};
+ assert.equal((await call('/export',target,'query')).status,403);
+ assert.equal((await call('/export',{...target,reason:''})).status,400);
+ assert.equal((await call('/export',target,'planner',{'sec-fetch-site':'cross-site'})).status,403);
+ assert.equal((await call('/export',{...target,resourceLoad:{start:null,end:100,kind:'all'}})).status,400);
+ assert.equal((await call('/export',{...target,resourceLoad:{start:0,end:100,kind:'bad'}})).status,400);
+ assert.equal((await call('/export',{...target,planId:'absent'})).status,404);
+ const s=(await call('/state')).body;const rows=structuredClone(s.data.machines);rows[0]['设备名称']='CURRENT ONLY';assert.equal((await call('/tables/machines',{rows,revision:0})).status,200);
+ store.setExport('test#query',true);
+ const ex=await call('/export',target,'query');assert.equal(ex.status,200);assert.match(ex.body,/FR032/);assert.match(ex.body,/L01/);assert.match(ex.body,/100/);assert.ok(!ex.body.includes('CURRENT ONLY'));assert.ok(!ex.body.includes('"materials"'));
+ assert.deepEqual((await call('/plans')).body,prior);
+ const audit=(await call('/operations')).body.at(-1);assert.equal(audit.action,'export');assert.deepEqual(audit.resourceLoad,target.resourceLoad);
+});

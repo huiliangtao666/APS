@@ -1,3 +1,4 @@
+import {LoadPanel} from './LoadPanel';
 import {TaskLinkage} from './TaskLinkage';
 import {TimelinePanel} from './TimelinePanel';
 import {ConfirmationPanel} from './ConfirmationPanel';
@@ -127,6 +128,7 @@ export default function App() {
             ['lineScope','单线约束'],['machineOverlap','机器不重叠'],['precedence','优先关系'],
           ] as const).map(([key,label])=>{const check=verification.checks[key];const statusLabel:Record<VerificationStatus,string>={pass:'通过',problem:'问题',not_checked:'未检查'};return <article className={`verification-check ${check.status}`} key={key}><div><b>{label}</b><strong>{statusLabel[check.status]}</strong></div><ul>{check.details.map((detail,i)=><li key={i}>{detail}</li>)}</ul></article>;})}</div><small className="verification-note">本报告只复核上述三项已确认约束；保存的结果不代替主管确认。输入变更后需重新复核。</small></>}
         </section>
+        <LoadPanel onExport={session?.canExport&&!busy&&!!reason.trim()?options=>download({planId:activePlan?.id,resourceLoad:options},activePlan?.id+'-资源负荷.csv'):undefined} key={'load-'+(activePlan?.id||'none')} plan={activePlan} onTask={ids=>{setProblemOnly(false);setFocusedProblem(null);setSelected(ids);}} onInput={(table,row)=>{setQueryInputTable(table);setQueryInputRow(row);setView('query');}}/>
         <TaskLinkage plan={activePlan} selected={selected} findings={visibleFindings} focused={focusedProblem} onProblem={locate} onSelect={ids=>{setFocusedProblem(null);setSelected(ids);}} onCheck={verifyPlan} busy={busy||!session?.canWrite||!reason.trim()} problemOnly={problemOnly} onFilter={setProblemOnly}/>
         <TimelinePanel focusedProblem={focusedProblem} problemTaskIds={problemOnly?visibleFindings.flatMap(f=>f.taskIds):undefined} key={activePlan?.id||'none'} plan={activePlan} selected={selected} onSelect={setSelected} currentFacts={data.executionFacts||[]} onInput={(table,row)=>{setQueryInputTable(table);setQueryInputRow(row);setView('query');}}/>
         <div className="content-grid">
