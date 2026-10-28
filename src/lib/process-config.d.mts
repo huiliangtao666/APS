@@ -8,4 +8,5 @@ export function validateProcessConfig(input: {
   dependencies?: ProcessConfigRow[];
   machines?: ProcessConfigRow[];
   materials?: ProcessConfigRow[];
+  personnelGroups?: ProcessConfigRow[];
 }): ProcessConfigIssue[];
