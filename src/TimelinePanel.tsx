@@ -30,7 +30,14 @@ export function TimelinePanel({plan,selected,onSelect,onInput,currentFacts,focus
  const hidden=selected.filter(id=>model.tasks.some(t=>t.id===id)&&!filtered.some(t=>t.id===id));
  function reset(){setMachine('');setOrder('');setState('');setQuery('');setFrom('');setTo('');setAcceptedWindow(null);}
  function reveal(){reset();requestAnimationFrame(()=>detail.current?.scrollIntoView?.({block:'nearest'}));}
- useEffect(()=>{const node=host.current?.querySelector<HTMLElement>('[data-selected="true"]');node?.scrollIntoView?.({block:'nearest',inline:'center'});},[selected.join('|'),plan?.id,zoom,query,machine,order,state,from,to]);
+ useEffect(()=>{
+  const node=host.current?.querySelector<HTMLElement>('[data-selected="true"]');
+  // Problem activation scrolls to the saved task. Carry keyboard focus with it,
+  // rather than leaving the originating finding outside the viewport.
+  const fromKeyboardProblem=typeof document!=='undefined'&&document.activeElement?.matches('.finding:focus-visible');
+  node?.scrollIntoView?.({block:'nearest',inline:'center'});
+  if(fromKeyboardProblem)node?.focus({preventScroll:true});
+ },[selected.join('|'),plan?.id,zoom,query,machine,order,state,from,to]);
  const chosen=model.tasks.filter(t=>selected.includes(t.id));
  const rows:any[]=[];let height=48;const positions=new Map<string,{x:number;y:number;end:number}>();
  for(const id of model.machines.filter(id=>!machine||id===machine)){

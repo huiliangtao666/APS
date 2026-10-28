@@ -1,0 +1,16 @@
+TAP version 13
+# Subtest: FR023 delivery UI distinguishes completed/deliverable, locates tasks and truthfully compares unchanged/worse/unknown saved results
+ok 1 - FR023 delivery UI distinguishes completed/deliverable, locates tasks and truthfully compares unchanged/worse/unknown saved results
+  ---
+  duration_ms: 32.206109
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 76.925331

@@ -84,3 +84,20 @@ test('FR034 focus resets obstructing filters and shows exact overlap while probl
  act(()=>ui.update(<TimelinePanel plan={p} selected={selected} onSelect={()=>{}} onInput={()=>{}} currentFacts={[]} problemTaskIds={[]}/>));
  assert.equal(bars(ui).length,0);
 });
+
+
+test('KBD01 round1: keyboard finding scrolls then focuses the exact selected bar; pointer activation retains focus',()=>{
+ const p=fixture(),before=JSON.stringify(p),events:string[]=[];
+ const previous=Object.getOwnPropertyDescriptor(globalThis,'document');
+ let keyboard=true;
+ Object.defineProperty(globalThis,'document',{configurable:true,value:{activeElement:{matches:(selector:string)=>keyboard&&selector==='.finding:focus-visible'}}});
+ const node={scrollIntoView:(options:any)=>events.push('scroll:'+options.inline),focus:(options:any)=>events.push('focus:'+options.preventScroll)};
+ let ui:any;
+ try{
+  act(()=>{ui=Renderer.create(<TimelinePanel plan={p} selected={['A-MIX']} onSelect={()=>{}} onInput={()=>{}} currentFacts={[]}/>,{createNodeMock:(el:any)=>el.props.className==='fr033-scroll'?{querySelector:(selector:string)=>{assert.equal(selector,'[data-selected="true"]');return node;}}:null});});
+  assert.deepEqual(events.slice(-2),['scroll:center','focus:true']);
+  events.length=0;keyboard=false;
+  act(()=>ui.update(<TimelinePanel plan={p} selected={['A-FILL']} onSelect={()=>{}} onInput={()=>{}} currentFacts={[]}/>));
+  assert.deepEqual(events,['scroll:center']);assert.equal(JSON.stringify(p),before);
+ }finally{act(()=>ui?.unmount());if(previous)Object.defineProperty(globalThis,'document',previous);else delete (globalThis as any).document;}
+});

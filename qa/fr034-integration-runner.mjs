@@ -16,7 +16,7 @@ import {jointFixture,enableJoint,claim} from './joint-fixture.mjs';
 import {materialFixture} from './material-fixture.mjs';
 import {executionFixture} from './execution-fixture.mjs';
 
-export const sourceSHA='FR034 working source; parent 9783e9de6e500f895dbe6084bcfda2690dcbad7d';
+export const sourceSHA=process.env.FR034_PRODUCT_LABEL||'FR034 working source; parent 9783e9de6e500f895dbe6084bcfda2690dcbad7d';
 export async function startValidation(){
  assert.equal(process.env.FR033_DISPOSABLE_VALIDATION,'1','Set FR033_DISPOSABLE_VALIDATION=1 explicitly');
  const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
@@ -24,7 +24,7 @@ export async function startValidation(){
  const dist=path.join(scratch,'dist');
  const alias=fileURLToPath(new URL('./fr033-integration-runtime.mjs',import.meta.url));
  const label='FR033 DISPOSABLE VALIDATION · SYNTHETIC DATA / TEST IDENTITY · NO GATEWAY AUTHENTICATION';
- const pinned=JSON.parse(fs.readFileSync(path.join(root,'qa/fr034-source-sha256.json')));
+ const pinned=JSON.parse(fs.readFileSync(path.join(root,process.env.FR034_SOURCE_MANIFEST||'qa/fr034-source-sha256.json')));
  assert.equal(pinned.productSourceSHA,sourceSHA);
  const sourceHashes=Object.fromEntries(Object.entries(pinned.files).map(([f,expected])=>{const actual=createHash('sha256').update(fs.readFileSync(path.join(root,f))).digest('hex');assert.equal(actual,expected,f+' differs from canonical product source');return [f,actual];}));
  let server;

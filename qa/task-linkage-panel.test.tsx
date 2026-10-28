@@ -12,7 +12,15 @@ test('problem click, active check, filter and missing evidence controls remain e
  act(()=>view.root.findAllByType('button').find((b:any)=>b.props.className==='finding')!.props.onClick());assert.equal(focus,f);
  act(()=>view.root.findAllByType('button')[0].props.onClick());assert.equal(checks,1);
  act(()=>view.root.findByType('input').props.onChange({target:{checked:true}}));assert.equal(filtered,true);
- act(()=>view.update(<TaskLinkage {...props} busy/>));assert.equal(view.root.findAllByType('button')[0].props.disabled,true);
+ act(()=>view.update(<TaskLinkage {...props} busy/>));const check=view.root.findAllByType('button')[0];
+ assert.equal(check.props.disabled,false);assert.equal(check.props['aria-disabled'],true);
+ act(()=>check.props.onClick());assert.equal(checks,1,'busy control suppresses repeat activation');
+ act(()=>view.update(<TaskLinkage {...props}/>));
+ assert.equal(view.root.findAllByType('button')[0].props['aria-disabled'],false);
+ act(()=>view.root.findAllByType('button')[0].props.onClick());assert.equal(checks,2);
+ act(()=>view.update(<TaskLinkage {...props} plan={null}/>));
+ const unavailable=view.root.findAllByType('button')[0];assert.equal(unavailable.props.disabled,true);
+ act(()=>unavailable.props.onClick());assert.equal(checks,2,'no plan cannot trigger check');
 });
 
 test('stale structured evidence over raw null cannot render a numeric problem interval',()=>{
