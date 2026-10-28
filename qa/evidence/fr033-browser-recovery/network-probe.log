@@ -1,0 +1,26 @@
+/usr/local/bin/node
+/usr/bin/dpkg-deb
+/usr/bin/apt-get
+/usr/bin/apt-cache
+/usr/bin/gpgv
+/usr/bin/ldd
+/usr/bin/unshare
+/usr/bin/apt
+/usr/bin/apt-cache
+/usr/bin/apt-cdrom
+/usr/bin/apt-config
+/usr/bin/apt-get
+/usr/bin/apt-key
+/usr/bin/apt-mark
+/usr/bin/dpkg
+/usr/bin/dpkg-deb
+/usr/bin/dpkg-divert
+/usr/bin/dpkg-maintscript-helper
+/usr/bin/dpkg-query
+/usr/bin/dpkg-realpath
+/usr/bin/dpkg-split
+/usr/bin/dpkg-statoverride
+/usr/bin/dpkg-trigger
+DEBIAN_INDEX 200 8689464
+
+[validation] disposable source/dependencies/output; no publish or restart

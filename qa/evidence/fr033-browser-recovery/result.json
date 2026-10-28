@@ -1,0 +1,45 @@
+{
+  "atUTC": "2026-10-28T22:03:58.213616+00:00",
+  "delivery": "dlv_114d27e9-50e1-484c-afc4-7e53f60acc0f",
+  "canonicalBaseSHA": "799f0882e610fca0b6ee1dfe64c52de84a04350a",
+  "branch": "feat/fr-033-machine-timetable",
+  "runtime": {
+    "os": "Debian12 bookworm",
+    "arch": "arm64/aarch64",
+    "uid": 503,
+    "gid": 20,
+    "node": "v22.23.2",
+    "playwright": "1.56.1",
+    "chromium": "141.0.7390.37",
+    "chromiumBuild": 1194,
+    "chromiumExecutableSHA256": "7522aa366193273540bb458d2693fdc2437c4404441ab9fe672479b658b4710f"
+  },
+  "packageCount": 59,
+  "dependencyRestore": "PASS: every package downloaded by pinned URL and verified by SHA256; full Chromium ldd has no missing libraries",
+  "browserLaunch": "BLOCKED: chromiumSandbox:true -> No usable sandbox!",
+  "namespaceProbe": {
+    "command": "unshare --user --map-root-user true",
+    "status": 1,
+    "stderr": "unshare: unshare failed: Operation not permitted",
+    "seccomp": 2,
+    "capEff": "0000000000000000",
+    "maxUserNamespaces": 32138
+  },
+  "responsiblePolicy": "Not identifiable from unprivileged probe; namespace denial is observed, seccomp mode2 is observed. No policy modifications attempted.",
+  "checks": {
+    "appExecExit": 0,
+    "tests": 252,
+    "failed": 0,
+    "build": "PASS",
+    "realAppAPISmoke": "PASS; saved40/current50 unchanged; canonical source hashes verified",
+    "HISTORY01": "PASS",
+    "ZOOM01": "PASS",
+    "WINDOW02": "PASS"
+  },
+  "newBrowserDOM": false,
+  "newScreenshots": false,
+  "componentBrowserAcceptance": "NOT RUN: sandboxed launch prerequisite failed",
+  "realAppBrowserAcceptance": "NOT RUN: sandboxed launch prerequisite failed",
+  "operatorRequirement": "Provide an approved disposable QA runtime supporting nonroot Chromium sandboxing (working user namespaces or a pre-provisioned supported sandbox), while retaining platform security policy. Then rerun commands.txt. No host/live-app/daemon changes or --no-sandbox workaround requested.",
+  "changes": "QA scripts, pinned dependency manifest, evidence logs only; no product files, cards, publication, restart or platform configuration changed."
+}

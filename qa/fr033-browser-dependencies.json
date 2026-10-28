@@ -1,0 +1,480 @@
+{
+  "schema": 1,
+  "os": "debian12",
+  "arch": "arm64",
+  "authentication": "APT signed Debian InRelease indexes; SHA256 verified against package index",
+  "packages": [
+    {
+      "name": "at-spi2-common",
+      "version": "2.46.0-5",
+      "architecture": "all",
+      "file": "at-spi2-common_2.46.0-5_all.deb",
+      "url": "https://deb.debian.org/debian/pool/main/a/at-spi2-core/at-spi2-common_2.46.0-5_all.deb",
+      "sha256": "441bc1c6cefdc01f519310abf55823deb868898480dee09a05aa44e8c83cabc2"
+    },
+    {
+      "name": "fontconfig-config",
+      "version": "2.14.1-4",
+      "architecture": "arm64",
+      "file": "fontconfig-config_2.14.1-4_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/f/fontconfig/fontconfig-config_2.14.1-4_arm64.deb",
+      "sha256": "297b5a63f9214ffebe08892cdf2effdaf2b408e719811d5e8e98870f710cd35c"
+    },
+    {
+      "name": "fontconfig",
+      "version": "2.14.1-4",
+      "architecture": "arm64",
+      "file": "fontconfig_2.14.1-4_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/f/fontconfig/fontconfig_2.14.1-4_arm64.deb",
+      "sha256": "5fe5ce908c360fb5e9376ce26484477948f8182c982fee495b8ab024a0f22c6f"
+    },
+    {
+      "name": "fonts-liberation",
+      "version": "1:1.07.4-11",
+      "architecture": "all",
+      "file": "fonts-liberation_1%3a1.07.4-11_all.deb",
+      "url": "https://deb.debian.org/debian/pool/main/f/fonts-liberation/fonts-liberation_1.07.4-11_all.deb",
+      "sha256": "efd381517f958b01969343634ffcbdd60056be7779af84c6f53a005090430204"
+    },
+    {
+      "name": "libasound2-data",
+      "version": "1.2.8-1",
+      "architecture": "all",
+      "file": "libasound2-data_1.2.8-1_all.deb",
+      "url": "https://deb.debian.org/debian/pool/main/a/alsa-lib/libasound2-data_1.2.8-1_all.deb",
+      "sha256": "fe0780d2d3674b2977e0acb0d48b448ad72ba1642564b7dc537f55e839984c2d"
+    },
+    {
+      "name": "libasound2",
+      "version": "1.2.8-1+b1",
+      "architecture": "arm64",
+      "file": "libasound2_1.2.8-1+b1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/a/alsa-lib/libasound2_1.2.8-1+b1_arm64.deb",
+      "sha256": "9fa889400fcee4b92c8f4a2fafbb7f2cd33444d9ec1665a71002ab67c06114bb"
+    },
+    {
+      "name": "libatk-bridge2.0-0",
+      "version": "2.46.0-5",
+      "architecture": "arm64",
+      "file": "libatk-bridge2.0-0_2.46.0-5_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/a/at-spi2-core/libatk-bridge2.0-0_2.46.0-5_arm64.deb",
+      "sha256": "3f2229723e1f8337282f74c44f139eda2aab5829fc0bca9adb2976f3a8d83b44"
+    },
+    {
+      "name": "libatk1.0-0",
+      "version": "2.46.0-5",
+      "architecture": "arm64",
+      "file": "libatk1.0-0_2.46.0-5_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/a/at-spi2-core/libatk1.0-0_2.46.0-5_arm64.deb",
+      "sha256": "c7508adb33e42c35b516e8456d801d5d246e36f1ebb2f1ebb8d2ce7a70ce1d2b"
+    },
+    {
+      "name": "libatspi2.0-0",
+      "version": "2.46.0-5",
+      "architecture": "arm64",
+      "file": "libatspi2.0-0_2.46.0-5_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/a/at-spi2-core/libatspi2.0-0_2.46.0-5_arm64.deb",
+      "sha256": "5408f7d48e84f3b140fb4496215078cb9da997937e3702086476690374d60311"
+    },
+    {
+      "name": "libavahi-client3",
+      "version": "0.8-10+deb12u1",
+      "architecture": "arm64",
+      "file": "libavahi-client3_0.8-10+deb12u1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/a/avahi/libavahi-client3_0.8-10+deb12u1_arm64.deb",
+      "sha256": "1bd0aa97b536ae39a90a44988b4fbb903352aa7c91d7cd914727b82f39ff0d81"
+    },
+    {
+      "name": "libavahi-common-data",
+      "version": "0.8-10+deb12u1",
+      "architecture": "arm64",
+      "file": "libavahi-common-data_0.8-10+deb12u1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/a/avahi/libavahi-common-data_0.8-10+deb12u1_arm64.deb",
+      "sha256": "9fb985c54d65586b1e13d734852c9cc26d91f2ea4922b90cb6d684a52a46f449"
+    },
+    {
+      "name": "libavahi-common3",
+      "version": "0.8-10+deb12u1",
+      "architecture": "arm64",
+      "file": "libavahi-common3_0.8-10+deb12u1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/a/avahi/libavahi-common3_0.8-10+deb12u1_arm64.deb",
+      "sha256": "f55666f45c6ccf6853fd444524ff2c255292cbb3c5b49d8aa0afffa3510a9d9f"
+    },
+    {
+      "name": "libbrotli1",
+      "version": "1.0.9-2+deb12u1",
+      "architecture": "arm64",
+      "file": "libbrotli1_1.0.9-2+deb12u1_arm64.deb",
+      "url": "https://deb.debian.org/debian-security/pool/updates/main/b/brotli/libbrotli1_1.0.9-2+deb12u1_arm64.deb",
+      "sha256": "131e62b9708da9aea88be990d275cb5c7b119e40beccf174c23ac8dc7246bb0f"
+    },
+    {
+      "name": "libbsd0",
+      "version": "0.11.7-2",
+      "architecture": "arm64",
+      "file": "libbsd0_0.11.7-2_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libb/libbsd/libbsd0_0.11.7-2_arm64.deb",
+      "sha256": "ef00f132ddd268ee67d756998723ee18543db27ab34930c0a9f1cff75cf55382"
+    },
+    {
+      "name": "libcairo2",
+      "version": "1.16.0-7",
+      "architecture": "arm64",
+      "file": "libcairo2_1.16.0-7_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/c/cairo/libcairo2_1.16.0-7_arm64.deb",
+      "sha256": "48b5c5ae1972ea0757c6285463d611d0ca32c9c808957961e5c7924126f30289"
+    },
+    {
+      "name": "libcups2",
+      "version": "2.4.2-3+deb12u9",
+      "architecture": "arm64",
+      "file": "libcups2_2.4.2-3+deb12u9_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/c/cups/libcups2_2.4.2-3+deb12u9_arm64.deb",
+      "sha256": "41c9220d57d9eb3b5245f17038c830053f12176f6eef611c6f6941fcbf6d507f"
+    },
+    {
+      "name": "libdatrie1",
+      "version": "0.2.13-2+b1",
+      "architecture": "arm64",
+      "file": "libdatrie1_0.2.13-2+b1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libd/libdatrie/libdatrie1_0.2.13-2+b1_arm64.deb",
+      "sha256": "d7c52aa971278e7f298b7e74f8ed50ad25579f9b344212fd4a91744cffa58cc9"
+    },
+    {
+      "name": "libdbus-1-3",
+      "version": "1.14.10-1~deb12u1",
+      "architecture": "arm64",
+      "file": "libdbus-1-3_1.14.10-1~deb12u1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/d/dbus/libdbus-1-3_1.14.10-1~deb12u1_arm64.deb",
+      "sha256": "2a423794f44ee756f70fda67c6e47b15afe3dd22cd69e51f5d14d2ec9538f806"
+    },
+    {
+      "name": "libdrm-common",
+      "version": "2.4.114-1",
+      "architecture": "all",
+      "file": "libdrm-common_2.4.114-1_all.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libd/libdrm/libdrm-common_2.4.114-1_all.deb",
+      "sha256": "32f9664138b38b224383c6986457d5ad2ec8efd559b1a0ce7749405f7a451aad"
+    },
+    {
+      "name": "libdrm2",
+      "version": "2.4.114-1+b1",
+      "architecture": "arm64",
+      "file": "libdrm2_2.4.114-1+b1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libd/libdrm/libdrm2_2.4.114-1+b1_arm64.deb",
+      "sha256": "f5f15a46d02cf5d9fa52d4f1c54b8cf80c398711ad771a9938b12399b8d8090c"
+    },
+    {
+      "name": "libexpat1",
+      "version": "2.5.0-1+deb12u5",
+      "architecture": "arm64",
+      "file": "libexpat1_2.5.0-1+deb12u5_arm64.deb",
+      "url": "https://deb.debian.org/debian-security/pool/updates/main/e/expat/libexpat1_2.5.0-1+deb12u5_arm64.deb",
+      "sha256": "4a733e7f636de4a4483e3e5d7b02dc8e788b115361a04dd58df89461ce2ae65a"
+    },
+    {
+      "name": "libfontconfig1",
+      "version": "2.14.1-4",
+      "architecture": "arm64",
+      "file": "libfontconfig1_2.14.1-4_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/f/fontconfig/libfontconfig1_2.14.1-4_arm64.deb",
+      "sha256": "4836d9deca824883f0de33d4f8f3718ba776c6e7c80cd7c418b5a0f86c009b9e"
+    },
+    {
+      "name": "libfreetype6",
+      "version": "2.12.1+dfsg-5+deb12u4",
+      "architecture": "arm64",
+      "file": "libfreetype6_2.12.1+dfsg-5+deb12u4_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/f/freetype/libfreetype6_2.12.1+dfsg-5+deb12u4_arm64.deb",
+      "sha256": "b8d32e54ebc9020637f8fa16b6afa64a5731e40845a6e01880d38d6f632237c9"
+    },
+    {
+      "name": "libfribidi0",
+      "version": "1.0.8-2.1",
+      "architecture": "arm64",
+      "file": "libfribidi0_1.0.8-2.1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/f/fribidi/libfribidi0_1.0.8-2.1_arm64.deb",
+      "sha256": "8ab3adcf64b318252d37669468fecb8e0478e1cf5f096d065611ac7dda68ccf4"
+    },
+    {
+      "name": "libgbm1",
+      "version": "22.3.6-1+deb12u2",
+      "architecture": "arm64",
+      "file": "libgbm1_22.3.6-1+deb12u2_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/m/mesa/libgbm1_22.3.6-1+deb12u2_arm64.deb",
+      "sha256": "f5c8fdddbf365259d74af270fb10f30d7fddb3fbe7b2ff62f0fdd556f8db0dc8"
+    },
+    {
+      "name": "libglib2.0-0",
+      "version": "2.74.6-2+deb12u9",
+      "architecture": "arm64",
+      "file": "libglib2.0-0_2.74.6-2+deb12u9_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/g/glib2.0/libglib2.0-0_2.74.6-2+deb12u9_arm64.deb",
+      "sha256": "61d92fffada7e27fc0ed9d23e047b45bca3b2e3bfe1a918f4ec16559282859f4"
+    },
+    {
+      "name": "libgraphite2-3",
+      "version": "1.3.14-1+deb12u1",
+      "architecture": "arm64",
+      "file": "libgraphite2-3_1.3.14-1+deb12u1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/g/graphite2/libgraphite2-3_1.3.14-1+deb12u1_arm64.deb",
+      "sha256": "fca82a3f01cb2cfe607efb6f21f489081716ddcf8a71e2f588d3d67ad39107a2"
+    },
+    {
+      "name": "libgssapi-krb5-2",
+      "version": "1.20.1-2+deb12u5",
+      "architecture": "arm64",
+      "file": "libgssapi-krb5-2_1.20.1-2+deb12u5_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/k/krb5/libgssapi-krb5-2_1.20.1-2+deb12u5_arm64.deb",
+      "sha256": "a00678963f692a929312968f19b77a61a8fc0011690d7dc909a8a2c4810fc7b3"
+    },
+    {
+      "name": "libharfbuzz0b",
+      "version": "6.0.0+dfsg-3",
+      "architecture": "arm64",
+      "file": "libharfbuzz0b_6.0.0+dfsg-3_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/h/harfbuzz/libharfbuzz0b_6.0.0+dfsg-3_arm64.deb",
+      "sha256": "64b1d4aa672dc4eda5e11b9ff8061122060fc7aba6ad16908c89a269ffa174ee"
+    },
+    {
+      "name": "libk5crypto3",
+      "version": "1.20.1-2+deb12u5",
+      "architecture": "arm64",
+      "file": "libk5crypto3_1.20.1-2+deb12u5_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/k/krb5/libk5crypto3_1.20.1-2+deb12u5_arm64.deb",
+      "sha256": "8ae2c31cde0b3e6f80c573a495b0f90bf6d9efb4455d900728278bb54d9092e5"
+    },
+    {
+      "name": "libkeyutils1",
+      "version": "1.6.3-2",
+      "architecture": "arm64",
+      "file": "libkeyutils1_1.6.3-2_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/k/keyutils/libkeyutils1_1.6.3-2_arm64.deb",
+      "sha256": "aac46cb6faec4e737502b3c2290b7b02f8ba04e8accd5af7fd07934df0c867b1"
+    },
+    {
+      "name": "libkrb5-3",
+      "version": "1.20.1-2+deb12u5",
+      "architecture": "arm64",
+      "file": "libkrb5-3_1.20.1-2+deb12u5_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/k/krb5/libkrb5-3_1.20.1-2+deb12u5_arm64.deb",
+      "sha256": "c3c7227f5db903a7a8b8936d47d1d79643edcda36365c4c992e1a96bcc2d4c7e"
+    },
+    {
+      "name": "libkrb5support0",
+      "version": "1.20.1-2+deb12u5",
+      "architecture": "arm64",
+      "file": "libkrb5support0_1.20.1-2+deb12u5_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/k/krb5/libkrb5support0_1.20.1-2+deb12u5_arm64.deb",
+      "sha256": "3043fd4a54b945a1b503170749527f825dcfc7add2f8bf5abb4a329deeb48f4a"
+    },
+    {
+      "name": "libnspr4",
+      "version": "2:4.35-1",
+      "architecture": "arm64",
+      "file": "libnspr4_2%3a4.35-1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/n/nspr/libnspr4_4.35-1_arm64.deb",
+      "sha256": "3aa6bc5a1a3f83627f735b9712eed74ed2c345ae9148e9d876887a97982ae28d"
+    },
+    {
+      "name": "libnss3",
+      "version": "2:3.87.1-1+deb12u4",
+      "architecture": "arm64",
+      "file": "libnss3_2%3a3.87.1-1+deb12u4_arm64.deb",
+      "url": "https://deb.debian.org/debian-security/pool/updates/main/n/nss/libnss3_3.87.1-1+deb12u4_arm64.deb",
+      "sha256": "aaa1b291b6330590079a0eb1404650c7c4f6c788f9213ab6911149dc22b2b6d0"
+    },
+    {
+      "name": "libpango-1.0-0",
+      "version": "1.50.12+ds-1",
+      "architecture": "arm64",
+      "file": "libpango-1.0-0_1.50.12+ds-1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/p/pango1.0/libpango-1.0-0_1.50.12+ds-1_arm64.deb",
+      "sha256": "88afa1481f9e520a3068e85dad776ed09a3751c7638a877333af6cec927db3ee"
+    },
+    {
+      "name": "libpixman-1-0",
+      "version": "0.42.2-1",
+      "architecture": "arm64",
+      "file": "libpixman-1-0_0.42.2-1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/p/pixman/libpixman-1-0_0.42.2-1_arm64.deb",
+      "sha256": "a18db1a3bdbad168c7168b528bbb07b47316ff9fe977206a780dcc21b376e501"
+    },
+    {
+      "name": "libpng16-16",
+      "version": "1.6.39-2+deb12u6",
+      "architecture": "arm64",
+      "file": "libpng16-16_1.6.39-2+deb12u6_arm64.deb",
+      "url": "https://deb.debian.org/debian-security/pool/updates/main/libp/libpng1.6/libpng16-16_1.6.39-2+deb12u6_arm64.deb",
+      "sha256": "9fa66d01197efe73f44ed566a3bffbb476675826326e9c32ffa80b29495de482"
+    },
+    {
+      "name": "libsqlite3-0",
+      "version": "3.40.1-2+deb12u2",
+      "architecture": "arm64",
+      "file": "libsqlite3-0_3.40.1-2+deb12u2_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/s/sqlite3/libsqlite3-0_3.40.1-2+deb12u2_arm64.deb",
+      "sha256": "a690f7f2aa6435bd1fd7cbbd2216acb9acbb8c48c9721f2c195766375439eb13"
+    },
+    {
+      "name": "libssl3",
+      "version": "3.0.22-1~deb12u2",
+      "architecture": "arm64",
+      "file": "libssl3_3.0.22-1~deb12u2_arm64.deb",
+      "url": "https://deb.debian.org/debian-security/pool/updates/main/o/openssl/libssl3_3.0.22-1~deb12u2_arm64.deb",
+      "sha256": "3d04ecd8d0f57fed50d205abaeedfcc84c1960073ea085719c00add44b0ccd7f"
+    },
+    {
+      "name": "libthai-data",
+      "version": "0.1.29-1",
+      "architecture": "all",
+      "file": "libthai-data_0.1.29-1_all.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libt/libthai/libthai-data_0.1.29-1_all.deb",
+      "sha256": "eed65a75269411e47d7b393d82bc30471da5c499e9f311abbfd8c54ca1a42d9e"
+    },
+    {
+      "name": "libthai0",
+      "version": "0.1.29-1",
+      "architecture": "arm64",
+      "file": "libthai0_0.1.29-1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libt/libthai/libthai0_0.1.29-1_arm64.deb",
+      "sha256": "1374f50f4e96397f2830f3fdf09e95a5fe8e4d584fdc70dd187eec5f8832d08c"
+    },
+    {
+      "name": "libwayland-server0",
+      "version": "1.21.0-1",
+      "architecture": "arm64",
+      "file": "libwayland-server0_1.21.0-1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/w/wayland/libwayland-server0_1.21.0-1_arm64.deb",
+      "sha256": "4d99e7e0503fdaa999e67d47d8612c0465e775eafa47819573da50bdb09064f2"
+    },
+    {
+      "name": "libx11-6",
+      "version": "2:1.8.4-2+deb12u2",
+      "architecture": "arm64",
+      "file": "libx11-6_2%3a1.8.4-2+deb12u2_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libx/libx11/libx11-6_1.8.4-2+deb12u2_arm64.deb",
+      "sha256": "d1d533e983582282a9ea82c87ac5ce715a9b67bd6d1acbd2439a11c63c36549b"
+    },
+    {
+      "name": "libx11-data",
+      "version": "2:1.8.4-2+deb12u2",
+      "architecture": "all",
+      "file": "libx11-data_2%3a1.8.4-2+deb12u2_all.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libx/libx11/libx11-data_1.8.4-2+deb12u2_all.deb",
+      "sha256": "987a848aeb1c358e4186368871b0526f10bb14c6b53214ab3bf8b69abb830191"
+    },
+    {
+      "name": "libxau6",
+      "version": "1:1.0.9-1",
+      "architecture": "arm64",
+      "file": "libxau6_1%3a1.0.9-1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libx/libxau/libxau6_1.0.9-1_arm64.deb",
+      "sha256": "36c2bf400641a80521093771dc2562c903df4065f9eb03add50d90564337ea6c"
+    },
+    {
+      "name": "libxcb-render0",
+      "version": "1.15-1",
+      "architecture": "arm64",
+      "file": "libxcb-render0_1.15-1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libx/libxcb/libxcb-render0_1.15-1_arm64.deb",
+      "sha256": "8d431caeae9dd0f7490caef1d66de0b7a7d3817afe021b6d55bedbba7b19bf43"
+    },
+    {
+      "name": "libxcb-shm0",
+      "version": "1.15-1",
+      "architecture": "arm64",
+      "file": "libxcb-shm0_1.15-1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libx/libxcb/libxcb-shm0_1.15-1_arm64.deb",
+      "sha256": "825931950d42f51cd795cf2e5b9399d840225491e95ec530e0c5a9145c4ba5a0"
+    },
+    {
+      "name": "libxcb1",
+      "version": "1.15-1",
+      "architecture": "arm64",
+      "file": "libxcb1_1.15-1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libx/libxcb/libxcb1_1.15-1_arm64.deb",
+      "sha256": "041d9a68415c3ccf3ce8f4f8b88e4bbfb5dc1f0d97013c6ef8423e620ea50f84"
+    },
+    {
+      "name": "libxcomposite1",
+      "version": "1:0.4.5-1",
+      "architecture": "arm64",
+      "file": "libxcomposite1_1%3a0.4.5-1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libx/libxcomposite/libxcomposite1_0.4.5-1_arm64.deb",
+      "sha256": "cfe39326fdb822e9d060ed5eb3f95b14459dd6b73793c5290000f9b27f8bad37"
+    },
+    {
+      "name": "libxdamage1",
+      "version": "1:1.1.6-1",
+      "architecture": "arm64",
+      "file": "libxdamage1_1%3a1.1.6-1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libx/libxdamage/libxdamage1_1.1.6-1_arm64.deb",
+      "sha256": "489d20cf78c8ee4428f3e26c5b3edcd87a71b5beb6bed992c45f47c6d01a1c92"
+    },
+    {
+      "name": "libxdmcp6",
+      "version": "1:1.1.2-3",
+      "architecture": "arm64",
+      "file": "libxdmcp6_1%3a1.1.2-3_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libx/libxdmcp/libxdmcp6_1.1.2-3_arm64.deb",
+      "sha256": "e92569ac33247261aa09adfadc34ced3994ac301cf8b58de415a2d5dbf15ccfc"
+    },
+    {
+      "name": "libxext6",
+      "version": "2:1.3.4-1+b1",
+      "architecture": "arm64",
+      "file": "libxext6_2%3a1.3.4-1+b1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libx/libxext/libxext6_1.3.4-1+b1_arm64.deb",
+      "sha256": "5e9c0ad606eb4674c645fe8e0e64330c47d2729f7a59ed569848610efd5d5b62"
+    },
+    {
+      "name": "libxfixes3",
+      "version": "1:6.0.0-2",
+      "architecture": "arm64",
+      "file": "libxfixes3_1%3a6.0.0-2_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libx/libxfixes/libxfixes3_6.0.0-2_arm64.deb",
+      "sha256": "d47bda8fed01b19b41d503e2df05d9166c58e30e2376f2f8784ceb7a834befe6"
+    },
+    {
+      "name": "libxi6",
+      "version": "2:1.8-1+b1",
+      "architecture": "arm64",
+      "file": "libxi6_2%3a1.8-1+b1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libx/libxi/libxi6_1.8-1+b1_arm64.deb",
+      "sha256": "b26383c9929d8bfba051eee22301e064d17039ed022bbf31990feb0d7a03b36c"
+    },
+    {
+      "name": "libxkbcommon0",
+      "version": "1.5.0-1",
+      "architecture": "arm64",
+      "file": "libxkbcommon0_1.5.0-1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libx/libxkbcommon/libxkbcommon0_1.5.0-1_arm64.deb",
+      "sha256": "ec518d8a19796a399ab95e7bc4dfbb6bd2ed8e151f77b222df26208db412d852"
+    },
+    {
+      "name": "libxrandr2",
+      "version": "2:1.5.2-2+b1",
+      "architecture": "arm64",
+      "file": "libxrandr2_2%3a1.5.2-2+b1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libx/libxrandr/libxrandr2_1.5.2-2+b1_arm64.deb",
+      "sha256": "f0bc7f79fee182caae176652fdb1bf349d13b9591b10ad4dc1c896521da8e49f"
+    },
+    {
+      "name": "libxrender1",
+      "version": "1:0.9.10-1.1",
+      "architecture": "arm64",
+      "file": "libxrender1_1%3a0.9.10-1.1_arm64.deb",
+      "url": "https://deb.debian.org/debian/pool/main/libx/libxrender/libxrender1_0.9.10-1.1_arm64.deb",
+      "sha256": "f260193deb4eaf0b410a1c61e1f84804366ee3372b8bad9f38005f7dbcd89aae"
+    },
+    {
+      "name": "xkb-data",
+      "version": "2.35.1-1",
+      "architecture": "all",
+      "file": "xkb-data_2.35.1-1_all.deb",
+      "url": "https://deb.debian.org/debian/pool/main/x/xkeyboard-config/xkb-data_2.35.1-1_all.deb",
+      "sha256": "28a79c61b785f403da93af58c39aed13c022032935e3e54362c6707169cfe982"
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+bash .codex/skills/workspace-app-builder/scripts/app-exec.sh --validate --mode standalone --cwd /workspace/apps/aps-fr033 --timeout-ms 300000 'bash qa/fr033-browser-recovery.sh'
+
+bash .codex/skills/workspace-app-builder/scripts/app-exec.sh --validate --mode standalone --cwd /workspace/apps/aps-fr033 --timeout-ms 240000 'bash qa/fr033-recovery-checks.sh'

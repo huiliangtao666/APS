@@ -6,7 +6,7 @@ import {startValidation} from './fr033-integration-runner.mjs';
 const run=await startValidation();
 let browser;
 try{
- browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+ browser=await chromium.launch({headless:true,chromiumSandbox:true});
  const page=await browser.newPage({viewport:{width:1280,height:900}});
  const errors=[],requests=[],checks=[];
  page.on('pageerror',e=>errors.push(e.message));

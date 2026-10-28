@@ -1,0 +1,169 @@
+RUNTIME_PREFIX=/tmp/fr033-browser-runtime-lszGEA uid=503 OS=Debian GNU/Linux 12 (bookworm) arch=aarch64
+Runtime prepared; task-scoped library/font/cache paths only.
+Downloading Chromium 141.0.7390.37 (playwright build v1194) from https://cdn.playwright.dev/dbazure/download/playwright/builds/chromium/1194/chromium-linux-arm64.zip
+|                                                                                |   0% of 175.9 MiB
+|■■■■■■■■                                                                        |  10% of 175.9 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 175.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 175.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 175.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 175.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 175.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 175.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 175.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 175.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 175.9 MiB
+Chromium 141.0.7390.37 (playwright build v1194) downloaded to /tmp/fr033-browser-runtime-lszGEA/browsers/chromium-1194
+Downloading FFMPEG playwright build v1011 from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1011/ffmpeg-linux-arm64.zip
+|                                                                                |   0% of 1.6 MiB
+|■■■■■■■■                                                                        |  10% of 1.6 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 1.6 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 1.6 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 1.6 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 1.6 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 1.6 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 1.6 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 1.6 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 1.6 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 1.6 MiB
+FFMPEG playwright build v1011 downloaded to /tmp/fr033-browser-runtime-lszGEA/browsers/ffmpeg-1011
+Downloading Chromium Headless Shell 141.0.7390.37 (playwright build v1194) from https://cdn.playwright.dev/dbazure/download/playwright/builds/chromium/1194/chromium-headless-shell-linux-arm64.zip
+|                                                                                |   0% of 106.1 MiB
+|■■■■■■■■                                                                        |  10% of 106.1 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 106.1 MiB
+Chromium Headless Shell 141.0.7390.37 (playwright build v1194) downloaded to /tmp/fr033-browser-runtime-lszGEA/browsers/chromium_headless_shell-1194
+BROWSER_EXECUTABLE /tmp/fr033-browser-runtime-lszGEA/browsers/chromium-1194/chrome-linux/chrome
+	linux-vdso.so.1 (0x0000ffffb84cc000)
+	libdl.so.2 => /lib/aarch64-linux-gnu/libdl.so.2 (0x0000ffffa9440000)
+	libpthread.so.0 => /lib/aarch64-linux-gnu/libpthread.so.0 (0x0000ffffa9410000)
+	libglib-2.0.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libglib-2.0.so.0 (0x0000ffffa92b0000)
+	libgobject-2.0.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libgobject-2.0.so.0 (0x0000ffffa9230000)
+	libnspr4.so => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libnspr4.so (0x0000ffffa91d0000)
+	libnss3.so => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libnss3.so (0x0000ffffa9070000)
+	libnssutil3.so => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libnssutil3.so (0x0000ffffa9020000)
+	libsmime3.so => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libsmime3.so (0x0000ffffa8fd0000)
+	libgio-2.0.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libgio-2.0.so.0 (0x0000ffffa8dc0000)
+	libdbus-1.so.3 => /tmp/fr033-browser-runtime-lszGEA/root/lib/aarch64-linux-gnu/libdbus-1.so.3 (0x0000ffffa8d40000)
+	libatk-1.0.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libatk-1.0.so.0 (0x0000ffffa8cf0000)
+	libatk-bridge-2.0.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libatk-bridge-2.0.so.0 (0x0000ffffa8c90000)
+	libcups.so.2 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libcups.so.2 (0x0000ffffa8bd0000)
+	libexpat.so.1 => /tmp/fr033-browser-runtime-lszGEA/root/lib/aarch64-linux-gnu/libexpat.so.1 (0x0000ffffa8b80000)
+	libxcb.so.1 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libxcb.so.1 (0x0000ffffa8b30000)
+	libxkbcommon.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libxkbcommon.so.0 (0x0000ffffa8ac0000)
+	libatspi.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libatspi.so.0 (0x0000ffffa8a60000)
+	libX11.so.6 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libX11.so.6 (0x0000ffffa8900000)
+	libXcomposite.so.1 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libXcomposite.so.1 (0x0000ffffa88e0000)
+	libXdamage.so.1 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libXdamage.so.1 (0x0000ffffa88b0000)
+	libXext.so.6 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libXext.so.6 (0x0000ffffa8870000)
+	libXfixes.so.3 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libXfixes.so.3 (0x0000ffffa8840000)
+	libXrandr.so.2 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libXrandr.so.2 (0x0000ffffa8820000)
+	libgbm.so.1 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libgbm.so.1 (0x0000ffffa87f0000)
+	libcairo.so.2 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libcairo.so.2 (0x0000ffffa86c0000)
+	libpango-1.0.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libpango-1.0.so.0 (0x0000ffffa8630000)
+	libudev.so.1 => /lib/aarch64-linux-gnu/libudev.so.1 (0x0000ffffa85e0000)
+	libasound.so.2 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libasound.so.2 (0x0000ffffa84c0000)
+	libm.so.6 => /lib/aarch64-linux-gnu/libm.so.6 (0x0000ffffa8410000)
+	libgcc_s.so.1 => /lib/aarch64-linux-gnu/libgcc_s.so.1 (0x0000ffffa83d0000)
+	libc.so.6 => /lib/aarch64-linux-gnu/libc.so.6 (0x0000ffffa8220000)
+	/lib/ld-linux-aarch64.so.1 (0x0000ffffb8490000)
+	libpcre2-8.so.0 => /lib/aarch64-linux-gnu/libpcre2-8.so.0 (0x0000ffffa8170000)
+	libffi.so.8 => /lib/aarch64-linux-gnu/libffi.so.8 (0x0000ffffa8140000)
+	libplc4.so => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libplc4.so (0x0000ffffa8110000)
+	libplds4.so => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libplds4.so (0x0000ffffa80e0000)
+	libgmodule-2.0.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libgmodule-2.0.so.0 (0x0000ffffa80b0000)
+	libz.so.1 => /lib/aarch64-linux-gnu/libz.so.1 (0x0000ffffa8070000)
+	libmount.so.1 => /lib/aarch64-linux-gnu/libmount.so.1 (0x0000ffffa7fe0000)
+	libselinux.so.1 => /lib/aarch64-linux-gnu/libselinux.so.1 (0x0000ffffa7f90000)
+	libsystemd.so.0 => /lib/aarch64-linux-gnu/libsystemd.so.0 (0x0000ffffa7ea0000)
+	libgssapi_krb5.so.2 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libgssapi_krb5.so.2 (0x0000ffffa7e30000)
+	libavahi-common.so.3 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libavahi-common.so.3 (0x0000ffffa7e00000)
+	libavahi-client.so.3 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libavahi-client.so.3 (0x0000ffffa7dd0000)
+	libgnutls.so.30 => /lib/aarch64-linux-gnu/libgnutls.so.30 (0x0000ffffa7b80000)
+	libXau.so.6 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libXau.so.6 (0x0000ffffa7b60000)
+	libXdmcp.so.6 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libXdmcp.so.6 (0x0000ffffa7b40000)
+	libXi.so.6 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libXi.so.6 (0x0000ffffa7b10000)
+	libXrender.so.1 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libXrender.so.1 (0x0000ffffa7af0000)
+	libdrm.so.2 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libdrm.so.2 (0x0000ffffa7ab0000)
+	libwayland-server.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libwayland-server.so.0 (0x0000ffffa7a70000)
+	libpixman-1.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libpixman-1.so.0 (0x0000ffffa79b0000)
+	libfontconfig.so.1 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libfontconfig.so.1 (0x0000ffffa7940000)
+	libfreetype.so.6 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libfreetype.so.6 (0x0000ffffa7860000)
+	libpng16.so.16 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libpng16.so.16 (0x0000ffffa7800000)
+	libxcb-shm.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libxcb-shm.so.0 (0x0000ffffa77d0000)
+	libxcb-render.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libxcb-render.so.0 (0x0000ffffa77a0000)
+	libfribidi.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libfribidi.so.0 (0x0000ffffa7770000)
+	libthai.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libthai.so.0 (0x0000ffffa7750000)
+	libharfbuzz.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libharfbuzz.so.0 (0x0000ffffa7630000)
+	libblkid.so.1 => /lib/aarch64-linux-gnu/libblkid.so.1 (0x0000ffffa75b0000)
+	libcap.so.2 => /lib/aarch64-linux-gnu/libcap.so.2 (0x0000ffffa7580000)
+	libgcrypt.so.20 => /lib/aarch64-linux-gnu/libgcrypt.so.20 (0x0000ffffa7480000)
+	liblzma.so.5 => /lib/aarch64-linux-gnu/liblzma.so.5 (0x0000ffffa7430000)
+	libzstd.so.1 => /lib/aarch64-linux-gnu/libzstd.so.1 (0x0000ffffa7370000)
+	liblz4.so.1 => /lib/aarch64-linux-gnu/liblz4.so.1 (0x0000ffffa7320000)
+	libkrb5.so.3 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libkrb5.so.3 (0x0000ffffa7230000)
+	libk5crypto.so.3 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libk5crypto.so.3 (0x0000ffffa71e0000)
+	libcom_err.so.2 => /lib/aarch64-linux-gnu/libcom_err.so.2 (0x0000ffffa71b0000)
+	libkrb5support.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libkrb5support.so.0 (0x0000ffffa7180000)
+	libp11-kit.so.0 => /lib/aarch64-linux-gnu/libp11-kit.so.0 (0x0000ffffa7030000)
+	libidn2.so.0 => /lib/aarch64-linux-gnu/libidn2.so.0 (0x0000ffffa6fe0000)
+	libunistring.so.2 => /lib/aarch64-linux-gnu/libunistring.so.2 (0x0000ffffa6e10000)
+	libtasn1.so.6 => /lib/aarch64-linux-gnu/libtasn1.so.6 (0x0000ffffa6dd0000)
+	libnettle.so.8 => /lib/aarch64-linux-gnu/libnettle.so.8 (0x0000ffffa6d60000)
+	libhogweed.so.6 => /lib/aarch64-linux-gnu/libhogweed.so.6 (0x0000ffffa6cf0000)
+	libgmp.so.10 => /lib/aarch64-linux-gnu/libgmp.so.10 (0x0000ffffa6c50000)
+	libbsd.so.0 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libbsd.so.0 (0x0000ffffa6c10000)
+	libbrotlidec.so.1 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libbrotlidec.so.1 (0x0000ffffa6be0000)
+	libdatrie.so.1 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libdatrie.so.1 (0x0000ffffa6bb0000)
+	libgraphite2.so.3 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libgraphite2.so.3 (0x0000ffffa6b70000)
+	libgpg-error.so.0 => /lib/aarch64-linux-gnu/libgpg-error.so.0 (0x0000ffffa6b20000)
+	libkeyutils.so.1 => /tmp/fr033-browser-runtime-lszGEA/root/lib/aarch64-linux-gnu/libkeyutils.so.1 (0x0000ffffa6af0000)
+	libresolv.so.2 => /lib/aarch64-linux-gnu/libresolv.so.2 (0x0000ffffa6ac0000)
+	libmd.so.0 => /lib/aarch64-linux-gnu/libmd.so.0 (0x0000ffffa6a90000)
+	libbrotlicommon.so.1 => /tmp/fr033-browser-runtime-lszGEA/root/usr/lib/aarch64-linux-gnu/libbrotlicommon.so.1 (0x0000ffffa6a50000)
+
+BROWSER_SHA256 7522aa366193273540bb458d2693fdc2437c4404441ab9fe672479b658b4710f
+/proc/sys/user/max_user_namespaces 32138
+
+/proc/self/status Uid:	503	503	503	503
+Gid:	20	20	20	20
+CapEff:	0000000000000000
+NoNewPrivs:	0
+Seccomp:	2
+USER_NAMESPACE_PROBE {"status":1,"stderr":"unshare: unshare failed: Operation not permitted\n","stdout":""}
+
+[validation] disposable source/dependencies/output; no publish or restart
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+browserType.launch: Target page, context or browser has been closed
+Browser logs:
+Chromium sandboxing failed!
+================================
+To avoid the sandboxing issue, do either of the following:
+  - (preferred): Configure your environment to support sandboxing
+  - (alternative): Launch Chromium without sandbox using 'chromiumSandbox: false' option
+================================
+
+Call log:
+  - <launching> /tmp/fr033-browser-runtime-lszGEA/browsers/chromium_headless_shell-1194/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --user-data-dir=/tmp/playwright_chromiumdev_profile-vjyRRL --remote-debugging-pipe --no-startup-window
+  - <launched> pid=564
+  - [pid=564][err] [1028/220144.850658:FATAL:content/browser/zygote_host/zygote_host_impl_linux.cc:128] No usable sandbox! If you are running on Ubuntu 23.10+ or another Linux distro that has disabled unprivileged user namespaces with AppArmor, see https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md. Otherwise see https://chromium.googlesource.com/chromium/src/+/main/docs/linux/suid_sandbox_development.md for more information on developing with the (older) SUID sandbox. If you want to live dangerously and need an immediate workaround, you can try using --no-sandbox.
+  - [pid=564] <gracefully close start>
+  - [pid=564] <kill>
+  - [pid=564] <will force kill>
+  - [pid=564] <process did exit: exitCode=null, signal=SIGTRAP>
+  - [pid=564] starting temporary directories cleanup
+  - [pid=564] finished temporary directories cleanup
+  - [pid=564] <gracefully close end>
+
+    at /tmp/praetor-app-validate-eazKCt/project/qa/fr033-browser-launch.mjs:13:30
+
+Node.js v22.23.2
