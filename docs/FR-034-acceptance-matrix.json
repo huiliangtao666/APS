@@ -424,7 +424,14 @@
         "FR-032"
       ],
       "readiness": "supported source dependencies integrated; next executable original feature candidate AFTER issue22 independent result is triaged; no need for complete global all-rule/DEC02/identity acceptance to implement supported export scope",
-      "remaining": "query/export breadth, source/unit/date/simulation metadata, permission/current-range and page/export parity acceptance; real identity UAT later"
+      "remaining": "query/export breadth, source/unit/date/simulation metadata, permission/current-range and page/export parity acceptance; real identity UAT later",
+      "canonical_card_id": "PVTI_lAHOFM9WU84BpE1czhEHhEU",
+      "source_commits": {
+        "FR-014": "db090453482261c386a6492e2106323e2100c20c",
+        "FR-024": "2375487b3d630190434fd4be4e3313de18d8df7a",
+        "FR-026": "e93fadce55d3f1deef0a602d3a01ebfe561a01b4",
+        "FR-032": "28ed8f8e422173f9b83d8a974e26ea9af6f09c8e"
+      }
     },
     {
       "id": "FR-038",
@@ -433,7 +440,12 @@
         "FR-024"
       ],
       "readiness": "supported source available; executable original backlog candidate after defect priority gate; independent of FR034 full Done",
-      "remaining": "run record/cancel/failure UX and reproducible provenance; use original card only"
+      "remaining": "run record/cancel/failure UX and reproducible provenance; use original card only",
+      "canonical_card_id": "PVTI_lAHOFM9WU84BpE1czhEHhHk",
+      "source_commits": {
+        "FR-024": "2375487b3d630190434fd4be4e3313de18d8df7a",
+        "FR-018": "a9eb8f6d60e8adc523217c117e6152c96d7924c2"
+      }
     },
     {
       "id": "FR-027",
@@ -490,5 +502,21 @@
     "optional_run": "--run: existing 441 TAP/build/CSV, keyboard/UNKNOWN01/history, then boundary; all npm/server/browser work in disposable containers",
     "historical_counts": "Never sum runs or count measurements as passes; exact historical commands remain in referenced reports/archives",
     "runtime": "Historical Node22.23.2/Playwright1.56.1/Chromium141.0.7390.37 ARM64; existing runners use mutable node:22-slim tag, so record resolved image/version for each replay; source pin reproducible, container image not guaranteed byte-identical"
+  },
+  "delivery_verification": {
+    "delivery_id": "dlv_68960084-968b-4dfd-8ee1-10d0f27d830b",
+    "product_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+    "report": "FR-034-INTEGRATED-RUN-REPORT.json",
+    "entrypoint": "qa/fr034-integrated-validation.sh",
+    "run_mode_executed": true,
+    "original_exit": 1,
+    "qa_entrypoint_corrected_exit": 0,
+    "independent_test_pending": true,
+    "evidence": {
+      "repo_path": "docs/evidence/fr034-integrated-run/evidence.zip",
+      "sha256": "814e5a0bb31ef37b1ff886c7f6796e7af5ba7e68963caeccb3ad550d190693f1",
+      "bytes": 12571648,
+      "source_snapshot_note": "parallel probe source snapshot excludes only old qa/evidence archives; exact110 manifest files retained. Fresh evidence and failed run preserved."
+    }
   }
 }

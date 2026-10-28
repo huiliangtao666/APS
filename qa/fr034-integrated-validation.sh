@@ -39,7 +39,14 @@ PY
 mkdir "$FR034_OUT/regression" "$FR034_OUT/boundary"
 export FR034_REPO="$REPO" FR034_SOURCE_MANIFEST=qa/fr034-boundary-source-sha256.json
 export FR034_PRODUCT_SHA="$PIN" FR034_KBD_MODE=fixed
-export FR034_PRODUCT_LABEL="FR034 integrated reconciliation pin $PIN"
+# The existing runner compares this label byte-for-byte with the pinned manifest.
+# The exact commit remains FR034_PRODUCT_SHA; a display label is not a new pin.
+export FR034_PRODUCT_LABEL
+FR034_PRODUCT_LABEL=$(python3 - "$REPO/$FR034_SOURCE_MANIFEST" <<'PYLABEL'
+import json,sys
+print(json.load(open(sys.argv[1]))['productSourceSHA'])
+PYLABEL
+)
 OUT_ROOT=$FR034_OUT
 FR034_OUT="$OUT_ROOT/regression" bash "$REPO/qa/fr034-keyboard-r1-docker.sh" > "$OUT_ROOT/regression.log" 2>&1
 FR034_OUT="$OUT_ROOT/boundary" bash "$REPO/qa/fr034-boundary-docker.sh" > "$OUT_ROOT/boundary.log" 2>&1
