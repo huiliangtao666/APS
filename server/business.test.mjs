@@ -88,3 +88,24 @@ test('integrated server scheduler preserves expected supply waits, downtime reas
  assert.equal((await call('/tables/supplyUses',{rows:[{'引用编号':'BAD','供给编号':'NO'}],revision:rev,operation:'import'})).status,400);
  assert.equal((await call('/state')).body.revision,rev);assert.equal((await call('/operations')).body.length,before);
 });
+test('FR014 query export re-reads authoritative filtered rows, preserves grant and audit, rejects stale revision',async t=>{
+ const {call}=await fixture(t);
+ const state=(await call('/state',undefined,'query')).body;
+ const order=state.data.orders[0]['订单编号'];
+ const query={table:'orders',revision:state.revision,filters:{order}};
+ assert.equal((await call('/export',{query},'query')).status,403);
+ assert.equal((await call('/auth/members/export',{key:'test#query',canExport:true},'admin')).status,200);
+ const r=await call('/export',{query,rows:[{'订单编号':'FORGED'}]},'query');assert.equal(r.status,200);
+ assert.ok(r.body.includes('"'+order+'"'));assert.ok(!r.body.includes('FORGED'));assert.equal(r.body.split('\r\n').length,2);
+ const logs=(await call('/operations')).body;assert.equal(logs[0].role,'query');assert.deepEqual(logs[0].query,query);
+ assert.equal((await call('/export',{query:{...query,revision:999}},'query')).status,409);
+ assert.equal((await call('/export',{query:{...query,filters:{text:[]}}},'query')).status,400);
+ assert.equal((await call('/export',{query:{...query,table:'missing'}},'query')).status,404);
+ assert.equal((await call('/export',{query:{...query,planId:'missing'}},'query')).status,404);
+ assert.equal((await call('/state',undefined,'query')).body.revision,state.revision);
+});
+test('FR014 all UI category schemas match authoritative server definitions and can export current read view',async t=>{
+ const {defs:uiDefs}=await import('../src/data-defs.ts');const {defs:serverDefs}=await import('./planner.ts');assert.deepEqual(uiDefs,serverDefs);
+ const {call}=await fixture(t);const state=(await call('/state')).body;
+ for(const def of uiDefs){const r=await call('/export',{query:{table:def.key,revision:state.revision,filters:{}}});assert.equal(r.status,200,def.key);assert.equal(r.body.split('\r\n').length,state.data[def.key].length+1,def.key);}
+});

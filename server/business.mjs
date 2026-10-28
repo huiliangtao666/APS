@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { Router } from 'express';
+import { queryCsv } from '../src/lib/data-query.mjs';
 import { subjectKey } from './auth/store.mjs';
 import { defs, seed, calculate } from './planner.ts';
 import { validateExpectedSupply, exportSupplyPlanCsv } from '../src/lib/expected-supply.mjs';
@@ -68,9 +69,15 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember }
   for(const action of ['confirm','return','release'])router.post(`/plans/:id/${action}`,permission(action),(_req,res)=>res.status(501).json({error:'workflow_not_supported',action}));
   router.post('/export',permission('export'),(req,res)=>{
     const s=read();let csv,target;
-    if(req.body.planId){const p=s.plans.find(p=>p.id===req.body.planId);if(!p)return res.status(404).json({error:'plan_not_found'});csv=exportSupplyPlanCsv(p);target=p.id;}
+    if(req.body.query){
+      const q=req.body.query;
+      if(!q||typeof q!=='object'||typeof q.table!=='string'||(q.planId!==undefined&&typeof q.planId!=='string')||(q.filters&&(typeof q.filters!=='object'||Array.isArray(q.filters)||Object.values(q.filters).some(v=>typeof v!=='string'))))return res.status(400).json({error:'invalid_query'});
+      if(q.revision!==s.revision)return res.status(409).json({error:'stale_input'});
+      try{csv=queryCsv(defs,s.data,s.plans,s.revision,q);}catch(e){return res.status(404).json({error:e.message});}target=q.table;
+    }
+    else if(req.body.planId){const p=s.plans.find(p=>p.id===req.body.planId);if(!p)return res.status(404).json({error:'plan_not_found'});csv=exportSupplyPlanCsv(p);target=p.id;}
     else{const d=defs.find(d=>d.key===req.body.table);if(!d)return res.status(404).json({error:'unknown_table'});csv=[d.fields,...s.data[d.key].map(r=>d.fields.map(f=>r[f]||''))].map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');target=d.key;}
-    record(s,req,'export',target);write(s);res.type('text/csv').send('\ufeff'+csv);
+    record(s,req,'export',target,req.body.query?{query:req.body.query}:{});write(s);res.type('text/csv').send('\ufeff'+csv);
   });
   router.use((_req,res)=>res.status(404).json({error:'unsupported_action'}));
   router.use((err,_req,res,_next)=>{console.error('business request failed',err.code||'internal_error');res.status(500).json({error:'internal_error'});});

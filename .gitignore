@@ -10,3 +10,5 @@ dist/
 /server/data/auth/
 /server/data/business.json
 /server/data/business.json.*
+
+.qa-query-ui.cjs

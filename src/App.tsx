@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import './index.css';
+import { defs } from './data-defs';
+import { DataQueries } from './DataQueries';
 import { useAppMembership } from './auth/useAppMembership';
 import { usePraetorEmbedded } from './praetor-embedded';
 import { type VerificationReport, type VerificationStatus } from './lib/independent-verification.mjs';
@@ -10,30 +12,11 @@ import { queryInventoryAvailability, validateInventoryBatches } from './lib/inve
 import { validateBomConfig } from './lib/bom-config.mjs';
 
 type Row = Record<string, string>;
-type TableDef = { key: string; label: string; file: string; fields: string[] };
 type Task = { id: string; orderId: string; productId: string; operation: string; label: string; machine: string; start: number; end: number; duration: number; predecessor: string; source: string };
 type Finding = { code: string; message: string; taskIds: string[] };
 type StoredVerificationReport = VerificationReport & { inputFingerprint?: string };
 type Plan = { id: string; name: string; createdAt: string; tasks: Task[]; findings: Finding[]; rules: string[]; inputVersion: string; verification?: StoredVerificationReport; supplyConditions?: SupplyCondition[]; supplyInput?: string };
 
-const defs: TableDef[] = [
-  { key: 'products', label: '产品与包装规格', file: '07_产品与包装规格.csv', fields: ['产品编号','产品名称','单支净重kg','每袋支数','总收率','模拟交付等待分钟'] },
-  { key: 'materials', label: '物料主数据', file: '08_物料主数据.csv', fields: ['物料编号','物料名称','单位','类别'] },
-  { key: 'supplies', label: '预计到料', file: '20_预计到料.csv', fields: ['供给编号','物料编号','批次编号','预计数量','预计到达时间','预计可用时间'] },
-  { key: 'supplyDelays', label: '延期模拟记录', file: '21_延期模拟记录.csv', fields: ['记录编号','供给编号','记录时间','调整后到达时间','调整后可用时间','原因'] },
-  { key: 'supplyUses', label: '计划供给引用', file: '22_计划供给引用.csv', fields: ['引用编号','订单编号','工序编号','供给编号','使用数量'] },
-  { key: 'inventory', label: '库存批次', file: '09_库存批次.csv', fields: ['批次编号','物料编号','账面数量','已占用数量','有效期','位置','质量状态','预计可用时间'] },
-  { key: 'orders', label: '订单与交期', file: '17_生产订单与交期.csv', fields: ['订单编号','产品编号','产线编号','合格需求','数量单位','要求可交付分钟','优先顺序','是否允许拆分','需求类型','订单状态'] },
-  { key: 'bom', label: 'BOM 与包装用量', file: '09_BOM与包装用量.csv', fields: ['版本编号','产品编号','生效日期','投料工序编号','用量类型','物料编号','配置用量','用量单位','用量基准','收率/损耗口径备注'] },
-  { key: 'routes', label: '工艺路线', file: '10_工艺路线配置.csv', fields: ['产品编号','工序编号','工序名称','前序工序','最大等待分钟','程序编号'] },
-  { key: 'times', label: '工序工时', file: '11_工序工时配置.csv', fields: ['产品编号','工序编号','计算方式','固定分钟','速度支每分钟'] },
-  { key: 'machines', label: '设备资源', file: '03_设备资源配置.csv', fields: ['设备编号','设备名称','产线编号','工序编号','日历编号','最小装载kg','最大装载kg','装载计量基准'] },
-  { key: 'calendars', label: '工厂工作日历', file: '02_工厂工作日历.csv', fields: ['日历编号','工厂编号','起始分钟','结束分钟','是否工作','说明'] },
-  { key: 'downtime', label: '设备停机例外', file: '04_设备停机与例外日历.csv', fields: ['设备编号','起始分钟','结束分钟','原因'] },
-  { key: 'dependencies', label: '工序资源依赖', file: '12_工序资源与物料依赖.csv', fields: ['订单编号','工序编号','资源类型','资源编号','需求数量','提前占用分钟','后延占用分钟','所需技能','所需班次','人员参与阶段','人员开始偏移','人员结束偏移'] },
-  { key: 'personnelGroups', label: '人员组与可用时间', file: '19_人员组与可用时间.csv', fields: ['人员组编号','人员组名称','人员数量','技能','班次','可用起始分钟','可用结束分钟'] },
-  { key: 'rules', label: '排程规则', file: '16_排程规则配置.csv', fields: ['规则编号','中文名称','是否启用','参数JSON'] },
-];
 function rulesInputFingerprint(data:Record<string,Row[]>) { const source=JSON.stringify({orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],personnelGroups:data.personnelGroups||[],machines:data.machines||[],calendars:data.calendars||[],downtime:data.downtime||[],rules:data.rules||[]});let hash=2166136261;for(let i=0;i<source.length;i++){hash^=source.charCodeAt(i);hash=Math.imul(hash,16777619);}return (hash>>>0).toString(16).padStart(8,'0'); }
 function parseCsv(text: string): string[][] { const rows: string[][]=[]; let row:string[]=[], cell='', quoted=false; for(let i=0;i<text.length;i++){const c=text[i]; if(quoted){if(c==='"'&&text[i+1]==='"'){cell+='"';i++;}else if(c==='"')quoted=false;else cell+=c;}else if(c==='"')quoted=true;else if(c===','){row.push(cell);cell='';}else if(c==='\n'){row.push(cell.replace(/\r$/,''));rows.push(row);row=[];cell='';}else cell+=c;} if(cell.length||row.length){row.push(cell.replace(/\r$/,''));rows.push(row);} return rows; }
 function fmt(min: number) { const n=480+Math.round(min); return `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`; }
@@ -42,7 +25,7 @@ export default function App() {
   const requestGeneration=useRef(0);
   const embedded = usePraetorEmbedded();
   const [data,setData]=useState<Record<string,Row[]>>({});
-  const [view,setView]=useState<'schedule'|'data'|'decisions'>('schedule');
+  const [view,setView]=useState<'schedule'|'data'|'query'|'decisions'>('schedule');
   const [tableKey,setTableKey]=useState('orders');
   const [inventoryAsOf,setInventoryAsOf]=useState(new Date().toISOString().slice(0,16));
   const [selected,setSelected]=useState<string[]>([]);
@@ -94,10 +77,10 @@ export default function App() {
 
   if(membership.state.kind!=='member')return <main className="panel"><h1>APS · 模拟排程</h1><p>身份状态：{membership.state.kind}</p><p>需要托管身份和已授权业务成员。</p><button onClick={()=>membership.signIn()}>登录</button></main>;
   return <div className="app-shell">
-    <header className={`topbar ${embedded?'embedded-topbar':''}`}><div className="brandmark">APS</div><div className="brand"><b>APS · 单线最小排程</b><span>R1 原型 / v0.3 需求基线</span></div>{!embedded&&<nav><button className={view==='schedule'?'active':''} onClick={()=>setView('schedule')}>排程工作台</button><button className={view==='data'?'active':''} onClick={()=>setView('data')}>数据与 CSV</button><button className={view==='decisions'?'active':''} onClick={()=>setView('decisions')}>范围与待决</button></nav>}<div className="top-status"><i/>预览环境</div></header>
+    <header className={`topbar ${embedded?'embedded-topbar':''}`}><div className="brandmark">APS</div><div className="brand"><b>APS · 单线最小排程</b><span>R1 原型 / v0.3 需求基线</span></div>{<nav><button className={view==='schedule'?'active':''} onClick={()=>setView('schedule')}>排程工作台</button><button className={view==='query'?'active':''} onClick={()=>setView('query')}>模拟数据查询</button><button className={view==='data'?'active':''} onClick={()=>setView('data')}>数据与 CSV</button><button className={view==='decisions'?'active':''} onClick={()=>setView('decisions')}>范围与待决</button></nav>}<div className="top-status"><i/>预览环境</div></header>
     <main>
       <section className="panel"><h2>权限与操作记录</h2><p>当前权限：{session?.role||'未取得业务权限'} · 所有质量状态均为模拟数据，无 QA 在线审批。主管确认、退回与发布流程尚未提供。</p><label>操作原因（必填）<input aria-label="操作原因" value={reason} onChange={e=>setReason(e.target.value)}/></label><button onClick={()=>{requestGeneration.current++;membership.signOut().catch(e=>setMessage(e.message));}}>退出登录</button><button onClick={()=>perform(refresh)}>刷新数据与记录</button><details><summary>操作记录（{operations.length}）</summary>{operations.map(r=><p key={r.id}>{r.at} · {r.actor} · {r.action} · {r.reason}</p>)}</details></section>
-      <section className="hero"><div><p className="eyebrow">R2.1 阶段切片 · 单线 · CALENDAR + MACHINE + PRECEDENCE</p><h1>{view==='schedule'?'日历约束排程核对':view==='data'?'日历与排程数据':'实现范围与业务决策'}</h1><p className="sub">基于 v0.3 UAT-02 / 2026-11-02 08:00（Asia/Shanghai）；样例业务值均为虚构，仅用于软件验证。</p></div><div className="hero-source"><span>追溯基线</span><b>FR-008 · UAT-02 · AC-05</b><small>工厂窗口继承 · 设备停机例外 · 连续工作窗口</small></div></section>
+      <section className="hero"><div><p className="eyebrow">R2.1 阶段切片 · 单线 · CALENDAR + MACHINE + PRECEDENCE</p><h1>{view==='schedule'?'日历约束排程核对':view==='data'?'日历与排程数据':view==='query'?'模拟数据与关联查询':'实现范围与业务决策'}</h1><p className="sub">基于 v0.3 UAT-02 / 2026-11-02 08:00（Asia/Shanghai）；样例业务值均为虚构，仅用于软件验证。</p></div><div className="hero-source"><span>追溯基线</span><b>FR-008 · UAT-02 · AC-05</b><small>工厂窗口继承 · 设备停机例外 · 连续工作窗口</small></div></section>
       {message&&<div className="toast" role="status">{message}<button onClick={()=>setMessage('')}>×</button></div>}
       {view==='schedule'&&<>
         <div className="metrics"><article><span>单线订单</span><b>{data.orders?.length||0}</b><small>FR-009 / BR-01</small></article><article><span>已排任务</span><b>{tasks.length}</b><small>机器 + 前后序</small></article><article><span>问题定位</span><b className={visibleFindings.length?'warn-text':''}>{visibleFindings.length}</b><small>问题与甘特联动</small></article><article><span>保存方案</span><b>{plans.length}</b><small>快照保留输入版本</small></article></div>
@@ -118,10 +101,11 @@ export default function App() {
           {visibleFindings.length?visibleFindings.map((f,i)=><button className="finding" key={`${f.code}-${i}`} onClick={()=>{if(f.taskIds.length)locate(f);else{setTableKey(f.code.startsWith('SUPPLY_')?'supplies':f.code.startsWith('INVENTORY_')?'inventory':f.code.includes('ROUTE')?'routes':f.code.includes('PROCESS_TIME')?'times':f.code.includes('MACHINE')?'dependencies':f.code.includes('CALENDAR')?'calendars':f.code.includes('DOWNTIME')?'downtime':f.code.includes('PERSONNEL')?'dependencies':'orders');setView('data');setMessage(`问题来源已定位：${f.message}`);}}}><b>{f.code}</b><span>{f.message}</span>{f.taskIds.length>0&&<small>定位任务：{f.taskIds.join(' / ')}</small>}</button>):<div className="clear-state"><span>✓</span><b>当前已启用约束检查无冲突</b><small>仅表示机器占用、工序顺序和 R2.1 日历窗口检查无冲突；不代表交期、全订单覆盖或其他规则已通过。</small></div>}
           <div className="scope-note"><b>本切片未实现</b><p>跨班和可中断策略尚无已确认业务口径；工装（R2.2）、完整物料平衡、拆合批、空间、执行事实及主管确认尚未实现；显式预计供给引用按可用时点等待。</p></div>
         </aside></div>
-        <section className="panel plan-list"><div className="panel-head"><div><h2>任务明细 / 已保存方案</h2><p>任务时间、资源和前序引用支持核查；保存方案在此回看。</p></div><select value={activePlan?.id||''} onChange={e=>{const plan=plans.find(p=>p.id===e.target.value)||activePlan;setActivePlan(plan);setIssues([]);setVerification(plan?.verification||null);}}><option value="">当前计算</option>{plans.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></div>
+        <section className="panel plan-list"><div className="panel-head"><div><h2>任务明细 / 已保存方案</h2><button onClick={()=>setView('query')}>查询关联输入与任务</button><p>任务时间、资源和前序引用支持核查；保存方案在此回看。</p></div><select value={activePlan?.id||''} onChange={e=>{const plan=plans.find(p=>p.id===e.target.value)||activePlan;setActivePlan(plan);setIssues([]);setVerification(plan?.verification||null);}}><option value="">当前计算</option>{plans.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></div>
           <div className="table-wrap"><table><thead><tr><th>任务</th><th>订单 / 产品</th><th>工序</th><th>机器</th><th>开始</th><th>结束</th><th>工时</th><th>前序</th><th>来源</th><th>预计供给条件</th></tr></thead><tbody>{tasks.map(t=><tr key={t.id} onClick={()=>setSelected([t.id])}><td><b>{t.id}</b></td><td>{t.orderId} / {t.productId}</td><td>{t.label} <small>{t.operation}</small></td><td>{t.machine}</td><td>{fmt(t.start)}</td><td>{fmt(t.end)}</td><td>{t.duration} 分</td><td>{t.predecessor||'—'}</td><td>{t.source}</td><td>{activePlan?.supplyConditions?.filter(c=>c['订单编号']===t.orderId&&c['工序编号']===t.operation).map(c=>c['条件说明']).join('；')||'未引用预计供给'}</td></tr>)}</tbody></table>{!tasks.length&&<div className="empty">暂无任务明细</div>}</div>
         </section>
       </>}
+      {view==='query'&&<DataQueries key={inputVersion+'-'+plans.map(p=>p.id).join(',')} data={data} plans={plans} revision={inputVersion} initialPlan={activePlan?.id} initialTask={selected.find(id=>activePlan?.tasks.some(t=>t.id===id))} canExport={!!session?.canExport} reason={reason} onExport={(query)=>download({query},'模拟数据查询.csv')} onTask={(planId,taskId)=>{const plan=plans.find(p=>p.id===planId);if(plan){setActivePlan(plan);setIssues(plan.findings);setVerification(plan.verification||null);setSelected([taskId]);setView('schedule');}}}/>}
       {view==='data'&&<section className="panel data-panel"><div className="panel-head"><div><h2>主数据、单位与排程输入</h2><p>FR-002 新增产品/包装规格与物料主数据；同时维护 R1/R2.1 排程表。CSV 导入只替换当前表；预计供给使用带时区 ISO 时间，其余排程时间字段使用分钟，0 = 2026-11-02 08:00 Asia/Shanghai。</p></div><div className="actions"><label className="upload">导入 CSV<input type="file" disabled={!session?.canWrite||busy||!reason.trim()} accept=".csv,text/csv" onChange={e=>importCsv(e.target.files?.[0])}/></label><button onClick={downloadCsv} disabled={!session?.canExport||busy||!reason.trim()}>导出当前表</button><button onClick={addRow} disabled={!session?.canWrite||busy||!reason.trim()}>新增一行</button><button className="danger" onClick={removeRows} disabled={!selected.length||!session?.canWrite||busy||!reason.trim()}>删除选中</button></div></div>
         <div className="data-tabs">{defs.map(d=><button className={d.key===tableKey?'chosen':''} key={d.key} onClick={()=>{setTableKey(d.key);setSelected([]);}}>{d.label}<small>{data[d.key]?.length||0}</small></button>)}</div>
         {tableKey==='inventory'&&<div className="panel inventory-panel"><div className="panel-head"><div><h2>库存账面与当前可用量</h2><p>当前可用量 = 账面数量 − 已占用数量；质量状态、预计可用时间与有效期任一不满足时，该批次可用量为 0。</p></div><label>查询时点 <input type="datetime-local" value={inventoryAsOf} onChange={e=>setInventoryAsOf(e.target.value)}/></label></div><div className="table-wrap"><table><thead><tr><th>批次</th><th>物料</th><th>账面数量</th><th>已占用</th><th>当前可用</th><th>有效期</th><th>质量状态</th><th>预计可用时间</th></tr></thead><tbody>{inventoryQuery.map(batch=><tr key={batch['批次编号']}><td>{batch['批次编号']}</td><td>{batch['物料编号']}</td><td>{batch['账面数量']}</td><td>{batch['已占用数量']}</td><td><b>{batch['当前可用数量']}</b></td><td>{batch['有效期']}</td><td>{batch['质量状态']}</td><td>{batch['预计可用时间']||'立即'}</td></tr>)}</tbody></table>{!inventoryQuery.length&&<div className="empty">没有库存批次</div>}</div><div className="hint-box"><b>质量可用状态配置</b><span>在“排程规则”中编辑 INVENTORY 规则的参数JSON，例如 {`{"可用质量状态":["合格","条件放行"]}`}。默认仅“合格”可用；待检、冻结、不合格等状态默认排除。此配置仅用于库存可用量模拟，不提供 QA 审批或放行。</span></div>{inventoryIssues.length>0&&<div className="finding-list">{inventoryIssues.map((issue,i)=><div className="finding" key={`${issue.code}-${i}`}><b>{issue.code}</b><span>{issue.message}</span></div>)}</div>}</div>}
