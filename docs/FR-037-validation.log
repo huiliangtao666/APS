@@ -1,0 +1,617 @@
+v22.23.2
+
+added 246 packages, and audited 247 packages in 3s
+
+47 packages are looking for funding
+  run `npm fund` for details
+
+4 vulnerabilities (3 moderate, 1 high)
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+aps-r1@0.1.0 /tmp/praetor-app-validate-9W4WqC/project
+`-- @praetor/lite-app-server@0.4.1
+
+
+> aps-r1@0.1.0 test
+> node --test src/lib/*.test.mjs && node --experimental-strip-types --test server/auth/auth.test.mjs server/business.test.mjs
+
+TAP version 13
+# Subtest: FR-003 accepts multiple material rows within one product BOM version, including packaging
+ok 1 - FR-003 accepts multiple material rows within one product BOM version, including packaging
+  ---
+  duration_ms: 1.218441
+  type: 'test'
+  ...
+# Subtest: FR-003 validates required fields, date, positive configured quantity, and dangling product/material/operation refs
+ok 2 - FR-003 validates required fields, date, positive configured quantity, and dangling product/material/operation refs
+  ---
+  duration_ms: 0.166539
+  type: 'test'
+  ...
+# Subtest: FR-003 rejects duplicate version lines and inconsistent effective date inside a version
+ok 3 - FR-003 rejects duplicate version lines and inconsistent effective date inside a version
+  ---
+  duration_ms: 0.348786
+  type: 'test'
+  ...
+# Subtest: FR-003 flags unit mismatch and records values without conversion, yield, or loss calculations
+ok 4 - FR-003 flags unit mismatch and records values without conversion, yield, or loss calculations
+  ---
+  duration_ms: 0.812989
+  type: 'test'
+  ...
+# Subtest: FR-008 AC-05 attributes a 30-minute shift to the downtime that blocked the initial fit
+ok 5 - FR-008 AC-05 attributes a 30-minute shift to the downtime that blocked the initial fit
+  ---
+  duration_ms: 0.940862
+  type: 'test'
+  ...
+# Subtest: FR-008 does not attribute shifts to another machine or a non-causal stop
+ok 6 - FR-008 does not attribute shifts to another machine or a non-causal stop
+  ---
+  duration_ms: 0.170873
+  type: 'test'
+  ...
+# Subtest: FR-008 reports no downtime shift when the task starts at its earliest time
+ok 7 - FR-008 reports no downtime shift when the task starts at its earliest time
+  ---
+  duration_ms: 0.10529
+  type: 'test'
+  ...
+# Subtest: valid fields and references accepted; arrival alone does not permit use
+ok 8 - valid fields and references accepted; arrival alone does not permit use
+  ---
+  duration_ms: 1.696019
+  type: 'test'
+  ...
+# Subtest: late simulation preserves original record and uses revised availability
+ok 9 - late simulation preserves original record and uses revised availability
+  ---
+  duration_ms: 0.85653
+  type: 'test'
+  ...
+# Subtest: delay history resolves by event time independent of CSV order
+ok 10 - delay history resolves by event time independent of CSV order
+  ---
+  duration_ms: 0.968987
+  type: 'test'
+  ...
+# Subtest: strict timestamps reject impossible, timezone-free and reversed availability
+ok 11 - strict timestamps reject impossible, timezone-free and reversed availability
+  ---
+  duration_ms: 0.671824
+  type: 'test'
+  ...
+# Subtest: required identifiers, quantities and empty/invalid material references fail closed
+ok 12 - required identifiers, quantities and empty/invalid material references fail closed
+  ---
+  duration_ms: 1.049069
+  type: 'test'
+  ...
+# Subtest: delay and plan references reject unknown supply/order/route and duplicate IDs
+ok 13 - delay and plan references reject unknown supply/order/route and duplicate IDs
+  ---
+  duration_ms: 0.688407
+  type: 'test'
+  ...
+# Subtest: allocation is summed across orders and rejects oversubscription
+ok 14 - allocation is summed across orders and rejects oversubscription
+  ---
+  duration_ms: 0.533118
+  type: 'test'
+  ...
+# Subtest: conditions survive snapshot round trip and CSV export even when supply is in the past
+ok 15 - conditions survive snapshot round trip and CSV export even when supply is in the past
+  ---
+  duration_ms: 0.827322
+  type: 'test'
+  ...
+# Subtest: trimmed identifiers cannot silently bypass supply waiting or conditions
+ok 16 - trimmed identifiers cannot silently bypass supply waiting or conditions
+  ---
+  duration_ms: 1.086652
+  type: 'test'
+  ...
+# Subtest: multiple supplies wait for the latest ready instant and round seconds upward
+ok 17 - multiple supplies wait for the latest ready instant and round seconds upward
+  ---
+  duration_ms: 1.016611
+  type: 'test'
+  ...
+# Subtest: passes single-line, half-open machine, and precedence checks
+ok 18 - passes single-line, half-open machine, and precedence checks
+  ---
+  duration_ms: 1.180984
+  type: 'test'
+  ...
+# Subtest: reports multiple lines, machine overlaps, and early successors as problems
+ok 19 - reports multiple lines, machine overlaps, and early successors as problems
+  ---
+  duration_ms: 0.273913
+  type: 'test'
+  ...
+# Subtest: marks checks not checked when there are no relevant records
+ok 20 - marks checks not checked when there are no relevant records
+  ---
+  duration_ms: 0.181623
+  type: 'test'
+  ...
+# Subtest: does not run disabled confirmed-rule checks
+ok 21 - does not run disabled confirmed-rule checks
+  ---
+  duration_ms: 1.687935
+  type: 'test'
+  ...
+# Subtest: detects an omitted predecessor from the route input
+ok 22 - detects an omitted predecessor from the route input
+  ---
+  duration_ms: 1.740976
+  type: 'test'
+  ...
+# Subtest: available quantity subtracts reservations while preserving book quantity
+ok 23 - available quantity subtracts reservations while preserving book quantity
+  ---
+  duration_ms: 2.170637
+  type: 'test'
+  ...
+# Subtest: default quality policy excludes pending, frozen, and rejected batches
+ok 24 - default quality policy excludes pending, frozen, and rejected batches
+  ---
+  duration_ms: 4.216234
+  type: 'test'
+  ...
+# Subtest: future-ready and expired lots are unavailable at the query time
+ok 25 - future-ready and expired lots are unavailable at the query time
+  ---
+  duration_ms: 2.130721
+  type: 'test'
+  ...
+# Subtest: quality availability is configurable through the inventory rule
+ok 26 - quality availability is configurable through the inventory rule
+  ---
+  duration_ms: 0.369037
+  type: 'test'
+  ...
+# Subtest: batch validation catches missing identifiers, invalid amounts, over-reservation, and malformed dates
+ok 27 - batch validation catches missing identifiers, invalid amounts, over-reservation, and malformed dates
+  ---
+  duration_ms: 0.727906
+  type: 'test'
+  ...
+# Subtest: query can filter by material
+ok 28 - query can filter by material
+  ---
+  duration_ms: 0.272372
+  type: 'test'
+  ...
+# Subtest: FR-010 D1 rejects material references when the material master is empty
+ok 29 - FR-010 D1 rejects material references when the material master is empty
+  ---
+  duration_ms: 0.337954
+  type: 'test'
+  ...
+# Subtest: FR-010 D2 rejects impossible expiry dates including non-leap February
+ok 30 - FR-010 D2 rejects impossible expiry dates including non-leap February
+  ---
+  duration_ms: 0.654282
+  type: 'test'
+  ...
+# Subtest: FR-010 D2 query never reports positive availability for impossible expiry
+ok 31 - FR-010 D2 query never reports positive availability for impossible expiry
+  ---
+  duration_ms: 0.882571
+  type: 'test'
+  ...
+# Subtest: allows one line with multiple operations and parallel machines
+ok 32 - allows one line with multiple operations and parallel machines
+  ---
+  duration_ms: 0.885237
+  type: 'test'
+  ...
+# Subtest: blocks orders spanning more than one line
+ok 33 - blocks orders spanning more than one line
+  ---
+  duration_ms: 0.167623
+  type: 'test'
+  ...
+# Subtest: blocks resources assigned to another line, including unused resources
+ok 34 - blocks resources assigned to another line, including unused resources
+  ---
+  duration_ms: 0.182456
+  type: 'test'
+  ...
+# Subtest: blocks a configured resource with no line ownership
+ok 35 - blocks a configured resource with no line ownership
+  ---
+  duration_ms: 0.120498
+  type: 'test'
+  ...
+# Subtest: blocks orders missing their line assignment
+ok 36 - blocks orders missing their line assignment
+  ---
+  duration_ms: 0.144206
+  type: 'test'
+  ...
+# Subtest: FR-002 accepts configured masters and order, route, material references
+ok 37 - FR-002 accepts configured masters and order, route, material references
+  ---
+  duration_ms: 1.452272
+  type: 'test'
+  ...
+# Subtest: FR-002 reports required fields, duplicate codes, and invalid numeric configuration
+ok 38 - FR-002 reports required fields, duplicate codes, and invalid numeric configuration
+  ---
+  duration_ms: 0.285413
+  type: 'test'
+  ...
+# Subtest: FR-002 catches unknown product and material references used by orders, routes, and dependencies
+ok 39 - FR-002 catches unknown product and material references used by orders, routes, and dependencies
+  ---
+  duration_ms: 0.169122
+  type: 'test'
+  ...
+# Subtest: FR-002 records units without inferring conversion or rounding semantics
+ok 40 - FR-002 records units without inferring conversion or rounding semantics
+  ---
+  duration_ms: 0.102332
+  type: 'test'
+  ...
+# Subtest: validates the P0 order fields, duplicate ids, numeric inputs, split flag and single-line scope
+ok 41 - validates the P0 order fields, duplicate ids, numeric inputs, split flag and single-line scope
+  ---
+  duration_ms: 1.044611
+  type: 'test'
+  ...
+# Subtest: records quantity and delivery-time changes as append-only events
+ok 42 - records quantity and delivery-time changes as append-only events
+  ---
+  duration_ms: 0.335412
+  type: 'test'
+  ...
+# Subtest: cancel excludes the order from future scheduling while preserving started and completed simulation tasks
+ok 43 - cancel excludes the order from future scheduling while preserving started and completed simulation tasks
+  ---
+  duration_ms: 0.134957
+  type: 'test'
+  ...
+# Subtest: forecast orders retain a distinct type marker and quantities are not converted across units
+ok 44 - forecast orders retain a distinct type marker and quantities are not converted across units
+  ---
+  duration_ms: 0.077958
+  type: 'test'
+  ...
+# Subtest: FR-004 accepts arbitrary route IDs and configurable precedence independent of CSV row order
+ok 45 - FR-004 accepts arbitrary route IDs and configurable precedence independent of CSV row order
+  ---
+  duration_ms: 1.117151
+  type: 'test'
+  ...
+# Subtest: FR-004 validates missing, duplicate, dangling, and cyclic route configuration
+ok 46 - FR-004 validates missing, duplicate, dangling, and cyclic route configuration
+  ---
+  duration_ms: 0.387828
+  type: 'test'
+  ...
+# Subtest: FR-004 requires one valid fixed duration configuration per route operation
+ok 47 - FR-004 requires one valid fixed duration configuration per route operation
+  ---
+  duration_ms: 0.701032
+  type: 'test'
+  ...
+# Subtest: FR-004 validates dependency identifiers and references without inferring non-equipment resource semantics
+ok 48 - FR-004 validates dependency identifiers and references without inferring non-equipment resource semantics
+  ---
+  duration_ms: 0.316662
+  type: 'test'
+  ...
+# Subtest: FR-005 validates unique machine identifiers and supported operation applicability
+ok 49 - FR-005 validates unique machine identifiers and supported operation applicability
+  ---
+  duration_ms: 0.190581
+  type: 'test'
+  ...
+# Subtest: FR-005 rejects fixed-time rows that point to an unconfigured product operation
+ok 50 - FR-005 rejects fixed-time rows that point to an unconfigured product operation
+  ---
+  duration_ms: 0.103623
+  type: 'test'
+  ...
+# Subtest: matches required headcount, skill, shift and the personnel phase window
+ok 51 - matches required headcount, skill, shift and the personnel phase window
+  ---
+  duration_ms: 0.997653
+  type: 'test'
+  ...
+# Subtest: rejects sufficient headcount when skill or shift does not match
+ok 52 - rejects sufficient headcount when skill or shift does not match
+  ---
+  duration_ms: 0.162456
+  type: 'test'
+  ...
+# Subtest: rejects unavailable personnel time and concurrent capacity overbooking
+ok 53 - rejects unavailable personnel time and concurrent capacity overbooking
+  ---
+  duration_ms: 0.139998
+  type: 'test'
+  ...
+# Subtest: uses the referenced personnel group instead of substituting another group
+ok 54 - uses the referenced personnel group instead of substituting another group
+  ---
+  duration_ms: 0.672449
+  type: 'test'
+  ...
+# Subtest: does not allocate the same group capacity twice across requirement rows
+ok 55 - does not allocate the same group capacity twice across requirement rows
+  ---
+  duration_ms: 0.236164
+  type: 'test'
+  ...
+# Subtest: zero personnel demand does not require a group
+ok 56 - zero personnel demand does not require a group
+  ---
+  duration_ms: 0.078666
+  type: 'test'
+  ...
+1..56
+# tests 56
+# suites 0
+# pass 56
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 103.357543
+TAP version 13
+# Subtest: deployment bootstrap and persistence
+    # Subtest: mismatch, unsupported runtime, missing confirmation and machine targets write nothing
+    ok 1 - mismatch, unsupported runtime, missing confirmation and machine targets write nothing
+      ---
+      duration_ms: 7.260026
+      type: 'test'
+      ...
+    # Subtest: accepts an exact legacy human ID that predates the current creation grammar
+    ok 2 - accepts an exact legacy human ID that predates the current creation grammar
+      ---
+      duration_ms: 4.488605
+      type: 'test'
+      ...
+    # Subtest: fresh server stores see the committed admin; repeats refuse and other issuers have no membership
+    ok 3 - fresh server stores see the committed admin; repeats refuse and other issuers have no membership
+      ---
+      duration_ms: 2.030305
+      type: 'test'
+      ...
+    # Subtest: a failed atomic replacement leaves no half-initialized admin or poisoned in-memory state
+    ok 4 - a failed atomic replacement leaves no half-initialized admin or poisoned in-memory state
+      ---
+      duration_ms: 2.582173
+      type: 'test'
+      ...
+    # Subtest: two separate processes cannot both initialize; stale lock and malformed state fail closed
+    ok 5 - two separate processes cannot both initialize; stale lock and malformed state fail closed
+      ---
+      duration_ms: 22.848771
+      type: 'test'
+      ...
+    1..5
+ok 1 - deployment bootstrap and persistence
+  ---
+  duration_ms: 40.104159
+  type: 'suite'
+  ...
+# {"at":"2026-10-28T16:44:28.116Z","action":"deny","requestId":"req-1","actor":"user","reason":"membership_required"}
+# {"at":"2026-10-28T16:44:28.124Z","action":"deny","requestId":"req-1","actor":"user","reason":"membership_required"}
+# Subtest: no member, no access — platform authentication never implies business membership
+    # Subtest: a signed-in platform user, even a platform admin, is refused by the business backend
+    ok 1 - a signed-in platform user, even a platform admin, is refused by the business backend
+      ---
+      duration_ms: 24.396249
+      type: 'test'
+      ...
+    # Subtest: an anonymous or machine actor is not a person: 401 on human routes
+    ok 2 - an anonymous or machine actor is not a person: 401 on human routes
+      ---
+      duration_ms: 13.186778
+      type: 'test'
+      ...
+    1..2
+ok 2 - no member, no access — platform authentication never implies business membership
+  ---
+  duration_ms: 37.95148
+  type: 'suite'
+  ...
+# {"at":"2026-10-28T16:44:28.152Z","action":"deny","requestId":"req-1","actor":"user","reason":"membership_required"}
+# {"at":"2026-10-28T16:44:28.176Z","action":"member.remove","requestId":"req-1","actor":"user","target":"praetor:test:env\#alice"}
+# Subtest: the first admin is initialized explicitly — never "first login wins"
+    # Subtest: initFirstAdmin once; a second attempt is refused; the admin then manages members
+    ok 1 - initFirstAdmin once; a second attempt is refused; the admin then manages members
+      ---
+      duration_ms: 44.444891
+      type: 'test'
+      ...
+    1..1
+ok 3 - the first admin is initialized explicitly — never "first login wins"
+  ---
+  duration_ms: 44.589306
+  type: 'suite'
+  ...
+# Subtest: the operator reads the first admin key from /me
+    # Subtest: `key` from GET /api/auth/me is exactly what initFirstAdmin needs; a bare user id is refused, not silently stored
+    ok 1 - `key` from GET /api/auth/me is exactly what initFirstAdmin needs; a bare user id is refused, not silently stored
+      ---
+      duration_ms: 7.283066
+      type: 'test'
+      ...
+    1..1
+ok 4 - the operator reads the first admin key from /me
+  ---
+  duration_ms: 7.39619
+  type: 'suite'
+  ...
+# {"at":"2026-10-28T16:44:28.201Z","action":"invite.create","requestId":"req-1","actor":"user","inviteId":"inv_ac4a71c100db90c2","role":"member"}
+# Subtest: invitations: the app binds a stable subject, the admin confirms, links can be forwarded
+    # Subtest: unregistered person: the invite alone opens nothing — accepting requires a platform sign-in first
+    ok 1 - unregistered person: the invite alone opens nothing — accepting requires a platform sign-in first
+      ---
+      duration_ms: 13.822519
+      type: 'test'
+      ...
+# {"at":"2026-10-28T16:44:28.217Z","action":"invite.create","requestId":"req-1","actor":"user","inviteId":"inv_61b3cc85a8b35166","role":"member"}
+# {"at":"2026-10-28T16:44:28.220Z","action":"invite.accept","requestId":"req-1","actor":"user","outcome":"pending","inviteId":"inv_61b3cc85a8b35166"}
+# {"at":"2026-10-28T16:44:28.222Z","action":"deny","requestId":"req-1","actor":"user","reason":"membership_pending"}
+# {"at":"2026-10-28T16:44:28.224Z","action":"deny","requestId":"req-1","actor":"user","reason":"membership_pending"}
+# {"at":"2026-10-28T16:44:28.227Z","action":"invite.accept","requestId":"req-1","actor":"user","outcome":"conflict","inviteId":"inv_61b3cc85a8b35166"}
+# {"at":"2026-10-28T16:44:28.235Z","action":"invite.accept","requestId":"req-1","actor":"user","outcome":"already","inviteId":"inv_61b3cc85a8b35166"}
+# {"at":"2026-10-28T16:44:28.241Z","action":"member.approve","requestId":"req-1","actor":"user","target":"praetor:test:env\#carol"}
+    # Subtest: same email, different subject: "for bob@example.com" is a note, not an identity — whoever accepts is pending until the admin confirms
+    ok 2 - same email, different subject: "for bob@example.com" is a note, not an identity — whoever accepts is pending until the admin confirms
+      ---
+      duration_ms: 37.902315
+      type: 'test'
+      ...
+# {"at":"2026-10-28T16:44:28.251Z","action":"invite.accept","requestId":"req-1","actor":"user","outcome":"invalid"}
+# {"at":"2026-10-28T16:44:28.253Z","action":"invite.create","requestId":"req-1","actor":"user","inviteId":"inv_6fcee66e59740549","role":"member"}
+# {"at":"2026-10-28T16:44:28.258Z","action":"deny","requestId":"req-1","actor":"user","reason":"membership_required"}
+# {"at":"2026-10-28T16:44:28.260Z","action":"invite.revoke","requestId":"req-1","actor":"user","inviteId":"inv_6fcee66e59740549"}
+# {"at":"2026-10-28T16:44:28.264Z","action":"invite.accept","requestId":"req-1","actor":"user","outcome":"invalid"}
+# {"at":"2026-10-28T16:44:28.267Z","action":"deny","requestId":"req-1","actor":"user","reason":"membership_required"}
+    # Subtest: expired and revoked invites are dead; a non-admin cannot create or revoke one
+    ok 3 - expired and revoked invites are dead; a non-admin cannot create or revoke one
+      ---
+      duration_ms: 22.39686
+      type: 'test'
+      ...
+# {"at":"2026-10-28T16:44:28.273Z","action":"invite.create","requestId":"req-1","actor":"user","inviteId":"inv_883827b9a3338750","role":"member"}
+    # Subtest: cross-site POSTs are refused before anything is consumed
+    ok 4 - cross-site POSTs are refused before anything is consumed
+      ---
+      duration_ms: 4.78156
+      type: 'test'
+      ...
+    1..4
+ok 5 - invitations: the app binds a stable subject, the admin confirms, links can be forwarded
+  ---
+  duration_ms: 79.120249
+  type: 'suite'
+  ...
+# {"at":"2026-10-28T16:44:28.279Z","action":"member.role","requestId":"req-1","actor":"user","target":"praetor:test:env\#bob","role":"admin"}
+# {"at":"2026-10-28T16:44:28.281Z","action":"member.role","requestId":"req-1","actor":"user","target":"praetor:test:env\#bob","role":"member"}
+# {"at":"2026-10-28T16:44:28.287Z","action":"deny","requestId":"req-1","actor":"user","reason":"membership_required"}
+# {"at":"2026-10-28T16:44:28.290Z","action":"deny","requestId":"req-1","actor":"user","reason":"membership_required"}
+# Subtest: business admin ≠ platform admin
+    # Subtest: an app admin manages this app's members and nothing else; a platform admin without membership manages nothing here
+    ok 1 - an app admin manages this app's members and nothing else; a platform admin without membership manages nothing here
+      ---
+      duration_ms: 15.040336
+      type: 'test'
+      ...
+    1..1
+ok 6 - business admin ≠ platform admin
+  ---
+  duration_ms: 15.128043
+  type: 'suite'
+  ...
+# {"at":"2026-10-28T16:44:28.293Z","action":"worker.ping","requestId":"req-1","actor":"service","service":"sa_worker"}
+# Subtest: machine callers and streams
+    # Subtest: a worker is a service actor on an allow-list, never a member
+    ok 1 - a worker is a service actor on an allow-list, never a member
+      ---
+      duration_ms: 6.253706
+      type: 'test'
+      ...
+    # Subtest: stream actions are authorized per message from the current membership
+    ok 2 - stream actions are authorized per message from the current membership
+      ---
+      duration_ms: 2.52234
+      type: 'test'
+      ...
+    1..2
+ok 7 - machine callers and streams
+  ---
+  duration_ms: 8.875586
+  type: 'suite'
+  ...
+# {"action":"edit","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"action":"calculate","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"action":"edit","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"action":"edit","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"action":"confirm","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"action":"return","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"action":"release","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"action":"export","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"at":"2026-10-28T16:44:28.184Z","action":"deny","requestId":"trusted-request","actor":"user","reason":"role_required","need":["admin"]}
+# Subtest: query role denied on every write/alternate path, client role and audit spoof ignored
+ok 8 - query role denied on every write/alternate path, client role and audit spoof ignored
+  ---
+  duration_ms: 99.315681
+  type: 'test'
+  ...
+# Subtest: import/edit/calculate/save/verify/export records actor, server time and reason atomically; persistent and stale protected
+ok 9 - import/edit/calculate/save/verify/export records actor, server time and reason atomically; persistent and stale protected
+  ---
+  duration_ms: 67.735613
+  type: 'test'
+  ...
+# {"action":"confirm","decision":"deny","requestId":"trusted-request","actor":"test\#planner"}
+# {"action":"return","decision":"deny","requestId":"trusted-request","actor":"test\#planner"}
+# {"action":"release","decision":"deny","requestId":"trusted-request","actor":"test\#planner"}
+# Subtest: supervisor-only downstream gates fail closed without inventing R7 confirmation
+ok 10 - supervisor-only downstream gates fail closed without inventing R7 confirmation
+  ---
+  duration_ms: 22.998143
+  type: 'test'
+  ...
+# {"action":"export","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"at":"2026-10-28T16:44:28.286Z","action":"member.export","requestId":"trusted-request","actor":"user","target":"test\#query","canExport":true}
+# {"action":"calculate","decision":"deny","requestId":"trusted-request","actor":"test\#planner"}
+# {"at":"2026-10-28T16:44:28.298Z","action":"deny","requestId":"trusted-request","actor":"user","reason":"membership_required"}
+# {"at":"2026-10-28T16:44:28.302Z","action":"deny","requestId":"trusted-request","actor":"user","reason":"role_required","need":["planner","supervisor","query"]}
+# Subtest: query export requires explicit stored grant; demotion/removal takes effect next action
+ok 11 - query export requires explicit stored grant; demotion/removal takes effect next action
+  ---
+  duration_ms: 23.314056
+  type: 'test'
+  ...
+# Subtest: CSRF write denied and SDK rejects unsigned/plaintext impersonation
+ok 12 - CSRF write denied and SDK rejects unsigned/plaintext impersonation
+  ---
+  duration_ms: 13.82656
+  type: 'test'
+  ...
+# Subtest: integrated server scheduler preserves expected supply waits, downtime reason and staffing constraints
+ok 13 - integrated server scheduler preserves expected supply waits, downtime reason and staffing constraints
+  ---
+  duration_ms: 62.663058
+  type: 'test'
+  ...
+1..13
+# tests 22
+# suites 7
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 405.179074
+
+> aps-r1@0.1.0 build
+> tsc --noEmit && vite build && npx esbuild server/index.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs
+
+vite v5.4.21 building for production...
+transforming...
+✓ 44 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.45 kB │ gzip:  0.30 kB
+dist/assets/index-4msqi5Ee.css   16.12 kB │ gzip:  4.51 kB
+dist/assets/index-ayIhTCtf.js   197.63 kB │ gzip: 67.38 kB
+✓ built in 918ms
+
+[validation] disposable source/dependencies/output; no publish or restart
+
+  dist/server.mjs  99.6kb
+
+⚡ Done in 6ms

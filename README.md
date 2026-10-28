@@ -95,3 +95,14 @@ npm run build
 订单支持订单号、产品、合格需求数量/单位、分钟轴交期、优先级、可拆分标识、需求类型和状态；旧版浏览器数据迁移为 kg/正式订单/有效。数量、单位和交期编辑追加本地变更记录。预测订单与正式订单分开，预测不进入正式订单排程；已取消订单不进入之后的计算，已有方案快照保留。单线 P0 校验与字段约定见 `docs/APS-TEST-HANDOFF.md`。当前不执行单位换算、订单拆分执行或执行进度/数量核销。
 
 复现：应用容器内运行 `npm test && npm run build`；FR-009 用例在 `src/lib/orders.test.mjs`。
+
+## FR-037 permissions slice
+
+[FR-037 implementation and limits](docs/FR-037.md) supersedes older descriptions
+of localStorage authority and anonymous snapshot APIs. Main application business
+APIs now require verified Managed identity + active planner/supervisor/query
+membership. Data and operation history are stored together server-side; all
+writes/exports require a reason. Existing prototypes remain isolated source.
+Supervisor confirmation/return/release deliberately report unsupported until
+FR-025/030 exist; this is not full R7. Do not activate without the documented
+operator-owned Managed identity and membership provisioning steps.

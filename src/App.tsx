@@ -1,15 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import './index.css';
+import { useAppMembership } from './auth/useAppMembership';
 import { usePraetorEmbedded } from './praetor-embedded';
-import { independentlyVerifyPlan, type VerificationReport, type VerificationStatus } from './lib/independent-verification.mjs';
-import { validateSingleLineScope } from './lib/line-scope.mjs';
+import { type VerificationReport, type VerificationStatus } from './lib/independent-verification.mjs';
 import { validateMasterData } from './lib/master-data.mjs';
 import { validateProcessConfig } from './lib/process-config.mjs';
-import { validateExpectedSupply, resolveExpectedSupply, supplyEarliestMinute, buildSupplyConditions, exportSupplyPlanCsv, type SupplyCondition } from './lib/expected-supply.mjs';
+import { validateExpectedSupply, resolveExpectedSupply, type SupplyCondition } from './lib/expected-supply.mjs';
 import { queryInventoryAvailability, validateInventoryBatches } from './lib/inventory.mjs';
-import { findDowntimeShiftReason } from './lib/downtime-shift-reason.mjs';
-import { appendOrderChange, isOrderSchedulable, validateOrders, type OrderChange } from './lib/orders.mjs';
-import { allocatePersonnel, type PersonnelReservation } from './lib/staffing.mjs';
 import { validateBomConfig } from './lib/bom-config.mjs';
 
 type Row = Record<string, string>;
@@ -37,87 +34,14 @@ const defs: TableDef[] = [
   { key: 'personnelGroups', label: '人员组与可用时间', file: '19_人员组与可用时间.csv', fields: ['人员组编号','人员组名称','人员数量','技能','班次','可用起始分钟','可用结束分钟'] },
   { key: 'rules', label: '排程规则', file: '16_排程规则配置.csv', fields: ['规则编号','中文名称','是否启用','参数JSON'] },
 ];
-const seed: Record<string, Row[]> = {
-  products: [
-    {'产品编号':'HC40','产品名称':'模拟火腿肠40g','单支净重kg':'0.04','每袋支数':'10','总收率':'0.96','模拟交付等待分钟':'0'},
-    {'产品编号':'HC60','产品名称':'模拟火腿肠60g','单支净重kg':'0.06','每袋支数':'10','总收率':'0.96','模拟交付等待分钟':'0'},
-  ],
-  materials: [
-    ...[['LEAN','模拟瘦肉','kg','原料'],['FAT','模拟背膘','kg','原料'],['WATER','生产用水','kg','原料'],['PREMIX','复合辅料占位','kg','辅料'],['BAG','十支外包装袋','个','包材']].map(([id,name,unit,category])=>({'物料编号':id,'物料名称':name,'单位':unit,'类别':category})),
-  ],
-  supplies: [],
-  supplyDelays: [],
-  supplyUses: [],
-  inventory: [
-    {'批次编号':'LEAN-LOT-001','物料编号':'LEAN','账面数量':'500','已占用数量':'120','有效期':'2026-12-31','位置':'冷库 A-01','质量状态':'合格','预计可用时间':''},
-    {'批次编号':'LEAN-LOT-002','物料编号':'LEAN','账面数量':'200','已占用数量':'0','有效期':'2026-12-31','位置':'待检区 Q-01','质量状态':'待检','预计可用时间':''},
-  ],
-  bom: [],
-  orders: [
-    {'订单编号':'A','产品编号':'HC40','产线编号':'L01','合格需求':'240','数量单位':'kg','要求可交付分钟':'480','优先顺序':'1','是否允许拆分':'否','需求类型':'正式订单','订单状态':'有效'},
-    {'订单编号':'B','产品编号':'HC60','产线编号':'L01','合格需求':'240','数量单位':'kg','要求可交付分钟':'480','优先顺序':'2','是否允许拆分':'否','需求类型':'正式订单','订单状态':'有效'},
-  ],
-  routes: [
-    {'产品编号':'HC40','工序编号':'MIX','工序名称':'混合','前序工序':'','最大等待分钟':'','程序编号':''},
-    {'产品编号':'HC40','工序编号':'FILL','工序名称':'灌装','前序工序':'MIX','最大等待分钟':'','程序编号':''},
-    {'产品编号':'HC60','工序编号':'MIX','工序名称':'混合','前序工序':'','最大等待分钟':'','程序编号':''},
-    {'产品编号':'HC60','工序编号':'FILL','工序名称':'灌装','前序工序':'MIX','最大等待分钟':'','程序编号':''},
-  ],
-  times: [
-    {'产品编号':'HC40','工序编号':'MIX','计算方式':'固定','固定分钟':'30','速度支每分钟':'120'},
-    {'产品编号':'HC40','工序编号':'FILL','计算方式':'固定','固定分钟':'30','速度支每分钟':'120'},
-    {'产品编号':'HC60','工序编号':'MIX','计算方式':'固定','固定分钟':'30','速度支每分钟':'100'},
-    {'产品编号':'HC60','工序编号':'FILL','计算方式':'固定','固定分钟':'30','速度支每分钟':'100'},
-  ],
-  machines: [
-    ...['MIX01','MIX02','MIX03'].map((id,i)=>({'设备编号':id,'设备名称':`混合设备${i+1}`,'产线编号':'L01','工序编号':'MIX','日历编号':'FC01','最小装载kg':'0','最大装载kg':'300','装载计量基准':'BOM总投入'})),
-    ...['FILL01','FILL02','FILL03'].map((id,i)=>({'设备编号':id,'设备名称':`灌装设备${i+1}`,'产线编号':'L01','工序编号':'FILL','日历编号':'FC01','最小装载kg':'0','最大装载kg':'10000','装载计量基准':'BOM总投入'})),
-  ],
-  calendars: [{'日历编号':'FC01','工厂编号':'F01','起始分钟':'0','结束分钟':'600','是否工作':'是','说明':'2026-11-02 08:00—18:00；资源默认继承'}],
-  downtime: [],
-  dependencies: [
-    {'订单编号':'A','工序编号':'MIX','资源类型':'设备','资源编号':'MIX01','需求数量':'1','提前占用分钟':'0','后延占用分钟':'0','所需技能':''},
-    {'订单编号':'A','工序编号':'FILL','资源类型':'设备','资源编号':'FILL01','需求数量':'1','提前占用分钟':'0','后延占用分钟':'0','所需技能':''},
-    {'订单编号':'B','工序编号':'MIX','资源类型':'设备','资源编号':'MIX02','需求数量':'1','提前占用分钟':'0','后延占用分钟':'0','所需技能':''},
-    {'订单编号':'B','工序编号':'FILL','资源类型':'设备','资源编号':'FILL02','需求数量':'1','提前占用分钟':'0','后延占用分钟':'0','所需技能':''},
-  ],
-  personnelGroups: [],
-  rules: [
-    {'规则编号':'MACHINE','中文名称':'机器不重叠','是否启用':'是','参数JSON':'{}'},
-    {'规则编号':'PRECEDENCE','中文名称':'工序顺序','是否启用':'是','参数JSON':'{}'},
-    ...[['CALENDAR','工厂及设备日历','是'],['MOLD','模具与工具占用','否'],['LABOR','人员技能及数量','否'],['MATERIAL','物料数量及可用时点','否'],['CAPACITY','设备装载','否'],['PROGRAM','资源程序兼容','否'],['MAX_LAG','工序最大等待','否'],['STORAGE','空间容量','否'],['PROGRESS','执行保护','否'],['DELIVERY','预计可交付','否']].map(([id,label,on])=>({'规则编号':id,'中文名称':label,'是否启用':on,'参数JSON':'{}'})),
-    {'规则编号':'INVENTORY','中文名称':'库存质量状态可用性','是否启用':'是','参数JSON':'{"可用质量状态":["合格"]}'},
-  ],
-};
-
-const storageKey = 'aps-r1-data-v1';
-const orderHistoryKey = 'aps-r1-order-change-history-v1';
-function loadData() { try { const v = localStorage.getItem(storageKey); if(!v)return structuredClone(seed); const saved=JSON.parse(v) as Record<string,Row[]>; const merged={...structuredClone(seed),...saved}; if(!merged.calendars?.length)merged.calendars=structuredClone(seed.calendars); if(!merged.downtime)merged.downtime=[]; merged.orders=(merged.orders||[]).map(r=>({'订单编号':r['订单编号']||'','产品编号':r['产品编号']||'','产线编号':r['产线编号']||'','合格需求':r['合格需求']||r['合格需求kg']||'','数量单位':r['数量单位']||'kg','要求可交付分钟':r['要求可交付分钟']||'','优先顺序':r['优先顺序']||'','是否允许拆分':r['是否允许拆分']||'否','需求类型':r['需求类型']||'正式订单','订单状态':r['订单状态']||'有效'})); const calendarRule=merged.rules?.find(r=>r['规则编号']==='CALENDAR'); if(calendarRule)calendarRule['是否启用']='是'; return merged; } catch { return structuredClone(seed); } }
-function uid() { return `R1-${new Date().toISOString().replace(/[-:.TZ]/g,'').slice(0,14)}`; }
 function rulesInputFingerprint(data:Record<string,Row[]>) { const source=JSON.stringify({orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],personnelGroups:data.personnelGroups||[],machines:data.machines||[],calendars:data.calendars||[],downtime:data.downtime||[],rules:data.rules||[]});let hash=2166136261;for(let i=0;i<source.length;i++){hash^=source.charCodeAt(i);hash=Math.imul(hash,16777619);}return (hash>>>0).toString(16).padStart(8,'0'); }
 function parseCsv(text: string): string[][] { const rows: string[][]=[]; let row:string[]=[], cell='', quoted=false; for(let i=0;i<text.length;i++){const c=text[i]; if(quoted){if(c==='"'&&text[i+1]==='"'){cell+='"';i++;}else if(c==='"')quoted=false;else cell+=c;}else if(c==='"')quoted=true;else if(c===','){row.push(cell);cell='';}else if(c==='\n'){row.push(cell.replace(/\r$/,''));rows.push(row);row=[];cell='';}else cell+=c;} if(cell.length||row.length){row.push(cell.replace(/\r$/,''));rows.push(row);} return rows; }
 function fmt(min: number) { const n=480+Math.round(min); return `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`; }
-function findCalendarWindow(calendarId:string, earliest:number, duration:number, calendars:Row[], downtime:Row[], machineId:string):{start:number|null;reason:string}{
-  const valid=calendars.filter(r=>r['日历编号']===calendarId).map(r=>({start:Number(r['起始分钟']),end:Number(r['结束分钟']),work:r['是否工作']==='是'})).filter(r=>Number.isFinite(r.start)&&Number.isFinite(r.end)&&r.end>r.start);
-  const off=valid.filter(r=>!r.work).sort((a,b)=>a.start-b.start);
-  const entries=valid.filter(r=>r.work).flatMap(w=>{let segments=[{start:w.start,end:w.end}];for(const stop of off){segments=segments.flatMap(s=>stop.start<s.end&&stop.end>s.start?[...(stop.start>s.start?[{start:s.start,end:stop.start}]:[]),...(stop.end<s.end?[{start:stop.end,end:s.end}]:[])]:[s]);}return segments;}).filter(r=>r.end>r.start).sort((a,b)=>a.start-b.start);
-  if(!entries.length)return {start:null,reason:`工厂日历 ${calendarId||'（未配置）'} 没有有效工作窗口，工厂未开工或日历配置缺失`};
-  const stops=downtime.filter(r=>r['设备编号']===machineId).map(r=>({start:Number(r['起始分钟']),end:Number(r['结束分钟']),reason:r['原因']||'设备停机'})).filter(r=>Number.isFinite(r.start)&&Number.isFinite(r.end)&&r.end>r.start).sort((a,b)=>a.start-b.start);
-  for(const window of entries){let candidate=Math.max(earliest,window.start);while(candidate+duration<=window.end){const stop=stops.find(s=>candidate<s.end&&candidate+duration>s.start);if(!stop)return {start:candidate,reason:''};candidate=stop.end;}}
-  const next=entries.find(w=>w.end>earliest); const detail=next&&stops.some(s=>s.start<next.end&&s.end>Math.max(earliest,next.start))?'設備停機例外缩短了可用区间，且剩余连续窗口不足':'工厂工作窗口内没有足够的连续可用时长';
-  return {start:null,reason:detail};
-}
-function validate(tasks: Task[]): Finding[] {
-  const out: Finding[]=[]; const byMachine=new Map<string,Task[]>();
-  tasks.forEach(t=>{const a=byMachine.get(t.machine)||[];a.push(t);byMachine.set(t.machine,a);});
-  byMachine.forEach((list,machine)=>{list.sort((a,b)=>a.start-b.start);for(let i=1;i<list.length;i++){const a=list[i-1],b=list[i];if(b.start<a.end)out.push({code:'BR-03 / MACHINE_OVERLAP',message:`${machine} 上 ${a.id} 与 ${b.id} 重叠 ${fmt(b.start)}–${fmt(Math.min(a.end,b.end))}`,taskIds:[a.id,b.id]});}});
-  const byId=new Map(tasks.map(t=>[t.id,t])); tasks.forEach(t=>{if(t.predecessor){const pre=byId.get(t.predecessor);if(pre&&t.start<pre.end)out.push({code:'BR-02 / PRECEDENCE',message:`${t.id} 开始于 ${fmt(t.start)}，早于前序 ${pre.id} 完成 ${fmt(pre.end)}`,taskIds:[pre.id,t.id]});}});
-  return out;
-}
-
 export default function App() {
+  const membership=useAppMembership();
+  const requestGeneration=useRef(0);
   const embedded = usePraetorEmbedded();
-  const [data,setData]=useState<Record<string,Row[]>>(loadData);
+  const [data,setData]=useState<Record<string,Row[]>>({});
   const [view,setView]=useState<'schedule'|'data'|'decisions'>('schedule');
   const [tableKey,setTableKey]=useState('orders');
   const [inventoryAsOf,setInventoryAsOf]=useState(new Date().toISOString().slice(0,16));
@@ -128,7 +52,11 @@ export default function App() {
   const [message,setMessage]=useState('');
   const [issues,setIssues]=useState<Finding[]>([]);
   const [inputVersion,setInputVersion]=useState(0);
-  const [orderHistory,setOrderHistory]=useState<OrderChange[]>(()=>{try{return JSON.parse(localStorage.getItem(orderHistoryKey)||'[]');}catch{return [];}});
+  const [reason,setReason]=useState('');
+  const [busy,setBusy]=useState(false);
+  const [session,setSession]=useState<{role:string;canWrite:boolean;canExport:boolean}|null>(null);
+  const [operations,setOperations]=useState<{id:string;action:string;actor:string;at:string;reason:string}[]>([]);
+  const orderHistory=operations.flatMap(r=>{const x=r as typeof r & {target?:string;before?:Row[];after?:Row[]};if(x.target!=='orders'||!x.before||!x.after)return [];return x.after.flatMap(row=>{const before=x.before!.find(b=>b['订单编号']===row['订单编号']);return before?['合格需求','数量单位','要求可交付分钟'].filter(f=>before[f]!==row[f]).map(f=>({orderId:row['订单编号'],field:f,before:before[f],after:row[f],changedAt:x.at})):[];});});
   const currentDef=defs.find(d=>d.key===tableKey)!;
   const currentRows=data[tableKey]||[];
   const inventoryQuery=useMemo(()=>queryInventoryAvailability(data.inventory||[],{asOf:inventoryAsOf,rules:data.rules||[]}),[data.inventory,data.rules,inventoryAsOf]);
@@ -140,90 +68,41 @@ export default function App() {
   const enabledRules=(data.rules||[]).filter(r=>r['是否启用']==='是').map(r=>r['规则编号']);
   const tasks=activePlan?.tasks||[];
   const maxTime=Math.max(120,...tasks.map(t=>t.end));
-  const verificationStale=!!verification&&verification.inputFingerprint!==rulesInputFingerprint(data);
+  const verificationStale=!!verification&&(activePlan?.inputVersion!==`v${inputVersion}`||verification.inputFingerprint!==rulesInputFingerprint(data));
 
-  useEffect(()=>{localStorage.setItem(storageKey,JSON.stringify(data));},[data]);
-  useEffect(()=>{localStorage.setItem(orderHistoryKey,JSON.stringify(orderHistory));},[orderHistory]);
-  useEffect(()=>{fetch('/api/plans').then(r=>r.json()).then((list:Plan[])=>{setPlans(list);if(list.length){setActivePlan(list[0]);setVerification(list[0].verification||null);}}).catch(()=>{});},[]);
-  function replaceRow(index:number,field:string,value:string){const prior=data[tableKey]?.[index];if(tableKey==='orders'&&prior&&['合格需求','数量单位','要求可交付分钟'].includes(field)){setOrderHistory(h=>appendOrderChange(h,prior['订单编号'],field,prior[field]||'',value));}setData(prev=>({...prev,[tableKey]:prev[tableKey].map((row,i)=>i===index?{...row,[field]:value}:row)}));setInputVersion(v=>v+1);}
-  function addRow(){setData(prev=>({...prev,[tableKey]:[...(prev[tableKey]||[]),Object.fromEntries(currentDef.fields.map(f=>[f,'']))]}));setInputVersion(v=>v+1);}
-  function removeRows(){setData(prev=>({...prev,[tableKey]:prev[tableKey].filter((_,i)=>!selected.includes(String(i)))}));setSelected([]);setInputVersion(v=>v+1);}
-  async function importCsv(file?:File){if(!file)return;const rows=parseCsv(await file.text()).filter(r=>r.some(c=>c.trim()));if(rows.length<2){setMessage('CSV 需要表头和至少一行数据。');return;}const headers=rows[0].map(h=>h.replace(/^\ufeff/, '').trim());const optional=tableKey==='dependencies'?new Set(['所需班次','人员参与阶段','人员开始偏移','人员结束偏移']):new Set<string>();const missing=currentDef.fields.filter(f=>!optional.has(f)&&!headers.includes(f));if(missing.length){setMessage(`字段不匹配，缺少：${missing.join('、')}`);return;}const parsed=rows.slice(1).map(cells=>Object.fromEntries(currentDef.fields.map(f=>[f,headers.includes(f)?cells[headers.indexOf(f)]||'':''])));if(['supplies','supplyDelays','supplyUses'].includes(tableKey)){const next={...data,[tableKey]:parsed};const errors=validateExpectedSupply({supplies:next.supplies||[],delays:next.supplyDelays||[],uses:next.supplyUses||[],materials:next.materials||[],orders:next.orders||[],routes:next.routes||[]});if(errors.length){setMessage(`导入未应用：${errors.map(e=>e.message).join('；')}`);return;}}setData(prev=>({...prev,[tableKey]:parsed}));setInputVersion(v=>v+1);setMessage(`已导入 ${parsed.length} 行 ${currentDef.file}；仅替换当前表。`);}
-  function downloadCsv(){const rows=[currentDef.fields,...currentRows.map(r=>currentDef.fields.map(f=>r[f]||''))];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=currentDef.file;a.click();URL.revokeObjectURL(a.href);}
-  function schedule(){
-    const built:Task[]=[]; const findings:Finding[]=[]; const machineBusy=new Map<string,Task[]>(); const personnelReservations:PersonnelReservation[]=[];
-    const sorted=[...(data.orders||[])].filter(o=>o['需求类型']!=='预测'&&isOrderSchedulable(o)).sort((a,b)=>Number(a['优先顺序'])-Number(b['优先顺序']));
-    const orderIssues=validateOrders(data.orders||[]).filter(issue=>issue.code!=='ORDER_MULTI_LINE');
-    if(orderIssues.length){findings.push(...orderIssues.map(issue=>({code:`FR-009 / ${issue.code}`,message:issue.message,taskIds:[]})));setIssues(findings);setActivePlan({id:uid(),name:'订单数据校验',createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules,inputVersion:`v${inputVersion}`});setVerification(null);setMessage(`FR-009 订单字段检查发现 ${orderIssues.length} 个问题，未生成任务。`);return;}
-    const masterIssues=[...validateBomConfig({products:data.products||[],materials:data.materials||[],routes:data.routes||[],bom:data.bom||[]}),...supplyIssues,...inventoryIssues,...validateMasterData({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[],personnelGroups:data.personnelGroups||[]})];
-    if(masterIssues.length){
-      findings.push(...masterIssues.map(issue=>({...issue,taskIds:[]})));
-      const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
-      setIssues(findings);setActivePlan(plan);setVerification(null);setMessage(`主数据/引用检查发现 ${findings.length} 个问题，未生成任务。`);return;
-    }
-    const scopeFindings=validateSingleLineScope(sorted,data.machines||[]);
-    if(scopeFindings.length){
-      findings.push(...scopeFindings);
-      const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
-      setIssues(findings);setActivePlan(plan);setVerification(null);setMessage(findings.map(f=>f.message).join(' '));return;
-    }
-    for(const order of sorted){const oid=order['订单编号'], product=order['产品编号'];const route=(data.routes||[]).filter(r=>r['产品编号']===product);
-      if(!route.length){findings.push({code:'INPUT / ROUTE_MISSING',message:`订单 ${oid} 的产品 ${product} 没有工艺路线`,taskIds:[]});continue;}
-      const routeByOperation=new Map<string,Row>(); const routeProblems:string[]=[];
-      for(const op of route){const operation=op['工序编号']?.trim();if(!operation){routeProblems.push('存在工序编号为空的路线记录');continue;}if(routeByOperation.has(operation))routeProblems.push(`工序 ${operation} 重复定义`);else routeByOperation.set(operation,op);}
-      for(const [operation,op] of routeByOperation){const predecessor=op['前序工序']?.trim();if(predecessor&&!routeByOperation.has(predecessor))routeProblems.push(`工序 ${operation} 引用不存在的前序工序 ${predecessor}`);}
-      const visiting=new Set<string>(), visited=new Set<string>(), stack:string[]=[];let cycle:string[]=[];
-      const visit=(operation:string)=>{if(cycle.length||visited.has(operation))return;if(visiting.has(operation)){const start=stack.indexOf(operation);cycle=[...stack.slice(start),operation];return;}visiting.add(operation);stack.push(operation);const predecessor=routeByOperation.get(operation)?.['前序工序']?.trim();if(predecessor&&routeByOperation.has(predecessor))visit(predecessor);stack.pop();visiting.delete(operation);visited.add(operation);};
-      routeByOperation.forEach((_,operation)=>visit(operation));
-      if(cycle.length)routeProblems.push(`工序依赖存在循环：${cycle.join(' → ')}`);
-      if(routeProblems.length){findings.push({code:cycle.length?'INPUT / ROUTE_CYCLE':'INPUT / ROUTE_CONFIG',message:`订单 ${oid} / 产品 ${product} 路线配置问题：${[...new Set(routeProblems)].join('；')}`,taskIds:[]});continue;}
-      // Keep the source row order among independent steps, while always placing predecessors first.
-      const orderedRoute:Row[]=[];const remaining=[...route];const completedOperations=new Set<string>();
-      while(remaining.length){const index=remaining.findIndex(op=>!op['前序工序']?.trim()||completedOperations.has(op['前序工序'].trim()));if(index<0)break;const [next]=remaining.splice(index,1);orderedRoute.push(next);completedOperations.add(next['工序编号'].trim());}
-      const done=new Map<string,Task>();
-      for(const op of orderedRoute){const operation=op['工序编号'];const dep=(data.dependencies||[]).find(d=>d['订单编号']===oid&&d['工序编号']===operation&&d['资源类型']==='设备');const machineId=dep?.['资源编号']||'';const machine=(data.machines||[]).find(m=>m['设备编号']===machineId&&m['工序编号']===operation);
-        if(!dep||!machine){findings.push({code:'INPUT / MACHINE_DEPENDENCY',message:`订单 ${oid} / 工序 ${operation} 缺少有效设备依赖（12_工序资源与物料依赖.csv）`,taskIds:[]});continue;}
-        const time=(data.times||[]).find(t=>t['产品编号']===product&&t['工序编号']===operation);const duration=Number(time?.['固定分钟']);if(!time||!Number.isFinite(duration)||duration<=0){findings.push({code:'INPUT / PROCESS_TIME',message:`产品 ${product} / 工序 ${operation} 工时缺失或无效`,taskIds:[]});continue;}
-        const predecessor=op['前序工序']?done.get(op['前序工序']):undefined; if(op['前序工序']&&!predecessor){findings.push({code:'INPUT / PREDECESSOR',message:`${operation} 引用的前序 ${op['前序工序']} 未排入`,taskIds:[]});continue;}
-        const busy=machineBusy.get(machineId)||[];let candidate=Math.max(predecessor?.end||0,supplyEarliestMinute(oid,operation,resolvedSupplies,data.supplyUses||[]));const initialEarliest=candidate;let start:number|null=null;let reason='';
-        const calendarId=machine['日历编号']?.trim()||(data.calendars||[])[0]?.['日历编号']||'';
-        const firstCalendarFit=findCalendarWindow(calendarId,initialEarliest,duration,data.calendars||[],data.downtime||[],machineId).start;
-        for(let attempt=0;attempt<1000;attempt++){
-          const fit=findCalendarWindow(calendarId,candidate,duration,data.calendars||[],data.downtime||[],machineId);
-          if(fit.start===null){reason=fit.reason;break;}
-          const overlap=busy.find(t=>fit.start!<t.end&&fit.start!+duration>t.start);
-          if(overlap){candidate=overlap.end;continue;}
-          start=fit.start;break;
-        }
-        if(start===null){findings.push({code:'UNPLANNED / CALENDAR',message:`订单 ${oid} / 工序 ${operation} 未排：设备 ${machineId} 不可用。${reason||'找不到满足连续工作时长的窗口'}。任务要求连续 ${duration} 分钟；跨班或中断规则尚未配置。`,taskIds:[]});continue;}
-        const stop=findDowntimeShiftReason(data.downtime||[],machineId,initialEarliest,duration,firstCalendarFit??start);
-        const calendarShift=firstCalendarFit!==null&&firstCalendarFit!==undefined&&firstCalendarFit>initialEarliest?(stop?`日历顺延：设备停机「${stop.reason}」${fmt(stop.start)}–${fmt(stop.end)}，安排至${fmt(start)}`:`日历顺延：工厂工作窗口，安排至${fmt(start)}`):'';
-        const personnelRequirements=(data.dependencies||[]).filter(d=>d['订单编号']===oid&&d['工序编号']===operation&&d['资源类型']==='人员技能');
-        const personnel=allocatePersonnel(personnelRequirements,data.personnelGroups||[],start,start+duration,personnelReservations);
-        if(!personnel.ok){findings.push({code:'UNPLANNED / PERSONNEL',message:`订单 ${oid} / 工序 ${operation} 未排：${personnel.reason}。人数充足但技能、班次或可用时段不匹配时仍视为不可用。`,taskIds:[]});continue;}
-        personnelReservations.push(...(personnel.allocations||[]));
-        const participation=personnelRequirements.filter(r=>Number(r['需求数量']||0)>0).map(r=>`${r['人员参与阶段']||'全工序'} ${r['人员开始偏移']||0}–${duration-Number(r['人员结束偏移']||0)} 分钟`).join('、');
-        const task:Task={id:`${oid}-${operation}`,orderId:oid,productId:product,operation,label:op['工序名称']||operation,machine:machineId,start,end:start+duration,duration,predecessor:predecessor?.id||'',source:`订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04${personnelRequirements.length?` · 人员阶段：${participation}`:''}${calendarShift?` · ${calendarShift}`:''}`};built.push(task);done.set(operation,task);busy.push(task);machineBusy.set(machineId,busy);
-      }
-    }
-    const hard=validate(built);const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:built,supplyConditions:buildSupplyConditions(built,resolvedSupplies,data.supplyUses||[]),supplyInput,findings:[...findings,...hard],rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
-    setIssues(plan.findings);setActivePlan(plan);setVerification(null);setMessage(plan.findings.length?`生成 ${built.length} 项任务，并发现 ${plan.findings.length} 个需处理的问题。`:`生成 ${built.length} 项任务；当前启用的机器与顺序检查通过。`);
+  async function api(path:string,body?:object) {
+    const generation=requestGeneration.current;
+    const r=await fetch('/api'+path,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,reason})}:{cache:'no-store'});
+    if(!r.ok){const e=await r.json();throw new Error(e.error||`HTTP ${r.status}`);}const result=await r.json();if(generation!==requestGeneration.current)throw new Error('身份已变化，请刷新');return result;
   }
-  function verifyPlan(){if(!activePlan){setMessage('请先计算或选择一个排程。');return;}const report={...independentlyVerifyPlan(activePlan,data.orders||[],data.routes||[],enabledRules),inputFingerprint:rulesInputFingerprint(data)};setVerification(report);setActivePlan({...activePlan,verification:report});setMessage('独立复核已完成。主管确认前请确认复核仍对应当前订单、路线和规则输入。');}
-  async function savePlan(){if(!activePlan){setMessage('请先计算一个排程。');return;}const plan={...activePlan,verification:verification||undefined,id:activePlan.id||uid(),createdAt:new Date().toISOString()};try{const res=await fetch('/api/plans',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(plan)});if(!res.ok)throw new Error();const list=await fetch('/api/plans').then(r=>r.json());setPlans(list);setActivePlan(plan);setMessage('排程快照已保存，后续输入变化不会覆盖这份方案。');}catch{setMessage('保存失败：应用 API 当前不可用。');}}
-  function exportPlan(){if(!activePlan)return;const csv=exportSupplyPlanCsv(activePlan);const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download=`${activePlan.id}-tasks.csv`;a.click();URL.revokeObjectURL(a.href);}
+  async function refresh(){const [state,list,who,log]=await Promise.all([api('/state'),api('/plans'),api('/session'),api('/operations')]);setData(state.data);setInputVersion(state.revision);setPlans(list);setSession(who);setOperations(log);}
+  useEffect(()=>{requestGeneration.current++;if(membership.state.kind==='member'){refresh().catch(e=>setMessage(e.message));}else{setData({});setPlans([]);setActivePlan(null);setSession(null);}},[membership.state]);
+  function perform(work:()=>Promise<void>){if(busy)return;setBusy(true);work().catch(e=>setMessage(e.message)).finally(()=>setBusy(false));}
+  function persist(rows:Row[],operation='edit'){perform(async()=>{await api('/tables/'+tableKey,{rows,revision:inputVersion,operation});await refresh();});}
+  function replaceRow(index:number,field:string,value:string){persist(currentRows.map((r,i)=>i===index?{...r,[field]:value}:r));}
+  function addRow(){persist([...currentRows,Object.fromEntries(currentDef.fields.map(f=>[f,'']))]);}
+  function removeRows(){persist(currentRows.filter((_,i)=>!selected.includes(String(i))));setSelected([]);}
+  async function importCsv(file?:File){if(!file)return;const rows=parseCsv(await file.text()).filter(r=>r.some(c=>c.trim()));if(rows.length<2){setMessage('CSV 需要表头和至少一行数据。');return;}const headers=rows[0].map(h=>h.replace(/^\ufeff/, '').trim());const optional=tableKey==='dependencies'?new Set(['所需班次','人员参与阶段','人员开始偏移','人员结束偏移']):new Set<string>();const missing=currentDef.fields.filter(f=>!optional.has(f)&&!headers.includes(f));if(missing.length){setMessage(`字段不匹配，缺少：${missing.join('、')}`);return;}const parsed=rows.slice(1).map(cells=>Object.fromEntries(currentDef.fields.map(f=>[f,headers.includes(f)?cells[headers.indexOf(f)]||'':''])));if(['supplies','supplyDelays','supplyUses'].includes(tableKey)){const next={...data,[tableKey]:parsed};const errors=validateExpectedSupply({supplies:next.supplies||[],delays:next.supplyDelays||[],uses:next.supplyUses||[],materials:next.materials||[],orders:next.orders||[],routes:next.routes||[]});if(errors.length){setMessage(`导入未应用：${errors.map(e=>e.message).join('；')}`);return;}}persist(parsed,'import');}
+  function download(target:object,name:string){perform(async()=>{const r=await fetch('/api/export',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...target,reason})});if(!r.ok){const e=await r.json();throw new Error(e.error);}const blob=await r.blob();const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);await refresh();});}
+  function downloadCsv(){download({table:tableKey},currentDef.file);}
+  function schedule(){perform(async()=>{const p=await api('/calculate',{revision:inputVersion});setActivePlan(p);setVerification(null);setIssues(p.findings);await refresh();});}
+  function verifyPlan(){if(activePlan)perform(async()=>{const p=await api('/plans/'+activePlan.id+'/verify',{});setActivePlan(p);setVerification({...p.verification,inputFingerprint:rulesInputFingerprint(data)});await refresh();});}
+  function savePlan(){if(activePlan)perform(async()=>{await api('/plans',{id:activePlan.id});setMessage('服务端排程快照已保存。');await refresh();});}
+  function exportPlan(){if(activePlan)download({planId:activePlan.id},activePlan.id+'-tasks.csv');}
   const visibleFindings=useMemo(()=>issues.length?issues:(activePlan?.findings||[]),[issues,activePlan]);
   function locate(f:Finding){setSelected(f.taskIds);setView('schedule');}
 
+  if(membership.state.kind!=='member')return <main className="panel"><h1>APS · 模拟排程</h1><p>身份状态：{membership.state.kind}</p><p>需要托管身份和已授权业务成员。</p><button onClick={()=>membership.signIn()}>登录</button></main>;
   return <div className="app-shell">
     <header className={`topbar ${embedded?'embedded-topbar':''}`}><div className="brandmark">APS</div><div className="brand"><b>APS · 单线最小排程</b><span>R1 原型 / v0.3 需求基线</span></div>{!embedded&&<nav><button className={view==='schedule'?'active':''} onClick={()=>setView('schedule')}>排程工作台</button><button className={view==='data'?'active':''} onClick={()=>setView('data')}>数据与 CSV</button><button className={view==='decisions'?'active':''} onClick={()=>setView('decisions')}>范围与待决</button></nav>}<div className="top-status"><i/>预览环境</div></header>
     <main>
+      <section className="panel"><h2>权限与操作记录</h2><p>当前权限：{session?.role||'未取得业务权限'} · 所有质量状态均为模拟数据，无 QA 在线审批。主管确认、退回与发布流程尚未提供。</p><label>操作原因（必填）<input aria-label="操作原因" value={reason} onChange={e=>setReason(e.target.value)}/></label><button onClick={()=>{requestGeneration.current++;membership.signOut().catch(e=>setMessage(e.message));}}>退出登录</button><button onClick={()=>perform(refresh)}>刷新数据与记录</button><details><summary>操作记录（{operations.length}）</summary>{operations.map(r=><p key={r.id}>{r.at} · {r.actor} · {r.action} · {r.reason}</p>)}</details></section>
       <section className="hero"><div><p className="eyebrow">R2.1 阶段切片 · 单线 · CALENDAR + MACHINE + PRECEDENCE</p><h1>{view==='schedule'?'日历约束排程核对':view==='data'?'日历与排程数据':'实现范围与业务决策'}</h1><p className="sub">基于 v0.3 UAT-02 / 2026-11-02 08:00（Asia/Shanghai）；样例业务值均为虚构，仅用于软件验证。</p></div><div className="hero-source"><span>追溯基线</span><b>FR-008 · UAT-02 · AC-05</b><small>工厂窗口继承 · 设备停机例外 · 连续工作窗口</small></div></section>
       {message&&<div className="toast" role="status">{message}<button onClick={()=>setMessage('')}>×</button></div>}
       {view==='schedule'&&<>
         <div className="metrics"><article><span>单线订单</span><b>{data.orders?.length||0}</b><small>FR-009 / BR-01</small></article><article><span>已排任务</span><b>{tasks.length}</b><small>机器 + 前后序</small></article><article><span>问题定位</span><b className={visibleFindings.length?'warn-text':''}>{visibleFindings.length}</b><small>问题与甘特联动</small></article><article><span>保存方案</span><b>{plans.length}</b><small>快照保留输入版本</small></article></div>
         {activePlan&&<section className="panel"><h2>预计供给使用条件</h2>{supplyStale&&<p role="alert">供给、延期、引用或相关主数据已变化；当前方案是旧快照，须重新计算。保存与导出保留原方案条件。</p>}{activePlan.supplyConditions?.length ? activePlan.supplyConditions.map(c=><div className="hint-box" key={c['引用编号']}><b>{c['订单编号']} / {c['工序编号']} · 条件性计划</b><span>{c['条件说明']}</span><span>延期记录：{c['延期记录'].map(d=>`${d['记录编号']}（${d['原因']}）`).join('；')||'无'}</span></div>) : <p>{activePlan.supplyInput?'本方案没有显式引用预计供给；尚未校验全部物料需求覆盖。':'旧版方案未记录预计供给条件；请重新计算后评估。'}</p>}<p>仅对“计划供给引用”中的供给按可用时间安排；不自动分配物料、不推断 BOM 需求、不确认到货或创建采购单。</p></section>}
-        <section className="panel control-panel"><div><h2>运行 FR-007 / R2.4 单线计算</h2><p>任务完整落入工厂工作窗口；机器自动运行时段与人员参与阶段分开计算。人员须同时满足人数、技能、班次和可用时间。</p><div className="rule-chips"><span>BR-02 工序顺序</span><span>BR-03 机器占用</span><span>FR-008 日历窗口</span><span>FR-007 人数与技能</span><span>配置开关：{enabledRules.join(' · ')||'无'}</span></div></div><div className="actions"><button className="primary" onClick={schedule}>计算排程</button><button onClick={verifyPlan} disabled={!activePlan}>独立复核</button><button onClick={savePlan}>保存快照</button><button onClick={exportPlan} disabled={!activePlan}>导出 CSV</button></div></section>
+        <section className="panel control-panel"><div><h2>运行 FR-007 / R2.4 单线计算</h2><p>任务完整落入工厂工作窗口；机器自动运行时段与人员参与阶段分开计算。人员须同时满足人数、技能、班次和可用时间。</p><div className="rule-chips"><span>BR-02 工序顺序</span><span>BR-03 机器占用</span><span>FR-008 日历窗口</span><span>FR-007 人数与技能</span><span>配置开关：{enabledRules.join(' · ')||'无'}</span></div></div><div className="actions"><button className="primary" onClick={schedule} disabled={!session?.canWrite||busy||!reason.trim()}>计算排程</button><button onClick={verifyPlan} disabled={!activePlan||!session?.canWrite||busy||!reason.trim()}>独立复核</button><button onClick={savePlan} disabled={!session?.canWrite||busy||!reason.trim()}>保存快照</button><button onClick={exportPlan} disabled={!activePlan||!session?.canExport||busy||!reason.trim()}>导出 CSV</button></div></section>
         <section className="panel verification-panel"><div className="panel-head"><div><h2>独立结果复核 · 主管确认前</h2><p>复核器独立检查单线、机器不重叠、优先关系；每次复核读取当前订单输入。</p></div><span className={`tag ${verificationStale?'warn-text':''}`}>{!verification?'尚未复核':verificationStale?'复核已过期':'复核记录'}</span></div>
           {!verification?<div className="empty">运行“独立复核”后显示通过、问题和未检查明细。主管确认前应重新复核一次。</div>:<><div className="verification-meta"><span>复核时间：{new Date(verification.checkedAt).toLocaleString('zh-CN',{hour12:false})}</span><span>订单/规则输入标识：{verification.inputFingerprint||'旧版记录，无标识'}</span>{verificationStale&&<b>当前订单或规则输入与复核记录不一致；此复核不能用于主管确认。</b>}</div><div className="verification-grid">{([
             ['lineScope','单线约束'],['machineOverlap','机器不重叠'],['precedence','优先关系'],
@@ -243,7 +122,7 @@ export default function App() {
           <div className="table-wrap"><table><thead><tr><th>任务</th><th>订单 / 产品</th><th>工序</th><th>机器</th><th>开始</th><th>结束</th><th>工时</th><th>前序</th><th>来源</th><th>预计供给条件</th></tr></thead><tbody>{tasks.map(t=><tr key={t.id} onClick={()=>setSelected([t.id])}><td><b>{t.id}</b></td><td>{t.orderId} / {t.productId}</td><td>{t.label} <small>{t.operation}</small></td><td>{t.machine}</td><td>{fmt(t.start)}</td><td>{fmt(t.end)}</td><td>{t.duration} 分</td><td>{t.predecessor||'—'}</td><td>{t.source}</td><td>{activePlan?.supplyConditions?.filter(c=>c['订单编号']===t.orderId&&c['工序编号']===t.operation).map(c=>c['条件说明']).join('；')||'未引用预计供给'}</td></tr>)}</tbody></table>{!tasks.length&&<div className="empty">暂无任务明细</div>}</div>
         </section>
       </>}
-      {view==='data'&&<section className="panel data-panel"><div className="panel-head"><div><h2>主数据、单位与排程输入</h2><p>FR-002 新增产品/包装规格与物料主数据；同时维护 R1/R2.1 排程表。CSV 导入只替换当前表；预计供给使用带时区 ISO 时间，其余排程时间字段使用分钟，0 = 2026-11-02 08:00 Asia/Shanghai。</p></div><div className="actions"><label className="upload">导入 CSV<input type="file" accept=".csv,text/csv" onChange={e=>importCsv(e.target.files?.[0])}/></label><button onClick={downloadCsv}>导出当前表</button><button onClick={addRow}>新增一行</button><button className="danger" onClick={removeRows} disabled={!selected.length}>删除选中</button></div></div>
+      {view==='data'&&<section className="panel data-panel"><div className="panel-head"><div><h2>主数据、单位与排程输入</h2><p>FR-002 新增产品/包装规格与物料主数据；同时维护 R1/R2.1 排程表。CSV 导入只替换当前表；预计供给使用带时区 ISO 时间，其余排程时间字段使用分钟，0 = 2026-11-02 08:00 Asia/Shanghai。</p></div><div className="actions"><label className="upload">导入 CSV<input type="file" disabled={!session?.canWrite||busy||!reason.trim()} accept=".csv,text/csv" onChange={e=>importCsv(e.target.files?.[0])}/></label><button onClick={downloadCsv} disabled={!session?.canExport||busy||!reason.trim()}>导出当前表</button><button onClick={addRow} disabled={!session?.canWrite||busy||!reason.trim()}>新增一行</button><button className="danger" onClick={removeRows} disabled={!selected.length||!session?.canWrite||busy||!reason.trim()}>删除选中</button></div></div>
         <div className="data-tabs">{defs.map(d=><button className={d.key===tableKey?'chosen':''} key={d.key} onClick={()=>{setTableKey(d.key);setSelected([]);}}>{d.label}<small>{data[d.key]?.length||0}</small></button>)}</div>
         {tableKey==='inventory'&&<div className="panel inventory-panel"><div className="panel-head"><div><h2>库存账面与当前可用量</h2><p>当前可用量 = 账面数量 − 已占用数量；质量状态、预计可用时间与有效期任一不满足时，该批次可用量为 0。</p></div><label>查询时点 <input type="datetime-local" value={inventoryAsOf} onChange={e=>setInventoryAsOf(e.target.value)}/></label></div><div className="table-wrap"><table><thead><tr><th>批次</th><th>物料</th><th>账面数量</th><th>已占用</th><th>当前可用</th><th>有效期</th><th>质量状态</th><th>预计可用时间</th></tr></thead><tbody>{inventoryQuery.map(batch=><tr key={batch['批次编号']}><td>{batch['批次编号']}</td><td>{batch['物料编号']}</td><td>{batch['账面数量']}</td><td>{batch['已占用数量']}</td><td><b>{batch['当前可用数量']}</b></td><td>{batch['有效期']}</td><td>{batch['质量状态']}</td><td>{batch['预计可用时间']||'立即'}</td></tr>)}</tbody></table>{!inventoryQuery.length&&<div className="empty">没有库存批次</div>}</div><div className="hint-box"><b>质量可用状态配置</b><span>在“排程规则”中编辑 INVENTORY 规则的参数JSON，例如 {`{"可用质量状态":["合格","条件放行"]}`}。默认仅“合格”可用；待检、冻结、不合格等状态默认排除。此配置仅用于库存可用量模拟，不提供 QA 审批或放行。</span></div>{inventoryIssues.length>0&&<div className="finding-list">{inventoryIssues.map((issue,i)=><div className="finding" key={`${issue.code}-${i}`}><b>{issue.code}</b><span>{issue.message}</span></div>)}</div>}</div>}
         {['supplies','supplyDelays','supplyUses'].includes(tableKey)&&<section className="panel"><h2>预计供给 · 到达与可用分开</h2><p>全部为模拟预计量，永不计入库存账面或确认真实到货。日期时间须含时区，例如 2026-11-02T08:00:00+08:00。延期表保留原始到料，按记录时间应用全部模拟调整；CSV 只替换当前表，错误导入不会生效。</p><p>在“计划供给引用”指定订单、工序、供给及数量，计算时按调整后的预计可用时间等待；跨引用合计不能超过预计量。此引用不表示已满足该工序全部物料需求。</p><div className="table-wrap"><table><thead><tr><th>供给 / 批次</th><th>物料 / 预计量</th><th>原预计到达</th><th>原预计可用</th><th>调整后到达</th><th>调整后可用</th><th>延期记录</th><th>性质</th></tr></thead><tbody>{resolvedSupplies.map((r,i)=><tr key={i}><td>{r['供给编号']} / {r['批次编号']}</td><td>{r['物料编号']} / {r['预计数量']}</td><td>{r['预计到达时间']}</td><td>{r['预计可用时间']}</td><td>{r['生效到达时间']}</td><td>{r['生效可用时间']}</td><td>{r['延期记录'].map(d=>`${d['记录编号']}：${d['原因']}`).join('；')||'无'}</td><td>{r['供给性质']}</td></tr>)}</tbody></table></div>{supplyIssues.map((issue,i)=><div className="finding" key={i}><b>{issue.code}</b><span>{issue.message}</span></div>)}</section>}
@@ -252,11 +131,11 @@ export default function App() {
           <div className="hint-box"><b>FR-009 · 订单与需求</b><span>需求类型“正式订单”参与本次排程；“预测”独立保存且不混入正式排程。取消订单保留已有排程快照，之后不再生成新任务。数量单位只记录，不执行单位换算；“是否允许拆分”作为输入保存，工序任务仍按当前不可中断规则连续排程。</span></div>
           {orderHistory.length>0&&<div className="table-wrap"><table><thead><tr><th>订单</th><th>变更字段</th><th>原值</th><th>新值</th><th>记录时间</th></tr></thead><tbody>{orderHistory.map((entry,i)=><tr key={`${entry.orderId}-${entry.changedAt}-${i}`}><td>{entry.orderId}</td><td>{entry.field}</td><td>{entry.before}</td><td>{entry.after}</td><td>{entry.changedAt}</td></tr>)}</tbody></table></div>}
         </>}
-        <div className="table-wrap edit-table"><table><thead><tr><th>选</th>{currentDef.fields.map(f=><th key={f}>{f}</th>)}</tr></thead><tbody>{currentRows.map((row,i)=><tr key={i}><td><input type="checkbox" checked={selected.includes(String(i))} onChange={e=>setSelected(e.target.checked?[...selected,String(i)]:selected.filter(x=>x!==String(i)))}/></td>{currentDef.fields.map(f=><td key={f}><input aria-label={`${currentDef.label} ${i+1} ${f}`} value={row[f]||''} onChange={e=>replaceRow(i,f,e.target.value)}/></td>)}</tr>)}</tbody></table>{!currentRows.length&&<div className="empty">当前表无记录。可导入 CSV 或新增行。</div>}</div>
+        <div className="table-wrap edit-table"><table><thead><tr><th>选</th>{currentDef.fields.map(f=><th key={f}>{f}</th>)}</tr></thead><tbody>{currentRows.map((row,i)=><tr key={i}><td><input type="checkbox" checked={selected.includes(String(i))} onChange={e=>setSelected(e.target.checked?[...selected,String(i)]:selected.filter(x=>x!==String(i)))}/></td>{currentDef.fields.map(f=><td key={f}><input disabled={!session?.canWrite||busy||!reason.trim()} aria-label={`${currentDef.label} ${i+1} ${f}`} defaultValue={row[f]||''} key={`${tableKey}-${i}-${f}-${inputVersion}`} onBlur={e=>{if(e.target.value!==(row[f]||''))replaceRow(i,f,e.target.value);}}/></td>)}</tr>)}</tbody></table>{!currentRows.length&&<div className="empty">当前表无记录。可导入 CSV 或新增行。</div>}</div>
         {tableKey==='dependencies'&&<div className="hint-box"><b>FR-007 · 人员任务需求</b><span>资源类型选“人员技能”，资源编号填人员组编号；需求数量为所需人数，所需技能与班次必须匹配。人员参与阶段用于标注装卸/操作，开始/结束偏移（分钟）定义人员相对工序开始/结束的参与窗口；偏移外的机器自动运行不占用人员。</span></div>}
         {tableKey==='personnelGroups'&&<div className="hint-box"><b>FR-007 · 人员组容量与班次</b><span>每行配置组人数、以逗号分隔的技能、班次及分钟可用窗口（以工作台显示的 2026-11-02 08:00 为分钟 0）。同组相交的任务会扣减可用人数；不满足人数、技能、班次或可用窗口时任务不可排。P0 不记录考勤。</span></div>}
         <div className="hint-box"><b>数据质量检查 · FR-004</b><span>校验产品路线工序编号/名称、重复工序、前序引用与循环，逐工序固定分钟工时，以及资源依赖的订单、工序、类型和资源编号。路线按可配置前序关系排序，CSV 行顺序不定义工艺顺序。设备依赖进入当前排程；FR-007 人员技能依赖按人数、技能、班次、参与阶段和可用窗口核验；模具、工具、空间、投料依赖只保存并检查标识。</span></div>
-        {[...validateMasterData({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[],personnelGroups:data.personnelGroups||[]})].length>0&&<div className="finding-list">{[...validateMasterData({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[],personnelGroups:data.personnelGroups||[]})].map((issue,i)=><div className="finding" key={`${issue.code}-${i}`}><b>{issue.code}</b><span>{issue.message}</span></div>)}</div>}
+        {[...validateBomConfig({products:data.products||[],materials:data.materials||[],routes:data.routes||[],bom:data.bom||[]}),...validateMasterData({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[],personnelGroups:data.personnelGroups||[]})].length>0&&<div className="finding-list">{[...validateBomConfig({products:data.products||[],materials:data.materials||[],routes:data.routes||[],bom:data.bom||[]}),...validateMasterData({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[],personnelGroups:data.personnelGroups||[]})].map((issue,i)=><div className="finding" key={`${issue.code}-${i}`}><b>{issue.code}</b><span>{issue.message}</span></div>)}</div>}
       </section>}
       {view==='decisions'&&<div className="decision-layout"><section className="panel"><h2>实现边界与追溯</h2><div className="trace-row"><b>R2.1 映射</b><span>FR-008：工厂日历继承、设备停机例外与连续工作窗口；UAT-02：08:15 边界；AC-05：按日历约束排程。本页面仅覆盖 UAT-02 阶段切片。</span></div><div className="trace-row"><b>R2.1 数据</b><span>02 工厂工作日历（calendarId、factoryId、startMinute、endMinute、isWork；否行从工作段扣除）；03 设备资源.日历编号关联工厂日历；04 设备停机与例外日历（machineId、startMinute、endMinute、reason）。</span></div><div className="trace-row"><b>R2.1 行为</b><span>资源默认继承设备所引用日历对应的工厂工作窗口；无设备日历编号时回退唯一配置日历。任务须完整置于一个连续工作窗口，并排除该设备停机；端点相邻合法。工厂无工作窗口时不排任务并给出原因。</span></div><div className="trace-row"><b>R1 基线</b><span>《APS需求分析与设计说明书 v0.3》：第2.2、5、6、7、8、10、12、14章；UAT-01 和 AC-01/02/04。</span></div><div className="trace-row"><b>时间接口</b><span>分钟基准：0=2026-11-02 08:00 Asia/Shanghai；时间段 [start,end)；任务主键 orderId-operationId；来源保留订单/路线/工时/设备依赖。完整字段与测试约定见 docs/APS-TEST-HANDOFF.md。</span></div></section>
         <section className="panel"><h2>显式待决项</h2>{[
@@ -265,7 +144,7 @@ export default function App() {
           ['D-03','交期状态','显示输入交期，但当前不把迟交作为排程阻断条件。是否提供“只排期内”或确认迟交部分另待 BR-15/BR-17。'],
           ['D-04','固定工时与速度','只按固定分钟执行；“速度支每分钟”涉及数量基准、转换和舍入，需产品确认后支持。'],
           ['D-05','缺少机器依赖','不擅自分配兼容设备；当前作为数据错误中止该任务，默认候选设备策略待决。'],
-          ['D-06','数据保存与版本','输入数据保存在浏览器 localStorage；服务端持久化已保存排程快照。后续需确定共享用户/数据库及旧方案完整输入快照格式。'],
+          ['D-06','数据保存与版本','输入数据、排程快照与操作记录由服务端保存；旧浏览器数据不会自动覆盖服务端数据，需按权限导入。'],
           ['D-07','单位换算与精度','产品净重、每袋支数及物料单位目前只保存配置；kg/支/袋/箱的换算方向与链、计算/展示精度、取整时点和误差范围待 APS-Design 按 BR-18 确认。当前不换算订单/工时/包材/BOM数量。'],
           ['D-08','BOM 生效与收率/损耗','FR-003 保存产品/版本/生效日期/投料工序/物料及配置用量。生效日的区间边界、历史版本追溯方式、订单适用版本选择、用量基准，以及总收率与逐工序收率/损耗的口径均待 APS-Design 确认；当前仅做结构校验，不选版本、不展开或计算需求。'],
         ].map(([id,title,body])=><article className="decision" key={id}><b>{id} · {title}</b><p>{body}</p></article>)}</section>
