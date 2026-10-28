@@ -5,6 +5,7 @@ import { independentlyVerifyPlan, type VerificationReport, type VerificationStat
 import { validateSingleLineScope } from './lib/line-scope.mjs';
 import { validateMasterData } from './lib/master-data.mjs';
 import { validateProcessConfig } from './lib/process-config.mjs';
+import { validateBomConfig } from './lib/bom-config.mjs';
 
 type Row = Record<string, string>;
 type TableDef = { key: string; label: string; file: string; fields: string[] };
@@ -16,6 +17,7 @@ type Plan = { id: string; name: string; createdAt: string; tasks: Task[]; findin
 const defs: TableDef[] = [
   { key: 'products', label: '产品与包装规格', file: '07_产品与包装规格.csv', fields: ['产品编号','产品名称','单支净重kg','每袋支数','总收率','模拟交付等待分钟'] },
   { key: 'materials', label: '物料主数据', file: '08_物料主数据.csv', fields: ['物料编号','物料名称','单位','类别'] },
+  { key: 'bom', label: 'BOM 与包装用量', file: '09_BOM与包装用量.csv', fields: ['版本编号','产品编号','生效日期','投料工序编号','用量类型','物料编号','配置用量','用量单位','用量基准','收率/损耗口径备注'] },
   { key: 'orders', label: '订单与交期', file: '17_生产订单与交期.csv', fields: ['订单编号','产品编号','产线编号','合格需求kg','要求可交付分钟','优先顺序'] },
   { key: 'routes', label: '工艺路线', file: '10_工艺路线配置.csv', fields: ['产品编号','工序编号','工序名称','前序工序','最大等待分钟','程序编号'] },
   { key: 'times', label: '工序工时', file: '11_工序工时配置.csv', fields: ['产品编号','工序编号','计算方式','固定分钟','速度支每分钟'] },
@@ -33,6 +35,7 @@ const seed: Record<string, Row[]> = {
   materials: [
     ...[['LEAN','模拟瘦肉','kg','原料'],['FAT','模拟背膘','kg','原料'],['WATER','生产用水','kg','原料'],['PREMIX','复合辅料占位','kg','辅料'],['BAG','十支外包装袋','个','包材']].map(([id,name,unit,category])=>({'物料编号':id,'物料名称':name,'单位':unit,'类别':category})),
   ],
+  bom: [],
   orders: [
     {'订单编号':'A','产品编号':'HC40','产线编号':'L01','合格需求kg':'240','要求可交付分钟':'480','优先顺序':'1'},
     {'订单编号':'B','产品编号':'HC60','产线编号':'L01','合格需求kg':'240','要求可交付分钟':'480','优先顺序':'2'},
@@ -69,7 +72,7 @@ const seed: Record<string, Row[]> = {
 };
 
 const storageKey = 'aps-r1-data-v1';
-function loadData() { try { const v = localStorage.getItem(storageKey); if(!v)return structuredClone(seed); const saved=JSON.parse(v) as Record<string,Row[]>; const merged={...structuredClone(seed),...saved}; if(!merged.calendars?.length)merged.calendars=structuredClone(seed.calendars); if(!merged.downtime)merged.downtime=[]; const calendarRule=merged.rules?.find(r=>r['规则编号']==='CALENDAR'); if(calendarRule)calendarRule['是否启用']='是'; return merged; } catch { return structuredClone(seed); } }
+function loadData() { try { const v = localStorage.getItem(storageKey); if(!v)return structuredClone(seed); const saved=JSON.parse(v) as Record<string,Row[]>; const merged={...structuredClone(seed),...saved}; if(!merged.calendars?.length)merged.calendars=structuredClone(seed.calendars); if(!merged.downtime)merged.downtime=[]; if(!merged.bom)merged.bom=[]; const calendarRule=merged.rules?.find(r=>r['规则编号']==='CALENDAR'); if(calendarRule)calendarRule['是否启用']='是'; return merged; } catch { return structuredClone(seed); } }
 function uid() { return `R1-${new Date().toISOString().replace(/[-:.TZ]/g,'').slice(0,14)}`; }
 function rulesInputFingerprint(data:Record<string,Row[]>) { const source=JSON.stringify({orders:data.orders||[],rules:data.rules||[]});let hash=2166136261;for(let i=0;i<source.length;i++){hash^=source.charCodeAt(i);hash=Math.imul(hash,16777619);}return (hash>>>0).toString(16).padStart(8,'0'); }
 function parseCsv(text: string): string[][] { const rows: string[][]=[]; let row:string[]=[], cell='', quoted=false; for(let i=0;i<text.length;i++){const c=text[i]; if(quoted){if(c==='"'&&text[i+1]==='"'){cell+='"';i++;}else if(c==='"')quoted=false;else cell+=c;}else if(c==='"')quoted=true;else if(c===','){row.push(cell);cell='';}else if(c==='\n'){row.push(cell.replace(/\r$/,''));rows.push(row);row=[];cell='';}else cell+=c;} if(cell.length||row.length){row.push(cell.replace(/\r$/,''));rows.push(row);} return rows; }
@@ -121,7 +124,7 @@ export default function App() {
   function schedule(){
     const built:Task[]=[]; const findings:Finding[]=[]; const machineBusy=new Map<string,Task[]>();
     const sorted=[...(data.orders||[])].sort((a,b)=>Number(a['优先顺序'])-Number(b['优先顺序']));
-    const masterIssues=[...validateMasterData({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[]})];
+    const masterIssues=[...validateMasterData({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[]}),...validateBomConfig({products:data.products||[],materials:data.materials||[],routes:data.routes||[],bom:data.bom||[]})];
     if(masterIssues.length){
       findings.push(...masterIssues.map(issue=>({...issue,taskIds:[]})));
       const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
@@ -196,7 +199,7 @@ export default function App() {
           {selected.length>0&&<div className="task-focus"><b>选中任务：{selected.join('、')}</b><span>来源：17_订单 → 10_路线 → 11_工时 → 12_资源依赖</span><button onClick={()=>setSelected([])}>清除定位</button></div>}
         </section>
         <aside className="panel issues-panel"><div className="panel-head"><div><h2>问题定位</h2><p>点击问题突出关联任务；输入错误定位到表格更正。</p></div><span className={`count ${visibleFindings.length?'error':''}`}>{visibleFindings.length}</span></div>
-          {visibleFindings.length?visibleFindings.map((f,i)=><button className="finding" key={`${f.code}-${i}`} onClick={()=>{if(f.taskIds.length)locate(f);else{setTableKey(f.code.includes('ROUTE')?'routes':f.code.includes('PROCESS_TIME')?'times':f.code.includes('MACHINE')?'dependencies':f.code.includes('CALENDAR')?'calendars':f.code.includes('DOWNTIME')?'downtime':'orders');setView('data');setMessage(`问题来源已定位：${f.message}`);}}}><b>{f.code}</b><span>{f.message}</span>{f.taskIds.length>0&&<small>定位任务：{f.taskIds.join(' / ')}</small>}</button>):<div className="clear-state"><span>✓</span><b>当前已启用约束检查无冲突</b><small>仅表示机器占用、工序顺序和 R2.1 日历窗口检查无冲突；不代表交期、全订单覆盖或其他规则已通过。</small></div>}
+          {visibleFindings.length?visibleFindings.map((f,i)=><button className="finding" key={`${f.code}-${i}`} onClick={()=>{if(f.taskIds.length)locate(f);else{setTableKey(f.code.includes('BOM')?'bom':f.code.includes('ROUTE')?'routes':f.code.includes('PROCESS_TIME')?'times':f.code.includes('MACHINE')?'dependencies':f.code.includes('CALENDAR')?'calendars':f.code.includes('DOWNTIME')?'downtime':'orders');setView('data');setMessage(`问题来源已定位：${f.message}`);}}}><b>{f.code}</b><span>{f.message}</span>{f.taskIds.length>0&&<small>定位任务：{f.taskIds.join(' / ')}</small>}</button>):<div className="clear-state"><span>✓</span><b>当前已启用约束检查无冲突</b><small>仅表示机器占用、工序顺序和 R2.1 日历窗口检查无冲突；不代表交期、全订单覆盖或物料可行性检查通过。</small></div>}
           <div className="scope-note"><b>本切片未实现</b><p>跨班和可中断策略尚无已确认业务口径；工装（R2.2）、人员容量（R2.3/2.4）、物料、拆合批、空间、执行事实及主管确认不参与计算。</p></div>
         </aside></div>
         <section className="panel plan-list"><div className="panel-head"><div><h2>任务明细 / 已保存方案</h2><p>任务时间、资源和前序引用支持核查；保存方案在此回看。</p></div><select value={activePlan?.id||''} onChange={e=>{const plan=plans.find(p=>p.id===e.target.value)||activePlan;setActivePlan(plan);setVerification(plan?.verification||null);}}><option value="">当前计算</option>{plans.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></div>
@@ -205,10 +208,10 @@ export default function App() {
       </>}
       {view==='data'&&<section className="panel data-panel"><div className="panel-head"><div><h2>主数据、单位与排程输入</h2><p>FR-002 新增产品/包装规格与物料主数据；同时维护 R1/R2.1 排程表。CSV 导入只替换当前表；时间字段使用分钟，0 = 2026-11-02 08:00 Asia/Shanghai。</p></div><div className="actions"><label className="upload">导入 CSV<input type="file" accept=".csv,text/csv" onChange={e=>importCsv(e.target.files?.[0])}/></label><button onClick={downloadCsv}>导出当前表</button><button onClick={addRow}>新增一行</button><button className="danger" onClick={removeRows} disabled={!selected.length}>删除选中</button></div></div>
         <div className="data-tabs">{defs.map(d=><button className={d.key===tableKey?'chosen':''} key={d.key} onClick={()=>{setTableKey(d.key);setSelected([]);}}>{d.label}<small>{data[d.key]?.length||0}</small></button>)}</div>
-        <div className="schema-note"><b>{currentDef.file}</b><span>必需字段：{currentDef.fields.join('、')}</span><span>可追溯：FR-013/014/015/016 · DT-09/11/13</span></div>
+        <div className="schema-note"><b>{currentDef.file}</b><span>必需字段：{currentDef.fields.join('、')}</span><span>可追溯：{tableKey==='bom'?'FR-003 · BR-18待决':'FR-013/014/015/016 · DT-09/11/13'}</span></div>
         <div className="table-wrap edit-table"><table><thead><tr><th>选</th>{currentDef.fields.map(f=><th key={f}>{f}</th>)}</tr></thead><tbody>{currentRows.map((row,i)=><tr key={i}><td><input type="checkbox" checked={selected.includes(String(i))} onChange={e=>setSelected(e.target.checked?[...selected,String(i)]:selected.filter(x=>x!==String(i)))}/></td>{currentDef.fields.map(f=><td key={f}><input aria-label={`${currentDef.label} ${i+1} ${f}`} value={row[f]||''} onChange={e=>replaceRow(i,f,e.target.value)}/></td>)}</tr>)}</tbody></table>{!currentRows.length&&<div className="empty">当前表无记录。可导入 CSV 或新增行。</div>}</div>
-        <div className="hint-box"><b>数据质量检查 · FR-004</b><span>校验产品路线工序编号/名称、重复工序、前序引用与循环，逐工序固定分钟工时，以及资源依赖的订单、工序、类型和资源编号。路线按可配置前序关系排序，CSV 行顺序不定义工艺顺序。设备依赖仍用于当前排程；模具、工具、人员技能、空间、投料依赖仅保存并检查引用完整性，不推断容量、占用、技能匹配、物料数量/可用时点或其他资源语义。</span></div>
-        {[...validateMasterData({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[]})].length>0&&<div className="finding-list">{[...validateMasterData({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[]})].map((issue,i)=><div className="finding" key={`${issue.code}-${i}`}><b>{issue.code}</b><span>{issue.message}</span></div>)}</div>}
+        <div className="hint-box"><b>{tableKey==='bom'?'BOM 配置校验 · FR-003':'数据质量检查 · FR-002/004'}</b><span>{tableKey==='bom'?'每行记录一个版本内的 BOM/包装物料用量，适用于一个产品、生效日期和投料工序。单位须与物料主数据完全一致；当前只保存配置值，不推导订单用量。生效日、用量基准、收率与损耗口径尚未形成跨版本择优或计算规则，BR-18 换算精度、方向与取整待决。':'校验产品和物料主数据、工艺路线/工时及资源依赖引用。FR-003 BOM 与包装行也会在计算前校验版本、生效日、工序/物料引用、重复行及单位一致性；尚未确定的用量基准、收率、损耗和跨单位换算不参与计算。'}</span></div>
+        {[...validateMasterData({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[]}),...validateBomConfig({products:data.products||[],materials:data.materials||[],routes:data.routes||[],bom:data.bom||[]})].length>0&&<div className="finding-list">{[...validateMasterData({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[]}),...validateBomConfig({products:data.products||[],materials:data.materials||[],routes:data.routes||[],bom:data.bom||[]})].map((issue,i)=><div className="finding" key={`${issue.code}-${i}`}><b>{issue.code}</b><span>{issue.message}</span></div>)}</div>}
       </section>}
       {view==='decisions'&&<div className="decision-layout"><section className="panel"><h2>实现边界与追溯</h2><div className="trace-row"><b>R2.1 映射</b><span>FR-008：工厂日历继承、设备停机例外与连续工作窗口；UAT-02：08:15 边界；AC-05：按日历约束排程。本页面仅覆盖 UAT-02 阶段切片。</span></div><div className="trace-row"><b>R2.1 数据</b><span>02 工厂工作日历（calendarId、factoryId、startMinute、endMinute、isWork；否行从工作段扣除）；03 设备资源.日历编号关联工厂日历；04 设备停机与例外日历（machineId、startMinute、endMinute、reason）。</span></div><div className="trace-row"><b>R2.1 行为</b><span>资源默认继承设备所引用日历对应的工厂工作窗口；无设备日历编号时回退唯一配置日历。任务须完整置于一个连续工作窗口，并排除该设备停机；端点相邻合法。工厂无工作窗口时不排任务并给出原因。</span></div><div className="trace-row"><b>R1 基线</b><span>《APS需求分析与设计说明书 v0.3》：第2.2、5、6、7、8、10、12、14章；UAT-01 和 AC-01/02/04。</span></div><div className="trace-row"><b>时间接口</b><span>分钟基准：0=2026-11-02 08:00 Asia/Shanghai；时间段 [start,end)；任务主键 orderId-operationId；来源保留订单/路线/工时/设备依赖。完整字段与测试约定见 docs/APS-TEST-HANDOFF.md。</span></div></section>
         <section className="panel"><h2>显式待决项</h2>{[
@@ -219,6 +222,7 @@ export default function App() {
           ['D-05','缺少机器依赖','不擅自分配兼容设备；当前作为数据错误中止该任务，默认候选设备策略待决。'],
           ['D-06','数据保存与版本','输入数据保存在浏览器 localStorage；服务端持久化已保存排程快照。后续需确定共享用户/数据库及旧方案完整输入快照格式。'],
           ['D-07','单位换算与精度','产品净重、每袋支数及物料单位目前只保存配置；kg/支/袋/箱的换算方向与链、计算/展示精度、取整时点和误差范围待 APS-Design 按 BR-18 确认。当前不换算订单/工时/包材/BOM数量。'],
+          ['D-08','BOM 生效与收率/损耗','FR-003 保存产品/版本/生效日期/投料工序/物料及配置用量。生效日的区间边界、历史版本追溯方式、订单适用版本选择、用量基准，以及总收率与逐工序收率/损耗的口径均待 APS-Design 确认；当前仅做结构校验，不选版本、不展开或计算需求。'],
         ].map(([id,title,body])=><article className="decision" key={id}><b>{id} · {title}</b><p>{body}</p></article>)}</section>
         <section className="panel"><h2>待决与未实现（不作隐式默认）</h2><ul className="not-in">{['跨班任务：是否允许跨日历窗口衔接，待业务确认；当前要求单个连续窗口容纳完整工序。','可中断工序：是否允许拆分、最小连续段和中断恢复规则待确认；当前不拆分任务。','开始/结束所需人员：角色、技能、人数及占用边界待配置/确认；本切片不计人员容量。','R2.2 工装和 R2.3/2.4 人员容量、工装、物料、空间、批处理及多线均未实现。','工厂日历的有效日期/周循环、节假日优先级和跨日窗口表达尚待确认；当前时间为 v0.3 单日分钟轴。','全局优化、真实工艺/质量参数、主管确认和外部 ERP/MES/WMS 集成不在此切片。'] .map(x=><li key={x}>{x}</li>)}</ul></section></div>}
       <footer>APS-Dev 原型 · R2.1 阶段预览 · 未发布上线 · v0.3 UAT-02 虚构数据</footer>

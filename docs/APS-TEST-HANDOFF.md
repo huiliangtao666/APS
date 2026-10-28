@@ -127,3 +127,15 @@ FR-001 产线/工位/资源归属沿用可编辑的订单与设备资源表：�
 资源类型标签支持设备、模具、工具、人员技能、空间、投料（兼容物料）。只有设备继续进入现有排程计算。其他类型只存档并验证标识，不解释需求数量、偏移、占用边界、人员技能适配、空间容量、投料数量或可用时点；没有计算 BOM 数量。固定以外的速度工时不支持。FR-004 可执行项由 `src/lib/process-config.test.mjs` 覆盖；APS-Test 请实际导入/编辑任意长度路线、打乱路线行序、检验引用/工时/依赖错误显示和排程拦截，并分别记录原型表现与未决业务口径。自动化通过不表示产品 UAT 已通过。
 
 实际执行：`$WAB_DIR/scripts/app-exec.sh --validate --app-id aps-r1 'npm ci && npm test && npm run build'`。隔离验证容器中 18/18 Node 测试通过；TypeScript、Vite 与 server bundle 构建成功。`npm ci` 报告依赖树 4 条 audit advisories（3 moderate、1 high）；CSS minifier 保留既有语法 warning，构建退出成功。验证不发布、不重启应用。`publish-app.sh status` 检查 `aps-r1` 为 `published: false`。APS-Test 产品级导入/编辑/UAT 尚待执行。原始执行记录在本轮 APS-Dev 对话的容器命令输出；源文件为 `src/lib/process-config.mjs`、`src/lib/process-config.test.mjs` 和 `src/lib/process-config.d.mts`。
+
+## 11. FR-003 BOM 与包装用量配置
+
+新增数据表 `09_BOM与包装用量.csv`，逐行记录 BOM 版本、产品、生效日期、投料工序、BOM物料/包装物料类型、物料、配置用量、单位、用量基准和口径备注。表支持与现有主数据相同的新增、编辑、删除、CSV 导入/导出和浏览器本地保存。旧浏览器数据缺少 `bom` 表时初始化为空，不填入推测的 BOM 用量。
+
+排程前和数据页对记录执行完整性校验：必填值、ISO 日历日期、正数用量、产品/物料/产品工序引用、物料单位与主数据精确匹配、同一版本日期一致及产品/版本/工序/物料行唯一。校验发现问题会阻止排程，并允许定位到 BOM 表。用量基准作为自由文本明确留档，不据此换算。
+
+当前不按订单或产出计算物料/包装需求，不自动选生效版本，也不把产品总收率转成投料系数。BR-18 的转换方向、精度、舍入及误差规则待决；BOM 生效边界/版本适用选择，以及总收率、工序收率和损耗口径也待 APS-Design 决策。详见页面“待决项”D-07/D-08。BOM 可复现校验由 `src/lib/bom-config.test.mjs` 覆盖：多行版本与包装物料接受、必填/日期/数值/引用错误、重复行/版本日期冲突、单位不匹配且不换算。
+
+**FR-003 容器验收：**运行 `$WAB_DIR/scripts/app-exec.sh --validate --app-id aps-r1 'npm ci && npm test && npm run build'`。应用保持 unpublished；产品级 BOM 导入/编辑 UAT 由 APS-Test 独立执行并记录。GitHub 仓库为 `huiliangtao666/APS`。公开 Issue API 未列出 FR-003 卡片且环境没有 `gh` CLI。代码已提交到本地分支 `feat/fr-003-bom-packaging-config`；推送被 GitHub 拒绝（HTTP 403：当前凭证账号 `s1e9y0ng` 对 `huiliangtao666/APS` 无写权限），因此尚无远端分支/PR，也不能关联该卡。需仓库管理员授权写权限或由有权限者推送此分支；APS-Dev 不修改 Issue 状态。
+
+本轮实际验证结果：容器隔离命令退出码 0，`npm test` 22/22 通过，`npm run build` TypeScript、Vite 和 server bundle 成功。保留构建期间 CSS minifier 对 `-: .TZ` 的既有 warning；`npm ci` 报告 4 条 audit advisories（3 moderate、1 high），未升级依赖。`publish-app.sh status` 确认 `aps-r1` 仍为 `published: false`。验证未发布、未重启服务。
