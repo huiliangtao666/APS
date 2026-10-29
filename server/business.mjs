@@ -1,3 +1,4 @@
+import {inspectSingleCsv} from './csv-single.mjs';
 import {migratePolicies} from '../src/lib/resource-policies.mjs';
 import {inspectCsvBatch,physicalIssues,batchKeys} from './csv-batch.mjs';
 import {taskPosition,movableTask,positionGuard,positionToken,freezePositions,evaluatePosition} from './trial-positions.mjs';
@@ -112,17 +113,20 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     return result;
   }
   router.post('/imports/preview',permission('edit'),(req,res)=>{
-    const {files,revision}=req.body,s=read();
+    const {files,revision,table}=req.body,s=read();
     if(revision!==s.revision)return res.status(409).json({error:'stale_input'});
     if(!Array.isArray(files)||!files.length||files.length>batchKeys.length||files.some(f=>!f||typeof f.name!=='string'||typeof f.text!=='string'||f.text.length>1000000))return res.status(400).json({error:'invalid_files'});
-    const inspection=inspectCsvBatch(files,defs);
+    const def=table===undefined?null:defs.find(d=>d.key===table&&d.key!=='factoryLines');
+    if(table!==undefined&&(!def||files.length!==1))return res.status(400).json({error:'invalid_single_table'});
+    const inspection=def?inspectSingleCsv(files[0],def):inspectCsvBatch(files,defs);
+    if(table==='simulationEvents')inspection.tables.executionFacts=s.data.executionFacts||[];
     const base={tables:inspection.tables,sources:inspection.sources,revision};
     if(inspection.issues.length)return res.json({...base,valid:false,issues:inspection.issues});
     const checked=checkCsv({...req,body:{...req.body,operation:'import'}},s,inspection,true);
     if(checked.status!==200)return res.status(checked.status).json({...base,valid:false,...checked.body});
     for(const [id,p] of csvPreviews)if(Date.now()-p.createdAt>15*60*1000)csvPreviews.delete(id);
     if(csvPreviews.size>=100)return res.status(429).json({error:'preview_capacity'});
-    const id=randomUUID();csvPreviews.set(id,{owner:subjectKey(req.praetorActor),createdAt:Date.now(),stateHash:contentHash(s),revision,files:structuredClone(files)});
+    const id=randomUUID();csvPreviews.set(id,{owner:subjectKey(req.praetorActor),createdAt:Date.now(),stateHash:contentHash(s),revision,table,files:structuredClone(files)});
     res.json({...base,id,valid:true,issues:[]});
   });
   router.post('/imports/commit',permission('edit'),(req,res)=>{
@@ -130,7 +134,8 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(!p||p.owner!==subjectKey(req.praetorActor)||Date.now()-p.createdAt>15*60*1000)return res.status(409).json({error:'preview_expired_or_unowned'});
     if(p.revision!==s.revision||p.stateHash!==contentHash(s))return res.status(409).json({error:'stale_preview'});
     // Ignore caller-supplied tables/actor/revision; reparse the server-owned original files.
-    const inspection=inspectCsvBatch(p.files,defs);
+    const inspection=p.table?inspectSingleCsv(p.files[0],defs.find(d=>d.key===p.table)):inspectCsvBatch(p.files,defs);
+    if(p.table==='simulationEvents')inspection.tables.executionFacts=s.data.executionFacts||[];
     if(inspection.issues.length)return res.status(400).json({error:'invalid_input',issues:inspection.issues});
     const checked=checkCsv({...req,body:{reason:req.body.reason,revision:p.revision,operation:'import'}},s,inspection,false);
     if(checked.status===200)csvPreviews.delete(req.body.previewId);
