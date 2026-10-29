@@ -53,6 +53,9 @@ def write_csv(name, headers, rows):
 def export(workbook_path=None, refresh=True):
     baseline = json.loads((DOCS / 'baselines/APS-BL-001-v0.3.json').read_text())
     changes = json.loads((DOCS / 'changes/change-register.json').read_text())['changes']
+    ownership_path = DOCS / 'uat-ownership.json'
+    ownership = json.loads(ownership_path.read_text()) if ownership_path.exists() else {}
+    uat_owner = ownership.get('business_owner', '')
     p = project_snapshot() if refresh else json.loads((ROOT / 'project-snapshot.json').read_text())
     stamp = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).isoformat(timespec='seconds')
     (ROOT / 'project-snapshot.json').write_text(json.dumps(p, ensure_ascii=False))
@@ -85,6 +88,9 @@ def export(workbook_path=None, refresh=True):
             acceptance = '基线原范围历史记录保留；本次CR专项验收未完成'
         commits = list(dict.fromkeys(re.findall(r'(?<![0-9a-f])[0-9a-f]{40}(?![0-9a-f])', body)))
         row = {**b, 'current_version': 'v0.3' + ''.join('+' + c['id'] for c in applied), 'applied_changes': [c['id'] for c in applied], 'pending_changes': [c['id'] for c in related if c not in applied], 'current_text': b['text'] + ''.join('\n\n[' + c['id'] + ' 批准增量]\n' + c['approved_delta'] for c in applied), 'project_status': status, 'current_phase': phase, 'blocker': blocker, 'acceptance_result': acceptance, 'accepted_requirement_version': '未统一登记版本签收；原卡通过范围及历史证据保留', 'code_reference': applied[-1]['code_sha'] if applied else (commits[-1] if commits else ''), 'code_reference_note': '原卡引用/Dev交付SHA，非本表新增的验收结论', 'issues': ['https://github.com/' + REPO + '/issues/' + str(i) for i in issue_ids], 'owner': 'APS-Design维护；APS-Dev实施；APS-Test验证', 'snapshot_at': stamp}
+        row['uat_owner'] = uat_owner
+        if uat_owner:
+            row['owner'] += '；UAT业务验收：' + uat_owner
         requirements.append(row)
     assert len(requirements) == 61 and len({r['id'] for r in requirements}) == 61
     register = {'schema_version': 1, 'snapshot_at': stamp, 'authority': 'Baseline/CR条文以受控JSON为准，实施状态以GitHub Project原卡为准；本表为派生快照', 'baseline_id': baseline['baseline_id'], 'requirements': requirements}
@@ -93,6 +99,14 @@ def export(workbook_path=None, refresh=True):
     br = [[r['id'], r['type'], r['title'], r['baseline_id'], r['baseline_version'], r['scope'], r['stage'], r['text'], '、'.join(r['acceptance_ids']) or '原规则未逐条指定', r['source'], r['source_paragraph'], r['canonical']['url']] for r in requirements]
     rh = ['需求编号', '名称', '基线版本', '当前要求版本', '生效CR', '当前有效要求', '原卡状态', '当前环节', '阻塞/待验收事项', '验收结论', '已验收版本记录', '代码引用SHA', '关联Issue', '责任分工', '唯一原卡', '快照时间']
     rr = [[r['id'], r['title'], r['baseline_version'], r['current_version'], '、'.join(r['applied_changes']), r['current_text'], r['project_status'], r['current_phase'], r['blocker'], r['acceptance_result'], r['accepted_requirement_version'], r['code_reference'], '\n'.join(r['issues']), r['owner'], r['canonical']['url'], stamp] for r in requirements]
+    rh.insert(14, 'UAT负责人')
+    for values in rr:
+        values.insert(14, uat_owner)
+    uh = ['UAT编号', '名称', '阶段及关联', 'UAT负责人', '测试执行', '协调维护', '原场景条文', '来源段落']
+    ur = [[u['id'], u['title'], u['context'], uat_owner, ownership.get('testing_workspace', 'APS-Test'), ownership.get('coordination_workspace', 'APS-Design'), u['content'], u['source_paragraph']] for u in baseline['uat']]
+    write_csv('uat-register.csv', uh, ur)
+    (DOCS / 'uat-register.json').write_text(json.dumps({'snapshot_at': stamp, 'ownership': ownership, 'scenarios': [{**u, 'business_owner': uat_owner, 'testing_workspace': ownership.get('testing_workspace', 'APS-Test'), 'coordination_workspace': ownership.get('coordination_workspace', 'APS-Design')} for u in baseline['uat']]}, ensure_ascii=False, indent=2) + '\n')
+    (DOCS / 'uat-register.md').write_text('# UAT场景及负责人清单\n\n全部UAT业务验收负责人：**' + uat_owner + '**。APS-Test负责测试执行和证据；APS-Design组织验收与维护记录。指定负责人不等于场景已经执行或通过。\n\n授权原话：“' + ownership.get('source_quote', '') + '”。责任分工源：[uat-ownership.json](uat-ownership.json)；原始场景仍以v0.3基线为准。\n\n' + markdown_table(uh, ur) + '\n')
     ch = ['CR编号', '标题', '类别', '原基线', '目标要求版本', '提出人', '提出日期', '授权原话', '批准状态', '批准人', '批准日期', '受影响FR', '关联BR/DEC', '变更前', '批准增量', '影响', '计划/工作量', '专项验收条件', '实施状态', 'Dev交付', 'Test任务', '代码SHA', '验收结论', '默认值及设计细化', '限制', '主Issue']
     cr = [[c['id'], c['title'], c['classification'], c['from_version'], c['target_version'], c['requested_by'], c['requested_on'], c['request_quote'], c['approval_status'], c['approved_by'], c['approved_on'], '、'.join(c['primary_requirements']), '、'.join(c['related_rules'] + c['decisions']), c['before'], c['approved_delta'], c['impact'], c['plan_impact'] + '；' + c['effort'], c['acceptance_delta'], c['implementation_status'], c['dev_delivery'], c['product_test_delivery'], c['code_sha'], c['acceptance_result'], c['design_detail_status'], c['limitations'], c['issue_url']] for c in changes]
     for name, headers, rows in [('baseline-register.csv', bh, br), ('requirements-register.csv', rh, rr), ('change-register.csv', ch, cr)]:
@@ -100,6 +114,8 @@ def export(workbook_path=None, refresh=True):
     baseline_rows = [[r['id'], r['type'], r['title'], r['stage'], r['text'], '、'.join(r['acceptance_ids']), '[原卡](' + r['canonical']['url'] + ')'] for r in requirements]
     (DOCS / 'baseline-register.md').write_text('# APS-BL-001 v0.3 基线清单\n\n43项功能需求、18条业务规则；原文来源和SHA见[受控快照](baselines/APS-BL-001-v0.3.json)。不叠加CR、不以实现状态改写条文。\n\n' + markdown_table(['编号', '类型', '名称', '阶段', '基线要求', '原AC', '唯一原卡'], baseline_rows) + '\n')
     (DOCS / 'requirements-register.md').write_text('# 当前需求跟踪表\n\n快照：' + stamp + '。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。\n\n' + markdown_table(['编号', '名称', '要求版本', '生效CR', '原卡状态', '当前环节', '验收结论', '原卡'], [[r['id'], r['title'], r['current_version'], '、'.join(r['applied_changes']), r['project_status'], r['current_phase'], r['acceptance_result'], '[原卡](' + r['canonical']['url'] + ')'] for r in requirements]) + '\n')
+    with (DOCS / 'requirements-register.md').open('a') as stream:
+        stream.write('\n全部UAT业务验收负责人：**' + uat_owner + '**；逐场景责任分工见[UAT清单](uat-register.md)。\n')
     text = '# 已纳入的需求变更\n\n当前登记1项已批准能力方向的CR；缺陷修复、交付故障、验收缺口和调度政策不计作产品需求变更。\n\n'
     text += markdown_table(['CR', '名称', '批准状态', '影响FR/BR', '实施状态', '验收结论'], [[c['id'], c['title'], c['approval_status'], '、'.join(c['primary_requirements'] + c['related_rules']), c['implementation_status'], c['acceptance_result']] for c in changes])
     for c in changes:
@@ -109,11 +125,10 @@ def export(workbook_path=None, refresh=True):
         info = [['生成时间', stamp], ['权威来源', 'GitHub受控基线/CR条文及Project唯一原卡；本工作簿仅为导出快照'], ['基线范围', 'FR43+BR18；另附AC32、UAT18、DEC9'], ['批准变更', '1项CR，关联4项FR、2条BR、2项DEC；不是新增6个需求或多个CR'], ['版本规则', 'v0.3原文不覆盖；批准生效CR叠加当前目标要求；不自动创建正式v0.4冻结版'], ['发布与冻结', baseline['control_status']], ['验收规则', '批准≠已实现≠已验收；旧范围通过记录保留；默认值及设计建议不视为用户已批准'], ['维护职责', '用户批准范围；Design维护；Dev交付代码；Test独立验证'], ['暂停规则', '其他未开始backlog仍暂停；本CR为用户明确授权范围']]
         ah = ['AC编号', '名称', '阶段及关联', '原始验收条文', '来源段落']
         ar = [[a['id'], a['title'], a['context'], a['content'], a['source_paragraph']] for a in baseline['acceptance']]
-        uh = ['UAT编号', '名称', '阶段及关联', '原场景条文', '来源段落']
-        ur = [[u['id'], u['title'], u['context'], u['content'], u['source_paragraph']] for u in baseline['uat']]
         dh = ['DEC编号', '名称', '原基线建议', '责任与时点', '当前决定/未决边界', '关联CR', '原卡']
         dr = [[d['id'], d['title'], d['recommendation'], d['owner_due'], '已授权参数化能力；具体默认值未批准' if d['id'] in ['DEC-02', 'DEC-03'] else '原卡/基线仍待业务决定，本次未代决', changes[0]['id'] if d['id'] in ['DEC-02', 'DEC-03'] else '', d['canonical']['url']] for d in baseline['decisions']]
-        write_workbook(workbook_path, [('使用说明', ['项目', '说明'], info), ('基线清单61项', bh, br), ('当前需求跟踪61项', rh, rr), ('需求变更清单', ch, cr), ('基线验收条件32项', ah, ar), ('基线UAT场景18项', uh, ur), ('业务待决事项9项', dh, dr)])
+        info.append(['UAT业务验收负责人', uat_owner + '；测试执行APS-Test；协调维护APS-Design'])
+        write_workbook(workbook_path, [('使用说明', ['项目', '说明'], info), ('基线清单61项', bh, br), ('当前需求跟踪61项', rh, rr), ('需求变更清单', ch, cr), ('基线验收条件32项', ah, ar), ('UAT场景与负责人18项', uh, ur), ('业务待决事项9项', dh, dr)])
     print('Exported baseline61/current61/CR' + str(len(changes)) + '/AC32/UAT18/DEC9 at ' + stamp)
     return register, p
 
@@ -124,7 +139,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if args.pull_controlled:
         import base64
-        for name in ['baselines/APS-BL-001-v0.3.json', 'changes/change-register.json']:
+        for name in ['baselines/APS-BL-001-v0.3.json', 'changes/change-register.json', 'uat-ownership.json']:
             source = api('/repos/' + REPO + '/contents/docs/requirements/' + name + '?ref=main')
             (DOCS / name).parent.mkdir(parents=True, exist_ok=True)
             (DOCS / name).write_bytes(base64.b64decode(source['content']))

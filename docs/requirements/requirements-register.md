@@ -1,6 +1,6 @@
 # 当前需求跟踪表
 
-快照：2026-10-29T10:40:19+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
+快照：2026-10-29T10:58:35+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
 
 | 编号 | 名称 | 要求版本 | 生效CR | 原卡状态 | 当前环节 | 验收结论 | 原卡 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -65,3 +65,5 @@
 | BR-16 | 执行保护与异常 | v0.3 |  | Backlog | 按关联功能/阶段实施；规则独立验收结论待登记 | 不得从规则卡Backlog推断功能未实现；需逐规则证据 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhgY) |
 | BR-17 | 计划确认条件 | v0.3 |  | Backlog | 按关联功能/阶段实施；规则独立验收结论待登记 | 不得从规则卡Backlog推断功能未实现；需逐规则证据 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhhA) |
 | BR-18 | 时间、单位与取整 | v0.3 |  | Backlog | 按关联功能/阶段实施；规则独立验收结论待登记 | 不得从规则卡Backlog推断功能未实现；需逐规则证据 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhh4) |
+
+全部UAT业务验收负责人：**huiliangtao666**；逐场景责任分工见[UAT清单](uat-register.md)。

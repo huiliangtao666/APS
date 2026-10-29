@@ -11,6 +11,9 @@
 | 已纳入需求变更 | [变更台账](change-register.md)；[CSV](change-register.csv)；[受控CR记录](changes/change-register.json) |
 | 原始验收与待决事项 | [基线结构化快照](baselines/APS-BL-001-v0.3.json)内保留AC32、UAT18、DEC9 |
 | 实时实施状态与证据 | [GitHub Project #2](https://github.com/users/huiliangtao666/projects/2)，复用原FR/BR卡，不新建开发或测试支线卡 |
+| UAT责任分工 | [18项UAT场景及负责人](uat-register.md)；全部业务验收负责人为 **huiliangtao666**；[责任分工授权](uat-ownership.json) |
+
+2026-10-29用户明确指定“UAT负责人都是huiliangtao666”。当前UAT-01至UAT-18及后续新增场景均按此维护，直至用户另行指定。APS-Test承担测试执行与证据准备，APS-Design承担组织协调和GitHub维护。该登记属于责任分工，不新增产品CR，不修改冻结基线条文，也不意味着UAT已经通过。
 
 ## 权威来源与版本
 

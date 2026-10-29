@@ -7,7 +7,7 @@ from export_register import DOCS, gql, project_snapshot
 def synchronize():
     register = json.loads((DOCS / 'current-register.json').read_text())
     p = project_snapshot()
-    field_names = ['需求编号', '基线版本', '当前要求版本', '生效CR', '当前环节', '阻塞原因', '验收结论', '交付代码SHA', '跟踪记录']
+    field_names = ['需求编号', '基线版本', '当前要求版本', '生效CR', '当前环节', '阻塞原因', '验收结论', '交付代码SHA', '跟踪记录', 'UAT负责人']
     fields = {f['name']: f for f in p['fields']['nodes'] if f.get('name')}
     for name in field_names:
         if name not in fields:
@@ -22,6 +22,7 @@ def synchronize():
     updates = []
     for r in register['requirements']:
         values = {'需求编号': r['id'], '基线版本': r['baseline_version'], '当前要求版本': r['current_version'], '生效CR': '、'.join(r['applied_changes']), '当前环节': r['current_phase'], '阻塞原因': r['blocker'], '验收结论': r['acceptance_result'], '交付代码SHA': r['code_reference'], '跟踪记录': 'https://github.com/huiliangtao666/APS/blob/main/docs/requirements/requirements-register.md'}
+        values['UAT负责人'] = r.get('uat_owner', '')
         item = r['canonical']['item_id']
         expected[item] = values
         for name, value in values.items():
