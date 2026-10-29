@@ -1,0 +1,16 @@
+{
+  "productBase": "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc",
+  "files": {
+    "src/data-defs.ts": "83a96b5f4e2e8c12dcf9e657108615dde76b9fe69c40d9f7fc314a2a6fd9a14c",
+    "server/planner.ts": "c47e77ddeb2361d826fdf9a2bda69f38198d93c31bd72ac8b5fc244a18196c12",
+    "server/business.mjs": "762c3bd733fcd15df3fb34af65c9371bdd3b2d148ef022e8075d2fed4829b0a6",
+    "server/run-input.mjs": "24d62ee193d2a40a4381547147df305b563bc1c745dc27073c066af55bafbaf5",
+    "src/lib/staffing.mjs": "9706fe8087fea247c320f9653ef000c2e91ff97e08b847a5b27963330ba931ee",
+    "src/lib/staffing.d.mts": "1a8521f1e4f9db2ded6f80282081f777b4f37c39bc9ba371ae9f9c545dcd3ca6",
+    "src/lib/verify-resource-policies.mjs": "3eb789dd760a6b4def95d5437d7d88b81d084f4c3a96dcbd2a4c503e95a59f2d",
+    "src/lib/resource-conflicts.mjs": "0652303d29dea6abafc2b653d77787dcb8417d7b819638b13431b5f6a729cf87",
+    "src/lib/resource-load.mjs": "fd16563fb5911e656c7c29ce025ae70d21b28b098f76287977aa6af6c4359aeb",
+    "src/lib/resource-policies.mjs": "e418d0917a676b349e3e2dae1b01a37ddbcc3b2e3f14ee8eaf43d74468d6911b",
+    "src/PolicyPreview.tsx": "1b74bf19ac314e82a9572bbb4524db5c78871346c7f918521366087628050e08"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "dispatchKey": "issue3:cr-dec02-03:p10-cross-group-physical-pool:dev:v0.3:r1",
+  "handoffKey": "dlv_e3bdd41f-abdb-4a17-9a5b-b7a26fcce2f9:r1",
+  "receivedMatches": [
+    {
+      "id": "dlv_e3bdd41f-abdb-4a17-9a5b-b7a26fcce2f9",
+      "title": "[Issue3 / FR007/022] P10跨组同物理池配置容量与联合扣算限定补齐",
+      "status": "executing",
+      "createdAt": "2026-10-29T16:07:42.149Z",
+      "updatedAt": "2026-10-29T16:08:02.217Z"
+    }
+  ],
+  "sentMatchingEvents": 0,
+  "note": "Checked received and sent returned pages; no second queued/executing P10 entry on returned Inbox page; no matching sent event. No global queue claims."
+}

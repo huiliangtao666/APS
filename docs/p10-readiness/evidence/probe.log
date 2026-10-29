@@ -1,0 +1,43 @@
+{"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test#query"}
+{"at":"2026-10-29T16:11:00.067Z","action":"deny","requestId":"fr027-synthetic","actor":"user","reason":"membership_required"}
+{
+  "complete": true,
+  "cases": [
+    {
+      "id": "MODEL01",
+      "status": "PASS_PROBE"
+    },
+    {
+      "id": "MODEL02",
+      "status": "PASS_PROBE"
+    },
+    {
+      "id": "API_poolId",
+      "status": "PASS_PROBE"
+    },
+    {
+      "id": "API_pool table",
+      "status": "PASS_PROBE"
+    },
+    {
+      "id": "API_sharing/handover",
+      "status": "PASS_PROBE"
+    },
+    {
+      "id": "GUARD_query_403",
+      "status": "PASS_PROBE"
+    },
+    {
+      "id": "GUARD_outsider_403",
+      "status": "PASS_PROBE"
+    },
+    {
+      "id": "GUARD_planner_409",
+      "status": "PASS_PROBE"
+    },
+    {
+      "id": "WORKER_CHECKER",
+      "status": "PASS_PROBE"
+    }
+  ]
+}
