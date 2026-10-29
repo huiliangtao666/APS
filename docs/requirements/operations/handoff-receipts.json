@@ -1205,7 +1205,14 @@
       },
       "internal_hashes_verified": 21,
       "zip_crc_verified": 24,
-      "limitations": "Original S06/S07 and D01-D03 old-SHA PASS retained; FR007/022 and full CR/UAT not complete; CR-DEC04-05-06 design/mock only"
+      "limitations": "Original S06/S07 and D01-D03 old-SHA PASS retained; FR007/022 and full CR/UAT not complete; CR-DEC04-05-06 design/mock only",
+      "authorized_retry": {
+        "delivery": "dlv_6c6c80d7-edf2-456d-b39e-788e043bbe6e",
+        "source": "APS-Dev",
+        "target": "APS-PM",
+        "status": "RECEIVED_DUPLICATE_ALREADY_PROCESSED",
+        "note": "Retry queued after dispatcher grant; same event_key and SHA. Original Files API processing and independent Test disposition remain authoritative; no repeat dispatch."
+      }
     },
     {
       "event_key": "dlv_ef0c6e69-7c93-455b-bc96-98e52dee22e2:r1",

@@ -115,8 +115,10 @@ def export(workbook_path=None, refresh=True):
             record = json.loads(accepted.group(1))
             row['accepted_requirement_version'] = record['requirement_version'] + '；' + record['code_sha'] + '；' + record['test_delivery']
             row['acceptance_record'] = record
-            if status == 'Done' and not applied:
+            if status == 'Done':
                 row['code_reference'] = record['code_sha']
+                row['code_reference_note'] = '原卡已验收版本；CR整体状态另见受控变更记录'
+            if status == 'Done' and not applied:
                 row['current_phase'] = '本卡适用需求已独立验收；历史复核与证据见原卡'
                 row['blocker'] = ''
                 row['acceptance_result'] = record['conclusion']
