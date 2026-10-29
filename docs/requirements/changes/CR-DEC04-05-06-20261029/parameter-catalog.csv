@@ -1,0 +1,41 @@
+﻿DEC,参数,类型,作用域,校验/语义,仿真示例,确认状态,前台维护方式
+DEC-04,basis_kind,enum,产品/BOM,INPUT或GOOD_OUTPUT，缺值不可启用,INPUT,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-04,basis_quantity/unit,decimal+unit,BOM版本,数量>0且维度可换算,1000 kg,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-04,yield_mode,enum,产品/工序,TOTAL/STAGED/INCLUDED互斥,TOTAL,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-04,total_yield,decimal,产品版本,"(0,1]，不能与阶段路径重复应用",0.96,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-04,stage_yields,references+decimal,工序节点,"有序且每项(0,1]",0.98;0.97,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-04,loss_inclusion,enum,物料/工序,INCLUDED/EXPLICIT/NONE互斥,NONE,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-04,loss_fraction/mode,decimal+enum,物料/包材,"[0,1)，毛量损失与净量加成须区分",0;GROSS_FRACTION,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-04,feed_operation,reference,BOM行,实际路线节点，不能缺引用,MIX,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-04,quantity_quantum,decimal+unit,物料/包装,>0，不得以显示舍入吞掉缺口,0.01 kg,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-04,rounding_scope/stage,enum,订单/批/工序,位置唯一，防重复量化,ORDER,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-04,pieces_per_bag/bags_per_box,positive integer,产品包装,换算引用明确；0和非整数拒绝,10;20,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-04,partial_pack_policy,enum,产品/客户范围,ALLOW_PARTIAL或REJECT，不自动超产,REJECT,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-04,display_scale/rounding,integer+enum,显示配置,仅显示，不反推分配,2;HALF_EVEN,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-05,state_mapping,map,状态/物料范围,CONFIRMED/CONDITIONAL/BLOCKED，同范围冲突拒绝,可用=CONFIRMED,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-05,allow_expected_supply,boolean,物料/运行范围,开启仍需状态、时间合法；不变成真实库存,true,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-05,arrival/quality_ready,time,批次/供给,取明确可用时点最大值，空值非0,60/90 min,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-05,expiry_boundary,enum,物料策略,边界显式冻结，不能靠字符串推断,"[ready,expiry)",MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-05,allocation_order,enum+keys,物料策略,先合法过滤再FEFO/FIFO；稳定并列键,FEFO;batch_id,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-05,reservation_scope,reference,库存/已采用计划,区分实际既有占用与独立模拟方案,existing_actual,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-05,unknown_state_policy,enum,映射策略,未知不计可用并给原因，不默认可用,BLOCK_WITH_REASON,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-05,supply_source_identity,reference,库存/预计供给,转库存去重，不能重复覆盖同一供给,MOCK-EXPECTED-LEAN,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-05,shelf_life_check,time+reference,产品/交付条件,原料投料有效期与成品余保分别配置,投料时点;客户余保引用,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-06,route/order,references,产品路线,P0顺序，无循环/失效工序引用,MIX>FILL>HEAT>COOL>PACK,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-06,duration_mode,enum,产品/工序/设备,FIXED或RATE，不能混加,FIXED,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-06,fixed_minutes,decimal time,程序/工序,>0，固定程序不随未满载缩短,120 min,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-06,speed/unit,decimal+unit,产品/设备,>0且数量/时间单位兼容,120 支/min,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-06,rate_basis/efficiency,enum+decimal,速度版本,NOMINAL才乘效率；EFFECTIVE不重复折减,NOMINAL;0.8,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-06,load_basis,enum+node,设备/工序,投入/在制/产出节点显式,BOM_INPUT,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-06,min/max_load,decimal+unit,设备/程序,0<=min<=max且max>0,0/500 kg,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-06,compatibility_keys,references,资源批,配方/路线/程序身份，不靠名称相似,same_program,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-06,tail_batch_policy,enum,产品/设备,不足下限报告或明确允许调整，不自动超产,REPORT,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-06,min/max_wait,decimal time,相邻工序,边界清楚且min<=max,0/10 min,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-06,cooling/space_window,time+reference,工序/空间,真实锚点、占用量与释放点；全区间容量,60 min;COLD,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-06,space_capacity/unit,decimal+unit,物理空间,>0；UAT12和UAT14容量不混用,480kg/400kg,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+DEC-06,directional_changeover,map+time,设备/前后程序,有向关系，必需项缺失未知,A>B:10;B>A:25,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+COMMON,scope/precedence,references+priority,策略,同优先级生效冲突拒绝；前台显示来源,产线/产品/工序范围,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+COMMON,effective_interval,time interval,版本,边界明确，过去运行不按现配置重解释,版本化起止,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+COMMON,version/hash,identifier+hash,策略/运行,冻结来源，Worker和独立复核从原事实取范围,mock-v1,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+COMMON,draft/enable/support,enum,策略,未支持/缺关键字段不得启用或声称通过,DRAFT,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示
+COMMON,unit_conversion,reference+decimal,产品/单位,正值、维度一致，不全局套产品重量,HC40:0.04kg/支,MOCK_ONLY / 设计候选，非现场批准默认值,中文表单、引用选择、单位及来源提示

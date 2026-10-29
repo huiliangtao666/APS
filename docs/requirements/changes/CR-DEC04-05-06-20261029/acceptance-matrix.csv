@@ -1,0 +1,45 @@
+﻿专项编号,条件,原AC关联,场景来源,输入,预期,数据核验范围,产品验收状态,UAT负责人
+C04-01,基线240kg、0.96收率和四项原料,AC-08/09/15,UAT-09,{},"{""input_kg"": ""250"", ""LEAN"": ""162.5"", ""FAT"": ""37.5"", ""WATER"": ""37.5"", ""PREMIX"": ""12.5"", ""pieces"": ""6000"", ""bags"": ""600""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C04-02,逐工序收率不再叠乘总收率,AC-08/09/15,UAT-09,"{""good"": ""95.06"", ""yields"": [""0.98"", ""0.97""]}","{""input"": ""100""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C04-03,按生产批量化,AC-08/09/15,UAT-09,"{""amounts"": [""0.104"", ""0.104""], ""quantum"": ""0.01"", ""scope"": ""BATCH""}","{""quantity"": ""0.22""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C04-04,汇总订单后量化,AC-08/09/15,UAT-09,"{""amounts"": [""0.104"", ""0.104""], ""quantum"": ""0.01"", ""scope"": ""ORDER""}","{""quantity"": ""0.21""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C04-05,允许尾袋不代表自动增加成品,AC-08/09/15,UAT-09,"{""pieces"": ""101"", ""per_pack"": ""10"", ""partial_allowed"": true, ""loss"": ""0""}","{""pieces"": ""101"", ""gross_packs"": ""11""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C04-06,不允许尾袋时报告问题,AC-08/09/15,UAT-09,"{""pieces"": ""101"", ""per_pack"": ""10"", ""partial_allowed"": false, ""loss"": ""0""}","{""error"": ""PARTIAL_PACK_NOT_ALLOWED""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C04-07,损失占毛量比例与净量加成不可混淆,AC-08/09/15,UAT-09,"{""pieces"": ""100"", ""per_pack"": ""10"", ""partial_allowed"": true, ""loss"": ""0.2""}","{""pieces"": ""100"", ""gross_packs"": ""13""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C04-08,显示半偶舍入不回算业务量,AC-08/09/15,UAT-09,"{""amount"": ""0.105"", ""scale"": 2, ""mode"": ""HALF_EVEN""}","{""display"": ""0.10"", ""raw"": ""0.105""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C04-09,零收率不可启用,AC-08/09/15,UAT-09,"{""yield"": ""0""}","{""error"": ""INVALID_YIELD""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C04-10,同时应用总收率和阶段收率应拒绝,AC-08/09/15,UAT-09,"{""apply_total"": true, ""apply_stages"": true}","{""error"": ""DUPLICATE_YIELD_PATH""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C04-11,无换算关系的维度不能相加,AC-08/09/15,UAT-09,"{""basis_unit"": ""kg"", ""quota_unit"": ""支"", ""conversion"": null}","{""error"": ""MISSING_UNIT_CONVERSION""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C04-12,显示四舍五入也不回算原值,AC-08/09/15,UAT-09,"{""amount"": ""0.105"", ""scale"": 2, ""mode"": ""HALF_UP""}","{""display"": ""0.11"", ""raw"": ""0.105""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C05-01,基线净库存恰好齐套,AC-10/11/17,UAT-09,"{""required"": ""162.5""}","{""available"": ""162.5"", ""shortage"": ""0""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C05-02,基线缺0.1kg必须保留,AC-10/11/17,UAT-10,"{""required"": ""162.5""}","{""available"": ""162.4"", ""shortage"": ""0.1""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C05-03,冻结999kg不计可用,AC-10/11/17,UAT-09,"{""status"": ""冻结"", ""class"": ""BLOCKED"", ""expected_on"": true, ""arrival"": ""0"", ""ready"": ""0"", ""expiry"": ""1440"", ""at"": ""0""}","{""available"": false, ""conditional"": false}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C05-04,预计到货不等于质量已可用,AC-10/11/17,UAT-10,"{""status"": ""预计可用"", ""class"": ""CONDITIONAL"", ""expected_on"": true, ""arrival"": ""60"", ""ready"": ""90"", ""expiry"": ""180"", ""at"": ""89""}","{""available"": false, ""conditional"": false}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C05-05,到可用边界且开关允许时条件可用,AC-10/11/17,UAT-10,"{""status"": ""预计可用"", ""class"": ""CONDITIONAL"", ""expected_on"": true, ""arrival"": ""60"", ""ready"": ""90"", ""expiry"": ""180"", ""at"": ""90""}","{""available"": true, ""conditional"": true}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C05-06,关闭预计供给即不计入,AC-10/11/17,UAT-10,"{""status"": ""预计可用"", ""class"": ""CONDITIONAL"", ""expected_on"": false, ""arrival"": ""60"", ""ready"": ""90"", ""expiry"": ""180"", ""at"": ""90""}","{""available"": false, ""conditional"": false}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C05-07,未知状态不默认为可用,AC-10/11/17,UAT-09,"{""status"": ""未登记状态X"", ""class"": null, ""expected_on"": true, ""arrival"": ""0"", ""ready"": ""0"", ""expiry"": ""180"", ""at"": ""0""}","{""available"": false, ""conditional"": false}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C05-08,mock到期边界不含结束时刻,AC-10/11/17,UAT-09,"{""status"": ""可用"", ""class"": ""CONFIRMED"", ""expected_on"": false, ""arrival"": ""0"", ""ready"": ""0"", ""expiry"": ""180"", ""at"": ""180""}","{""available"": false, ""conditional"": false}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C05-09,既有占用超过账面量不能产生负可用,AC-10/11/17,UAT-09,"{""quantity"": ""10"", ""reserved"": ""11""}","{""error"": ""NEGATIVE_NET_STOCK""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C05-10,同范围状态映射冲突应拒绝,AC-10/11/17,UAT-09,"{""status"": ""可用"", ""classes"": [""CONFIRMED"", ""BLOCKED""]}","{""error"": ""CONFLICTING_STATUS_MAPPING""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C06-01,固定程序半载仍120分钟,AC-13/14/15,UAT-12,"{""minutes"": ""120"", ""load"": ""250""}","{""minutes"": ""120""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C06-02,固定程序满载同样120分钟,AC-13/14/15,UAT-12,"{""minutes"": ""120"", ""load"": ""500""}","{""minutes"": ""120""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C06-03,HC40包装120支每分钟,AC-13/14/15,UAT-12,"{""quantity"": ""1200"", ""speed"": ""120"", ""basis"": ""EFFECTIVE"", ""efficiency"": ""1""}","{""minutes"": ""10""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C06-04,HC60不同速度不能套HC40,AC-13/14/15,UAT-12,"{""quantity"": ""1200"", ""speed"": ""100"", ""basis"": ""EFFECTIVE"", ""efficiency"": ""1""}","{""minutes"": ""12""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C06-05,名义速度按配置折算一次效率,AC-13/14/15,UAT-12,"{""quantity"": ""1200"", ""speed"": ""120"", ""basis"": ""NOMINAL"", ""efficiency"": ""0.8""}","{""minutes"": ""12.5""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C06-06,已实测速率不再次乘效率,AC-13/14/15,UAT-12,"{""quantity"": ""1200"", ""speed"": ""96"", ""basis"": ""EFFECTIVE"", ""efficiency"": ""0.8""}","{""minutes"": ""12.5""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C06-07,设备投入容量等于500合法,AC-13/14/15,UAT-12,"{""loads"": [""250"", ""250""], ""capacity"": ""500""}","{""fits"": true}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C06-08,设备投入容量超0.1不能通过,AC-13/14/15,UAT-12,"{""loads"": [""250"", ""250.1""], ""capacity"": ""500""}","{""fits"": false}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C06-09,设备可用两程序不代表可混批,AC-13/14/15,UAT-12,"{""programs"": [""TP-HC40"", ""TP-HC60""], ""mixed_allowed"": false}","{""compatible"": false}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C06-10,最大等待恰好10分钟,AC-13/14/15,UAT-12,"{""lag"": ""10"", ""limit"": ""10""}","{""fits"": true}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C06-11,最大等待超0.1分钟,AC-13/14/15,UAT-12,"{""lag"": ""10.1"", ""limit"": ""10""}","{""fits"": false}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C06-12,源UAT14冷却空间400不可重叠两笔240,AC-13/14/15,UAT-14,"{""capacity"": ""400"", ""intervals"": [[""0"", ""60"", ""240""], [""30"", ""90"", ""240""]]}","{""peak"": ""480"", ""fits"": false}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C06-13,冷却空间半开边界可复用,AC-13/14/15,UAT-14,"{""capacity"": ""400"", ""intervals"": [[""0"", ""60"", ""240""], [""60"", ""120"", ""240""]]}","{""peak"": ""240"", ""fits"": true}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C06-14,方向A到B为mock10分钟,AC-13/14/15,UAT-12,"{""from"": ""TP-HC40"", ""to"": ""TP-HC60"", ""matrix"": {""TP-HC40>TP-HC60"": ""10"", ""TP-HC60>TP-HC40"": ""25""}}","{""minutes"": ""10""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C06-15,反向转换为mock25分钟,AC-13/14/15,UAT-12,"{""from"": ""TP-HC60"", ""to"": ""TP-HC40"", ""matrix"": {""TP-HC40>TP-HC60"": ""10"", ""TP-HC60>TP-HC40"": ""25""}}","{""minutes"": ""25""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+C06-16,必需转换缺项不能默认0,AC-13/14/15,UAT-12,"{""from"": ""TP-HC40"", ""to"": ""TP-NEW"", ""matrix"": {}}","{""error"": ""MISSING_TRANSITION""}",可独立核算数据；非产品通过,待后续指定应用SHA独立执行,huiliangtao666
+W-01,BOM前台更改收率/量化范围，保存刷新后新运行变而旧输入不变,AC-02/03/17/24/26/32,DEC-04,真实前台/服务端/Worker/冻结配置和历史数据,以需求增量与设计共同契约为准,设计验收条目，未执行产品测试,待实现/独立验收/UAT,huiliangtao666
+W-02,质量映射/预计供给开关可维护，前台及Worker风险量时间一致,AC-02/03/17/24/26/32,DEC-05,真实前台/服务端/Worker/冻结配置和历史数据,以需求增量与设计共同契约为准,设计验收条目，未执行产品测试,待实现/独立验收/UAT,huiliangtao666
+W-03,工时模式/效率/容量/等待/空间可维护并影响实际排程,AC-02/03/17/24/26/32,DEC-06,真实前台/服务端/Worker/冻结配置和历史数据,以需求增量与设计共同契约为准,设计验收条目，未执行产品测试,待实现/独立验收/UAT,huiliangtao666
+W-04,缺项/冲突/单位/非法数值/越权/版本过期保存原子拒绝,AC-02/03/17/24/26/32,DEC-04/05/06,真实前台/服务端/Worker/冻结配置和历史数据,以需求增量与设计共同契约为准,设计验收条目，未执行产品测试,待实现/独立验收/UAT,huiliangtao666
+W-05,实际运行冻结版本，独立检查器从冻结事实重建范围，导出一致,AC-02/03/17/24/26/32,DEC-04/05/06,真实前台/服务端/Worker/冻结配置和历史数据,以需求增量与设计共同契约为准,设计验收条目，未执行产品测试,待实现/独立验收/UAT,huiliangtao666
+W-06,旧确认方案和执行事实保护，实际业务UAT由huiliangtao666接受或退回,AC-02/03/17/24/26/32,DEC-04/05/06,真实前台/服务端/Worker/冻结配置和历史数据,以需求增量与设计共同契约为准,设计验收条目，未执行产品测试,待实现/独立验收/UAT,huiliangtao666

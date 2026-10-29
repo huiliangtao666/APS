@@ -1,0 +1,57 @@
+{
+  "purpose": "MOCK_ONLY / design contract, not current-app import schema",
+  "bom": {
+    "policy_id": "MOCK-BOM-BASE",
+    "basis_kind": "INPUT",
+    "basis_quantity": "1000",
+    "basis_unit": "kg",
+    "yield_mode": "TOTAL",
+    "total_yield": "0.96",
+    "loss_inclusion": "NONE",
+    "quantity_quantum": "0.01",
+    "rounding_scope": "ORDER",
+    "partial_pack_policy": "REJECT",
+    "pack_loss_mode": "GROSS_FRACTION"
+  },
+  "quality": {
+    "policy_id": "MOCK-QUALITY-BASE",
+    "allow_expected_supply": true,
+    "interval": "[ready,expiry)",
+    "mapping": {
+      "可用": "CONFIRMED",
+      "待检": "BLOCKED",
+      "冻结": "BLOCKED",
+      "不合格": "BLOCKED",
+      "预计可用": "CONDITIONAL"
+    },
+    "unknown_policy": "BLOCK_WITH_REASON",
+    "allocation_order": "FEFO"
+  },
+  "process": {
+    "policy_id": "MOCK-PROCESS-BASE",
+    "route_mode": "SEQUENTIAL",
+    "HEAT": {
+      "duration_mode": "FIXED",
+      "minutes": "120",
+      "max_input_kg": "500"
+    },
+    "PACK_HC40": {
+      "duration_mode": "RATE",
+      "speed": "120",
+      "speed_unit": "支/min",
+      "rate_basis": "EFFECTIVE"
+    },
+    "PACK_HC60": {
+      "duration_mode": "RATE",
+      "speed": "100",
+      "speed_unit": "支/min",
+      "rate_basis": "EFFECTIVE"
+    },
+    "cooling": {
+      "minutes": "60",
+      "capacity_UAT12_kg": "480",
+      "capacity_UAT14_kg": "400",
+      "max_wait": "10"
+    }
+  }
+}

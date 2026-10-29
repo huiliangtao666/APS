@@ -1,0 +1,433 @@
+{
+  "scope": "DATA_PROVENANCE_AND_ARITHMETIC_ONLY",
+  "source_zip_checked": true,
+  "baseline_csv_checked": 76,
+  "derived_csv_checked": 38,
+  "data_cases_passed": 38,
+  "data_cases_total": 38,
+  "product_tests": "NOT_EXECUTED",
+  "business_uat": "NOT_EXECUTED",
+  "uat_owner": "huiliangtao666",
+  "results": [
+    {
+      "id": "C04-01",
+      "actual": {
+        "input_kg": "250",
+        "LEAN": "162.5",
+        "FAT": "37.5",
+        "WATER": "37.5",
+        "PREMIX": "12.5",
+        "pieces": "6000",
+        "bags": "600"
+      },
+      "expected": {
+        "input_kg": "250",
+        "LEAN": "162.5",
+        "FAT": "37.5",
+        "WATER": "37.5",
+        "PREMIX": "12.5",
+        "pieces": "6000",
+        "bags": "600"
+      },
+      "pass": true
+    },
+    {
+      "id": "C04-02",
+      "actual": {
+        "input": "100"
+      },
+      "expected": {
+        "input": "100"
+      },
+      "pass": true
+    },
+    {
+      "id": "C04-03",
+      "actual": {
+        "quantity": "0.22"
+      },
+      "expected": {
+        "quantity": "0.22"
+      },
+      "pass": true
+    },
+    {
+      "id": "C04-04",
+      "actual": {
+        "quantity": "0.21"
+      },
+      "expected": {
+        "quantity": "0.21"
+      },
+      "pass": true
+    },
+    {
+      "id": "C04-05",
+      "actual": {
+        "pieces": "101",
+        "gross_packs": "11"
+      },
+      "expected": {
+        "pieces": "101",
+        "gross_packs": "11"
+      },
+      "pass": true
+    },
+    {
+      "id": "C04-06",
+      "actual": {
+        "error": "PARTIAL_PACK_NOT_ALLOWED"
+      },
+      "expected": {
+        "error": "PARTIAL_PACK_NOT_ALLOWED"
+      },
+      "pass": true
+    },
+    {
+      "id": "C04-07",
+      "actual": {
+        "pieces": "100",
+        "gross_packs": "13"
+      },
+      "expected": {
+        "pieces": "100",
+        "gross_packs": "13"
+      },
+      "pass": true
+    },
+    {
+      "id": "C04-08",
+      "actual": {
+        "display": "0.10",
+        "raw": "0.105"
+      },
+      "expected": {
+        "display": "0.10",
+        "raw": "0.105"
+      },
+      "pass": true
+    },
+    {
+      "id": "C04-09",
+      "actual": {
+        "error": "INVALID_YIELD"
+      },
+      "expected": {
+        "error": "INVALID_YIELD"
+      },
+      "pass": true
+    },
+    {
+      "id": "C04-10",
+      "actual": {
+        "error": "DUPLICATE_YIELD_PATH"
+      },
+      "expected": {
+        "error": "DUPLICATE_YIELD_PATH"
+      },
+      "pass": true
+    },
+    {
+      "id": "C04-11",
+      "actual": {
+        "error": "MISSING_UNIT_CONVERSION"
+      },
+      "expected": {
+        "error": "MISSING_UNIT_CONVERSION"
+      },
+      "pass": true
+    },
+    {
+      "id": "C04-12",
+      "actual": {
+        "display": "0.11",
+        "raw": "0.105"
+      },
+      "expected": {
+        "display": "0.11",
+        "raw": "0.105"
+      },
+      "pass": true
+    },
+    {
+      "id": "C05-01",
+      "actual": {
+        "available": "162.5",
+        "shortage": "0"
+      },
+      "expected": {
+        "available": "162.5",
+        "shortage": "0"
+      },
+      "pass": true
+    },
+    {
+      "id": "C05-02",
+      "actual": {
+        "available": "162.4",
+        "shortage": "0.1"
+      },
+      "expected": {
+        "available": "162.4",
+        "shortage": "0.1"
+      },
+      "pass": true
+    },
+    {
+      "id": "C05-03",
+      "actual": {
+        "available": false,
+        "conditional": false
+      },
+      "expected": {
+        "available": false,
+        "conditional": false
+      },
+      "pass": true
+    },
+    {
+      "id": "C05-04",
+      "actual": {
+        "available": false,
+        "conditional": false
+      },
+      "expected": {
+        "available": false,
+        "conditional": false
+      },
+      "pass": true
+    },
+    {
+      "id": "C05-05",
+      "actual": {
+        "available": true,
+        "conditional": true
+      },
+      "expected": {
+        "available": true,
+        "conditional": true
+      },
+      "pass": true
+    },
+    {
+      "id": "C05-06",
+      "actual": {
+        "available": false,
+        "conditional": false
+      },
+      "expected": {
+        "available": false,
+        "conditional": false
+      },
+      "pass": true
+    },
+    {
+      "id": "C05-07",
+      "actual": {
+        "available": false,
+        "conditional": false
+      },
+      "expected": {
+        "available": false,
+        "conditional": false
+      },
+      "pass": true
+    },
+    {
+      "id": "C05-08",
+      "actual": {
+        "available": false,
+        "conditional": false
+      },
+      "expected": {
+        "available": false,
+        "conditional": false
+      },
+      "pass": true
+    },
+    {
+      "id": "C05-09",
+      "actual": {
+        "error": "NEGATIVE_NET_STOCK"
+      },
+      "expected": {
+        "error": "NEGATIVE_NET_STOCK"
+      },
+      "pass": true
+    },
+    {
+      "id": "C05-10",
+      "actual": {
+        "error": "CONFLICTING_STATUS_MAPPING"
+      },
+      "expected": {
+        "error": "CONFLICTING_STATUS_MAPPING"
+      },
+      "pass": true
+    },
+    {
+      "id": "C06-01",
+      "actual": {
+        "minutes": "120"
+      },
+      "expected": {
+        "minutes": "120"
+      },
+      "pass": true
+    },
+    {
+      "id": "C06-02",
+      "actual": {
+        "minutes": "120"
+      },
+      "expected": {
+        "minutes": "120"
+      },
+      "pass": true
+    },
+    {
+      "id": "C06-03",
+      "actual": {
+        "minutes": "10"
+      },
+      "expected": {
+        "minutes": "10"
+      },
+      "pass": true
+    },
+    {
+      "id": "C06-04",
+      "actual": {
+        "minutes": "12"
+      },
+      "expected": {
+        "minutes": "12"
+      },
+      "pass": true
+    },
+    {
+      "id": "C06-05",
+      "actual": {
+        "minutes": "12.5"
+      },
+      "expected": {
+        "minutes": "12.5"
+      },
+      "pass": true
+    },
+    {
+      "id": "C06-06",
+      "actual": {
+        "minutes": "12.5"
+      },
+      "expected": {
+        "minutes": "12.5"
+      },
+      "pass": true
+    },
+    {
+      "id": "C06-07",
+      "actual": {
+        "fits": true
+      },
+      "expected": {
+        "fits": true
+      },
+      "pass": true
+    },
+    {
+      "id": "C06-08",
+      "actual": {
+        "fits": false
+      },
+      "expected": {
+        "fits": false
+      },
+      "pass": true
+    },
+    {
+      "id": "C06-09",
+      "actual": {
+        "compatible": false
+      },
+      "expected": {
+        "compatible": false
+      },
+      "pass": true
+    },
+    {
+      "id": "C06-10",
+      "actual": {
+        "fits": true
+      },
+      "expected": {
+        "fits": true
+      },
+      "pass": true
+    },
+    {
+      "id": "C06-11",
+      "actual": {
+        "fits": false
+      },
+      "expected": {
+        "fits": false
+      },
+      "pass": true
+    },
+    {
+      "id": "C06-12",
+      "actual": {
+        "peak": "480",
+        "fits": false
+      },
+      "expected": {
+        "peak": "480",
+        "fits": false
+      },
+      "pass": true
+    },
+    {
+      "id": "C06-13",
+      "actual": {
+        "peak": "240",
+        "fits": true
+      },
+      "expected": {
+        "peak": "240",
+        "fits": true
+      },
+      "pass": true
+    },
+    {
+      "id": "C06-14",
+      "actual": {
+        "minutes": "10"
+      },
+      "expected": {
+        "minutes": "10"
+      },
+      "pass": true
+    },
+    {
+      "id": "C06-15",
+      "actual": {
+        "minutes": "25"
+      },
+      "expected": {
+        "minutes": "25"
+      },
+      "pass": true
+    },
+    {
+      "id": "C06-16",
+      "actual": {
+        "error": "MISSING_TRANSITION"
+      },
+      "expected": {
+        "error": "MISSING_TRANSITION"
+      },
+      "pass": true
+    }
+  ]
+}

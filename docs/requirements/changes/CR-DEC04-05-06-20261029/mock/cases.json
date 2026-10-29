@@ -1,0 +1,691 @@
+{
+  "purpose": "MOCK_ONLY",
+  "product_acceptance": "NOT_EXECUTED",
+  "cases": [
+    {
+      "id": "C04-01",
+      "title": "基线240kg、0.96收率和四项原料",
+      "source_scenario": "UAT-09",
+      "kind": "baseline_bom",
+      "inputs": {},
+      "expected": {
+        "input_kg": "250",
+        "LEAN": "162.5",
+        "FAT": "37.5",
+        "WATER": "37.5",
+        "PREMIX": "12.5",
+        "pieces": "6000",
+        "bags": "600"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C04-02",
+      "title": "逐工序收率不再叠乘总收率",
+      "source_scenario": "UAT-09",
+      "kind": "staged_yield",
+      "inputs": {
+        "good": "95.06",
+        "yields": [
+          "0.98",
+          "0.97"
+        ]
+      },
+      "expected": {
+        "input": "100"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C04-03",
+      "title": "按生产批量化",
+      "source_scenario": "UAT-09",
+      "kind": "round_scope",
+      "inputs": {
+        "amounts": [
+          "0.104",
+          "0.104"
+        ],
+        "quantum": "0.01",
+        "scope": "BATCH"
+      },
+      "expected": {
+        "quantity": "0.22"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C04-04",
+      "title": "汇总订单后量化",
+      "source_scenario": "UAT-09",
+      "kind": "round_scope",
+      "inputs": {
+        "amounts": [
+          "0.104",
+          "0.104"
+        ],
+        "quantum": "0.01",
+        "scope": "ORDER"
+      },
+      "expected": {
+        "quantity": "0.21"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C04-05",
+      "title": "允许尾袋不代表自动增加成品",
+      "source_scenario": "UAT-09",
+      "kind": "pack",
+      "inputs": {
+        "pieces": "101",
+        "per_pack": "10",
+        "partial_allowed": true,
+        "loss": "0"
+      },
+      "expected": {
+        "pieces": "101",
+        "gross_packs": "11"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C04-06",
+      "title": "不允许尾袋时报告问题",
+      "source_scenario": "UAT-09",
+      "kind": "pack",
+      "inputs": {
+        "pieces": "101",
+        "per_pack": "10",
+        "partial_allowed": false,
+        "loss": "0"
+      },
+      "expected": {
+        "error": "PARTIAL_PACK_NOT_ALLOWED"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C04-07",
+      "title": "损失占毛量比例与净量加成不可混淆",
+      "source_scenario": "UAT-09",
+      "kind": "pack",
+      "inputs": {
+        "pieces": "100",
+        "per_pack": "10",
+        "partial_allowed": true,
+        "loss": "0.2"
+      },
+      "expected": {
+        "pieces": "100",
+        "gross_packs": "13"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C04-08",
+      "title": "显示半偶舍入不回算业务量",
+      "source_scenario": "UAT-09",
+      "kind": "display",
+      "inputs": {
+        "amount": "0.105",
+        "scale": 2,
+        "mode": "HALF_EVEN"
+      },
+      "expected": {
+        "display": "0.10",
+        "raw": "0.105"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C04-09",
+      "title": "零收率不可启用",
+      "source_scenario": "UAT-09",
+      "kind": "validate_yield",
+      "inputs": {
+        "yield": "0"
+      },
+      "expected": {
+        "error": "INVALID_YIELD"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C04-10",
+      "title": "同时应用总收率和阶段收率应拒绝",
+      "source_scenario": "UAT-09",
+      "kind": "validate_modes",
+      "inputs": {
+        "apply_total": true,
+        "apply_stages": true
+      },
+      "expected": {
+        "error": "DUPLICATE_YIELD_PATH"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C04-11",
+      "title": "无换算关系的维度不能相加",
+      "source_scenario": "UAT-09",
+      "kind": "validate_units",
+      "inputs": {
+        "basis_unit": "kg",
+        "quota_unit": "支",
+        "conversion": null
+      },
+      "expected": {
+        "error": "MISSING_UNIT_CONVERSION"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C04-12",
+      "title": "显示四舍五入也不回算原值",
+      "source_scenario": "UAT-09",
+      "kind": "display",
+      "inputs": {
+        "amount": "0.105",
+        "scale": 2,
+        "mode": "HALF_UP"
+      },
+      "expected": {
+        "display": "0.11",
+        "raw": "0.105"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C05-01",
+      "title": "基线净库存恰好齐套",
+      "source_scenario": "UAT-09",
+      "kind": "baseline_stock",
+      "inputs": {
+        "required": "162.5"
+      },
+      "expected": {
+        "available": "162.5",
+        "shortage": "0"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C05-02",
+      "title": "基线缺0.1kg必须保留",
+      "source_scenario": "UAT-10",
+      "kind": "baseline_stock",
+      "inputs": {
+        "required": "162.5"
+      },
+      "expected": {
+        "available": "162.4",
+        "shortage": "0.1"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C05-03",
+      "title": "冻结999kg不计可用",
+      "source_scenario": "UAT-09",
+      "kind": "availability",
+      "inputs": {
+        "status": "冻结",
+        "class": "BLOCKED",
+        "expected_on": true,
+        "arrival": "0",
+        "ready": "0",
+        "expiry": "1440",
+        "at": "0"
+      },
+      "expected": {
+        "available": false,
+        "conditional": false
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C05-04",
+      "title": "预计到货不等于质量已可用",
+      "source_scenario": "UAT-10",
+      "kind": "availability",
+      "inputs": {
+        "status": "预计可用",
+        "class": "CONDITIONAL",
+        "expected_on": true,
+        "arrival": "60",
+        "ready": "90",
+        "expiry": "180",
+        "at": "89"
+      },
+      "expected": {
+        "available": false,
+        "conditional": false
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C05-05",
+      "title": "到可用边界且开关允许时条件可用",
+      "source_scenario": "UAT-10",
+      "kind": "availability",
+      "inputs": {
+        "status": "预计可用",
+        "class": "CONDITIONAL",
+        "expected_on": true,
+        "arrival": "60",
+        "ready": "90",
+        "expiry": "180",
+        "at": "90"
+      },
+      "expected": {
+        "available": true,
+        "conditional": true
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C05-06",
+      "title": "关闭预计供给即不计入",
+      "source_scenario": "UAT-10",
+      "kind": "availability",
+      "inputs": {
+        "status": "预计可用",
+        "class": "CONDITIONAL",
+        "expected_on": false,
+        "arrival": "60",
+        "ready": "90",
+        "expiry": "180",
+        "at": "90"
+      },
+      "expected": {
+        "available": false,
+        "conditional": false
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C05-07",
+      "title": "未知状态不默认为可用",
+      "source_scenario": "UAT-09",
+      "kind": "availability",
+      "inputs": {
+        "status": "未登记状态X",
+        "class": null,
+        "expected_on": true,
+        "arrival": "0",
+        "ready": "0",
+        "expiry": "180",
+        "at": "0"
+      },
+      "expected": {
+        "available": false,
+        "conditional": false
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C05-08",
+      "title": "mock到期边界不含结束时刻",
+      "source_scenario": "UAT-09",
+      "kind": "availability",
+      "inputs": {
+        "status": "可用",
+        "class": "CONFIRMED",
+        "expected_on": false,
+        "arrival": "0",
+        "ready": "0",
+        "expiry": "180",
+        "at": "180"
+      },
+      "expected": {
+        "available": false,
+        "conditional": false
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C05-09",
+      "title": "既有占用超过账面量不能产生负可用",
+      "source_scenario": "UAT-09",
+      "kind": "net_stock",
+      "inputs": {
+        "quantity": "10",
+        "reserved": "11"
+      },
+      "expected": {
+        "error": "NEGATIVE_NET_STOCK"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C05-10",
+      "title": "同范围状态映射冲突应拒绝",
+      "source_scenario": "UAT-09",
+      "kind": "validate_mapping",
+      "inputs": {
+        "status": "可用",
+        "classes": [
+          "CONFIRMED",
+          "BLOCKED"
+        ]
+      },
+      "expected": {
+        "error": "CONFLICTING_STATUS_MAPPING"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C06-01",
+      "title": "固定程序半载仍120分钟",
+      "source_scenario": "UAT-12",
+      "kind": "fixed",
+      "inputs": {
+        "minutes": "120",
+        "load": "250"
+      },
+      "expected": {
+        "minutes": "120"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C06-02",
+      "title": "固定程序满载同样120分钟",
+      "source_scenario": "UAT-12",
+      "kind": "fixed",
+      "inputs": {
+        "minutes": "120",
+        "load": "500"
+      },
+      "expected": {
+        "minutes": "120"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C06-03",
+      "title": "HC40包装120支每分钟",
+      "source_scenario": "UAT-12",
+      "kind": "rate",
+      "inputs": {
+        "quantity": "1200",
+        "speed": "120",
+        "basis": "EFFECTIVE",
+        "efficiency": "1"
+      },
+      "expected": {
+        "minutes": "10"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C06-04",
+      "title": "HC60不同速度不能套HC40",
+      "source_scenario": "UAT-12",
+      "kind": "rate",
+      "inputs": {
+        "quantity": "1200",
+        "speed": "100",
+        "basis": "EFFECTIVE",
+        "efficiency": "1"
+      },
+      "expected": {
+        "minutes": "12"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C06-05",
+      "title": "名义速度按配置折算一次效率",
+      "source_scenario": "UAT-12",
+      "kind": "rate",
+      "inputs": {
+        "quantity": "1200",
+        "speed": "120",
+        "basis": "NOMINAL",
+        "efficiency": "0.8"
+      },
+      "expected": {
+        "minutes": "12.5"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C06-06",
+      "title": "已实测速率不再次乘效率",
+      "source_scenario": "UAT-12",
+      "kind": "rate",
+      "inputs": {
+        "quantity": "1200",
+        "speed": "96",
+        "basis": "EFFECTIVE",
+        "efficiency": "0.8"
+      },
+      "expected": {
+        "minutes": "12.5"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C06-07",
+      "title": "设备投入容量等于500合法",
+      "source_scenario": "UAT-12",
+      "kind": "capacity",
+      "inputs": {
+        "loads": [
+          "250",
+          "250"
+        ],
+        "capacity": "500"
+      },
+      "expected": {
+        "fits": true
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C06-08",
+      "title": "设备投入容量超0.1不能通过",
+      "source_scenario": "UAT-12",
+      "kind": "capacity",
+      "inputs": {
+        "loads": [
+          "250",
+          "250.1"
+        ],
+        "capacity": "500"
+      },
+      "expected": {
+        "fits": false
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C06-09",
+      "title": "设备可用两程序不代表可混批",
+      "source_scenario": "UAT-12",
+      "kind": "program",
+      "inputs": {
+        "programs": [
+          "TP-HC40",
+          "TP-HC60"
+        ],
+        "mixed_allowed": false
+      },
+      "expected": {
+        "compatible": false
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C06-10",
+      "title": "最大等待恰好10分钟",
+      "source_scenario": "UAT-12",
+      "kind": "wait",
+      "inputs": {
+        "lag": "10",
+        "limit": "10"
+      },
+      "expected": {
+        "fits": true
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C06-11",
+      "title": "最大等待超0.1分钟",
+      "source_scenario": "UAT-12",
+      "kind": "wait",
+      "inputs": {
+        "lag": "10.1",
+        "limit": "10"
+      },
+      "expected": {
+        "fits": false
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C06-12",
+      "title": "源UAT14冷却空间400不可重叠两笔240",
+      "source_scenario": "UAT-14",
+      "kind": "space",
+      "inputs": {
+        "capacity": "400",
+        "intervals": [
+          [
+            "0",
+            "60",
+            "240"
+          ],
+          [
+            "30",
+            "90",
+            "240"
+          ]
+        ]
+      },
+      "expected": {
+        "peak": "480",
+        "fits": false
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C06-13",
+      "title": "冷却空间半开边界可复用",
+      "source_scenario": "UAT-14",
+      "kind": "space",
+      "inputs": {
+        "capacity": "400",
+        "intervals": [
+          [
+            "0",
+            "60",
+            "240"
+          ],
+          [
+            "60",
+            "120",
+            "240"
+          ]
+        ]
+      },
+      "expected": {
+        "peak": "240",
+        "fits": true
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C06-14",
+      "title": "方向A到B为mock10分钟",
+      "source_scenario": "UAT-12",
+      "kind": "transition",
+      "inputs": {
+        "from": "TP-HC40",
+        "to": "TP-HC60",
+        "matrix": {
+          "TP-HC40>TP-HC60": "10",
+          "TP-HC60>TP-HC40": "25"
+        }
+      },
+      "expected": {
+        "minutes": "10"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C06-15",
+      "title": "反向转换为mock25分钟",
+      "source_scenario": "UAT-12",
+      "kind": "transition",
+      "inputs": {
+        "from": "TP-HC60",
+        "to": "TP-HC40",
+        "matrix": {
+          "TP-HC40>TP-HC60": "10",
+          "TP-HC60>TP-HC40": "25"
+        }
+      },
+      "expected": {
+        "minutes": "25"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    },
+    {
+      "id": "C06-16",
+      "title": "必需转换缺项不能默认0",
+      "source_scenario": "UAT-12",
+      "kind": "transition",
+      "inputs": {
+        "from": "TP-HC40",
+        "to": "TP-NEW",
+        "matrix": {}
+      },
+      "expected": {
+        "error": "MISSING_TRANSITION"
+      },
+      "purpose": "MOCK_ONLY",
+      "product_acceptance": "NOT_EXECUTED"
+    }
+  ]
+}

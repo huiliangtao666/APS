@@ -1,0 +1,11 @@
+﻿产品编号,工序编号,工序名称,前序工序,最大等待分钟,程序编号
+HC40,MIX,混合,,,
+HC40,FILL,灌装,MIX,,
+HC40,HEAT,热加工,FILL,,TP-HC40
+HC40,COOL,冷却,HEAT,10,
+HC40,PACK,包装,COOL,,
+HC60,MIX,混合,,,
+HC60,FILL,灌装,MIX,,
+HC60,HEAT,热加工,FILL,,TP-HC60
+HC60,COOL,冷却,HEAT,10,
+HC60,PACK,包装,COOL,,

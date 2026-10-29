@@ -1,0 +1,710 @@
+{
+  "change_id": "CR-DEC04-05-06-20261029",
+  "purpose": "MOCK_ONLY / DESIGNED_NOT_PRODUCT_ACCEPTED",
+  "source_zip": "APS测试数据_v0.3_约束场景与配置数据.zip",
+  "source_zip_sha256": "01aa86f90d257e3e6c948531f1010d0a0fdf502a68266176991dc0fb8f107759",
+  "baseline_files": [
+    {
+      "path": "baseline/UAT-09/01_工厂与产线配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/01_工厂与产线配置.csv",
+      "sha256": "5ab9e0a4d1f8d432b8bcb2375449d4af285b3c55a2313aa83ca9420e136e1089",
+      "rows": 1
+    },
+    {
+      "path": "baseline/UAT-09/02_工厂工作日历.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/02_工厂工作日历.csv",
+      "sha256": "d01e60d53e5acd10008cb7afac46b8f6b64df775cd1c30a74d4d5594e2a503a2",
+      "rows": 1
+    },
+    {
+      "path": "baseline/UAT-09/03_设备资源配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/03_设备资源配置.csv",
+      "sha256": "78d7557d0d7e3fe1ab4abe3c0a372c545b8ee3b5b5ff18e0ce0bbc7bb437ad52",
+      "rows": 10
+    },
+    {
+      "path": "baseline/UAT-09/04_设备停机与例外日历.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/04_设备停机与例外日历.csv",
+      "sha256": "5c3543dc5e6c0a86ad266e150a550b257b6e55b2c3d8bd3caadfcfec5822e974",
+      "rows": 0
+    },
+    {
+      "path": "baseline/UAT-09/05_模具与工具配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/05_模具与工具配置.csv",
+      "sha256": "3d9363c7af74899c20fb743f5228dec448e5b70aa7acffa75880ae3beb0a1171",
+      "rows": 3
+    },
+    {
+      "path": "baseline/UAT-09/06_人员技能与班次.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/06_人员技能与班次.csv",
+      "sha256": "a4cc777bdefc88fb05cda0565d2aee28beca092f4a55f099e83479c0be0d900d",
+      "rows": 2
+    },
+    {
+      "path": "baseline/UAT-09/07_产品与包装规格.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/07_产品与包装规格.csv",
+      "sha256": "299afcb5bc575927751621af5c1f65c0fe34ac6082c2fc715eb64c31c714a420",
+      "rows": 2
+    },
+    {
+      "path": "baseline/UAT-09/08_物料主数据.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/08_物料主数据.csv",
+      "sha256": "3cda8f510ba4c58cccd34710b3604682b746f43f0ca18f87e356d299780df2bd",
+      "rows": 5
+    },
+    {
+      "path": "baseline/UAT-09/09_物料BOM配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/09_物料BOM配置.csv",
+      "sha256": "8e7ba0b451aa8b7415f4a65ef4be2e3b77eeb23dd8a0e9fba15883dd94f121eb",
+      "rows": 8
+    },
+    {
+      "path": "baseline/UAT-09/10_工艺路线配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/10_工艺路线配置.csv",
+      "sha256": "400d01fb11e23784338c9e52f0fb591e8046b8b4f147992fe2e1f2b256ce1af8",
+      "rows": 4
+    },
+    {
+      "path": "baseline/UAT-09/11_工序工时配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/11_工序工时配置.csv",
+      "sha256": "4838e7ad58e023be86ba474cdb32f84b73c6cd61863100b042ad7ee1779e43e2",
+      "rows": 4
+    },
+    {
+      "path": "baseline/UAT-09/12_工序资源与物料依赖.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/12_工序资源与物料依赖.csv",
+      "sha256": "64dd5bbd16755bf9f79947435ce06eba1c4b598f8edfebf1a5460369f5332296",
+      "rows": 10
+    },
+    {
+      "path": "baseline/UAT-09/13_物料库存批次.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/13_物料库存批次.csv",
+      "sha256": "e9f5106fc62017e30eecb4988a1c1eabc5ceb9b095aab12f9ee47d001163903e",
+      "rows": 8
+    },
+    {
+      "path": "baseline/UAT-09/14_预计到料与可用时间.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/14_预计到料与可用时间.csv",
+      "sha256": "65e650a8d1cd7debe1110f1ab95b78746f60919e3777cf2e36e326fbeaa45291",
+      "rows": 0
+    },
+    {
+      "path": "baseline/UAT-09/15_空间与组批规则配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/15_空间与组批规则配置.csv",
+      "sha256": "c70f1d81667236d7ccbc7bf4c3bf32e3b8de0c826a4c3ec3e73231d7f1393400",
+      "rows": 2
+    },
+    {
+      "path": "baseline/UAT-09/16_排程规则配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/16_排程规则配置.csv",
+      "sha256": "d87d2a906ae0e1b7855d9c0eb889e290509cfcca279d819b38e23ba85469ef4d",
+      "rows": 12
+    },
+    {
+      "path": "baseline/UAT-09/17_生产订单与交期.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/17_生产订单与交期.csv",
+      "sha256": "af442b33df81bf452b554f91b21cdc0987608ba221184673d5d46b657d21ad70",
+      "rows": 1
+    },
+    {
+      "path": "baseline/UAT-09/18_模拟执行进度.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/18_模拟执行进度.csv",
+      "sha256": "21b35b7c8302116167076f057066bd3e30337d0ef204875f7c2a29fd5405dd14",
+      "rows": 0
+    },
+    {
+      "path": "baseline/UAT-09/19_模拟异常与条件变更.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-09_库存预留质量效期与BOM精确齐套/19_模拟异常与条件变更.csv",
+      "sha256": "8d83b95e40b70b63a70dfa0e49279b5d0a3011a3750a3949ee38159a13827836",
+      "rows": 0
+    },
+    {
+      "path": "baseline/UAT-10/01_工厂与产线配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/01_工厂与产线配置.csv",
+      "sha256": "5ab9e0a4d1f8d432b8bcb2375449d4af285b3c55a2313aa83ca9420e136e1089",
+      "rows": 1
+    },
+    {
+      "path": "baseline/UAT-10/02_工厂工作日历.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/02_工厂工作日历.csv",
+      "sha256": "d01e60d53e5acd10008cb7afac46b8f6b64df775cd1c30a74d4d5594e2a503a2",
+      "rows": 1
+    },
+    {
+      "path": "baseline/UAT-10/03_设备资源配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/03_设备资源配置.csv",
+      "sha256": "78d7557d0d7e3fe1ab4abe3c0a372c545b8ee3b5b5ff18e0ce0bbc7bb437ad52",
+      "rows": 10
+    },
+    {
+      "path": "baseline/UAT-10/04_设备停机与例外日历.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/04_设备停机与例外日历.csv",
+      "sha256": "5c3543dc5e6c0a86ad266e150a550b257b6e55b2c3d8bd3caadfcfec5822e974",
+      "rows": 0
+    },
+    {
+      "path": "baseline/UAT-10/05_模具与工具配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/05_模具与工具配置.csv",
+      "sha256": "3d9363c7af74899c20fb743f5228dec448e5b70aa7acffa75880ae3beb0a1171",
+      "rows": 3
+    },
+    {
+      "path": "baseline/UAT-10/06_人员技能与班次.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/06_人员技能与班次.csv",
+      "sha256": "a4cc777bdefc88fb05cda0565d2aee28beca092f4a55f099e83479c0be0d900d",
+      "rows": 2
+    },
+    {
+      "path": "baseline/UAT-10/07_产品与包装规格.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/07_产品与包装规格.csv",
+      "sha256": "299afcb5bc575927751621af5c1f65c0fe34ac6082c2fc715eb64c31c714a420",
+      "rows": 2
+    },
+    {
+      "path": "baseline/UAT-10/08_物料主数据.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/08_物料主数据.csv",
+      "sha256": "3cda8f510ba4c58cccd34710b3604682b746f43f0ca18f87e356d299780df2bd",
+      "rows": 5
+    },
+    {
+      "path": "baseline/UAT-10/09_物料BOM配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/09_物料BOM配置.csv",
+      "sha256": "8e7ba0b451aa8b7415f4a65ef4be2e3b77eeb23dd8a0e9fba15883dd94f121eb",
+      "rows": 8
+    },
+    {
+      "path": "baseline/UAT-10/10_工艺路线配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/10_工艺路线配置.csv",
+      "sha256": "400d01fb11e23784338c9e52f0fb591e8046b8b4f147992fe2e1f2b256ce1af8",
+      "rows": 4
+    },
+    {
+      "path": "baseline/UAT-10/11_工序工时配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/11_工序工时配置.csv",
+      "sha256": "4838e7ad58e023be86ba474cdb32f84b73c6cd61863100b042ad7ee1779e43e2",
+      "rows": 4
+    },
+    {
+      "path": "baseline/UAT-10/12_工序资源与物料依赖.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/12_工序资源与物料依赖.csv",
+      "sha256": "64dd5bbd16755bf9f79947435ce06eba1c4b598f8edfebf1a5460369f5332296",
+      "rows": 10
+    },
+    {
+      "path": "baseline/UAT-10/13_物料库存批次.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/13_物料库存批次.csv",
+      "sha256": "79ebcb04c9f0de38a6fdbfe1706627440716efbe08797200e406071df3fae503",
+      "rows": 8
+    },
+    {
+      "path": "baseline/UAT-10/14_预计到料与可用时间.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/14_预计到料与可用时间.csv",
+      "sha256": "65e650a8d1cd7debe1110f1ab95b78746f60919e3777cf2e36e326fbeaa45291",
+      "rows": 0
+    },
+    {
+      "path": "baseline/UAT-10/15_空间与组批规则配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/15_空间与组批规则配置.csv",
+      "sha256": "c70f1d81667236d7ccbc7bf4c3bf32e3b8de0c826a4c3ec3e73231d7f1393400",
+      "rows": 2
+    },
+    {
+      "path": "baseline/UAT-10/16_排程规则配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/16_排程规则配置.csv",
+      "sha256": "d87d2a906ae0e1b7855d9c0eb889e290509cfcca279d819b38e23ba85469ef4d",
+      "rows": 12
+    },
+    {
+      "path": "baseline/UAT-10/17_生产订单与交期.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/17_生产订单与交期.csv",
+      "sha256": "af442b33df81bf452b554f91b21cdc0987608ba221184673d5d46b657d21ad70",
+      "rows": 1
+    },
+    {
+      "path": "baseline/UAT-10/18_模拟执行进度.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/18_模拟执行进度.csv",
+      "sha256": "21b35b7c8302116167076f057066bd3e30337d0ef204875f7c2a29fd5405dd14",
+      "rows": 0
+    },
+    {
+      "path": "baseline/UAT-10/19_模拟异常与条件变更.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-10_BOM净缺料0.1kg的不可排边界/19_模拟异常与条件变更.csv",
+      "sha256": "8d83b95e40b70b63a70dfa0e49279b5d0a3011a3750a3949ee38159a13827836",
+      "rows": 0
+    },
+    {
+      "path": "baseline/UAT-12/01_工厂与产线配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/01_工厂与产线配置.csv",
+      "sha256": "5ab9e0a4d1f8d432b8bcb2375449d4af285b3c55a2313aa83ca9420e136e1089",
+      "rows": 1
+    },
+    {
+      "path": "baseline/UAT-12/02_工厂工作日历.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/02_工厂工作日历.csv",
+      "sha256": "d01e60d53e5acd10008cb7afac46b8f6b64df775cd1c30a74d4d5594e2a503a2",
+      "rows": 1
+    },
+    {
+      "path": "baseline/UAT-12/03_设备资源配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/03_设备资源配置.csv",
+      "sha256": "78d7557d0d7e3fe1ab4abe3c0a372c545b8ee3b5b5ff18e0ce0bbc7bb437ad52",
+      "rows": 10
+    },
+    {
+      "path": "baseline/UAT-12/04_设备停机与例外日历.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/04_设备停机与例外日历.csv",
+      "sha256": "8f5877461e92412cb3fb2b6bb4b2bc7ca2cbb950e1ee648d9489a88f9cde0e86",
+      "rows": 1
+    },
+    {
+      "path": "baseline/UAT-12/05_模具与工具配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/05_模具与工具配置.csv",
+      "sha256": "3d9363c7af74899c20fb743f5228dec448e5b70aa7acffa75880ae3beb0a1171",
+      "rows": 3
+    },
+    {
+      "path": "baseline/UAT-12/06_人员技能与班次.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/06_人员技能与班次.csv",
+      "sha256": "fb1a1a5c07ab5adeab29c06afcc0502e9d1b01504ad75b77bbd5cd61e517178a",
+      "rows": 2
+    },
+    {
+      "path": "baseline/UAT-12/07_产品与包装规格.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/07_产品与包装规格.csv",
+      "sha256": "efad6d105b297a99691cc2af8086b984d77afda40d3307a5a25aa06d265d9cc0",
+      "rows": 2
+    },
+    {
+      "path": "baseline/UAT-12/08_物料主数据.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/08_物料主数据.csv",
+      "sha256": "3cda8f510ba4c58cccd34710b3604682b746f43f0ca18f87e356d299780df2bd",
+      "rows": 5
+    },
+    {
+      "path": "baseline/UAT-12/09_物料BOM配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/09_物料BOM配置.csv",
+      "sha256": "bdbf2fcbacafadfe3bb4eb9be5ae5fef3a89925531238466190adb5ff89c4d23",
+      "rows": 10
+    },
+    {
+      "path": "baseline/UAT-12/10_工艺路线配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/10_工艺路线配置.csv",
+      "sha256": "7169fc9451e0a24f5e776ace1de62d9b31dfa291ef6673711542d3a0d83d2505",
+      "rows": 10
+    },
+    {
+      "path": "baseline/UAT-12/11_工序工时配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/11_工序工时配置.csv",
+      "sha256": "9f0e32d1a771f369eda39e9e97e9f78970e35a7b490917034a29e18bc979805c",
+      "rows": 10
+    },
+    {
+      "path": "baseline/UAT-12/12_工序资源与物料依赖.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/12_工序资源与物料依赖.csv",
+      "sha256": "3e75f68c295dfddfccaccd358de2a1fb997dd6c3c471eee47c94d9a806cb61f7",
+      "rows": 16
+    },
+    {
+      "path": "baseline/UAT-12/13_物料库存批次.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/13_物料库存批次.csv",
+      "sha256": "d3f4d18ba355e64c368fd9223dfde52241f757bff492536baa3ca139f408866a",
+      "rows": 5
+    },
+    {
+      "path": "baseline/UAT-12/14_预计到料与可用时间.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/14_预计到料与可用时间.csv",
+      "sha256": "65e650a8d1cd7debe1110f1ab95b78746f60919e3777cf2e36e326fbeaa45291",
+      "rows": 0
+    },
+    {
+      "path": "baseline/UAT-12/15_空间与组批规则配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/15_空间与组批规则配置.csv",
+      "sha256": "c70f1d81667236d7ccbc7bf4c3bf32e3b8de0c826a4c3ec3e73231d7f1393400",
+      "rows": 2
+    },
+    {
+      "path": "baseline/UAT-12/16_排程规则配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/16_排程规则配置.csv",
+      "sha256": "8aff7de258118d9a909d393761d347945d3c4e35c4cd575a27187592649a0d28",
+      "rows": 12
+    },
+    {
+      "path": "baseline/UAT-12/17_生产订单与交期.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/17_生产订单与交期.csv",
+      "sha256": "af442b33df81bf452b554f91b21cdc0987608ba221184673d5d46b657d21ad70",
+      "rows": 1
+    },
+    {
+      "path": "baseline/UAT-12/18_模拟执行进度.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/18_模拟执行进度.csv",
+      "sha256": "21b35b7c8302116167076f057066bd3e30337d0ef204875f7c2a29fd5405dd14",
+      "rows": 0
+    },
+    {
+      "path": "baseline/UAT-12/19_模拟异常与条件变更.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/19_模拟异常与条件变更.csv",
+      "sha256": "8d83b95e40b70b63a70dfa0e49279b5d0a3011a3750a3949ee38159a13827836",
+      "rows": 0
+    },
+    {
+      "path": "baseline/UAT-14/01_工厂与产线配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/01_工厂与产线配置.csv",
+      "sha256": "5ab9e0a4d1f8d432b8bcb2375449d4af285b3c55a2313aa83ca9420e136e1089",
+      "rows": 1
+    },
+    {
+      "path": "baseline/UAT-14/02_工厂工作日历.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/02_工厂工作日历.csv",
+      "sha256": "d01e60d53e5acd10008cb7afac46b8f6b64df775cd1c30a74d4d5594e2a503a2",
+      "rows": 1
+    },
+    {
+      "path": "baseline/UAT-14/03_设备资源配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/03_设备资源配置.csv",
+      "sha256": "78d7557d0d7e3fe1ab4abe3c0a372c545b8ee3b5b5ff18e0ce0bbc7bb437ad52",
+      "rows": 10
+    },
+    {
+      "path": "baseline/UAT-14/04_设备停机与例外日历.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/04_设备停机与例外日历.csv",
+      "sha256": "5c3543dc5e6c0a86ad266e150a550b257b6e55b2c3d8bd3caadfcfec5822e974",
+      "rows": 0
+    },
+    {
+      "path": "baseline/UAT-14/05_模具与工具配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/05_模具与工具配置.csv",
+      "sha256": "3d9363c7af74899c20fb743f5228dec448e5b70aa7acffa75880ae3beb0a1171",
+      "rows": 3
+    },
+    {
+      "path": "baseline/UAT-14/06_人员技能与班次.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/06_人员技能与班次.csv",
+      "sha256": "fb1a1a5c07ab5adeab29c06afcc0502e9d1b01504ad75b77bbd5cd61e517178a",
+      "rows": 2
+    },
+    {
+      "path": "baseline/UAT-14/07_产品与包装规格.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/07_产品与包装规格.csv",
+      "sha256": "efad6d105b297a99691cc2af8086b984d77afda40d3307a5a25aa06d265d9cc0",
+      "rows": 2
+    },
+    {
+      "path": "baseline/UAT-14/08_物料主数据.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/08_物料主数据.csv",
+      "sha256": "3cda8f510ba4c58cccd34710b3604682b746f43f0ca18f87e356d299780df2bd",
+      "rows": 5
+    },
+    {
+      "path": "baseline/UAT-14/09_物料BOM配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/09_物料BOM配置.csv",
+      "sha256": "bdbf2fcbacafadfe3bb4eb9be5ae5fef3a89925531238466190adb5ff89c4d23",
+      "rows": 10
+    },
+    {
+      "path": "baseline/UAT-14/10_工艺路线配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/10_工艺路线配置.csv",
+      "sha256": "7169fc9451e0a24f5e776ace1de62d9b31dfa291ef6673711542d3a0d83d2505",
+      "rows": 10
+    },
+    {
+      "path": "baseline/UAT-14/11_工序工时配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/11_工序工时配置.csv",
+      "sha256": "9f0e32d1a771f369eda39e9e97e9f78970e35a7b490917034a29e18bc979805c",
+      "rows": 10
+    },
+    {
+      "path": "baseline/UAT-14/12_工序资源与物料依赖.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/12_工序资源与物料依赖.csv",
+      "sha256": "89cab17edd64252194eb1ebc2f1e272e1b48e3e37a6f84c9906fe68795614c9d",
+      "rows": 32
+    },
+    {
+      "path": "baseline/UAT-14/13_物料库存批次.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/13_物料库存批次.csv",
+      "sha256": "d3f4d18ba355e64c368fd9223dfde52241f757bff492536baa3ca139f408866a",
+      "rows": 5
+    },
+    {
+      "path": "baseline/UAT-14/14_预计到料与可用时间.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/14_预计到料与可用时间.csv",
+      "sha256": "65e650a8d1cd7debe1110f1ab95b78746f60919e3777cf2e36e326fbeaa45291",
+      "rows": 0
+    },
+    {
+      "path": "baseline/UAT-14/15_空间与组批规则配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/15_空间与组批规则配置.csv",
+      "sha256": "fd35e6802f0c9f59d1d3dd02b014718c3aa9c3427329e6ea7f0bb259db6fd4d6",
+      "rows": 2
+    },
+    {
+      "path": "baseline/UAT-14/16_排程规则配置.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/16_排程规则配置.csv",
+      "sha256": "8aff7de258118d9a909d393761d347945d3c4e35c4cd575a27187592649a0d28",
+      "rows": 12
+    },
+    {
+      "path": "baseline/UAT-14/17_生产订单与交期.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/17_生产订单与交期.csv",
+      "sha256": "524be056428c56fe37e13702867411c2b97390fe6015dba75f4a32e4a04da46a",
+      "rows": 2
+    },
+    {
+      "path": "baseline/UAT-14/18_模拟执行进度.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/18_模拟执行进度.csv",
+      "sha256": "21b35b7c8302116167076f057066bd3e30337d0ef204875f7c2a29fd5405dd14",
+      "rows": 0
+    },
+    {
+      "path": "baseline/UAT-14/19_模拟异常与条件变更.csv",
+      "source_member": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/19_模拟异常与条件变更.csv",
+      "sha256": "8d83b95e40b70b63a70dfa0e49279b5d0a3011a3750a3949ee38159a13827836",
+      "rows": 0
+    }
+  ],
+  "derived_files": [
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/01_工厂与产线配置.csv",
+      "parent": "baseline/UAT-10/01_工厂与产线配置.csv",
+      "sha256": "5ab9e0a4d1f8d432b8bcb2375449d4af285b3c55a2313aa83ca9420e136e1089",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/02_工厂工作日历.csv",
+      "parent": "baseline/UAT-10/02_工厂工作日历.csv",
+      "sha256": "d01e60d53e5acd10008cb7afac46b8f6b64df775cd1c30a74d4d5594e2a503a2",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/03_设备资源配置.csv",
+      "parent": "baseline/UAT-10/03_设备资源配置.csv",
+      "sha256": "78d7557d0d7e3fe1ab4abe3c0a372c545b8ee3b5b5ff18e0ce0bbc7bb437ad52",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/04_设备停机与例外日历.csv",
+      "parent": "baseline/UAT-10/04_设备停机与例外日历.csv",
+      "sha256": "5c3543dc5e6c0a86ad266e150a550b257b6e55b2c3d8bd3caadfcfec5822e974",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/05_模具与工具配置.csv",
+      "parent": "baseline/UAT-10/05_模具与工具配置.csv",
+      "sha256": "3d9363c7af74899c20fb743f5228dec448e5b70aa7acffa75880ae3beb0a1171",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/06_人员技能与班次.csv",
+      "parent": "baseline/UAT-10/06_人员技能与班次.csv",
+      "sha256": "a4cc777bdefc88fb05cda0565d2aee28beca092f4a55f099e83479c0be0d900d",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/07_产品与包装规格.csv",
+      "parent": "baseline/UAT-10/07_产品与包装规格.csv",
+      "sha256": "299afcb5bc575927751621af5c1f65c0fe34ac6082c2fc715eb64c31c714a420",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/08_物料主数据.csv",
+      "parent": "baseline/UAT-10/08_物料主数据.csv",
+      "sha256": "3cda8f510ba4c58cccd34710b3604682b746f43f0ca18f87e356d299780df2bd",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/09_物料BOM配置.csv",
+      "parent": "baseline/UAT-10/09_物料BOM配置.csv",
+      "sha256": "8e7ba0b451aa8b7415f4a65ef4be2e3b77eeb23dd8a0e9fba15883dd94f121eb",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/10_工艺路线配置.csv",
+      "parent": "baseline/UAT-10/10_工艺路线配置.csv",
+      "sha256": "400d01fb11e23784338c9e52f0fb591e8046b8b4f147992fe2e1f2b256ce1af8",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/11_工序工时配置.csv",
+      "parent": "baseline/UAT-10/11_工序工时配置.csv",
+      "sha256": "4838e7ad58e023be86ba474cdb32f84b73c6cd61863100b042ad7ee1779e43e2",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/12_工序资源与物料依赖.csv",
+      "parent": "baseline/UAT-10/12_工序资源与物料依赖.csv",
+      "sha256": "64dd5bbd16755bf9f79947435ce06eba1c4b598f8edfebf1a5460369f5332296",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/13_物料库存批次.csv",
+      "parent": "baseline/UAT-10/13_物料库存批次.csv",
+      "sha256": "79ebcb04c9f0de38a6fdbfe1706627440716efbe08797200e406071df3fae503",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/14_预计到料与可用时间.csv",
+      "parent": "baseline/UAT-10/14_预计到料与可用时间.csv",
+      "sha256": "d72cb853a3d26713f7ea8d621d4dbe2809701d6b227652d10e5677a8157565af",
+      "change": "新增虚构LEAN预计供给0.1kg；到达60/预计可用90/到期180"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/15_空间与组批规则配置.csv",
+      "parent": "baseline/UAT-10/15_空间与组批规则配置.csv",
+      "sha256": "c70f1d81667236d7ccbc7bf4c3bf32e3b8de0c826a4c3ec3e73231d7f1393400",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/16_排程规则配置.csv",
+      "parent": "baseline/UAT-10/16_排程规则配置.csv",
+      "sha256": "d87d2a906ae0e1b7855d9c0eb889e290509cfcca279d819b38e23ba85469ef4d",
+      "change": "仅设置MATERIAL允许预计供给=True"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/17_生产订单与交期.csv",
+      "parent": "baseline/UAT-10/17_生产订单与交期.csv",
+      "sha256": "af442b33df81bf452b554f91b21cdc0987608ba221184673d5d46b657d21ad70",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/18_模拟执行进度.csv",
+      "parent": "baseline/UAT-10/18_模拟执行进度.csv",
+      "sha256": "21b35b7c8302116167076f057066bd3e30337d0ef204875f7c2a29fd5405dd14",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-ON/19_模拟异常与条件变更.csv",
+      "parent": "baseline/UAT-10/19_模拟异常与条件变更.csv",
+      "sha256": "8d83b95e40b70b63a70dfa0e49279b5d0a3011a3750a3949ee38159a13827836",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/01_工厂与产线配置.csv",
+      "parent": "baseline/UAT-10/01_工厂与产线配置.csv",
+      "sha256": "5ab9e0a4d1f8d432b8bcb2375449d4af285b3c55a2313aa83ca9420e136e1089",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/02_工厂工作日历.csv",
+      "parent": "baseline/UAT-10/02_工厂工作日历.csv",
+      "sha256": "d01e60d53e5acd10008cb7afac46b8f6b64df775cd1c30a74d4d5594e2a503a2",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/03_设备资源配置.csv",
+      "parent": "baseline/UAT-10/03_设备资源配置.csv",
+      "sha256": "78d7557d0d7e3fe1ab4abe3c0a372c545b8ee3b5b5ff18e0ce0bbc7bb437ad52",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/04_设备停机与例外日历.csv",
+      "parent": "baseline/UAT-10/04_设备停机与例外日历.csv",
+      "sha256": "5c3543dc5e6c0a86ad266e150a550b257b6e55b2c3d8bd3caadfcfec5822e974",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/05_模具与工具配置.csv",
+      "parent": "baseline/UAT-10/05_模具与工具配置.csv",
+      "sha256": "3d9363c7af74899c20fb743f5228dec448e5b70aa7acffa75880ae3beb0a1171",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/06_人员技能与班次.csv",
+      "parent": "baseline/UAT-10/06_人员技能与班次.csv",
+      "sha256": "a4cc777bdefc88fb05cda0565d2aee28beca092f4a55f099e83479c0be0d900d",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/07_产品与包装规格.csv",
+      "parent": "baseline/UAT-10/07_产品与包装规格.csv",
+      "sha256": "299afcb5bc575927751621af5c1f65c0fe34ac6082c2fc715eb64c31c714a420",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/08_物料主数据.csv",
+      "parent": "baseline/UAT-10/08_物料主数据.csv",
+      "sha256": "3cda8f510ba4c58cccd34710b3604682b746f43f0ca18f87e356d299780df2bd",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/09_物料BOM配置.csv",
+      "parent": "baseline/UAT-10/09_物料BOM配置.csv",
+      "sha256": "8e7ba0b451aa8b7415f4a65ef4be2e3b77eeb23dd8a0e9fba15883dd94f121eb",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/10_工艺路线配置.csv",
+      "parent": "baseline/UAT-10/10_工艺路线配置.csv",
+      "sha256": "400d01fb11e23784338c9e52f0fb591e8046b8b4f147992fe2e1f2b256ce1af8",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/11_工序工时配置.csv",
+      "parent": "baseline/UAT-10/11_工序工时配置.csv",
+      "sha256": "4838e7ad58e023be86ba474cdb32f84b73c6cd61863100b042ad7ee1779e43e2",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/12_工序资源与物料依赖.csv",
+      "parent": "baseline/UAT-10/12_工序资源与物料依赖.csv",
+      "sha256": "64dd5bbd16755bf9f79947435ce06eba1c4b598f8edfebf1a5460369f5332296",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/13_物料库存批次.csv",
+      "parent": "baseline/UAT-10/13_物料库存批次.csv",
+      "sha256": "79ebcb04c9f0de38a6fdbfe1706627440716efbe08797200e406071df3fae503",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/14_预计到料与可用时间.csv",
+      "parent": "baseline/UAT-10/14_预计到料与可用时间.csv",
+      "sha256": "d72cb853a3d26713f7ea8d621d4dbe2809701d6b227652d10e5677a8157565af",
+      "change": "新增虚构LEAN预计供给0.1kg；到达60/预计可用90/到期180"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/15_空间与组批规则配置.csv",
+      "parent": "baseline/UAT-10/15_空间与组批规则配置.csv",
+      "sha256": "c70f1d81667236d7ccbc7bf4c3bf32e3b8de0c826a4c3ec3e73231d7f1393400",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/16_排程规则配置.csv",
+      "parent": "baseline/UAT-10/16_排程规则配置.csv",
+      "sha256": "6dd60b839426a4a1d703b1c9b8368b5683d640f78d472568d3317854ea3906af",
+      "change": "仅设置MATERIAL允许预计供给=False"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/17_生产订单与交期.csv",
+      "parent": "baseline/UAT-10/17_生产订单与交期.csv",
+      "sha256": "af442b33df81bf452b554f91b21cdc0987608ba221184673d5d46b657d21ad70",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/18_模拟执行进度.csv",
+      "parent": "baseline/UAT-10/18_模拟执行进度.csv",
+      "sha256": "21b35b7c8302116167076f057066bd3e30337d0ef204875f7c2a29fd5405dd14",
+      "change": "原样继承UAT-10"
+    },
+    {
+      "path": "derived/MOCK-D05-EXPECTED-OFF/19_模拟异常与条件变更.csv",
+      "parent": "baseline/UAT-10/19_模拟异常与条件变更.csv",
+      "sha256": "8d83b95e40b70b63a70dfa0e49279b5d0a3011a3750a3949ee38159a13827836",
+      "change": "原样继承UAT-10"
+    }
+  ],
+  "scope": "四组基线场景各19张业务CSV；派生预计供给场景另存；新策略文件为待实现设计契约",
+  "not_claimed": [
+    "当前应用扩展导入器已实现",
+    "产品测试通过",
+    "业务UAT通过",
+    "现场参数已批准"
+  ],
+  "counts": {
+    "baseline_csv": 76,
+    "derived_csv": 38,
+    "numeric_cases": 38,
+    "future_workflow_checks": 6,
+    "parameter_entries": 40
+  },
+  "policy_sha256": "667d086d98ea25a65d0b7ea98f7545715911116f3eb8d5962069880a8344e576",
+  "cases_sha256": "9b5b7c47aba3f59d15e5092b917a7abdf1c81da64fd4a8437ab83f73978c59ab"
+}

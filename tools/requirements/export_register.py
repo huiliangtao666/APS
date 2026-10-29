@@ -33,10 +33,24 @@ def gql(query, variables=None):
     return data['data']
 
 def project_snapshot():
-    query = 'query { user(login:"huiliangtao666") { projectV2(number:2) { id fields(first:50){nodes{... on ProjectV2Field{id name dataType} ... on ProjectV2SingleSelectField{id name}}} items(first:100){pageInfo{hasNextPage} nodes{id fieldValues(first:40){nodes{... on ProjectV2ItemFieldSingleSelectValue{name field{... on ProjectV2SingleSelectField{name}}} ... on ProjectV2ItemFieldTextValue{text field{... on ProjectV2Field{name}}}}} content{... on DraftIssue{id title body} ... on Issue{id number title body state}}}}}}}'
-    p = gql(query)['user']['projectV2']
-    assert not p['items']['pageInfo']['hasNextPage'], 'Pagination required; refuse incomplete export'
-    return p
+    query = 'query($after:String) { user(login:"huiliangtao666") { projectV2(number:2) { id fields(first:50){nodes{... on ProjectV2Field{id name dataType} ... on ProjectV2SingleSelectField{id name}}} items(first:25,after:$after){pageInfo{hasNextPage endCursor} nodes{id fieldValues(first:40){nodes{... on ProjectV2ItemFieldSingleSelectValue{name field{... on ProjectV2SingleSelectField{name}}} ... on ProjectV2ItemFieldTextValue{text field{... on ProjectV2Field{name}}}}} content{... on DraftIssue{id title body} ... on Issue{id number title body state}}}}}}}'
+    after = None
+    project = None
+    nodes = []
+    for _ in range(100):
+        page = gql(query, {'after': after})['user']['projectV2']
+        if project is None:
+            project = page
+        assert project['id'] == page['id']
+        nodes.extend(page['items']['nodes'])
+        info = page['items']['pageInfo']
+        if not info['hasNextPage']:
+            assert len(nodes) == len({n['id'] for n in nodes}), 'Duplicate paginated items'
+            project['items'] = {'nodes': nodes, 'pageInfo': info}
+            return project
+        assert info['endCursor'] and info['endCursor'] != after, 'Pagination did not advance'
+        after = info['endCursor']
+    raise RuntimeError('Project pagination limit exceeded; refuse incomplete export')
 
 def markdown_table(headers, rows):
     def escape(v):
@@ -82,13 +96,20 @@ def export(workbook_path=None, refresh=True):
             blocker = '完整验收证据/业务决策/跨功能依赖待闭环；具体见原卡及Issue'
         if applied:
             latest = applied[-1]
-            phase = latest['implementation_status']
-            blocker = latest['acceptance_result']
-            issue_ids = sorted(set(issue_ids + [3, 13, 16]))
-            acceptance = '基线原范围历史记录保留；本次CR专项验收未完成'
+            phase = '；'.join(c['id'] + '：' + c['implementation_status'] for c in applied)
+            blocker = '；'.join(c['id'] + '：' + c['acceptance_result'] for c in applied)
+            linked = []
+            for change in applied:
+                for url in [change.get('issue_url','')] + change.get('related_issue_urls',[]):
+                    linked.extend(int(x) for x in re.findall(r'/issues/(\d+)',url))
+            issue_ids = sorted(set(issue_ids + linked))
+            acceptance = '基线原范围历史记录保留；' + '；'.join(c.get('acceptance_status','本CR专项验收未完成') for c in applied)
         commits = list(dict.fromkeys(re.findall(r'(?<![0-9a-f])[0-9a-f]{40}(?![0-9a-f])', body)))
         row = {**b, 'current_version': 'v0.3' + ''.join('+' + c['id'] for c in applied), 'applied_changes': [c['id'] for c in applied], 'pending_changes': [c['id'] for c in related if c not in applied], 'current_text': b['text'] + ''.join('\n\n[' + c['id'] + ' 批准增量]\n' + c['approved_delta'] for c in applied), 'project_status': status, 'current_phase': phase, 'blocker': blocker, 'acceptance_result': acceptance, 'accepted_requirement_version': '未统一登记版本签收；原卡通过范围及历史证据保留', 'code_reference': applied[-1]['code_sha'] if applied else (commits[-1] if commits else ''), 'code_reference_note': '原卡引用/Dev交付SHA，非本表新增的验收结论', 'issues': ['https://github.com/' + REPO + '/issues/' + str(i) for i in issue_ids], 'owner': 'APS-Design维护；APS-Dev实施；APS-Test验证', 'snapshot_at': stamp}
         row['uat_owner'] = uat_owner
+        if applied:
+            row['current_text'] = b['text'] + ''.join('\n\n[' + c['id'] + ' 批准增量]\n' + c.get('requirement_deltas',{}).get(b['id'],c['approved_delta']) for c in applied)
+            row['code_reference'] = next((c.get('code_sha') for c in reversed(applied) if c.get('code_sha')),(commits[-1] if commits else ''))
         if uat_owner:
             row['owner'] += '；UAT业务验收：' + uat_owner
         requirements.append(row)
@@ -116,7 +137,7 @@ def export(workbook_path=None, refresh=True):
     (DOCS / 'requirements-register.md').write_text('# 当前需求跟踪表\n\n快照：' + stamp + '。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。\n\n' + markdown_table(['编号', '名称', '要求版本', '生效CR', '原卡状态', '当前环节', '验收结论', '原卡'], [[r['id'], r['title'], r['current_version'], '、'.join(r['applied_changes']), r['project_status'], r['current_phase'], r['acceptance_result'], '[原卡](' + r['canonical']['url'] + ')'] for r in requirements]) + '\n')
     with (DOCS / 'requirements-register.md').open('a') as stream:
         stream.write('\n全部UAT业务验收负责人：**' + uat_owner + '**；逐场景责任分工见[UAT清单](uat-register.md)。\n')
-    text = '# 已纳入的需求变更\n\n当前登记1项已批准能力方向的CR；缺陷修复、交付故障、验收缺口和调度政策不计作产品需求变更。\n\n'
+    text = '# 已纳入的需求变更\n\n当前登记' + str(len(changes)) + '项CR；逐项记录批准边界、设计/实现/验收阶段。缺陷修复、交付故障、验收缺口和调度政策不计作产品需求变更。\n\n'
     text += markdown_table(['CR', '名称', '批准状态', '影响FR/BR', '实施状态', '验收结论'], [[c['id'], c['title'], c['approval_status'], '、'.join(c['primary_requirements'] + c['related_rules']), c['implementation_status'], c['acceptance_result']] for c in changes])
     for c in changes:
         text += '\n\n## ' + c['id'] + '\n\n' + '\n\n'.join('**' + title + '**：' + c[key] for title, key in [('授权原话', 'request_quote'), ('变更前', 'before'), ('批准增量', 'approved_delta'), ('专项验收', 'acceptance_delta'), ('设计细化与默认值', 'design_detail_status'), ('影响', 'impact'), ('计划影响', 'plan_impact'), ('工作量评估', 'effort'), ('交付限制', 'limitations'), ('主跟踪记录', 'issue_url')])
@@ -126,7 +147,12 @@ def export(workbook_path=None, refresh=True):
         ah = ['AC编号', '名称', '阶段及关联', '原始验收条文', '来源段落']
         ar = [[a['id'], a['title'], a['context'], a['content'], a['source_paragraph']] for a in baseline['acceptance']]
         dh = ['DEC编号', '名称', '原基线建议', '责任与时点', '当前决定/未决边界', '关联CR', '原卡']
-        dr = [[d['id'], d['title'], d['recommendation'], d['owner_due'], '已授权参数化能力；具体默认值未批准' if d['id'] in ['DEC-02', 'DEC-03'] else '原卡/基线仍待业务决定，本次未代决', changes[0]['id'] if d['id'] in ['DEC-02', 'DEC-03'] else '', d['canonical']['url']] for d in baseline['decisions']]
+        dr = []
+        for d in baseline['decisions']:
+            related = [c for c in changes if d['id'] in c.get('decisions',[])]
+            state = '；'.join(c['approval_status'] for c in related) or '原卡/基线仍待业务决定，本次未代决'
+            dr.append([d['id'],d['title'],d['recommendation'],d['owner_due'],state,'、'.join(c['id'] for c in related),d['canonical']['url']])
+        info[3] = ['登记变更',str(len(changes))+'项CR；逐项区分授权、设计、实现与验收']
         info.append(['UAT业务验收负责人', uat_owner + '；测试执行APS-Test；协调维护APS-Design'])
         write_workbook(workbook_path, [('使用说明', ['项目', '说明'], info), ('基线清单61项', bh, br), ('当前需求跟踪61项', rh, rr), ('需求变更清单', ch, cr), ('基线验收条件32项', ah, ar), ('UAT场景与负责人18项', uh, ur), ('业务待决事项9项', dh, dr)])
     print('Exported baseline61/current61/CR' + str(len(changes)) + '/AC32/UAT18/DEC9 at ' + stamp)
