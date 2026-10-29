@@ -999,6 +999,72 @@
         "issue_comment": "https://github.com/huiliangtao666/APS/issues/14#issuecomment-6490965221",
         "issue14_state": "closed; FR018 accepted scope preserved"
       }
+    },
+    {
+      "event_key": "dlv_8d3a7593-26f1-4bf5-aa22-ffc0939d96f4:r1",
+      "original_delivery": "dlv_8d3a7593-26f1-4bf5-aa22-ffc0939d96f4",
+      "notification_delivery": "dlv_b6f27fc0-c061-4f19-a72e-a09949c6f5f7",
+      "dispatch_event_key": "fr028:c8e16d40:card-responsibility-acceptance-r1",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T15:59:03+08:00",
+      "product_sha": "c8e16d408b2d0207cb9886b55f39a52ebc9c1665",
+      "test_design_snapshot": "243edd403a684a92deea5604e1b5807910d3558c",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/14#issuecomment-6491236582",
+      "audit_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/operations/fr028-c8e16d40-acceptance-r1-design.md",
+      "external_hashes": {
+        "FR028-c8e16d40-ACCEPTANCE-R1-REPORT.txt": "c363172d7601444ca41f68c393f4f61291bcce2b1e0efb8740faeb3edd2dd92b",
+        "FR028-c8e16d40-ACCEPTANCE-R1-ASSERTIONS.csv": "b9499ff0f728d762130ac6fe2723a962855a76cf476a62ec1ee330471bfe7140",
+        "FR028-c8e16d40-ACCEPTANCE-R1-LAYERS.json": "c1c8b1c68cf3d907e1e2ff7514faa72ca65da0a3861765b01289f3ba667d37ae",
+        "FR028-c8e16d40-ACCEPTANCE-R1-EVIDENCE.zip": "c06e074c6c1efb391eead67c316174279c4d2244cb82dad70376bc64d294295f"
+      },
+      "verification": {
+        "product_sha": "c8e16d408b2d0207cb9886b55f39a52ebc9c1665",
+        "parent": "18c2f59761c9db69554f33a2870b68e15d092320",
+        "design_main_before": "243edd403a684a92deea5604e1b5807910d3558c",
+        "source_records": 5,
+        "source_file_maps": 89,
+        "github_fixed_source_files": 1652,
+        "external_hashes": 4,
+        "internal_hashes": 139,
+        "inherited_original_hashes": 16,
+        "matrix": 22,
+        "github_segments_verified": [
+          "field-diff",
+          "compare-results"
+        ],
+        "confirmed_fixture_hash_verified": "6724d05885e065214164d7cbbf5b69b7a3a53d24d20b4b1d87526aeafa40ce5b"
+      },
+      "outcomes": [
+        {
+          "requirement": "FR-028",
+          "before": "In review",
+          "after": "Done",
+          "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg8s",
+          "code_sha": "c8e16d408b2d0207cb9886b55f39a52ebc9c1665",
+          "requirement_version": "v0.3",
+          "applicable_assertions": 22,
+          "pass": 22,
+          "responsibility_round": 1,
+          "repair_round": 0,
+          "retest_round": 0,
+          "next_step": "FR028无剩余产品动作；FR026成功恢复及FR031责任保留，平台/部署/持久性与huiliangtao666业务UAT分层未执行"
+        }
+      ],
+      "ack_delivery_policy": "本Inbox最终PROCESSED由平台hook记录，不另派ACK/完成通知",
+      "next_test_dispatch": {
+        "event_key": "fr031:c8e16d40:card-responsibility-acceptance-r1",
+        "delivery": "dlv_64ce563e-58c9-47e1-9cb0-9d5ff85d2aec",
+        "requirement": "FR-031",
+        "code_sha": "c8e16d408b2d0207cb9886b55f39a52ebc9c1665",
+        "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg_o",
+        "state": "SENT",
+        "delivery_status": "queued/waiting; not claimed started/passed",
+        "audit_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/operations/fr031-c8e16d40-acceptance-dispatch.md",
+        "issue_comment": "https://github.com/huiliangtao666/APS/issues/14#issuecomment-6491268801",
+        "issue14_state": "closed; FR018 accepted scope preserved"
+      }
     }
   ]
 }
