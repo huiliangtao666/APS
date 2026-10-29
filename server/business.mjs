@@ -9,6 +9,7 @@ import {reviewPlan,contentHash,validConfirmation} from './confirmation.mjs';
 import {stageEvents} from '../src/lib/simulation-events.mjs';
 import {executionState,executionTransition,executionAdmission,executionSummary,factTables,executionTrialIssues} from '../src/lib/execution-facts.mjs';
 import {executionInventory} from '../src/lib/material-allocation.mjs';
+import {inventoryView} from '../src/lib/inventory-view.mjs';
 import {queryInventoryAvailability} from '../src/lib/inventory.mjs';
 import {comparePlans,restoreBlockers,conditionChanges} from '../src/lib/plan-comparison.mjs';
 import {resultState,resultCsv} from '../src/lib/result-assessment.mjs';
@@ -71,6 +72,11 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   const inputs=(s,p)=>{const v=s.inputVersions?.[p.inputVersionId];return v&&v.data&&versionId(v.data)===p.inputVersionId?v:null;};
   router.get('/plans',permission('read'),(_req,res)=>{const s=read();res.json(s.plans.map(p=>({...p,inputSnapshot:inputs(s,p)?.data??null})));});
   router.get('/plans/:id/inputs',permission('read'),(req,res)=>{const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});const v=inputs(s,p);if(!v)return res.status(409).json({error:'historical_inputs_unavailable'});res.json(v);});
+  router.get('/inventory',permission('read'),(req,res)=>{
+    const asOf=req.query.asOf??new Date().toISOString();
+    if(typeof asOf!=='string'||!Number.isFinite(Date.parse(asOf)))return res.status(400).json({error:'invalid_inventory_time'});
+    const s=read();res.json({revision:s.revision,inputVersionId:inputHash(s.data),asOf,rows:inventoryView(s.data,asOf),scope:'模拟库存；当前查询与分配前余额；方案内分配保留在方案中，不写入库存占用'});
+  });
   router.get('/execution',permission('read'),(_req,res)=>{const s=read();const history=s.records.filter(r=>!r.trialId&&factTables.includes(r.target));res.json({...executionSummary(s.data),version:inputHash(executionState(s.data)),revision:s.revision,history,inventory:queryInventoryAvailability(executionInventory(s.data),{rules:s.data.rules}).map(row=>({...row,'扣耗后余额':row['账面数量'],'扣耗前账面数量':s.data.inventory.find(b=>b['批次编号']===row['批次编号'])?.['账面数量'],'说明':'模拟账面减累计耗料，再减独立占用；不是真实库存'}))});});
   function saveInputs(req,res,tables,trialId,dryRun=false){
     const {revision,operation}=req.body;

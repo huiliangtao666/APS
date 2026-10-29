@@ -1,4 +1,4 @@
-import {inventoryBusinessDate} from './inventory.mjs';
+import {inventoryBusinessDate,inventoryEligibility} from './inventory.mjs';
 import { PLAN_TIME_ORIGIN, resolveExpectedSupply } from './expected-supply.mjs';
 // Exact rational arithmetic: no tolerance, display rounding or repeated float deductions.
 const q = value => {
@@ -79,7 +79,7 @@ export function createMaterialAllocator(data,policy) {
    const baseGeneration=generation;let committed=false;const staged=new Map(used),rows=[];
    for(const demand of demands){
     let left=fromExact(demand.exactQuantity);const allocations=[];
-    const inventory=(data.inventory||[]).filter(b=>b['物料编号']===demand.materialId&&policy['可用状态'].includes(b['质量状态'])&&b['有效期']>=dateAt(minute)&&(!b['预计可用时间']||Date.parse(b['预计可用时间'])<=Date.parse(feedTime(minute)))).sort((a,b)=>a['有效期'].localeCompare(b['有效期'])||a['批次编号'].localeCompare(b['批次编号']));
+    const inventory=(data.inventory||[]).filter(b=>b['物料编号']===demand.materialId&&inventoryEligibility(b,feedTime(minute),policy['可用状态']).eligible).sort((a,b)=>a['有效期'].localeCompare(b['有效期'])||a['批次编号'].localeCompare(b['批次编号']));
     const candidates=inventory.map(b=>({key:'inventory:'+b['批次编号'],lotId:b['批次编号'],capacity:sub(q(b['账面数量']),q(b['已占用数量'])),expiry:b['有效期'],quality:b['质量状态'],readyAt:b['预计可用时间']||'',conditional:false}));
     if(policy['允许预计供给'])for(const use of data.supplyUses||[]){
      if(use['订单编号']!==demand.orderId||use['工序编号']!==demand.operation)continue;

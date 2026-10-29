@@ -1,3 +1,4 @@
+import {inventoryView} from './lib/inventory-view.mjs';
 import {CsvBatchPanel} from './CsvBatchPanel';
 import {ExchangeGuide} from './ExchangeGuide';
 import {ReportPanel} from './ReportPanel';
@@ -6,7 +7,6 @@ import {TaskLinkage} from './TaskLinkage';
 import {TimelinePanel} from './TimelinePanel';
 import {ConfirmationPanel} from './ConfirmationPanel';
 import {ExecutionPanel} from './ExecutionPanel';
-import {executionInventory} from './lib/material-allocation.mjs';
 import {TrialPanel,type Trial} from './TrialPanel';
 import {ResultPanel,type ResultPlan} from './ResultPanel';
 import {DeliveryPanel,type DeliveryPlan} from './DeliveryPanel';
@@ -29,7 +29,7 @@ import { type VerificationReport, type VerificationStatus } from './lib/independ
 import { validateMasterData } from './lib/master-data.mjs';
 import { validateProcessConfig } from './lib/process-config.mjs';
 import { validateExpectedSupply, resolveExpectedSupply, type SupplyCondition } from './lib/expected-supply.mjs';
-import { queryInventoryAvailability, validateInventoryBatches } from './lib/inventory.mjs';
+import { validateInventoryBatches } from './lib/inventory.mjs';
 import { validateBomConfig } from './lib/bom-config.mjs';
 
 type Row = Record<string, string>;
@@ -51,7 +51,7 @@ export default function App() {
   const [view,setView]=useState<'schedule'|'data'|'query'|'decisions'|'reports'>('schedule');
   useEffect(()=>{if(view!=='query')setQueryInputTable(undefined);},[view]);
   const [tableKey,setTableKey]=useState('orders');
-  const [inventoryAsOf,setInventoryAsOf]=useState(new Date().toISOString().slice(0,16));
+  const [inventoryAsOf,setInventoryAsOf]=useState(new Date(Date.now()+8*3600000).toISOString().slice(0,16));
   const [selected,setSelected]=useState<string[]>([]);
   const [focusedProblem,setFocusedProblem]=useState<any>(null);
   const [problemOnly,setProblemOnly]=useState(false);
@@ -73,7 +73,7 @@ export default function App() {
   const orderHistory=operations.flatMap(r=>{const x=r as typeof r & {target?:string;before?:Row[];after?:Row[]};if((x as typeof x & {trialId?:string}).trialId||x.target!=='orders'||!x.before||!x.after)return [];return x.after.flatMap(row=>{const before=x.before!.find(b=>b['订单编号']===row['订单编号']);return before?['合格需求','数量单位','要求可交付分钟'].filter(f=>before[f]!==row[f]).map(f=>({orderId:row['订单编号'],field:f,before:before[f],after:row[f],changedAt:x.at})):[];});});
   const currentDef=defs.find(d=>d.key===tableKey)!;
   const currentRows=data[tableKey]||[];
-  const inventoryQuery=useMemo<ReturnType<typeof queryInventoryAvailability>>(()=>queryInventoryAvailability(executionInventory(data),{asOf:inventoryAsOf,rules:data.rules||[]}).map(row=>({...row,'账面数量':Number((data.inventory||[]).find(b=>b['批次编号']===row['批次编号'])?.['账面数量']||0)})),[data.inventory,data.executionMaterials,data.rules,inventoryAsOf]);
+  const inventoryQuery=useMemo(()=>inventoryView(data,inventoryAsOf?inventoryAsOf+':00+08:00':''),[data.inventory,data.executionMaterials,data.rules,inventoryAsOf]);
   const inventoryIssues=useMemo(()=>validateInventoryBatches(data.inventory||[],data.materials||[]),[data.inventory,data.materials]);
   const supplyInput=JSON.stringify({supplies:data.supplies||[],delays:data.supplyDelays||[],uses:data.supplyUses||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[]});
   const supplyIssues=useMemo(()=>validateExpectedSupply(JSON.parse(supplyInput)),[supplyInput]);
@@ -152,7 +152,8 @@ export default function App() {
         <SingleCsvPanel key={`${tableKey}:${inputVersion}:${session?.role||''}`} table={currentDef} rows={currentRows} revision={inputVersion} canWrite={!!session?.canWrite&&!!reason.trim()&&tableKey!=='factoryLines'} busy={busy} api={api} refresh={refresh}/>
         <div className="data-tabs">{defs.map(d=><button className={d.key===tableKey?'chosen':''} key={d.key} onClick={()=>{setTableKey(d.key);setSelected([]);}}>{d.label}<small>{data[d.key]?.length||0}</small></button>)}</div>
         {tableKey==='rules'&&<RulePanel data={data} history={operations}/>}
-        {tableKey==='inventory'&&<div className="panel inventory-panel"><div className="panel-head"><div><h2>库存账面与当前可用量</h2><p>当前可用量 = 账面数量 − 已占用数量；质量状态、预计可用时间与有效期任一不满足时，该批次可用量为 0。</p></div><label>查询时点 <input type="datetime-local" value={inventoryAsOf} onChange={e=>setInventoryAsOf(e.target.value)}/></label></div><div className="table-wrap"><table><thead><tr><th>批次</th><th>物料</th><th>账面数量</th><th>已占用</th><th>当前可用</th><th>有效期</th><th>质量状态</th><th>预计可用时间</th></tr></thead><tbody>{inventoryQuery.map(batch=><tr key={batch['批次编号']}><td>{batch['批次编号']}</td><td>{batch['物料编号']}</td><td>{batch['账面数量']}</td><td>{batch['已占用数量']}</td><td><b>{batch['当前可用数量']}</b></td><td>{batch['有效期']}</td><td>{batch['质量状态']}</td><td>{batch['预计可用时间']||'立即'}</td></tr>)}</tbody></table>{!inventoryQuery.length&&<div className="empty">没有库存批次</div>}</div><div className="hint-box"><b>质量可用状态配置</b><span>在“排程规则”中编辑 INVENTORY 规则的参数JSON，例如 {`{"可用质量状态":["合格","条件放行"]}`}。默认仅“合格”可用；待检、冻结、不合格等状态默认排除。此配置仅用于库存可用量模拟，不提供 QA 审批或放行。</span></div>{inventoryIssues.length>0&&<div className="finding-list">{inventoryIssues.map((issue,i)=><div className="finding" key={`${issue.code}-${i}`}><b>{issue.code}</b><span>{issue.message}</span></div>)}</div>}</div>}
+        {tableKey==='inventory'&&<section className="panel inventory-panel" data-inventory-view><div className="panel-head"><div><h2>库存账面与当前可用量</h2><p>模拟数据维护；余额 = 账面 − 累计模拟耗料；可用量再减已有占用，并检查质量、效期和预计可用时间。</p></div><label>查询时点（工厂 +08:00） <input type="datetime-local" value={inventoryAsOf} onChange={e=>setInventoryAsOf(e.target.value)}/></label></div><p>查询沿用 INVENTORY；分配沿用 MATERIAL 独立配置。方案内分配与缺口见方案物料清单，未写入库存占用。无 QA 在线审批或放行。</p><div className="table-wrap"><table><thead><tr>{['批次','物料','账面数量','累计模拟耗料','扣耗后余额','已占用','当前查询可用','分配前可用','位置','有效期','模拟质量状态','预计可用时间','查询守卫','分配守卫'].map(h=><th key={h}>{h}</th>)}</tr></thead><tbody>{inventoryQuery.map(batch=><tr key={String(batch['批次编号'])}>{['批次编号','物料编号','账面数量','累计模拟耗料','扣耗后余额','已占用数量','当前可用数量','分配前可用数量','位置','有效期','质量状态','预计可用时间','不可用原因','分配守卫'].map(f=><td key={f}>{batch[f]??'未检查'}</td>)}</tr>)}</tbody></table></div>{inventoryIssues.map((issue,i)=><div className="finding" key={i}>{issue.code}：{issue.message}</div>)}</section>}
+
         {['supplies','supplyDelays','supplyUses'].includes(tableKey)&&<section className="panel"><h2>预计供给 · 到达与可用分开</h2><p>全部为模拟预计量，永不计入库存账面或确认真实到货。日期时间须含时区，例如 2026-11-02T08:00:00+08:00。延期表保留原始到料，按记录时间应用全部模拟调整；CSV 只替换当前表，错误导入不会生效。</p><p>在“计划供给引用”指定订单、工序、供给及数量，计算时按调整后的预计可用时间等待；跨引用合计不能超过预计量。此引用不表示已满足该工序全部物料需求。</p><div className="table-wrap"><table><thead><tr><th>供给 / 批次</th><th>物料 / 预计量</th><th>原预计到达</th><th>原预计可用</th><th>调整后到达</th><th>调整后可用</th><th>延期记录</th><th>性质</th></tr></thead><tbody>{resolvedSupplies.map((r,i)=><tr key={i}><td>{r['供给编号']} / {r['批次编号']}</td><td>{r['物料编号']} / {r['预计数量']}</td><td>{r['预计到达时间']}</td><td>{r['预计可用时间']}</td><td>{r['生效到达时间']}</td><td>{r['生效可用时间']}</td><td>{r['延期记录'].map(d=>`${d['记录编号']}：${d['原因']}`).join('；')||'无'}</td><td>{r['供给性质']}</td></tr>)}</tbody></table></div>{supplyIssues.map((issue,i)=><div className="finding" key={i}><b>{issue.code}</b><span>{issue.message}</span></div>)}</section>}
         <div className="schema-note"><b>{currentDef.file}</b><span>字段：{currentDef.fields.join('、')}</span><span>可追溯：FR-013/014/015/016 · DT-09/11/13</span></div>
         {tableKey==='orders'&&<>
