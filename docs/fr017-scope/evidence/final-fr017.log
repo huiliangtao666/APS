@@ -1,0 +1,41 @@
+TAP version 13
+# Subtest: T08/T10/U01 exact effective fields follow the Worker resolver and all resource scopes
+ok 1 - T08/T10/U01 exact effective fields follow the Worker resolver and all resource scopes
+  ---
+  duration_ms: 4.909893
+  type: 'test'
+  ...
+# Subtest: U05 separate disabled, future, unsupported, missing and adopted; minimal never claims adoption
+ok 2 - U05 separate disabled, future, unsupported, missing and adopted; minimal never claims adoption
+  ---
+  duration_ms: 3.073751
+  type: 'test'
+  ...
+# Subtest: U01 exact disabled substitution overrides wildcard; no implicit reverse/transitive eligibility
+ok 3 - U01 exact disabled substitution overrides wildcard; no implicit reverse/transitive eligibility
+  ---
+  duration_ms: 1.644103
+  type: 'test'
+  ...
+# Subtest: H02 upgrade/restart/read compatibility is idempotent and preserves full old history; rollback read; missing snapshot blocks writes
+ok 4 - H02 upgrade/restart/read compatibility is idempotent and preserves full old history; rollback read; missing snapshot blocks writes
+  ---
+  duration_ms: 91.165961
+  type: 'test'
+  ...
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# Subtest: N04 unsupported model fields and query writes reject atomically; frozen new run preview kept in original snapshot
+ok 5 - N04 unsupported model fields and query writes reject atomically; frozen new run preview kept in original snapshot
+  ---
+  duration_ms: 146.784267
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 439.853267

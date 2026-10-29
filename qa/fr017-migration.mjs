@@ -1,0 +1,15 @@
+import fs from 'node:fs';import path from 'node:path';import os from 'node:os';import assert from 'node:assert/strict';import express from 'express';import {createHash} from 'node:crypto';
+import {createBusinessRouter as current} from '../server/business.mjs';import {createBusinessRouter as parent} from '/tmp/fr017-parent/server/business.mjs';
+import {policyFixture} from './dec0203-fixture.mjs';
+const dir=fs.mkdtempSync(path.join(os.tmpdir(),'fr017-migration-')),file=path.join(dir,'business.json'),out='/evidence/migration.json',records=[];
+const hash=x=>createHash('sha256').update(x).digest('hex');
+const options={dataDir:dir,actorMiddleware:(q,_s,n)=>{q.praetorActor={kind:'user',issuer:'test',sub:'planner',requestId:'migration'};n();},requireMember:()=> (q,_s,n)=>{q.member={role:'planner'};n();}};
+async function open(factory){const a=express();a.use(express.json({limit:'5mb'}));a.use('/api',factory(options));const s=a.listen(0,'127.0.0.1');await new Promise(r=>s.once('listening',r));return {close:()=>new Promise(r=>s.close(r)),call:async(p,body)=>{const r=await fetch('http://127.0.0.1:'+s.address().port+'/api'+p,{method:body?'POST':'GET',headers:{'content-type':'application/json'},body:body?JSON.stringify({reason:'仿真升级回滚验证',...body}):undefined});return {status:r.status,body:await r.json()};}};}
+let server;
+try{
+ server=await open(parent);assert.equal((await server.call('/inputs',{revision:0,tables:policyFixture()})).status,200);const p=(await server.call('/calculate',{revision:1})).body;await server.close();
+ const bytes=fs.readFileSync(file,'utf8'),original=JSON.parse(bytes);records.push({stage:'parent',hash:hash(bytes),plan:p});
+ for(const [stage,factory]of [['upgrade',current],['restart',current],['rollback-parent',parent],['reupgrade',current]]){server=await open(factory);const s=await server.call('/state'),plans=await server.call('/plans'),inputs=await server.call('/plans/'+p.id+'/inputs');assert.equal(s.status,200);assert.equal(inputs.status,200);assert.equal(fs.readFileSync(file,'utf8'),bytes);assert.deepEqual(JSON.parse(fs.readFileSync(file)).plans,original.plans);records.push({stage,hash:hash(fs.readFileSync(file)),revision:s.body.revision,plans,inputs});await server.close();}
+ const broken=structuredClone(original);broken.plans[0].status='confirmed';delete broken.inputVersions[broken.plans[0].inputVersionId];fs.writeFileSync(file,JSON.stringify(broken));const b=fs.readFileSync(file,'utf8');server=await open(current);assert.equal((await server.call('/plans/'+p.id+'/inputs')).status,409);const tools=structuredClone(broken.data.tools);tools[0]['可用数量']='2';const denied=await server.call('/inputs',{revision:broken.revision,tables:{tools}});assert.equal(denied.body.error,'protected_history_unavailable');assert.equal(fs.readFileSync(file,'utf8'),b);records.push({stage:'missing-old-snapshot',denied,beforeHash:hash(b),afterHash:hash(fs.readFileSync(file))});await server.close();
+ fs.writeFileSync(out,JSON.stringify({complete:true,parent:'ca13c6d26a40eb329011c0fa66a747aa735570da',records},null,2));
+}finally{await server?.close().catch(()=>{});fs.rmSync(dir,{recursive:true,force:true});}
