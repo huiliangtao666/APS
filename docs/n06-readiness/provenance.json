@@ -1,0 +1,13 @@
+{
+  "requirement_main_sha": "0a0e135aa496cb7aa5a1c2e8f61641fdcbed5673",
+  "p10_design_sha": "9c230d4aeda124915bcb917b929050f020a11951",
+  "inspected_product_sha": "7a26732efc0fb440ca6f8ac7aa6261e33757eb81",
+  "inspected_direct_parent": "2016258169074d1e29292e5a3e58a0fa9304b4bf",
+  "source_originals": {
+    "APS需求分析与设计说明书_v0.3.docx": "4eb29f7cfaf4fe30f76329775d32930b806da941282098b7de163591807bc7d4",
+    "APS测试数据_v0.3_约束场景与配置数据.zip": "01aa86f90d257e3e6c948531f1010d0a0fdf502a68266176991dc0fb8f107759"
+  },
+  "source_originals_note": "APS-Dev root originals; excerpts only committed, no entire customer doc/archive published",
+  "card_read": "live authenticated GraphQL read; no mutation",
+  "evidence_capture": "2026-10-30 Asia/Singapore"
+}
