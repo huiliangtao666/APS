@@ -456,7 +456,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR013受影响需求增量；不等于已实现或UAT通过",
-      "implementation_status": "用户业务决定已登记；应用实现与独立Test尚未交付",
+      "implementation_status": "Dev已交付固定SHA；独立Test分项执行中；未合main/未发布",
       "primary_requirements": [
         "FR-013"
       ],
@@ -474,7 +474,7 @@
       "acceptance_delta": "CSV模板/预览/导入按批准配置校验：小数袋支拒绝，总收率>100%拒绝；合法配置保存刷新后生效，非法/越权整批零写入；保留旧确认/历史。",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006",
       "related_issue_urls": [],
-      "acceptance_result": "未进行本CR产品验收；旧原范围PASS保留原SHA",
+      "acceptance_result": "Dev自测PASS；本CR独立Test待结论；原卡NOT_READY；旧有限PASS保留原SHA",
       "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
       "history": [
         {
@@ -483,10 +483,10 @@
           "event": "用户确认本CR增量，原卡仍In progress/NOT_READY；待实现与独立验收"
         }
       ],
-      "dev_delivery": "",
+      "dev_delivery": "dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1",
       "contract_review_delivery": "",
-      "product_test_delivery": "",
-      "code_sha": "",
+      "product_test_delivery": "dlv_b4987c57-516c-4c3a-b0d6-2cab6febb7c9；dlv_1aef3889-5dad-4483-a367-479e14a240dd",
+      "code_sha": "fc273441ca93dcc47996bf5a6f7031e73be7f226",
       "code_branch": "",
       "dev_report": "",
       "test_report": "",

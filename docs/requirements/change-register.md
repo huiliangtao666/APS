@@ -6,7 +6,7 @@
 | --- | --- | --- | --- | --- | --- |
 | CR-DEC02-03-20261029 | 工装、人员、技能业务选择的前台参数化维护及排程生效 | 已批准能力方向并授权开发；具体默认参数值未批准 | FR-006、FR-007、FR-017、FR-022、BR-06、BR-07 | P08/P09 fixed e0be9b6d scoped independent 15/15 PASS; FR017 prior scoped PASS; FR007/022 and full CR NOT_READY | P08/P09 scoped 15/15 independent PASS at e0be9b6d; prior S06/S07, D01-D03 and FR017 PASS stay original SHAs; P06/P10, N06, R01/R02 and full FR007/022/CR/UAT remain open |
 | CR-DEC04-05-06-20261029 | DEC-04/05/06数量、质量可用性与工艺参数的需求设计深化及mock | 已批准需求设计深化、参数化及mock准备；应用实现未派发，具体业务值未批准 | FR-002、FR-003、FR-004、FR-005、FR-010、FR-011、FR-017、FR-020、FR-021、FR-022、FR-023、BR-02、BR-04、BR-08、BR-09、BR-10、BR-11、BR-12、BR-13、BR-14、BR-18 | 独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。 |
-| CR-FR013-VALIDATION-20261029 | FR013袋支/收率及字段可配置校验 | 已批准具体校验与可配置方向；具体其他业务默认值未批准 | FR-013 | 用户业务决定已登记；应用实现与独立Test尚未交付 | 未进行本CR产品验收；旧原范围PASS保留原SHA |
+| CR-FR013-VALIDATION-20261029 | FR013袋支/收率及字段可配置校验 | 已批准具体校验与可配置方向；具体其他业务默认值未批准 | FR-013 | Dev已交付固定SHA；独立Test分项执行中；未合main/未发布 | Dev自测PASS；本CR独立Test待结论；原卡NOT_READY；旧有限PASS保留原SHA |
 | CR-FR038-PERF-20261029 | FR038排程时间暂定目标 | 已批准暂定30秒目标；AC27规模/规则/环境仍待确认 | FR-038 | 用户业务决定已登记；应用实现与独立Test尚未交付 | 未进行本CR产品验收；旧原范围PASS保留原SHA |
 
 ## CR-DEC02-03-20261029
@@ -82,7 +82,7 @@
 
 **主跟踪记录**：https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006
 
-**交付与审查追踪**：Dev 未派发应用实现；设计/契约审查 未派发；产品Test 未派发。代码SHA：无本CR应用交付；设计文档提交：见主Issue及受控目录。
+**交付与审查追踪**：Dev dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1；设计/契约审查 未派发；产品Test dlv_b4987c57-516c-4c3a-b0d6-2cab6febb7c9；dlv_1aef3889-5dad-4483-a367-479e14a240dd。代码SHA：fc273441ca93dcc47996bf5a6f7031e73be7f226；设计文档提交：见主Issue及受控目录。
 
 ## CR-FR038-PERF-20261029
 
