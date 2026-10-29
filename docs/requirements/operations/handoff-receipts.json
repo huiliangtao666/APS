@@ -1420,6 +1420,39 @@
       "repair_rounds_completed": 0,
       "next_owner": "APS-Dev for first repair round; scope limited to PRE01 and LOC01",
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_216ce026-d13a-4330-911f-264ac6f3b138:r1",
+      "type": "DEV_DELIVERED",
+      "source": "APS-Dev delivery to APS-PM and original task",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T20:02:19+08:00",
+      "requirement": "FR-013 / Issue #4",
+      "product_sha": "7338108a01e4bcfa18e98d9c1ad5a17a187665e4",
+      "parent_sha": "66af9caceb57eff429dd8b14bbad690f62bfe749",
+      "branch": "feat/fr-013-016-main-batch",
+      "changed_files": [
+        "qa/fr013-main-browser.mjs",
+        "qa/issue4-category-r1-browser.mjs",
+        "qa/issue4-category-r1.test.mjs",
+        "qa/issue4-category-r1/REPRO-LOC01.csv",
+        "qa/issue4-category-r1/REPRO-PRE01.csv",
+        "server/business.mjs",
+        "server/csv-single.mjs",
+        "src/App.tsx",
+        "src/SingleCsvPanel.tsx"
+      ],
+      "result": "PRE01/LOC01 first repair round Dev self-check PASS; Test pending; FR013 NOT_READY",
+      "report_sha256": "1ac7434b98f58a4179b22bea7e5beee028969805478335ddfc0af78ead815c78",
+      "evidence_zip_sha256": "91b339e633bce3160ed8b793272678f31f391c883d5d203ad8106843e0ab12b6",
+      "zip_crc": "PASS",
+      "zip_internal_hashes_verified": 97,
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6496000107",
+      "test_delivery": "dlv_8cf177f1-c3fc-46c5-923c-e08ded0100af",
+      "project_status": {
+        "FR-013": "In progress"
+      },
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
