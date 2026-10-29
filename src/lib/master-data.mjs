@@ -1,5 +1,5 @@
 import {sourceRefs} from './problem-records.mjs';
-/** FR-002 structural validation only. This deliberately does not convert or round quantities. */
+/** Structural checks plus explicit integer bags and capped ratio; no conversion. */
 export function validateMasterData({ products = [], materials = [], orders = [], routes = [], dependencies = [] }, original = {}) {
   const findings = [];
   const source=(table,rows,field)=>({table,field,relatedRecords:sourceRefs(table,rows,original[table]||({products,materials,orders,routes,dependencies})[table])});
@@ -25,6 +25,19 @@ export function validateMasterData({ products = [], materials = [], orders = [],
     }
   }));
   numeric(products, [['单支净重kg', false], ['每袋支数', false], ['总收率', false], ['模拟交付等待分钟', true]], '产品', 'products');
+  // Compare decimal text exactly: Number() would round 1.0000000000000000001
+  // to 1, admitting both fractional bags and yields over 100%.
+  products.forEach((row, index) => {
+    const check = (field, valid, message) => {
+      if (!valid) findings.push({code:'INPUT / MASTER_VALUE', ...source('products',[row],field), message:`产品第 ${index+1} 行 ${field} ${message}`});
+    };
+    const bag = (row['每袋支数'] || '').trim();
+    check('每袋支数', /^(?:\d+)(?:\.0*)?$/.test(bag) && /[1-9]/.test(bag.split('.')[0]), '须为正整数（支/袋），不接受小数支数，不自动取整');
+    const rate = (row['总收率'] || '').trim();
+    // Existing CSV stores a ratio: 0.96 = 96%, 1 = 100%; never infer % syntax.
+    check('总收率', /^(?:0*\.\d*[1-9]\d*|0*1(?:\.0*)?)$/.test(rate), '须为大于0且不超过1的比例（1 = 100%），须显式配置');
+  });
+
   const referencedProducts = [
     ...orders.map((r, i) => ({ id: (r['产品编号'] || '').trim(), where: `订单第 ${i + 1} 行`, ...source('orders',[r],'产品编号') })),
     ...routes.map((r, i) => ({ id: (r['产品编号'] || '').trim(), where: `工艺路线第 ${i + 1} 行`, ...source('routes',[r],'产品编号') })),

@@ -390,7 +390,8 @@
         "src/App.tsx#importCsv",
         "server/input-validation.mjs#validateInputs"
       ],
-      "template": "templates/07_产品与包装规格.csv"
+      "template": "templates/07_产品与包装规格.csv",
+      "approved_validation": "CR-FR013-VALIDATION-20261029: 单支净重kg>0；每袋支数为正整数(支/袋)，不取整；总收率为比例0<值≤1(1=100%)；模拟交付等待分钟显式非负；缺值阻断，无业务默认。"
     },
     {
       "key": "materials",
@@ -419,7 +420,8 @@
         "src/App.tsx#importCsv",
         "server/input-validation.mjs#validateInputs"
       ],
-      "template": "templates/08_物料主数据.csv"
+      "template": "templates/08_物料主数据.csv",
+      "approved_validation": "CR-FR013-VALIDATION-20261029: 物料单位/类别为必填自定义文本，无固定枚举、不自动换算；沿用关联单位匹配约束。"
     },
     {
       "key": "supplies",

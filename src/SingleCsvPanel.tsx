@@ -1,3 +1,4 @@
+import {MasterDataContract} from './MasterDataContract';
 import {useEffect,useRef,useState} from 'react';
 type Row=Record<string,string>;
 type Issue={file:string;row:number;field:string;reason?:string;message?:string};
@@ -27,6 +28,7 @@ export function SingleCsvPanel({table,rows,revision,canWrite,busy,api,refresh}:{
  function locate(issue:Issue){const el=editor.current;if(!el)return;const text=el.value,lines=[0];for(let i=0;i<text.length;i++){if(text[i]==='\r'){if(text[i+1]==='\n')i++;lines.push(i+1);}else if(text[i]==='\n')lines.push(i+1);}el.focus();el.setSelectionRange(lines[Math.max(0,issue.row-1)]??0,lines[issue.row]??text.length);}
  const proposed=preview?.tables[table.key],disabled=!canWrite||busy||pending;
  return <section data-csv-single aria-label="单表 CSV 导入"><h3>单表 CSV 导入 · {table.label}</h3>
+ <MasterDataContract table={table.key}/>
  <label className="upload">导入 CSV<input aria-label="导入单表 CSV" type="file" accept=".csv,text/csv" disabled={disabled} onChange={e=>{const file=e.target.files?.[0];e.target.value='';if(file)void inspect(file);}}/></label>
  <p role="status">{message}</p>
  {name&&<div role="region" aria-label="单表导入预览"><h4>{name} · 导入前检查与变更预览</h4>
