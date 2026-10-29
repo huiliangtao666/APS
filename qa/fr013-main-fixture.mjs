@@ -1,2 +1,2 @@
-import {defs} from '../server/planner.ts';import {batchKeys} from '../server/csv-batch.mjs';
-export function filesOf(data,keys=batchKeys){return keys.filter(key=>Array.isArray(data[key])).map(key=>{const d=defs.find(d=>d.key===key),quote=v=>'"'+String(v??'').replaceAll('"','""')+'"';return {name:d.file,text:[d.fields,...data[key].map(r=>d.fields.map(f=>r[f]??''))].map(row=>row.map(quote).join(',')).join('\r\n')+'\r\n'};});}
+import {defs} from '../server/planner.ts';
+export function filesOf(data,keys=['factoryLines','orders','routes','times','machines','dependencies','rules']){return keys.filter(key=>Array.isArray(data[key])).map(key=>{const d=defs.find(d=>d.key===key),quote=v=>'"'+String(v??'').replaceAll('"','""')+'"';return {name:d.file,text:[d.fields,...data[key].map(r=>d.fields.map(f=>r[f]??''))].map(row=>row.map(quote).join(',')).join('\r\n')+'\r\n'};});}

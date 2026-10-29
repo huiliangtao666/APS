@@ -120,7 +120,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(table!==undefined&&(!def||files.length!==1))return res.status(400).json({error:'invalid_single_table'});
     const inspection=def?inspectSingleCsv(files[0],def):inspectCsvBatch(files,defs);
     if(table==='simulationEvents')inspection.tables.executionFacts=s.data.executionFacts||[];
-    const base={tables:inspection.tables,sources:inspection.sources,revision};
+    const base={tables:inspection.tables,sources:inspection.sources,revision,beforeTables:Object.fromEntries(Object.keys(inspection.tables).map(key=>[key,s.data[key]||[]]))};
     if(inspection.issues.length)return res.json({...base,valid:false,issues:inspection.issues});
     const checked=checkCsv({...req,body:{...req.body,operation:'import'}},s,inspection,true);
     if(checked.status!==200)return res.status(checked.status).json({...base,valid:false,...checked.body});

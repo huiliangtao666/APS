@@ -27,11 +27,11 @@ test('preview ownership, permission, reason, stale input/state and unsupported s
  for(const [endpoint,body,role,status] of [['/imports/preview',request(),'query',403],['/imports/commit',{previewId:p.id},'query',403],['/imports/commit',{previewId:p.id},'supervisor',409],['/imports/preview',{...request(),reason:''},'planner',400],['/imports/preview',request(raw('PRE01'),99),'planner',409],['/imports/preview',request(raw('PRE01'),0,'factoryLines'),'planner',400],['/imports/preview',request(raw('PRE01'),0,'unknown'),'planner',400]]){assert.equal((await f.call(endpoint,body,role)).status,status);assert.equal(f.bytes(),before);}
  await f.ok('/calculate',{revision:0});const changed=f.bytes();assert.equal((await f.call('/imports/commit',{previewId:p.id})).body.error,'stale_preview');assert.equal(f.bytes(),changed);
 });
-test('all currently valid single-table contracts preview their original fields; batch remains seven-file and rejects calendar category',async t=>{
+test('all currently valid single-table contracts preview their original fields; original six/seven-file batch still works; calendar now accepted',async t=>{
  const f=await setup(t),s=await f.ok('/state'),before=f.bytes();
  for(const def of defs.filter(d=>d.key!=='factoryLines'&&(s.data[d.key]||[]).length)){
   const file=filesOf(s.data,[def.key])[0],p=await f.call('/imports/preview',{table:def.key,revision:0,files:[file]});assert.equal(p.status,200,def.key+JSON.stringify(p));assert.equal(p.body.valid,true,def.key+JSON.stringify(p.body.issues));assert.equal(f.bytes(),before);
  }
- const invalid=await f.ok('/imports/preview',{files:[{name:'02_工厂工作日历.csv',text:raw('PRE01')}],revision:0});assert.equal(invalid.valid,false);assert.equal(f.bytes(),before);
+ const invalid=await f.ok('/imports/preview',{files:[{name:'02_工厂工作日历.csv',text:raw('PRE01')}],revision:0});assert.equal(invalid.valid,true);assert.equal(f.bytes(),before);
  const d=structuredClone(seed);d.orders[0]['优先顺序']='8';const six=await f.ok('/imports/preview',{revision:0,files:filesOf(d)});assert.equal(six.valid,true);assert.equal(f.bytes(),before);d.factoryLines=[{'工厂编号':'F01','工厂名称':'模拟工厂','产线编号':'L01','产线名称':'模拟产线','时区':'Asia/Shanghai'}];const files=filesOf(d);assert.equal(files.length,7);const p=await f.ok('/imports/preview',{revision:0,files});assert.equal(p.valid,true);assert.equal(f.bytes(),before);assert.equal((await f.ok('/imports/commit',{previewId:p.id})).revision,1);
 });
