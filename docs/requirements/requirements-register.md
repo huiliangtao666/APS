@@ -1,6 +1,6 @@
 # 当前需求跟踪表
 
-快照：2026-10-29T16:37:12+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
+快照：2026-10-29T16:59:45+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
 
 | 编号 | 名称 | 要求版本 | 生效CR | 原卡状态 | 当前环节 | 验收结论 | 原卡 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -34,7 +34,7 @@
 | FR-028 | 修改条件后重新试算 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | v0.3本卡22条适用责任断言22 PASS；Design复核接受固定产品SHA，无本卡阻断，Done。FR026成功恢复仍未完成，FR031原责任保留；真实平台/部署/生产持久性及业务UAT未执行。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg8s) |
 | FR-029 | 模拟异常与重新排程 | v0.3 |  | In progress | 实施或验收未闭环，见原卡/关联Issue | 未登记原需求完整版本验收；有限通过证据见原卡 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg9s) |
 | FR-030 | 主管确认、发布与归档 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | v0.3本卡20条适用责任断言20 PASS；Design复核接受固定产品SHA，无本卡阻断，Done。真实平台/部署/生产持久性及业务UAT未执行；Issue13其他FR/CR责任保留。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg-Y) |
-| FR-031 | 维护模拟进度并检查剩余工作 | v0.3 |  | In progress | FR031本卡NOT_READY；两项既有范围缺陷首轮修正已派APS-Dev，待交付后定向复测 | NOT_READY；23项本卡责任断言21 PASS/2 FAIL；原FR018/028通过及FR026未完成责任保留。原UAT15未由QA确认。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg_o) |
+| FR-031 | 维护模拟进度并检查剩余工作 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | FR031本卡23项适用责任有效PASS；21旧PASS沿原SHA证据并经影响分析承接，两原FAIL在新SHA独立复测PASS；修复round1/复测round1；FR026恢复及UAT15/真实平台/QA UAT单列未执行 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg_o) |
 | FR-032 | 资源负荷、物料缺口与提醒 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | v0.3本卡全部适用责任断言独立PASS，Design按原文复核后接受；无本范围阻断，Done。不是全项目UAT签收或应用上线。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhAY) |
 | FR-033 | 机器甘特图与任务时间表 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | v0.3本卡全部适用责任断言独立PASS，Design按原文复核后接受；无本范围阻断，Done。不是全项目UAT签收或应用上线。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhB4) |
 | FR-034 | 甘特、明细与问题联动核对 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | v0.3本卡全部适用责任断言独立PASS，Design归集原通过范围及本次补缺后接受；无本范围阻断或必测未执行项，Done。不是业务UAT签收、完整CR验收或应用发布。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhDI) |

@@ -1112,6 +1112,33 @@
         "handoff_zip_sha256": "c81f41b33190885fbd238a5199adb9cce8d39ab6c0f83ce8c47b7529b5fd7947"
       },
       "receipt_transport": "This Inbox final result is returned by platform hook; no extra ACK delivery"
+    },
+    {
+      "event_key": "dlv_0038ba5b-7098-4930-b115-b8a2ad1816c9:r1",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test task result (active send failed 403)",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T16:59:16+08:00",
+      "product_sha": "ca13c6d26a40eb329011c0fa66a747aa735570da",
+      "parent_sha": "c8e16d408b2d0207cb9886b55f39a52ebc9c1665",
+      "requirement": "FR-031",
+      "project_status": "Done",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/14#issuecomment-6492385032",
+      "result": {
+        "effective_card_pass": 23,
+        "new_retest_pass": 16,
+        "repair_round": 1,
+        "retest_round": 1,
+        "recommendation": "READY_DONE"
+      },
+      "external_hashes": {
+        "FR031-ca13c6d2-FIX-R1-RETEST-R1-REPORT.txt": "8261acbcbadc3ade815b45a5a6fdd2b7f375fd9f027117ed874d3768fd4a40da",
+        "FR031-ca13c6d2-FIX-R1-RETEST-R1-ASSERTIONS.csv": "60c247245b3e35b0d1e2a56dfd4d5d6a0ad3328dd3d95decf25fe92873d2895b",
+        "FR031-ca13c6d2-FIX-R1-RETEST-R1-LAYERS.json": "dc3afc2e9bb15f4b9f4425c435da8502cd40d84896b07f369e8aa1447d09e94c",
+        "FR031-ca13c6d2-FIX-R1-RETEST-R1-EVIDENCE.zip": "857f6e038688933fd75f61d07f8d78e097f9206cf3612e1f830f9b5b9f5e79cc"
+      },
+      "notification": "FAILED_403; result read from original task and Files API",
+      "limitations": "FR026 restore, original UAT15 business approval, platform/SSO/deployment/persistence and QA UAT not executed"
     }
   ]
 }
