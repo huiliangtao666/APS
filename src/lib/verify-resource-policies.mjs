@@ -1,3 +1,4 @@
+import {hasPhysicalPools,validatePhysicalPools} from './physical-pools.mjs';
 import {resourceConflicts} from './resource-conflicts.mjs';
 import {quantityMath as Q} from './material-allocation.mjs';
 // Fixed-output checker: rebuild expected windows from frozen inputs, never call
@@ -10,6 +11,8 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
  const at=conditions?.ruleEvaluationAt??plan.ruleSnapshot?.at;
  if(!at||!Number.isFinite(Date.parse(at)))return unchecked('缺少冻结规则生效判定时刻，无法确定资源采用范围；未检查。');
  if(!['resourceClaims','tools','dependencies','personnelGroups','batchResources','skillSubstitutions'].every(k=>Array.isArray(data[k])))return unchecked('冻结资源配置不完整，无法重建需求；未检查。');
+ if(conditions?.personnelPoolContract==='P10-core-v1'&&(!Array.isArray(data.personnelPools)||!data.personnelPools.length))return {status:'problem',details:['P10冻结契约缺少物理池表，禁止降级按组容量复核']};
+ if(data.personnelPools!==undefined&&!Array.isArray(data.personnelPools))return {status:'problem',details:['冻结物理池表结构无效']};
  const problems=[],reservations=plan.resourceReservations||[],tasks=plan.tasks||[];
  const add=m=>problems.push(m),num=(r,k,fallback=0)=>Number(r[k]??fallback);
  const enabled=id=>(data.rules||[]).some(r=>r['规则编号']===id&&r['是否启用']==='是'&&(!conditions?.enabledRuleIds||conditions.enabledRuleIds.includes(id))&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at)));
@@ -79,6 +82,21 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
   const same=reservations.filter(x=>x.type===r.type&&x.resourceId===r.resourceId);
   for(const t of [r.start,...same.map(x=>x.start).filter(t=>t>=r.start&&t<r.end)])if(Q.cmp(same.filter(x=>x.start<=t&&x.end>t).reduce((s,x)=>Q.add(s,Q.q(x.quantity)),Q.zero),Q.q(String(capacity)))>0n)add(`${r.resourceId} 在分钟 ${t} 超容量 ${capacity}（所有技能合计）`);
   if(!(r.taskIds||[r.taskId]).some(id=>tasks.some(t=>t.id===id)))add(`${r.resourceId} 存在无任务资源占用`);
+ }
+ // Independent sweep of frozen group->pool identity; allocator and ledger labels
+ // are never the authority for physical membership or capacity.
+ if(hasPhysicalPools(data)){
+  for(const i of validatePhysicalPools(data,{at,forRun:true}))add(i.message);
+  if(conditions?.personnelPoolContract!=='P10-core-v1')add('P10冻结契约版本缺失/不符');
+  const labor=reservations.filter(r=>r.type==='人员');
+  for(const r of labor){const g=data.personnelGroups.find(g=>g['人员组编号']===r.resourceId);if(!g?.poolId||r.poolId!==g.poolId)add(`${r.resourceId} 账本poolId与冻结组映射不一致`);}
+  for(const p of data.personnelPools||[]){
+   const rows=labor.filter(r=>data.personnelGroups.find(g=>g['人员组编号']===r.resourceId)?.poolId===p.poolId);
+   for(const t of [...new Set(rows.flatMap(r=>[r.start,r.end]))]){
+    const active=rows.filter(r=>r.start<=t&&r.end>t),total=active.reduce((s,r)=>s+Number(r.quantity),0);
+    if(total>Number(p['总人数']))add(`物理池 ${p.poolId} 在分钟 ${t} 需求 ${total} 人 / 可用 ${p['总人数']} 人 / 差额 ${total-Number(p['总人数'])}，跨组统一扣算`);
+   }
+  }
  }
  const findings=resourceConflicts(plan,data,conditions);
  const hasPolicy=enabled('MOLD')||enabled('STORAGE')||(data.dependencies||[]).some(d=>d['资源类型']==='人员技能');

@@ -1,0 +1,72 @@
+TAP version 13
+# Subtest: cross-group physical total is unique; independent posts sum and group qualification cap retained
+ok 1 - cross-group physical total is unique; independent posts sum and group qualification cap retained
+  ---
+  duration_ms: 27.863511
+  type: 'test'
+  ...
+# Subtest: same pool across tasks and groups, endpoint release; distinct pools independent; candidate alternatives search without duplicate consumption
+ok 2 - same pool across tasks and groups, endpoint release; distinct pools independent; candidate alternatives search without duplicate consumption
+  ---
+  duration_ms: 1.183361
+  type: 'test'
+  ...
+# Subtest: same-post overlap max and distinct-post adjacent windows, no skill/shift/availability bypass
+ok 3 - same-post overlap max and distinct-post adjacent windows, no skill/shift/availability bypass
+  ---
+  duration_ms: 0.492911
+  type: 'test'
+  ...
+# Subtest: independent checker rebuilds pool identity/total and catches forged labels, quantity, missing coverage and wrong contract
+ok 4 - independent checker rebuilds pool identity/total and catches forged labels, quantity, missing coverage and wrong contract
+  ---
+  duration_ms: 5.005609
+  type: 'test'
+  ...
+# Subtest: no guesses for missing capacity/identity/shared flag or U01/U02; drafts save but cannot run; future effective version deferred
+ok 5 - no guesses for missing capacity/identity/shared flag or U01/U02; drafts save but cannot run; future effective version deferred
+  ---
+  duration_ms: 7.151917
+  type: 'test'
+  ...
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"at":"2026-10-29T17:19:38.858Z","action":"deny","requestId":"fr027-synthetic","actor":"user","reason":"membership_required"}
+# Subtest: Express invalid/unauthorized/stale/deletion/reused identity atomically reject; audit captures new versions; no downgrade
+ok 6 - Express invalid/unauthorized/stale/deletion/reused identity atomically reject; audit captures new versions; no downgrade
+  ---
+  duration_ms: 124.463434
+  type: 'test'
+  ...
+# Subtest: load retains identical same-group independent posts and maps physical identities from frozen data
+ok 7 - load retains identical same-group independent posts and maps physical identities from frozen data
+  ---
+  duration_ms: 2.191558
+  type: 'test'
+  ...
+# Subtest: N06 accepted execution facts still prevent dependency edits; corrupt confirmed history prevents P10 writes
+ok 8 - N06 accepted execution facts still prevent dependency edits; corrupt confirmed history prevents P10 writes
+  ---
+  duration_ms: 23.980264
+  type: 'test'
+  ...
+# Subtest: explicit same-name different pools stay distinct; referenced pool removal requires one complete cross-table remap
+ok 9 - explicit same-name different pools stay distinct; referenced pool removal requires one complete cross-table remap
+  ---
+  duration_ms: 35.238217
+  type: 'test'
+  ...
+# Subtest: design S08/S11/S12/S13 explicit quantities and malformed capacity/map inputs
+ok 10 - design S08/S11/S12/S13 explicit quantities and malformed capacity/map inputs
+  ---
+  duration_ms: 2.857466
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 353.117162

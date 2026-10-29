@@ -52,7 +52,8 @@ export const defs: TableDef[] = [
   { key: 'downtime', label: '设备停机例外', file: '04_设备停机与例外日历.csv', fields: ['设备编号','起始分钟','结束分钟','原因'] },
   { key: 'dependencies', label: '工序资源依赖', file: '12_工序资源与物料依赖.csv', fields: ['订单编号','工序编号','资源类型','资源编号','需求数量','提前占用分钟','后延占用分钟','所需技能','所需班次','候选人员组','人员岗位编号','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'] },
   { key: 'skillSubstitutions', label: '有向技能替代', file: '29_有向技能替代.csv', fields: ['关系编号','可提供技能','所需技能','是否启用','适用工序','说明'] },
-  { key: 'personnelGroups', label: '人员组与可用时间', file: '19_人员组与可用时间.csv', fields: ['人员组编号','人员组名称','人员数量','技能','班次','可用起始分钟','可用结束分钟'] },
+  { key: 'personnelPools', label: '物理人员池（P10核心）', file: '30_物理人员池.csv', fields: ['poolId','池名称','总人数','是否启用','允许共用','容量来源','适用范围','生效时间','交接设置'] },
+  { key: 'personnelGroups', label: '人员组与可用时间', file: '19_人员组与可用时间.csv', fields: ['人员组编号','人员组名称','人员数量','技能','班次','可用起始分钟','可用结束分钟','poolId'] },
   { key: 'rules', label: '排程规则', file: '16_排程规则配置.csv', fields: ['规则编号','中文名称','是否启用','参数JSON','适用对象','生效时间'] },
 ];
 export const seed: Record<string, Row[]> = {
@@ -104,7 +105,7 @@ export const seed: Record<string, Row[]> = {
   deliveryConditions: [],
   resourceClaims: [],
   batchResources: [],
-  personnelGroups: [], skillSubstitutions: [],
+  personnelGroups: [], personnelPools: [], skillSubstitutions: [],
   rules: [
     {'规则编号':'MACHINE','中文名称':'机器不重叠','是否启用':'是','参数JSON':'{}'},
     {'规则编号':'PRECEDENCE','中文名称':'工序顺序','是否启用':'是','参数JSON':'{}'},
@@ -114,7 +115,7 @@ export const seed: Record<string, Row[]> = {
 };
 
 function uid() { return `R1-${new Date().toISOString().replace(/[-:.TZ]/g,'').slice(0,14)}`; }
-function rulesInputFingerprint(data:Record<string,Row[]>) { const source=JSON.stringify({orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],personnelGroups:data.personnelGroups||[],machines:data.machines||[],calendars:data.calendars||[],downtime:data.downtime||[],rules:data.rules||[]});let hash=2166136261;for(let i=0;i<source.length;i++){hash^=source.charCodeAt(i);hash=Math.imul(hash,16777619);}return (hash>>>0).toString(16).padStart(8,'0'); }
+function rulesInputFingerprint(data:Record<string,Row[]>) { const source=JSON.stringify({orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],personnelGroups:data.personnelGroups||[],personnelPools:data.personnelPools||[],machines:data.machines||[],calendars:data.calendars||[],downtime:data.downtime||[],rules:data.rules||[]});let hash=2166136261;for(let i=0;i<source.length;i++){hash^=source.charCodeAt(i);hash=Math.imul(hash,16777619);}return (hash>>>0).toString(16).padStart(8,'0'); }
 function fmt(min: number) { const n=480+Math.round(min); return `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`; }
 function findCalendarWindow(calendarId:string, earliest:number, duration:number, calendars:Row[], downtime:Row[], machineId:string):{start:number|null;reason:string}{
   const valid=calendars.filter(r=>r['日历编号']===calendarId).map(r=>({start:Number(r['起始分钟']),end:Number(r['结束分钟']),work:r['是否工作']==='是'})).filter(r=>Number.isFinite(r.start)&&Number.isFinite(r.end)&&r.end>r.start);
@@ -249,7 +250,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
           if(overlap){timingReasons.push({code:'MACHINE_BUSY',sourceTaskId:overlap.id,resourceId:machineId,from:fit.start,to:overlap.end});candidate=overlap.end;continue;}
           jointPreview=previewResources(claims,fit.start,fit.start+duration,resourceReservations);
           if(!jointPreview.ok){resourceError=jointPreview.reason||'资源不可用';if(jointPreview.nextStart!==undefined&&jointPreview.nextStart>fit.start){timingReasons.push({code:'JOINT_RESOURCE',source:claims,from:fit.start,to:jointPreview.nextStart,message:resourceError});candidate=jointPreview.nextStart;continue;}break;}
-          personnel=allocatePersonnel(personnelRequirements,data.personnelGroups||[],fit.start,fit.start+duration,personnelReservations,sourceData.skillSubstitutions||[]);
+          personnel=allocatePersonnel(personnelRequirements,data.personnelGroups||[],fit.start,fit.start+duration,personnelReservations,sourceData.skillSubstitutions||[],sourceData.personnelPools||[]);
           if(!personnel.ok){
            personnelError=personnel.reason||'人员不可用';
            const next=personnelRequirements.flatMap(r=>[...personnelReservations.map(p=>p.end-(r['窗口外释放']==='否'?0:Number(r['人员开始偏移']||0))),...(data.personnelGroups||[]).map(g=>Number(g['可用起始分钟'])-(r['窗口外释放']==='否'?0:Number(r['人员开始偏移']||0)))]).filter(t=>Number.isFinite(t)&&t>fit.start!);

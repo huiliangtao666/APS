@@ -1,3 +1,4 @@
+import {validatePhysicalPools} from './physical-pools.mjs';
 // One policy source per declaration; no name/grade based skill rules.
 export const skillsOf=value=>String(value||'').split(/[;,，；\s]+/).filter(Boolean);
 // Empty candidate field preserves an explicit single group; never means all groups.
@@ -28,7 +29,7 @@ export function validatePolicyExecution(data,at=new Date().toISOString(),mode='s
  });
 }
 export function validatePolicies(data,at=new Date().toISOString(),mode='supported',checkExecution=true){
- const issues=[];const add=(table,i,field,message)=>issues.push({code:'INPUT / RESOURCE_POLICY',table,row:i+2,field,message,...(table==='dependencies'?{file:'12_工序资源与物料依赖.csv'}:{})});
+ const issues=[...validatePhysicalPools(data,{at})];const add=(table,i,field,message)=>issues.push({code:'INPUT / RESOURCE_POLICY',table,row:i+2,field,message,...(table==='dependencies'?{file:'12_工序资源与物料依赖.csv'}:{})});
  const skillSet=new Set((data.personnelGroups||[]).flatMap(g=>skillsOf(g['技能'])));
  for(const [i,r]of (data.dependencies||[]).entries())if(r['资源类型']==='人员技能'&&r['所需技能'])skillSet.add(r['所需技能']);
  if(checkExecution)issues.push(...validatePolicyExecution(data,at,mode));

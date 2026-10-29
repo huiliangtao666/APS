@@ -1,0 +1,104 @@
+Issue3 / FR007 / FR022 P10 physical pool identity and capacity core
+Original delivery: dlv_1e86ea88-67a6-4d95-85fc-98c63f2436ae
+Result event: dlv_1e86ea88-67a6-4d95-85fc-98c63f2436ae:r1
+Dispatch key: issue3:cr-dec02-03:p10-core-pool-identity-capacity:dev:v0.3:r1
+Authority: APS-BL-001 v0.3 + effective CR-DEC02-03-20261029.
+Design document SHA (not product): 9c230d4aeda124915bcb917b929050f020a11951.
+Issue: https://github.com/huiliangtao666/APS/issues/3#issuecomment-6502353099
+FR007: https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgjs
+FR022: https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg1o
+
+Version and isolation
+Branch feat/issue3-p10-core-pool; direct parent e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc.
+The final workspace report and GitHub read-back bind the exact delivered commit SHA.
+Original apps/aps-p10 readiness tree and other worktrees untouched.
+Fresh main authority read: e3f659252ad44f6c973a552a2b341c6f72b31ab5.
+FR021 fix 2662b2b39e5ae63b0ba3a0b0040e28c41c963337 and FR016 U1
+c30276b626927fcc49bee6248946ff0819a5ee1e are separate branches, NOT integrated here.
+Shared touched areas: planner/App for FR021; business/planner/run-input/App for U1.
+Their old acceptance stays at those SHAs. A combined product needs deliberate integration
+and relevant retests; this branch is not a replacement for either delivery or main.
+FR017 7077e536 scope inheritance implementation also remains on its own branch.
+
+Schema and operation
+A canonical personnelPools table (30_物理人员池.csv) owns poolId, display name,
+finite positive integer total headcount, explicit enable/shared flags, capacity source,
+global scope *, effective timestamp and a reserved handover field. personnelGroups adds
+poolId; original group headcount remains a separate qualification ceiling. No name/skill/
+shift inference, automatic pool creation, zero/infinite capacities or site defaults.
+Use Data & CSV -> physical pools, add a row; edit group mappings on the group tab;
+save both drafts together with a reason. Drafts can be incomplete only while disabled.
+Once any pool is enabled all groups require explicit known mappings. Referenced disabled/
+future pools block supported new runs until configured/effective. Empty handover is not
+approval of a 'no handover' business mode; scenes requiring handover cannot use this core.
+A saved physical contract cannot be silently stripped back to legacy group semantics.
+Deleted IDs are retired from trusted audit history and cannot be reused; name changes
+preserve identity. Removal with dangling group references rejects the entire mutation;
+a complete remap and deletion in one transaction is allowed.
+Both CSV preview/commit and React edits use existing atomic revision/audit/history guards.
+Single legacy group CSV can omit poolId before adoption; after adoption, replacing groups
+without mapping correctly fails rather than losing the physical constraint.
+
+Execution and independent verification
+Existing same-post max/different-post sum, candidate allocation, skills, directed skill
+substitution, shift, availability and group headcount continue. Every allocation also
+checks aggregate use of all groups mapped to the same pool at every half-open boundary.
+Pool membership is derived from frozen groups, including existing reservations; a ledger
+label cannot create capacity. A failed candidate never commits any allocations. Existing
+bounded search limits remain explicit and do not claim global infeasibility.
+New inputs and runs freeze pool table, group mappings and policy fingerprint, with
+personnelPoolContract=P10-core-v1. Retry retains original inputs and evaluation instant.
+Independent verifier reconstructs demand and windows, then independently sweeps frozen
+pool membership and headcount; it does not invoke the allocator. It detects missing/
+shortened allocations, forged pool labels, demand changes and excess aggregate use.
+Saved resource load adds a separate physical-pool aggregate, alongside group qualification
+views. It derives membership from frozen input. Independent posts are not deduplicated
+just because their group/quantity/window match. Conflict geometry identifies the pool,
+tasks, members, half-open segment, demand, capacity and gap; exports retain frozen input.
+
+Compatibility, risk and rollback
+No stored old run/input/plan/confirmation/audit is migrated. Current-state reads expose an
+empty new table for maintenance only. Old frozen snapshots without pool configuration keep
+their exact old contract; they are not certified as P10. The upgrade probe generates an
+actual confirmed store using exact e0be9b6 software, opens that raw store with new code,
+then saves new configuration and checks history equality. Missing confirmed input blocks
+new saves. Old software rejects new table and mapping fields atomically (404/400).
+Rollback is an operational stop of new P10 writes and read-only retention of their stores;
+do not strip fields or reopen a new store under old code. Back up the business store before
+any future deployment; deployment/merging are not part of this delivery.
+
+Validation and independent reproduction
+Run qa/p10-core-container.sh with absolute P10_REPO and new P10_OUT. Default local image
+aps-fr038-qa-runtime:latest contains Node22, SDK dependencies and Playwright; it is a local
+validation image, not a registry distribution or production release. P10_QA_IMAGE may
+point to an equivalent Test-owned image with dependencies at /workspace/apps/aps-fr032.
+All Node/server/browser activity is inside the disposable container; source mounts are
+read-only. The script archives the exact legacy parent for the separate upgrade probe.
+qa/p10-core.test.mjs: behavioral core, candidate/boundary/qualification and tamper cases,
+permissions/stale/invalid full-store atomicity, retirement/remap/history/N06 guards.
+qa/p10-core-browser.mjs: actual React save/refresh, real asynchronous Worker, server
+independent checker, two-task sequential/concurrent results, read-only query role,
+U01/U02 rejected writes, saved load UI/download and immutable historical snapshots.
+qa/p10-core-upgrade.mjs: exact old software confirmed-store compatibility and rollback.
+Final logs and workspace report give counts and exact code binding; none is independent
+APS-Test acceptance. Synthetic actors do not certify real SSO or QA UAT.
+
+Remaining scope and owners
+U01: user via PM must decide the shared-off mutex object/granularity. Shared-off activation
+is rejected now; no task/group/post mutex is guessed.
+U02: user via PM must decide handover quantity meaning/anchors/formula. Any nonempty
+handover setting is rejected; no extra-demand/supply-limit formula is guessed.
+Single group has one pool reference, one shift/window. Unknown identity, unsupported
+fields/arrays and non-global capacity scope reject explicitly. Qualification intersections
+of individual people cannot be expressed; operators must not enable such a scene and must
+ask PM/Design for a contract. No individual identity/schedule proof is claimed.
+Pool capacity scope is one canonical global * and effective timestamp, not the separate
+FR017 hierarchy/inheritance branch, not multiple simultaneous capacity versions. A future
+replacement blocks use until effective; it does not automatically inherit old capacity.
+Existing single-line admission stays; no two-line simultaneous Worker is claimed.
+P06 multi-shift, N06 original physical execution ledger, R01/R02 joint rollback, multi-pool
+handover and DEC04-06 implementation remain outside this delivery.
+FR007/022 and full P10/CR remain NOT_READY; QA UAT WAITING_DEPENDENCIES.
+PM should schedule independent APS-Test on the fixed new SHA for the authorized core,
+retain all original defect rounds, and route U01/U02 decisions. No new product FAIL round.
+No main merge, release, production environment or user/default-value approval.

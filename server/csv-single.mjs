@@ -1,7 +1,7 @@
 import {parseInputCsvRecords} from '../src/lib/input-csv.mjs';
 // Preserve the existing single-table field contract and literal cell values.
 // Source positions are metadata, never accepted from the browser as row numbers.
-const optional={executionFacts:['累计报废数量','报废补做口径'],orders:['已完成合格数量'],bom:['损坏比例'],supplies:['质量状态','有效期'],dependencies:['人员岗位编号','所需班次','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'],rules:['适用对象','生效时间'],tools:['可用起始分钟','可用结束分钟'],resourceClaims:['窗口开始偏移分钟','窗口结束偏移分钟','参数来源']};
+const optional={personnelGroups:['poolId'],executionFacts:['累计报废数量','报废补做口径'],orders:['已完成合格数量'],bom:['损坏比例'],supplies:['质量状态','有效期'],dependencies:['人员岗位编号','所需班次','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'],rules:['适用对象','生效时间'],tools:['可用起始分钟','可用结束分钟'],resourceClaims:['窗口开始偏移分钟','窗口结束偏移分钟','参数来源']};
 const defaults={'窗口外释放':'是','可用起始分钟':'0','可用结束分钟':'525600','窗口开始偏移分钟':'0','窗口结束偏移分钟':'0','参数来源':'逐项声明'};
 export function inspectSingleCsv(file,def){
  const tables={},sources={},issues=[];
