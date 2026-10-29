@@ -3342,6 +3342,32 @@
       "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6508665974",
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_8286fb53-0837-49b0-9113-14ee2858ef60:r1",
+      "original_delivery": "dlv_8286fb53-0837-49b0-9113-14ee2858ef60",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test2",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T05:26:29+08:00",
+      "requirement": "FR-007/FR-022/Issue3",
+      "product_sha": "7ae4ca827276c66b276c4cc32a4593825ee2623f",
+      "result": "P10 E01–E04固定7ae4ca8独立18 PASS/4 PARTIAL/22业务BLOCKED，0可复现产品FAIL；F04/F11/F18/F20部分范围与U01/U02/N06/跨线仍未闭，整卡NOT_READY",
+      "external_hashes": {
+        "Issue3-P10-E01-E04-7ae4ca8-Test2-R1-report.md": "e1c75cc70932f02ab4c4edf3cf623292242b394a8f6d51b9febe8ef355044eb4",
+        "Issue3-P10-E01-E04-7ae4ca8-Test2-R1-sha256.json": "82625909bf9fb3812a4cd19aac8873374d88e6fe5606a90e173fe7cb94658155",
+        "Issue3-P10-E01-E04-7ae4ca8-Test2-R1-matrix.csv": "95a5a7e2794961f14ae09fea2f5717268ce00dfd243f3079bb8ba40ad7193a6b",
+        "Issue3-P10-E01-E04-7ae4ca8-Test2-R1-evidence.zip": "4bbdaa1ed50168ba5ccf2f023130cc7762420b9c5b22d5fc8ef8b15521da7680"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 44,
+      "project_status": {
+        "FR-007": "In progress",
+        "FR-022": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6508710192",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
