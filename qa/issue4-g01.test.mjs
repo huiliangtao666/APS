@@ -24,9 +24,9 @@ test('actual Express preflight returns exact global records without changing sto
  const global=response.body.findings.find(f=>f.code==='SCOPE / MULTI_LINE');assert.ok(global);
  assert.deepEqual(global.relatedRecords.map(r=>({table:r.table,row:r.row})),recordRefs('orders',store.data.orders));assert.equal(global.sourceRevision,state.revision);assert.equal(f.bytes(),before);
 });
-test('master source now survives collect while unrelated native locations remain compatible',async()=>{
+test('master source survives collect and route native locations include producer occurrences',async()=>{
  const {validateInputs}=await import('../server/input-validation.mjs');const {seed,defs}=await import('../server/planner.ts');const data=structuredClone(seed);data.products[0]['产品名称']='';data.routes[0]['工序名称']='';
  const issues=validateInputs(defs,data);const legacy=issues.find(i=>i.code==='INPUT / MASTER_REQUIRED'&&i.message.includes('产品名称'));
  assert.equal(legacy.table,'products');assert.equal(legacy.row,2);assert.deepEqual(attachProblemRecords({...legacy,taskIds:[]},data).relatedRecords,sourceRefs('products',[data.products[0]],data.products));
- const explicit=issues.find(i=>i.code==='INPUT / ROUTE_REQUIRED'&&i.field==='工序名称');assert.ok(explicit);assert.deepEqual(attachProblemRecords({...explicit,taskIds:[]},data).relatedRecords,recordRefs('routes',[data.routes[0]]));
+ const explicit=issues.find(i=>i.code==='INPUT / ROUTE_REQUIRED'&&i.field==='工序名称');assert.ok(explicit);assert.deepEqual(attachProblemRecords({...explicit,taskIds:[]},data).relatedRecords,[{table:'routes',row:data.routes[0],field:'工序名称',occurrence:{index:0,logicalRow:2,keyCount:1}}]);
 });

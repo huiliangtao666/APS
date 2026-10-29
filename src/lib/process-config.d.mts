@@ -1,5 +1,6 @@
 export type ProcessConfigRow = Record<string, string>;
-export type ProcessConfigIssue = { code: string; message: string };
+import type {RecordRef} from './problem-records.mjs';
+export type ProcessConfigIssue = { code: string; message: string; table?:string; row?:number; field?:string; relatedRecords?:RecordRef[]; missingTarget?:{table:string;key:string} };
 export function validateProcessConfig(input: {
   products?: ProcessConfigRow[];
   orders?: ProcessConfigRow[];
