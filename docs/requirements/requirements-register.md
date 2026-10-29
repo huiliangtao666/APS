@@ -1,6 +1,6 @@
 # 当前需求跟踪表
 
-快照：2026-10-29T20:02:44+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
+快照：2026-10-29T20:22:50+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
 
 | 编号 | 名称 | 要求版本 | 生效CR | 原卡状态 | 当前环节 | 验收结论 | 原卡 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -16,7 +16,7 @@
 | FR-010 | 库存批次与模拟质量状态 | v0.3+CR-DEC04-05-06-20261029 | CR-DEC04-05-06-20261029 | In progress | CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgm8) |
 | FR-011 | 预计到料与可用时间 | v0.3+CR-DEC04-05-06-20261029 | CR-DEC04-05-06-20261029 | Done | CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgn8) |
 | FR-012 | 在制品与模拟进度 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | FR012本卡两原条款及AC12/21/32责任18/18 PASS；旧PASS按原SHA证据经影响分析承接，新三状态页面/API/Worker补证；产品修复轮次0。FR026恢复、原UAT15业务批准、真实平台及QA UAT单列未完成 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgp0) |
-| FR-013 | 各类CSV模拟数据导入 | v0.3 |  | In progress | 66af9cac后续02–19类别独立核查PARTIAL；两项当前单表导入产品FAIL待首轮修复 | Test dlv_69486ac0-f8c0-4cd1-bcac-cad4bc48b5a1:r1：29 PASS、2产品FAIL、13实现缺口、7契约缺口、4契约/上下文缺口、2仅预览PASS；FR013整卡NOT_READY。原01 37/37 PASS和旧证据保留原SHA；新缺陷各待修复第1轮。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgrg) |
+| FR-013 | 各类CSV模拟数据导入 | v0.3 |  | In progress | PRE01/LOC01在7338108a首轮修复及独立复测PASS；其余02–19类别继续按原责任闭环 | Test dlv_8cf177f1-c3fc-46c5-923c-e08ded0100af:r1固定7338108a01e4bcfa18e98d9c1ad5a17a187665e4 28/28 PASS，仅PRE01/LOC01首轮修复与复测闭环；旧66af9caceb57eff429dd8b14bbad690f62bfe749 FAIL历史保留，原01 37/37及其他旧PASS留原SHA；FR013整卡NOT_READY。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgrg) |
 | FR-014 | 各类模拟数据查询 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | FR-014当前适用责任51/51PASS；原01唯一PARTIAL在新SHA独立PASS，其他旧PASS留原SHA；后续未提供类别/QA UAT另列 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgs4) |
 | FR-015 | 各类模拟数据编辑 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | FR-015当前适用责任109/109PASS；原01唯一PARTIAL在新SHA独立PASS，其他旧PASS留原SHA；后续未提供类别/QA UAT另列 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgto) |
 | FR-016 | 数据检查与问题处理 | v0.3 |  | In progress | 实施或验收未闭环，见原卡/关联Issue | 未登记原需求完整版本验收；有限通过证据见原卡 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgu4) |

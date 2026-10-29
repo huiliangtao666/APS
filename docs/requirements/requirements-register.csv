@@ -2,7 +2,7 @@
 FR-001,产线、工位及资源归属,v0.3,v0.3,,"范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R1；完整提供：R1。
 前置功能：无。
 • 支持维护一条产线及其工位、机器和其他资源归属。P0只允许一个排程产线，发现订单或资源引用其他产线时提示并阻止计算。
-• 同一产线可含多道工序和并行设备。不得把一台机器等同一条产线；多产线选择在P1提供。",Done,原卡已完成；按历史验收范围,,原卡Done，保留原通过记录；不推定完整业务UAT通过,未统一登记版本签收；原卡通过范围及历史证据保留,58b7afcbc3be1dc368c70702ea6ae112dc9289b9,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgeo,2026-10-29T20:02:44+08:00
+• 同一产线可含多道工序和并行设备。不得把一台机器等同一条产线；多产线选择在P1提供。",Done,原卡已完成；按历史验收范围,,原卡Done，保留原通过记录；不推定完整业务UAT通过,未统一登记版本签收；原卡通过范围及历史证据保留,58b7afcbc3be1dc368c70702ea6ae112dc9289b9,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgeo,2026-10-29T20:22:50+08:00
 FR-002,产品、物料与单位配置,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R1；完整提供：R3。
 前置功能：FR-001。
 • 支持产品、原料、半成品、包材编码，及kg、支、袋、箱的适用换算。净重、每袋支数、每箱支数等按产品配置。
@@ -12,7 +12,7 @@ FR-002,产品、物料与单位配置,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04
 新增/细化单位维度、物理计量粒度、显示精度及版本化产品换算；业务量不从显示值回算。",Done,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,58b7afcbc3be1dc368c70702ea6ae112dc9289b9,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgfQ,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgfQ,2026-10-29T20:22:50+08:00
 FR-003,BOM、收率与包装用量配置,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R3；完整提供：R4。
 前置功能：FR-002/004。
 • 配置BOM计算基准、物料定额/比例、投料工序、适用产品、生效日期、工序加入量和损失。包装用量及损坏比例独立配置。
@@ -22,7 +22,7 @@ FR-003,BOM、收率与包装用量配置,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DE
 明确BOM投入/产出基准、总/分阶段/已含收率互斥路径、损失只计一次、投料节点及包装/尾包可维护口径。",Done,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,12f77d3dbd1f03bbaf4b3d4930225b2a14054bcc,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHggI,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHggI,2026-10-29T20:22:50+08:00
 FR-004,工序与工艺路线配置,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R1；完整提供：R4。
 前置功能：FR-001/002。
 • 分别维护工艺路线、工序工时及资源依赖。资源依赖明确设备、模具、工具、人员/技能、空间及投料物料；物料数量由BOM计算。P0先支持顺序路线。
@@ -32,7 +32,7 @@ FR-004,工序与工艺路线配置,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05
 顺序路线及工序锚点、等待/程序等参数显式维护；不固定示例工序名称，不扩展任意并行工艺图。",Done,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,28793e87ee4b8a6b24a95e2810b6fb9824153a7e,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHghY,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHghY,2026-10-29T20:22:50+08:00
 FR-005,机器能力及适用范围,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R1；完整提供：R4。
 前置功能：FR-001/004。
 • 配置机器可执行工序、处理方式、固定工时、产品加工速度、容量及装载上下限。P0初期先提供机器及固定工时，容量等后续启用。
@@ -42,7 +42,7 @@ FR-005,机器能力及适用范围,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05
 工时模式、产品/设备速度单位、已含/名义效率、装载量计量节点和边界可配置；固定程序不随未满载缩短。",Done,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,e1b99835a304ee6f35ab3b478eb972dc1bbab6b9,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgiI,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgiI,2026-10-29T20:22:50+08:00
 FR-006,模具及工装配置,v0.3,v0.3+CR-DEC02-03-20261029,CR-DEC02-03-20261029,"范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R2.2；完整提供：R2.2。
 前置功能：FR-001/004/005。
 • 配置模具/工装编码、适用任务、数量及占用起止条件。先支持单套独占，再支持同类多套。
@@ -51,7 +51,7 @@ FR-006,模具及工装配置,v0.3,v0.3+CR-DEC02-03-20261029,CR-DEC02-03-20261029
 [CR-DEC02-03-20261029 批准增量]
 将DEC02/03涉及的业务选择统一明确为前台可维护、可保存并实际作用于新试算的参数：工装占用/归还策略，人员参与阶段/窗口、人数与释放，显式技能替代关系及禁止替代；保留基线既有权限、历史输入/方案保护和结果可追溯要求。",In progress,CR-DEC02-03-20261029：固定12eed551的S06/S07独立有限PASS；FR017当前适用实现责任在7077e536独立PASS/原卡Done；FR007/022及完整CR仍NOT_READY；D01-D03 round1 PASS保留,CR-DEC02-03-20261029：FR017 T08/T10/U01/U05/H02独立PASS（7077e536）；原A01-A24及S06/S07有限PASS、原48项25 PASS/19 PARTIAL/2 FAIL_SCOPE/2 NOT_EXECUTABLE保留；FR007/022、L01/L02及完整CR/UAT未完成,基线原范围历史记录保留；FR017当前适用实现责任独立PASS；FR007/022及完整CR和业务UAT未通过；原S06/S07与D01-D03有限结果保留,未统一登记版本签收；原卡通过范围及历史证据保留,12eed5514c702f730aae65a39a08747c532f8536,"https://github.com/huiliangtao666/APS/issues/3
 https://github.com/huiliangtao666/APS/issues/13
-https://github.com/huiliangtao666/APS/issues/16",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgjI,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/16",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgjI,2026-10-29T20:22:50+08:00
 FR-007,人员数量与技能配置,v0.3,v0.3+CR-DEC02-03-20261029,CR-DEC02-03-20261029,"范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R2.3；完整提供：R2.4。
 前置功能：FR-004/005。
 • 先配置人员组数量及任务需要的人数，再配置技能、班次、装卸/操作阶段和可用时间。P0不建设人员考勤系统。
@@ -60,15 +60,15 @@ FR-007,人员数量与技能配置,v0.3,v0.3+CR-DEC02-03-20261029,CR-DEC02-03-20
 [CR-DEC02-03-20261029 批准增量]
 将DEC02/03涉及的业务选择统一明确为前台可维护、可保存并实际作用于新试算的参数：工装占用/归还策略，人员参与阶段/窗口、人数与释放，显式技能替代关系及禁止替代；保留基线既有权限、历史输入/方案保护和结果可追溯要求。",In progress,S06/S07独立验收PASS；本卡剩余条件归集待闭环；原FR007通过历史保留,P08/P09：独立同技能岗位身份及人数累加；P10：跨组同物理池身份、容量与禁止说明；P06：多班/交接表达或明确阻断。原P02等PARTIAL保持。,S06/S07有限PASS；整卡NOT_READY。FR007原范围Done、D01-D03 round1 PASS及原48历史保留；非完整CR/UAT,未统一登记版本签收；原卡通过范围及历史证据保留,12eed5514c702f730aae65a39a08747c532f8536,"https://github.com/huiliangtao666/APS/issues/3
 https://github.com/huiliangtao666/APS/issues/13
-https://github.com/huiliangtao666/APS/issues/16",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgjs,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/16",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgjs,2026-10-29T20:22:50+08:00
 FR-008,工作日历与停机配置,v0.3,v0.3,,"范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R2.1；完整提供：R4。
 前置功能：FR-005。
 • 配置工厂工作日历、设备停机及人员/工装例外时段。资源默认继承工厂工作窗口，例外停机进一步减少可用时间；工厂不开工时不能仅因设备为空而排任务。
-• 工序能否跨班运行、能否中断、开始结束是否需要人员，均由配置决定。初期不支持中断加工时，明确提示不能拆开执行。",Done,原卡已完成；按历史验收范围,,原卡Done，保留原通过记录；不推定完整业务UAT通过,未统一登记版本签收；原卡通过范围及历史证据保留,4e21ce744f4de70a2ae7d2351e9d1dcb6557aae2,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgk0,2026-10-29T20:02:44+08:00
+• 工序能否跨班运行、能否中断、开始结束是否需要人员，均由配置决定。初期不支持中断加工时，明确提示不能拆开执行。",Done,原卡已完成；按历史验收范围,,原卡Done，保留原通过记录；不推定完整业务UAT通过,未统一登记版本签收；原卡通过范围及历史证据保留,4e21ce744f4de70a2ae7d2351e9d1dcb6557aae2,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgk0,2026-10-29T20:22:50+08:00
 FR-009,订单与需求数据,v0.3,v0.3,,"范围：P0；关联流程：BP-01/02；页面：PG-02；开始提供：R1；完整提供：R3。
 前置功能：FR-001/002。
 • 维护订单号、产品、数量/单位、要求完成时间、优先顺序、是否允许拆分和指定产线等信息。P0订单产线固定为本产线。
-• 数量或交期修改需保留记录；减少或取消订单时不能抹去已开始/已完成的模拟任务。预测数据先与正式订单分开处理。",Done,原卡已完成；按历史验收范围,,原卡Done，保留原通过记录；不推定完整业务UAT通过,未统一登记版本签收；原卡通过范围及历史证据保留,3ae56568011de611abf0e1d80b53206cb27205ee,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHglg,2026-10-29T20:02:44+08:00
+• 数量或交期修改需保留记录；减少或取消订单时不能抹去已开始/已完成的模拟任务。预测数据先与正式订单分开处理。",Done,原卡已完成；按历史验收范围,,原卡Done，保留原通过记录；不推定完整业务UAT通过,未统一登记版本签收；原卡通过范围及历史证据保留,3ae56568011de611abf0e1d80b53206cb27205ee,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHglg,2026-10-29T20:22:50+08:00
 FR-010,库存批次与模拟质量状态,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"范围：P0；关联流程：BP-01/02；页面：PG-01/02；开始提供：R3；完整提供：R3。
 前置功能：FR-002。
 • 维护每批库存的数量、已占用数量、有效期、所在位置、质量状态和预计可用时间。查询时区分账面数量与当前能使用的数量。
@@ -78,7 +78,7 @@ FR-010,库存批次与模拟质量状态,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DE
 质量状态到确定/条件/不可用的映射及时间边界可维护；未知不默认为可用，净库存与既有占用可追溯。",In progress,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,a7d766614bbdfbb13c78217b516cae2730c11823,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgm8,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgm8,2026-10-29T20:22:50+08:00
 FR-011,预计到料与可用时间,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"范围：P0；关联流程：BP-01/02；页面：PG-01/02；开始提供：R3；完整提供：R3。
 前置功能：FR-002/010。
 • 维护预计到达、数量、批次和预计可用时间，可导入迟到或延期的模拟记录。
@@ -88,29 +88,29 @@ FR-011,预计到料与可用时间,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05
 预计供给是否参与及最早可用时点可配置，保留来源身份与风险；不把预计到货计为已确认库存。",Done,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,1483f7654c4668498196fb9c44947f1b8e7e660a,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgn8,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgn8,2026-10-29T20:22:50+08:00
 FR-012,在制品与模拟进度,v0.3,v0.3,,"范围：P0；关联流程：BP-01/02/06；页面：PG-01/08；开始提供：R5；完整提供：R5。
 前置功能：FR-009/010/018。
 • 导入、查询和编辑任务开始/完成、完成量、已用物料、剩余工时、所在设备及暂停原因等模拟数据。
-• 模拟已开始/完成任务须保留原记录，计算剩余工作时不能把其物料再算为未使用库存。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,FR012本卡两原条款及AC12/21/32责任18/18 PASS；旧PASS按原SHA证据经影响分析承接，新三状态页面/API/Worker补证；产品修复轮次0。FR026恢复、原UAT15业务批准、真实平台及QA UAT单列未完成,v0.3；ca13c6d26a40eb329011c0fa66a747aa735570da；dlv_aaa72c93-8beb-41aa-929c-0f1e265092d7,ca13c6d26a40eb329011c0fa66a747aa735570da,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgp0,2026-10-29T20:02:44+08:00
+• 模拟已开始/完成任务须保留原记录，计算剩余工作时不能把其物料再算为未使用库存。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,FR012本卡两原条款及AC12/21/32责任18/18 PASS；旧PASS按原SHA证据经影响分析承接，新三状态页面/API/Worker补证；产品修复轮次0。FR026恢复、原UAT15业务批准、真实平台及QA UAT单列未完成,v0.3；ca13c6d26a40eb329011c0fa66a747aa735570da；dlv_aaa72c93-8beb-41aa-929c-0f1e265092d7,ca13c6d26a40eb329011c0fa66a747aa735570da,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgp0,2026-10-29T20:22:50+08:00
 FR-013,各类CSV模拟数据导入,v0.3,v0.3,,"范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R1；完整提供：R6。
 前置功能：各阶段所需的数据定义。
 • 第9章列出的每类数据均提供CSV模板、示例和导入操作。先提供本阶段必需类别，后续随功能补充，不能只做一个通用上传按钮而不支持具体字段。
-• 导入前预览并检查字段、引用、单位和日期，报告文件/行号/字段及原因；同一批次发现影响使用的错误时不导入。支持修正后重新导入，避免重复数据。",In progress,66af9cac后续02–19类别独立核查PARTIAL；两项当前单表导入产品FAIL待首轮修复,PRE01缺导入前预览；LOC01物理行号偏移；其余类别实现/字段契约/证据缺口仍在Issue4，整卡NOT_READY,Test dlv_69486ac0-f8c0-4cd1-bcac-cad4bc48b5a1:r1：29 PASS、2产品FAIL、13实现缺口、7契约缺口、4契约/上下文缺口、2仅预览PASS；FR013整卡NOT_READY。原01 37/37 PASS和旧证据保留原SHA；新缺陷各待修复第1轮。,未统一登记版本签收；原卡通过范围及历史证据保留,66af9caceb57eff429dd8b14bbad690f62bfe749,"https://github.com/huiliangtao666/APS/issues/4
-https://github.com/huiliangtao666/APS/issues/13",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgrg,2026-10-29T20:02:44+08:00
+• 导入前预览并检查字段、引用、单位和日期，报告文件/行号/字段及原因；同一批次发现影响使用的错误时不导入。支持修正后重新导入，避免重复数据。",In progress,PRE01/LOC01在7338108a首轮修复及独立复测PASS；其余02–19类别继续按原责任闭环,FR013其他类别原样字段映射、实现与独立证据缺口；FR016/Issue4集成未完成，QA UAT依赖未满足,Test dlv_8cf177f1-c3fc-46c5-923c-e08ded0100af:r1固定7338108a01e4bcfa18e98d9c1ad5a17a187665e4 28/28 PASS，仅PRE01/LOC01首轮修复与复测闭环；旧66af9caceb57eff429dd8b14bbad690f62bfe749 FAIL历史保留，原01 37/37及其他旧PASS留原SHA；FR013整卡NOT_READY。,未统一登记版本签收；原卡通过范围及历史证据保留,7338108a01e4bcfa18e98d9c1ad5a17a187665e4,"https://github.com/huiliangtao666/APS/issues/4
+https://github.com/huiliangtao666/APS/issues/13",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgrg,2026-10-29T20:22:50+08:00
 FR-014,各类模拟数据查询,v0.3,v0.3,,"范围：P0；关联流程：BP-01/02/05；页面：PG-01/02/08；开始提供：R1；完整提供：R6。
 前置功能：FR-013。
 • 每类已支持数据均提供列表、筛选、详情及关联查询，例如订单查任务、工序查机器、物料查批次及占用。
-• 支持按产品、订单、日期、状态等适用条件筛选；不能要求查询用户通过查看原始JSON文件理解数据。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,FR-014当前适用责任51/51PASS；原01唯一PARTIAL在新SHA独立PASS，其他旧PASS留原SHA；后续未提供类别/QA UAT另列,v0.3；66af9caceb57eff429dd8b14bbad690f62bfe749；dlv_e2ac5f26-6f61-4e8c-badf-6fefd374af7c,66af9caceb57eff429dd8b14bbad690f62bfe749,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgs4,2026-10-29T20:02:44+08:00
+• 支持按产品、订单、日期、状态等适用条件筛选；不能要求查询用户通过查看原始JSON文件理解数据。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,FR-014当前适用责任51/51PASS；原01唯一PARTIAL在新SHA独立PASS，其他旧PASS留原SHA；后续未提供类别/QA UAT另列,v0.3；66af9caceb57eff429dd8b14bbad690f62bfe749；dlv_e2ac5f26-6f61-4e8c-badf-6fefd374af7c,66af9caceb57eff429dd8b14bbad690f62bfe749,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgs4,2026-10-29T20:22:50+08:00
 FR-015,各类模拟数据编辑,v0.3,v0.3,,"范围：P0；关联流程：BP-01/02；页面：PG-01/02/08；开始提供：R1；完整提供：R6。
 前置功能：FR-013/014。
 • 计划员和主管可新增、编辑、复制及在允许时删除模拟记录；查询用户不能修改。保存时执行与导入相同的检查。
-• 被已确认计划引用的数据不能直接删除或覆盖；修改后保存新记录并保留原值，已确认计划仍能查到计算时的数据。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,FR-015当前适用责任109/109PASS；原01唯一PARTIAL在新SHA独立PASS，其他旧PASS留原SHA；后续未提供类别/QA UAT另列,v0.3；66af9caceb57eff429dd8b14bbad690f62bfe749；dlv_e2ac5f26-6f61-4e8c-badf-6fefd374af7c,66af9caceb57eff429dd8b14bbad690f62bfe749,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgto,2026-10-29T20:02:44+08:00
+• 被已确认计划引用的数据不能直接删除或覆盖；修改后保存新记录并保留原值，已确认计划仍能查到计算时的数据。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,FR-015当前适用责任109/109PASS；原01唯一PARTIAL在新SHA独立PASS，其他旧PASS留原SHA；后续未提供类别/QA UAT另列,v0.3；66af9caceb57eff429dd8b14bbad690f62bfe749；dlv_e2ac5f26-6f61-4e8c-badf-6fefd374af7c,66af9caceb57eff429dd8b14bbad690f62bfe749,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgto,2026-10-29T20:22:50+08:00
 FR-016,数据检查与问题处理,v0.3,v0.3,,"范围：P0；关联流程：BP-02；页面：PG-01/03；开始提供：R1；完整提供：R6。
 前置功能：FR-013/014/015。
 • 检查必填、重复、外部引用、数量、日期、单位、工序顺序和本阶段已启用规则所需字段，区分阻止计算的问题与提醒。
 • 点击问题可转到相应记录进行查询或编辑；缺失值显示待补充，不把未知数量、工时或容量默认为0。",In progress,实施或验收未闭环，见原卡/关联Issue,完整验收证据/业务决策/跨功能依赖待闭环；具体见原卡及Issue,未登记原需求完整版本验收；有限通过证据见原卡,未统一登记版本签收；原卡通过范围及历史证据保留,500bdad0d70ba5f5cc2a9817b9d649a553e438e5,"https://github.com/huiliangtao666/APS/issues/4
-https://github.com/huiliangtao666/APS/issues/13",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgu4,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/13",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgu4,2026-10-29T20:22:50+08:00
 FR-017,业务规则配置与启用,v0.3,v0.3+CR-DEC02-03-20261029+CR-DEC04-05-06-20261029,CR-DEC02-03-20261029、CR-DEC04-05-06-20261029,"范围：P0；关联流程：BP-03；页面：PG-03；开始提供：R1；完整提供：R7。
 前置功能：FR-004/005/016。
 • 第7章的规则按规则类别维护参数、适用对象、是否启用及生效时间。配置变化保留记录，并显示本方案采用的设置。
@@ -124,15 +124,15 @@ FR-017,业务规则配置与启用,v0.3,v0.3+CR-DEC02-03-20261029+CR-DEC04-05-06
 https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgv4,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgv4,2026-10-29T20:22:50+08:00
 FR-018,选择计算范围并保存输入,v0.3,v0.3,,"范围：P0；关联流程：BP-03/04；页面：PG-03；开始提供：R1；完整提供：R5。
 前置功能：FR-009/016/017。
 • 选择本产线订单、开始时间、计划结束范围、任务排序及启用规则；保存本次使用的数据、规则和计算条件，提供运行编号。
-• 计算时使用同一份输入记录。新的数据修改不直接改变正在计算的结果；用户可另开计算。支持查看进度、取消及失败原因。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡适用责任断言全部独立PASS；原六条PASS按原SHA/来源保留，本轮18-06及A1–A5 PASS解除唯一阻断。Design接受完整产品SHA，FR018 Done。,v0.3；18c2f59761c9db69554f33a2870b68e15d092320；dlv_746c521a-23b2-405f-8574-1dc7bf4b3769,18c2f59761c9db69554f33a2870b68e15d092320,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgxI,2026-10-29T20:02:44+08:00
+• 计算时使用同一份输入记录。新的数据修改不直接改变正在计算的结果；用户可另开计算。支持查看进度、取消及失败原因。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡适用责任断言全部独立PASS；原六条PASS按原SHA/来源保留，本轮18-06及A1–A5 PASS解除唯一阻断。Design接受完整产品SHA，FR018 Done。,v0.3；18c2f59761c9db69554f33a2870b68e15d092320；dlv_746c521a-23b2-405f-8574-1dc7bf4b3769,18c2f59761c9db69554f33a2870b68e15d092320,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgxI,2026-10-29T20:22:50+08:00
 FR-019,最小排程：机器与工序顺序,v0.3,v0.3,,"范围：P0；关联流程：BP-04；页面：PG-03/04；开始提供：R1；完整提供：R1。
 前置功能：FR-004/005/009/018。
 • 第一版按给定机器、工时和工序顺序安排任务，只要求同机器任务不重叠、后序不得早于前序完成。机器暂按连续可用处理。
-• 在该版本中，模具、人员、物料等不参与判断；界面必须列明尚未检查的条件，不能把两类约束通过称为完整业务都可执行。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡全部适用责任断言独立PASS，Design复核接受；无本范围阻断或必测未执行，Done。不是全项目UAT或上线。,v0.3；12eed5514c702f730aae65a39a08747c532f8536；dlv_71d770dd-6faf-4314-bd38-1bf91e6b5fc9,12eed5514c702f730aae65a39a08747c532f8536,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgyQ,2026-10-29T20:02:44+08:00
+• 在该版本中，模具、人员、物料等不参与判断；界面必须列明尚未检查的条件，不能把两类约束通过称为完整业务都可执行。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡全部适用责任断言独立PASS，Design复核接受；无本范围阻断或必测未执行，Done。不是全项目UAT或上线。,v0.3；12eed5514c702f730aae65a39a08747c532f8536；dlv_71d770dd-6faf-4314-bd38-1bf91e6b5fc9,12eed5514c702f730aae65a39a08747c532f8536,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgyQ,2026-10-29T20:22:50+08:00
 FR-020,物料需求计算与分配,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"范围：P0；关联流程：BP-04；页面：PG-04/07；开始提供：R3；完整提供：R4。
 前置功能：FR-003/010/011/018。
 • 根据订单余量、BOM和工序投料点计算原料及包材需求，扣除有效库存和可用供给，保留批次分配与缺口。
@@ -142,7 +142,7 @@ FR-020,物料需求计算与分配,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05
 按明确收率/投料/量化口径计算需求，先过滤可用批次再分配，追溯精确量/差额/来源与条件供给。",In progress,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,a7d766614bbdfbb13c78217b516cae2730c11823,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgy8,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgy8,2026-10-29T20:22:50+08:00
 FR-021,生产拆批与批处理安排,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"范围：P0；关联流程：BP-04；页面：PG-03/04；开始提供：R4；完整提供：R4。
 前置功能：FR-003/004/005/017/020。
 • 按配置的装载上下限拆批，并按配方/路线/程序兼容条件组合资源批次。一个资源批可以包含多个生产批，但要保留各自订单和数量。
@@ -152,7 +152,7 @@ FR-021,生产拆批与批处理安排,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04
 量化层级、拆批分摊、兼容键、尾批策略和装载节点明确配置；数量守恒，不自动超产补满。",In progress,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,e72c552fdd8eea189380d0bcc75c0265188d243b,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg0E,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg0E,2026-10-29T20:22:50+08:00
 FR-022,设备、模具、人员及空间联合安排,v0.3,v0.3+CR-DEC02-03-20261029+CR-DEC04-05-06-20261029,CR-DEC02-03-20261029、CR-DEC04-05-06-20261029,"范围：P0；关联流程：BP-04；页面：PG-04/07；开始提供：R2.2；完整提供：R4。
 前置功能：FR-005/006/007/008/017/019。
 • 逐阶段加入模具、人员及空间占用。一个任务必须同时满足已启用的全部资源条件，不能只检查机器。
@@ -166,7 +166,7 @@ FR-022,设备、模具、人员及空间联合安排,v0.3,v0.3+CR-DEC02-03-20261
 https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg1o,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg1o,2026-10-29T20:22:50+08:00
 FR-023,计算可行完成时间及交期影响,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"范围：P0；关联流程：BP-04/05/06；页面：PG-02/04/06；开始提供：R4；完整提供：R6。
 前置功能：FR-019/020/021/022。
 • 输出任务完成、订单完成和满足配置条件后的预计可交付时间。与订单要求比较，显示延后数量/时间及原因。
@@ -176,172 +176,172 @@ FR-023,计算可行完成时间及交期影响,v0.3,v0.3+CR-DEC04-05-06-20261029
 输出配置条件、预计供给覆盖量/时间及交付风险，保留采用版本和原因，不称全局最早或真实承诺。",In progress,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,675f6fd81555230260d2245aabed6dbb7e3f20d2,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg2c,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg2c,2026-10-29T20:22:50+08:00
 FR-024,结果状态、未排任务与原因,v0.3,v0.3,,"范围：P0；关联流程：BP-04/05；页面：PG-04/05；开始提供：R1；完整提供：R6。
 前置功能：FR-018/019。
 • 区分已经得到安排、部分任务未排、规定时间内未找到可用结果、计算失败和用户取消。不得把超时直接解释为业务不可能。
-• 未排或冲突原因指出具体任务、资源/物料、日期和数量，并提供适用建议，例如补数据、推迟、增加模拟资源或修改需求。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡全部适用责任断言独立PASS，Design复核接受；无本范围阻断或必测未执行，Done。不是全项目UAT或上线。,v0.3；12eed5514c702f730aae65a39a08747c532f8536；dlv_71d770dd-6faf-4314-bd38-1bf91e6b5fc9,12eed5514c702f730aae65a39a08747c532f8536,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg3Q,2026-10-29T20:02:44+08:00
+• 未排或冲突原因指出具体任务、资源/物料、日期和数量，并提供适用建议，例如补数据、推迟、增加模拟资源或修改需求。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡全部适用责任断言独立PASS，Design复核接受；无本范围阻断或必测未执行，Done。不是全项目UAT或上线。,v0.3；12eed5514c702f730aae65a39a08747c532f8536；dlv_71d770dd-6faf-4314-bd38-1bf91e6b5fc9,12eed5514c702f730aae65a39a08747c532f8536,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg3Q,2026-10-29T20:22:50+08:00
 FR-025,独立检查排程结果,v0.3,v0.3,,"范围：P0；关联流程：BP-05/07；页面：PG-04/05；开始提供：R1；完整提供：R7。
 前置功能：FR-017/019/024。
 • 通过独立检查重新核对每个已启用条件，并输出通过项、问题项及尚未检查项。新增约束时同步增加结果检查。
-• 主管确认前重新检查结果、缺口和输入是否变化；存在规则冲突或影响执行的关键数据缺失时无法发布。",Done,原卡已完成；按历史验收范围,,原卡Done，保留原通过记录；不推定完整业务UAT通过,未统一登记版本签收；原卡通过范围及历史证据保留,58b7afcbc3be1dc368c70702ea6ae112dc9289b9,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg4k,2026-10-29T20:02:44+08:00
+• 主管确认前重新检查结果、缺口和输入是否变化；存在规则冲突或影响执行的关键数据缺失时无法发布。",Done,原卡已完成；按历史验收范围,,原卡Done，保留原通过记录；不推定完整业务UAT通过,未统一登记版本签收；原卡通过范围及历史证据保留,58b7afcbc3be1dc368c70702ea6ae112dc9289b9,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg4k,2026-10-29T20:22:50+08:00
 FR-026,保存、复制与比较方案,v0.3,v0.3,,"范围：P0；关联流程：BP-05/06；页面：PG-04/06；开始提供：R1；完整提供：R6。
 前置功能：FR-018/024。
 • 保存计算输入和结果；复制为独立试算方案；比较任务时间、资源、物料分配、订单交期和未排数量。
-• 放弃试算不影响已确认计划。恢复旧方案时用当前模拟进度重新检查，不恢复过时库存或抹去已执行事实。",In progress,实施或验收未闭环，见原卡/关联Issue,完整验收证据/业务决策/跨功能依赖待闭环；具体见原卡及Issue,未登记原需求完整版本验收；有限通过证据见原卡,未统一登记版本签收；原卡通过范围及历史证据保留,c8e16d408b2d0207cb9886b55f39a52ebc9c1665,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg5k,2026-10-29T20:02:44+08:00
+• 放弃试算不影响已确认计划。恢复旧方案时用当前模拟进度重新检查，不恢复过时库存或抹去已执行事实。",In progress,实施或验收未闭环，见原卡/关联Issue,完整验收证据/业务决策/跨功能依赖待闭环；具体见原卡及Issue,未登记原需求完整版本验收；有限通过证据见原卡,未统一登记版本签收；原卡通过范围及历史证据保留,c8e16d408b2d0207cb9886b55f39a52ebc9c1665,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg5k,2026-10-29T20:22:50+08:00
 FR-027,拖拽调整与锁定,v0.3,v0.3,,"范围：P0后期；关联流程：BP-06；页面：PG-04/06；开始提供：R6.1；完整提供：R6.1。
 前置功能：FR-025/026/033/034。
 • 计划用户可在试算方案拖动任务时间或改到允许机器，显示预览并重新检查。非法位置指出冲突，不允许直接作为有效计划。
-• 支持锁定未开始任务。锁定与其他条件冲突时报告原因，不静默解除。已开始/已完成任务不能自由拖动。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡22条适用责任断言22 PASS；Design复核接受固定产品SHA，无本卡阻断，Done。真实平台/部署/生产持久性及业务UAT未执行；Issue13其他FR/CR责任保留。,v0.3；c8e16d408b2d0207cb9886b55f39a52ebc9c1665；dlv_1971efcf-1545-475e-99ad-ae813c0314eb,c8e16d408b2d0207cb9886b55f39a52ebc9c1665,https://github.com/huiliangtao666/APS/issues/13,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg7Y,2026-10-29T20:02:44+08:00
+• 支持锁定未开始任务。锁定与其他条件冲突时报告原因，不静默解除。已开始/已完成任务不能自由拖动。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡22条适用责任断言22 PASS；Design复核接受固定产品SHA，无本卡阻断，Done。真实平台/部署/生产持久性及业务UAT未执行；Issue13其他FR/CR责任保留。,v0.3；c8e16d408b2d0207cb9886b55f39a52ebc9c1665；dlv_1971efcf-1545-475e-99ad-ae813c0314eb,c8e16d408b2d0207cb9886b55f39a52ebc9c1665,https://github.com/huiliangtao666/APS/issues/13,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg7Y,2026-10-29T20:22:50+08:00
 FR-028,修改条件后重新试算,v0.3,v0.3,,"范围：P0后期；关联流程：BP-06；页面：PG-06；开始提供：R6.2；完整提供：R6.2。
 前置功能：FR-017/025/026。
 • 复制方案后修改订单、日历、模具、人员或物料等模拟条件，再计算并比较结果。页面采用“条件试算”，可在帮助中说明What-if含义。
-• 清楚列出改了哪些条件、影响哪些任务和交期；可保留或放弃。增加资源但交期没有改善时也应如实说明。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡22条适用责任断言22 PASS；Design复核接受固定产品SHA，无本卡阻断，Done。FR026成功恢复仍未完成，FR031原责任保留；真实平台/部署/生产持久性及业务UAT未执行。,v0.3；c8e16d408b2d0207cb9886b55f39a52ebc9c1665；dlv_8d3a7593-26f1-4bf5-aa22-ffc0939d96f4,c8e16d408b2d0207cb9886b55f39a52ebc9c1665,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg8s,2026-10-29T20:02:44+08:00
+• 清楚列出改了哪些条件、影响哪些任务和交期；可保留或放弃。增加资源但交期没有改善时也应如实说明。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡22条适用责任断言22 PASS；Design复核接受固定产品SHA，无本卡阻断，Done。FR026成功恢复仍未完成，FR031原责任保留；真实平台/部署/生产持久性及业务UAT未执行。,v0.3；c8e16d408b2d0207cb9886b55f39a52ebc9c1665；dlv_8d3a7593-26f1-4bf5-aa22-ffc0939d96f4,c8e16d408b2d0207cb9886b55f39a52ebc9c1665,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg8s,2026-10-29T20:22:50+08:00
 FR-029,模拟异常与重新排程,v0.3,v0.3,,"范围：P0后期；关联流程：BP-06；页面：PG-06/08；开始提供：R6.3；完整提供：R6.3。
 前置功能：FR-012/024/025/026/028/031。
 • 通过CSV或模拟数据编辑引入插单、设备故障、人员缺勤、到料延期及物料状态变化。先更新事件时点的模拟执行数据，再安排剩余工作。
-• 保留已完成/已投料/已开始事实及设定保护时段。故障中任务或被不可用物料影响的任务应标为需处理，不能自动认定质量合格。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,FR029两条原文及AC12/21/24本卡责任24/24独立PASS；旧a5fa 373+18 PASS原SHA保留；FR026/007/022、原UAT15批准和真实平台/QA UAT另列,v0.3；ca13c6d26a40eb329011c0fa66a747aa735570da；dlv_7eece95f-fb3f-4bd1-a8be-b32ea455d49b,ca13c6d26a40eb329011c0fa66a747aa735570da,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg9s,2026-10-29T20:02:44+08:00
+• 保留已完成/已投料/已开始事实及设定保护时段。故障中任务或被不可用物料影响的任务应标为需处理，不能自动认定质量合格。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,FR029两条原文及AC12/21/24本卡责任24/24独立PASS；旧a5fa 373+18 PASS原SHA保留；FR026/007/022、原UAT15批准和真实平台/QA UAT另列,v0.3；ca13c6d26a40eb329011c0fa66a747aa735570da；dlv_7eece95f-fb3f-4bd1-a8be-b32ea455d49b,ca13c6d26a40eb329011c0fa66a747aa735570da,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg9s,2026-10-29T20:22:50+08:00
 FR-030,主管确认、发布与归档,v0.3,v0.3,,"范围：P0；关联流程：BP-07；页面：PG-09；开始提供：R7；完整提供：R7。
 前置功能：FR-025/026/037。
 • 计划员提交，主管查看规则检查、未排需求、预计供给条件及调整原因后确认或退回。确认后内容保存，供本系统查询和导出。
-• 输入或方案发生影响结果的变化后需重新提交。允许确认已排部分时，必须明确未排清单；存在已启用规则冲突时不能确认发布。不连接外部执行系统。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡20条适用责任断言20 PASS；Design复核接受固定产品SHA，无本卡阻断，Done。真实平台/部署/生产持久性及业务UAT未执行；Issue13其他FR/CR责任保留。,v0.3；c8e16d408b2d0207cb9886b55f39a52ebc9c1665；dlv_c198f365-2f80-42a8-b54b-bd6688609317,c8e16d408b2d0207cb9886b55f39a52ebc9c1665,https://github.com/huiliangtao666/APS/issues/13,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg-Y,2026-10-29T20:02:44+08:00
+• 输入或方案发生影响结果的变化后需重新提交。允许确认已排部分时，必须明确未排清单；存在已启用规则冲突时不能确认发布。不连接外部执行系统。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡20条适用责任断言20 PASS；Design复核接受固定产品SHA，无本卡阻断，Done。真实平台/部署/生产持久性及业务UAT未执行；Issue13其他FR/CR责任保留。,v0.3；c8e16d408b2d0207cb9886b55f39a52ebc9c1665；dlv_c198f365-2f80-42a8-b54b-bd6688609317,c8e16d408b2d0207cb9886b55f39a52ebc9c1665,https://github.com/huiliangtao666/APS/issues/13,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg-Y,2026-10-29T20:22:50+08:00
 FR-031,维护模拟进度并检查剩余工作,v0.3,v0.3,,"范围：P0；关联流程：BP-01/05/06；页面：PG-08；开始提供：R5；完整提供：R5。
 前置功能：FR-012/018/026。
 • 提供模拟任务进度的导入、查询和编辑。更新完成量、报废量、耗料和剩余工时后，显示对未完成任务和订单的影响。
-• 同一记录重复导入不能重复累计完成或扣料；发现状态倒退、超过订单数量等问题时提示核对。该功能不要求接MES。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,FR031本卡23项适用责任有效PASS；21旧PASS沿原SHA证据并经影响分析承接，两原FAIL在新SHA独立复测PASS；修复round1/复测round1；FR026恢复及UAT15/真实平台/QA UAT单列未执行,v0.3；ca13c6d26a40eb329011c0fa66a747aa735570da；dlv_0038ba5b-7098-4930-b115-b8a2ad1816c9,ca13c6d26a40eb329011c0fa66a747aa735570da,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg_o,2026-10-29T20:02:44+08:00
+• 同一记录重复导入不能重复累计完成或扣料；发现状态倒退、超过订单数量等问题时提示核对。该功能不要求接MES。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,FR031本卡23项适用责任有效PASS；21旧PASS沿原SHA证据并经影响分析承接，两原FAIL在新SHA独立复测PASS；修复round1/复测round1；FR026恢复及UAT15/真实平台/QA UAT单列未执行,v0.3；ca13c6d26a40eb329011c0fa66a747aa735570da；dlv_0038ba5b-7098-4930-b115-b8a2ad1816c9,ca13c6d26a40eb329011c0fa66a747aa735570da,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg_o,2026-10-29T20:22:50+08:00
 FR-032,资源负荷、物料缺口与提醒,v0.3,v0.3,,"范围：P0；关联流程：BP-05/07；页面：PG-07；开始提供：R2；完整提供：R7。
 前置功能：FR-020/022/024。
 • 按当前已支持范围显示设备忙闲、模具占用、人员需求、空间占用和物料缺口；从汇总转到任务和原始数据。
-• 显示订单延后、模拟到料未满足、输入缺失等提醒。优先实现具体数量和原因，不以复杂经营指标看板作为排程前置。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡全部适用责任断言独立PASS，Design按原文复核后接受；无本范围阻断，Done。不是全项目UAT签收或应用上线。,v0.3；28ed8f8e422173f9b83d8a974e26ea9af6f09c8e；dlv_371e16a8-dc2b-444a-8cf5-3abd84f9bf3d,28ed8f8e422173f9b83d8a974e26ea9af6f09c8e,https://github.com/huiliangtao666/APS/issues/16,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhAY,2026-10-29T20:02:44+08:00
+• 显示订单延后、模拟到料未满足、输入缺失等提醒。优先实现具体数量和原因，不以复杂经营指标看板作为排程前置。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡全部适用责任断言独立PASS，Design按原文复核后接受；无本范围阻断，Done。不是全项目UAT签收或应用上线。,v0.3；28ed8f8e422173f9b83d8a974e26ea9af6f09c8e；dlv_371e16a8-dc2b-444a-8cf5-3abd84f9bf3d,28ed8f8e422173f9b83d8a974e26ea9af6f09c8e,https://github.com/huiliangtao666/APS/issues/16,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhAY,2026-10-29T20:22:50+08:00
 FR-033,机器甘特图与任务时间表,v0.3,v0.3,,"范围：P0优先；关联流程：BP-05；页面：PG-04；开始提供：R1；完整提供：R5。
 前置功能：FR-018/019/024。
 • 机器为行、时间为轴展示任务，支持基本缩放、滚动、筛选和任务详情；显示订单/工序、计划时间及状态。
-• 逐阶段加入停机背景、前后工序连线、模具/人员/空间占用和模拟进度。颜色附文字说明，不能仅靠颜色理解问题。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡全部适用责任断言独立PASS，Design按原文复核后接受；无本范围阻断，Done。不是全项目UAT签收或应用上线。,v0.3；799f0882e610fca0b6ee1dfe64c52de84a04350a；dlv_371e16a8-dc2b-444a-8cf5-3abd84f9bf3d,799f0882e610fca0b6ee1dfe64c52de84a04350a,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhB4,2026-10-29T20:02:44+08:00
+• 逐阶段加入停机背景、前后工序连线、模具/人员/空间占用和模拟进度。颜色附文字说明，不能仅靠颜色理解问题。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡全部适用责任断言独立PASS，Design按原文复核后接受；无本范围阻断，Done。不是全项目UAT签收或应用上线。,v0.3；799f0882e610fca0b6ee1dfe64c52de84a04350a；dlv_371e16a8-dc2b-444a-8cf5-3abd84f9bf3d,799f0882e610fca0b6ee1dfe64c52de84a04350a,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhB4,2026-10-29T20:22:50+08:00
 FR-034,甘特、明细与问题联动核对,v0.3,v0.3,,"范围：P0优先；关联流程：BP-05；页面：PG-04/05；开始提供：R1；完整提供：R4。
 前置功能：FR-014/024/025/033。
 • 点击任务可查原始输入、前后工序和资源需求；点击问题同时定位相关任务及区间。机器问题显示交叠，顺序问题显示前序结束、后序开始及违反时长。
-• 可主动运行检查并筛选问题任务。新增模具、人员、物料等规则时，对应显示需求/可用值及判断依据，不要求用户先导出再核对。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡全部适用责任断言独立PASS，Design归集原通过范围及本次补缺后接受；无本范围阻断或必测未执行项，Done。不是业务UAT签收、完整CR验收或应用发布。,v0.3；12eed5514c702f730aae65a39a08747c532f8536；dlv_0f7e77e1-2dde-492c-9dd8-b6e35f5a742d,12eed5514c702f730aae65a39a08747c532f8536,https://github.com/huiliangtao666/APS/issues/13,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhDI,2026-10-29T20:02:44+08:00
+• 可主动运行检查并筛选问题任务。新增模具、人员、物料等规则时，对应显示需求/可用值及判断依据，不要求用户先导出再核对。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡全部适用责任断言独立PASS，Design归集原通过范围及本次补缺后接受；无本范围阻断或必测未执行项，Done。不是业务UAT签收、完整CR验收或应用发布。,v0.3；12eed5514c702f730aae65a39a08747c532f8536；dlv_0f7e77e1-2dde-492c-9dd8-b6e35f5a742d,12eed5514c702f730aae65a39a08747c532f8536,https://github.com/huiliangtao666/APS/issues/13,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhDI,2026-10-29T20:22:50+08:00
 FR-035,查询、报表与文件导出,v0.3,v0.3,,"范围：P0；关联流程：BP-05/07；页面：PG-02/04/07/09；开始提供：R1；完整提供：R7。
 前置功能：FR-014/024/026/032。
 • 查询订单/任务计划、资源占用、物料需求、未排原因和方案差异，提供CSV或Excel导出；按页面当前范围和权限处理。
-• 导出标识产线、方案、输入记录、单位、日期和模拟说明，保证与页面数量和时间一致。首期不要求自动向外部系统发送。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡全部适用责任断言独立PASS，Design按原文复核后接受；无本范围阻断，Done。不是全项目UAT签收或应用上线。,v0.3；cf6e76e23722f142a08c552aacb43c924fc62f19；dlv_371e16a8-dc2b-444a-8cf5-3abd84f9bf3d,cf6e76e23722f142a08c552aacb43c924fc62f19,https://github.com/huiliangtao666/APS/issues/13,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhEU,2026-10-29T20:02:44+08:00
+• 导出标识产线、方案、输入记录、单位、日期和模拟说明，保证与页面数量和时间一致。首期不要求自动向外部系统发送。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡全部适用责任断言独立PASS，Design按原文复核后接受；无本范围阻断，Done。不是全项目UAT签收或应用上线。,v0.3；cf6e76e23722f142a08c552aacb43c924fc62f19；dlv_371e16a8-dc2b-444a-8cf5-3abd84f9bf3d,cf6e76e23722f142a08c552aacb43c924fc62f19,https://github.com/huiliangtao666/APS/issues/13,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhEU,2026-10-29T20:22:50+08:00
 FR-036,外部系统接口说明与模拟替代,v0.3,v0.3,,"范围：P0；关联流程：BP-01/07；页面：PG-01；开始提供：R0；完整提供：R7。
 前置功能：数据分类和FR-013/035。
 • 对ERP、OMS、WMS、PLM、MES等可能交换的数据，说明对应类别、主要字段、唯一编号、来源和方向，并提供CSV模拟文件约定。
-• 本期不实现真实连接、数据订阅或生产指令下发；无需配置真实系统账号。接入实现不作为P0或P1验收必需项。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡全部适用责任断言独立PASS，Design按原文复核后接受；无本范围阻断，Done。不是全项目UAT签收或应用上线。,v0.3；d8c8c3ef00d2358f4e6effc0bad0e089b73d95d8；dlv_371e16a8-dc2b-444a-8cf5-3abd84f9bf3d,d8c8c3ef00d2358f4e6effc0bad0e089b73d95d8,https://github.com/huiliangtao666/APS/issues/4,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhFg,2026-10-29T20:02:44+08:00
+• 本期不实现真实连接、数据订阅或生产指令下发；无需配置真实系统账号。接入实现不作为P0或P1验收必需项。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡全部适用责任断言独立PASS，Design按原文复核后接受；无本范围阻断，Done。不是全项目UAT签收或应用上线。,v0.3；d8c8c3ef00d2358f4e6effc0bad0e089b73d95d8；dlv_371e16a8-dc2b-444a-8cf5-3abd84f9bf3d,d8c8c3ef00d2358f4e6effc0bad0e089b73d95d8,https://github.com/huiliangtao666/APS/issues/4,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhFg,2026-10-29T20:22:50+08:00
 FR-037,简单权限与操作记录,v0.3,v0.3,,"范围：P0；关联流程：BP-01至BP-07；页面：所有适用页面；开始提供：R1；完整提供：R7。
 前置功能：第3章用户职责。
 • 计划员和主管可以维护模拟数据、运行和调整方案；主管可以确认发布；查询用户只可查询和按权限导出。
-• 记录导入、编辑、计算、确认、退回及导出的操作者、时间和原因。模拟质量状态通过数据维护设置，不设置质量审批角色。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡25条适用责任断言25 PASS；Design复核接受固定产品SHA，无本卡阻断，Done。部署/平台四层与业务UAT未签收，历史范围及原SHA保留。,v0.3；c8e16d408b2d0207cb9886b55f39a52ebc9c1665；dlv_88a6254b-a3ac-4e5c-a218-7db64b5580fa,c8e16d408b2d0207cb9886b55f39a52ebc9c1665,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhGM,2026-10-29T20:02:44+08:00
+• 记录导入、编辑、计算、确认、退回及导出的操作者、时间和原因。模拟质量状态通过数据维护设置，不设置质量审批角色。",Done,本卡适用需求已独立验收；历史复核与证据见原卡,,v0.3本卡25条适用责任断言25 PASS；Design复核接受固定产品SHA，无本卡阻断，Done。部署/平台四层与业务UAT未签收，历史范围及原SHA保留。,v0.3；c8e16d408b2d0207cb9886b55f39a52ebc9c1665；dlv_88a6254b-a3ac-4e5c-a218-7db64b5580fa,c8e16d408b2d0207cb9886b55f39a52ebc9c1665,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhGM,2026-10-29T20:22:50+08:00
 FR-038,运行记录与故障提示,v0.3,v0.3,,"范围：P0；关联流程：BP-04/05；页面：PG-03/05；开始提供：R1；完整提供：R7。
 前置功能：FR-018/024。
 • 保存每次计算的输入、规则、耗时、状态和错误提示，便于用相同数据复查问题。
-• 较长计算可取消；失败不破坏已保存方案或源数据。技术信息放在可展开详情，不要求普通用户理解算法名称。",In progress,实施或验收未闭环，见原卡/关联Issue,完整验收证据/业务决策/跨功能依赖待闭环；具体见原卡及Issue,未登记原需求完整版本验收；有限通过证据见原卡,未统一登记版本签收；原卡通过范围及历史证据保留,8741bf0a597fa11838a514259d8ffe7980382ee2,https://github.com/huiliangtao666/APS/issues/13,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhHk,2026-10-29T20:02:44+08:00
+• 较长计算可取消；失败不破坏已保存方案或源数据。技术信息放在可展开详情，不要求普通用户理解算法名称。",In progress,实施或验收未闭环，见原卡/关联Issue,完整验收证据/业务决策/跨功能依赖待闭环；具体见原卡及Issue,未登记原需求完整版本验收；有限通过证据见原卡,未统一登记版本签收；原卡通过范围及历史证据保留,8741bf0a597fa11838a514259d8ffe7980382ee2,https://github.com/huiliangtao666/APS/issues/13,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhHk,2026-10-29T20:22:50+08:00
 FR-039,多条产线及适用范围,v0.3,v0.3,,"范围：P1；关联流程：BP-01/02/03；页面：PG-01/03；开始提供：R8；完整提供：R8。
 前置功能：P0数据及排程功能。
 • 维护多条产线、各线机器/人员/工装和产品适用范围。查询时明确当前产线及是否显示多线汇总。
-• P0完成前不启用多线分配；P1新增产线数据沿用导入、查询、编辑及检查功能。",Backlog,尚未开始；新功能分发暂停,,未登记原需求完整版本验收；有限通过证据见原卡,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhJE,2026-10-29T20:02:44+08:00
+• P0完成前不启用多线分配；P1新增产线数据沿用导入、查询、编辑及检查功能。",Backlog,尚未开始；新功能分发暂停,,未登记原需求完整版本验收；有限通过证据见原卡,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhJE,2026-10-29T20:22:50+08:00
 FR-040,多线分配与共享资源,v0.3,v0.3,,"范围：P1；关联流程：BP-03至BP-06；页面：PG-03/04/06/07；开始提供：R8；完整提供：R8。
 前置功能：FR-039/022/028。
 • 按产品适用、交期和资源条件选择产线，比较指定线与多线分配方案；明确哪些人员/工装允许跨线共享。
-• 多条线有空也不能重复占用同一共享资源。P1不默认包括跨工厂生产或运输。",Backlog,尚未开始；新功能分发暂停,,未登记原需求完整版本验收；有限通过证据见原卡,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhKQ,2026-10-29T20:02:44+08:00
+• 多条线有空也不能重复占用同一共享资源。P1不默认包括跨工厂生产或运输。",Backlog,尚未开始；新功能分发暂停,,未登记原需求完整版本验收；有限通过证据见原卡,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhKQ,2026-10-29T20:22:50+08:00
 FR-041,预测需求与补库策略,v0.3,v0.3,,"范围：P1；关联流程：BP-01/03/04；页面：PG-02/03；开始提供：R8；完整提供：按专题确定。
 前置功能：FR-009/020/039。
 • 按需要建设预测与销售订单去重、目标库存和补库规则。不同需求类型分开显示，避免同一需求重复计入。
-• 在规则未确定前只保存独立模拟需求，不宣称已提供自动补库。",Backlog,尚未开始；新功能分发暂停,,未登记原需求完整版本验收；有限通过证据见原卡,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhL8,2026-10-29T20:02:44+08:00
+• 在规则未确定前只保存独立模拟需求，不宣称已提供自动补库。",Backlog,尚未开始；新功能分发暂停,,未登记原需求完整版本验收；有限通过证据见原卡,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhL8,2026-10-29T20:22:50+08:00
 FR-042,复杂工艺与配方选择,v0.3,v0.3,,"范围：P1；关联流程：BP-01/03/04；页面：PG-01/03；开始提供：R8；完整提供：按专题确定。
 前置功能：FR-003/004/021。
 • 按需要扩展分支汇合、返工、多条可选路线或允许范围内的配方选择，并补齐各自数据与验收场景。
-• 不能通过添加名称或字段就宣称已支持复杂计算；未支持的配置应明确提示。",Backlog,尚未开始；新功能分发暂停,,未登记原需求完整版本验收；有限通过证据见原卡,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhNY,2026-10-29T20:02:44+08:00
+• 不能通过添加名称或字段就宣称已支持复杂计算；未支持的配置应明确提示。",Backlog,尚未开始；新功能分发暂停,,未登记原需求完整版本验收；有限通过证据见原卡,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhNY,2026-10-29T20:22:50+08:00
 FR-043,其他资源与优化目标,v0.3,v0.3,,"范围：P1；关联流程：BP-03/04/05；页面：PG-01/03/07；开始提供：R8；完整提供：按专题确定。
 前置功能：FR-017/022/032。
 • 按业务价值扩展蒸汽、制冷、周转器具等资源，以及换型、加班、库存或成本目标。资源占用方式与目标权重均需配置。
-• 新增目标不能抵消已启用的必要约束；以相同订单和条件比较实际效果。",Backlog,尚未开始；新功能分发暂停,,未登记原需求完整版本验收；有限通过证据见原卡,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhOw,2026-10-29T20:02:44+08:00
-BR-01,产线范围,v0.3,v0.3,,P0固定为一条产线；产线编号、工位及归属可维护。多线适用关系在P1配置。,Backlog,按关联功能/阶段实施；规则独立验收结论待登记,,不得从规则卡Backlog推断功能未实现；需逐规则证据,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhPY,2026-10-29T20:02:44+08:00
+• 新增目标不能抵消已启用的必要约束；以相同订单和条件比较实际效果。",Backlog,尚未开始；新功能分发暂停,,未登记原需求完整版本验收；有限通过证据见原卡,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhOw,2026-10-29T20:22:50+08:00
+BR-01,产线范围,v0.3,v0.3,,P0固定为一条产线；产线编号、工位及归属可维护。多线适用关系在P1配置。,Backlog,按关联功能/阶段实施；规则独立验收结论待登记,,不得从规则卡Backlog推断功能未实现；需逐规则证据,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhPY,2026-10-29T20:22:50+08:00
 BR-02,工序先后与工时,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"前后工序、固定/按数量工时、产品速度、最小/最大等待；后序开始不得早于前序完成。
 
 [CR-DEC04-05-06-20261029 批准增量]
 固定工时或数量/有效速度明确二选一，前后工序等待锚点和边界有配置与解释链。",Backlog,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhQk,2026-10-29T20:02:44+08:00
-BR-03,机器占用,v0.3,v0.3,,设备适用工序、独占/批处理、是否允许并行、可用台数；同一独占设备任务不能重叠。,Backlog,按关联功能/阶段实施；规则独立验收结论待登记,,不得从规则卡Backlog推断功能未实现；需逐规则证据,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhRs,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhQk,2026-10-29T20:22:50+08:00
+BR-03,机器占用,v0.3,v0.3,,设备适用工序、独占/批处理、是否允许并行、可用台数；同一独占设备任务不能重叠。,Backlog,按关联功能/阶段实施；规则独立验收结论待登记,,不得从规则卡Backlog推断功能未实现；需逐规则证据,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhRs,2026-10-29T20:22:50+08:00
 BR-04,加工速度与效率,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"按产品/机器/单位配置有效速度；明确已是实测速率还是还需乘效率，避免重复折减。
 
 [CR-DEC04-05-06-20261029 批准增量]
 明确名义速度才乘效率，已实测速率不能再次折减；产品/单位/设备换算来源可追溯。",Backlog,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhTM,2026-10-29T20:02:44+08:00
-BR-05,日历与停机,v0.3,v0.3,,工厂工作窗口、资源继承关系、停机、清洗、加班、跨班及能否中断；非中断工序必须放在完整工作窗口内。,Backlog,按关联功能/阶段实施；规则独立验收结论待登记,,不得从规则卡Backlog推断功能未实现；需逐规则证据,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhUg,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhTM,2026-10-29T20:22:50+08:00
+BR-05,日历与停机,v0.3,v0.3,,工厂工作窗口、资源继承关系、停机、清洗、加班、跨班及能否中断；非中断工序必须放在完整工作窗口内。,Backlog,按关联功能/阶段实施；规则独立验收结论待登记,,不得从规则卡Backlog推断功能未实现；需逐规则证据,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhUg,2026-10-29T20:22:50+08:00
 BR-06,模具/工装,v0.3,v0.3+CR-DEC02-03-20261029,CR-DEC02-03-20261029,"适用任务、需求套数、可用数、提前取得/后延释放时间；全占用区间累计不超过可用数。
 
 [CR-DEC02-03-20261029 批准增量]
 将DEC02/03涉及的业务选择统一明确为前台可维护、可保存并实际作用于新试算的参数：工装占用/归还策略，人员参与阶段/窗口、人数与释放，显式技能替代关系及禁止替代；保留基线既有权限、历史输入/方案保护和结果可追溯要求。",In progress,CR-DEC02-03-20261029：固定12eed551的S06/S07独立有限PASS；FR017当前适用实现责任在7077e536独立PASS/原卡Done；FR007/022及完整CR仍NOT_READY；D01-D03 round1 PASS保留,CR-DEC02-03-20261029：FR017 T08/T10/U01/U05/H02独立PASS（7077e536）；原A01-A24及S06/S07有限PASS、原48项25 PASS/19 PARTIAL/2 FAIL_SCOPE/2 NOT_EXECUTABLE保留；FR007/022、L01/L02及完整CR/UAT未完成,基线原范围历史记录保留；FR017当前适用实现责任独立PASS；FR007/022及完整CR和业务UAT未通过；原S06/S07与D01-D03有限结果保留,未统一登记版本签收；原卡通过范围及历史证据保留,12eed5514c702f730aae65a39a08747c532f8536,"https://github.com/huiliangtao666/APS/issues/3
 https://github.com/huiliangtao666/APS/issues/13
-https://github.com/huiliangtao666/APS/issues/16",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhVk,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/16",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhVk,2026-10-29T20:22:50+08:00
 BR-07,人员,v0.3,v0.3+CR-DEC02-03-20261029,CR-DEC02-03-20261029,"技能组、人数、班次、任务需要的人数及参与阶段；不同技能不能未经配置互相替代。
 
 [CR-DEC02-03-20261029 批准增量]
 将DEC02/03涉及的业务选择统一明确为前台可维护、可保存并实际作用于新试算的参数：工装占用/归还策略，人员参与阶段/窗口、人数与释放，显式技能替代关系及禁止替代；保留基线既有权限、历史输入/方案保护和结果可追溯要求。",In progress,CR-DEC02-03-20261029：固定12eed551的S06/S07独立有限PASS；FR017当前适用实现责任在7077e536独立PASS/原卡Done；FR007/022及完整CR仍NOT_READY；D01-D03 round1 PASS保留,CR-DEC02-03-20261029：FR017 T08/T10/U01/U05/H02独立PASS（7077e536）；原A01-A24及S06/S07有限PASS、原48项25 PASS/19 PARTIAL/2 FAIL_SCOPE/2 NOT_EXECUTABLE保留；FR007/022、L01/L02及完整CR/UAT未完成,基线原范围历史记录保留；FR017当前适用实现责任独立PASS；FR007/022及完整CR和业务UAT未通过；原S06/S07与D01-D03有限结果保留,未统一登记版本签收；原卡通过范围及历史证据保留,12eed5514c702f730aae65a39a08747c532f8536,"https://github.com/huiliangtao666/APS/issues/3
 https://github.com/huiliangtao666/APS/issues/13
-https://github.com/huiliangtao666/APS/issues/16",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhW8,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/16",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhW8,2026-10-29T20:22:50+08:00
 BR-08,物料状态与时间,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"质量状态和“可用/不可用”的对应关系、到达/预计可用/有效期；质量状态来自模拟数据。
 
 [CR-DEC04-05-06-20261029 批准增量]
 状态映射、到达/质量最早可用/到期边界显式维护，未知或冲突阻止计入可用量。",Backlog,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhYE,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhYE,2026-10-29T20:22:50+08:00
 BR-09,库存分配,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"优先到期或优先到货等顺序、已有占用、是否允许预计供给；在投料工序开始时检查。
 
 [CR-DEC04-05-06-20261029 批准增量]
 先执行质量/时点/净量合法过滤，再依可配置FEFO/FIFO等键分配；预计供给保留条件。",Backlog,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhZA,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhZA,2026-10-29T20:22:50+08:00
 BR-10,BOM与数量计算,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"计算基准、比例/定额、工序加料、收率、包材定额及损坏比例；每个加入或损失只计一次。
 
 [CR-DEC04-05-06-20261029 批准增量]
 总/分阶段/已含收率路径互斥，每项加入/损失只应用一次，BOM与包装公式口径分别维护。",Backlog,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhag,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhag,2026-10-29T20:22:50+08:00
 BR-11,拆批与合批,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"容量上下限、允许拆分、程序/产品兼容、装载重量节点、尾批处理；不自动超产补满设备。
 
 [CR-DEC04-05-06-20261029 批准增量]
 量化位置、兼容组合与尾批处理明确，保留订单/批次数量及差额，不因合并重复扣算。",Backlog,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhbU,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhbU,2026-10-29T20:22:50+08:00
 BR-12,等待与空间,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"工序最短停留、最大等待、冷却/存储占用、空间单位和容量；必要时推迟上游。
 
 [CR-DEC04-05-06-20261029 批准增量]
 最短/最大等待、冷却占用、空间单位/容量/释放锚点可配置并联立检查。",Backlog,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhcM,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhcM,2026-10-29T20:22:50+08:00
 BR-13,换型与清洗,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"前后产品方向、资源、时长、人员、验证等待和禁止组合；A到B可以不同于B到A。
 
 [CR-DEC04-05-06-20261029 批准增量]
 按前后产品/程序方向维护换型清洗时长与资源，必需转换缺项不得默认为0。",Backlog,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhdg,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhdg,2026-10-29T20:22:50+08:00
 BR-14,预计可交付与余保,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"后续等待、有效期起算、客户最低剩余有效期及检查时点；P0不计算真实运输。
 
 [CR-DEC04-05-06-20261029 批准增量]
 原料投料有效期与成品交付余保分别维护；条件供给和后续等待的假设可追溯，不含真实运输。",Backlog,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHheY,2026-10-29T20:02:44+08:00
-BR-15,任务排序与评价,v0.3,v0.3,,优先顺序、要求日期、稳定排序；后期配置减少延期、调整或换型等目标，不能忽略约束。,Backlog,按关联功能/阶段实施；规则独立验收结论待登记,,不得从规则卡Backlog推断功能未实现；需逐规则证据,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhfc,2026-10-29T20:02:44+08:00
-BR-16,执行保护与异常,v0.3,v0.3,,已开始/已完成的保护方式、未开始任务保护时段、锁定及故障处理；冲突必须指出。,Backlog,按关联功能/阶段实施；规则独立验收结论待登记,,不得从规则卡Backlog推断功能未实现；需逐规则证据,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhgY,2026-10-29T20:02:44+08:00
-BR-17,计划确认条件,v0.3,v0.3,,无规则冲突、关键数据完整、输入未发生影响结果的变化；是否允许主管确认已排部分。,Backlog,按关联功能/阶段实施；规则独立验收结论待登记,,不得从规则卡Backlog推断功能未实现；需逐规则证据,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhhA,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHheY,2026-10-29T20:22:50+08:00
+BR-15,任务排序与评价,v0.3,v0.3,,优先顺序、要求日期、稳定排序；后期配置减少延期、调整或换型等目标，不能忽略约束。,Backlog,按关联功能/阶段实施；规则独立验收结论待登记,,不得从规则卡Backlog推断功能未实现；需逐规则证据,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhfc,2026-10-29T20:22:50+08:00
+BR-16,执行保护与异常,v0.3,v0.3,,已开始/已完成的保护方式、未开始任务保护时段、锁定及故障处理；冲突必须指出。,Backlog,按关联功能/阶段实施；规则独立验收结论待登记,,不得从规则卡Backlog推断功能未实现；需逐规则证据,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhgY,2026-10-29T20:22:50+08:00
+BR-17,计划确认条件,v0.3,v0.3,,无规则冲突、关键数据完整、输入未发生影响结果的变化；是否允许主管确认已排部分。,Backlog,按关联功能/阶段实施；规则独立验收结论待登记,,不得从规则卡Backlog推断功能未实现；需逐规则证据,未统一登记版本签收；原卡通过范围及历史证据保留,,,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhhA,2026-10-29T20:22:50+08:00
 BR-18,时间、单位与取整,v0.3,v0.3+CR-DEC04-05-06-20261029,CR-DEC04-05-06-20261029,"本厂时区、计算/展示精度、支/袋/箱取整和误差范围；原始值用于计算，展示值不反复回算。
 
 [CR-DEC04-05-06-20261029 批准增量]
 计算精确量、物理粒度、采购建议取整和显示舍入分离；保持单位/时间及分摊守恒。",Backlog,CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发,CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。,基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始,未统一登记版本签收；原卡通过范围及历史证据保留,,"https://github.com/huiliangtao666/APS/issues/9
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16
-https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhh4,2026-10-29T20:02:44+08:00
+https://github.com/huiliangtao666/APS/issues/25",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhh4,2026-10-29T20:22:50+08:00

@@ -1453,6 +1453,41 @@
         "FR-013": "In progress"
       },
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_8cf177f1-c3fc-46c5-923c-e08ded0100af:r1",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test original delivery and Files API originals",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T20:22:21+08:00",
+      "requirement": "FR-013 / Issue #4",
+      "product_sha": "7338108a01e4bcfa18e98d9c1ad5a17a187665e4",
+      "parent_sha": "66af9caceb57eff429dd8b14bbad690f62bfe749",
+      "branch": "feat/fr-013-016-main-batch",
+      "result": "28/28 scoped PASS; PRE01 and LOC01 each repair-r1/retest-r1 closed; FR013 remains NOT_READY",
+      "external_hashes": {
+        "Issue4-FR013-PRE01-LOC01-7338108a-INDEPENDENT-R1-REPORT.txt": {
+          "bytes": 23385,
+          "sha256": "f571b5c7205185c0f40e271a3bfb9f85b30920acfcc579b5735ddcc0854cd0c7"
+        },
+        "Issue4-FR013-PRE01-LOC01-7338108a-INDEPENDENT-R1-ASSERTIONS.csv": {
+          "bytes": 14136,
+          "sha256": "440fc29d0feefae7b2da8e2ce0724e32558ddc5e56b55cc51e6ab9ed1f974404"
+        },
+        "Issue4-FR013-PRE01-LOC01-7338108a-INDEPENDENT-R1-EVIDENCE.zip": {
+          "bytes": 2388710,
+          "sha256": "c9d4272ab979acf831accf32c657a30e8cb3849d54a0af5e95e0cc1b83d9d432"
+        }
+      },
+      "zip_crc": "PASS",
+      "zip_internal_hashes_verified": 161,
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6496550736",
+      "project_status": {
+        "FR-013": "In progress"
+      },
+      "old_fail_sha_preserved": "66af9caceb57eff429dd8b14bbad690f62bfe749",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
