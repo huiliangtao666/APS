@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "固定12eed551的S06/S07独立有限验收PASS；FR007/017/022均NOT_READY，逐卡剩余条件见原卡/Issue3/13/16；D01-D03 round1 PASS保持",
+      "implementation_status": "固定12eed551的S06/S07独立有限验收PASS；FR017新交付7077e536自测PASS、独立Test待结果；FR007/022及完整CR仍NOT_READY；D01-D03 round1 PASS保留",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -89,6 +89,11 @@
           "date": "2026-10-29",
           "event_key": "dlv_f4ebcde5-67f6-4898-a740-535c299548de:r1",
           "event": "Design处理S06/S07独立TEST_VERDICT；有限PASS，FR007/017/022各NOT_READY，状态In progress；保留原通过和缺陷轮次，不恢复其他backlog"
+        },
+        {
+          "date": "2026-10-29",
+          "event_key": "dlv_20413b70-7284-427b-ab59-12e6023f3d90:r1",
+          "event": "PM核Dev FR017配置范围/五态/历史保护交付7077e536d421b79a634b2792790344bc258acd51，自测PASS，独立Test dlv_ef0c6e69-7c93-455b-bc96-98e52dee22e2 已SENT；原S06/S07与D01-D03历史不变，完整FR/CR/UAT未通过"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
@@ -198,7 +203,23 @@
         "next_owner": "APS-Design",
         "next_step": "按唯一原卡归集本卡剩余责任并细化已有契约；后续仅既有授权缺项实现、固定SHA定向验证；本事件未新增投递"
       },
-      "uat_owner": "QA"
+      "uat_owner": "QA",
+      "pending_fr017_test": {
+        "event_key": "dlv_20413b70-7284-427b-ab59-12e6023f3d90:r1",
+        "dev_delivery": "dlv_20413b70-7284-427b-ab59-12e6023f3d90",
+        "test_delivery": "dlv_ef0c6e69-7c93-455b-bc96-98e52dee22e2",
+        "code_sha": "7077e536d421b79a634b2792790344bc258acd51",
+        "parent_sha": "ca13c6d26a40eb329011c0fa66a747aa735570da",
+        "branch": "feat/fr-017-scope-status",
+        "dev_result": "PASS self-test",
+        "test_status": "SENT; result pending",
+        "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6492970938",
+        "artifact_hashes": {
+          "FR017-SCOPE-STATUS-EVIDENCE-2026-10-29.zip": "24ccdc3b06aaa2a185f8a94d45cf34415cdbb9d78f1cf44530d833c2326a06b1",
+          "FR017-SCOPE-STATUS-REPORT-2026-10-29.txt": "9d637a91dd1a6be0a51a805a8dc7af878bf6a7c57096c27ffc96ca8f1699725b",
+          "FR017-SCOPE-STATUS-HANDOFF-2026-10-29.json": "672b0959e2def089265710f367eaff5c0e5933f5e8d4f2e19036165d4ee021d4"
+        }
+      }
     },
     {
       "id": "CR-DEC04-05-06-20261029",
