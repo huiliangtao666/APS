@@ -190,7 +190,9 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
     if(!minimal&&activeBatchRule(data,calculatedAt)){
      batches=prepareProductionBatches(data,sorted,conditions.startMinute??0);findings.push(...batches.findings);data=batches.data;sorted=batches.orders;
      for(const g of batches.groups.filter((g:any)=>g.status==='blocked-under-min'))for(const op of g.route){
-      try{const demands=g.members.flatMap((m:any)=>calculateMaterialDemand(sourceData,m.order,op['工序编号'],conditions.startMinute??0,m.qualifiedKg).map(d=>({...d,taskId:JSON.stringify([m.orderId,m.index,op['工序编号']])})));if(allocator)materialDemands.push(...allocator.preview(demands,conditions.startMinute??0).rows.map(r=>({...r,blockedReason:'低于最小装载；候选未占用'})));}catch(e){findings.push({code:'UNPLANNED / BATCH_MATERIAL',message:String(e),taskIds:[]});}
+      const materialSources:any[]=[];const trace=(table:string,rows:Row[])=>materialSources.push(...sourceRefs(table,rows,sourceData[table]||[]));
+      g.members.forEach((m:any)=>trace('orders',[m.order]));trace('routes',[op]);
+      try{const demands=g.members.flatMap((m:any)=>calculateMaterialDemand(sourceData,m.order,op['工序编号'],conditions.startMinute??0,m.qualifiedKg,trace).map(d=>({...d,taskId:JSON.stringify([m.orderId,m.index,op['工序编号']])})));if(allocator)materialDemands.push(...allocator.preview(demands,conditions.startMinute??0).rows.map(r=>({...r,blockedReason:'低于最小装载；候选未占用'})));}catch(e){findings.push({relatedRecords:materialSources,code:'UNPLANNED / BATCH_MATERIAL',message:String(e),taskIds:[]});}
      }
     }
     const retainBlockedDemand=(order:Row,operation:string,minute:number,blockedReason:string)=>{
@@ -201,14 +203,14 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
     sorted.sort((a:Row,b:Row)=>Number((sourceData.executionFacts||[]).some(f=>f['订单编号']===b['订单编号']))-Number((sourceData.executionFacts||[]).some(f=>f['订单编号']===a['订单编号'])));
     for(const order of sorted){const oid=order['订单编号'], product=order['产品编号'];const route=(data.routes||[]).filter(r=>r['产品编号']===product);
       if(!route.length){findings.push({relatedRecords:[...sourceRefs('orders',sourceData.orders.filter(o=>o['订单编号']===oid),sourceData.orders),...sourceRefs('products',sourceData.products.filter(p=>p['产品编号']===product),sourceData.products)],missingTarget:{table:'routes',key:product},code:'INPUT / ROUTE_MISSING',message:`订单 ${oid} 的产品 ${product} 没有工艺路线`,taskIds:[]});continue;}
-      const routeByOperation=new Map<string,Row>(); const routeProblems:string[]=[];
-      for(const op of route){const operation=op['工序编号']?.trim();if(!operation){routeProblems.push('存在工序编号为空的路线记录');continue;}if(routeByOperation.has(operation))routeProblems.push(`工序 ${operation} 重复定义`);else routeByOperation.set(operation,op);}
-      for(const [operation,op] of routeByOperation){const predecessor=op['前序工序']?.trim();if(predecessor&&!routeByOperation.has(predecessor))routeProblems.push(`工序 ${operation} 引用不存在的前序工序 ${predecessor}`);}
+      const routeByOperation=new Map<string,Row>(); const routeProblems:string[]=[];const routeProblemRows:Row[]=[];
+      for(const op of route){const operation=op['工序编号']?.trim();if(!operation){routeProblemRows.push(op);routeProblems.push('存在工序编号为空的路线记录');continue;}if(routeByOperation.has(operation)){routeProblemRows.push(...route.filter(r=>r['工序编号']?.trim()===operation));routeProblems.push(`工序 ${operation} 重复定义`);}else routeByOperation.set(operation,op);}
+      for(const [operation,op] of routeByOperation){const predecessor=op['前序工序']?.trim();if(predecessor&&!routeByOperation.has(predecessor)){routeProblemRows.push(op);routeProblems.push(`工序 ${operation} 引用不存在的前序工序 ${predecessor}`);}}
       const visiting=new Set<string>(), visited=new Set<string>(), stack:string[]=[];let cycle:string[]=[];
       const visit=(operation:string)=>{if(cycle.length||visited.has(operation))return;if(visiting.has(operation)){const start=stack.indexOf(operation);cycle=[...stack.slice(start),operation];return;}visiting.add(operation);stack.push(operation);const predecessor=routeByOperation.get(operation)?.['前序工序']?.trim();if(predecessor&&routeByOperation.has(predecessor))visit(predecessor);stack.pop();visiting.delete(operation);visited.add(operation);};
       routeByOperation.forEach((_,operation)=>visit(operation));
-      if(cycle.length)routeProblems.push(`工序依赖存在循环：${cycle.join(' → ')}`);
-      if(routeProblems.length){findings.push({code:cycle.length?'INPUT / ROUTE_CYCLE':'INPUT / ROUTE_CONFIG',message:`订单 ${oid} / 产品 ${product} 路线配置问题：${[...new Set(routeProblems)].join('；')}`,taskIds:[]});continue;}
+      if(cycle.length){routeProblemRows.push(...cycle.slice(0,-1).map(operation=>routeByOperation.get(operation)!));routeProblems.push(`工序依赖存在循环：${cycle.join(' → ')}`);}
+      if(routeProblems.length){findings.push({relatedRecords:[...sourceRefs('orders',batches?[...new Set<Row>(batches.byId.get(oid).members.map((m:any)=>m.order))]:[order],sourceData.orders),...sourceRefs('routes',[...new Set<Row>(batches?batches.originalRecords('routes',routeProblemRows):routeProblemRows)],sourceData.routes)],code:cycle.length?'INPUT / ROUTE_CYCLE':'INPUT / ROUTE_CONFIG',message:`订单 ${oid} / 产品 ${product} 路线配置问题：${[...new Set(routeProblems)].join('；')}`,taskIds:[]});continue;}
       // Keep the source row order among independent steps, while always placing predecessors first.
       const orderedRoute:Row[]=[];const remaining=[...route];const completedOperations=new Set<string>();
       while(remaining.length){const index=remaining.findIndex(op=>!op['前序工序']?.trim()||completedOperations.has(op['前序工序'].trim()));if(index<0)break;const [next]=remaining.splice(index,1);orderedRoute.push(next);completedOperations.add(next['工序编号'].trim());}

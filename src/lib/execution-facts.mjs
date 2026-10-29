@@ -54,13 +54,16 @@ export function validateExecution(data){
   if(!material||material['单位']!==c['单位'])bad('单位','须与物料主数据完全一致，不换算',[...refs('executionMaterials',[c]),...refs('materials',material?[material]:[])]);
   if(!decimal(c['累计已用数量'])||!(Number(c['累计已用数量'])>0))bad('累计已用数量','须为正十进制累计值');
   else {lots.set(c['批次编号'],Q.add(lots.get(c['批次编号'])||Q.zero,Q.q(c['累计已用数量'])));}
+  let demandMembers=[...refs('executionMaterials',[c]),...refs('executionFacts',f?[f]:[])];
+  const trace=(table,rows)=>demandMembers.push(...refs(table,rows));
   if(f&&decimal(c['累计已用数量']))try{
    const o=data.orders.find(o=>o['订单编号']===f['订单编号']);
-   const demands=executionMaterialDemand({...data,executionFacts:f['报废补做口径']==='按本工序BOM补做'?data.executionFacts:[]},o,f['工序编号'],Number(f['开始分钟']));
+   const demands=executionMaterialDemand({...data,executionFacts:f['报废补做口径']==='按本工序BOM补做'?data.executionFacts:[]},o,f['工序编号'],Number(f['开始分钟']),trace);
    const demand=demands.find(d=>d.materialId===c['物料编号']);
-   const sum=(data.executionMaterials||[]).filter(x=>x['事实编号']===c['事实编号']&&x['物料编号']===c['物料编号']).reduce((v,x)=>Q.add(v,Q.q(x['累计已用数量'])),Q.zero);
-   if(!demand||Q.cmp(sum,Q.fromExact(demand.exactQuantity))>0)bad('累计已用数量','缺少支持口径的BOM或累计耗料超显式定额；补料/超耗需核对');
-  }catch{bad('累计已用数量','BOM/耗料口径未明确，禁止推断剩余物料');}
+   const summed=(data.executionMaterials||[]).filter(x=>x['事实编号']===c['事实编号']&&x['物料编号']===c['物料编号']);trace('executionMaterials',summed);
+   const sum=summed.reduce((v,x)=>Q.add(v,Q.q(x['累计已用数量'])),Q.zero);
+   if(!demand||Q.cmp(sum,Q.fromExact(demand.exactQuantity))>0)bad('累计已用数量','缺少支持口径的BOM或累计耗料超显式定额；补料/超耗需核对',demandMembers);
+  }catch{bad('累计已用数量','BOM/耗料口径未明确，禁止推断剩余物料',demandMembers);}
  });
  for(const [id,amount] of lots){const lot=(data.inventory||[]).find(b=>b['批次编号']===id);if(lot)try{if(Q.cmp(amount,Q.sub(Q.q(lot['账面数量']),Q.q(lot['已占用数量'])))>0)issues.push({code:'EXECUTION_STOCK_OVERUSE',table:'executionMaterials',file:'26_模拟累计耗料.csv',row:0,field:'累计已用数量',relatedRecords:[...refs('executionMaterials',(data.executionMaterials||[]).filter(c=>c['批次编号']===id&&decimal(c['累计已用数量'])&&Number(c['累计已用数量'])>0)),...refs('inventory',[lot])],message:'累计耗料超过账面减独立占用；账面须为扣耗前口径，不能重复扣减'});}catch{/* Inventory validation reports invalid amounts. */}}
  const sourceIds=new Set(),sourceFacts=new Set();
@@ -128,7 +131,7 @@ export function executionTransition(before,after){
  return issues;
 }
 export function executionAdmission(data,conditions){
- const eventIssues=[];if((data.simulationEvents||[]).length){const ids=(conditions.enabledRuleIds||(data.rules||[]).filter(r=>r['是否启用']==='是').map(r=>r['规则编号'])).filter(id=>{const r=(data.rules||[]).find(r=>r['规则编号']===id);return !r?.['生效时间']||Date.parse(r['生效时间'])<=Date.parse(conditions.ruleEvaluationAt||new Date().toISOString());});if(conditions.mode==='minimal-r1'||!ids.includes('CALENDAR')||(data.simulationEvents||[]).some(e=>['物料状态变化','到料延期'].includes(e['事件类型']))&&!ids.includes('MATERIAL'))eventIssues.push({code:'EVENT_POLICY_REQUIRED',message:'异常事件须使用完整支持模式及日历；物料/延期事件须启用物料规则，不得绕过事件约束'});}
+ const eventIssues=[];if((data.simulationEvents||[]).length){const ids=(conditions.enabledRuleIds||(data.rules||[]).filter(r=>r['是否启用']==='是').map(r=>r['规则编号'])).filter(id=>{const r=(data.rules||[]).find(r=>r['规则编号']===id);return !r?.['生效时间']||Date.parse(r['生效时间'])<=Date.parse(conditions.ruleEvaluationAt||new Date().toISOString());});if(conditions.mode==='minimal-r1'||!ids.includes('CALENDAR')||(data.simulationEvents||[]).some(e=>['物料状态变化','到料延期'].includes(e['事件类型']))&&!ids.includes('MATERIAL'))eventIssues.push({relatedRecords:[...sourceRefs('simulationEvents',data.simulationEvents,data.simulationEvents),...sourceRefs('rules',(data.rules||[]).filter(r=>(conditions.enabledRuleIds||[]).includes(r['规则编号'])||!conditions.enabledRuleIds&&r['是否启用']==='是'),data.rules||[])],code:'EVENT_POLICY_REQUIRED',message:'异常事件须使用完整支持模式及日历；物料/延期事件须启用物料规则，不得绕过事件约束'});}
  if(!facts(data).length)return eventIssues;
  let members=[];const refs=(table,rows,input=data)=>sourceRefs(table,rows,input[table]||[]).map(r=>input===data?r:{...r,sourceContext:'executionContext'});
  const issues=[...eventIssues],bad=(message,relatedRecords=members)=>issues.push({relatedRecords,code:'EXECUTION_SCOPE_UNDECIDED',table:'executionFacts',file:'25_模拟任务执行事实.csv',row:0,field:'计算口径',message});
@@ -137,11 +140,11 @@ export function executionAdmission(data,conditions){
  if(conditions.mode==='minimal-r1')bad('有执行事实不能使用忽略保护的最小模式');
  const enabled=(conditions.enabledRuleIds||[]).filter(id=>{const row=(data.rules||[]).find(r=>r['规则编号']===id);return !row?.['生效时间']||Date.parse(row['生效时间'])<=Date.parse(conditions.ruleEvaluationAt||new Date().toISOString());});
  const full=data.executionContext||data;
- if(enabled.includes('MATERIAL'))for(const f of facts(full).filter(f=>f['状态']==='已完成'))try{members=refs('executionFacts',[f],full);const o=full.orders.find(o=>o['订单编号']===f['订单编号']);for(const demand of executionMaterialDemand(full,o,f['工序编号'],Number(f['开始分钟']))){members=[...refs('executionFacts',[f],full),...refs('executionMaterials',(full.executionMaterials||[]).filter(c=>c['事实编号']===f['事实编号']&&c['物料编号']===demand.materialId),full)];const used=(full.executionMaterials||[]).filter(c=>c['事实编号']===f['事实编号']&&c['物料编号']===demand.materialId).reduce((a,c)=>Q.add(a,Q.q(c['累计已用数量'])),Q.zero);if(Q.cmp(used,Q.fromExact(demand.exactQuantity))!==0n)bad('已完成工序耗料与支持BOM定额未齐；不能默认其物料仍未使用或擅自补耗料');}}catch{bad('已完成工序的BOM/耗料映射不明，须核对');}
- members=refs('executionFacts',facts(data));
+ if(enabled.includes('MATERIAL'))for(const f of facts(full).filter(f=>f['状态']==='已完成'))try{members=[...refs('executionFacts',[f],full),...refs('rules',(data.rules||[]).filter(r=>r['规则编号']==='MATERIAL'))];const o=full.orders.find(o=>o['订单编号']===f['订单编号']);const trace=(table,rows)=>members.push(...refs(table,rows,full));const demands=executionMaterialDemand(full,o,f['工序编号'],Number(f['开始分钟']),trace),baseline=[...members];for(const demand of demands){members=[...baseline,...refs('executionMaterials',(full.executionMaterials||[]).filter(c=>c['事实编号']===f['事实编号']&&c['物料编号']===demand.materialId),full)];const used=(full.executionMaterials||[]).filter(c=>c['事实编号']===f['事实编号']&&c['物料编号']===demand.materialId).reduce((a,c)=>Q.add(a,Q.q(c['累计已用数量'])),Q.zero);if(Q.cmp(used,Q.fromExact(demand.exactQuantity))!==0n)bad('已完成工序耗料与支持BOM定额未齐；不能默认其物料仍未使用或擅自补耗料');}}catch{bad('已完成工序的BOM/耗料映射不明，须核对');}
+ members=[...refs('executionFacts',facts(data)),...refs('rules',(data.rules||[]).filter(r=>['CAPACITY','PROGRAM','MOLD','STORAGE','DELIVERY'].includes(r['规则编号'])&&enabled.includes(r['规则编号'])))];
  if(['CAPACITY','PROGRAM','MOLD','STORAGE','DELIVERY'].some(id=>enabled.includes(id)))bad('执行事实与拆合批/联合占用/交付质量的完整协调待FR031；禁止虚构已确认执行或合格产出');
- if((data.dependencies||[]).some(d=>d['资源类型']==='人员技能'&&factFor(data,d['订单编号'],d['工序编号'])))bad('已开始任务人员阶段剩余范围未定，禁止重复占用');
- if(conditions.endMinute!==null&&conditions.endMinute!==undefined&&facts(data).some(f=>Number(f['观测分钟'])>conditions.endMinute))bad('计算结束早于执行观测时点，禁止裁去事实');
+ if((data.dependencies||[]).some(d=>d['资源类型']==='人员技能'&&factFor(data,d['订单编号'],d['工序编号'])))bad('已开始任务人员阶段剩余范围未定，禁止重复占用',[...refs('dependencies',(data.dependencies||[]).filter(d=>d['资源类型']==='人员技能'&&factFor(data,d['订单编号'],d['工序编号']))),...refs('executionFacts',[...new Set((data.dependencies||[]).filter(d=>d['资源类型']==='人员技能').map(d=>factFor(data,d['订单编号'],d['工序编号'])).filter(Boolean))])]);
+ if(conditions.endMinute!==null&&conditions.endMinute!==undefined&&facts(data).some(f=>Number(f['观测分钟'])>conditions.endMinute))bad('计算结束早于执行观测时点，禁止裁去事实',refs('executionFacts',facts(data).filter(f=>Number(f['观测分钟'])>conditions.endMinute)));
  return issues;
 }
 export function executionSummary(data,at=new Date().toISOString()){

@@ -36,13 +36,13 @@ export function validatePolicies(data,at=new Date().toISOString(),mode='supporte
  if(checkExecution)issues.push(...validatePolicyExecution(data,at,mode));
  const seen=new Set();
  for(const [i,r]of (data.skillSubstitutions||[]).entries()){
-  const fail=(f,m)=>add('skillSubstitutions',i,f,m),key=JSON.stringify([r['可提供技能'],r['所需技能'],r['适用工序']]);
+  const fail=(f,m,baseline=[])=>add('skillSubstitutions',i,f,m,[...refs('skillSubstitutions',[r]),...baseline]),key=JSON.stringify([r['可提供技能'],r['所需技能'],r['适用工序']]);
   if(!r['关系编号']?.trim())fail('关系编号','必填');
-  if(seen.has(key))fail('可提供技能','同方向及范围只能有一条关系，禁止重叠覆盖');seen.add(key);
-  for(const k of ['可提供技能','所需技能'])if(!r[k]?.trim()||r[k]!==r[k].trim()||!skillSet.has(r[k]))fail(k,'须引用人员组已声明技能或现有需求技能');
+  if(seen.has(key))add('skillSubstitutions',i,'可提供技能','同方向及范围只能有一条关系，禁止重叠覆盖',refs('skillSubstitutions',(data.skillSubstitutions||[]).filter(x=>JSON.stringify([x['可提供技能'],x['所需技能'],x['适用工序']])===key)));seen.add(key);
+  for(const k of ['可提供技能','所需技能'])if(!r[k]?.trim()||r[k]!==r[k].trim()||!skillSet.has(r[k]))fail(k,'须引用人员组已声明技能或现有需求技能',r[k]?.trim()&&r[k]===r[k].trim()?[...refs('personnelGroups',data.personnelGroups||[]),...refs('dependencies',(data.dependencies||[]).filter(d=>d['资源类型']==='人员技能'&&d['所需技能']))]:[]);
   if(r['可提供技能']===r['所需技能'])fail('所需技能','同技能自动匹配，无须替代关系');
   if(!['是','否'].includes(r['是否启用']))fail('是否启用','仅接受是或否；否表示禁止该范围的有向替代');
-  if(r['适用工序']!=='*'&&!(data.routes||[]).some(x=>x['工序编号']===r['适用工序']))fail('适用工序','须为 * 或单个现有工序编号；精确工序优先于 *，禁用也覆盖 *');
+  if(r['适用工序']!=='*'&&!(data.routes||[]).some(x=>x['工序编号']===r['适用工序']))fail('适用工序','须为 * 或单个现有工序编号；精确工序优先于 *，禁用也覆盖 *',refs('routes',data.routes||[]));
  }
  for(const [i,t]of (data.tools||[]).entries())for(const k of ['提前占用分钟','后延占用分钟'])if(!minute(t[k]))add('tools',i,k,'须为0–525600整数分钟');
  for(const [i,t]of (data.tools||[]).entries())if(t['可用起始分钟']!==undefined||t['可用结束分钟']!==undefined){
@@ -82,14 +82,14 @@ export function validatePolicies(data,at=new Date().toISOString(),mode='supporte
   const ids=personnelCandidates(r),field=r['候选人员组']?.trim()?'候选人员组':'资源编号';
   if(r['候选人员组']?.trim()&&r['资源编号']?.trim())add('dependencies',i,field,'候选集合与单组资源编号互斥，请仅填写一种；不隐含优先组');
   if(!ids.length||ids.some(id=>!id)||new Set(ids).size!==ids.length||ids.length>32)add('dependencies',i,field,'显式填写1–32个不重复人员组编号，以逗号分隔；空集合不代表任意组');
-  for(const id of ids)if(!(data.personnelGroups||[]).some(g=>g['人员组编号']===id))add('dependencies',i,field,`须引用现有人员组 ${id}；同池多个技能只共享一份人数容量`);
+  for(const id of ids)if(!(data.personnelGroups||[]).some(g=>g['人员组编号']===id))add('dependencies',i,field,`须引用现有人员组 ${id}；同池多个技能只共享一份人数容量`,[...refs('dependencies',[r]),...refs('personnelGroups',data.personnelGroups||[])]);
  }
- const posts=new Map();
+ const posts=new Map(),postRows=new Map();
  for(const [i,r] of (data.dependencies||[]).entries())if(r['资源类型']==='人员技能'&&r['人员岗位编号']?.trim()){
   const key=JSON.stringify([r['订单编号'],r['工序编号'],r['人员岗位编号']]);
   const contract=JSON.stringify([[...personnelCandidates(r)].sort(),r['所需技能'],r['所需班次']||'']);
-  if(posts.has(key)&&posts.get(key)!==contract)add('dependencies',i,'人员岗位编号','同订单同工序同岗位的候选组、技能及班次须一致；独立岗位请使用不同编号');
-  posts.set(key,contract);
+  if(posts.has(key)&&posts.get(key)!==contract)add('dependencies',i,'人员岗位编号','同订单同工序同岗位的候选组、技能及班次须一致；独立岗位请使用不同编号',refs('dependencies',[postRows.get(key),r]));
+  posts.set(key,contract);postRows.set(key,r);
  }
  return issues;
 }
