@@ -3666,6 +3666,59 @@
       "issue_comment": null,
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_e8529c0e-8832-45da-b589-fbef99abe54f:c1",
+      "original_delivery": "dlv_e8529c0e-8832-45da-b589-fbef99abe54f",
+      "type": "DEV_DELIVERED",
+      "source": "APS-Dev",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T06:43:21+08:00",
+      "requirement": "FR-022/Issue3",
+      "product_sha": "cd115f077593cb4c1fc991cbaf54053e305e03ee",
+      "result": "N06有限原账Dev新cd115f0交付16 PASS/5 BLOCKED：来源完整且全部实际释放的单连续区间保存→冻结→容量保护→独立重建→历史链自测通过；Test2正式独立任务dlv_e22a0f95执行中。真实客户原账/未知释放/U01/U02/多窗口/跨线仍BLOCKED，FR022整卡NOT_READY；平台中断不计产品FAIL",
+      "external_hashes": {
+        "Issue3-FR022-N06-FINITE-c1-EVIDENCE.zip": "5a2c4921982ba42c9e4be1f82b42aefca078fdd086beb7da9a11bd9bb6a6ebc6",
+        "Issue3-FR022-N06-FINITE-c1-HANDOFF.json": "4838f000f365c3b724244510e3ecb2d0288b846782b39f7c75c37673435b1054",
+        "Issue3-FR022-N06-FINITE-c1-REPORT.md": "d50428929fd5e3aa9a92d3f7ab30933a2dc357c15a2ad5d3076b6a1a49734d16",
+        "Issue3-FR022-N06-FINITE-c1-SHA256.json": "eccf5842ff45b77eeb9083adbf158f756b527da6bf71ef38c5a92ae2283ed87f",
+        "Issue3-FR022-N06-FINITE-c1-MATRIX.csv": "ff88cd46ad1ecff0aff5def7f286d8384ba19a88839afef60de5321f65149a40"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 21,
+      "project_status": {
+        "FR-022": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6510231636",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_2c62f6ad-d8e6-4fd1-b6f0-471799ce57dd:c1",
+      "original_delivery": "dlv_2c62f6ad-d8e6-4fd1-b6f0-471799ce57dd",
+      "type": "TEST_EVIDENCE_FOLLOWUP",
+      "source": "APS-Test2",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T06:43:21+08:00",
+      "requirement": "FR-038",
+      "product_sha": "8741bf0a597fa11838a514259d8ffe7980382ee2",
+      "result": "FR038固定8741bf0a探索证据C2更正：2048单输入4096候选工序，输出3993已排+53日历窗口未排+50前序阻断=4096；原C1“全部任务数相符/findings均0”文字错误，保留旧原件并引用更正。62次Worker耗时仍仅探索，正式AC27不判产品PASS/FAIL，整卡NOT_READY",
+      "external_hashes": {
+        "FR038-AC27-8741bf0a-Test2-C2-base-operations.csv": "3ad4c19ccc310dcde3e191786241cebed574bfb53937fefc91bbb602b5f778cb",
+        "FR038-AC27-8741bf0a-Test2-C2-tiers-corrected.csv": "5611f14ba4d2ac91150cada9073b45455398b67fa87c1c1cf20f43187f48eeaa",
+        "FR038-AC27-8741bf0a-Test2-C2-material-operations.csv": "6f60084d413f3afe8b35d08cd2b7cbee1132ceb97cb68ba0484a7ae29a66f142",
+        "FR038-AC27-8741bf0a-Test2-C2-evidence.zip": "566c65d7ff898ff337e36283a2884c29bd665f577db2a6afdaa6e562e7651dec",
+        "FR038-AC27-8741bf0a-Test2-C2-hashes.sha256": "41765c934f6e12e3941a1352b4f95eebe5529cb0b61c5613fcc12e2112e04e14",
+        "FR038-AC27-8741bf0a-Test2-C2-reconciliation.md": "5a682cd1428ee3c18e7855d2f5746e9af4de7a32ec845847b8cc13c955774165"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 18,
+      "project_status": {
+        "FR-038": "In progress"
+      },
+      "issue_comment": null,
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
