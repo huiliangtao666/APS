@@ -887,6 +887,56 @@
         "dispatch_status": "queued/waiting；仅SENT，不声称开始或通过",
         "reason": "已有交付且当前本卡未闭环；Test无排队/执行重复；先复用证据、仅补责任缺口"
       }
+    },
+    {
+      "event_key": "dlv_c198f365-2f80-42a8-b54b-bd6688609317:r1",
+      "original_delivery": "dlv_c198f365-2f80-42a8-b54b-bd6688609317",
+      "notification_delivery": "dlv_d28ce851-d4be-4b42-b461-48afd1285c7b",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T15:28:47+08:00",
+      "product_sha": "c8e16d408b2d0207cb9886b55f39a52ebc9c1665",
+      "test_design_snapshot": "ffee6a8013b2fce8a7303332b70ad3dd9dcff6ee",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/13#issuecomment-6490705592",
+      "audit_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/operations/fr030-c8e16d40-acceptance-r1-design.md",
+      "external_hashes": {
+        "FR030-c8e16d40-ACCEPTANCE-R1-REPORT.txt": "6f9c7b1255f62c9b11856d5b9a81b0e84667d98d058c849cd321bc5d61c3f842",
+        "FR030-c8e16d40-ACCEPTANCE-R1-ASSERTIONS.csv": "ad527567501fcf2b357f661801ecd0a039ee7f5f194c8e398d89f1cba7200218",
+        "FR030-c8e16d40-ACCEPTANCE-R1-LAYERS.json": "d0a27fda7698b450e0f5b332743f1f402637b8041a54981c52c09eb7b3c86a0f",
+        "FR030-c8e16d40-ACCEPTANCE-R1-EVIDENCE.zip": "82a5b8d1c5f09bc0828f10e3108c087a9e6de3c4de8c506907933be4a8b323ef"
+      },
+      "verified_internal_hashes": 91,
+      "outcomes": [
+        {
+          "requirement": "FR-030",
+          "before": "In review",
+          "after": "Done",
+          "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg-Y",
+          "code_sha": "c8e16d408b2d0207cb9886b55f39a52ebc9c1665",
+          "requirement_version": "v0.3",
+          "applicable_assertions": 20,
+          "pass": 20,
+          "issue13_state": "open; other FR/CR responsibility retained",
+          "responsibility_round": 1,
+          "repair_round": 0,
+          "retest_round": 0,
+          "next_owner": "后续部署负责人 / huiliangtao666（业务UAT）",
+          "next_step": "FR030无剩余产品动作；平台/部署/持久性与业务UAT单列未执行"
+        }
+      ],
+      "ack_delivery_policy": "本Inbox最终PROCESSED由平台hook记录，不另派ACK/完成通知",
+      "next_test_dispatch": {
+        "event_key": "fr027:c8e16d40:card-responsibility-acceptance-r1",
+        "delivery": "dlv_1971efcf-1545-475e-99ad-ae813c0314eb",
+        "requirement": "FR-027",
+        "code_sha": "c8e16d408b2d0207cb9886b55f39a52ebc9c1665",
+        "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg7Y",
+        "state": "SENT",
+        "delivery_status": "queued/waiting; not claimed started/passed",
+        "audit_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/operations/fr027-c8e16d40-acceptance-dispatch.md",
+        "issue_comment": "https://github.com/huiliangtao666/APS/issues/13#issuecomment-6490745846"
+      }
     }
   ]
 }
