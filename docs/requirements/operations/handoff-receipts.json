@@ -584,6 +584,79 @@
         "dispatched_at": "2026-10-29T14:32:50+08:00"
       },
       "ack_delivery_policy": "本Inbox最终PROCESSED由平台hook记录/回送；不另发ACK或完成通知任务，不循环"
+    },
+    {
+      "event_key": "dlv_03a2516f-1eb4-432a-95e9-2bb025a44274:r1",
+      "original_delivery": "dlv_03a2516f-1eb4-432a-95e9-2bb025a44274",
+      "notification_delivery": "dlv_3507ed26-173b-4306-a836-b765af4ff48c",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T14:43:05+08:00",
+      "requirement_version": "v0.3",
+      "product_sha": "18c2f59761c9db69554f33a2870b68e15d092320",
+      "design_document_sha": "38f48f680b6368eb2f52222a8d231dfc77af2980",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/12#issuecomment-6489885529",
+      "audit_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/operations/fr015-fresh-18c2f597-supplement-r1.md",
+      "verification": {
+        "event_key": "dlv_03a2516f-1eb4-432a-95e9-2bb025a44274:r1",
+        "product_sha": "18c2f59761c9db69554f33a2870b68e15d092320",
+        "external_hashes": {
+          "FR015-FRESH-18c2f597-SUPPLEMENT-R1-REPORT.txt": "8bb67a11299189b42935eeb266a3fa3f4635b1f840426d7e100c355d82ea9346",
+          "FR015-FRESH-18c2f597-SUPPLEMENT-R1-ASSERTIONS.csv": "db9051923fa22eab6ddac66a3ac89ec9ac7d260f95a8398dbb13cff7215935cb",
+          "FR015-FRESH-18c2f597-SUPPLEMENT-R1-OPERATIONS.csv": "4a3d9e8b8c28f88860444303616f5aed450a5ef57a2e4821f91b0ee0db0cf1b9",
+          "FR015-FRESH-18c2f597-SUPPLEMENT-R1-EFFECTIVE-FR015.csv": "64b8acbb4445ed2aee2924dcfa1e3a763d8b7d7be8fc406a951e68a959136707",
+          "FR015-FRESH-18c2f597-SUPPLEMENT-R1-EVIDENCE.zip": "c0a8ce8c3221916f57eee3bd911235f935b2a479d8b9739bc4b78305a858e9bd"
+        },
+        "zip_entries": 71,
+        "internal_hash_count": 69,
+        "source_blobs_verified": 126,
+        "runner_failure_preserved": true,
+        "effective_counts": {
+          "PASS": 108,
+          "PARTIAL": 1
+        },
+        "operation_count": 8,
+        "http200_count": 9,
+        "verification": "Design reviewed saved transaction→GET→business snapshot consistency, unique business identities, source conservation, full event facts and prefix; product validator/allocator PASS from Test isolated verify.mjs, not rerun",
+        "inherited_104_pass_rows_all_original_fields_unchanged": true,
+        "screenshots_reviewed": [
+          "executionFacts-copy.png",
+          "simulationEvents-copy.png"
+        ]
+      },
+      "outcomes": [
+        {
+          "requirement": "FR-015",
+          "before": "In progress",
+          "after": "In progress",
+          "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgto",
+          "code_sha": "18c2f59761c9db69554f33a2870b68e15d092320",
+          "test_result": "PARTIAL",
+          "card_recommendation": "NOT_READY",
+          "counts": {
+            "PASS": 108,
+            "PARTIAL": 1,
+            "NOT_EXECUTED": 0
+          },
+          "accepted_supplement_assertions": 4,
+          "accepted_operations": 8,
+          "conclusion": "PARTIAL / NOT_READY；108 PASS、1 PARTIAL、0 NOT_EXECUTED；四项fresh补证PASS（八操作），旧104 PASS沿原SHA继承；无新产品FAIL",
+          "remaining": "仅余15-FACTORY-LINE：原01五字段类别维护/保存与导入同检查/引用保护未交付取证；Design明确契约，APS-Dev实施尚未派发，之后APS-Test补本类别证据（Issue12/4）",
+          "product_failures": 0,
+          "repair_round": 0,
+          "retest_round": 0,
+          "next_owner": "APS-Design（契约/限定派工）；APS-Dev（实施，未派）；APS-Test（交付后对应类别独立验证）"
+        }
+      ],
+      "test_continuation": {
+        "status": "waiting_for_executable_delivery",
+        "next_priority": "FR014-SKILL-REL01当前独立修复新完整SHA后优先续派Test，不重复本八操作",
+        "fr015_wait": "原01限定实施明确授权/投递并交付固定SHA后，仅补对应类别证据",
+        "duplicate_check": "APS-Test最近任务无待测新修复；APS-Dev dlv_c0e89812-c8ea-4b7a-91e8-7a100beae70a仍executing；FR016有限范围此前独立Test完成，不重复"
+      },
+      "ack_delivery_policy": "本Inbox最终PROCESSED由hook记录回送；不另投递ACK/完成通知任务",
+      "restrictions": "原01实现未派；其他未开始backlog和DEC04/05/06实现暂停；巡检paused；无应用发布/产品合并/UAT代签"
     }
   ]
 }
