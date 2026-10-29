@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "changes": [
+    {
+      "id": "CR-DEC02-03-20261029",
+      "title": "工装、人员、技能业务选择的前台参数化维护及排程生效",
+      "classification": "新增/细化能力的需求变更；不是缺陷修复或单纯验收缺口",
+      "baseline_id": "APS-BL-001",
+      "from_version": "v0.3",
+      "target_version": "v0.3+CR-DEC02-03-20261029",
+      "requested_by": "项目用户（本会话）",
+      "requested_on": "2026-10-29",
+      "request_quote": "好。请把这些业务选择做成可配置参数，前台可以进行维护，而不是固化的逻辑。",
+      "approval_status": "已批准能力方向并授权开发；具体默认参数值未批准",
+      "approved_by": "项目用户（会话授权；未另登记实名签批）",
+      "approved_on": "2026-10-29（未补造精确时刻）",
+      "effective": true,
+      "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
+      "implementation_status": "Dev已交付；独立产品验收已派发（In review）",
+      "primary_requirements": [
+        "FR-006",
+        "FR-007",
+        "FR-017",
+        "FR-022"
+      ],
+      "related_rules": [
+        "BR-06",
+        "BR-07"
+      ],
+      "decisions": [
+        "DEC-02",
+        "DEC-03"
+      ],
+      "acceptance_ids": [
+        "AC-06",
+        "AC-07",
+        "AC-15",
+        "AC-17",
+        "AC-24",
+        "AC-32"
+      ],
+      "uat_ids": [
+        "UAT-03",
+        "UAT-04",
+        "UAT-06",
+        "UAT-07",
+        "UAT-08"
+      ],
+      "before": "FR006/BR06已有数量、占用起止及提前/后延释放要求；FR007/BR07已有人员组、人数、技能、班次、参与阶段及未经配置不得替代要求。DEC02/03具体业务选择仍待决。原有要求不重复计为新增。",
+      "approved_delta": "将DEC02/03涉及的业务选择统一明确为前台可维护、可保存并实际作用于新试算的参数：工装占用/归还策略，人员参与阶段/窗口、人数与释放，显式技能替代关系及禁止替代；保留基线既有权限、历史输入/方案保护和结果可追溯要求。",
+      "design_detail_status": "Issue3参数契约为设计细化；具体枚举、默认值、迁移策略和模型限制须评审留痕，不将Design建议自动视为业务批准",
+      "reason": "用户要求在前台调整业务策略，避免按单一业务选择固化逻辑，并明确作为基线增加能力管理",
+      "impact": "主数据/规则配置、前台表单、服务端校验持久化、运行输入版本、Worker及独立复核、资源人数容量与历史兼容；不包含人员考勤或恢复其他新backlog",
+      "plan_impact": "原R2.2/R2.3/R2.4及相关联合资源验收；未另承诺完成日期",
+      "effort": "未正式登记工时/成本评估，不推定已批准预算",
+      "acceptance_delta": "实际前台修改→保存→刷新读回→新试算行为变化；占用/释放边界、有向替代与共享人数容量正确；非法/越权原子拒绝、历史方案不变。原AC继续有效，新增检查为CR专项验收，不篡改基线AC条文。",
+      "issue_url": "https://github.com/huiliangtao666/APS/issues/3",
+      "related_issue_urls": [
+        "https://github.com/huiliangtao666/APS/issues/13",
+        "https://github.com/huiliangtao666/APS/issues/16"
+      ],
+      "dev_delivery": "dlv_34829592-b369-4312-81ae-a29c8368ae1e",
+      "contract_review_delivery": "dlv_536b631b-bac0-40ca-a16c-1eeb6ce1a44f",
+      "code_sha": "0d2de88b70b15c555f6d005c0e4d94674e160cdf",
+      "code_branch": "feat/fr-013-016-main-batch",
+      "dev_report": "APS-Dev/DEC02-03-Delivery-2026-10-29.md",
+      "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
+      "product_test_delivery": "dlv_fdad89b2-cb94-49fb-bb7c-8cd83b653e97",
+      "acceptance_result": "尚无本次新SHA完整独立验收结论，不得标已验收/Done",
+      "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event": "用户授权前台参数化能力"
+        },
+        {
+          "date": "2026-10-29",
+          "event": "用户明确该能力属于基线新增能力，建立变更管理"
+        },
+        {
+          "date": "2026-10-29",
+          "event": "登记基线清单与变更台账；原卡和原验收历史保留"
+        }
+      ]
+    }
+  ]
+}
