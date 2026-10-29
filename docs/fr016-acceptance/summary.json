@@ -1,0 +1,214 @@
+{
+  "kind": "finite-original-FR016-contract-inventory",
+  "productSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+  "originalAC": [
+    "AC02",
+    "AC03",
+    "AC15",
+    "AC17"
+  ],
+  "branch": "feat/fr-013-016-main-batch",
+  "completeFiniteHarness": true,
+  "fullFR016Accepted": false,
+  "counts": {
+    "catalog": 20,
+    "supportedSlices": 13,
+    "unsupportedCatalog": 7,
+    "unknownControl": 1,
+    "ruleMatrixRows": 21,
+    "inputUIConditions": 9,
+    "inputConditionClasses": 7,
+    "inputIssueKeyboardActivations": 8,
+    "ruleNameIssueKeyboardActivations": 13,
+    "navigationScenarios": 15,
+    "problemTaskSourceChains": 5,
+    "globalFindingNoTaskIdGaps": 2,
+    "atomicRejectionByteProofs": 88,
+    "highLevelHarnessGroups": 4,
+    "browserPageErrors": 0,
+    "screenshots": 17
+  },
+  "countsAre": "Acceptance groups/proofs; overlapping observations, not unique TAP tests. No unchanged full suite replay.",
+  "limits": [
+    "Synthetic membership actors and runtime alias; real React/Express business APIs; no gateway/SSO or real-person UAT.",
+    "Global batch-config finding without taskIds cannot certify issue-to-task linkage; task-first saved input navigation separately passes.",
+    "Inventory material-reference issue has field 关联配置 and keyboard focuses record identity; exact offending-field focus not certified.",
+    "Successful personnel task has no direct personnel-group source link; saved dependency -> explicit related group keyboard route passes.",
+    "All /inputs issues in this run are blocking400. Catalog disabled/unknown notices and unplanned results are not an exposed uniform warning severity schema. Separate warning-only input disposition remains unverified.",
+    "13 supported slices do not mean all BR01..18 semantics implemented. LINE configurable switch unsupported while single-line intrinsic protection remains. LABOR/PROGRESS disabled switches retain existing protections.",
+    "PROGRESS rule switch profile has no execution facts; final execution omission and minimal-mode422 guard add focused facts evidence, not every execution/parameter combination.",
+    "Cross-product/program compatibility, dynamic release/DEC02, DEC03 precision decisions, maximum lag, speed, cleaning and real quality/dispatch not inferred.",
+    "Full AC02/03 per-category CRUD/deletion/restore, all rule combinations, all task links, accessibility/touch, UAT/R6/R7 and independent Test acceptance remain dependencies.",
+    "RAW01 independent Test verified product pin; APS-Design closed issue24 during this task, final read at comment6485675114. No new product repair attempted. This finite FR016 matrix remains Dev-owned pending independent acceptance; new backlog dispatch paused."
+  ],
+  "sourcePins": [
+    {
+      "file": "src/lib/business-rules.mjs",
+      "token": "export const ruleCatalog",
+      "line": 6,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "39bfaf9f80a8cab6dde0b4f8f3233f8753102ece7aa72b534b0251560d298883",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/src/lib/business-rules.mjs#L6"
+    },
+    {
+      "file": "src/lib/business-rules.mjs",
+      "token": "export function assessRules",
+      "line": 26,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "39bfaf9f80a8cab6dde0b4f8f3233f8753102ece7aa72b534b0251560d298883",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/src/lib/business-rules.mjs#L26"
+    },
+    {
+      "file": "src/lib/business-rules.mjs",
+      "token": "if(checkCoverage)",
+      "line": 72,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "39bfaf9f80a8cab6dde0b4f8f3233f8753102ece7aa72b534b0251560d298883",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/src/lib/business-rules.mjs#L72"
+    },
+    {
+      "file": "server/input-validation.mjs",
+      "token": "export function validateInputs",
+      "line": 16,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "b66adde3a6249e7e2245f74df17f1d7ab8ab9206750d91f082b07f1a64f24b4a",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/server/input-validation.mjs#L16"
+    },
+    {
+      "file": "server/input-validation.mjs",
+      "token": "const collect=",
+      "line": 52,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "b66adde3a6249e7e2245f74df17f1d7ab8ab9206750d91f082b07f1a64f24b4a",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/server/input-validation.mjs#L52"
+    },
+    {
+      "file": "src/DataEditor.tsx",
+      "token": "useEffect(()=>{if(!target",
+      "line": 19,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "c05ff954c55e8367f3e404bfab48e941c6f52dabc802f31451f48e9a66b67843",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/src/DataEditor.tsx#L19"
+    },
+    {
+      "file": "src/DataEditor.tsx",
+      "token": "aria-label=\"保存问题定位\"",
+      "line": 31,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "c05ff954c55e8367f3e404bfab48e941c6f52dabc802f31451f48e9a66b67843",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/src/DataEditor.tsx#L31"
+    },
+    {
+      "file": "src/RulePanel.tsx",
+      "token": "export function RulePanel",
+      "line": 3,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "79e08c855ea83fbed72ab55339a3cbb625f59ab3b73acfa8ed88f63f9b169c8a",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/src/RulePanel.tsx#L3"
+    },
+    {
+      "file": "src/RulePanel.tsx",
+      "token": "export function UsedRules",
+      "line": 7,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "79e08c855ea83fbed72ab55339a3cbb625f59ab3b73acfa8ed88f63f9b169c8a",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/src/RulePanel.tsx#L7"
+    },
+    {
+      "file": "src/TaskLinkage.tsx",
+      "token": "export function TaskLinkage",
+      "line": 4,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "a2aec89a550e7d201f595af5959e901511902b86bf5b99509daec45f19ad2002",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/src/TaskLinkage.tsx#L4"
+    },
+    {
+      "file": "src/TimelinePanel.tsx",
+      "token": "export function TimelinePanel",
+      "line": 6,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "c2f83d300db4156f390c75c27f173cf3daa07c69fd05fe4f274b2cf801b3c45c",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/src/TimelinePanel.tsx#L6"
+    },
+    {
+      "file": "src/TimelinePanel.tsx",
+      "token": "保存的原始输入",
+      "line": 113,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "c2f83d300db4156f390c75c27f173cf3daa07c69fd05fe4f274b2cf801b3c45c",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/src/TimelinePanel.tsx#L113"
+    },
+    {
+      "file": "src/lib/task-linkage.mjs",
+      "token": "export function taskEvidence",
+      "line": 30,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "67927a67e08f5ea8b5a5a80df697cd097a881f038236072ee46d0f96ddfdd664",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/src/lib/task-linkage.mjs#L30"
+    },
+    {
+      "file": "src/lib/result-assessment.mjs",
+      "token": "const refs=",
+      "line": 47,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "61ffb3736e9e631b32ddc26c6ecf131ab9862d43b30a45fc32c3d6fe78332a4f",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/src/lib/result-assessment.mjs#L47"
+    },
+    {
+      "file": "src/lib/result-assessment.mjs",
+      "token": "if(/PERSONNEL/",
+      "line": 53,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "61ffb3736e9e631b32ddc26c6ecf131ab9862d43b30a45fc32c3d6fe78332a4f",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/src/lib/result-assessment.mjs#L53"
+    },
+    {
+      "file": "src/lib/scheduling-scope.mjs",
+      "token": "export function schedulingScope",
+      "line": 2,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "85197c4103150170a83b8965ac3d258a6bb6d861e71555c6cda62401fe04d266",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/src/lib/scheduling-scope.mjs#L2"
+    },
+    {
+      "file": "server/business.mjs",
+      "token": "router.get('/rules/capabilities'",
+      "line": 63,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "a6080baf520a9c38a94ea268d1d775e41271b6d90080b992e77aa6791b5f9eec",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/server/business.mjs#L63"
+    },
+    {
+      "file": "server/business.mjs",
+      "token": "router.post('/inputs'",
+      "line": 139,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "a6080baf520a9c38a94ea268d1d775e41271b6d90080b992e77aa6791b5f9eec",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/server/business.mjs#L139"
+    },
+    {
+      "file": "server/business.mjs",
+      "token": "router.post('/calculate'",
+      "line": 356,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "a6080baf520a9c38a94ea268d1d775e41271b6d90080b992e77aa6791b5f9eec",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/server/business.mjs#L356"
+    },
+    {
+      "file": "server/run-input.mjs",
+      "token": "export function freezeRunInput",
+      "line": 12,
+      "sourceSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "sha256": "091c3b64c3a6d672e4722921de84e726605aede43545aef7e719a013c9155f2a",
+      "url": "https://github.com/huiliangtao666/APS/blob/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/server/run-input.mjs#L12"
+    }
+  ],
+  "raw01FinalState": {
+    "issue": 24,
+    "state": "closed",
+    "independentTest": "FIX VERIFIED at product base0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+    "by": "APS-Test evidence / APS-Design closure",
+    "comment": "https://github.com/huiliangtao666/APS/issues/24#issuecomment-6485675114",
+    "newBacklogDispatch": "paused; no new feature authorized"
+  }
+}

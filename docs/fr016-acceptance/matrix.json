@@ -1,0 +1,2904 @@
+{
+  "productSHA": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+  "interpretation": "Supported means catalog restricted slice; per-operation statuses are observed API/UI outcomes, not full business acceptance.",
+  "rules": [
+    {
+      "id": "MACHINE",
+      "category": "BR-03",
+      "name": "机器不重叠",
+      "required": true,
+      "supported": true,
+      "scope": "全部设备；独占、单台；FR021显式资源批仅占用一次，不支持并行加工",
+      "parameters": "{}",
+      "unit": "无",
+      "range": "固定",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "disable": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 2,
+              "field": "是否启用",
+              "message": "MACHINE 是始终有效的必要约束，不得关闭或延后生效"
+            }
+          ]
+        },
+        "enable": {
+          "status": 200,
+          "source": "actual main UI enabled value saved (may be unchanged no-op)"
+        },
+        "unsupportedParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 2,
+              "field": "参数JSON",
+              "message": "包含当前执行器不支持的参数"
+            }
+          ]
+        },
+        "missingParameter": {
+          "status": "not-applicable",
+          "reason": "Fixed empty object; no supported tunable parameter"
+        },
+        "validParameterChange": {
+          "status": "not-applicable-or-not-exercised",
+          "reason": "Only documented fixed constants/empty object in this slice; no alternate business semantics invented"
+        },
+        "invalidScope": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 2,
+              "field": "适用对象",
+              "message": "此规则当前只支持 *（全部对象），不允许遗漏必要约束"
+            }
+          ]
+        },
+        "necessaryOmission": {
+          "table": "machines",
+          "row": 2,
+          "field": "最大装载kg",
+          "status": 400,
+          "issues": [
+            {
+              "table": "machines",
+              "file": "03_设备资源配置.csv",
+              "row": 2,
+              "field": "最大装载kg",
+              "message": "字段不能为空"
+            }
+          ]
+        },
+        "keyboardRuleIssue": {
+          "file": "16_排程规则配置.csv",
+          "row": 2,
+          "field": "中文名称",
+          "focused": true
+        },
+        "future": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 2,
+              "field": "是否启用",
+              "message": "MACHINE 是始终有效的必要约束，不得关闭或延后生效"
+            }
+          ]
+        }
+      },
+      "limits": [
+        "Rule adoption is not full independent verification; independent verifier covers line/machine/precedence only."
+      ],
+      "calculation": {
+        "id": "8e080be6-4c93-4b23-8d15-c1a10b703500",
+        "tasks": 4,
+        "findings": [],
+        "setting": {
+          "id": "MACHINE",
+          "category": "BR-03",
+          "name": "机器不重叠",
+          "enabled": true,
+          "active": true,
+          "supported": true,
+          "required": true,
+          "effectiveFrom": "",
+          "scope": "*",
+          "parameters": {},
+          "status": "采用"
+        },
+        "checked": [
+          "单产线",
+          "给定机器不重叠",
+          "固定工时",
+          "工序先后",
+          "日历与停机",
+          "已配置人员依赖",
+          "显式预计供给可用时点"
+        ],
+        "unchecked": [
+          "模具与工装",
+          "完整物料/BOM/库存分配",
+          "设备容量与拆合批",
+          "程序兼容",
+          "最大等待与空间",
+          "换型清洗",
+          "交付与余保",
+          "执行事实与主管确认",
+          "速度换算及完整精度规则"
+        ],
+        "intrinsic": [
+          "单产线",
+          "机器不重叠",
+          "工序先后与固定工时",
+          "日历与停机",
+          "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+          "显式预计供给引用可用时点"
+        ]
+      }
+    },
+    {
+      "id": "PRECEDENCE",
+      "category": "BR-02",
+      "name": "工序顺序与固定工时",
+      "required": true,
+      "supported": true,
+      "scope": "全部工序；不支持最大等待",
+      "parameters": "{}",
+      "unit": "分钟",
+      "range": "正数固定工时来自工序工时表",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "disable": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 3,
+              "field": "是否启用",
+              "message": "PRECEDENCE 是始终有效的必要约束，不得关闭或延后生效"
+            }
+          ]
+        },
+        "enable": {
+          "status": 200,
+          "source": "actual main UI enabled value saved (may be unchanged no-op)"
+        },
+        "unsupportedParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 3,
+              "field": "参数JSON",
+              "message": "包含当前执行器不支持的参数"
+            }
+          ]
+        },
+        "missingParameter": {
+          "status": "not-applicable",
+          "reason": "Fixed empty object; no supported tunable parameter"
+        },
+        "validParameterChange": {
+          "status": "not-applicable-or-not-exercised",
+          "reason": "Only documented fixed constants/empty object in this slice; no alternate business semantics invented"
+        },
+        "invalidScope": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 3,
+              "field": "适用对象",
+              "message": "此规则当前只支持 *（全部对象），不允许遗漏必要约束"
+            }
+          ]
+        },
+        "necessaryOmission": {
+          "table": "times",
+          "row": 2,
+          "field": "固定分钟",
+          "status": 400,
+          "issues": [
+            {
+              "code": "INPUT / PROCESS_TIME_INVALID",
+              "message": "产品 HC40 / 工序 MIX 需配置正数固定分钟；速度换算暂不支持",
+              "table": "times",
+              "row": 2,
+              "field": "固定分钟",
+              "file": "11_工序工时配置.csv"
+            }
+          ]
+        },
+        "keyboardRuleIssue": {
+          "file": "16_排程规则配置.csv",
+          "row": 3,
+          "field": "中文名称",
+          "focused": true
+        },
+        "future": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 3,
+              "field": "是否启用",
+              "message": "PRECEDENCE 是始终有效的必要约束，不得关闭或延后生效"
+            }
+          ]
+        }
+      },
+      "limits": [
+        "Rule adoption is not full independent verification; independent verifier covers line/machine/precedence only."
+      ],
+      "calculation": {
+        "id": "f9c803e4-4434-4e0c-aa63-fef01d6e729b",
+        "tasks": 4,
+        "findings": [],
+        "setting": {
+          "id": "PRECEDENCE",
+          "category": "BR-02",
+          "name": "工序顺序",
+          "enabled": true,
+          "active": true,
+          "supported": true,
+          "required": true,
+          "effectiveFrom": "",
+          "scope": "*",
+          "parameters": {},
+          "status": "采用"
+        },
+        "checked": [
+          "单产线",
+          "给定机器不重叠",
+          "固定工时",
+          "工序先后",
+          "日历与停机",
+          "已配置人员依赖",
+          "显式预计供给可用时点"
+        ],
+        "unchecked": [
+          "模具与工装",
+          "完整物料/BOM/库存分配",
+          "设备容量与拆合批",
+          "程序兼容",
+          "最大等待与空间",
+          "换型清洗",
+          "交付与余保",
+          "执行事实与主管确认",
+          "速度换算及完整精度规则"
+        ],
+        "intrinsic": [
+          "单产线",
+          "机器不重叠",
+          "工序先后与固定工时",
+          "日历与停机",
+          "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+          "显式预计供给引用可用时点"
+        ]
+      }
+    },
+    {
+      "id": "CALENDAR",
+      "category": "BR-05",
+      "name": "日历与停机",
+      "required": true,
+      "supported": true,
+      "scope": "全部设备；连续窗口，不支持中断",
+      "parameters": "{}",
+      "unit": "分钟",
+      "range": "窗口及停机来自日历表",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "disable": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 4,
+              "field": "是否启用",
+              "message": "CALENDAR 是始终有效的必要约束，不得关闭或延后生效"
+            }
+          ]
+        },
+        "enable": {
+          "status": 200,
+          "source": "actual main UI enabled value saved (may be unchanged no-op)"
+        },
+        "unsupportedParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 4,
+              "field": "参数JSON",
+              "message": "包含当前执行器不支持的参数"
+            }
+          ]
+        },
+        "missingParameter": {
+          "status": "not-applicable",
+          "reason": "Fixed empty object; no supported tunable parameter"
+        },
+        "validParameterChange": {
+          "status": "not-applicable-or-not-exercised",
+          "reason": "Only documented fixed constants/empty object in this slice; no alternate business semantics invented"
+        },
+        "invalidScope": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 4,
+              "field": "适用对象",
+              "message": "此规则当前只支持 *（全部对象），不允许遗漏必要约束"
+            }
+          ]
+        },
+        "necessaryOmission": {
+          "table": "calendars",
+          "row": 2,
+          "field": "结束分钟",
+          "status": 400,
+          "issues": [
+            {
+              "table": "calendars",
+              "file": "02_工厂工作日历.csv",
+              "row": 2,
+              "field": "结束分钟",
+              "message": "唯一键字段不能为空"
+            },
+            {
+              "table": "calendars",
+              "file": "02_工厂工作日历.csv",
+              "row": 2,
+              "field": "结束分钟",
+              "message": "结束分钟须大于起始分钟"
+            }
+          ]
+        },
+        "keyboardRuleIssue": {
+          "file": "16_排程规则配置.csv",
+          "row": 4,
+          "field": "中文名称",
+          "focused": true
+        },
+        "future": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 4,
+              "field": "是否启用",
+              "message": "CALENDAR 是始终有效的必要约束，不得关闭或延后生效"
+            }
+          ]
+        }
+      },
+      "limits": [
+        "Rule adoption is not full independent verification; independent verifier covers line/machine/precedence only."
+      ],
+      "calculation": {
+        "id": "af80d6bf-ea38-487a-bdbd-d7394a45898e",
+        "tasks": 4,
+        "findings": [],
+        "setting": {
+          "id": "CALENDAR",
+          "category": "BR-05",
+          "name": "工厂及设备日历",
+          "enabled": true,
+          "active": true,
+          "supported": true,
+          "required": true,
+          "effectiveFrom": "",
+          "scope": "*",
+          "parameters": {},
+          "status": "采用"
+        },
+        "checked": [
+          "单产线",
+          "给定机器不重叠",
+          "固定工时",
+          "工序先后",
+          "日历与停机",
+          "已配置人员依赖",
+          "显式预计供给可用时点"
+        ],
+        "unchecked": [
+          "模具与工装",
+          "完整物料/BOM/库存分配",
+          "设备容量与拆合批",
+          "程序兼容",
+          "最大等待与空间",
+          "换型清洗",
+          "交付与余保",
+          "执行事实与主管确认",
+          "速度换算及完整精度规则"
+        ],
+        "intrinsic": [
+          "单产线",
+          "机器不重叠",
+          "工序先后与固定工时",
+          "日历与停机",
+          "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+          "显式预计供给引用可用时点"
+        ]
+      }
+    },
+    {
+      "id": "LABOR",
+      "category": "BR-07",
+      "name": "人员技能与数量",
+      "required": false,
+      "supported": true,
+      "scope": "全部人员依赖；关闭开关仍保留既有依赖保护",
+      "parameters": "{}",
+      "unit": "人/分钟",
+      "range": "正整数人数及有效参与窗口",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "disable": {
+          "status": 200,
+          "issues": [],
+          "savedSetting": {
+            "id": "LABOR",
+            "category": "BR-07",
+            "name": "人员技能及数量",
+            "enabled": false,
+            "active": false,
+            "supported": true,
+            "required": false,
+            "effectiveFrom": "",
+            "scope": "*",
+            "parameters": {},
+            "status": "未启用"
+          },
+          "intrinsic": [
+            "单产线",
+            "机器不重叠",
+            "工序先后与固定工时",
+            "日历与停机",
+            "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+            "显式预计供给引用可用时点"
+          ]
+        },
+        "enable": {
+          "status": 200,
+          "source": "actual main UI enabled value saved (may be unchanged no-op)"
+        },
+        "unsupportedParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 6,
+              "field": "参数JSON",
+              "message": "包含当前执行器不支持的参数"
+            }
+          ]
+        },
+        "missingParameter": {
+          "status": "not-applicable",
+          "reason": "Fixed empty object; no supported tunable parameter"
+        },
+        "validParameterChange": {
+          "status": "not-applicable-or-not-exercised",
+          "reason": "Only documented fixed constants/empty object in this slice; no alternate business semantics invented"
+        },
+        "invalidScope": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 6,
+              "field": "适用对象",
+              "message": "此规则当前只支持 *（全部对象），不允许遗漏必要约束"
+            }
+          ]
+        },
+        "necessaryOmission": {
+          "table": "personnelGroups",
+          "row": 2,
+          "field": "人员数量",
+          "status": 400,
+          "issues": [
+            {
+              "table": "personnelGroups",
+              "file": "19_人员组与可用时间.csv",
+              "row": 2,
+              "field": "人员数量",
+              "message": "人员组须有名称及正整数人数"
+            }
+          ]
+        },
+        "keyboardRuleIssue": {
+          "file": "16_排程规则配置.csv",
+          "row": 6,
+          "field": "中文名称",
+          "focused": true
+        },
+        "future": {
+          "status": 200,
+          "issues": []
+        }
+      },
+      "limits": [
+        "Rule adoption is not full independent verification; independent verifier covers line/machine/precedence only."
+      ],
+      "calculation": {
+        "id": "cc024a6d-01ae-494a-8915-4153a5f628b5",
+        "tasks": 4,
+        "findings": [],
+        "setting": {
+          "id": "LABOR",
+          "category": "BR-07",
+          "name": "人员技能及数量",
+          "enabled": true,
+          "active": true,
+          "supported": true,
+          "required": false,
+          "effectiveFrom": "",
+          "scope": "*",
+          "parameters": {},
+          "status": "采用"
+        },
+        "checked": [
+          "单产线",
+          "给定机器不重叠",
+          "固定工时",
+          "工序先后",
+          "日历与停机",
+          "已配置人员依赖",
+          "显式预计供给可用时点"
+        ],
+        "unchecked": [
+          "模具与工装",
+          "完整物料/BOM/库存分配",
+          "设备容量与拆合批",
+          "程序兼容",
+          "最大等待与空间",
+          "换型清洗",
+          "交付与余保",
+          "执行事实与主管确认",
+          "速度换算及完整精度规则"
+        ],
+        "intrinsic": [
+          "单产线",
+          "机器不重叠",
+          "工序先后与固定工时",
+          "日历与停机",
+          "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+          "显式预计供给引用可用时点"
+        ]
+      }
+    },
+    {
+      "id": "INVENTORY",
+      "category": "BR-08",
+      "name": "库存质量可用性查询",
+      "required": false,
+      "supported": true,
+      "scope": "* 或物料编号逗号列表；仅查询，不代表物料平衡",
+      "parameters": "{\"可用质量状态\":[\"合格\"]}",
+      "unit": "物料单位",
+      "range": "非空、无重复状态列表",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "disable": {
+          "status": 200,
+          "issues": [],
+          "savedSetting": {
+            "id": "INVENTORY",
+            "category": "BR-08",
+            "name": "库存质量状态可用性",
+            "enabled": false,
+            "active": false,
+            "supported": true,
+            "required": false,
+            "effectiveFrom": "",
+            "scope": "*",
+            "parameters": {
+              "可用质量状态": [
+                "合格"
+              ]
+            },
+            "status": "未启用"
+          },
+          "intrinsic": [
+            "单产线",
+            "机器不重叠",
+            "工序先后与固定工时",
+            "日历与停机",
+            "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+            "显式预计供给引用可用时点"
+          ]
+        },
+        "enable": {
+          "status": 200,
+          "source": "actual main UI enabled value saved (may be unchanged no-op)"
+        },
+        "unsupportedParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 14,
+              "field": "参数JSON",
+              "message": "包含当前执行器不支持的参数"
+            }
+          ]
+        },
+        "missingParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 14,
+              "field": "参数JSON",
+              "message": "可用质量状态须为非空、无重复的状态列表"
+            }
+          ]
+        },
+        "validParameterChange": {
+          "status": 200,
+          "issues": []
+        },
+        "invalidScope": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 14,
+              "field": "适用对象",
+              "message": "须为 * 或已配置物料编号的无重复逗号列表"
+            }
+          ]
+        },
+        "necessaryOmission": {
+          "table": "inventory",
+          "row": 2,
+          "field": "账面数量",
+          "status": 400,
+          "issues": [
+            {
+              "code": "INVENTORY_AMOUNT",
+              "message": "库存批次第 1 行 账面数量 必须为非负数值",
+              "table": "inventory",
+              "file": "09_库存批次.csv",
+              "row": 2,
+              "field": "账面数量"
+            },
+            {
+              "code": "INVENTORY_RESERVED",
+              "message": "库存批次第 1 行已占用数量不能大于账面数量",
+              "table": "inventory",
+              "file": "09_库存批次.csv",
+              "row": 2,
+              "field": "账面数量"
+            }
+          ]
+        },
+        "keyboardRuleIssue": {
+          "file": "16_排程规则配置.csv",
+          "row": 14,
+          "field": "中文名称",
+          "focused": true
+        },
+        "future": {
+          "status": 200,
+          "issues": []
+        }
+      },
+      "limits": [
+        "Rule adoption is not full independent verification; independent verifier covers line/machine/precedence only."
+      ],
+      "calculation": {
+        "id": "5073cdcc-1491-4ab4-8c5c-3d063aabcd25",
+        "tasks": 4,
+        "findings": [],
+        "setting": {
+          "id": "INVENTORY",
+          "category": "BR-08",
+          "name": "库存质量状态可用性",
+          "enabled": true,
+          "active": true,
+          "supported": true,
+          "required": false,
+          "effectiveFrom": "",
+          "scope": "*",
+          "parameters": {
+            "可用质量状态": [
+              "合格"
+            ]
+          },
+          "status": "采用"
+        },
+        "checked": [
+          "单产线",
+          "给定机器不重叠",
+          "固定工时",
+          "工序先后",
+          "日历与停机",
+          "已配置人员依赖",
+          "显式预计供给可用时点"
+        ],
+        "unchecked": [
+          "模具与工装",
+          "完整物料/BOM/库存分配",
+          "设备容量与拆合批",
+          "程序兼容",
+          "最大等待与空间",
+          "换型清洗",
+          "交付与余保",
+          "执行事实与主管确认",
+          "速度换算及完整精度规则"
+        ],
+        "intrinsic": [
+          "单产线",
+          "机器不重叠",
+          "工序先后与固定工时",
+          "日历与停机",
+          "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+          "显式预计供给引用可用时点"
+        ]
+      }
+    },
+    {
+      "id": "SORT",
+      "category": "BR-15",
+      "name": "任务排序",
+      "required": false,
+      "supported": true,
+      "scope": "全部订单；稳定排序，不改变硬约束",
+      "parameters": "{\"排序方式\":\"优先顺序\"}",
+      "unit": "无",
+      "range": "优先顺序 或 要求日期",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "disable": {
+          "status": 200,
+          "issues": [],
+          "savedSetting": {
+            "id": "SORT",
+            "category": "BR-15",
+            "name": "SORT",
+            "enabled": false,
+            "active": false,
+            "supported": true,
+            "required": false,
+            "effectiveFrom": "",
+            "scope": "*",
+            "parameters": {
+              "排序方式": "优先顺序"
+            },
+            "status": "未启用"
+          },
+          "intrinsic": [
+            "单产线",
+            "机器不重叠",
+            "工序先后与固定工时",
+            "日历与停机",
+            "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+            "显式预计供给引用可用时点"
+          ]
+        },
+        "enable": {
+          "status": 200,
+          "source": "actual main UI enabled value saved (may be unchanged no-op)"
+        },
+        "unsupportedParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "参数JSON",
+              "message": "包含当前执行器不支持的参数"
+            }
+          ]
+        },
+        "missingParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "参数JSON",
+              "message": "排序方式须为优先顺序或要求日期"
+            }
+          ]
+        },
+        "validParameterChange": {
+          "status": "not-applicable-or-not-exercised",
+          "reason": "Structured UI change exercised separately"
+        },
+        "invalidScope": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "适用对象",
+              "message": "此规则当前只支持 *（全部对象），不允许遗漏必要约束"
+            }
+          ]
+        },
+        "necessaryOmission": {
+          "table": "rules",
+          "row": 15,
+          "field": "参数JSON",
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "参数JSON",
+              "message": "排序方式须为优先顺序或要求日期"
+            }
+          ]
+        },
+        "keyboardRuleIssue": {
+          "file": "16_排程规则配置.csv",
+          "row": 15,
+          "field": "中文名称",
+          "focused": true
+        },
+        "future": {
+          "status": 200,
+          "issues": []
+        }
+      },
+      "limits": [
+        "Rule adoption is not full independent verification; independent verifier covers line/machine/precedence only."
+      ],
+      "calculation": {
+        "id": "369a08a8-f715-4817-a4a2-ea606e24132d",
+        "tasks": 4,
+        "findings": [],
+        "setting": {
+          "id": "SORT",
+          "category": "BR-15",
+          "name": "SORT",
+          "enabled": true,
+          "active": true,
+          "supported": true,
+          "required": false,
+          "effectiveFrom": "",
+          "scope": "*",
+          "parameters": {
+            "排序方式": "优先顺序"
+          },
+          "status": "采用"
+        },
+        "checked": [
+          "单产线",
+          "给定机器不重叠",
+          "固定工时",
+          "工序先后",
+          "日历与停机",
+          "已配置人员依赖",
+          "显式预计供给可用时点"
+        ],
+        "unchecked": [
+          "模具与工装",
+          "完整物料/BOM/库存分配",
+          "设备容量与拆合批",
+          "程序兼容",
+          "最大等待与空间",
+          "换型清洗",
+          "交付与余保",
+          "执行事实与主管确认",
+          "速度换算及完整精度规则"
+        ],
+        "intrinsic": [
+          "单产线",
+          "机器不重叠",
+          "工序先后与固定工时",
+          "日历与停机",
+          "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+          "显式预计供给引用可用时点"
+        ]
+      }
+    },
+    {
+      "id": "LINE",
+      "category": "BR-01",
+      "name": "单线范围（始终检查）",
+      "required": false,
+      "supported": false,
+      "scope": "不支持可配置启用；字段保存不等于检查通过",
+      "parameters": "{}",
+      "unit": "见v0.3第7章",
+      "range": "后续完整验收",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "enable": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "是否启用",
+              "message": "LINE 尚未实现，不得启用；保存字段不代表检查通过"
+            },
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "是否启用",
+              "message": "LINE 尚未实现，不得启用；保存字段不代表检查通过"
+            }
+          ]
+        },
+        "disable": {
+          "status": 200,
+          "setting": {
+            "id": "LINE",
+            "category": "BR-01",
+            "name": "LINE",
+            "enabled": false,
+            "active": false,
+            "supported": false,
+            "required": false,
+            "effectiveFrom": "",
+            "scope": "*",
+            "parameters": {},
+            "status": "未实现/未检查"
+          }
+        }
+      },
+      "limits": []
+    },
+    {
+      "id": "SPEED",
+      "category": "BR-04",
+      "name": "速度与效率",
+      "required": false,
+      "supported": false,
+      "scope": "不支持可配置启用；字段保存不等于检查通过",
+      "parameters": "{}",
+      "unit": "见v0.3第7章",
+      "range": "后续完整验收",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "enable": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "是否启用",
+              "message": "SPEED 尚未实现，不得启用；保存字段不代表检查通过"
+            },
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "是否启用",
+              "message": "SPEED 尚未实现，不得启用；保存字段不代表检查通过"
+            }
+          ]
+        },
+        "disable": {
+          "status": 200,
+          "setting": {
+            "id": "SPEED",
+            "category": "BR-04",
+            "name": "SPEED",
+            "enabled": false,
+            "active": false,
+            "supported": false,
+            "required": false,
+            "effectiveFrom": "",
+            "scope": "*",
+            "parameters": {},
+            "status": "未实现/未检查"
+          }
+        }
+      },
+      "limits": []
+    },
+    {
+      "id": "MOLD",
+      "category": "BR-06",
+      "name": "模具/工装",
+      "required": false,
+      "supported": true,
+      "scope": "显式逐生产批完整区间；工装套数/空间kg或位置；不推断DEC02",
+      "parameters": "{\"占用口径\":\"显式逐生产批完整区间\",\"数量口径\":\"每生产批声明数量\",\"FR006任务默认\":\"不自动采用，须逐批声明\"}",
+      "unit": "见v0.3第7章",
+      "range": "须填表23及明确的数量、单位、起止偏移；未声明语义阻断",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "disable": {
+          "status": 200,
+          "issues": [],
+          "savedSetting": {
+            "id": "MOLD",
+            "category": "BR-06",
+            "name": "模具与工具占用",
+            "enabled": false,
+            "active": false,
+            "supported": true,
+            "required": false,
+            "effectiveFrom": "",
+            "scope": "*",
+            "parameters": {
+              "占用口径": "显式逐生产批完整区间",
+              "数量口径": "每生产批声明数量",
+              "FR006任务默认": "不自动采用，须逐批声明"
+            },
+            "status": "未启用"
+          },
+          "intrinsic": [
+            "单产线",
+            "机器不重叠",
+            "工序先后与固定工时",
+            "日历与停机",
+            "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+            "显式预计供给引用可用时点"
+          ]
+        },
+        "enable": {
+          "status": 200,
+          "source": "actual main UI enabled value saved (may be unchanged no-op)"
+        },
+        "unsupportedParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 5,
+              "field": "参数JSON",
+              "message": "包含当前执行器不支持的参数"
+            }
+          ]
+        },
+        "missingParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 5,
+              "field": "参数JSON",
+              "message": "占用口径须显式配置为 显式逐生产批完整区间；DEC02未决，不采用配置表隐式默认"
+            }
+          ]
+        },
+        "validParameterChange": {
+          "status": "not-applicable-or-not-exercised",
+          "reason": "Only documented fixed constants/empty object in this slice; no alternate business semantics invented"
+        },
+        "invalidScope": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 5,
+              "field": "适用对象",
+              "message": "此规则当前只支持 *（全部对象），不允许遗漏必要约束"
+            }
+          ]
+        },
+        "necessaryOmission": {
+          "table": "resourceClaims",
+          "row": 2,
+          "field": "需求数量",
+          "status": 400,
+          "issues": [
+            {
+              "code": "INPUT / JOINT_RESOURCE",
+              "message": "资源占用声明 G-A：需求数量须为显式正有限十进制数",
+              "table": "resourceClaims",
+              "row": 2,
+              "file": "23_资源占用声明.csv",
+              "field": "关联配置"
+            }
+          ]
+        },
+        "keyboardRuleIssue": {
+          "file": "16_排程规则配置.csv",
+          "row": 5,
+          "field": "中文名称",
+          "focused": true
+        },
+        "future": {
+          "status": 200,
+          "issues": []
+        }
+      },
+      "limits": [
+        "Rule adoption is not full independent verification; independent verifier covers line/machine/precedence only."
+      ],
+      "calculation": {
+        "id": "c3ba1304-bd7e-43ce-b6cb-eaf9aefd43ab",
+        "tasks": 4,
+        "findings": [],
+        "setting": {
+          "id": "MOLD",
+          "category": "BR-06",
+          "name": "模具与工具占用",
+          "enabled": true,
+          "active": true,
+          "supported": true,
+          "required": false,
+          "effectiveFrom": "",
+          "scope": "*",
+          "parameters": {
+            "占用口径": "显式逐生产批完整区间",
+            "数量口径": "每生产批声明数量",
+            "FR006任务默认": "不自动采用，须逐批声明"
+          },
+          "status": "采用"
+        },
+        "checked": [
+          "单产线",
+          "给定机器不重叠",
+          "固定工时",
+          "工序先后",
+          "日历与停机",
+          "已配置人员依赖",
+          "显式预计供给可用时点",
+          "显式逐生产批工装数量与完整占用/释放区间"
+        ],
+        "unchecked": [
+          "DEC02未批准/未声明工装阶段及跨任务释放",
+          "完整物料/BOM/库存分配",
+          "设备容量与拆合批",
+          "程序兼容",
+          "最大等待与空间",
+          "换型清洗",
+          "交付与余保",
+          "执行事实与主管确认",
+          "速度换算及完整精度规则"
+        ],
+        "intrinsic": [
+          "单产线",
+          "机器不重叠",
+          "工序先后与固定工时",
+          "日历与停机",
+          "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+          "显式预计供给引用可用时点",
+          "显式逐生产批工装完整占用与释放容量"
+        ]
+      }
+    },
+    {
+      "id": "BOM",
+      "category": "BR-10",
+      "name": "BOM数量计算",
+      "required": false,
+      "supported": false,
+      "scope": "不支持可配置启用；字段保存不等于检查通过",
+      "parameters": "{}",
+      "unit": "见v0.3第7章",
+      "range": "后续完整验收",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "enable": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "是否启用",
+              "message": "BOM 尚未实现，不得启用；保存字段不代表检查通过"
+            },
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "是否启用",
+              "message": "BOM 尚未实现，不得启用；保存字段不代表检查通过"
+            }
+          ]
+        },
+        "disable": {
+          "status": 200,
+          "setting": {
+            "id": "BOM",
+            "category": "BR-10",
+            "name": "BOM",
+            "enabled": false,
+            "active": false,
+            "supported": false,
+            "required": false,
+            "effectiveFrom": "",
+            "scope": "*",
+            "parameters": {},
+            "status": "未实现/未检查"
+          }
+        }
+      },
+      "limits": []
+    },
+    {
+      "id": "CAPACITY",
+      "category": "BR-11",
+      "name": "拆合批与容量",
+      "required": false,
+      "supported": true,
+      "scope": "全部订单；同产品/BOM/整条路线/程序/给定设备的保守资源批",
+      "parameters": "{\"装载计量基准\":\"BOM总投入\",\"拆批方式\":\"均分\",\"尾批处理\":\"报问题\",\"合批条件\":\"同产品同版本同路线同程序\",\"人员需求\":\"逐生产批累加\"}",
+      "unit": "见v0.3第7章",
+      "range": "显式配置必填；非kg订单及其他装载节点阻断",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "disable": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 9,
+              "field": "是否启用",
+              "message": "拆合批须同时采用 MATERIAL/CAPACITY/PROGRAM；缺少 CAPACITY"
+            }
+          ]
+        },
+        "enable": {
+          "status": 200,
+          "source": "actual main UI enabled value saved (may be unchanged no-op)"
+        },
+        "unsupportedParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 8,
+              "field": "参数JSON",
+              "message": "包含当前执行器不支持的参数"
+            }
+          ]
+        },
+        "missingParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 8,
+              "field": "参数JSON",
+              "message": "装载计量基准须显式配置为 BOM总投入；其他语义未决定"
+            }
+          ]
+        },
+        "validParameterChange": {
+          "status": "not-applicable-or-not-exercised",
+          "reason": "Only documented fixed constants/empty object in this slice; no alternate business semantics invented"
+        },
+        "invalidScope": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 8,
+              "field": "适用对象",
+              "message": "此规则当前只支持 *（全部对象），不允许遗漏必要约束"
+            }
+          ]
+        },
+        "necessaryOmission": {
+          "table": "batchResources",
+          "row": 2,
+          "field": "容量",
+          "status": 400,
+          "issues": [
+            {
+              "code": "INPUT / BATCH_RESOURCE",
+              "message": "组批资源 MIX01：容量须为正有限 kg 或空间位置数；其他单位语义未决定",
+              "table": "batchResources",
+              "file": "15_空间与组批规则配置.csv",
+              "row": 0,
+              "field": "容量"
+            },
+            {
+              "code": "INPUT / BATCH_RESOURCE",
+              "message": "组批资源 MIX01：表03最大装载与表15容量冲突，不能猜测优先级",
+              "table": "batchResources",
+              "file": "15_空间与组批规则配置.csv",
+              "row": 0,
+              "field": "容量"
+            },
+            {
+              "code": "INPUT / BATCH_RESOURCE",
+              "message": "组批资源 MIX01：容量须为正有限 kg 或空间位置数；其他单位语义未决定",
+              "table": "batchResources",
+              "file": "15_空间与组批规则配置.csv",
+              "row": 0,
+              "field": "关联配置"
+            },
+            {
+              "code": "INPUT / BATCH_RESOURCE",
+              "message": "组批资源 MIX01：表03最大装载与表15容量冲突，不能猜测优先级",
+              "table": "batchResources",
+              "file": "15_空间与组批规则配置.csv",
+              "row": 0,
+              "field": "关联配置"
+            }
+          ]
+        },
+        "keyboardRuleIssue": {
+          "file": "16_排程规则配置.csv",
+          "row": 8,
+          "field": "中文名称",
+          "focused": true
+        },
+        "future": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 9,
+              "field": "是否启用",
+              "message": "拆合批须同时采用 MATERIAL/CAPACITY/PROGRAM；缺少 CAPACITY"
+            }
+          ]
+        }
+      },
+      "limits": [
+        "Rule adoption is not full independent verification; independent verifier covers line/machine/precedence only."
+      ],
+      "calculation": {
+        "id": "fa5fbf1f-1dde-4d22-8b9e-11fcac0999a8",
+        "tasks": 4,
+        "findings": [],
+        "setting": {
+          "id": "CAPACITY",
+          "category": "BR-11",
+          "name": "设备装载",
+          "enabled": true,
+          "active": true,
+          "supported": true,
+          "required": false,
+          "effectiveFrom": "",
+          "scope": "*",
+          "parameters": {
+            "装载计量基准": "BOM总投入",
+            "拆批方式": "均分",
+            "尾批处理": "报问题",
+            "合批条件": "同产品同版本同路线同程序",
+            "人员需求": "逐生产批累加"
+          },
+          "status": "采用"
+        },
+        "checked": [
+          "单产线",
+          "给定机器不重叠",
+          "固定工时",
+          "工序先后",
+          "日历与停机",
+          "已配置人员依赖",
+          "显式预计供给可用时点",
+          "已声明口径的BOM需求、库存FEFO及条件供给分配",
+          "BOM总投入装载、均分及同产品同版本同路线同程序资源批"
+        ],
+        "unchecked": [
+          "模具与工装",
+          "工序加料、完整BOM/执行耗料与任意单位换算",
+          "其他装载重量节点、跨产品兼容及分工序合批",
+          "最大等待与空间",
+          "换型清洗",
+          "交付与余保",
+          "执行事实与主管确认",
+          "速度换算及完整精度规则"
+        ],
+        "intrinsic": [
+          "单产线",
+          "机器不重叠",
+          "工序先后与固定工时",
+          "日历与停机",
+          "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+          "显式预计供给引用可用时点",
+          "已声明口径的BOM需求、库存及条件供给分配",
+          "BOM总投入装载、均分、同产品同版本同路线同程序资源批"
+        ]
+      }
+    },
+    {
+      "id": "PROGRAM",
+      "category": "BR-11",
+      "name": "程序兼容",
+      "required": false,
+      "supported": true,
+      "scope": "全部订单；同产品/BOM/整条路线/程序/给定设备的保守资源批",
+      "parameters": "{\"兼容条件\":\"同产品同版本同路线同程序\"}",
+      "unit": "见v0.3第7章",
+      "range": "显式配置必填；非kg订单及其他装载节点阻断",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "disable": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 8,
+              "field": "是否启用",
+              "message": "拆合批须同时采用 MATERIAL/CAPACITY/PROGRAM；缺少 PROGRAM"
+            }
+          ]
+        },
+        "enable": {
+          "status": 200,
+          "source": "actual main UI enabled value saved (may be unchanged no-op)"
+        },
+        "unsupportedParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 9,
+              "field": "参数JSON",
+              "message": "包含当前执行器不支持的参数"
+            }
+          ]
+        },
+        "missingParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 9,
+              "field": "参数JSON",
+              "message": "兼容条件须显式配置为 同产品同版本同路线同程序；其他语义未决定"
+            }
+          ]
+        },
+        "validParameterChange": {
+          "status": "not-applicable-or-not-exercised",
+          "reason": "Only documented fixed constants/empty object in this slice; no alternate business semantics invented"
+        },
+        "invalidScope": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 9,
+              "field": "适用对象",
+              "message": "此规则当前只支持 *（全部对象），不允许遗漏必要约束"
+            }
+          ]
+        },
+        "necessaryOmission": {
+          "table": "batchResources",
+          "row": 2,
+          "field": "允许程序",
+          "status": 400,
+          "issues": [
+            {
+              "code": "INPUT / BATCH_RESOURCE",
+              "message": "组批资源 MIX01：允许程序须为显式、无重复的分号列表",
+              "table": "batchResources",
+              "file": "15_空间与组批规则配置.csv",
+              "row": 0,
+              "field": "允许程序"
+            },
+            {
+              "code": "INPUT / BATCH_RESOURCE",
+              "message": "组批资源 MIX01：允许程序须为显式、无重复的分号列表",
+              "table": "batchResources",
+              "file": "15_空间与组批规则配置.csv",
+              "row": 0,
+              "field": "关联配置"
+            }
+          ]
+        },
+        "keyboardRuleIssue": {
+          "file": "16_排程规则配置.csv",
+          "row": 9,
+          "field": "中文名称",
+          "focused": true
+        },
+        "future": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 8,
+              "field": "是否启用",
+              "message": "拆合批须同时采用 MATERIAL/CAPACITY/PROGRAM；缺少 PROGRAM"
+            }
+          ]
+        }
+      },
+      "limits": [
+        "Rule adoption is not full independent verification; independent verifier covers line/machine/precedence only."
+      ],
+      "calculation": {
+        "id": "ee29159d-6146-46dd-bda1-84d63e880f30",
+        "tasks": 4,
+        "findings": [],
+        "setting": {
+          "id": "PROGRAM",
+          "category": "BR-11",
+          "name": "资源程序兼容",
+          "enabled": true,
+          "active": true,
+          "supported": true,
+          "required": false,
+          "effectiveFrom": "",
+          "scope": "*",
+          "parameters": {
+            "兼容条件": "同产品同版本同路线同程序"
+          },
+          "status": "采用"
+        },
+        "checked": [
+          "单产线",
+          "给定机器不重叠",
+          "固定工时",
+          "工序先后",
+          "日历与停机",
+          "已配置人员依赖",
+          "显式预计供给可用时点",
+          "已声明口径的BOM需求、库存FEFO及条件供给分配",
+          "BOM总投入装载、均分及同产品同版本同路线同程序资源批"
+        ],
+        "unchecked": [
+          "模具与工装",
+          "工序加料、完整BOM/执行耗料与任意单位换算",
+          "其他装载重量节点、跨产品兼容及分工序合批",
+          "最大等待与空间",
+          "换型清洗",
+          "交付与余保",
+          "执行事实与主管确认",
+          "速度换算及完整精度规则"
+        ],
+        "intrinsic": [
+          "单产线",
+          "机器不重叠",
+          "工序先后与固定工时",
+          "日历与停机",
+          "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+          "显式预计供给引用可用时点",
+          "已声明口径的BOM需求、库存及条件供给分配",
+          "BOM总投入装载、均分、同产品同版本同路线同程序资源批"
+        ]
+      }
+    },
+    {
+      "id": "MAX_LAG",
+      "category": "BR-12",
+      "name": "最大等待",
+      "required": false,
+      "supported": false,
+      "scope": "不支持可配置启用；字段保存不等于检查通过",
+      "parameters": "{}",
+      "unit": "见v0.3第7章",
+      "range": "后续完整验收",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "enable": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 10,
+              "field": "是否启用",
+              "message": "MAX_LAG 尚未实现，不得启用；保存字段不代表检查通过"
+            },
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 10,
+              "field": "是否启用",
+              "message": "MAX_LAG 尚未实现，不得启用；保存字段不代表检查通过"
+            }
+          ]
+        },
+        "disable": {
+          "status": 200,
+          "setting": {
+            "id": "MAX_LAG",
+            "category": "BR-12",
+            "name": "工序最大等待",
+            "enabled": false,
+            "active": false,
+            "supported": false,
+            "required": false,
+            "effectiveFrom": "",
+            "scope": "*",
+            "parameters": {},
+            "status": "未实现/未检查"
+          }
+        }
+      },
+      "limits": []
+    },
+    {
+      "id": "STORAGE",
+      "category": "BR-12",
+      "name": "空间容量",
+      "required": false,
+      "supported": true,
+      "scope": "显式逐生产批完整区间；工装套数/空间kg或位置；不推断DEC02",
+      "parameters": "{\"占用口径\":\"显式逐生产批完整区间\",\"数量口径\":\"每生产批声明数量\",\"FR006任务默认\":\"不自动采用，须逐批声明\"}",
+      "unit": "见v0.3第7章",
+      "range": "须填表23及明确的数量、单位、起止偏移；未声明语义阻断",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "disable": {
+          "status": 200,
+          "issues": [],
+          "savedSetting": {
+            "id": "STORAGE",
+            "category": "BR-12",
+            "name": "空间容量",
+            "enabled": false,
+            "active": false,
+            "supported": true,
+            "required": false,
+            "effectiveFrom": "",
+            "scope": "*",
+            "parameters": {
+              "占用口径": "显式逐生产批完整区间",
+              "数量口径": "每生产批声明数量",
+              "FR006任务默认": "不自动采用，须逐批声明"
+            },
+            "status": "未启用"
+          },
+          "intrinsic": [
+            "单产线",
+            "机器不重叠",
+            "工序先后与固定工时",
+            "日历与停机",
+            "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+            "显式预计供给引用可用时点"
+          ]
+        },
+        "enable": {
+          "status": 200,
+          "source": "actual main UI enabled value saved (may be unchanged no-op)"
+        },
+        "unsupportedParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 11,
+              "field": "参数JSON",
+              "message": "包含当前执行器不支持的参数"
+            }
+          ]
+        },
+        "missingParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 11,
+              "field": "参数JSON",
+              "message": "占用口径须显式配置为 显式逐生产批完整区间；DEC02未决，不采用配置表隐式默认"
+            }
+          ]
+        },
+        "validParameterChange": {
+          "status": "not-applicable-or-not-exercised",
+          "reason": "Only documented fixed constants/empty object in this slice; no alternate business semantics invented"
+        },
+        "invalidScope": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 11,
+              "field": "适用对象",
+              "message": "此规则当前只支持 *（全部对象），不允许遗漏必要约束"
+            }
+          ]
+        },
+        "necessaryOmission": {
+          "table": "resourceClaims",
+          "row": 3,
+          "field": "后延占用分钟",
+          "status": 400,
+          "issues": [
+            {
+              "code": "INPUT / JOINT_RESOURCE",
+              "message": "资源占用声明 SPACE-A：提前/后延占用分钟须显式填写非负安全整数；不能推断DEC02释放",
+              "table": "resourceClaims",
+              "row": 3,
+              "file": "23_资源占用声明.csv",
+              "field": "关联配置"
+            }
+          ]
+        },
+        "keyboardRuleIssue": {
+          "file": "16_排程规则配置.csv",
+          "row": 11,
+          "field": "中文名称",
+          "focused": true
+        },
+        "future": {
+          "status": 200,
+          "issues": []
+        }
+      },
+      "limits": [
+        "Rule adoption is not full independent verification; independent verifier covers line/machine/precedence only."
+      ],
+      "calculation": {
+        "id": "83b85985-050b-4b71-8184-5f10b3060452",
+        "tasks": 4,
+        "findings": [],
+        "setting": {
+          "id": "STORAGE",
+          "category": "BR-12",
+          "name": "空间容量",
+          "enabled": true,
+          "active": true,
+          "supported": true,
+          "required": false,
+          "effectiveFrom": "",
+          "scope": "*",
+          "parameters": {
+            "占用口径": "显式逐生产批完整区间",
+            "数量口径": "每生产批声明数量",
+            "FR006任务默认": "不自动采用，须逐批声明"
+          },
+          "status": "采用"
+        },
+        "checked": [
+          "单产线",
+          "给定机器不重叠",
+          "固定工时",
+          "工序先后",
+          "日历与停机",
+          "已配置人员依赖",
+          "显式预计供给可用时点",
+          "显式逐生产批空间kg/位置容量与完整占用/释放区间"
+        ],
+        "unchecked": [
+          "模具与工装",
+          "完整物料/BOM/库存分配",
+          "设备容量与拆合批",
+          "程序兼容",
+          "最大等待、动态下游释放与其他空间单位",
+          "换型清洗",
+          "交付与余保",
+          "执行事实与主管确认",
+          "速度换算及完整精度规则"
+        ],
+        "intrinsic": [
+          "单产线",
+          "机器不重叠",
+          "工序先后与固定工时",
+          "日历与停机",
+          "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+          "显式预计供给引用可用时点",
+          "显式逐生产批空间kg/位置完整占用与释放容量"
+        ]
+      }
+    },
+    {
+      "id": "CLEANING",
+      "category": "BR-13",
+      "name": "换型清洗",
+      "required": false,
+      "supported": false,
+      "scope": "不支持可配置启用；字段保存不等于检查通过",
+      "parameters": "{}",
+      "unit": "见v0.3第7章",
+      "range": "后续完整验收",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "enable": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "是否启用",
+              "message": "CLEANING 尚未实现，不得启用；保存字段不代表检查通过"
+            },
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "是否启用",
+              "message": "CLEANING 尚未实现，不得启用；保存字段不代表检查通过"
+            }
+          ]
+        },
+        "disable": {
+          "status": 200,
+          "setting": {
+            "id": "CLEANING",
+            "category": "BR-13",
+            "name": "CLEANING",
+            "enabled": false,
+            "active": false,
+            "supported": false,
+            "required": false,
+            "effectiveFrom": "",
+            "scope": "*",
+            "parameters": {},
+            "status": "未实现/未检查"
+          }
+        }
+      },
+      "limits": []
+    },
+    {
+      "id": "DELIVERY",
+      "category": "BR-14",
+      "name": "预计可交付与余保",
+      "required": false,
+      "supported": true,
+      "scope": "显式模拟交付等待/质量/余保；附条件，不作承诺",
+      "parameters": "{\"等待口径\":\"产品模拟交付等待分钟\",\"质量口径\":\"显式订单模拟条件\",\"有效期口径\":\"交付时剩余分钟\"}",
+      "unit": "见v0.3第7章",
+      "range": "须采用物料和批次检查；缺条件保留未知",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "disable": {
+          "status": 200,
+          "issues": [],
+          "savedSetting": {
+            "id": "DELIVERY",
+            "category": "BR-14",
+            "name": "预计可交付",
+            "enabled": false,
+            "active": false,
+            "supported": true,
+            "required": false,
+            "effectiveFrom": "",
+            "scope": "*",
+            "parameters": {
+              "等待口径": "产品模拟交付等待分钟",
+              "质量口径": "显式订单模拟条件",
+              "有效期口径": "交付时剩余分钟"
+            },
+            "status": "未启用"
+          },
+          "intrinsic": [
+            "单产线",
+            "机器不重叠",
+            "工序先后与固定工时",
+            "日历与停机",
+            "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+            "显式预计供给引用可用时点",
+            "已声明口径的BOM需求、库存及条件供给分配",
+            "BOM总投入装载、均分、同产品同版本同路线同程序资源批"
+          ]
+        },
+        "enable": {
+          "status": 200,
+          "source": "actual main UI enabled value saved (may be unchanged no-op)"
+        },
+        "unsupportedParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 13,
+              "field": "参数JSON",
+              "message": "包含当前执行器不支持的参数"
+            }
+          ]
+        },
+        "missingParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 13,
+              "field": "参数JSON",
+              "message": "等待口径须显式配置为 产品模拟交付等待分钟"
+            }
+          ]
+        },
+        "validParameterChange": {
+          "status": "not-applicable-or-not-exercised",
+          "reason": "Only documented fixed constants/empty object in this slice; no alternate business semantics invented"
+        },
+        "invalidScope": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 13,
+              "field": "适用对象",
+              "message": "此规则当前只支持 *（全部对象），不允许遗漏必要约束"
+            }
+          ]
+        },
+        "necessaryOmission": {
+          "table": "deliveryConditions",
+          "row": 2,
+          "field": "要求剩余有效分钟",
+          "status": 400,
+          "issues": [
+            {
+              "table": "deliveryConditions",
+              "file": "24_订单模拟交付条件.csv",
+              "row": 2,
+              "field": "交付条件",
+              "message": "要求剩余有效分钟须为非负安全整数；不适用时须为0"
+            }
+          ]
+        },
+        "keyboardRuleIssue": {
+          "file": "16_排程规则配置.csv",
+          "row": 13,
+          "field": "中文名称",
+          "focused": true
+        },
+        "future": {
+          "status": 200,
+          "issues": []
+        }
+      },
+      "limits": [
+        "Rule adoption is not full independent verification; independent verifier covers line/machine/precedence only."
+      ],
+      "calculation": {
+        "id": "67b67714-ef25-4c52-aa2b-a340c2649fde",
+        "tasks": 4,
+        "findings": [],
+        "setting": {
+          "id": "DELIVERY",
+          "category": "BR-14",
+          "name": "预计可交付",
+          "enabled": true,
+          "active": true,
+          "supported": true,
+          "required": false,
+          "effectiveFrom": "",
+          "scope": "*",
+          "parameters": {
+            "等待口径": "产品模拟交付等待分钟",
+            "质量口径": "显式订单模拟条件",
+            "有效期口径": "交付时剩余分钟"
+          },
+          "status": "采用"
+        },
+        "checked": [
+          "单产线",
+          "给定机器不重叠",
+          "固定工时",
+          "工序先后",
+          "日历与停机",
+          "已配置人员依赖",
+          "显式预计供给可用时点",
+          "已声明口径的BOM需求、库存FEFO及条件供给分配",
+          "显式模拟交付等待/质量可用/交付时剩余效期（附条件）",
+          "BOM总投入装载、均分及同产品同版本同路线同程序资源批"
+        ],
+        "unchecked": [
+          "模具与工装",
+          "工序加料、完整BOM/执行耗料与任意单位换算",
+          "其他装载重量节点、跨产品兼容及分工序合批",
+          "最大等待与空间",
+          "换型清洗",
+          "真实质量事实、未声明余保条件及真实交付承诺",
+          "执行事实与主管确认",
+          "速度换算及完整精度规则"
+        ],
+        "intrinsic": [
+          "单产线",
+          "机器不重叠",
+          "工序先后与固定工时",
+          "日历与停机",
+          "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+          "显式预计供给引用可用时点",
+          "已声明口径的BOM需求、库存及条件供给分配",
+          "BOM总投入装载、均分、同产品同版本同路线同程序资源批"
+        ],
+        "deliveryAssessment": {
+          "version": "FR023-v1",
+          "label": "找到的可行时间（仅保存的已检查范围；附条件）",
+          "timeOrigin": "2026-11-02T08:00:00+08:00",
+          "mode": "supported",
+          "active": true,
+          "promised": false,
+          "scope": {
+            "mode": "supported",
+            "label": "已有支持模式",
+            "machineAvailability": "工厂日历及设备停机连续窗口",
+            "checked": [
+              "单产线",
+              "给定机器不重叠",
+              "固定工时",
+              "工序先后",
+              "日历与停机",
+              "已配置人员依赖",
+              "显式预计供给可用时点",
+              "已声明口径的BOM需求、库存FEFO及条件供给分配",
+              "显式模拟交付等待/质量可用/交付时剩余效期（附条件）",
+              "BOM总投入装载、均分及同产品同版本同路线同程序资源批"
+            ],
+            "unchecked": [
+              "模具与工装",
+              "工序加料、完整BOM/执行耗料与任意单位换算",
+              "其他装载重量节点、跨产品兼容及分工序合批",
+              "最大等待与空间",
+              "换型清洗",
+              "真实质量事实、未声明余保条件及真实交付承诺",
+              "执行事实与主管确认",
+              "速度换算及完整精度规则"
+            ],
+            "note": "机器与顺序检查通过不代表完整业务可执行；未排任务不代表全局无解。独立复核仅覆盖单线、机器不重叠和工序先后。"
+          },
+          "limits": [
+            "非全局最早；构造搜索不保证找到所有可行排法",
+            "DEC02、最大等待、动态下游释放等未决语义保留",
+            "模拟物料/质量条件须成立；无真实交付承诺",
+            "运输与跨工厂承诺不属于P0"
+          ],
+          "taskCompletions": [
+            {
+              "taskId": "[\"A\",1,\"MIX\"]",
+              "orderId": "A",
+              "productionBatchId": "[\"A\",1]",
+              "resourceBatchId": "[\"FR021-RB-1\",\"MIX\"]",
+              "completionMinute": 30,
+              "completionAt": "2026-11-02T00:30:00.000Z"
+            },
+            {
+              "taskId": "[\"A\",1,\"FILL\"]",
+              "orderId": "A",
+              "productionBatchId": "[\"A\",1]",
+              "resourceBatchId": "[\"FR021-RB-1\",\"FILL\"]",
+              "completionMinute": 60,
+              "completionAt": "2026-11-02T01:00:00.000Z"
+            },
+            {
+              "taskId": "[\"A\",2,\"MIX\"]",
+              "orderId": "A",
+              "productionBatchId": "[\"A\",2]",
+              "resourceBatchId": "[\"FR021-RB-2\",\"MIX\"]",
+              "completionMinute": 60,
+              "completionAt": "2026-11-02T01:00:00.000Z"
+            },
+            {
+              "taskId": "[\"A\",2,\"FILL\"]",
+              "orderId": "A",
+              "productionBatchId": "[\"A\",2]",
+              "resourceBatchId": "[\"FR021-RB-2\",\"FILL\"]",
+              "completionMinute": 90,
+              "completionAt": "2026-11-02T01:30:00.000Z"
+            }
+          ],
+          "orders": [
+            {
+              "orderId": "A",
+              "productId": "HC40",
+              "unit": "kg",
+              "status": "conditional-assessed",
+              "promised": false,
+              "requiredQuantity": 480,
+              "exactRequiredQuantity": {
+                "numerator": "480",
+                "denominator": "1"
+              },
+              "remainingQuantity": 480,
+              "exactRemainingQuantity": {
+                "numerator": "480",
+                "denominator": "1"
+              },
+              "knownCompletedQuantity": 480,
+              "knownLateQuantity": 0,
+              "exactKnownLateQuantity": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "unknownDeliverableQuantity": 0,
+              "exactUnknownDeliverableQuantity": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "delayedQuantity": 0,
+              "delayMinutes": 0,
+              "dueMinute": 480,
+              "dueAt": "2026-11-02T08:00:00.000Z",
+              "completionMinute": 90,
+              "completionAt": "2026-11-02T01:30:00.000Z",
+              "expectedDeliverableMinute": 90,
+              "expectedDeliverableAt": "2026-11-02T01:30:00.000Z",
+              "batches": [
+                {
+                  "productionBatchId": "[\"A\",1]",
+                  "quantity": 240,
+                  "exactQuantity": {
+                    "numerator": "240",
+                    "denominator": "1"
+                  },
+                  "unit": "kg",
+                  "taskIds": [
+                    "[\"A\",1,\"MIX\"]",
+                    "[\"A\",1,\"FILL\"]"
+                  ],
+                  "missingOperations": [],
+                  "completionMinute": 60,
+                  "completionAt": "2026-11-02T01:00:00.000Z",
+                  "deliverableMinute": 60,
+                  "deliverableAt": "2026-11-02T01:00:00.000Z"
+                },
+                {
+                  "productionBatchId": "[\"A\",2]",
+                  "quantity": 240,
+                  "exactQuantity": {
+                    "numerator": "240",
+                    "denominator": "1"
+                  },
+                  "unit": "kg",
+                  "taskIds": [
+                    "[\"A\",2,\"MIX\"]",
+                    "[\"A\",2,\"FILL\"]"
+                  ],
+                  "missingOperations": [],
+                  "completionMinute": 90,
+                  "completionAt": "2026-11-02T01:30:00.000Z",
+                  "deliverableMinute": 90,
+                  "deliverableAt": "2026-11-02T01:30:00.000Z"
+                }
+              ],
+              "reasons": [
+                {
+                  "code": "POST_COMPLETION_WAIT",
+                  "productionBatchId": "[\"A\",1]",
+                  "from": 60,
+                  "to": 60,
+                  "message": "生产完成后按产品配置等待 0 分钟"
+                },
+                {
+                  "code": "POST_COMPLETION_WAIT",
+                  "productionBatchId": "[\"A\",2]",
+                  "from": 90,
+                  "to": 90,
+                  "message": "生产完成后按产品配置等待 0 分钟"
+                }
+              ],
+              "taskIds": [
+                "[\"A\",1,\"MIX\"]",
+                "[\"A\",1,\"FILL\"]",
+                "[\"A\",2,\"MIX\"]",
+                "[\"A\",2,\"FILL\"]"
+              ],
+              "timingReasons": [
+                {
+                  "taskId": "[\"A\",1,\"MIX\"]",
+                  "reasons": [],
+                  "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04 · FR021 BOM总投入/均分；资源批 FR021-RB-1"
+                },
+                {
+                  "taskId": "[\"A\",1,\"FILL\"]",
+                  "reasons": [
+                    {
+                      "code": "PRECEDENCE",
+                      "source": "FR021-RB-1-MIX",
+                      "from": 0,
+                      "to": 30,
+                      "sourceTaskIds": [
+                        "[\"A\",1,\"MIX\"]"
+                      ]
+                    }
+                  ],
+                  "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04 · FR021 BOM总投入/均分；资源批 FR021-RB-1"
+                },
+                {
+                  "taskId": "[\"A\",2,\"MIX\"]",
+                  "reasons": [
+                    {
+                      "code": "MACHINE_BUSY",
+                      "sourceTaskId": "FR021-RB-1-MIX",
+                      "resourceId": "MIX01",
+                      "from": 0,
+                      "to": 30,
+                      "sourceTaskIds": [
+                        "[\"A\",1,\"MIX\"]"
+                      ]
+                    }
+                  ],
+                  "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04 · FR021 BOM总投入/均分；资源批 FR021-RB-2"
+                },
+                {
+                  "taskId": "[\"A\",2,\"FILL\"]",
+                  "reasons": [
+                    {
+                      "code": "PRECEDENCE",
+                      "source": "FR021-RB-2-MIX",
+                      "from": 0,
+                      "to": 60,
+                      "sourceTaskIds": [
+                        "[\"A\",2,\"MIX\"]"
+                      ]
+                    }
+                  ],
+                  "source": "订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04 · FR021 BOM总投入/均分；资源批 FR021-RB-2"
+                }
+              ],
+              "supplyConditions": [],
+              "materialAllocations": [
+                {
+                  "lotId": "LEAN-LOT",
+                  "supplyId": "",
+                  "quantity": 162.5,
+                  "exactQuantity": {
+                    "numerator": "325",
+                    "denominator": "2"
+                  },
+                  "conditional": false,
+                  "expiry": "2026-12-31",
+                  "quality": "合格",
+                  "readyAt": "",
+                  "remaining": 9837.5,
+                  "source": "模拟库存（扣除已有占用及本方案分配）",
+                  "taskId": "[\"A\",1,\"MIX\"]",
+                  "materialId": "LEAN",
+                  "feedMinute": 0
+                },
+                {
+                  "lotId": "FAT-LOT",
+                  "supplyId": "",
+                  "quantity": 37.5,
+                  "exactQuantity": {
+                    "numerator": "75",
+                    "denominator": "2"
+                  },
+                  "conditional": false,
+                  "expiry": "2026-12-31",
+                  "quality": "合格",
+                  "readyAt": "",
+                  "remaining": 9962.5,
+                  "source": "模拟库存（扣除已有占用及本方案分配）",
+                  "taskId": "[\"A\",1,\"MIX\"]",
+                  "materialId": "FAT",
+                  "feedMinute": 0
+                },
+                {
+                  "lotId": "WATER-LOT",
+                  "supplyId": "",
+                  "quantity": 37.5,
+                  "exactQuantity": {
+                    "numerator": "75",
+                    "denominator": "2"
+                  },
+                  "conditional": false,
+                  "expiry": "2026-12-31",
+                  "quality": "合格",
+                  "readyAt": "",
+                  "remaining": 9962.5,
+                  "source": "模拟库存（扣除已有占用及本方案分配）",
+                  "taskId": "[\"A\",1,\"MIX\"]",
+                  "materialId": "WATER",
+                  "feedMinute": 0
+                },
+                {
+                  "lotId": "PREMIX-LOT",
+                  "supplyId": "",
+                  "quantity": 12.5,
+                  "exactQuantity": {
+                    "numerator": "25",
+                    "denominator": "2"
+                  },
+                  "conditional": false,
+                  "expiry": "2026-12-31",
+                  "quality": "合格",
+                  "readyAt": "",
+                  "remaining": 9987.5,
+                  "source": "模拟库存（扣除已有占用及本方案分配）",
+                  "taskId": "[\"A\",1,\"MIX\"]",
+                  "materialId": "PREMIX",
+                  "feedMinute": 0
+                },
+                {
+                  "lotId": "LEAN-LOT",
+                  "supplyId": "",
+                  "quantity": 162.5,
+                  "exactQuantity": {
+                    "numerator": "325",
+                    "denominator": "2"
+                  },
+                  "conditional": false,
+                  "expiry": "2026-12-31",
+                  "quality": "合格",
+                  "readyAt": "",
+                  "remaining": 9675,
+                  "source": "模拟库存（扣除已有占用及本方案分配）",
+                  "taskId": "[\"A\",2,\"MIX\"]",
+                  "materialId": "LEAN",
+                  "feedMinute": 30
+                },
+                {
+                  "lotId": "FAT-LOT",
+                  "supplyId": "",
+                  "quantity": 37.5,
+                  "exactQuantity": {
+                    "numerator": "75",
+                    "denominator": "2"
+                  },
+                  "conditional": false,
+                  "expiry": "2026-12-31",
+                  "quality": "合格",
+                  "readyAt": "",
+                  "remaining": 9925,
+                  "source": "模拟库存（扣除已有占用及本方案分配）",
+                  "taskId": "[\"A\",2,\"MIX\"]",
+                  "materialId": "FAT",
+                  "feedMinute": 30
+                },
+                {
+                  "lotId": "WATER-LOT",
+                  "supplyId": "",
+                  "quantity": 37.5,
+                  "exactQuantity": {
+                    "numerator": "75",
+                    "denominator": "2"
+                  },
+                  "conditional": false,
+                  "expiry": "2026-12-31",
+                  "quality": "合格",
+                  "readyAt": "",
+                  "remaining": 9925,
+                  "source": "模拟库存（扣除已有占用及本方案分配）",
+                  "taskId": "[\"A\",2,\"MIX\"]",
+                  "materialId": "WATER",
+                  "feedMinute": 30
+                },
+                {
+                  "lotId": "PREMIX-LOT",
+                  "supplyId": "",
+                  "quantity": 12.5,
+                  "exactQuantity": {
+                    "numerator": "25",
+                    "denominator": "2"
+                  },
+                  "conditional": false,
+                  "expiry": "2026-12-31",
+                  "quality": "合格",
+                  "readyAt": "",
+                  "remaining": 9975,
+                  "source": "模拟库存（扣除已有占用及本方案分配）",
+                  "taskId": "[\"A\",2,\"MIX\"]",
+                  "materialId": "PREMIX",
+                  "feedMinute": 30
+                }
+              ],
+              "qualityCondition": {
+                "订单编号": "A",
+                "模拟质量状态": "模拟合格",
+                "模拟质量可用时间": "",
+                "模拟有效期截止时间": "2026-12-31T08:00:00+08:00",
+                "要求剩余有效分钟": "0"
+              },
+              "waitMinutes": "0",
+              "findings": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "PROGRESS",
+      "category": "BR-16",
+      "name": "执行保护",
+      "required": false,
+      "supported": true,
+      "scope": "模拟累计事实原始时段、显式剩余分钟与耗料；即使关闭也不解除事实保护",
+      "parameters": "{}",
+      "unit": "见v0.3第7章",
+      "range": "支持累计报废、显式本工序BOM补做及来源汇总映射；暂停/冲销/转机与批次/质量协调未定时阻断；不确认真实执行或质量",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "disable": {
+          "status": 200,
+          "issues": [],
+          "savedSetting": {
+            "id": "PROGRESS",
+            "category": "BR-16",
+            "name": "执行保护",
+            "enabled": false,
+            "active": false,
+            "supported": true,
+            "required": false,
+            "effectiveFrom": "",
+            "scope": "*",
+            "parameters": {},
+            "status": "未启用"
+          },
+          "intrinsic": [
+            "单产线",
+            "机器不重叠",
+            "工序先后与固定工时",
+            "日历与停机",
+            "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+            "显式预计供给引用可用时点"
+          ]
+        },
+        "enable": {
+          "status": 200,
+          "source": "actual main UI enabled value saved (may be unchanged no-op)"
+        },
+        "unsupportedParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 12,
+              "field": "参数JSON",
+              "message": "包含当前执行器不支持的参数"
+            }
+          ]
+        },
+        "missingParameter": {
+          "status": "not-applicable",
+          "reason": "Fixed empty object; no supported tunable parameter"
+        },
+        "validParameterChange": {
+          "status": "not-applicable-or-not-exercised",
+          "reason": "Only documented fixed constants/empty object in this slice; no alternate business semantics invented"
+        },
+        "invalidScope": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 12,
+              "field": "适用对象",
+              "message": "此规则当前只支持 *（全部对象），不允许遗漏必要约束"
+            }
+          ]
+        },
+        "necessaryOmission": {
+          "table": "rules",
+          "row": 12,
+          "field": "中文名称",
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 12,
+              "field": "中文名称",
+              "message": "中文名称不能为空"
+            }
+          ]
+        },
+        "keyboardRuleIssue": {
+          "file": "16_排程规则配置.csv",
+          "row": 12,
+          "field": "中文名称",
+          "focused": true
+        },
+        "future": {
+          "status": 200,
+          "issues": []
+        }
+      },
+      "limits": [
+        "No facts in this profile: only rule-row required name; execution necessary-field protection separately retained, not certified here.",
+        "Rule adoption is not full independent verification; independent verifier covers line/machine/precedence only."
+      ],
+      "calculation": {
+        "id": "5db154d8-c4ae-4238-8aa6-a76876c09662",
+        "tasks": 4,
+        "findings": [],
+        "setting": {
+          "id": "PROGRESS",
+          "category": "BR-16",
+          "name": "执行保护",
+          "enabled": true,
+          "active": true,
+          "supported": true,
+          "required": false,
+          "effectiveFrom": "",
+          "scope": "*",
+          "parameters": {},
+          "status": "采用"
+        },
+        "checked": [
+          "单产线",
+          "给定机器不重叠",
+          "固定工时",
+          "工序先后",
+          "日历与停机",
+          "已配置人员依赖",
+          "显式预计供给可用时点"
+        ],
+        "unchecked": [
+          "模具与工装",
+          "完整物料/BOM/库存分配",
+          "设备容量与拆合批",
+          "程序兼容",
+          "最大等待与空间",
+          "换型清洗",
+          "交付与余保",
+          "执行事实与主管确认",
+          "速度换算及完整精度规则"
+        ],
+        "intrinsic": [
+          "单产线",
+          "机器不重叠",
+          "工序先后与固定工时",
+          "日历与停机",
+          "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+          "显式预计供给引用可用时点"
+        ]
+      }
+    },
+    {
+      "id": "CONFIRM",
+      "category": "BR-17",
+      "name": "主管确认条件",
+      "required": false,
+      "supported": false,
+      "scope": "不支持可配置启用；字段保存不等于检查通过",
+      "parameters": "{}",
+      "unit": "见v0.3第7章",
+      "range": "后续完整验收",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "enable": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "是否启用",
+              "message": "CONFIRM 尚未实现，不得启用；保存字段不代表检查通过"
+            },
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "是否启用",
+              "message": "CONFIRM 尚未实现，不得启用；保存字段不代表检查通过"
+            }
+          ]
+        },
+        "disable": {
+          "status": 200,
+          "setting": {
+            "id": "CONFIRM",
+            "category": "BR-17",
+            "name": "CONFIRM",
+            "enabled": false,
+            "active": false,
+            "supported": false,
+            "required": false,
+            "effectiveFrom": "",
+            "scope": "*",
+            "parameters": {},
+            "status": "未实现/未检查"
+          }
+        }
+      },
+      "limits": []
+    },
+    {
+      "id": "ROUNDING",
+      "category": "BR-18",
+      "name": "时间单位与取整",
+      "required": false,
+      "supported": false,
+      "scope": "不支持可配置启用；字段保存不等于检查通过",
+      "parameters": "{}",
+      "unit": "见v0.3第7章",
+      "range": "后续完整验收",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "enable": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "是否启用",
+              "message": "ROUNDING 尚未实现，不得启用；保存字段不代表检查通过"
+            },
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "是否启用",
+              "message": "ROUNDING 尚未实现，不得启用；保存字段不代表检查通过"
+            }
+          ]
+        },
+        "disable": {
+          "status": 200,
+          "setting": {
+            "id": "ROUNDING",
+            "category": "BR-18",
+            "name": "ROUNDING",
+            "enabled": false,
+            "active": false,
+            "supported": false,
+            "required": false,
+            "effectiveFrom": "",
+            "scope": "*",
+            "parameters": {},
+            "status": "未实现/未检查"
+          }
+        }
+      },
+      "limits": []
+    },
+    {
+      "id": "MATERIAL",
+      "category": "BR-09",
+      "name": "BOM需求与批次分配",
+      "required": false,
+      "supported": true,
+      "scope": "全部订单；仅损失配方及每袋包材，库存FEFO；预计供给须显式引用",
+      "parameters": "{\"允许预计供给\":false,\"可用状态\":[\"合格\"],\"预计状态\":[\"预计可用\"],\"不可用状态\":[\"待检\",\"冻结\",\"不合格\"]}",
+      "unit": "BOM物料单位",
+      "range": "v0.3每1000kg投入/每袋，其他口径拒绝推断",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "disable": {
+          "status": 200,
+          "issues": [],
+          "savedSetting": {
+            "id": "MATERIAL",
+            "category": "BR-09",
+            "name": "物料数量及可用时点",
+            "enabled": false,
+            "active": false,
+            "supported": true,
+            "required": false,
+            "effectiveFrom": "",
+            "scope": "*",
+            "parameters": {
+              "允许预计供给": false,
+              "可用状态": [
+                "合格"
+              ],
+              "预计状态": [
+                "预计可用"
+              ],
+              "不可用状态": [
+                "待检",
+                "冻结",
+                "不合格"
+              ]
+            },
+            "status": "未启用"
+          },
+          "intrinsic": [
+            "单产线",
+            "机器不重叠",
+            "工序先后与固定工时",
+            "日历与停机",
+            "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+            "显式预计供给引用可用时点"
+          ]
+        },
+        "enable": {
+          "status": 200,
+          "source": "actual main UI enabled value saved (may be unchanged no-op)"
+        },
+        "unsupportedParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 7,
+              "field": "参数JSON",
+              "message": "包含当前执行器不支持的参数"
+            }
+          ]
+        },
+        "missingParameter": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 7,
+              "field": "参数JSON",
+              "message": "须显式声明允许预计供给 true/false"
+            }
+          ]
+        },
+        "validParameterChange": {
+          "status": 200,
+          "issues": []
+        },
+        "invalidScope": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 7,
+              "field": "适用对象",
+              "message": "此规则当前只支持 *（全部对象），不允许遗漏必要约束"
+            }
+          ]
+        },
+        "necessaryOmission": {
+          "table": "bom",
+          "row": 2,
+          "field": "配置用量",
+          "status": 400,
+          "issues": [
+            {
+              "code": "INPUT / BOM_REQUIRED",
+              "message": "BOM第 1 行缺少配置用量",
+              "table": "bom",
+              "file": "09_BOM与包装用量.csv",
+              "row": 2,
+              "field": "配置用量"
+            }
+          ]
+        },
+        "keyboardRuleIssue": {
+          "file": "16_排程规则配置.csv",
+          "row": 7,
+          "field": "中文名称",
+          "focused": true
+        },
+        "future": {
+          "status": 200,
+          "issues": []
+        }
+      },
+      "limits": [
+        "Rule adoption is not full independent verification; independent verifier covers line/machine/precedence only."
+      ],
+      "calculation": {
+        "id": "e739cef3-1c7e-48db-84c4-6ec239bd3d35",
+        "tasks": 2,
+        "findings": [],
+        "setting": {
+          "id": "MATERIAL",
+          "category": "BR-09",
+          "name": "物料数量及可用时点",
+          "enabled": true,
+          "active": true,
+          "supported": true,
+          "required": false,
+          "effectiveFrom": "",
+          "scope": "*",
+          "parameters": {
+            "允许预计供给": false,
+            "可用状态": [
+              "合格"
+            ],
+            "预计状态": [
+              "预计可用"
+            ],
+            "不可用状态": [
+              "待检",
+              "冻结",
+              "不合格"
+            ]
+          },
+          "status": "采用"
+        },
+        "checked": [
+          "单产线",
+          "给定机器不重叠",
+          "固定工时",
+          "工序先后",
+          "日历与停机",
+          "已配置人员依赖",
+          "显式预计供给可用时点",
+          "已声明口径的BOM需求、库存FEFO及条件供给分配"
+        ],
+        "unchecked": [
+          "模具与工装",
+          "工序加料、完整BOM/执行耗料与任意单位换算",
+          "设备容量与拆合批",
+          "程序兼容",
+          "最大等待与空间",
+          "换型清洗",
+          "交付与余保",
+          "执行事实与主管确认",
+          "速度换算及完整精度规则"
+        ],
+        "intrinsic": [
+          "单产线",
+          "机器不重叠",
+          "工序先后与固定工时",
+          "日历与停机",
+          "已配置人员依赖（即使 LABOR 开关关闭也保留）",
+          "显式预计供给引用可用时点",
+          "已声明口径的BOM需求、库存及条件供给分配"
+        ]
+      }
+    },
+    {
+      "id": "QA_UNKNOWN",
+      "supported": false,
+      "required": false,
+      "scope": "unknown",
+      "parameters": "{}",
+      "source": "src/lib/business-rules.mjs ruleCatalog / assessRules; server /rules/capabilities",
+      "operations": {
+        "enable": {
+          "status": 400,
+          "issues": [
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "是否启用",
+              "message": "QA_UNKNOWN 尚未实现，不得启用；保存字段不代表检查通过"
+            },
+            {
+              "table": "rules",
+              "file": "16_排程规则配置.csv",
+              "row": 15,
+              "field": "是否启用",
+              "message": "QA_UNKNOWN 尚未实现，不得启用；保存字段不代表检查通过"
+            }
+          ]
+        },
+        "disable": {
+          "status": 200,
+          "setting": {
+            "id": "QA_UNKNOWN",
+            "category": "未知类别",
+            "name": "QA_UNKNOWN",
+            "enabled": false,
+            "active": false,
+            "supported": false,
+            "required": false,
+            "effectiveFrom": "",
+            "scope": "*",
+            "parameters": {},
+            "status": "未实现/未检查"
+          }
+        }
+      },
+      "limits": []
+    }
+  ]
+}

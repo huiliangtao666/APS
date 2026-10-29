@@ -1,0 +1,27 @@
+RAW01_SOURCE_PASS 255
+RAW01_PRESERVED_PASS 237
+RAW01_TEST_ORIGINALS_PASS 7
+
+> aps-r1@0.1.0 build
+> tsc --noEmit && vite build && npx esbuild server/index.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs && npx esbuild server/calculation-worker.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/calculation-worker.mjs
+
+vite v5.4.21 building for production...
+transforming...
+✓ 82 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.45 kB │ gzip:   0.30 kB
+dist/assets/index-BoO1gSfU.css   20.30 kB │ gzip:   5.51 kB
+dist/assets/index-FhxMnJaO.js   341.38 kB │ gzip: 126.44 kB
+✓ built in 1.23s
+
+  dist/server.mjs  412.2kb
+
+⚡ Done in 13ms
+
+  dist/calculation-worker.mjs  214.7kb
+
+⚡ Done in 7ms
+RAW01_SOURCE_PASS 255
+RAW01_PRESERVED_PASS 237
+RAW01_TEST_ORIGINALS_PASS 7

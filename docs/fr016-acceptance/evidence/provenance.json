@@ -1,0 +1,10 @@
+{
+  "originalDocx": "APS-Design/upload/APS需求分析与设计说明书_v0.3.docx",
+  "docxSha256": "4eb29f7cfaf4fe30f76329775d32930b806da941282098b7de163591807bc7d4",
+  "testReportSha256": "dc60ca159340b3a4fa3d6a4c5fb4482c335141235bb4bcdd94026c09ab67195c",
+  "liveCardId": "PVTI_lAHOFM9WU84BpE1czhEHgu4",
+  "delivery": "dlv_29e067c5-b689-4dab-8382-1cd07e7b7274",
+  "ownership": "All fresh acceptance evidence APS-Dev; not independent APS-Test acceptance",
+  "diagnostics": "run1: harness used mode at wrong request level; run2: moved minimal probe before facts after expected existing422; run3: successful personnel task lacks direct group link, so used existing dependency related-group navigation. Raw reports/logs retained in archive; no production repairs.",
+  "raw01FinalTestReportSha256": "2251c6ee3a072a08769f83be03cf1fc5dc38b9ea745dff941e1217ebd63fb836"
+}

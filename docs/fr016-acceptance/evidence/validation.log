@@ -1,0 +1,48 @@
+Downloading Chromium Headless Shell 141.0.7390.37 (playwright build v1194) from https://cdn.playwright.dev/dbazure/download/playwright/builds/chromium/1194/chromium-headless-shell-linux-arm64.zip
+|                                                                                |   0% of 106.1 MiB
+|■■■■■■■■                                                                        |  10% of 106.1 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 106.1 MiB
+Chromium Headless Shell 141.0.7390.37 (playwright build v1194) downloaded to /root/.cache/ms-playwright/chromium_headless_shell-1194
+vite v5.4.21 building for production...
+transforming...
+✓ 79 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../tmp/fr027-pU17yw/dist/index.html                   0.45 kB │ gzip:   0.30 kB
+../../../tmp/fr027-pU17yw/dist/assets/index-BoO1gSfU.css   20.30 kB │ gzip:   5.51 kB
+../../../tmp/fr027-pU17yw/dist/assets/index-C4l0VsGu.js   337.89 kB │ gzip: 125.22 kB
+✓ built in 1.47s
+RULE MACHINE complete
+RULE PRECEDENCE complete
+RULE CALENDAR complete
+RULE LABOR complete
+RULE INVENTORY complete
+RULE SORT complete
+RULE LINE complete
+RULE SPEED complete
+RULE MOLD complete
+RULE BOM complete
+RULE CAPACITY complete
+RULE PROGRAM complete
+RULE MAX_LAG complete
+RULE STORAGE complete
+RULE CLEANING complete
+RULE DELIVERY complete
+RULE PROGRESS complete
+RULE CONFIRM complete
+RULE ROUNDING complete
+RULE MATERIAL complete
+RULE QA_UNKNOWN complete
+PASS seven original input condition classes plus duration/capacity omissions reject atomically; eight issue links activated by Enter
+PASS main structured SORT parameter edit persists; confirmed settings and original inputs remain immutable
+PASS six positive rule families and seven actual scheduler problem cases: keyboard task/detail/saved-source navigation with explicit global-finding gaps
+PASS minimal-r1 does not present calendar or personnel as checked
+FR016_FINITE_PASS 21 rule rows, 4 groups
