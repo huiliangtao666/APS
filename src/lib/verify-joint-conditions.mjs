@@ -1,3 +1,4 @@
+import {verifyWorkingWindows} from './verify-working-windows.mjs';
 import {quantityMath as Q,calculateMaterialDemand,remainingExecutionDemand,feedTime} from './material-allocation.mjs';
 import {inventoryBusinessDate} from './inventory.mjs';
 import {resolveExpectedSupply} from './expected-supply.mjs';
@@ -10,7 +11,7 @@ export function verifyJointConditions(plan,data,conditions){
 function verifyFixed(plan,data,conditions){
  if(!data||!Array.isArray(data.rules))return ['缺少冻结输入/规则，不能完成联合复核'];
  if(plan.jointConditionsContract!==conditions.jointConditionsContract)return ['联合条件冻结契约缺失/不符'];
- const issues=[],add=m=>issues.push(m),tasks=plan.tasks||[],rows=plan.materialDemands||[];
+ const issues=verifyWorkingWindows(plan,data,conditions),add=m=>issues.push(m),tasks=plan.tasks||[],rows=plan.materialDemands||[];
  const at=conditions.ruleEvaluationAt,enabled=id=>data.rules.some(r=>r['规则编号']===id&&r['是否启用']==='是'&&conditions.enabledRuleIds.includes(id)&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at)));
  if(conditions.jointConditionsContract!=='FR022-joint-v1')return ['未知联合条件契约，不能完成复核'];
  const material=enabled('MATERIAL');let policy=null;

@@ -58,6 +58,12 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
      if(demand!==allocated)add(`${task.id} ${role||'未知需求'} 在分钟 ${t} 人员覆盖 ${allocated} ≠ 配置 ${demand}`);
     }
    }
+   if(conditions?.workingWindowsContract==='P06-windows-v1')for(const e of expected){
+    const rows=saved.filter(r=>keyFor(r)===e.key&&r.start<e.end&&r.end>e.start);
+    const points=[...new Set([e.start,...rows.flatMap(r=>[r.start,r.end]).filter(t=>t>e.start&&t<e.end)])];
+    const stable=(data.personnelGroups||[]).reduce((sum,g)=>sum+Math.min(...points.map(t=>rows.filter(r=>r.resourceId===g['人员组编号']&&r.start<=t&&r.end>t).reduce((n,r)=>n+Number(r.quantity),0))),0);
+    if(stable<e.count)add(`${task.id} 人员完整阶段 [${e.start},${e.end}) 缺少持续覆盖的同组人数，禁止隐式交班/拆分`);
+   }
    for(const r of saved){
     expectedReservations.add(r);
     const g=(data.personnelGroups||[]).find(g=>g['人员组编号']===r.resourceId),needs=expected.filter(e=>e.key===keyFor(r)&&e.ids.includes(r.resourceId)&&e.d['所需技能']===r.requiredSkill&&e.d.__policyRoleSource===r.roleSource);

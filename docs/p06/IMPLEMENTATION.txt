@@ -1,0 +1,86 @@
+Issue3 / P06 — noninterruptible multi-shift joint scheduling
+Authorization: APS-PM delivery dlv_1940d136-d3af-4e7b-9ba4-2f347c51f60f
+Dispatch key: issue3:fr007-fr022:p06-multishift-joint:dev:v0.3:r1
+Result event: dlv_1940d136-d3af-4e7b-9ba4-2f347c51f60f:r1
+Branch: feat/issue3-p06-multishift
+Exact direct parent: 2016258169074d1e29292e5a3e58a0fa9304b4bf
+Basis: APS-BL-001 v0.3 FR007/008/022, BR05/07, AC05/06/07/14/15
+plus effective CR-DEC02-03-20261029. Existing unclosed responsibility; repair +0.
+
+New supported runs freeze workingWindowsContract=P06-windows-v1. Old conditions
+without that field retain their original verifier behavior. No stored run/plan,
+confirmation, cumulative execution fact or material ledger is migrated on read.
+
+Data and real UI
+- Existing calendars table expresses multiple work rows. A task's given machine
+  identifies its calendar; personnel/tooling inherit that same factory calendar.
+- Factory nonwork rows subtract time. Each work row stays distinct, even when
+  endpoints touch. Noninterruptible tasks never concatenate adjacent work rows.
+- Existing personnel group/tool availability bounds further intersect windows.
+- New optional resourceStops table (31_人员与工装停用例外.csv) records only negative
+  personnel/tool exceptions: 例外编号,资源类型,资源编号,起始分钟,结束分钟,原因.
+  Types are 人员 (personnelGroups.人员组编号) and 工装 (tools.工装编码).
+  Machine stops continue in downtime. No business values or handover defaults
+  are supplied. An empty list states there are no additional configured exceptions.
+- The React data editor and server definitions expose identical schemas. Saves,
+  reloads, role permissions, revision checks, audit and CSV export use existing
+  atomic input routes; single-table CSV import uses the same server validation.
+- Stops require known resource identity, integer 0..525600 bounds, end>start and
+  reason; these validations run before any save/version/audit commit.
+
+Joint scheduling
+Machine interval, complete tool occupancy (including before/after offsets), each
+personnel phase and all directed skill/shift/group/physical-pool constraints must
+fit at the same candidate. Candidate failures leave no resource/material usage;
+a later legal boundary causes the entire existing R01/R02 preview to run again.
+Personnel overlapping max-demand segmentation cannot implicitly hand a complete
+phase to a different group: every original phase requires continuously assigned
+headcount from the same group(s). Independent roles still add, and physical pool
+capacity still limits all groups jointly. This does not model individual workers.
+
+The existing 1000-candidate and 256-phase/50000-search-step limits remain.
+Failure/limit means this bounded search did not find an assignment, not global
+infeasibility. Timing reasons retain source configuration/candidate/retry chain.
+Ordinary plan CSV includes the frozen P06 contract, reservations and retry cause;
+zero-task CSV still includes unscheduled reasons. Source frozen inputs are
+available through /runs/:id/inputs, not reconstructed from current configuration.
+
+Independent checker
+verify-working-windows.mjs does not import the allocator/window builder/planner.
+It compares fixed machine/personnel/tool intervals with original frozen calendar
+rows and exceptions, requiring a single containing work row and no overlapping
+negative row. verify-resource-policies.mjs separately checks stable whole-phase
+personnel coverage, skill direction, group and pool capacities. Existing joint
+checker integration makes these errors block submit/confirmation via existing
+server policy. Old runs without P06 keep their original contract and history.
+
+Verification (Dev only, not independent Test or QA)
+qa/p06.test.mjs: two-shift/gap/stop/skill/capacity/phase/boundary/frozen mutations,
+plus 60 integer-minute cases with an independent scalar same-window oracle.
+qa/p06-browser.mjs: real React save/reload, async Worker, server checker, normal
+CSV, synthetic confirmation history, invalid/stale/unauthorized zero-write.
+qa/r01r02-browser.mjs: existing 9 combined-resource cases remain a regression.
+qa/p06-upgrade.mjs: exact-parent confirmed and executed databases are read by
+this build without writes; later config edits/new calculations preserve all old
+plan/input/confirmation/execution-material/source data.
+qa/p06-container.sh reproduces scoped/regression/npm/build/browser/upgrade checks
+in the pre-existing disposable QA image. Runtime synthetic actors are not real
+platform SSO or a production deployment. No Portal bindings were changed.
+
+Impact and remaining scope
+Common files with separately delivered FR017 scope/U1/AC14 branches need explicit
+later integration by PM. No separate branch is merged here; their old evidence
+remains tied to original SHAs. This P06 branch directly extends only 2016258.
+U01 shared-off mutex granularity and U02 handover quantity/unit/anchor/release
+meaning remain BLOCKED: 允许共用=否 and nonempty 交接设置 stay rejected. Resolution:
+user decision via PM, Design contract, then PM dispatch. No implicit handover.
+N06 original adopted-resource execution ledgers, multiple discontinuous tool
+claim windows, cross-branch integration, broader FR/CR/UAT and DEC04-06 product
+implementation are not asserted complete. Storage capacity remains the existing
+R01/R02 logic; no new storage shutdown/release semantics are inferred.
+
+Rollback: no deployment or destructive migration. Keep database backup before a
+future downgrade, stop new writes and review snapshots with P06 before running an
+older binary. Do not strip new fields from frozen history to force compatibility.
+Ordinary branch push only; no Project/Issue/main/release/UAT edits. PM arranges
+fixed-SHA independent Test and decides original-card state. Whole card NOT_READY.
