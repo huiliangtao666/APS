@@ -358,6 +358,71 @@
       "ack_delivery_policy": "本Inbox最终PROCESSED结果回送，不另投递通知/ACK任务",
       "test_continuation": "优先可执行修复；等待本FR018修复完整SHA后续派独立复测。未预派无固定版本的验证，不重复已PASS范围。",
       "repair_dispatch_comment": "https://github.com/huiliangtao666/APS/issues/14#issuecomment-6488890344"
+    },
+    {
+      "event_key": "dlv_feadb3b5-bb46-4433-ab5a-f89d4f76a7e0:r1",
+      "original_delivery": "dlv_feadb3b5-bb46-4433-ab5a-f89d4f76a7e0",
+      "notification_delivery": "dlv_c4ad1508-6c8c-42cf-842f-be0eeac383a7",
+      "type": "DEV_DELIVERED",
+      "source": "APS-Dev",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T13:49:07+08:00",
+      "product_sha": "18c2f59761c9db69554f33a2870b68e15d092320",
+      "requirement_version": "v0.3",
+      "design_document_sha": null,
+      "design_document_sha_note": "Dev未取得指定文档HTTP404；依原派工授权按Issue14实施，不伪补SHA",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/14#issuecomment-6489089900",
+      "audit_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/operations/fr018-scope-note01-18c2f597-dev-r1.md",
+      "evidence_hashes": {
+        "FR018-SCOPE-NOTE01-R1-REPORT.txt": "46f96587a10d7a7646189d60ad9e29fc9eb78dac5efbcd009c0c4ee97d091bb3",
+        "FR018-SCOPE-NOTE01-R1-EVIDENCE.zip": "a259aeaeadace40254be81c26610a6a657025f9d06a83ddeaad8da79d253e175",
+        "FR018-SCOPE-NOTE01-R1-SHA256.txt": "7c332d2361ff3a2e77b7b86e73e72353b8e222b9f6e2a603c3e5187f100ad0ca"
+      },
+      "verification": "3外部hash/36 ZIP CRC/35内部hash/2 GitHub源码字节/两路径保存输入前后字节相同；仅Dev证据核验",
+      "evidence_transfer": [
+        {
+          "source_workspace": "APS-Dev",
+          "target_workspace": "APS-Test",
+          "path": "temp/fr018-scope-r1-report.txt",
+          "sha256": "46f96587a10d7a7646189d60ad9e29fc9eb78dac5efbcd009c0c4ee97d091bb3",
+          "copy_verified": true
+        },
+        {
+          "source_workspace": "APS-Dev",
+          "target_workspace": "APS-Test",
+          "path": "temp/fr018-scope-r1-evidence.zip",
+          "sha256": "a259aeaeadace40254be81c26610a6a657025f9d06a83ddeaad8da79d253e175",
+          "copy_verified": true
+        },
+        {
+          "source_workspace": "APS-Dev",
+          "target_workspace": "APS-Test",
+          "path": "temp/fr018-scope-r1-sha256.txt",
+          "sha256": "7c332d2361ff3a2e77b7b86e73e72353b8e222b9f6e2a603c3e5187f100ad0ca",
+          "copy_verified": true
+        }
+      ],
+      "outcomes": [
+        {
+          "requirement": "FR-018",
+          "before": "In progress",
+          "after": "In review",
+          "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgxI",
+          "code_sha": "18c2f59761c9db69554f33a2870b68e15d092320",
+          "card_recommendation": "NOT_READY",
+          "defect": "FR018-SCOPE-NOTE01",
+          "defect_status": "DEV_DELIVERED_PENDING_RETEST",
+          "repair_round": 1,
+          "retest_round": 0,
+          "test_delivery": "dlv_746c521a-23b2-405f-8574-1dc7bf4b3769",
+          "dispatch_status": "queued；仅投递，不据此宣称开始或通过",
+          "next_owner": "APS-Test",
+          "next_step": "固定新SHA独立复测A1-A5/18-06；Design收到TEST_VERDICT后逐卡判断Done",
+          "retained_pass": "原FR018六条PASS、FR019/024 Done及D01-D03结论保留，不重开"
+        }
+      ],
+      "ack_delivery_policy": "本Inbox最终PROCESSED结果由hook回送；不另投递ACK/完成通知",
+      "restrictions": "其他未开始backlog/DEC04-05-06实现暂停；巡检paused；无发布/合并/UAT代签"
     }
   ]
 }
