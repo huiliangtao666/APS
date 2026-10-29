@@ -38,7 +38,7 @@ def publish():
             print('No content changes; no duplicate commit')
             return parent
         tree = api(repo + '/git/trees', {'base_tree': commit['tree']['sha'], 'tree': tree_entries}, 'POST')
-        new_commit = api(repo + '/git/commits', {'message': 'docs: establish v0.3 requirement baseline and approved change registers', 'tree': tree['sha'], 'parents': [parent]}, 'POST')
+        new_commit = api(repo + '/git/commits', {'message': 'docs: synchronize APS controlled requirement governance and role responsibilities', 'tree': tree['sha'], 'parents': [parent]}, 'POST')
         try:
             api(repo + '/git/refs/heads/main', {'sha': new_commit['sha'], 'force': False}, 'PATCH')
         except urllib.error.HTTPError as error:

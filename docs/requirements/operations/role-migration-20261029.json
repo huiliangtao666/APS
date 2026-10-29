@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "effective_at": "2026-10-29T08:11:04+00:00",
+  "authorization": "用户确认v0.2六项职责分工，并明确要求向各工作区分发skill、将PM职责迁往已新建的APS-PM",
+  "source_git_sha": "7f8fd2af5b511f4fe4e7f6e2223d4f1d22024759",
+  "project": {
+    "number": 2,
+    "id": "PVT_kwHOFM9WU84BpE1c"
+  },
+  "coordinator": "APS-PM",
+  "business_design": "APS-Design",
+  "task_test": "APS-Test",
+  "uat_owner": "APS-QA",
+  "uat_supporting_role": "用户",
+  "scope_unchanged": true,
+  "historical_acceptance_preserved": true,
+  "scheduler": {
+    "id": "task-1793200034897-0ssp1u",
+    "workspace": "APS-Design",
+    "status": "paused",
+    "resume_authorized": false
+  },
+  "skills": {
+    "release": 1,
+    "workspace_registration": "registered-private",
+    "group_registry": "version1-pending-independent-review",
+    "self_review_rejected": "403: You cannot review a skill version you authored"
+  },
+  "active_task_migration": "保留原delivery与event_key；PM根据实时inbox、原卡和handoff-receipts去重接续，不重新派发已完成验证",
+  "formal_team_routing": "不得由文档记录推定已应用；以平台实际状态及用户Apply为准"
+}

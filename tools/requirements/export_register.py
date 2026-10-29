@@ -41,7 +41,7 @@ def project_snapshot():
         page = gql(query, {'after': after})['user']['projectV2']
         if project is None:
             project = page
-        assert project['id'] == page['id']
+        assert project['id'] == page['id'] == 'PVT_kwHOFM9WU84BpE1c', 'Refuse a non-canonical Project'
         nodes.extend(page['items']['nodes'])
         info = page['items']['pageInfo']
         if not info['hasNextPage']:
@@ -105,7 +105,7 @@ def export(workbook_path=None, refresh=True):
             issue_ids = sorted(set(issue_ids + linked))
             acceptance = '基线原范围历史记录保留；' + '；'.join(c.get('acceptance_status','本CR专项验收未完成') for c in applied)
         commits = list(dict.fromkeys(re.findall(r'(?<![0-9a-f])[0-9a-f]{40}(?![0-9a-f])', body)))
-        row = {**b, 'current_version': 'v0.3' + ''.join('+' + c['id'] for c in applied), 'applied_changes': [c['id'] for c in applied], 'pending_changes': [c['id'] for c in related if c not in applied], 'current_text': b['text'] + ''.join('\n\n[' + c['id'] + ' 批准增量]\n' + c['approved_delta'] for c in applied), 'project_status': status, 'current_phase': phase, 'blocker': blocker, 'acceptance_result': acceptance, 'accepted_requirement_version': '未统一登记版本签收；原卡通过范围及历史证据保留', 'code_reference': applied[-1]['code_sha'] if applied else (commits[-1] if commits else ''), 'code_reference_note': '原卡引用/Dev交付SHA，非本表新增的验收结论', 'issues': ['https://github.com/' + REPO + '/issues/' + str(i) for i in issue_ids], 'owner': 'APS-Design维护；APS-Dev实施；APS-Test验证', 'snapshot_at': stamp}
+        row = {**b, 'current_version': 'v0.3' + ''.join('+' + c['id'] for c in applied), 'applied_changes': [c['id'] for c in applied], 'pending_changes': [c['id'] for c in related if c not in applied], 'current_text': b['text'] + ''.join('\n\n[' + c['id'] + ' 批准增量]\n' + c['approved_delta'] for c in applied), 'project_status': status, 'current_phase': phase, 'blocker': blocker, 'acceptance_result': acceptance, 'accepted_requirement_version': '未统一登记版本签收；原卡通过范围及历史证据保留', 'code_reference': applied[-1]['code_sha'] if applied else (commits[-1] if commits else ''), 'code_reference_note': '原卡引用/Dev交付SHA，非本表新增的验收结论', 'issues': ['https://github.com/' + REPO + '/issues/' + str(i) for i in issue_ids], 'owner': 'APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT', 'snapshot_at': stamp}
         row['uat_owner'] = uat_owner
         if applied:
             row['current_text'] = b['text'] + ''.join('\n\n[' + c['id'] + ' 批准增量]\n' + c.get('requirement_deltas',{}).get(b['id'],c['approved_delta']) for c in applied)
@@ -117,7 +117,7 @@ def export(workbook_path=None, refresh=True):
             row['acceptance_record'] = record
             if status == 'Done' and not applied:
                 row['code_reference'] = record['code_sha']
-                row['current_phase'] = '本卡适用需求已独立验收，Design复核完成'
+                row['current_phase'] = '本卡适用需求已独立验收；历史复核与证据见原卡'
                 row['blocker'] = ''
                 row['acceptance_result'] = record['conclusion']
         reviewed = re.search(r'<!-- aps-card-review:(.*?) -->', body, re.S)
@@ -142,11 +142,11 @@ def export(workbook_path=None, refresh=True):
     rh.insert(14, 'UAT负责人')
     for values in rr:
         values.insert(14, uat_owner)
-    uh = ['UAT编号', '名称', '阶段及关联', 'UAT负责人', '测试执行', '协调维护', '原场景条文', '来源段落']
-    ur = [[u['id'], u['title'], u['context'], uat_owner, ownership.get('testing_workspace', 'APS-Test'), ownership.get('coordination_workspace', 'APS-Design'), u['content'], u['source_paragraph']] for u in baseline['uat']]
+    uh = ['UAT编号', '名称', '阶段及关联', 'UAT主责', '测试执行', '协调维护', '原场景条文', '来源段落', '用户角色']
+    ur = [[u['id'], u['title'], u['context'], uat_owner, ownership.get('testing_workspace', 'APS-QA'), ownership.get('coordination_workspace', 'APS-PM'), u['content'], u['source_paragraph'], ownership.get('supporting_role', '用户')] for u in baseline['uat']]
     write_csv('uat-register.csv', uh, ur)
-    (DOCS / 'uat-register.json').write_text(json.dumps({'snapshot_at': stamp, 'ownership': ownership, 'scenarios': [{**u, 'business_owner': uat_owner, 'testing_workspace': ownership.get('testing_workspace', 'APS-Test'), 'coordination_workspace': ownership.get('coordination_workspace', 'APS-Design')} for u in baseline['uat']]}, ensure_ascii=False, indent=2) + '\n')
-    (DOCS / 'uat-register.md').write_text('# UAT场景及负责人清单\n\n全部UAT业务验收负责人：**' + uat_owner + '**。APS-Test负责测试执行和证据；APS-Design组织验收与维护记录。指定负责人不等于场景已经执行或通过。\n\n授权原话：“' + ownership.get('source_quote', '') + '”。责任分工源：[uat-ownership.json](uat-ownership.json)；原始场景仍以v0.3基线为准。\n\n' + markdown_table(uh, ur) + '\n')
+    (DOCS / 'uat-register.json').write_text(json.dumps({'snapshot_at': stamp, 'ownership': ownership, 'scenarios': [{**u, 'business_owner': uat_owner, 'testing_workspace': ownership.get('testing_workspace', 'APS-QA'), 'coordination_workspace': ownership.get('coordination_workspace', 'APS-PM'), 'preparation_workspace': ownership.get('preparation_workspace', 'APS-QA'), 'confirmation_workspace': ownership.get('confirmation_workspace', 'APS-QA'), 'supporting_role': ownership.get('supporting_role', '用户')} for u in baseline['uat']]}, ensure_ascii=False, indent=2) + '\n')
+    (DOCS / 'uat-register.md').write_text('# UAT场景及负责人清单\n\n全部UAT准备、测试和确认主责：**' + uat_owner + '**。APS-QA主责UAT准备、测试、确认；用户配合。APS-PM在相应UAT依赖任务完成后调度QA并维护记录；APS-Test提供任务级证据。职责调整不等于UAT已执行或通过。\n\n授权原话：“' + ownership.get('source_quote', '') + '”。责任分工源：[uat-ownership.json](uat-ownership.json)；原始场景仍以v0.3基线为准。\n\n' + markdown_table(uh, ur) + '\n')
     ch = ['CR编号', '标题', '类别', '原基线', '目标要求版本', '提出人', '提出日期', '授权原话', '批准状态', '批准人', '批准日期', '受影响FR', '关联BR/DEC', '变更前', '批准增量', '影响', '计划/工作量', '专项验收条件', '实施状态', 'Dev交付', 'Test任务', '代码SHA', '验收结论', '默认值及设计细化', '限制', '主Issue']
     cr = [[c['id'], c['title'], c['classification'], c['from_version'], c['target_version'], c['requested_by'], c['requested_on'], c['request_quote'], c['approval_status'], c['approved_by'], c['approved_on'], '、'.join(c['primary_requirements']), '、'.join(c['related_rules'] + c['decisions']), c['before'], c['approved_delta'], c['impact'], c['plan_impact'] + '；' + c['effort'], c['acceptance_delta'], c['implementation_status'], c['dev_delivery'], c['product_test_delivery'], c['code_sha'], c['acceptance_result'], c['design_detail_status'], c['limitations'], c['issue_url']] for c in changes]
     ch[20] = '产品Test任务'
@@ -161,7 +161,7 @@ def export(workbook_path=None, refresh=True):
     (DOCS / 'baseline-register.md').write_text('# APS-BL-001 v0.3 基线清单\n\n43项功能需求、18条业务规则；原文来源和SHA见[受控快照](baselines/APS-BL-001-v0.3.json)。不叠加CR、不以实现状态改写条文。\n\n' + markdown_table(['编号', '类型', '名称', '阶段', '基线要求', '原AC', '唯一原卡'], baseline_rows) + '\n')
     (DOCS / 'requirements-register.md').write_text('# 当前需求跟踪表\n\n快照：' + stamp + '。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。\n\n' + markdown_table(['编号', '名称', '要求版本', '生效CR', '原卡状态', '当前环节', '验收结论', '原卡'], [[r['id'], r['title'], r['current_version'], '、'.join(r['applied_changes']), r['project_status'], r['current_phase'], r['acceptance_result'], '[原卡](' + r['canonical']['url'] + ')'] for r in requirements]) + '\n')
     with (DOCS / 'requirements-register.md').open('a') as stream:
-        stream.write('\n全部UAT业务验收负责人：**' + uat_owner + '**；逐场景责任分工见[UAT清单](uat-register.md)。\n')
+        stream.write('\n全部UAT准备、测试和确认主责：**' + uat_owner + '**；逐场景责任分工见[UAT清单](uat-register.md)。\n')
     text = '# 已纳入的需求变更\n\n当前登记' + str(len(changes)) + '项CR；逐项记录批准边界、设计/实现/验收阶段。缺陷修复、交付故障、验收缺口和调度政策不计作产品需求变更。\n\n'
     text += markdown_table(['CR', '名称', '批准状态', '影响FR/BR', '实施状态', '验收结论'], [[c['id'], c['title'], c['approval_status'], '、'.join(c['primary_requirements'] + c['related_rules']), c['implementation_status'], c['acceptance_result']] for c in changes])
     for c in changes:
@@ -171,7 +171,7 @@ def export(workbook_path=None, refresh=True):
         text += '。代码SHA：' + (c.get('code_sha') or '无本CR应用交付') + '；设计文档提交：' + (c.get('design_commit') or '见主Issue及受控目录') + '。'
     (DOCS / 'change-register.md').write_text(text + '\n')
     if workbook_path:
-        info = [['生成时间', stamp], ['权威来源', 'GitHub受控基线/CR条文及Project唯一原卡；本工作簿仅为导出快照'], ['基线范围', 'FR43+BR18；另附AC32、UAT18、DEC9'], ['批准变更', '1项CR，关联4项FR、2条BR、2项DEC；不是新增6个需求或多个CR'], ['版本规则', 'v0.3原文不覆盖；批准生效CR叠加当前目标要求；不自动创建正式v0.4冻结版'], ['发布与冻结', baseline['control_status']], ['验收规则', '批准≠已实现≠已验收；旧范围通过记录保留；默认值及设计建议不视为用户已批准'], ['维护职责', '用户批准范围；Design维护；Dev交付代码；Test独立验证'], ['暂停规则', '其他未开始backlog仍暂停；本CR为用户明确授权范围']]
+        info = [['生成时间', stamp], ['权威来源', 'GitHub受控基线/CR条文及Project唯一原卡；本工作簿仅为导出快照'], ['基线范围', 'FR43+BR18；另附AC32、UAT18、DEC9'], ['批准变更', '1项CR，关联4项FR、2条BR、2项DEC；不是新增6个需求或多个CR'], ['版本规则', 'v0.3原文不覆盖；批准生效CR叠加当前目标要求；不自动创建正式v0.4冻结版'], ['发布与冻结', baseline['control_status']], ['验收规则', '批准≠已实现≠已验收；旧范围通过记录保留；默认值及设计建议不视为用户已批准'], ['维护职责', '用户按权限批准范围；Design业务设计并提出变更；PM维护调度；Dev交付；Test任务级测试；QA主责UAT'], ['暂停规则', '其他未开始backlog仍暂停；本CR为用户明确授权范围']]
         ah = ['AC编号', '名称', '阶段及关联', '原始验收条文', '来源段落']
         ar = [[a['id'], a['title'], a['context'], a['content'], a['source_paragraph']] for a in baseline['acceptance']]
         dh = ['DEC编号', '名称', '原基线建议', '责任与时点', '当前决定/未决边界', '关联CR', '原卡']
@@ -181,7 +181,7 @@ def export(workbook_path=None, refresh=True):
             state = '；'.join(c['approval_status'] for c in related) or '原卡/基线仍待业务决定，本次未代决'
             dr.append([d['id'],d['title'],d['recommendation'],d['owner_due'],state,'、'.join(c['id'] for c in related),d['canonical']['url']])
         info[3] = ['登记变更',str(len(changes))+'项CR；逐项区分授权、设计、实现与验收']
-        info.append(['UAT业务验收负责人', uat_owner + '；测试执行APS-Test；协调维护APS-Design'])
+        info.append(['UAT主责', uat_owner + '；准备/测试/确认APS-QA；用户配合；协调维护APS-PM'])
         write_workbook(workbook_path, [('使用说明', ['项目', '说明'], info), ('基线清单61项', bh, br), ('当前需求跟踪61项', rh, rr), ('需求变更清单', ch, cr), ('基线验收条件32项', ah, ar), ('UAT场景与负责人18项', uh, ur), ('业务待决事项9项', dh, dr)])
     print('Exported baseline61/current61/CR' + str(len(changes)) + '/AC32/UAT18/DEC9 at ' + stamp)
     return register, p

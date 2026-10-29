@@ -1,16 +1,26 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "effective_on": "2026-10-29",
-  "scope": "全部UAT场景，当前UAT-01至UAT-18；后续新增场景默认沿用，除非用户另行指定",
-  "business_owner": "huiliangtao666",
-  "testing_workspace": "APS-Test",
-  "coordination_workspace": "APS-Design",
-  "source_quote": "UAT负责人都是huiliangtao666",
-  "classification": "验收责任分工登记，不是产品能力CR，不修改基线条文或验收结论",
+  "scope": "全部UAT场景，当前UAT-01至UAT-18及后续新增场景",
+  "business_owner": "QA",
+  "preparation_workspace": "APS-QA",
+  "testing_workspace": "APS-QA",
+  "confirmation_workspace": "APS-QA",
+  "coordination_workspace": "APS-PM",
+  "supporting_role": "用户",
+  "task_testing_workspace": "APS-Test",
+  "business_design_workspace": "APS-Design",
+  "source_quote": "UAT准备、测试、确认都是QA作为主责，UAT确认用户作为配合角色；QA在相应UAT依赖的任务完成后，由PM发起调度。",
+  "execution_authorization": "用户已新建APS-QA、APS-PM，并要求生成各skill分发工作区及将PM职责从Design迁到PM。",
+  "supersedes_assignment_at_git_sha": "7f8fd2af5b511f4fe4e7f6e2223d4f1d22024759",
+  "classification": "用户授权的角色职责与流程调整，不新增产品CR，不修改基线或历史验收结果",
   "responsibilities": {
-    "huiliangtao666": "UAT业务验收负责人，确认业务预期、评审结果并给出接受或退回意见",
-    "APS-Test": "按指定版本执行测试，准备数据、步骤、实际结果和证据，报告问题及未覆盖项",
-    "APS-Design": "组织验收、维护负责人及版本证据、协调修复并更新GitHub"
+    "APS-QA": "主责UAT准备、测试、确认；在UAT中考虑独立代码审查",
+    "用户": "配合UAT确认，提供真实业务意见；不设置个人签字为默认收口门槛",
+    "APS-PM": "统一调度；相应UAT依赖完成后派QA；维护原卡/Issue/CR与版本证据；观察效率并按需建议",
+    "APS-Test": "功能/规则/接口/集成/回归测试与修复复测；按PM调度提供任务级证据",
+    "APS-Design": "业务设计、业务原型、验证场景、mock及需求变更提出人",
+    "APS-Dev": "技术方案、实现、自测、固定版本交付与修复"
   },
-  "acceptance_effect": "指定负责人不代表UAT已执行或通过；完成状态以实际验收记录为准"
+  "acceptance_effect": "职责调整不表示任何UAT已执行或通过；以QA实际逐项证据与确认结论为准。新增范围、业务参数和发布仍按既有批准权限。"
 }
