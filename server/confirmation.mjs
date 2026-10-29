@@ -1,3 +1,4 @@
+import {freezePositions} from './trial-positions.mjs';
 import {inputHash,freezeRunInput} from './run-input.mjs';
 import {calculate,defs} from './planner.ts';
 import {validateInputs} from './input-validation.mjs';
@@ -34,7 +35,7 @@ export function reviewPlan(s,p,now=new Date().toISOString()){
  if(!blockers.length){
   try{
    if(run.conditions.mode!=='supported')add('unchecked_rules','最小模式未检查已启用日历等条件，不能确认');
-   const fresh=freezeRunInput(s.data,selection(run.conditions),run.createdAt);
+   const fresh=run.conditions.taskPositions?freezePositions(s.data,run.conditions,run.conditions.taskPositions,run.createdAt):freezeRunInput(s.data,selection(run.conditions),run.createdAt);
    if(fresh.snapshotHash!==run.snapshotHash)add('changed_conditions','运行条件不再匹配当前输入');
    if(s.data.orders.some(o=>o['需求类型']==='正式订单'&&o['订单状态']==='有效'&&Number(o['合格需求'])>Number(o['已完成合格数量']||0)&&!run.conditions.orderIds.includes(o['订单编号'])))add('unlisted_demand','当前有效需求未全部纳入计算范围；须纳入重算并明示未排清单');
    const current=assessRules(fresh.executionData,now,true,run.conditions.mode);

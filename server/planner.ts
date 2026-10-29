@@ -132,7 +132,8 @@ function validate(tasks: Task[]): Finding[] {
   return out;
 }
 
-export function calculate(data:Record<string,Row[]>, inputVersion:number, calculatedAt=new Date().toISOString(), conditions:{startMinute?:number;endMinute?:number|null;priority?:string;mode?:string}={}) {
+export function calculate(data:Record<string,Row[]>, inputVersion:number, calculatedAt=new Date().toISOString(), conditions:{startMinute?:number;endMinute?:number|null;priority?:string;mode?:string;taskPositions?:Record<string,any>}={}) {
+ const positions=conditions.taskPositions||{};
  const resourceReservations:any[]=[];const flags=conditions.mode==='minimal-r1'?{}:jointFlags(data,calculatedAt);
  const sourceData=data;let batches:ReturnType<typeof prepareProductionBatches>|null=null;
  const demandFor=(order:Row,operation:string,minute:number)=>batches?batches.demands(order,operation,minute):remainingExecutionDemand(sourceData,order,operation,minute);
@@ -155,6 +156,10 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
     const risks=executionRisks((sourceData as any).executionContext||sourceData,calculatedAt);
     for(const risk of risks)findings.push({code:'UNPLANNED / EXECUTION_EVENT_REVIEW',message:risk.message,taskIds:[`${risk.orderId}-${risk.operation}`]});
     personnelReservations.push(...eventAbsences(sourceData));
+    for(const [id,p] of Object.entries(positions)){
+      const busy=machineBusy.get(p.machine)||[];
+      busy.push({id:'position:'+id,orderId:p.orderId,productId:'',operation:p.operation,label:'试算固定位置',machine:p.machine,start:p.start,end:p.end,duration:p.duration,predecessor:'',source:'FR027'});machineBusy.set(p.machine,busy);
+    }
     const eventState=eventSummary(sourceData);
     const observation=Math.max(eventState.eventMinute,...(sourceData.executionFacts||[]).map(f=>Number(f['观测分钟'])));
     for(const f of sourceData.executionFacts||[]){const selected=(sourceData.orders||[]).some(o=>o['订单编号']===f['订单编号']);const end=f['状态']==='暂停'||(!selected&&f['状态']!=='已完成')?Number.POSITIVE_INFINITY:(f['状态']==='已完成'?Number(f['完成分钟']):Number(f['观测分钟'])+Number(f['剩余工时分钟']));const busy=machineBusy.get(f['当前设备'])||[];busy.push({id:'事实:'+f['事实编号'],orderId:f['订单编号'],productId:'',operation:f['工序编号'],label:'模拟执行保护',machine:f['当前设备'],start:Number(f['开始分钟']),end,duration:end-Number(f['开始分钟']),predecessor:'',source:'保留原始模拟事实'});machineBusy.set(f['当前设备'],busy);}
@@ -175,6 +180,9 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
       findings.push(...scopeFindings);
       const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
       setIssues(findings);setActivePlan(plan);setVerification(null);setMessage(findings.map(f=>f.message).join(' '));return;
+    }
+    if(Object.keys(positions).length&&(minimal||activeBatchRule(data,calculatedAt))){
+      setActivePlan({id:uid(),name:'固定位置检查受阻',createdAt:calculatedAt,tasks:[],findings:[{code:'POSITION / UNSUPPORTED',message:'最小模式或生产批/合批位置语义未支持；保留锁定，不推断可行',taskIds:Object.keys(positions)}],rules:enabledRules,inputVersion:`v${inputVersion}`});return;
     }
     if(!minimal&&activeBatchRule(data,calculatedAt)){
      batches=prepareProductionBatches(data,sorted,conditions.startMinute??0);findings.push(...batches.findings);data=batches.data;sorted=batches.orders;
@@ -203,7 +211,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
       while(remaining.length){const index=remaining.findIndex(op=>!op['前序工序']?.trim()||completedOperations.has(op['前序工序'].trim()));if(index<0)break;const [next]=remaining.splice(index,1);orderedRoute.push(next);completedOperations.add(next['工序编号'].trim());}
       if(policy && !orderHasRemaining(order))continue;
       const done=new Map<string,Task>();
-      for(const op of orderedRoute){const operation=op['工序编号'];const dep=(data.dependencies||[]).find(d=>d['订单编号']===oid&&d['工序编号']===operation&&d['资源类型']==='设备');const machineId=dep?.['资源编号']||'';const machine=(data.machines||[]).find(m=>m['设备编号']===machineId&&m['工序编号']===operation);
+      for(const op of orderedRoute){const operation=op['工序编号'];const position=positions[`${oid}-${operation}`];const dep=(data.dependencies||[]).find(d=>d['订单编号']===oid&&d['工序编号']===operation&&d['资源类型']==='设备');const machineId=dep?.['资源编号']||'';const machine=(data.machines||[]).find(m=>m['设备编号']===machineId&&m['工序编号']===operation);
         if(!dep||!machine){findings.push({code:'INPUT / MACHINE_DEPENDENCY',message:`订单 ${oid} / 工序 ${operation} 缺少有效设备依赖（12_工序资源与物料依赖.csv）`,taskIds:[`${oid}-${operation}`]});continue;}
         const time=(data.times||[]).find(t=>t['产品编号']===product&&t['工序编号']===operation);const fact=factFor(sourceData,oid,operation);const duration=Number(fact?fact['剩余工时分钟']:time?.['固定分钟']);if((!fact||fact['状态']!=='已完成')&&(!time||!Number.isFinite(duration)||duration<=0)){findings.push({code:'INPUT / PROCESS_TIME',message:`产品 ${product} / 工序 ${operation} 工时缺失或无效`,taskIds:[`${oid}-${operation}`]});continue;}
         if(fact?.['状态']==='已完成'){const task:Task={id:`${oid}-${operation}`,orderId:oid,productId:product,operation,label:op['工序名称'],machine:fact['当前设备'],start:Number(fact['开始分钟']),end:Number(fact['完成分钟']),duration:Number(fact['完成分钟'])-Number(fact['开始分钟']),predecessor:op['前序工序']?`${oid}-${op['前序工序']}`:'',source:`模拟已完成原始事实 ${fact['事实编号']}；不代表质量合格/真实执行`};built.push(task);if(!risks.some(r=>r.factId===fact['事实编号']))done.set(operation,task);continue;}
@@ -214,6 +222,12 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
         const busy=machineBusy.get(machineId)||[];let candidate=Math.max(observation,fact?0:eventState.protectionUntil,conditions.startMinute??0,predecessor?.end||0,minimal||policy?0:supplyEarliestMinute(oid,operation,resolvedSupplies,data.supplyUses||[]));const timingReasons:any[]=[];if(predecessor)timingReasons.push({code:'PRECEDENCE',source:predecessor.id,from:conditions.startMinute??0,to:predecessor.end});if(!minimal&&!policy){const uses=(sourceData.supplyUses||[]).filter(u=>u['订单编号']===oid&&u['工序编号']===operation);if(uses.length)timingReasons.push({code:'EXPECTED_SUPPLY',source:uses,readyMinute:supplyEarliestMinute(oid,operation,resolvedSupplies,sourceData.supplyUses||[]),candidateMinute:candidate});}const initialEarliest=candidate;let start:number|null=null;let reason='';
         const calendarId=machine['日历编号']?.trim()||(data.calendars||[])[0]?.['日历编号']||'';
         if(fact&&(candidate!==Number(fact['观测分钟'])||findCalendarWindow(calendarId,candidate,duration,data.calendars||[],data.downtime||[],machineId).start!==candidate)){const hold=machineBusy.get(machineId)||[];hold.push({id:'待核对:'+fact['事实编号'],orderId:oid,productId:product,operation,label:'执行待核对',machine:machineId,start:Number(fact['开始分钟']),end:Number.POSITIVE_INFINITY,duration:Number.POSITIVE_INFINITY,predecessor:'',source:'不自动恢复'});machineBusy.set(machineId,hold);findings.push({code:'UNPLANNED / EXECUTION_EVENT_REVIEW',message:'已开始任务与观测/日历/停机或选择时点不一致；保留事实与设备占用，事件时点协调待FR031',taskIds:[`${oid}-${operation}`]});continue;}
+        if(position){
+          if(fact||position.machine!==machineId||position.orderId!==oid||position.operation!==operation||position.duration!==duration||position.end!==position.start+duration||!Number.isFinite(position.start)||position.start<initialEarliest){
+            findings.push({code:'POSITION / CONFLICT',message:`${oid}-${operation} 固定位置与当前执行、显式设备依赖、工时或前序/保护时点 ${initialEarliest} 冲突；未解除锁定`,taskIds:[`${oid}-${operation}`]});continue;
+          }
+          candidate=position.start;
+        }
         const firstCalendarFit=minimal?initialEarliest:findCalendarWindow(calendarId,initialEarliest,duration,data.calendars||[],data.downtime||[],machineId).start;
         let materialPreview:ReturnType<ReturnType<typeof createMaterialAllocator>['preview']>|null=null;
         let materialError='',resourceError='',personnelError='';
@@ -223,11 +237,13 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
         let jointPreview:ReturnType<typeof previewResources>={ok:true,allocations:[]};
         let personnel:ReturnType<typeof allocatePersonnel>={ok:true,allocations:[]};
         for(let attempt=0;attempt<1000;attempt++){
+          if(position&&candidate!==position.start){reason='固定位置与资源/物料占用冲突；禁止自动顺延或解锁';break;}
           if(fact&&candidate!==Number(fact['观测分钟'])){reason='已开始任务余料/资源不满足；禁止自动延迟、转机或恢复，须核对';break;}
           const fit=minimal?{start:candidate,reason:''}:findCalendarWindow(calendarId,candidate,duration,data.calendars||[],data.downtime||[],machineId);
           if(fit.start!==null&&fit.start>candidate)timingReasons.push({code:'CALENDAR',resourceId:machineId,calendarId,from:candidate,to:fit.start,downtime:(data.downtime||[]).filter(r=>r['设备编号']===machineId)});
           if(fit.start===null){reason=fit.reason;break;}
-          const overlap=busy.find(t=>t.id!==('事实:'+fact?.['事实编号'])&&fit.start!<t.end&&fit.start!+duration>t.start);
+          if(position&&fit.start!==position.start){reason=`固定位置与日历/停机冲突，候选分钟 ${fit.start}；禁止顺延`;break;}
+          const overlap=busy.find(t=>t.id!==('position:'+`${oid}-${operation}`)&&t.id!==('事实:'+fact?.['事实编号'])&&fit.start!<t.end&&fit.start!+duration>t.start);
           if(overlap){timingReasons.push({code:'MACHINE_BUSY',sourceTaskId:overlap.id,resourceId:machineId,from:fit.start,to:overlap.end});candidate=overlap.end;continue;}
           jointPreview=previewResources(claims,fit.start,fit.start+duration,resourceReservations);
           if(!jointPreview.ok){resourceError=jointPreview.reason||'资源不可用';if(jointPreview.nextStart!==undefined&&jointPreview.nextStart>fit.start){timingReasons.push({code:'JOINT_RESOURCE',source:claims,from:fit.start,to:jointPreview.nextStart,message:resourceError});candidate=jointPreview.nextStart;continue;}break;}
@@ -265,6 +281,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
         const task:Task={timingReasons,id:`${oid}-${operation}`,orderId:oid,productId:product,operation,label:op['工序名称']||operation,machine:machineId,start,end:start+duration,duration,predecessor:predecessor?.id||'',source:minimal?'R1 最小模式 · 订单17 · 路线10 · 固定工时11 · 给定机器12 · 机器连续可用；日历/人员/工装/物料未检查':`${fact?'模拟剩余工作 '+fact['事实编号']+'（非合格入库） · ':''}订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04${personnelRequirements.length?` · 人员阶段：${participation}`:''}${calendarShift?` · ${calendarShift}`:''}${start>initialEarliest&&resourceError?` · 联合资源顺延：${resourceError}`:''}${start>initialEarliest&&personnelError?` · 人员顺延：${personnelError}`:''}`};built.push(task);done.set(operation,task);busy.push(task);machineBusy.set(machineId,busy);
       }
     }
+    for(const [id,p] of Object.entries(positions))if(!built.some(t=>t.id===id&&t.machine===p.machine&&t.start===p.start&&t.end===p.end&&t.duration===p.duration))findings.push({code:'POSITION / CONFLICT',message:`任务 ${id} 固定于 ${p.machine} [${p.start},${p.end}) 与当前规则冲突，锁定保留，须处理`,taskIds:[id]});
     const hard=validate(built);if(batches){const expanded=batches.expand(built);built.splice(0,built.length,...expanded);for(const f of findings)f.taskIds=f.taskIds.flatMap((id:string)=>batches.taskIds(id));}
     if(batches)for(const t of built)for(const reason of t.timingReasons||[]){if(reason.sourceTaskId)reason.sourceTaskIds=batches.taskIds(reason.sourceTaskId);if(reason.code==='PRECEDENCE')reason.sourceTaskIds=batches.taskIds(reason.source);}
     const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:built,supplyConditions:minimal?[]:buildSupplyConditions(built,resolvedSupplies,policy?materialDemands.filter(r=>r.committed).flatMap(r=>r.allocations.filter(a=>a.conditional).map((a,i)=>({'引用编号':`FR020-${r.taskId}-${r.materialId}-${i}`,'订单编号':r.orderId,'工序编号':r.operation,'供给编号':a.supplyId,'使用数量':String(a.quantity)}))):sourceData.supplyUses||[]),supplyInput:minimal?undefined:supplyInput,findings:[...findings,...hard],rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};

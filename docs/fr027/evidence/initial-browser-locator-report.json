@@ -1,0 +1,15 @@
+{
+  "identity": "synthetic QA actor, genuine React/Express/membership; no gateway or real SSO claim",
+  "checks": [],
+  "errors": [],
+  "requests": [
+    {
+      "url": "/api/trials/4c80f2be-f362-4b02-b804-570be9138576/move-preview",
+      "status": 201,
+      "method": "POST"
+    }
+  ],
+  "downloads": [],
+  "browserVersion": "141.0.7390.37",
+  "failure": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n  - waiting for getByRole('region', { name: '试算任务移动与锁定' }).getByRole('article', { name: '位置预览' }) to be visible\n\n    at pointer (/workspace/apps/aps-fr032/qa/fr027-browser.mjs:10:473)\n    at async file:///workspace/apps/aps-fr032/qa/fr027-browser.mjs:12:3\n    at async check (/workspace/apps/aps-fr032/qa/fr027-browser.mjs:5:31)\n    at async file:///workspace/apps/aps-fr032/qa/fr027-browser.mjs:11:2"
+}

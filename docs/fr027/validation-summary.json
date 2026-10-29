@@ -1,0 +1,142 @@
+{
+  "base": "d8c8c3ef00d2358f4e6effc0bad0e089b73d95d8",
+  "branch": "feat/fr-027-trial-task-moves",
+  "testTotal": 483,
+  "tapSuites": [
+    {
+      "suite": "business",
+      "tests": 164,
+      "pass": 164,
+      "fail": 0
+    },
+    {
+      "suite": "canonical",
+      "tests": 213,
+      "pass": 213,
+      "fail": 0
+    },
+    {
+      "suite": "confirmation-panel",
+      "tests": 4,
+      "pass": 4,
+      "fail": 0
+    },
+    {
+      "suite": "delivery-panel",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    {
+      "suite": "editor-interaction",
+      "tests": 10,
+      "pass": 10,
+      "fail": 0
+    },
+    {
+      "suite": "execution-panel",
+      "tests": 7,
+      "pass": 7,
+      "fail": 0
+    },
+    {
+      "suite": "fr027",
+      "tests": 17,
+      "pass": 17,
+      "fail": 0
+    },
+    {
+      "suite": "fr036-contract",
+      "tests": 8,
+      "pass": 8,
+      "fail": 0
+    },
+    {
+      "suite": "load-panel",
+      "tests": 3,
+      "pass": 3,
+      "fail": 0
+    },
+    {
+      "suite": "query",
+      "tests": 5,
+      "pass": 5,
+      "fail": 0
+    },
+    {
+      "suite": "resource-panel",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0
+    },
+    {
+      "suite": "result-panel",
+      "tests": 3,
+      "pass": 3,
+      "fail": 0
+    },
+    {
+      "suite": "run-history",
+      "tests": 8,
+      "pass": 8,
+      "fail": 0
+    },
+    {
+      "suite": "run-panel",
+      "tests": 2,
+      "pass": 2,
+      "fail": 0
+    },
+    {
+      "suite": "scoped-report",
+      "tests": 7,
+      "pass": 7,
+      "fail": 0
+    },
+    {
+      "suite": "task-linkage-panel",
+      "tests": 2,
+      "pass": 2,
+      "fail": 0
+    },
+    {
+      "suite": "timeline-panel",
+      "tests": 13,
+      "pass": 13,
+      "fail": 0
+    },
+    {
+      "suite": "trial-panel",
+      "tests": 6,
+      "pass": 6,
+      "fail": 0
+    },
+    {
+      "suite": "worker",
+      "tests": 9,
+      "pass": 9,
+      "fail": 0
+    }
+  ],
+  "browserGroups": {
+    "fr027": 7,
+    "fr035": 13,
+    "fr035ConfirmedHistoryAPI": 5,
+    "fr038": 6,
+    "fr036": 3
+  },
+  "build": "pass",
+  "CSV": "FR013 six-table plus CSV-DEF01..04 and actual React task CSV download",
+  "sourceGate": "158 current/55 baseline-preserved files; before and after final runtime",
+  "image": "sha256:0d45a31aa25c4cca1eaacbfd1ba4ee6d5028d899b329e49a6036a66fd0c35da8",
+  "imageTag": "aps-fr038-qa-runtime:latest",
+  "node": "v22.23.2",
+  "browser": "141.0.7390.37",
+  "dockerVersion": "29.4.0",
+  "sdkSHA256": {
+    "lite-app-runtime.tgz": "32884090246c8a23783425c93b3ae26a1279eace2045aed5dee2e43ac014951f",
+    "lite-app-server.tgz": "bcc66c06dbff896653d54dfc671e547382e367e7239609196a74a87cd379a18a"
+  },
+  "confirmedDefectRepairRounds": 2,
+  "identity": "QA-only actor/runtime alias with real membership/React/Express; no production signed gateway or SSO acceptance"
+}

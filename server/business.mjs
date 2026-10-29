@@ -1,3 +1,4 @@
+import {taskPosition,movableTask,positionGuard,positionToken,freezePositions,evaluatePosition} from './trial-positions.mjs';
 import {scopedReport,reportCsv} from './scoped-report.mjs';
 import {resourceLoad,loadCsv} from '../src/lib/resource-load.mjs';
 import {validInterval} from '../src/lib/timetable.mjs';
@@ -30,6 +31,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   const read=()=>{try{const s=JSON.parse(fs.readFileSync(file,'utf8'));s.data.simulationEvents??=[];s.data.executionFacts??=[];s.data.executionMaterials??=[];s.data.executionSources??=[];return s;}catch(e){if(e.code!=='ENOENT')throw e;let legacy=[];try{legacy=JSON.parse(fs.readFileSync(path.join(dataDir,'plans.json'),'utf8'));}catch(old){if(old.code!=='ENOENT')throw old;}return {data:structuredClone(seed),revision:0,plans:legacy.map(p=>({...p,status:'legacy'})),records:[]};}};
   const write=s=>{const tmp=`${file}.${randomUUID()}.tmp`;try{fs.writeFileSync(tmp,JSON.stringify(s),{mode:0o600,flag:'wx'});fs.renameSync(tmp,file);}finally{if(fs.existsSync(tmp))fs.unlinkSync(tmp);}};
   const activeWorkers=new Map();
+  const positionPreviews=new Map();
   const stopping=new Map();
   const terminal=new Set(['completed','partial','cancelled','timed_out','failed']);
   // A new process cannot resume a lost thread. Preserve the snapshot and explain it.
@@ -112,8 +114,70 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const id=randomUUID(),now=new Date().toISOString();
     const copy={...structuredClone(p),id:randomUUID(),status:'draft',revision:0,sourceRevision:p.revision,trialId:id,sourcePlanId:p.id,sourceRunId:p.runId,sourceCreatedAt:p.createdAt,sourceVerification:p.verification??null,createdAt:now,name:p.name+' · 独立试算',copiedResult:true};
     delete copy.verification;
-    const trial={id,status:'active',revision:0,createdAt:now,actor:subjectKey(req.praetorActor),sourcePlanId:p.id,sourceRunId:p.runId,sourceInputVersionId:p.inputVersionId,sourceSnapshotHash:p.snapshotHash,basePlanId:copy.id,latestPlanId:copy.id,data:structuredClone(inputs(s,p).data),selection:Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds'].map(k=>[k,structuredClone(p.conditions[k])]))};
+    const trial={id,status:'active',revision:0,locks:structuredClone(p.lockSnapshot||{}),createdAt:now,actor:subjectKey(req.praetorActor),sourcePlanId:p.id,sourceRunId:p.runId,sourceInputVersionId:p.inputVersionId,sourceSnapshotHash:p.snapshotHash,basePlanId:copy.id,latestPlanId:copy.id,data:structuredClone(inputs(s,p).data),selection:Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds'].map(k=>[k,structuredClone(p.conditions[k])]))};
     s.trials??=[];s.trials.unshift(trial);s.plans.unshift(copy);record(s,req,'trial_created',id,{sourcePlanId:p.id,planId:copy.id,inputVersionId:p.inputVersionId,snapshotHash:p.snapshotHash});write(s);res.status(201).json(trial);
+  });
+  // Preview transactions are ephemeral and never mutate saved plans, inputs or audit.
+  // Only an owned, freshly rechecked preview can create a new immutable snapshot.
+  router.get('/trials/:id/positions',permission('read'),(req,res)=>{
+    const s=read(),trial=s.trials?.find(t=>t.id===req.params.id),plan=s.plans.find(p=>p.id===trial?.latestPlanId);
+    if(!trial||!plan)return res.status(404).json({error:'trial_not_found'});
+    const history=inputs(s,plan)?.data;
+    res.json({trialId:trial.id,planId:plan.id,revision:trial.revision,planHash:contentHash(plan),blocked:positionGuard(s,trial,plan),locks:trial.locks||{},tasks:plan.tasks.map(t=>({...t,movable:!!history&&movableTask(t,s.data,trial.data,history),allowedMachines:trial.data.dependencies.filter(d=>d['订单编号']===t.orderId&&d['工序编号']===t.operation&&d['资源类型']==='设备').slice(0,1).map(d=>d['资源编号'])})),limits:['只采用当前显式设备依赖；不推断替代设备授权','生产批/合批、最小模式及上游未支持条件不能由移动证明可行']});
+  });
+  function createPositionPreview(req,res,kind){
+    const s=read(),trial=s.trials?.find(t=>t.id===req.params.id),plan=s.plans.find(p=>p.id===req.body.planId);
+    const blocked=positionGuard(s,trial,plan);if(blocked)return res.status(409).json({error:blocked});
+    if(req.body.revision!==trial.revision||req.body.planHash!==contentHash(plan))return res.status(409).json({error:'stale_position'});
+    const task=plan.tasks.find(t=>t.id===req.body.taskId),history=inputs(s,plan).data;
+    if(!movableTask(task,s.data,trial.data,history))return res.status(409).json({error:'task_execution_protected',message:'当前或历史任务已开始/已完成/已执行，或批身份尚不支持；禁止移动及改变锁定'});
+    if(kind==='move'&&trial.locks?.[task.id])return res.status(409).json({error:'task_locked',message:'任务已锁定，请显式解除锁定后再创建移动预览'});
+    const keys=kind==='move'?['reason','revision','planId','planHash','taskId','start','machine']:['reason','revision','planId','planHash','taskId','locked'];
+    if(Object.keys(req.body).some(k=>!keys.includes(k))||kind==='move'&&(typeof req.body.start!=='number'||!Number.isFinite(req.body.start)||req.body.start<0||req.body.start>525600||typeof req.body.machine!=='string')||kind==='lock'&&typeof req.body.locked!=='boolean')return res.status(400).json({error:'invalid_position_request'});
+    const positions=Object.fromEntries(plan.tasks.filter(t=>movableTask(t,s.data,trial.data,history)).map(t=>[t.id,taskPosition(t)])),locks=structuredClone(trial.locks||{});
+    if(kind==='move')Object.assign(positions[task.id],{start:req.body.start,end:req.body.start+task.duration,machine:req.body.machine});
+    else if(req.body.locked)locks[task.id]=taskPosition(task);else delete locks[task.id];
+    for(const [id,p] of Object.entries(locks))positions[id]=p;
+    // Bounded, short-lived, actor-scoped tokens; no client-supplied plan/quantity accepted.
+    for(const [id,p] of positionPreviews)if(Date.now()-p.createdAt>15*60*1000)positionPreviews.delete(id);
+    if(positionPreviews.size>=100)return res.status(429).json({error:'preview_capacity'});
+    const preview={id:randomUUID(),trialId:trial.id,planId:plan.id,kind,taskId:task.id,owner:subjectKey(req.praetorActor),token:positionToken(s,trial,plan),createdAt:Date.now(),positions,locks,checked:false};positionPreviews.set(preview.id,preview);
+    res.status(201).json({id:preview.id,kind,taskId:task.id,before:taskPosition(task),after:positions[task.id],locks,valid:false,checked:false,message:'仅预览，尚未独立复核；没有写入方案或输入'});
+  }
+  router.post('/trials/:id/move-preview',permission('edit'),(req,res)=>createPositionPreview(req,res,'move'));
+  router.post('/trials/:id/lock-preview',permission('edit'),(req,res)=>createPositionPreview(req,res,'lock'));
+  function ownedPreview(req,res){
+    const preview=positionPreviews.get(req.params.previewId);
+    if(!preview||preview.trialId!==req.params.id||preview.owner!==subjectKey(req.praetorActor)||Date.now()-preview.createdAt>15*60*1000){res.status(409).json({error:'preview_expired_or_unowned'});return;}
+    return preview;
+  }
+  function checkedPreview(req,res){
+    const preview=ownedPreview(req,res);if(!preview)return;
+    const s=read(),trial=s.trials?.find(t=>t.id===preview.trialId),plan=s.plans.find(p=>p.id===preview.planId),blocked=positionGuard(s,trial,plan);
+    if(blocked||positionToken(s,trial,plan)!==preview.token){res.status(409).json({error:blocked||'stale_position'});return;}
+    const task=plan.tasks.find(t=>t.id===preview.taskId);
+    if(!movableTask(task,s.data,trial.data,inputs(s,plan).data)){res.status(409).json({error:'task_execution_protected'});return;}
+    const evaluation=evaluatePosition(trial,plan,preview.positions,preview.locks);
+    return {s,trial,plan,preview,...evaluation};
+  }
+  router.post('/trials/:id/previews/:previewId/recheck',permission('edit'),(req,res)=>{
+    const x=checkedPreview(req,res);if(!x)return;x.preview.checked=true;x.preview.valid=x.valid;
+    res.json({id:x.preview.id,checked:true,valid:x.valid,check:x.check,tasks:x.result.tasks,locks:x.preview.locks});
+  });
+  router.post('/trials/:id/previews/:previewId/cancel',permission('edit'),(req,res)=>{
+    const preview=ownedPreview(req,res);if(!preview)return;positionPreviews.delete(preview.id);res.json({cancelled:true,id:preview.id});
+  });
+  router.post('/trials/:id/previews/:previewId/commit',permission('edit'),(req,res)=>{
+    const preview=ownedPreview(req,res);if(!preview)return;
+    if(!preview.checked||!preview.valid)return res.status(409).json({error:'valid_recheck_required'});
+    const x=checkedPreview(req,res);if(!x)return;
+    if(!x.valid){x.preview.valid=false;return res.status(409).json({error:'position_conflict',check:x.check});}
+    const {s,trial,plan,frozen,result}=x;trial.revision++;trial.locks=structuredClone(preview.locks);
+    const run={id:randomUUID(),status:'completed',phase:'试算位置独立复核完成',createdAt:frozen.conditions.ruleEvaluationAt,finishedAt:new Date().toISOString(),revision:trial.revision,trialId:trial.id,sourcePlanId:plan.id,inputVersionId:preserve(s,trial),...frozen,lockSnapshot:structuredClone(trial.locks),actor:subjectKey(req.praetorActor),reason:req.body.reason.trim(),requestId:req.praetorActor.requestId,positionEdit:{kind:preview.kind,taskId:preview.taskId,sourcePlanId:plan.id,sourceContentHash:contentHash(plan),before:taskPosition(plan.tasks.find(t=>t.id===preview.taskId)),after:preview.positions[preview.taskId],source:plan.tasks.find(t=>t.id===preview.taskId).source}};
+    const next=makePlan(result,run);next.positionEdit=structuredClone(run.positionEdit);next.positionCheck=x.check;
+    // Additional provenance is recorded outside calculated content so replay remains exact.
+    run.planId=next.id;s.runs??=[];s.runs.unshift(run);s.plans.unshift(next);trial.latestPlanId=next.id;
+    record(s,req,'trial_position_committed',trial.id,{previewId:preview.id,planId:next.id,runId:run.id,trialRevision:trial.revision,locks:trial.locks,...run.positionEdit});write(s);positionPreviews.delete(preview.id);res.status(201).json(next);
   });
   router.get('/trials/:id/changes',permission('read'),(req,res)=>{
     const s=read(),trial=s.trials?.find(t=>t.id===req.params.id),source=s.plans.find(p=>p.id===trial?.sourcePlanId);
@@ -172,14 +236,14 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(trial&&inputHash(executionState(trial.data))!==inputHash(executionState(s.data))){res.status(409).json({error:'current_execution_changed',message:'试算执行事实已落后当前版本；保留旧记录，请从当前事实新算再复制'});return;}
     if(trial){const reconciliation=executionTrialIssues(s.data,trial.data);if(reconciliation.length){res.status(409).json({error:'execution_reconciliation_required',issues:reconciliation});return;}}
     const calculatedAt=new Date().toISOString();let frozen;
-    try{frozen=freezeRunInput(target.data,req.body.selection??trial?.selection,calculatedAt);}catch(e){res.status(400).json({error:e.message});return;}
+    try{frozen=freezeRunInput(target.data,req.body.selection??trial?.selection,calculatedAt);if(trial&&Object.keys(trial.locks||{}).length)frozen=freezePositions(target.data,frozen.conditions,trial.locks,calculatedAt);}catch(e){res.status(400).json({error:e.message});return;}
     const issues=[...validateInputs(defs,target.data),...executionAdmission(frozen.executionData,frozen.conditions),...assessRules(frozen.executionData,calculatedAt,true,frozen.conditions.mode).issues];
     if(issues.length){res.status(422).json({error:'rule_configuration_blocked',issues});return;}
-    const run={id:randomUUID(),status:'queued',phase:'等待计算线程',createdAt:calculatedAt,revision:target.revision,trialId:trial?.id||null,sourcePlanId:trial?.sourcePlanId||null,inputVersionId:preserve(s,target),...frozen,actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim(),timeoutMs:runTimeoutMs};
+    const run={id:randomUUID(),status:'queued',phase:'等待计算线程',createdAt:calculatedAt,revision:target.revision,trialId:trial?.id||null,sourcePlanId:trial?.sourcePlanId||null,inputVersionId:preserve(s,target),...frozen,lockSnapshot:structuredClone(trial?.locks||{}),actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim(),timeoutMs:runTimeoutMs};
     s.runs??=[];s.runs.unshift(run);return {s,run};
   }
   const publicRun=run=>{const {executionData,...summary}=run;const plan=run.planId?read().plans.find(p=>p.id===run.planId):null;return {...summary,durationMs:run.durationMs??Math.max(0,Date.parse(run.finishedAt||new Date().toISOString())-Date.parse(run.createdAt)),outcome:run.outcome??({completed:'succeeded',partial:'succeeded',timed_out:'timed_out'}[run.status]||run.status),resultState:resultState(run,plan?.resultAssessment)};};
-  function makePlan(result,run){return {...result,trialId:run.trialId,sourcePlanId:run.sourcePlanId,id:randomUUID(),status:'draft',revision:run.revision,inputVersionId:run.inputVersionId,runId:run.id,conditions:run.conditions,snapshotHash:run.snapshotHash};}
+  function makePlan(result,run){return {...result,...(run.lockSnapshot?{lockSnapshot:structuredClone(run.lockSnapshot)}:{}),trialId:run.trialId,sourcePlanId:run.sourcePlanId,id:randomUUID(),status:'draft',revision:run.revision,inputVersionId:run.inputVersionId,runId:run.id,conditions:run.conditions,snapshotHash:run.snapshotHash};}
   function finish(id,req,status,details={}){
     const s=read(),run=s.runs?.find(r=>r.id===id);if(!run||terminal.has(run.status)||stopping.has(id))return;
     Object.assign(run,details,{status,finishedAt:new Date().toISOString(),phase:status==='completed'?'计算完成':status==='partial'?'计算完成，有未排或问题':status});
@@ -240,8 +304,9 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const original=s.inputVersions?.[old.inputVersionId];
     if(!original||inputHash(original.data)!==old.inputVersionId||inputHash({conditions:old.conditions,executionData:old.executionData})!==old.snapshotHash)return res.status(409).json({error:'historical_inputs_unavailable',message:'原始输入记录不完整，不能复算。'});
     if(old.trialId&&s.trials?.find(t=>t.id===old.trialId)?.status!=='active')return res.status(409).json({error:'trial_discarded'});
+    if(old.trialId){const t=s.trials.find(t=>t.id===old.trialId);if(old.revision!==t.revision||inputHash(old.conditions.taskPositions||{})!==inputHash(t.locks||{}))return res.status(409).json({error:'stale_trial_positions'});}
     if(old.conditions.executionFactsVersion!==inputHash(executionState(s.data)))return res.status(409).json({error:'current_execution_changed',message:'当前执行事实已变化；请从当前事实另开计算，原记录保留。'});
-    const run={id:randomUUID(),retryOf:old.id,status:'queued',phase:'等待计算线程',createdAt:new Date().toISOString(),revision:old.revision,trialId:old.trialId,sourcePlanId:old.sourcePlanId,inputVersionId:old.inputVersionId,executionData:structuredClone(old.executionData),conditions:structuredClone(old.conditions),snapshotHash:old.snapshotHash,timeoutMs:runTimeoutMs,actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim()};
+    const run={id:randomUUID(),retryOf:old.id,status:'queued',phase:'等待计算线程',createdAt:new Date().toISOString(),revision:old.revision,trialId:old.trialId,sourcePlanId:old.sourcePlanId,lockSnapshot:structuredClone(old.lockSnapshot||{}),inputVersionId:old.inputVersionId,executionData:structuredClone(old.executionData),conditions:structuredClone(old.conditions),snapshotHash:old.snapshotHash,timeoutMs:runTimeoutMs,actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim()};
     s.runs.unshift(run);record(s,req,'run_created',run.id,{retryOf:old.id,inputVersionId:run.inputVersionId,snapshotHash:run.snapshotHash});write(s);launch(req,run);res.status(202).json(publicRun(read().runs.find(r=>r.id===run.id)));
   });
   router.post('/runs/:id/cancel',permission('calculate'),async(req,res,next)=>{try{
@@ -275,6 +340,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(p.status!=='draft')return res.status(409).json({error:'immutable_plan'});
     if(p.trialId&&s.trials?.find(t=>t.id===p.trialId)?.status==='discarded')return res.status(409).json({error:'trial_discarded'});
     if(p.revision!==(p.trialId?s.trials?.find(t=>t.id===p.trialId)?.revision:s.revision))return res.status(409).json({error:'stale_input'});
+    if(p.trialId&&p.conditions?.executionFactsVersion!==inputHash(executionState(s.data)))return res.status(409).json({error:'current_execution_changed'});
     if(!p.ruleSnapshot)return res.status(409).json({error:'historical_rules_unavailable'});
     const run=p.runId?s.runs?.find(r=>r.id===p.runId):null;
     if(p.runId&&(!run||run.snapshotHash!==p.snapshotHash||inputHash({conditions:run.conditions,executionData:run.executionData})!==p.snapshotHash||!inputs(s,p)))return res.status(409).json({error:'historical_inputs_unavailable'});
@@ -373,7 +439,8 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
       if(q.sourcePlanId!==undefined){if(typeof q.sourcePlanId!=='string'||q.planId!==q.sourcePlanId)return res.status(400).json({error:'invalid_query'});const p=s.plans.find(p=>p.id===q.sourcePlanId);if(!p)return res.status(404).json({error:'plan_not_found'});const v=inputs(s,p);if(!v)return res.status(409).json({error:'historical_inputs_unavailable'});source=v.data;}
       try{csv=queryCsv(defs,source,s.plans,s.revision,q);}catch(e){if(['unknown_table','plan_not_found'].includes(e.message))return res.status(404).json({error:e.message});return res.status(500).json({error:'internal_error'});}target=q.table;
     }
-    else if(req.body.planId){const p=s.plans.find(p=>p.id===req.body.planId);if(!p)return res.status(404).json({error:'plan_not_found'});if(req.body.ruleSettings===true){if(!p.ruleSnapshot)return res.status(409).json({error:'historical_rules_unavailable'});const fields=['id','category','name','enabled','active','status','scope','effectiveFrom','parameters'];csv=[['运行编号',p.runId||'旧方案无记录'],['运行快照',p.snapshotHash||'旧方案无记录'],['计算条件',p.conditions?JSON.stringify(p.conditions):'旧方案无记录'],['能力版本',p.ruleSnapshot.capabilityVersion],['计算时刻',p.ruleSnapshot.at],['输入版本',p.inputVersionId],['始终执行',p.ruleSnapshot.intrinsicChecks.join('；')],['独立复核范围',p.ruleSnapshot.independentChecks.join('；')],['说明',p.ruleSnapshot.note],fields,...p.ruleSnapshot.settings.map(r=>fields.map(f=>typeof r[f]==='object'?JSON.stringify(r[f]):String(r[f])))].map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');}else csv=exportSupplyPlanCsv(p)+'\r\n'+resultCsv(s.runs?.find(r=>r.id===p.runId),p);if(p.conditions){const scope=p.conditions.checkScope;csv=[['运行编号',p.runId],['运行快照',p.snapshotHash],['计算条件',JSON.stringify(p.conditions)],['检查范围',scope?JSON.stringify(scope):'旧方案无记录']].map(row=>row.map(v=>'\"'+String(v).replace(/\"/g,'\"\"')+'\"').join(',')).join('\r\n')+'\r\n'+csv;}target=p.id;}
+    else if(req.body.planId){const p=s.plans.find(p=>p.id===req.body.planId);if(!p)return res.status(404).json({error:'plan_not_found'});if(req.body.ruleSettings===true){if(p.trialId&&p.conditions?.executionFactsVersion!==inputHash(executionState(s.data)))return res.status(409).json({error:'current_execution_changed'});
+    if(!p.ruleSnapshot)return res.status(409).json({error:'historical_rules_unavailable'});const fields=['id','category','name','enabled','active','status','scope','effectiveFrom','parameters'];csv=[['运行编号',p.runId||'旧方案无记录'],['运行快照',p.snapshotHash||'旧方案无记录'],['计算条件',p.conditions?JSON.stringify(p.conditions):'旧方案无记录'],['能力版本',p.ruleSnapshot.capabilityVersion],['计算时刻',p.ruleSnapshot.at],['输入版本',p.inputVersionId],['始终执行',p.ruleSnapshot.intrinsicChecks.join('；')],['独立复核范围',p.ruleSnapshot.independentChecks.join('；')],['说明',p.ruleSnapshot.note],fields,...p.ruleSnapshot.settings.map(r=>fields.map(f=>typeof r[f]==='object'?JSON.stringify(r[f]):String(r[f])))].map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');}else csv=exportSupplyPlanCsv(p)+'\r\n'+resultCsv(s.runs?.find(r=>r.id===p.runId),p);if(p.conditions){const scope=p.conditions.checkScope;csv=[['运行编号',p.runId],['运行快照',p.snapshotHash],['计算条件',JSON.stringify(p.conditions)],['检查范围',scope?JSON.stringify(scope):'旧方案无记录']].map(row=>row.map(v=>'\"'+String(v).replace(/\"/g,'\"\"')+'\"').join(',')).join('\r\n')+'\r\n'+csv;}target=p.id;}
     else{const d=defs.find(d=>d.key===req.body.table);if(!d)return res.status(404).json({error:'unknown_table'});csv=[d.fields,...(s.data[d.key]||[]).map(r=>d.fields.map(f=>r[f]||''))].map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');target=d.key;}
     record(s,req,'export',target,req.body.query?{query:req.body.query}:req.body.resourceLoad?{resourceLoad:req.body.resourceLoad}:{});write(s);res.type('text/csv').send('\ufeff'+csv);
   });
