@@ -155,7 +155,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
  const resolvedSupplies=resolveExpectedSupply(data.supplies||[],data.supplyDelays||[]);
   function schedule(){
     const built:Task[]=[]; const findings:Finding[]=[]; const machineBusy=new Map<string,Task[]>(); const personnelReservations:PersonnelReservation[]=[];
-    const executionIssues=[...validateEvents(sourceData),...validateExecution((sourceData as any).executionContext||sourceData),...executionAdmission(sourceData,{...conditions,ruleEvaluationAt:calculatedAt,enabledRuleIds:enabledRules})];if(executionIssues.length){setActivePlan({id:uid(),name:'模拟执行须核对',createdAt:calculatedAt,tasks:[],findings:executionIssues.map(i=>({code:i.code,message:i.message,taskIds:[]})),rules:[],inputVersion:`v${inputVersion}`});return;}
+    const executionIssues=[...validateEvents(sourceData),...validateExecution((sourceData as any).executionContext||sourceData),...executionAdmission(sourceData,{...conditions,ruleEvaluationAt:calculatedAt,enabledRuleIds:enabledRules})];if(executionIssues.length){setActivePlan({id:uid(),name:'模拟执行须核对',createdAt:calculatedAt,tasks:[],findings:executionIssues.map(i=>({...i,code:i.code,message:i.message,taskIds:[]})),rules:[],inputVersion:`v${inputVersion}`});return;}
     const risks=executionRisks((sourceData as any).executionContext||sourceData,calculatedAt);
     for(const risk of risks)findings.push({code:'UNPLANNED / EXECUTION_EVENT_REVIEW',message:risk.message,taskIds:[`${risk.orderId}-${risk.operation}`]});
     personnelReservations.push(...eventAbsences(sourceData));
@@ -172,13 +172,13 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
     let sorted=[...(data.orders||[])].filter(o=>o['需求类型']!=='预测'&&isOrderSchedulable(o)).sort((a,b)=>sortBy==='要求日期'?Number(a['要求可交付分钟'])-Number(b['要求可交付分钟'])||Number(a['优先顺序'])-Number(b['优先顺序']):Number(a['优先顺序'])-Number(b['优先顺序']));
     const orderIssues=validateOrders(data.orders||[]).filter(issue=>issue.code!=='ORDER_MULTI_LINE');
     if(orderIssues.length){findings.push(...orderIssues.map(issue=>({...issue,table:"orders",row:issue.line?issue.line+1:0,code:`FR-009 / ${issue.code}`,message:issue.message,taskIds:[]})));setIssues(findings);setActivePlan({id:uid(),name:'订单数据校验',createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules,inputVersion:`v${inputVersion}`});setVerification(null);setMessage(`FR-009 订单字段检查发现 ${orderIssues.length} 个问题，未生成任务。`);return;}
-    const masterIssues=[...validateBomConfig({products:data.products||[],materials:data.materials||[],routes:data.routes||[],bom:data.bom||[]}),...supplyIssues,...inventoryIssues,...validateMasterData({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],dependencies:data.dependencies||[]}),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[],personnelGroups:data.personnelGroups||[]})];
+    const masterIssues=[...validateBomConfig({products:data.products||[],materials:data.materials||[],routes:data.routes||[],bom:data.bom||[]}),...supplyIssues,...inventoryIssues,...validateMasterData({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],dependencies:data.dependencies||[]},data),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[],personnelGroups:data.personnelGroups||[]})];
     if(masterIssues.length){
       findings.push(...masterIssues.map(issue=>({...issue,taskIds:[]})));
       const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
       setIssues(findings);setActivePlan(plan);setVerification(null);setMessage(`主数据/引用检查发现 ${findings.length} 个问题，未生成任务。`);return;
     }
-    const scopeFindings=validateSingleLineScope(sorted,data.machines||[]);
+    const scopeFindings=validateSingleLineScope(sorted,data.machines||[],data);
     if(scopeFindings.length){
       findings.push(...scopeFindings);
       const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};

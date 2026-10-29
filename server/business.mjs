@@ -1,5 +1,7 @@
+import {validateMasterData} from '../src/lib/master-data.mjs';
+import {validateOrders} from '../src/lib/orders.mjs';
 import {validateSingleLineScope} from '../src/lib/line-scope.mjs';
-import {attachProblemRecords} from '../src/lib/problem-records.mjs';
+import {attachProblemRecords,bindProblemSource} from '../src/lib/problem-records.mjs';
 import {inspectSingleCsv} from './csv-single.mjs';
 import {migratePolicies} from '../src/lib/resource-policies.mjs';
 import {inspectCsvBatch,physicalIssues,batchKeys} from './csv-batch.mjs';
@@ -67,7 +69,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   router.get('/meta',permission('read'),(_req,res)=>res.json({release:'R1 prototype + FR-037 supported-flow slice',baseline:'APS v0.3 review draft',supportedRules:['BR-02 precedence','BR-03 exclusive machine overlap','FR-008 calendar','FR-007 personnel','FR-022 explicit joint occupancy'],timeOrigin:'2026-11-02T08:00:00+08:00',interval:'[start,end)',unsupportedWorkflows:['external-dispatch','historical-restore'],confirmation:'FR030-v1 internal only'}));
   router.get('/rules/capabilities',permission('read'),(_req,res)=>res.json(ruleCatalog));
   router.get('/session',permission('read'),(req,res)=>res.json({role:req.member.role,canWrite:['planner','supervisor'].includes(req.member.role),canExport:req.member.role!=='query'||req.member.canExport===true}));
-  router.get('/state',permission('read'),(_req,res)=>{const s=read();res.json({data:s.data,revision:s.revision});});
+  router.get('/state',permission('read'),(_req,res)=>{const s=read();res.json({data:s.data,revision:s.revision,inputVersionId:inputHash(s.data)});});
   router.get('/operations',permission('read'),(_req,res)=>res.json(read().records));
   const versionId=data=>createHash('sha256').update(JSON.stringify(data)).digest('hex');
   const preserve=(s,target=s)=>{s.inputVersions??={};const id=versionId(target.data);if(!s.inputVersions[id])s.inputVersions[id]={id,revision:target.revision,data:structuredClone(target.data)};return id;};
@@ -109,7 +111,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const before=target.data;const fromVersion=preserve(s,target);
     target.data=proposed;target.revision++;const toVersion=preserve(s,target);
     const batchId=randomUUID();
-    for(const key of changes)record(s,req,operation||'edit',key,{before:before[key],after:proposed[key],fromVersion,toVersion,batchId,trialId:trialId||null});
+    for(const key of changes)record(s,req,operation||'edit',key,{before:before[key],after:proposed[key],fromVersion,toVersion,fromRevision:target.revision-1,toRevision:target.revision,batchId,trialId:trialId||null});
     write(s);res.json({data:target.data,revision:target.revision,inputVersionId:toVersion});
   }
   // Preview and commit pass through exactly the same transition/history/validation gates.
@@ -286,21 +288,29 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(trial&&inputHash(executionState(trial.data))!==inputHash(executionState(s.data))){res.status(409).json({error:'current_execution_changed',message:'试算执行事实已落后当前版本；保留旧记录，请从当前事实新算再复制'});return;}
     if(trial){const reconciliation=executionTrialIssues(s.data,trial.data);if(reconciliation.length){res.status(409).json({error:'execution_reconciliation_required',issues:reconciliation});return;}}
     const calculatedAt=new Date().toISOString();let frozen;
+    const source={domain:trial?'trial:'+trial.id:'current',inputVersionId:inputHash(target.data),revision:target.revision,checkedAt:calculatedAt,scope:req.body.selection??trial?.selection??null};
     try{frozen=freezeRunInput(target.data,req.body.selection??trial?.selection,calculatedAt);if(trial&&Object.keys(trial.locks||{}).length)frozen=freezePositions(target.data,frozen.conditions,trial.locks,calculatedAt);}
     catch(e){
       const selection=req.body.selection??trial?.selection;
       const selected=e.message==='invalid_line_scope'?target.data.orders.filter(o=>o['需求类型']==='正式订单'&&o['订单状态']==='有效'&&(!selection?.orderIds||selection.orderIds.includes(o['订单编号']))):[];
       const findings=e.message==='invalid_line_scope'
-        ?validateSingleLineScope(selected,target.data.machines).map(f=>({...f,sourceRevision:target.revision})):undefined;
-      res.status(400).json({error:e.message,...(findings?{findings}:{})});return;
+        ?validateSingleLineScope(selected,target.data.machines).map(f=>({...bindProblemSource(f,{...source,scope:selection??null},target.data,{orders:selected.map(o=>target.data.orders.indexOf(o)),machines:target.data.machines.map((_,i)=>i)}),sourceRevision:target.revision})):[...validateOrders(target.data.orders),...validateMasterData(target.data)].map(f=>({...bindProblemSource({...f,taskIds:[]},{...source,scope:'complete saved input validation'}),sourceRevision:target.revision}));
+      res.status(400).json({error:e.message,...(findings?{findings,checkedInput:{data:target.data,inputVersionId:source.inputVersionId}}:{})});return;
     }
-    const issues=[...validateInputs(defs,target.data,{at:calculatedAt,checkPolicyExecution:false}),...executionAdmission(frozen.executionData,frozen.conditions),...assessRules(frozen.executionData,calculatedAt,true,frozen.conditions.mode).issues];
-    if(issues.length){res.status(422).json({error:'rule_configuration_blocked',issues,findings:issues.map(i=>({...attachProblemRecords({...i,code:i.code||'INPUT / CHECK',taskIds:[]},target.data),sourceRevision:target.revision}))});return;}
+    const native=validateInputs(defs,target.data,{at:calculatedAt,checkPolicyExecution:false});
+    const scoped=[...executionAdmission(frozen.executionData,frozen.conditions),...assessRules(frozen.executionData,calculatedAt,true,frozen.conditions.mode).issues];
+    const withSource=(i,data,context,map)=>bindProblemSource(attachProblemRecords({...i,code:i.code||'INPUT / CHECK',taskIds:[]},data),context,target.data,map);
+    const issues=[...native,...scoped];
+    const findings=[...native.map(i=>withSource(i,target.data,{...source,scope:'complete saved input validation'})),...scoped.map(i=>withSource(i,frozen.executionData,{...source,executionVersionId:inputHash(frozen.executionData),scope:frozen.conditions},frozen.sourceMap))];
+    if(issues.length){res.status(422).json({error:'rule_configuration_blocked',issues,checkedInput:{data:target.data,inputVersionId:source.inputVersionId},findings:findings.map(f=>({...f,sourceRevision:target.revision}))});return;}
     const run={id:randomUUID(),status:'queued',phase:'等待计算线程',createdAt:calculatedAt,revision:target.revision,trialId:trial?.id||null,sourcePlanId:trial?.sourcePlanId||null,inputVersionId:preserve(s,target),...frozen,lockSnapshot:structuredClone(trial?.locks||{}),actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim(),timeoutMs:runTimeoutMs};
     s.runs??=[];s.runs.unshift(run);return {s,run};
   }
   const publicRun=run=>{const {executionData,...summary}=run;const plan=run.planId?read().plans.find(p=>p.id===run.planId):null;return {...summary,durationMs:run.durationMs??Math.max(0,Date.parse(run.finishedAt||new Date().toISOString())-Date.parse(run.createdAt)),outcome:run.outcome??({completed:'succeeded',partial:'succeeded',timed_out:'timed_out'}[run.status]||run.status),resultState:resultState(run,plan?.resultAssessment)};};
-  function makePlan(result,run){return {...result,...(run.lockSnapshot?{lockSnapshot:structuredClone(run.lockSnapshot)}:{}),trialId:run.trialId,sourcePlanId:run.sourcePlanId,id:randomUUID(),status:'draft',revision:run.revision,inputVersionId:run.inputVersionId,runId:run.id,conditions:run.conditions,snapshotHash:run.snapshotHash};}
+  function makePlan(result,run){
+    const original=read().inputVersions?.[run.inputVersionId]?.data;
+    const source={domain:run.trialId?'trial:'+run.trialId:'current',inputVersionId:run.inputVersionId,executionVersionId:inputHash(run.executionData),revision:run.revision,checkedAt:run.createdAt,scope:run.conditions};
+    return {...result,findings:result.findings.map(f=>bindProblemSource(f,source,original,run.sourceMap||{})),...(run.lockSnapshot?{lockSnapshot:structuredClone(run.lockSnapshot)}:{}),trialId:run.trialId,sourcePlanId:run.sourcePlanId,id:randomUUID(),status:'draft',revision:run.revision,inputVersionId:run.inputVersionId,runId:run.id,conditions:run.conditions,snapshotHash:run.snapshotHash};}
   function finish(id,req,status,details={}){
     const s=read(),run=s.runs?.find(r=>r.id===id);if(!run||terminal.has(run.status)||stopping.has(id))return;
     Object.assign(run,details,{status,finishedAt:new Date().toISOString(),phase:status==='completed'?'计算完成':status==='partial'?'计算完成，有未排或问题':status});
@@ -363,7 +373,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(old.trialId&&s.trials?.find(t=>t.id===old.trialId)?.status!=='active')return res.status(409).json({error:'trial_discarded'});
     if(old.trialId){const t=s.trials.find(t=>t.id===old.trialId);if(old.revision!==t.revision||inputHash(old.conditions.taskPositions||{})!==inputHash(t.locks||{}))return res.status(409).json({error:'stale_trial_positions'});}
     if(old.conditions.executionFactsVersion!==inputHash(executionState(s.data)))return res.status(409).json({error:'current_execution_changed',message:'当前执行事实已变化；请从当前事实另开计算，原记录保留。'});
-    const run={id:randomUUID(),retryOf:old.id,status:'queued',phase:'等待计算线程',createdAt:new Date().toISOString(),revision:old.revision,trialId:old.trialId,sourcePlanId:old.sourcePlanId,lockSnapshot:structuredClone(old.lockSnapshot||{}),inputVersionId:old.inputVersionId,executionData:structuredClone(old.executionData),conditions:structuredClone(old.conditions),snapshotHash:old.snapshotHash,timeoutMs:runTimeoutMs,actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim()};
+    const run={id:randomUUID(),retryOf:old.id,status:'queued',phase:'等待计算线程',createdAt:new Date().toISOString(),revision:old.revision,trialId:old.trialId,sourcePlanId:old.sourcePlanId,lockSnapshot:structuredClone(old.lockSnapshot||{}),inputVersionId:old.inputVersionId,executionData:structuredClone(old.executionData),sourceMap:structuredClone(old.sourceMap||{}),conditions:structuredClone(old.conditions),snapshotHash:old.snapshotHash,timeoutMs:runTimeoutMs,actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim()};
     s.runs.unshift(run);record(s,req,'run_created',run.id,{retryOf:old.id,inputVersionId:run.inputVersionId,snapshotHash:run.snapshotHash});write(s);launch(req,run);res.status(202).json(publicRun(read().runs.find(r=>r.id===run.id)));
   });
   router.post('/runs/:id/cancel',permission('calculate'),async(req,res,next)=>{try{

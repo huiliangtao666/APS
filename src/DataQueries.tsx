@@ -4,19 +4,20 @@ import {fieldLabel} from './StructuredValue';
 import {defs} from './data-defs';
 import {queryData,taskDef,filterOptions,filterRows,related,displayValue,type Filters,type Row} from './lib/data-query.mjs';
 type Query={table:string;planId:string;filters:Filters;revision:number;sourcePlanId?:string};
-type Props={data:Record<string,Row[]>;plans:any[];revision:number;canExport:boolean;reason:string;onExport:(q:Query)=>void;onTask:(plan:string,task:string)=>void;initialHistorical?:boolean;initialRow?:Row;initialTable?:string;initialPlan?:string;initialTask?:string;onRestore?:(tables:Record<string,Row[]>)=>void};
-export function DataQueries({data,plans,revision,canExport,reason,onExport,onTask,initialPlan,initialTask,initialHistorical,onRestore,initialTable,initialRow}:Props){
+type Props={data:Record<string,Row[]>;plans:any[];revision:number;canExport:boolean;reason:string;onExport:(q:Query)=>void;onTask:(plan:string,task:string)=>void;initialSnapshot?:{data:Record<string,Row[]>;id:string};initialOccurrence?:number;initialHistorical?:boolean;initialRow?:Row;initialTable?:string;initialPlan?:string;initialTask?:string;onRestore?:(tables:Record<string,Row[]>)=>void};
+export function DataQueries({data,plans,revision,canExport,reason,onExport,onTask,initialPlan,initialTask,initialHistorical,initialOccurrence,initialSnapshot,onRestore,initialTable,initialRow}:Props){
  const detailHeading=useRef<HTMLHeadingElement>(null);
  const initialSourceHistorical=initialHistorical??!!initialTable;
  const categories=[...defs,taskDef];
  const [table,setTable]=useState(initialTable|| (initialTask?'tasks':'orders'));
  const [planId,setPlan]=useState(initialPlan||plans[0]?.id||'');
+ const [snapshot,setSnapshot]=useState(initialSnapshot);
  const [historical,setHistorical]=useState(initialSourceHistorical);
  const [filters,setFilters]=useState<Filters>({});
- const [focus,setFocus]=useState<number|null>(()=>initialRow&&initialTable?(()=>{const i=((initialSourceHistorical?plans.find(p=>p.id===initialPlan)?.inputSnapshot:data)?.[initialTable]||[]).findIndex((row:Row)=>Object.entries(initialRow).every(([key,value])=>row[key]===value));return i<0?null:i;})():initialTask?Math.max(0,(plans.find(p=>p.id===initialPlan)?.tasks||[]).findIndex((t:any)=>t.id===initialTask)):null);
- const [page,setPage]=useState(0);
+ const [focus,setFocus]=useState<number|null>(()=>initialRow&&initialTable?(()=>{const rows=((initialSourceHistorical?(initialSnapshot?.data||plans.find(p=>p.id===initialPlan)?.inputSnapshot):data)?.[initialTable]||[]);const matches=rows.map((row:Row,index:number)=>({row,index})).filter(({row}:{row:Row})=>Object.entries(initialRow).every(([key,value])=>row[key]===value));if(initialOccurrence!==undefined)return matches.some(({index}:{index:number})=>index===initialOccurrence)?initialOccurrence:null;return matches.length===1?matches[0].index:null;})():initialTask?Math.max(0,(plans.find(p=>p.id===initialPlan)?.tasks||[]).findIndex((t:any)=>t.id===initialTask)):null);
+ const [page,setPage]=useState(initialOccurrence===undefined?0:Math.floor(initialOccurrence/50));
  const selectedPlan=plans.find(p=>p.id===planId);
- const inputData:Record<string,Row[]>=historical?(selectedPlan?.inputSnapshot||{}):data;
+ const inputData:Record<string,Row[]>=historical?(snapshot?.data||selectedPlan?.inputSnapshot||{}):data;
  const all=useMemo(()=>queryData(inputData,plans,planId),[inputData,plans,planId]);
  const def=categories.find(d=>d.key===table)!;
  const options=filterOptions(def.fields);
@@ -32,19 +33,19 @@ export function DataQueries({data,plans,revision,canExport,reason,onExport,onTas
  return <section className="panel query-panel" aria-label="模拟数据查询">
   <h2>模拟数据查询 · FR-014</h2><p>导入 → 查询 → 计算 → 核对。共 {defs.length} 类当前输入及方案任务；所有数据均为模拟数据。分钟 0 = 2026-11-02 08:00（Asia/Shanghai），时间区间 [开始,结束)。</p>
   <div className="query-controls"><label>数据类别<select aria-label="查询数据类别" value={table} onChange={e=>navigate(e.target.value)}>{categories.map(d=><option key={d.key} value={d.key}>{d.label}（{all[d.key]?.length||0}）</option>)}</select></label>
-  <label>关联方案<select aria-label="查询方案" value={planId} onChange={e=>{setPlan(e.target.value);setHistorical(false);setFocus(null);setPage(0);}}><option value="">未选择方案</option>{plans.map(p=><option key={p.id} value={p.id}>{p.name||p.id} · {p.status==='draft'?'草稿':p.status==='legacy'?'历史快照':p.status} · {p.id}</option>)}</select></label></div>
-  <p>当前输入版本：{revision}。{selectedPlan?`所选方案输入版本：${selectedPlan.revision??selectedPlan.inputVersion??'旧版未记录'}。`:'尚无所选方案任务。'}{historical?'关联输入来自方案原始快照。':'关联输入显示当前数据，不代表方案计算时的历史输入。'}</p>
+  <label>关联方案<select aria-label="查询方案" value={planId} onChange={e=>{setPlan(e.target.value);setSnapshot(undefined);setHistorical(false);setFocus(null);setPage(0);}}><option value="">未选择方案</option>{plans.map(p=><option key={p.id} value={p.id}>{p.name||p.id} · {p.status==='draft'?'草稿':p.status==='legacy'?'历史快照':p.status} · {p.id}</option>)}</select></label></div>
+  <p>当前输入版本：{revision}。{selectedPlan?`所选方案输入版本：${selectedPlan.revision??selectedPlan.inputVersion??'旧版未记录'}。`:'尚无所选方案任务。'}{historical?(snapshot?'关联输入来自该次检查封存输入。':'关联输入来自方案原始快照。'):'关联输入显示当前数据，不代表方案计算时的历史输入。'}</p>
   {selectedPlan&&selectedPlan.revision!==revision&&<p role="status">方案为历史快照或输入已变化；任务保留方案原值。请核对版本差异，不能据此宣称当前数据已重新计算。</p>}
-  <label><input type="checkbox" checked={historical} disabled={!selectedPlan?.inputSnapshot} onChange={e=>{setHistorical(e.target.checked);setFocus(null);setFilters({});setPage(0);}}/>查看所选方案计算时的输入</label>
+  <label><input type="checkbox" checked={historical} disabled={!snapshot&&!selectedPlan?.inputSnapshot} onChange={e=>{setHistorical(e.target.checked);setFocus(null);setFilters({});setPage(0);}}/>查看所选方案计算时的输入</label>
   {selectedPlan&&!selectedPlan.inputSnapshot&&<p role="status">该历史方案未记录原始输入，无法恢复；不会用当前数据代替。</p>}
-  {selectedPlan?.inputSnapshot&&onRestore&&<button disabled={!reason.trim()} onClick={()=>onRestore(selectedPlan.inputSnapshot)}>恢复该方案输入为新版本</button>}
-  {historical&&<p>原始输入版本：{selectedPlan?.inputVersionId}。本视图只读，重算须使用当前输入。</p>}
+  {!snapshot&&selectedPlan?.inputSnapshot&&onRestore&&<button disabled={!reason.trim()} onClick={()=>onRestore(selectedPlan.inputSnapshot)}>恢复该方案输入为新版本</button>}
+  {historical&&<p>原始输入版本：{snapshot?.id||selectedPlan?.inputVersionId}。本视图只读，重算须使用当前输入。</p>}
   <div className="query-controls"><label>关键词<input aria-label="查询关键词" value={filters.text||''} onChange={e=>change({text:e.target.value})}/></label>
   {applicableProduct&&<label>产品<select aria-label="查询产品" value={filters.product||''} onChange={e=>change({product:e.target.value})}><option value="">全部产品</option>{[...new Set([...(inputData.products||[]).map(r=>r['产品编号']),...(all[table]||[]).map(r=>r['产品编号'])].filter(Boolean))].map(id=><option key={id}>{id}</option>)}</select></label>}
   {applicableOrder&&<label>订单<select aria-label="查询订单" value={filters.order||''} onChange={e=>change({order:e.target.value})}><option value="">全部订单</option>{[...new Set([...(inputData.orders||[]).map(r=>r['订单编号']),...(all[table]||[]).map(r=>r['订单编号'])].filter(Boolean))].map(id=><option key={id}>{id}</option>)}</select></label>}
   {options.statusFields.length>0&&<><label>状态字段<select aria-label="查询状态字段" value={filters.statusField||''} onChange={e=>change({statusField:e.target.value,status:''})}><option value="">请选择</option>{options.statusFields.map(f=><option key={f}>{f}</option>)}</select></label><label>状态<select aria-label="查询状态" value={filters.status||''} disabled={!filters.statusField} onChange={e=>change({status:e.target.value})}><option value="">全部状态</option>{[...new Set((all[table]||[]).map(r=>r[filters.statusField||'']).filter(Boolean))].map(v=><option key={v}>{v}</option>)}</select></label></>}
   {options.dateFields.length>0&&<><label>日期 / 分钟字段<select aria-label="查询日期字段" value={filters.dateField||''} onChange={e=>change({dateField:e.target.value,from:'',to:''})}><option value="">请选择</option>{options.dateFields.map(f=><option key={f}>{f}</option>)}</select></label><label>起值（含）<input aria-label="查询起值" disabled={!filters.dateField} placeholder="分钟数或含时区 ISO 日期时间" value={filters.from||''} onChange={e=>change({from:e.target.value})}/></label><label>止值（含）<input aria-label="查询止值" disabled={!filters.dateField} value={filters.to||''} onChange={e=>change({to:e.target.value})}/></label></>}
-  <button onClick={()=>{setFilters({});setFocus(null);setPage(0);}}>清除筛选</button><button disabled={!canExport||!reason.trim()||(historical&&!selectedPlan?.inputSnapshot)} onClick={()=>onExport({table,planId,filters,revision,...(historical?{sourcePlanId:planId}:{})})}>导出筛选结果（{rows.length}）</button></div>
+  <button onClick={()=>{setFilters({});setFocus(null);setPage(0);}}>清除筛选</button><button disabled={!canExport||!reason.trim()||!!snapshot||(historical&&!selectedPlan?.inputSnapshot)} onClick={()=>onExport({table,planId,filters,revision,...(historical?{sourcePlanId:planId}:{})})}>导出筛选结果（{rows.length}）</button></div>
   <p>条件同时满足才显示；产品/订单按明确引用匹配。日期字段用 YYYY-MM-DD，时间字段用含时区 ISO 时间，分钟字段用数值；无效范围或缺失日期不匹配。详情保留全部字段。</p>
   <p role="status">{rows.length} / {all[table]?.length||0} 条 · 第 {page+1} 页</p>
   <div className="table-wrap"><table><thead><tr><th>详情</th>{def.fields.filter(f=>f!=='参数JSON').map(f=><th key={f}>{fieldLabel(f)}</th>)}</tr></thead><tbody>{rows.slice(page*50,(page+1)*50).map(({row:r,index})=><tr key={index} className={focus===index?'selected-row':''}><td><button aria-label={`查看第${index+1}条详情`} onClick={()=>setFocus(index)}>查看</button></td>{def.fields.filter(f=>f!=='参数JSON').map(f=><td key={f}>{displayValue(f,r[f])||'—'}</td>)}</tr>)}</tbody></table></div>

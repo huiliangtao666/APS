@@ -1,15 +1,15 @@
-import {currentRecord,type RecordRef} from './lib/problem-records.mjs';
+import {currentRecord,type IdentityContext,type RecordRef} from './lib/problem-records.mjs';
 import {PolicyPreview,policyOptions} from './PolicyPreview';
 import {useEffect,useState} from 'react';
 import {recordIdentity} from './lib/record-identity.mjs';
 import {StructuredValue,fieldLabel} from './StructuredValue';
 import {type TableDef} from './data-defs';
 type Row=Record<string,string>;
-export type EditProps={initialRecord?:RecordRef|null;data?:Record<string,Row[]>;def:TableDef;rows:Row[];revision:number;canWrite:boolean;busy:boolean;reason:string;onLocate?:(table:string)=>void;onSave:(tables:Record<string,Row[]>,revision:number,operation:string)=>Promise<void|{unchanged?:boolean;revision?:number}>};
-export function DataEditor({initialRecord,data={},def,rows,revision,canWrite,busy,reason,onSave,onLocate}:EditProps){
+export type EditProps={identityContext?:IdentityContext;initialRecord?:RecordRef|null;data?:Record<string,Row[]>;def:TableDef;rows:Row[];revision:number;canWrite:boolean;busy:boolean;reason:string;onLocate?:(table:string)=>void;onSave:(tables:Record<string,Row[]>,revision:number,operation:string)=>Promise<void|{unchanged?:boolean;revision?:number}>};
+export function DataEditor({initialRecord,identityContext,data={},def,rows,revision,canWrite,busy,reason,onSave,onLocate}:EditProps){
  const [drafts,setDrafts]=useState<Record<string,Row[]>>({});
  const draft=Object.keys(drafts).length>0;
- useEffect(()=>{const target=initialRecord?.table===def.key?currentRecord(initialRecord,data):null;setSelected(target?[target.index]:[]);if(target)document.getElementById(`edit-${def.key}-${target.index}-${def.fields[0]}`)?.scrollIntoView({block:'center'});},[def.key,initialRecord,revision]);
+ useEffect(()=>{const target=initialRecord?.table===def.key?currentRecord(initialRecord,data,identityContext):null;setSelected(target?[target.index]:[]);if(target)document.getElementById(`edit-${def.key}-${target.index}-${def.fields[0]}`)?.scrollIntoView({block:'center'});},[def.key,initialRecord,revision]);
  const [base,setBase]=useState(revision);
  const [selected,setSelected]=useState<number[]>([]);
  const [operation,setOperation]=useState('edit');
