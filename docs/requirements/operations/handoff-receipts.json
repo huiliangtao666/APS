@@ -423,6 +423,74 @@
       ],
       "ack_delivery_policy": "本Inbox最终PROCESSED结果由hook回送；不另投递ACK/完成通知",
       "restrictions": "其他未开始backlog/DEC04-05-06实现暂停；巡检paused；无发布/合并/UAT代签"
+    },
+    {
+      "event_key": "dlv_746c521a-23b2-405f-8574-1dc7bf4b3769:r1",
+      "original_delivery": "dlv_746c521a-23b2-405f-8574-1dc7bf4b3769",
+      "notification_delivery": "dlv_c03c748a-efb2-4986-83f0-9fb77f2f4390",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T14:01:41+08:00",
+      "product_sha": "18c2f59761c9db69554f33a2870b68e15d092320",
+      "design_document_sha": "10c839cd5609b94a49a21d1f856135f27ff3dc3d",
+      "requirement_version": "v0.3",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/14#issuecomment-6489263861",
+      "audit_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/operations/fr018-scope-note01-18c2f597-test-r1.md",
+      "evidence_hashes": {
+        "FR018-SCOPE-NOTE01-18c2f597-INDEPENDENT-R1-REPORT.txt": "c364d42ae1fc693b96fd7bc6864a3ab50eec69046a8f656d9188c6dfb6d1b4d9",
+        "FR018-SCOPE-NOTE01-18c2f597-INDEPENDENT-R1-ASSERTIONS.csv": "a2a8b99c93fa347250be56fcefce907e54245d0e197d9a26a827c21ac40f3f15",
+        "FR018-SCOPE-NOTE01-18c2f597-INDEPENDENT-R1-EVIDENCE.zip": "46199f5d2bee5d1e7e526616a077a37bc75c74bb9a18e9ec3cb28a46a62ab60b"
+      },
+      "verification": {
+        "external_hashes": {
+          "FR018-SCOPE-NOTE01-18c2f597-INDEPENDENT-R1-REPORT.txt": "c364d42ae1fc693b96fd7bc6864a3ab50eec69046a8f656d9188c6dfb6d1b4d9",
+          "FR018-SCOPE-NOTE01-18c2f597-INDEPENDENT-R1-ASSERTIONS.csv": "a2a8b99c93fa347250be56fcefce907e54245d0e197d9a26a827c21ac40f3f15",
+          "FR018-SCOPE-NOTE01-18c2f597-INDEPENDENT-R1-EVIDENCE.zip": "46199f5d2bee5d1e7e526616a077a37bc75c74bb9a18e9ec3cb28a46a62ab60b"
+        },
+        "zip_entries": 103,
+        "internal_hash_count": 102,
+        "assertion_count": 11,
+        "source_paths": [
+          "src/RunPanel.tsx",
+          "server/run-input.mjs",
+          "src/lib/scheduling-scope.mjs",
+          "src/lib/execution-facts.mjs"
+        ],
+        "complete": true
+      },
+      "outcomes": [
+        {
+          "requirement": "FR-018",
+          "before": "In review",
+          "after": "Done",
+          "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgxI",
+          "code_sha": "18c2f59761c9db69554f33a2870b68e15d092320",
+          "card_recommendation": "READY_DONE",
+          "remaining_in_scope": [],
+          "defect": "FR018-SCOPE-NOTE01",
+          "defect_state": "closed",
+          "repair_round": 1,
+          "retest_round": 1,
+          "retained_pass_source": "12eed5514c702f730aae65a39a08747c532f8536"
+        }
+      ],
+      "ack_delivery_policy": "本Inbox最终PROCESSED由hook记录回送；不另派ACK通知",
+      "test_continuation": {
+        "source_event_key": "dlv_746c521a-23b2-405f-8574-1dc7bf4b3769:r1",
+        "dispatch_event_key": "fr014015:18c2f597:card-responsibility-acceptance-r1",
+        "delivery": "dlv_5962eb4d-0906-4760-8426-2b8cb124f919",
+        "status": "queued; SENT only",
+        "product_sha": "18c2f59761c9db69554f33a2870b68e15d092320",
+        "requirements": [
+          "FR-014",
+          "FR-015"
+        ],
+        "issue_comment": "https://github.com/huiliangtao666/APS/issues/12#issuecomment-6489284453",
+        "authorization": "2026-10-29收到Test反馈后持续续派已有交付验收",
+        "scope": "Issue12既有查询/编辑本卡断言与未覆盖的有限补证；不是新功能或修复轮次",
+        "dispatched_at": "2026-10-29T14:03:11+08:00"
+      }
     }
   ]
 }
