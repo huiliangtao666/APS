@@ -1206,6 +1206,40 @@
       "internal_hashes_verified": 21,
       "zip_crc_verified": 24,
       "limitations": "Original S06/S07 and D01-D03 old-SHA PASS retained; FR007/022 and full CR/UAT not complete; CR-DEC04-05-06 design/mock only"
+    },
+    {
+      "event_key": "dlv_ef0c6e69-7c93-455b-bc96-98e52dee22e2:r1",
+      "original_delivery": "dlv_ef0c6e69-7c93-455b-bc96-98e52dee22e2",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test original task result and Files API artifacts",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T17:43:32+08:00",
+      "notification": "FAILED_403; no Test→PM delivery queued",
+      "product_sha": "7077e536d421b79a634b2792790344bc258acd51",
+      "parent_sha": "ca13c6d26a40eb329011c0fa66a747aa735570da",
+      "branch": "feat/fr-017-scope-status",
+      "requirement": "FR-017",
+      "project_status": "Done",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6493295793",
+      "result": {
+        "target_assertions": 19,
+        "PASS": 19,
+        "FAIL": 0,
+        "recommendation": "READY_DONE",
+        "product_repair_rounds_added": 0
+      },
+      "external_hashes": {
+        "FR017-7077e536-INDEPENDENT-REPORT.txt": "c9192016fb376e23333bfc4a6d4091c937459b92d9be1fb0f9463dde49c2ce23",
+        "FR017-7077e536-INDEPENDENT-ASSERTIONS.csv": "d53ae5f2725a128e93d88723fc63ae6db29b623811d9b1f0fdff5e0f925f057d",
+        "FR017-7077e536-INDEPENDENT-LAYERS.csv": "7665e72b43ad2977d2176b75beab169ea35274f57413f557250af98696e3b340",
+        "FR017-7077e536-INDEPENDENT-ORIGINAL-48-PRESERVED.csv": "223d68e9582b4ae9710931a1685e4545d1c3ac107e9ed0303da850846193d6bb",
+        "FR017-7077e536-INDEPENDENT-EVIDENCE.zip": "ef656ded64436ad28846dfc3eb12c4f1f1f17a58e8c60e33f9ca5ce47b71427e"
+      },
+      "internal_hashes_verified": 70,
+      "zip_crc_verified": 75,
+      "old_48_sha256": "223d68e9582b4ae9710931a1685e4545d1c3ac107e9ed0303da850846193d6bb",
+      "limitations": "FR007/022 and full CR/UAT remain open; CR-DEC04-05-06 design/mock only; old S06/S07/D01-D03 PASS retain original SHAs",
+      "uat_dependency": "WAITING_DEPENDENCIES; QA not dispatched"
     }
   ]
 }

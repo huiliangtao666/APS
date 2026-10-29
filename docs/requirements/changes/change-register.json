@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "固定12eed551的S06/S07独立有限验收PASS；FR017新交付7077e536自测PASS、独立Test待结果；FR007/022及完整CR仍NOT_READY；D01-D03 round1 PASS保留",
+      "implementation_status": "固定12eed551的S06/S07独立有限PASS；FR017当前适用实现责任在7077e536独立PASS/原卡Done；FR007/022及完整CR仍NOT_READY；D01-D03 round1 PASS保留",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "A01-A24 PASS；L01额外强制栈耗尽未执行、L02其余完整范围未扩测。原48项25 PASS/19 PARTIAL/2 FAIL_SCOPE/2 NOT_EXECUTABLE逐单元格保持；S06新PASS仅追加Test列。岗位身份/跨组物理池/多班、原始执行资源账、多窗口与各FR维护/联合验证缺口仍在。",
+      "acceptance_result": "FR017 T08/T10/U01/U05/H02独立PASS（7077e536）；原A01-A24及S06/S07有限PASS、原48项25 PASS/19 PARTIAL/2 FAIL_SCOPE/2 NOT_EXECUTABLE保留；FR007/022、L01/L02及完整CR/UAT未完成",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -94,6 +94,11 @@
           "date": "2026-10-29",
           "event_key": "dlv_20413b70-7284-427b-ab59-12e6023f3d90:r1",
           "event": "PM核Dev FR017配置范围/五态/历史保护交付7077e536d421b79a634b2792790344bc258acd51，自测PASS，独立Test dlv_ef0c6e69-7c93-455b-bc96-98e52dee22e2 已SENT；原S06/S07与D01-D03历史不变，完整FR/CR/UAT未通过"
+        },
+        {
+          "date": "2026-10-29",
+          "event_key": "dlv_ef0c6e69-7c93-455b-bc96-98e52dee22e2:r1",
+          "event": "PM核FR017固定7077e536d421b79a634b2792790344bc258acd51独立Test：T08/T10/U01/U05/H02 PASS，本卡Done；原48矩阵及S06/S07/D01-D03历史不改；FR007/022及完整CR/UAT仍NOT_READY"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
@@ -133,7 +138,7 @@
       ],
       "repair_runtime_blocker": "Original dlv_105360d7-1929-489d-85b3-d769a1e15db6 failed server_overloaded at 2026-10-29T03:14:20.564Z; recovery dlv_197f09db-af6a-4cbf-96cf-16ae535359c2; infrastructure retry does not increment defect repair round",
       "repair_original_delivery": "dlv_105360d7-1929-489d-85b3-d769a1e15db6",
-      "acceptance_status": "S06/S07有限检查点独立PASS；FR007/017/022整体NOT_READY；完整CR与业务UAT未通过",
+      "acceptance_status": "FR017当前适用实现责任独立PASS；FR007/022及完整CR和业务UAT未通过；原S06/S07与D01-D03有限结果保留",
       "test_completed_at": "2026-10-29T11:42:40+08:00",
       "test_matrix_summary": {
         "PASS": 25,
@@ -212,13 +217,32 @@
         "parent_sha": "ca13c6d26a40eb329011c0fa66a747aa735570da",
         "branch": "feat/fr-017-scope-status",
         "dev_result": "PASS self-test",
-        "test_status": "SENT; result pending",
+        "test_status": "PROCESSED; FR017 current applicable implementation PASS",
         "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6492970938",
         "artifact_hashes": {
           "FR017-SCOPE-STATUS-EVIDENCE-2026-10-29.zip": "24ccdc3b06aaa2a185f8a94d45cf34415cdbb9d78f1cf44530d833c2326a06b1",
           "FR017-SCOPE-STATUS-REPORT-2026-10-29.txt": "9d637a91dd1a6be0a51a805a8dc7af878bf6a7c57096c27ffc96ca8f1699725b",
           "FR017-SCOPE-STATUS-HANDOFF-2026-10-29.json": "672b0959e2def089265710f367eaff5c0e5933f5e8d4f2e19036165d4ee021d4"
         }
+      },
+      "fr017_acceptance": {
+        "event_key": "dlv_ef0c6e69-7c93-455b-bc96-98e52dee22e2:r1",
+        "test_delivery": "dlv_ef0c6e69-7c93-455b-bc96-98e52dee22e2",
+        "code_sha": "7077e536d421b79a634b2792790344bc258acd51",
+        "parent_sha": "ca13c6d26a40eb329011c0fa66a747aa735570da",
+        "result": "PASS",
+        "card_recommendation": "READY_DONE",
+        "project_status": "Done",
+        "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6493295793",
+        "artifact_hashes": {
+          "FR017-7077e536-INDEPENDENT-REPORT.txt": "c9192016fb376e23333bfc4a6d4091c937459b92d9be1fb0f9463dde49c2ce23",
+          "FR017-7077e536-INDEPENDENT-ASSERTIONS.csv": "d53ae5f2725a128e93d88723fc63ae6db29b623811d9b1f0fdff5e0f925f057d",
+          "FR017-7077e536-INDEPENDENT-LAYERS.csv": "7665e72b43ad2977d2176b75beab169ea35274f57413f557250af98696e3b340",
+          "FR017-7077e536-INDEPENDENT-ORIGINAL-48-PRESERVED.csv": "223d68e9582b4ae9710931a1685e4545d1c3ac107e9ed0303da850846193d6bb",
+          "FR017-7077e536-INDEPENDENT-EVIDENCE.zip": "ef656ded64436ad28846dfc3eb12c4f1f1f17a58e8c60e33f9ca5ce47b71427e"
+        },
+        "old48_preserved_sha256": "223d68e9582b4ae9710931a1685e4545d1c3ac107e9ed0303da850846193d6bb",
+        "limits": "FR007/022 and full CR/UAT not complete; CR-DEC04-05-06 design/mock only"
       }
     },
     {
