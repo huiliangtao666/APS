@@ -130,6 +130,12 @@ def export(workbook_path=None, refresh=True):
     (DOCS / 'uat-register.md').write_text('# UAT场景及负责人清单\n\n全部UAT业务验收负责人：**' + uat_owner + '**。APS-Test负责测试执行和证据；APS-Design组织验收与维护记录。指定负责人不等于场景已经执行或通过。\n\n授权原话：“' + ownership.get('source_quote', '') + '”。责任分工源：[uat-ownership.json](uat-ownership.json)；原始场景仍以v0.3基线为准。\n\n' + markdown_table(uh, ur) + '\n')
     ch = ['CR编号', '标题', '类别', '原基线', '目标要求版本', '提出人', '提出日期', '授权原话', '批准状态', '批准人', '批准日期', '受影响FR', '关联BR/DEC', '变更前', '批准增量', '影响', '计划/工作量', '专项验收条件', '实施状态', 'Dev交付', 'Test任务', '代码SHA', '验收结论', '默认值及设计细化', '限制', '主Issue']
     cr = [[c['id'], c['title'], c['classification'], c['from_version'], c['target_version'], c['requested_by'], c['requested_on'], c['request_quote'], c['approval_status'], c['approved_by'], c['approved_on'], '、'.join(c['primary_requirements']), '、'.join(c['related_rules'] + c['decisions']), c['before'], c['approved_delta'], c['impact'], c['plan_impact'] + '；' + c['effort'], c['acceptance_delta'], c['implementation_status'], c['dev_delivery'], c['product_test_delivery'], c['code_sha'], c['acceptance_result'], c['design_detail_status'], c['limitations'], c['issue_url']] for c in changes]
+    ch[20] = '产品Test任务'
+    ch.insert(20, '设计/契约审查任务')
+    ch.append('设计文档提交')
+    for values, change in zip(cr, changes):
+        values.insert(20, change.get('contract_review_delivery',''))
+        values.append(change.get('design_commit',''))
     for name, headers, rows in [('baseline-register.csv', bh, br), ('requirements-register.csv', rh, rr), ('change-register.csv', ch, cr)]:
         write_csv(name, headers, rows)
     baseline_rows = [[r['id'], r['type'], r['title'], r['stage'], r['text'], '、'.join(r['acceptance_ids']), '[原卡](' + r['canonical']['url'] + ')'] for r in requirements]
@@ -141,6 +147,9 @@ def export(workbook_path=None, refresh=True):
     text += markdown_table(['CR', '名称', '批准状态', '影响FR/BR', '实施状态', '验收结论'], [[c['id'], c['title'], c['approval_status'], '、'.join(c['primary_requirements'] + c['related_rules']), c['implementation_status'], c['acceptance_result']] for c in changes])
     for c in changes:
         text += '\n\n## ' + c['id'] + '\n\n' + '\n\n'.join('**' + title + '**：' + c[key] for title, key in [('授权原话', 'request_quote'), ('变更前', 'before'), ('批准增量', 'approved_delta'), ('专项验收', 'acceptance_delta'), ('设计细化与默认值', 'design_detail_status'), ('影响', 'impact'), ('计划影响', 'plan_impact'), ('工作量评估', 'effort'), ('交付限制', 'limitations'), ('主跟踪记录', 'issue_url')])
+        text += '\n\n**交付与审查追踪**：Dev ' + (c.get('repair_delivery') or c.get('dev_delivery') or '未派发应用实现')
+        text += '；设计/契约审查 ' + (c.get('contract_review_delivery') or '未派发') + '；产品Test ' + (c.get('product_test_delivery') or '未派发')
+        text += '。代码SHA：' + (c.get('code_sha') or '无本CR应用交付') + '；设计文档提交：' + (c.get('design_commit') or '见主Issue及受控目录') + '。'
     (DOCS / 'change-register.md').write_text(text + '\n')
     if workbook_path:
         info = [['生成时间', stamp], ['权威来源', 'GitHub受控基线/CR条文及Project唯一原卡；本工作簿仅为导出快照'], ['基线范围', 'FR43+BR18；另附AC32、UAT18、DEC9'], ['批准变更', '1项CR，关联4项FR、2条BR、2项DEC；不是新增6个需求或多个CR'], ['版本规则', 'v0.3原文不覆盖；批准生效CR叠加当前目标要求；不自动创建正式v0.4冻结版'], ['发布与冻结', baseline['control_status']], ['验收规则', '批准≠已实现≠已验收；旧范围通过记录保留；默认值及设计建议不视为用户已批准'], ['维护职责', '用户批准范围；Design维护；Dev交付代码；Test独立验证'], ['暂停规则', '其他未开始backlog仍暂停；本CR为用户明确授权范围']]

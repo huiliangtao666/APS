@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "In progress: D01/D02/D03 same repair round1 capacity recovery dispatched; no final pushed fix yet",
+      "implementation_status": "D01-D03首轮修复已push，独立复测已派发；其余范围未完成",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -61,12 +61,12 @@
       ],
       "dev_delivery": "dlv_34829592-b369-4312-81ae-a29c8368ae1e",
       "contract_review_delivery": "dlv_536b631b-bac0-40ca-a16c-1eeb6ce1a44f",
-      "code_sha": "0d2de88b70b15c555f6d005c0e4d94674e160cdf",
+      "code_sha": "24ba6884b3a5f07425a728b7733a677563c6aa44",
       "code_branch": "feat/fr-013-016-main-batch",
-      "dev_report": "APS-Dev/DEC02-03-Delivery-2026-10-29.md",
+      "dev_report": "APS-Dev/DEC02-03-Issue3-Round1-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
-      "product_test_delivery": "dlv_fdad89b2-cb94-49fb-bb7c-8cd83b653e97",
-      "acceptance_result": "Test固定0d2de88独立48项：23通过、18部分、3失败、2范围未满足、2不可表达；完整CR及UAT未通过，待修复push后独立复测",
+      "product_test_delivery": "dlv_2c5caf14-f798-43ae-bb2f-737f33a40570",
+      "acceptance_result": "原0d2de88验收失败保留；修复24ba688待独立Test，不宣称3缺陷已通过或完整CR/UAT通过。",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -88,21 +88,21 @@
         {
           "id": "DEC0203-D01",
           "round": 1,
-          "status": "Same round1 capacity recovery dispatched; final pushed fix and independent retest pending",
+          "status": "Dev修复已交付，待独立Test",
           "description": "检查器信任被检结果自报规则，删除MOLD及工装账可绕过冻结启用配置",
           "repair_delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2"
         },
         {
           "id": "DEC0203-D02",
           "round": 1,
-          "status": "Same round1 capacity recovery dispatched; final pushed fix and independent retest pending",
+          "status": "Dev修复已交付，待独立Test",
           "description": "明确窗口人员开始偏移空值可保存并隐式0，须原子拒绝且显式0合法",
           "repair_delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2"
         },
         {
           "id": "DEC0203-D03",
           "round": 1,
-          "status": "Same round1 capacity recovery dispatched; final pushed fix and independent retest pending",
+          "status": "Dev修复已交付，待独立Test",
           "description": "未到生效时间的MOLD误拦合法执行事实，须按实际生效范围判断",
           "repair_delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2"
         }
@@ -111,7 +111,8 @@
         "dlv_105360d7-1929-489d-85b3-d769a1e15db6",
         "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2"
       ],
-      "repair_runtime_blocker": "Original dlv_105360d7-1929-489d-85b3-d769a1e15db6 failed server_overloaded at 2026-10-29T03:14:20.564Z; recovery dlv_197f09db-af6a-4cbf-96cf-16ae535359c2; infrastructure retry does not increment defect repair round"
+      "repair_runtime_blocker": "Original dlv_105360d7-1929-489d-85b3-d769a1e15db6 failed server_overloaded at 2026-10-29T03:14:20.564Z; recovery dlv_197f09db-af6a-4cbf-96cf-16ae535359c2; infrastructure retry does not increment defect repair round",
+      "repair_original_delivery": "dlv_105360d7-1929-489d-85b3-d769a1e15db6"
     },
     {
       "id": "CR-DEC04-05-06-20261029",
@@ -235,7 +236,7 @@
         "https://github.com/huiliangtao666/APS/issues/16"
       ],
       "dev_delivery": "",
-      "contract_review_delivery": "",
+      "contract_review_delivery": "dlv_ca267537-fa49-42fb-bc46-22e19b565ab5",
       "product_test_delivery": "",
       "code_sha": "",
       "code_branch": "",
@@ -255,8 +256,13 @@
         {
           "date": "2026-10-29",
           "event": "形成需求增量、三领域设计、40参数、38数据用例/6工作流条件及114CSV；应用测试未执行"
+        },
+        {
+          "date": "2026-10-29",
+          "event": "独立设计/mock审查已排队 dlv_ca267537-fa49-42fb-bc46-22e19b565ab5；前CR修复独立复测优先"
         }
-      ]
+      ],
+      "design_commit": "4db95a4c4bfb4ec2fe9178b6dc787e69630c9005"
     }
   ]
 }
