@@ -66,7 +66,7 @@ export function prepareProductionBatches(source,orders,minute){
    const deps=source.dependencies.filter(d=>d['订单编号']===first['订单编号']&&d['工序编号']===op['工序编号']&&d['资源类型']==='设备');
    data.dependencies.push(...deps.map(d=>({...d,'订单编号':g.id})));
    // Sum each member's independently declared personnel needs; never assume shared labor.
-   for(const m of g.members)data.dependencies.push(...source.dependencies.filter(d=>d['订单编号']===m.orderId&&d['工序编号']===op['工序编号']&&d['资源类型']==='人员技能').map(d=>({...d,'订单编号':g.id})));
+   for(const m of g.members)data.dependencies.push(...source.dependencies.filter(d=>d['订单编号']===m.orderId&&d['工序编号']===op['工序编号']&&d['资源类型']==='人员技能').map(d=>({...d,'__policyRoleSource':m.id,'订单编号':g.id})));
   }
  }
  return {data,orders:data.orders,findings,records,groups,byId,

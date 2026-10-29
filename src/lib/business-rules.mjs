@@ -1,5 +1,6 @@
+import {validatePolicies} from './resource-policies.mjs';
 import {deliveryParameters,deliveryActive,validateDelivery} from './delivery-policy.mjs';
-import {jointParameters,jointFlags,validateJointResources} from './joint-policy.mjs';
+import {jointParameters,legacyJointParameters,jointFlags,validateJointResources} from './joint-policy.mjs';
 import {batchParameters,activeBatchRule,validateBatchResources} from './batch-policy.mjs';
 import { schedulingScope } from './scheduling-scope.mjs';
 // Versioned capability contract. Configuration storage is not execution support.
@@ -14,7 +15,7 @@ export const ruleCatalog = [
 ].map(([id,category,name,required,scope,parameters,unit,range],i)=>({id,category,name,required,supported:i<6,scope,parameters,unit,range}));
 ruleCatalog.push({id:'MATERIAL',category:'BR-09',name:'BOM需求与批次分配',required:false,supported:true,scope:'全部订单；仅损失配方及每袋包材，库存FEFO；预计供给须显式引用',parameters:'{"允许预计供给":false,"可用状态":["合格"],"预计状态":["预计可用"],"不可用状态":["待检","冻结","不合格"]}',unit:'BOM物料单位',range:'v0.3每1000kg投入/每袋，其他口径拒绝推断'});
 for(const c of ruleCatalog.filter(c=>['CAPACITY','PROGRAM'].includes(c.id))){c.supported=true;c.scope='全部订单；同产品/BOM/整条路线/程序/给定设备的保守资源批';c.parameters=JSON.stringify(c.id==='CAPACITY'?batchParameters:{兼容条件:batchParameters.合批条件});c.range='显式配置必填；非kg订单及其他装载节点阻断';}
-for(const c of ruleCatalog.filter(c=>['MOLD','STORAGE'].includes(c.id))){c.supported=true;c.parameters=JSON.stringify(jointParameters);c.scope='显式逐生产批完整区间；工装套数/空间kg或位置；不推断DEC02';c.range='须填表23及明确的数量、单位、起止偏移；未声明语义阻断';}
+for(const c of ruleCatalog.filter(c=>['MOLD','STORAGE'].includes(c.id))){c.supported=true;c.parameters=JSON.stringify(jointParameters);c.scope='显式逐生产批整工序或明确分钟窗口；工装套数/空间kg或位置；单一参数来源';c.range='须填表23及明确的数量、单位、起止偏移；未声明语义阻断';}
 Object.assign(ruleCatalog.find(c=>c.id==='DELIVERY'),{supported:true,parameters:JSON.stringify(deliveryParameters),scope:'显式模拟交付等待/质量/余保；附条件，不作承诺',range:'须采用物料和批次检查；缺条件保留未知'});
 Object.assign(ruleCatalog.find(c=>c.id==='PROGRESS'),{supported:true,parameters:'{}',scope:'模拟累计事实原始时段、显式剩余分钟与耗料；即使关闭也不解除事实保护',range:'支持累计报废、显式本工序BOM补做及来源汇总映射；暂停/冲销/转机与批次/质量协调未定时阻断；不确认真实执行或质量'});
 export function validRuleTime(value) {
@@ -28,7 +29,7 @@ export function assessRules(data, at=new Date().toISOString(), checkCoverage=fal
  const checkScope=schedulingScope(mode,material,activeBatchRule(data,at),jointFlags(data,at),deliveryActive(data,at)), minimal=mode==='minimal-r1';
  const issues=validateBatchResources(data).map(f=>({...f,table:'batchResources',file:'15_空间与组批规则配置.csv',row:0,field:'关联配置'})),settings=[];const rows=data.rules||[];
  issues.push(...validateJointResources(data,at).map(f=>({...f,table:f.table||'resourceClaims',file:f.table==='tools'?'18_工装配置.csv':'23_资源占用声明.csv',row:f.row||0,field:'关联配置'})));
- issues.push(...validateDelivery(data));
+ issues.push(...validateDelivery(data),...validatePolicies(data));
  const add=(index,field,message)=>issues.push({table:'rules',file:'16_排程规则配置.csv',row:index<0?0:index+2,field,message});
  for(const c of ruleCatalog.filter(c=>c.required))if(!rows.some(r=>r['规则编号']===c.id))add(-1,'规则编号',`必要规则 ${c.id} 不得删除`);
  rows.forEach((r,i)=>{
@@ -47,7 +48,10 @@ export function assessRules(data, at=new Date().toISOString(), checkCoverage=fal
     const p=parameters['可用质量状态'];if(!Array.isArray(p)||!p.length||p.some(x=>typeof x!=='string'||!x.trim()||x!==x.trim())||new Set(p).size!==p.length)add(i,'参数JSON','可用质量状态须为非空、无重复的状态列表');
     const objects=scope.split(',');if(scope!=='*'&&(new Set(objects).size!==objects.length||objects.some(id=>!data.materials?.some(m=>m['物料编号']===id))))add(i,'适用对象','须为 * 或已配置物料编号的无重复逗号列表');
    }else if(scope!=='*')add(i,'适用对象','此规则当前只支持 *（全部对象），不允许遗漏必要约束');
-   if(['MOLD','STORAGE'].includes(c.id))for(const [key,value]of Object.entries(jointParameters))if(parameters[key]!==value)add(i,'参数JSON',`${key}须显式配置为 ${value}；DEC02未决，不采用配置表隐式默认`);
+   if(['MOLD','STORAGE'].includes(c.id)){
+    const same=expected=>Object.keys(parameters).length===Object.keys(expected).length&&Object.entries(expected).every(([k,v])=>parameters[k]===v);
+    if(!same(jointParameters)&&!same(legacyJointParameters))add(i,'参数JSON','须采用资源参数契约 CR-DEC02-03-v1；旧FR022-v1参数仅兼容迁移，实际占用按表23逐项配置');
+   }
    if(c.id==='DELIVERY')for(const [key,value]of Object.entries(deliveryParameters))if(parameters[key]!==value)add(i,'参数JSON',`${key}须显式配置为 ${value}`);
    if(c.id==='SORT'&&!['优先顺序','要求日期'].includes(parameters['排序方式']))add(i,'参数JSON','排序方式须为优先顺序或要求日期');
    if(c.id==='CAPACITY'||c.id==='PROGRAM'){
@@ -67,7 +71,7 @@ export function assessRules(data, at=new Date().toISOString(), checkCoverage=fal
   }
   const inScope=!minimal||['MACHINE','PRECEDENCE','SORT'].includes(c?.id);
   const active=inScope&&enabled&&!!c?.supported&&(!effectiveFrom||Date.parse(effectiveFrom)<=Date.parse(at));
-  settings.push({id:r['规则编号'],category:c?.category||'未知类别',name:r['中文名称'],enabled,active,supported:!!c?.supported,required:!!c?.required,effectiveFrom,scope,parameters,status:!inScope?'本次最小模式未检查':!c?.supported?'未实现/未检查':!enabled?'未启用':active?'采用':'待生效'});
+  settings.push({id:r['规则编号'],category:c?.category||'未知类别',name:r['中文名称'],enabled,active,supported:!!c?.supported,required:!!c?.required,effectiveFrom,scope,parameters:['MOLD','STORAGE'].includes(c?.id)?jointParameters:parameters,status:!inScope?'本次最小模式未检查':!c?.supported?'未实现/未检查':!enabled?'未启用':active?'采用':'待生效'});
  });
  if(checkCoverage){
   for(const order of (data.orders||[]).filter(o=>o['需求类型']!=='预测'&&!['取消','已取消','完成','已完成'].includes(o['订单状态']))){

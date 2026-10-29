@@ -1,3 +1,4 @@
+export const legacyJointParameters:Record<string,string>;
 export const jointParameters:Record<string,string>;
 export function jointFlags(data:any,at?:string):Record<string,boolean>;
 export function validateJointResources(data:any,at?:string):any[];

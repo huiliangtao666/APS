@@ -183,7 +183,7 @@
       "contract": "main-header-only",
       "expected": "fill-before-import",
       "simulation": true,
-      "sha256": "f9d5653bd85816225997054b1dd36cbc964bc9e1c72fa7317b30f91caa490fa2"
+      "sha256": "3fe183f2b26edfe071fa30a677f192435a0ad0c383828eec38ea37cc089035ca"
     },
     {
       "file": "templates/24_订单模拟交付条件.csv",
@@ -199,7 +199,7 @@
       "contract": "main-header-only",
       "expected": "fill-before-import",
       "simulation": true,
-      "sha256": "f47b6e6cd9f4e592c6f0e6a17467a987dd36a20580db8d3f15ed495e2fc38c59"
+      "sha256": "16b82208a9e1e0e9e241cf554b607c4737dc2747f58d3b0c05bcf1d09244bffc"
     },
     {
       "file": "templates/15_空间与组批规则配置.csv",
@@ -231,7 +231,7 @@
       "contract": "main-header-only",
       "expected": "fill-before-import",
       "simulation": true,
-      "sha256": "3c67becdd41f20ce71dbb6fdfbd4ca8f17627650c391562b88ce118b5f55fd9d"
+      "sha256": "5818522db4cf67d98bc0d08a1e7d03c96644dfdf8f3f3e2cad6313beafe2e1d2"
     },
     {
       "file": "templates/19_人员组与可用时间.csv",
@@ -350,6 +350,15 @@
       "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
       "simulation": true,
       "sha256": "75d4f7b076c35dba1016e1e0835c2083ebc37beb0fac1fa2be19a4c1b53f27d3"
+    },
+    {
+      "file": "templates/29_有向技能替代.csv",
+      "contract": "header-only",
+      "table": "skillSubstitutions",
+      "expected": "template",
+      "context": "CR-DEC02-03-v1；技能关系由中文表单维护；此文件仅表头",
+      "simulation": true,
+      "sha256": "e00a631daea5c41c1da312f5c048cd7e0e203270dcbcc533aa73e9665cde4655"
     }
   ]
 }

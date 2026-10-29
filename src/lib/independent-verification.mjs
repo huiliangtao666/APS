@@ -1,3 +1,4 @@
+import {verifyResourcePolicies} from './verify-resource-policies.mjs';
 import {savedInterval} from './verification-endpoints.mjs';
 
 function result(status, details) {
@@ -8,7 +9,7 @@ function result(status, details) {
  * Rechecks only the confirmed R1 result constraints. This intentionally does
  * not call the scheduler's own validation routine.
  */
-export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules = ['MACHINE', 'PRECEDENCE'], checkedAt = new Date().toISOString()) {
+export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules = ['MACHINE', 'PRECEDENCE'], checkedAt = new Date().toISOString(), frozenData = null) {
   const tasks = Array.isArray(plan?.tasks) ? plan.tasks : [];
   const orderRows = Array.isArray(orders) ? orders : [];
   const routeRows = Array.isArray(routes) ? routes : [];
@@ -105,5 +106,9 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
   else if (!tasks.length || !precedenceLinks.length) details.precedence = result('not_checked', ['结果中没有可核对的前序任务关系。']);
   else details.precedence = result('pass', [`已核对 ${precedenceLinks.length} 条前序关系；后序均不早于前序完成。`]);
 
-  return { checkedAt, planId: plan?.id ?? '', findings, scopeNote:'独立复核仅检查单线、机器不重叠、工序先后；不代表完整业务可执行。', checks: details };
+  if(frozenData&&plan.resourcePolicyContract==='CR-DEC02-03-v1'&&plan.conditions?.mode!=='minimal-r1'){
+    details.resourcePolicies=verifyResourcePolicies(plan,frozenData);
+    if(details.resourcePolicies.status==='problem')findings.push(...details.resourcePolicies.details.map(message=>({code:'VERIFY / RESOURCE_POLICY',message,taskIds:tasks.map(t=>t.id)})));
+  }
+  return { checkedAt, planId: plan?.id ?? '', findings, scopeNote:'独立复核仅检查单线、机器不重叠、工序先后；资源参数复核仅适用于携带冻结配置的新契约；不代表完整业务可执行。', checks: details };
 }

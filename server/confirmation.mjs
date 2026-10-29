@@ -45,7 +45,7 @@ export function reviewPlan(s,p,now=new Date().toISOString()){
    if(enabled.some(id=>!run.conditions.enabledRuleIds.includes(id)))add('unchecked_rules','本次运行遗漏当前启用规则');
    const replay=calculate(run.executionData,run.revision,run.createdAt,run.conditions);
    for(const key of Object.keys(replay).filter(k=>!['id','name','createdAt'].includes(k)))if(inputHash(replay[key])!==inputHash(p[key])){add('result_mismatch','结果与原始输入、条件和规则重新检查不一致');break;}
-   checks=independentlyVerifyPlan(p,run.executionData.orders,run.executionData.routes,p.rules,now);
+   checks=independentlyVerifyPlan(p,run.executionData.orders,run.executionData.routes,p.rules,now,run.executionData);
    if(Object.values(checks.checks).some(c=>c.status==='problem')||checks.findings.length)add('independent_conflict','独立复核发现冲突');
    if(checks.checks.lineScope.status!=='pass'||checks.checks.machineOverlap.status!=='pass')add('unchecked_result','独立复核未完成');
    // A route without predecessors has no precedence edges; that is vacuous,

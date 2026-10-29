@@ -10,6 +10,7 @@ export type VerificationReport = {
     lineScope: VerificationCheck;
     machineOverlap: VerificationCheck;
     precedence: VerificationCheck;
+    resourcePolicies?: VerificationCheck;
   };
 };
 export function independentlyVerifyPlan(
@@ -18,4 +19,5 @@ export function independentlyVerifyPlan(
   routes?: Array<Record<string, string>>,
   enabledRules?: string[],
   checkedAt?: string,
+  frozenData?: any,
 ): VerificationReport;

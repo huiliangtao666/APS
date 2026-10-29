@@ -3,7 +3,7 @@ import {seed,defs} from '../server/planner.ts';import {recordKeys,validateInputs
 const base='public/fr036',matrix=JSON.parse(fs.readFileSync(base+'/matrix.json')),samples=JSON.parse(fs.readFileSync(base+'/samples.json')).samples;
 const read=p=>fs.readFileSync(base+'/'+p,'utf8');
 const rows=(file)=>{const [head,...body]=parseInputCsv(read(file)).filter(r=>r.some(c=>c.trim()));return body.map(r=>Object.fromEntries(head.map((h,i)=>[h.replace(/^\ufeff/,''),r[i]])));};
-test('24 actual contracts, key parity, 19 chapter categories, five systems and all hashed sample bytes',()=>{
+test('current actual contracts, key parity, 19 chapter categories, five systems and all hashed sample bytes',()=>{
  assert.equal(matrix.inbound.length,defs.length);assert.equal(matrix.chapter9.length,19);assert.deepEqual([...new Set(matrix.inbound.flatMap(d=>d.systems))].sort(),['APS','ERP','MES','OMS','PLM','WMS']);
  for(const d of defs){const m=matrix.inbound.find(m=>m.key===d.key);assert.deepEqual(m.fields,d.fields);assert.deepEqual(m.uniqueKey,recordKeys[d.key]);assert.deepEqual(parseInputCsv(read(m.template)).filter(r=>r.some(Boolean)),[d.fields]);assert.ok(m.sourceOwner&&m.references&&m.version);}
  for(const s of samples)assert.equal(createHash('sha256').update(fs.readFileSync(base+'/'+s.file)).digest('hex'),s.sha256,s.file);

@@ -1,0 +1,78 @@
+// One policy source per declaration; no name/grade based skill rules.
+export const skillsOf=value=>String(value||'').split(/[;,，；\s]+/).filter(Boolean);
+export const whole='显式逐生产批完整区间';
+export const windowMode='明确窗口';
+export function migratePolicies(input){
+ const d=structuredClone(input);d.skillSubstitutions??=[];
+ d.tools=(d.tools||[]).map(t=>({...t,'可用起始分钟':t['可用起始分钟']??'0','可用结束分钟':t['可用结束分钟']??'525600'}));
+ d.resourceClaims=(d.resourceClaims||[]).map(c=>({...c,'窗口开始偏移分钟':c['窗口开始偏移分钟']??'0','窗口结束偏移分钟':c['窗口结束偏移分钟']??'0','参数来源':c['参数来源']??'逐项声明'}));
+ d.dependencies=(d.dependencies||[]).map(r=>r['资源类型']==='人员技能'?{...r,'窗口外释放':r['窗口外释放']??'是'}:r);
+ return d;
+}
+export function effectiveClaim(c,data){
+ const t=(data.tools||[]).find(t=>t['工装编码']===c['资源编号']);
+ return c['资源类型']==='工装'&&c['参数来源']==='工装配置'?{...c,...Object.fromEntries(['需求数量','提前占用分钟','后延占用分钟'].map(k=>[k,t?.[k==='需求数量'?'每任务需求数量':k]]))}:c;
+}
+const minute=v=>typeof v==='string'&&/^\d+$/.test(v)&&Number.isSafeInteger(Number(v))&&Number(v)<=525600;
+export function validatePolicies(data){
+ const issues=[];const add=(table,i,field,message)=>issues.push({code:'INPUT / RESOURCE_POLICY',table,row:i+2,field,message});
+ const skillSet=new Set((data.personnelGroups||[]).flatMap(g=>skillsOf(g['技能'])));
+ for(const [i,r]of (data.dependencies||[]).entries())if(r['资源类型']==='人员技能'&&r['所需技能'])skillSet.add(r['所需技能']);
+ for(const [i,f]of (data.executionFacts||[]).entries())if((data.resourceClaims||[]).some(c=>c['订单编号']===f['订单编号']&&c['工序编号']===f['工序编号']&&(data.rules||[]).some(r=>r['规则编号']===(c['资源类型']==='工装'?'MOLD':'STORAGE')&&r['是否启用']==='是'))||(data.dependencies||[]).some(d=>d['资源类型']==='人员技能'&&d['订单编号']===f['订单编号']&&d['工序编号']===f['工序编号']))add('executionFacts',i,'工序编号','该任务已有执行事实，原始工装/人员占用事实未建模；本次参数窗口仅支持未开始任务，不把阶段偏移重置到剩余工时，也不改写历史。');
+ const seen=new Set();
+ for(const [i,r]of (data.skillSubstitutions||[]).entries()){
+  const fail=(f,m)=>add('skillSubstitutions',i,f,m),key=JSON.stringify([r['可提供技能'],r['所需技能'],r['适用工序']]);
+  if(!r['关系编号']?.trim())fail('关系编号','必填');
+  if(seen.has(key))fail('可提供技能','同方向及范围只能有一条关系，禁止重叠覆盖');seen.add(key);
+  for(const k of ['可提供技能','所需技能'])if(!r[k]?.trim()||r[k]!==r[k].trim()||!skillSet.has(r[k]))fail(k,'须引用人员组已声明技能或现有需求技能');
+  if(r['可提供技能']===r['所需技能'])fail('所需技能','同技能自动匹配，无须替代关系');
+  if(!['是','否'].includes(r['是否启用']))fail('是否启用','仅接受是或否；否表示禁止该范围的有向替代');
+  if(r['适用工序']!=='*'&&!(data.routes||[]).some(x=>x['工序编号']===r['适用工序']))fail('适用工序','须为 * 或单个现有工序编号；精确工序优先于 *，禁用也覆盖 *');
+ }
+ for(const [i,t]of (data.tools||[]).entries())for(const k of ['提前占用分钟','后延占用分钟'])if(!minute(t[k]))add('tools',i,k,'须为0–525600整数分钟');
+ for(const [i,t]of (data.tools||[]).entries())if(t['可用起始分钟']!==undefined||t['可用结束分钟']!==undefined){
+  if(!minute(t['可用起始分钟'])||!minute(t['可用结束分钟'])||Number(t['可用结束分钟'])<=Number(t['可用起始分钟']))add('tools',i,'可用结束分钟','工装可用期须显式填写 0–525600 的整数分钟，结束大于开始');
+ }
+ for(const [i,g]of (data.personnelGroups||[]).entries())if(!Number.isSafeInteger(Number(g['人员数量']))||Number(g['人员数量'])<1)add('personnelGroups',i,'人员数量','人数须为安全正整数；所有技能共用该人数池');
+ const claimKeys=new Set();
+ for(const [i,c]of (data.resourceClaims||[]).entries()){
+  const fail=(f,m)=>add('resourceClaims',i,f,m);
+  const claimKey=JSON.stringify([c['订单编号'],c['工序编号'],c['资源类型'],c['资源编号']]);
+  if(claimKeys.has(claimKey))fail('资源编号','同一订单/工序/资源仅允许一条占用声明；多个或重叠工装窗口当前禁止，避免整段与阶段叠加');claimKeys.add(claimKey);
+  if(c['参数来源']!==undefined&&!['逐项声明','工装配置'].includes(c['参数来源']))fail('参数来源','仅支持逐项声明或工装配置');
+  if(c['参数来源']==='工装配置'){
+   if(c['资源类型']!=='工装')fail('参数来源','空间只能逐项声明');
+   for(const k of ['需求数量','提前占用分钟','后延占用分钟'])if(c[k]?.trim())fail(k,'采用工装配置时此字段须留空，避免两套冲突来源；预览显示有效值');
+  }
+  const effective=effectiveClaim(c,data);
+  for(const k of ['提前占用分钟','后延占用分钟'])if(!minute(effective[k]))fail(k,'有效值须为0–525600整数分钟');
+  const a=c['窗口开始偏移分钟']??'0',b=c['窗口结束偏移分钟']??'0';
+  if(!minute(a)||!minute(b))fail('窗口开始偏移分钟','窗口偏移须为0–525600的整数分钟');
+  if(c['占用口径']===whole&&(Number(a)!==0||Number(b)!==0))fail('占用口径','整工序占用不能同时配置阶段窗口');
+  if(c['占用口径']===windowMode){
+   const o=(data.orders||[]).find(o=>o['订单编号']===c['订单编号']);
+   const duration=Number((data.times||[]).find(t=>t['产品编号']===o?.['产品编号']&&t['工序编号']===c['工序编号'])?.['固定分钟']);
+   if(!(Number(a)+Number(b)<duration))fail('窗口结束偏移分钟','明确窗口须短于已配置固定工时；从开始+偏移到结束−偏移，不猜阶段时长');
+  }
+ }
+ for(const [i,r]of (data.dependencies||[]).entries())if(r['资源类型']!=='人员技能'&&['人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'].some(k=>r[k]?.trim()))add('dependencies',i,'人员参与阶段','人员阶段/偏移/释放仅适用于人员技能依赖；设备及其他资源请使用其对应配置');
+ for(const [i,r]of (data.dependencies||[]).entries())if(r['资源类型']==='人员技能'){
+  if(r['窗口外释放']!==undefined&&!['是','否'].includes(r['窗口外释放']))add('dependencies',i,'窗口外释放','仅接受是或否；否表示全工序保留人数');
+  if(!Number.isSafeInteger(Number(r['需求数量']))||Number(r['需求数量'])<1)add('dependencies',i,'需求数量','人员需求必须为安全正整数');
+  if(!r['所需技能']?.trim())add('dependencies',i,'所需技能','人员必须填写所需技能');
+  const group=(data.personnelGroups||[]).find(g=>g['人员组编号']===r['资源编号']);
+  if(!group)add('dependencies',i,'资源编号','须引用现有人员组；同池多个技能只共享一份人数容量');
+ }
+ return issues;
+}
+// Exact operation override, then wildcard; no reverse edge, no transitive search.
+export function skillMatch(group,required,operation,relations=[]){
+ const skills=skillsOf(group['技能']);
+ if(!required||skills.includes(required))return {providedSkill:required,requiredSkill:required,relationId:'',reason:'同技能匹配'};
+ for(const provided of skills){
+  const edges=relations.filter(r=>r['可提供技能']===provided&&r['所需技能']===required);
+  const edge=edges.find(r=>r['适用工序']===operation)||edges.find(r=>r['适用工序']==='*');
+  if(edge?.['是否启用']==='是')return {providedSkill:provided,requiredSkill:required,relationId:edge['关系编号'],reason:`有向替代 ${provided} → ${required}（${edge['关系编号']}，${edge['适用工序']}）`};
+ }
+ return null;
+}

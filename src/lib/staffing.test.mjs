@@ -8,7 +8,7 @@ const group = { '人员组编号': 'G1', '人员数量': '2', '技能': '装卸,
 test('matches required headcount, skill, shift and the personnel phase window', () => {
   const result = allocatePersonnel([requirement], [group], 20, 80);
   assert.equal(result.ok, true);
-  assert.deepEqual(result.allocations, [{ groupId: 'G1', count: 2, start: 20, end: 70 }]);
+  assert.deepEqual(result.allocations.map(({groupId,count,start,end})=>({groupId,count,start,end})), [{ groupId: 'G1', count: 2, start: 20, end: 70 }]);
 });
 
 test('rejects sufficient headcount when skill or shift does not match', () => {

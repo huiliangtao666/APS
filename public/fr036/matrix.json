@@ -715,7 +715,9 @@
         "提前占用分钟",
         "后延占用分钟",
         "是否启用",
-        "说明"
+        "说明",
+        "可用起始分钟",
+        "可用结束分钟"
       ],
       "systems": [
         "APS"
@@ -731,7 +733,7 @@
         "提前占用分钟",
         "后延占用分钟"
       ],
-      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "version": "CR-DEC02-03-v1；服务端revision与审计；新运行冻结配置及resourcePolicyVersion；旧历史不改写",
       "validation": [
         "src/App.tsx#importCsv",
         "server/input-validation.mjs#validateInputs"
@@ -785,7 +787,10 @@
         "单位",
         "提前占用分钟",
         "后延占用分钟",
-        "占用口径"
+        "占用口径",
+        "窗口开始偏移分钟",
+        "窗口结束偏移分钟",
+        "参数来源"
       ],
       "systems": [
         "APS"
@@ -801,7 +806,7 @@
         "提前占用分钟",
         "后延占用分钟"
       ],
-      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "version": "CR-DEC02-03-v1；服务端revision与审计；新运行冻结配置及resourcePolicyVersion；旧历史不改写",
       "validation": [
         "src/App.tsx#importCsv",
         "server/input-validation.mjs#validateInputs"
@@ -924,7 +929,8 @@
         "所需班次",
         "人员参与阶段",
         "人员开始偏移",
-        "人员结束偏移"
+        "人员结束偏移",
+        "窗口外释放"
       ],
       "systems": [
         "PLM",
@@ -936,7 +942,8 @@
         "订单编号",
         "工序编号",
         "资源类型",
-        "资源编号"
+        "资源编号",
+        "人员参与阶段"
       ],
       "references": "订单→orders→产品工序；设备→machines同工序；人员技能→personnelGroups；按资源类型解释引用",
       "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
@@ -944,7 +951,7 @@
         "提前占用分钟",
         "后延占用分钟"
       ],
-      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "version": "CR-DEC02-03-v1；服务端revision与审计；新运行冻结配置及resourcePolicyVersion；旧历史不改写",
       "validation": [
         "src/App.tsx#importCsv",
         "server/input-validation.mjs#validateInputs"
@@ -1016,6 +1023,39 @@
         "server/input-validation.mjs#validateInputs"
       ],
       "template": "templates/16_排程规则配置.csv"
+    },
+    {
+      "key": "skillSubstitutions",
+      "label": "有向技能替代",
+      "file": "29_有向技能替代.csv",
+      "fields": [
+        "关系编号",
+        "可提供技能",
+        "所需技能",
+        "是否启用",
+        "适用工序",
+        "说明"
+      ],
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "计划员/主管",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "关系编号"
+      ],
+      "references": "技能引用人员组或人员需求；可提供技能→所需技能；精确工序覆盖*；同技能自动匹配；无逆向/传递",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "可用起始分钟",
+        "可用结束分钟"
+      ],
+      "version": "CR-DEC02-03-v1；服务端revision与审计；新运行冻结配置及resourcePolicyVersion；旧历史不改写",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/29_有向技能替代.csv"
     }
   ],
   "outbound": [

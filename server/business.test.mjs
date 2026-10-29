@@ -588,7 +588,7 @@ test('FR022 canonical async runs persist joint occupancy, immutable histories an
  assert.equal(run.body.status,'completed',JSON.stringify(run.body));
  const plans=(await call('/plans')).body,p=plans.find(p=>p.id===run.body.planId);assert.deepEqual(p.tasks.filter(t=>t.operation==='MIX').map(t=>t.start),[0,0,30]);
  assert.equal(p.jointResourceChecks.MOLD,true);assert.ok(!p.resourceReservations.some(r=>r.resourceId==='forged'));assert.equal(p.ruleSnapshot.capabilityVersion,'FR022-v1');
- const snapshot=(await call('/runs/'+run.body.id+'/inputs')).body;assert.deepEqual(snapshot.executionData.resourceClaims,d.resourceClaims);assert.equal(snapshot.conditions.checkScope.checked.some(x=>x.includes('工装')),true);
+ const snapshot=(await call('/runs/'+run.body.id+'/inputs')).body;assert.deepEqual(snapshot.executionData.resourceClaims,d.resourceClaims.map(c=>({...c,'参数来源':'逐项声明','窗口开始偏移分钟':'0','窗口结束偏移分钟':'0'})));assert.equal(snapshot.conditions.checkScope.checked.some(x=>x.includes('工装')),true);
  const csv=await call('/export',{planId:p.id});assert.equal(csv.status,200);assert.match(csv.body,/G40/);assert.match(csv.body,/联合资源占用/);
  const claims=structuredClone(d.resourceClaims);claims.forEach(c=>c['后延占用分钟']='10');assert.equal((await call('/tables/resourceClaims',{revision:1,rows:claims})).status,200);
  const oldAgain=(await call('/plans')).body.find(x=>x.id===p.id);assert.deepEqual(oldAgain,p);assert.deepEqual((await call('/runs/'+run.body.id+'/inputs')).body,snapshot);
