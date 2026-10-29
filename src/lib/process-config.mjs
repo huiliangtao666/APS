@@ -1,7 +1,7 @@
 const resourceTypes = new Set(['设备', '模具', '工具', '人员技能', '空间', '投料', '物料']);
 
 /** FR-004 checks route/time/dependency configuration without assigning resource semantics. */
-export function validateProcessConfig({ products = [], orders = [], routes = [], times = [], dependencies = [], machines = [], materials = [], personnelGroups = [] }) {
+export function validateProcessConfig({ products = [], orders = [], routes = [], times = [], dependencies = [], machines = [], materials = [], personnelGroups = [], tools = [] }) {
   const findings = [];
   const issueFields={DEPENDENCY_ORDER:'订单编号',DEPENDENCY_OPERATION:'工序编号',DEPENDENCY_TYPE:'资源类型',PERSONNEL_COUNT:'需求数量',PERSONNEL_PHASE:'人员参与阶段',PROCESS_TIME_REFERENCE:'工序编号',PROCESS_TIME_REQUIRED:'产品编号 + 工序编号',PROCESS_TIME_DUPLICATE:'产品编号 + 工序编号',MACHINE_REQUIRED:'设备编号',MACHINE_DUPLICATE:'设备编号',ROUTE_DUPLICATE:'产品编号 + 工序编号'};
   const at=(table,index,field)=>({push(finding){
@@ -92,6 +92,8 @@ export function validateProcessConfig({ products = [], orders = [], routes = [],
     if (!resourceTypes.has(type)) at('dependencies',index,'资源编号').push({ code:'INPUT / DEPENDENCY_TYPE', message:`${prefix}资源类型为空或不支持` });
     if (!id && !(type==='人员技能'&&row['候选人员组']?.trim())) at('dependencies',index,'资源编号').push({ code:'INPUT / DEPENDENCY_ID', message:`${prefix}缺少资源编号` });
     if (type === '设备' && id && !machineIds.has(id)) at('dependencies',index,'资源编号').push({ code:'INPUT / DEPENDENCY_REFERENCE', message:`${prefix}引用未配置的设备 ${id}` });
+    // 工具/模具 share the existing 工装 master identity; original05 mapping is separate.
+    if (['工具', '模具'].includes(type) && id && !tools.some(tool => tool['工装编码'] === id)) at('dependencies',index,'资源编号').push({ code:'INPUT / DEPENDENCY_REFERENCE', message:`${prefix}引用未配置的工装 ${id}（${type}）` });
     if (type === '物料' && id && !materialIds.has(id)) at('dependencies',index,'资源编号').push({ code:'INPUT / DEPENDENCY_REFERENCE', message:`${prefix}引用未配置的物料 ${id}` });
     if (type === '人员技能' && id && personnelGroupIds.size && !personnelGroupIds.has(id)) at('dependencies',index,'资源编号').push({ code:'INPUT / DEPENDENCY_REFERENCE', message:`${prefix}引用未配置的人员组 ${id}` });
     if (type === '人员技能') {
