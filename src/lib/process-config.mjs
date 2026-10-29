@@ -1,13 +1,16 @@
+import {sourceRefs} from './problem-records.mjs';
 const resourceTypes = new Set(['设备', '模具', '工具', '人员技能', '空间', '投料', '物料']);
 
 /** FR-004 checks route/time/dependency configuration without assigning resource semantics. */
 export function validateProcessConfig({ products = [], orders = [], routes = [], times = [], dependencies = [], machines = [], materials = [], personnelGroups = [] }) {
   const findings = [];
   const issueFields={DEPENDENCY_ORDER:'订单编号',DEPENDENCY_OPERATION:'工序编号',DEPENDENCY_TYPE:'资源类型',PERSONNEL_COUNT:'需求数量',PERSONNEL_PHASE:'人员参与阶段',PROCESS_TIME_REFERENCE:'工序编号',PROCESS_TIME_REQUIRED:'产品编号 + 工序编号',PROCESS_TIME_DUPLICATE:'产品编号 + 工序编号',MACHINE_REQUIRED:'设备编号',MACHINE_DUPLICATE:'设备编号',ROUTE_DUPLICATE:'产品编号 + 工序编号'};
-  const at=(table,index,field)=>({push(finding){
+  const at=(table,index,field,members)=>({push(finding){
     const code=finding.code.split(' / ')[1];
     const required=code==='ROUTE_REQUIRED'?['产品编号','工序编号','工序名称'].find(f=>finding.message.includes('缺少'+f)):null;
-    findings.push({...finding,table,row:index+2,field:required||issueFields[code]||field});
+    const actualField=required||issueFields[code]||field;
+    const relatedRecords=table==='routes'?sourceRefs(table,members||[routes[index]],routes).map(ref=>({...ref,field:actualField})):undefined;
+    findings.push({...finding,table,row:index+2,field:actualField,...(relatedRecords?{relatedRecords}:{})});
   }});
   const productIds = new Set(products.map(row => (row['产品编号'] || '').trim()).filter(Boolean));
   const orderIds = new Set(orders.map(row => (row['订单编号'] || '').trim()).filter(Boolean));
@@ -26,7 +29,7 @@ export function validateProcessConfig({ products = [], orders = [], routes = [],
     if (product && productIds.has(product) && operation) {
       routeOperationKeys.add(`${product}\u0000${operation}`);
       const list = routeByProduct.get(product) || [];
-      if (list.some(existing => (existing['工序编号'] || '').trim() === operation)) at('routes',index,'工序编号').push({ code:'INPUT / ROUTE_DUPLICATE', message:`产品 ${product} 的工序编号 ${operation} 重复` });
+      if (list.some(existing => (existing['工序编号'] || '').trim() === operation)) at('routes',index,'工序编号',routes.filter(r=>(r['产品编号']||'').trim()===product&&(r['工序编号']||'').trim()===operation)).push({ code:'INPUT / ROUTE_DUPLICATE', message:`产品 ${product} 的工序编号 ${operation} 重复` });
       else list.push(row);
       routeByProduct.set(product, list);
     }
@@ -36,17 +39,23 @@ export function validateProcessConfig({ products = [], orders = [], routes = [],
     for (const row of list) {
       const operation = row['工序编号'].trim();
       const predecessor = (row['前序工序'] || '').trim();
-      if (predecessor && !opIds.has(predecessor)) at('routes',routes.indexOf(row),'前序工序').push({ code:'INPUT / ROUTE_PREDECESSOR', message:`产品 ${product} / 工序 ${operation} 引用不存在的前序工序 ${predecessor}` });
+      if (predecessor && !opIds.has(predecessor)) at('routes',routes.indexOf(row),'前序工序').push({ code:'INPUT / ROUTE_PREDECESSOR', missingTarget:{table:'routes',key:`${product}/${predecessor}`}, message:`产品 ${product} / 工序 ${operation} 引用不存在的前序工序 ${predecessor}` });
     }
-    const visiting = new Set(), visited = new Set();
+    const visiting = new Set(), visited = new Set(), path=[];
     const visit = id => {
-      if (visiting.has(id)) { at('routes',routes.findIndex(r=>r['产品编号']===product&&r['工序编号']===id),'前序工序').push({ code:'INPUT / ROUTE_CYCLE', message:`产品 ${product} 的路线存在循环依赖，涉及工序 ${id}` }); return; }
+      if (visiting.has(id)) {
+        // The existing traversal checks the first accepted occurrence per operation.
+        // Keep exactly its active cycle, excluding upstream callers and discarded duplicates.
+        const members=path.slice(path.indexOf(id)).map(op=>list.find(r=>r['工序编号'].trim()===op));
+        const ordered=members.slice().sort((a,b)=>routes.indexOf(a)-routes.indexOf(b));
+        at('routes',routes.indexOf(members[0]),'前序工序',ordered).push({ code:'INPUT / ROUTE_CYCLE', message:`产品 ${product} 的路线存在循环依赖，涉及工序 ${id}` }); return;
+      }
       if (visited.has(id)) return;
-      visiting.add(id);
+      visiting.add(id); path.push(id);
       const row = list.find(item => item['工序编号'].trim() === id);
       const predecessor = (row?.['前序工序'] || '').trim();
       if (predecessor && opIds.has(predecessor)) visit(predecessor);
-      visiting.delete(id); visited.add(id);
+      path.pop(); visiting.delete(id); visited.add(id);
     };
     for (const id of opIds) visit(id);
   }
