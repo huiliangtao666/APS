@@ -12,10 +12,10 @@ Issue3 / CR-DEC02-03 P10 E01–E04 限定交付 r1
 实时GitHub读取Issue3正文/30评论、Project2两唯一原卡（均In progress）及main
  d6b8d2ec2d3efeace82d2d4f18d0ec433db7ae25 的原基线与CR；未改卡/Issue。
 受检产品分支 feat/issue3-p06-multishift SHA 7a26732efc0fb440ca6f8ac7aa6261e33757eb81，
-其直接父2016258169074d1e29292e5a3e58a0fa9304b4bf；新分支直接以7a26732为父。
+其直接父2016258169074d1e29292e5a3e58a0fa9304b4bf；首个实现提交7c90507b37587b8f2b0f4851b6534d140423c920直接以7a26732为父；最终head及直接父以外层HANDOFF.json为准。
 新产品分支 feat/issue3-p10-e01-e04；最终完整SHA在外层HANDOFF.json，不用文档SHA冒充产品。
 设计文档固定SHA 9c230d4aeda124915bcb917b929050f020a11951，PM根目录副本ZIP/CSV已核；
-原E01–E04数值样例7条逐项转换为产品输入，预期取原设计legal，不用算法自报值作预期。
+原E01–E04数值样例8条逐项转换为产品输入，预期取原设计legal，不用算法自报值作预期。
 
 已有实现复用与本次变更
 7a26732已包含beae5b4 P10核心：池稳定ID/有限正整数唯一容量、明确G→P、多组累计、

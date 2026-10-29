@@ -16,9 +16,10 @@
     "design_math.py": "21eeb5e2bfdf2bede236ddb15b23e664daa82e17f04bea1d7f7bfa0236045ace",
     "SHA256.json": "badd496103ed46c5d10ca28620364d82df09ab3b7b63370d5be294a6dc571ffb"
   },
-  "product_direct_parent": "7a26732efc0fb440ca6f8ac7aa6261e33757eb81",
   "parent_parent": "2016258169074d1e29292e5a3e58a0fa9304b4bf",
   "authority_main_sha": "d6b8d2ec2d3efeace82d2d4f18d0ec433db7ae25",
   "scope": "E01-E04 explicit shared ordinary posts only; full matrix partial boundaries retained",
-  "new_failure_and_repair_rounds": 0
+  "new_failure_and_repair_rounds": 0,
+  "implementation_commit": "7c90507b37587b8f2b0f4851b6534d140423c920",
+  "implementation_direct_parent": "7a26732efc0fb440ca6f8ac7aa6261e33757eb81"
 }
