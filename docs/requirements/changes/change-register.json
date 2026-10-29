@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "S06候选联合分配范围缺口已派Dev实施；D01-D03独立round1 PASS保留；其他CR范围仍未完成",
+      "implementation_status": "S06候选联合分配有限检查点Dev已push，固定12eed551独立Test已入队；D01-D03 round1 PASS及其他未闭合范围保留",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -61,12 +61,12 @@
       ],
       "dev_delivery": "dlv_34829592-b369-4312-81ae-a29c8368ae1e",
       "contract_review_delivery": "dlv_536b631b-bac0-40ca-a16c-1eeb6ce1a44f",
-      "code_sha": "24ba6884b3a5f07425a728b7733a677563c6aa44",
+      "code_sha": "12eed5514c702f730aae65a39a08747c532f8536",
       "code_branch": "feat/fr-013-016-main-batch",
-      "dev_report": "APS-Dev/DEC02-03-Issue3-Round1-REPORT-2026-10-29.txt",
+      "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
-      "product_test_delivery": "dlv_2c5caf14-f798-43ae-bb2f-737f33a40570",
-      "acceptance_result": "D01-D03 round1已PASS；48项25 PASS/19 PARTIAL/2 FAIL_SCOPE/2 NOT_EXECUTABLE历史结论保留。S06范围实现已派发，待新SHA独立Test，不提前升级原矩阵或完整CR/UAT结论。",
+      "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
+      "acceptance_result": "原48项25 PASS/19 PARTIAL/2 FAIL_SCOPE/2 NOT_EXECUTABLE及D01-D03独立round1 PASS保留；S06/S07本次Dev有限PASS，六类独立断言待执行，不升级旧矩阵或完整CR/UAT结论。",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -80,6 +80,10 @@
         {
           "date": "2026-10-29",
           "event": "登记基线清单与变更台账；原卡和原验收历史保留"
+        },
+        {
+          "date": "2026-10-29",
+          "event": "Design处理S06 DEV_DELIVERED dlv_3a49b951-ccd7-4575-b44e-45d70684be50:r1；固定12eed5514c702f730aae65a39a08747c532f8536交独立Test dlv_f4ebcde5-67f6-4898-a740-535c299548de；非D01-D03新轮次"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
@@ -119,7 +123,7 @@
       ],
       "repair_runtime_blocker": "Original dlv_105360d7-1929-489d-85b3-d769a1e15db6 failed server_overloaded at 2026-10-29T03:14:20.564Z; recovery dlv_197f09db-af6a-4cbf-96cf-16ae535359c2; infrastructure retry does not increment defect repair round",
       "repair_original_delivery": "dlv_105360d7-1929-489d-85b3-d769a1e15db6",
-      "acceptance_status": "三项缺陷round1复测通过；完整CR及业务UAT未通过",
+      "acceptance_status": "S06 Dev有限PASS待独立Test；整卡NOT_READY，完整CR及业务UAT未通过",
       "test_completed_at": "2026-10-29T11:42:40+08:00",
       "test_matrix_summary": {
         "PASS": 25,
@@ -129,7 +133,20 @@
       },
       "test_report_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/changes/CR-DEC02-03-20261029/test-review-20261029.md",
       "active_dev_delivery": "dlv_3a49b951-ccd7-4575-b44e-45d70684be50",
-      "active_checkpoint": "S06候选组前台维护/有限联合分配及独立复核；S07及旧单组兼容回归"
+      "active_checkpoint": "S06候选组维护/有限联合分配/独立复核已交付，S07与兼容保护待独立Test",
+      "checkpoint_delivery": {
+        "event_key": "dlv_3a49b951-ccd7-4575-b44e-45d70684be50:r1",
+        "notification_delivery": "dlv_12bd1b32-b929-4c2e-9a92-a190bd36d6e4",
+        "dev_delivery": "dlv_3a49b951-ccd7-4575-b44e-45d70684be50",
+        "product_sha": "12eed5514c702f730aae65a39a08747c532f8536",
+        "design_document_sha": "730556fd18bd1b15d6c37005bf5ac4c09356cc93",
+        "test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
+        "test_status": "queued；不表示已开始或通过",
+        "dev_result": "PASS（有限检查点）",
+        "card_recommendation": "NOT_READY",
+        "report_sha256": "2d7c9182e196aee5273ab4fc03811ba0a528063034ce66667cb99aace16e7d0e",
+        "evidence_sha256": "9d6c0ee99c9d5906dbcca73af9567e8ffcd288feb4125f7598536291270a662a"
+      }
     },
     {
       "id": "CR-DEC04-05-06-20261029",

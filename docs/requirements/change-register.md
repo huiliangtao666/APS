@@ -4,7 +4,7 @@
 
 | CR | 名称 | 批准状态 | 影响FR/BR | 实施状态 | 验收结论 |
 | --- | --- | --- | --- | --- | --- |
-| CR-DEC02-03-20261029 | 工装、人员、技能业务选择的前台参数化维护及排程生效 | 已批准能力方向并授权开发；具体默认参数值未批准 | FR-006、FR-007、FR-017、FR-022、BR-06、BR-07 | S06候选联合分配范围缺口已派Dev实施；D01-D03独立round1 PASS保留；其他CR范围仍未完成 | D01-D03 round1已PASS；48项25 PASS/19 PARTIAL/2 FAIL_SCOPE/2 NOT_EXECUTABLE历史结论保留。S06范围实现已派发，待新SHA独立Test，不提前升级原矩阵或完整CR/UAT结论。 |
+| CR-DEC02-03-20261029 | 工装、人员、技能业务选择的前台参数化维护及排程生效 | 已批准能力方向并授权开发；具体默认参数值未批准 | FR-006、FR-007、FR-017、FR-022、BR-06、BR-07 | S06候选联合分配有限检查点Dev已push，固定12eed551独立Test已入队；D01-D03 round1 PASS及其他未闭合范围保留 | 原48项25 PASS/19 PARTIAL/2 FAIL_SCOPE/2 NOT_EXECUTABLE及D01-D03独立round1 PASS保留；S06/S07本次Dev有限PASS，六类独立断言待执行，不升级旧矩阵或完整CR/UAT结论。 |
 | CR-DEC04-05-06-20261029 | DEC-04/05/06数量、质量可用性与工艺参数的需求设计深化及mock | 已批准需求设计深化、参数化及mock准备；应用实现未派发，具体业务值未批准 | FR-002、FR-003、FR-004、FR-005、FR-010、FR-011、FR-017、FR-020、FR-021、FR-022、FR-023、BR-02、BR-04、BR-08、BR-09、BR-10、BR-11、BR-12、BR-13、BR-14、BR-18 | 独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。 |
 
 ## CR-DEC02-03-20261029
@@ -29,7 +29,7 @@
 
 **主跟踪记录**：https://github.com/huiliangtao666/APS/issues/3
 
-**交付与审查追踪**：Dev dlv_197f09db-af6a-4cbf-96cf-16ae535359c2；设计/契约审查 dlv_536b631b-bac0-40ca-a16c-1eeb6ce1a44f；产品Test dlv_2c5caf14-f798-43ae-bb2f-737f33a40570。代码SHA：24ba6884b3a5f07425a728b7733a677563c6aa44；设计文档提交：见主Issue及受控目录。
+**交付与审查追踪**：Dev dlv_197f09db-af6a-4cbf-96cf-16ae535359c2；设计/契约审查 dlv_536b631b-bac0-40ca-a16c-1eeb6ce1a44f；产品Test dlv_f4ebcde5-67f6-4898-a740-535c299548de。代码SHA：12eed5514c702f730aae65a39a08747c532f8536；设计文档提交：见主Issue及受控目录。
 
 ## CR-DEC04-05-06-20261029
 
