@@ -1745,6 +1745,31 @@
       },
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_39dfd0df-3a9c-4ee7-9b42-3cd7bd167c5e:r1",
+      "type": "TEST_VERDICT",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T23:26:36+08:00",
+      "requirement": "FR-026 v0.3",
+      "product_sha": "e684ee162d2dc743692cc154733d1a494a8f6ef6",
+      "parent_sha": "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc",
+      "branch": "fix/fr026-current-restore",
+      "result": "35 scoped PASS/3 external NOT_EXECUTED; FR026 READY_DONE",
+      "external_hashes": {
+        "FR026-e684ee16-INDEPENDENT-R1-REPORT.html": "11b032352968a559ceaac687c8064dc264918dbed9bb6492f4f2e0c43b784766",
+        "FR026-e684ee16-INDEPENDENT-R1-MATRIX.csv": "b4da9d6a30771406eae6977b49536bd23ca74b03662716a29d88736c49d62008",
+        "FR026-e684ee16-INDEPENDENT-R1-RESULT.json": "f97664592eababfe419f3742267c45bb685d4fc48f95877b4e17189fb998d468",
+        "FR026-e684ee16-INDEPENDENT-R1-EVIDENCE.zip": "c7806a712388faeefe227733dd33846a864f8f950ce60bf5df961b246e2ddb9f"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 38,
+      "project_status": {
+        "FR-026": "Done"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/14#issuecomment-6500882222",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES (actual UAT separately)"
     }
   ]
 }
