@@ -3534,6 +3534,34 @@
       "confirmed_product_defects": [
         "FR016-P29-COLLISION-SOURCE-01"
       ]
+    },
+    {
+      "event_key": "dlv_0f3ff0db-87f2-4285-926c-841f44bd4d9d:c1",
+      "original_delivery": "dlv_0f3ff0db-87f2-4285-926c-841f44bd4d9d",
+      "inbound_delivery": "dlv_9d6ff8ed-b932-4334-b107-203367ebef66",
+      "type": "DEV_DELIVERED",
+      "source": "APS-Dev",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T06:11:52+08:00",
+      "requirement": "FR-016/Issue4",
+      "product_sha": "723fea514931a05ddb276bda4d0842cb9d90d255",
+      "result": "FR016-P29-COLLISION-SOURCE-01首轮Dev修复已交付723fea51，12 PASS/2 BLOCKED/1 NOT_EXECUTED为Dev自测；React与生产Worker的实际库存/供给冲突来源已补传，待APS-Test在新SHA独立定向复测。P28晚期CONFIG/CYCLE及P29 helper自然入口仍缺输入/历史证据；缺陷未关闭，整卡NOT_READY，UAT WAITING_DEPENDENCIES",
+      "external_hashes": {
+        "FR016-P29-COLLISION-SOURCE-01-R1-c1-SHA256.json": "b5497da8f5864280ba346facee3d0ec17aa8e68b25f68357d365ce77de503bef",
+        "FR016-P29-COLLISION-SOURCE-01-R1-c1-MATRIX.csv": "108bafc5dd1467b416509e89968be04f107dc287fa354198d78a6b0cd25d0ff9",
+        "FR016-P29-COLLISION-SOURCE-01-R1-c1-REPORT.md": "880f742f75d43c68ba6a804d7e6243772f7358ced33466ab2c02a20d9433b3c6",
+        "FR016-P29-COLLISION-SOURCE-01-R1-c1-EVIDENCE.zip": "dcccac29c67172700a12a60a3f1599d766e72b26355614d98d17f2450ad60de2"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 15,
+      "project_status": {
+        "FR-016": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6509507821",
+      "repair_round_total": 1,
+      "defect": "FR016-P29-COLLISION-SOURCE-01",
+      "independent_test": "PENDING",
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
