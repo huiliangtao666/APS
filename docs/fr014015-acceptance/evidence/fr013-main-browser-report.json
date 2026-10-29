@@ -1,0 +1,17 @@
+{
+  "identity": "genuine React App / Express / membership; synthetic QA actor and runtime alias, no gateway/SSO claim",
+  "checks": [
+    "actual main PG01 blocks whitespace 合格需求 without business/audit writes",
+    "actual main PG01 blocks whitespace 固定分钟 without business/audit writes",
+    "actual main PG01 blocks whitespace 是否启用 without business/audit writes",
+    "DEF04 CRLF multiline escaped quotes: physical line4 keyboard Enter focuses and selects offending original CSV record",
+    "correct raw draft then re-preview then keyboard commit: six tables atomic, quoted name preserved, revision1 and audit",
+    "repeat corrected batch unchanged exact persisted bytes, revision, audit",
+    "stale plan/audit preview rejected409 with actionable re-preview message and zero writes",
+    "existing single-table input remains usable without duplicate rows",
+    "query role real app disabled upload/commit; server403 covered separately"
+  ],
+  "errors": [],
+  "browserVersion": "141.0.7390.37",
+  "complete": true
+}

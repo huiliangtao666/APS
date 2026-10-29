@@ -1,0 +1,528 @@
+- banner:
+  - text: APS APS · 单线最小排程 R1 原型 / v0.3 需求基线
+  - navigation:
+    - button "排程工作台"
+    - button "模拟数据查询"
+    - button "数据与 CSV"
+    - button "查询报表与导出"
+    - button "范围与待决"
+- main:
+  - heading "权限与操作记录" [level=2]
+  - paragraph: 当前权限：planner · 所有质量状态均为模拟数据，无 QA 在线审批。计划员可核对及提交，主管可确认或退回；确认仅在本系统支持范围内生效。
+  - text: 操作原因（必填）
+  - textbox "操作原因"
+  - button "退出登录"
+  - button "刷新数据与记录"
+  - group: 操作记录（8）
+  - paragraph: 单线排程 · R1 最小模式 / 已有支持模式
+  - heading "排程计算与范围核对" [level=1]
+  - paragraph: 基于 v0.3 UAT-02 / 2026-11-02 08:00（Asia/Shanghai）；样例业务值均为虚构，仅用于软件验证。
+  - text: 追溯基线 FR-008 · UAT-02 · AC-05 工厂窗口继承 · 设备停机例外 · 连续工作窗口
+  - heading "主管确认、内部发布与归档" [level=2]
+  - paragraph: 仅在本系统生效，可查询和导出。输入变化后须按当前事实重算、复核并重新提交；确认副本保存原输入、规则、运行结果和决定。
+  - combobox "主管确认方案":
+    - option "选择待确认或历史方案" [selected]
+    - option "单线计算 2026/10/29 01:17:28 · 9479c99d"
+    - option "单线计算 2026/10/29 01:17:28 · f4378383"
+    - option "单线计算 2026/10/29 01:17:26 · b9030cf4"
+    - option "单线计算 2026/10/29 01:17:25 · 独立试算 · aa2cf484"
+    - option "单线计算 2026/10/29 01:17:25 · 1fa97b96"
+  - region "方案副本与比较":
+    - heading "条件试算与影响比较 · FR-028" [level=2]
+    - paragraph: 条件试算（What-if）：复制后模拟修改订单、日历、工装、人员或物料。原方案与当前真实数据独立保留。副本冻结原始输入和结果。编辑与计算仅写入试算；放弃保留历史。恢复须复查当前进度，当前缺少执行事实接口，会显示阻塞原因。
+    - button "复制当前方案为独立试算" [disabled]
+    - button "检查能否恢复当前历史方案" [disabled]
+    - text: 比较对象
+    - combobox "比较对象":
+      - option "选择已保存方案" [selected]
+      - option "单线计算 2026/10/29 01:17:28 · 9479c99d-5ed2-400e-970d-3ea1363e8462"
+      - option "单线计算 2026/10/29 01:17:28 · f4378383-64a5-459c-a252-8aa369c556d9"
+      - option "单线计算 2026/10/29 01:17:26 · b9030cf4-2c3c-4c13-a9f9-9c2e05b21e81"
+      - option "单线计算 2026/10/29 01:17:25 · 独立试算 · aa2cf484-773b-4a1c-bd47-dba910a23111"
+      - option "单线计算 2026/10/29 01:17:25 · 1fa97b96-41e9-47f5-b692-1af73665c117"
+    - button "比较当前方案与所选方案" [disabled]
+    - text: 独立试算
+    - combobox "独立试算":
+      - option "选择试算"
+      - option "进行中 · a9240b8e-045f-4141-862a-aa53333ab152" [selected]
+    - article:
+      - paragraph: 来源方案 1fa97b96-41e9-47f5-b692-1af73665c117 · 原运行 086ab4ef-0d39-47d9-9327-344bba982eec · 试算输入版本 2
+      - button "查看试算最近保存结果"
+      - button "放弃试算（保留历史）" [disabled]
+      - button "查看相对原方案的模拟条件变化"
+      - button "保留最近重算结果（独立快照）" [disabled]
+      - button "比较原方案与最近试算"
+      - paragraph: 保留只保存指定重算结果及比较证据，可继续编辑或放弃；不确认、不执行、不改原方案。当前修订后未重算时，服务端拒绝保留旧结果。
+      - text: 试算输入类别
+      - combobox "试算输入类别":
+        - option "模拟异常事件（先更新时点事实）"
+        - option "模拟进度来源对账（显式映射）"
+        - option "模拟任务执行事实（累计）"
+        - option "模拟累计耗料（账面扣前口径）"
+        - option "产品与包装规格"
+        - option "物料主数据"
+        - option "预计到料"
+        - option "延期模拟记录"
+        - option "计划供给引用"
+        - option "库存批次"
+        - option "订单与交期" [selected]
+        - option "BOM 与包装用量"
+        - option "工艺路线"
+        - option "工序工时"
+        - option "设备资源"
+        - option "工装配置（不自动参与排程）"
+        - option "订单模拟交付条件"
+        - option "显式逐生产批占用声明"
+        - option "空间与组批配置（存储不代表检查）"
+        - option "工厂工作日历"
+        - option "设备停机例外"
+        - option "工序资源依赖"
+        - option "人员组与可用时间"
+        - option "排程规则"
+      - region "模拟记录编辑":
+        - paragraph: 可跨类别暂存修改，全部草稿一起保存；新增工艺路线和工时等关联数据须一起保存。离开数据页将丢弃草稿。修改先保存在本页草稿，点击“保存修改”后由服务端检查；取消不会写入。复制后请填写新的唯一编号。删除仅影响新输入版本，已保存方案保留原输入。质量状态均为模拟状态。
+        - button "新增一行"
+        - button "复制选中" [disabled]
+        - button "删除选中" [disabled]
+        - button "保存修改" [disabled]
+        - button "取消修改" [disabled]
+        - table:
+          - rowgroup:
+            - row "选 / 记录标识 订单编号 产品编号 产线编号 合格需求 数量单位 要求可交付分钟 优先顺序 是否允许拆分 需求类型 订单状态 已完成合格数量":
+              - cell "选 / 记录标识"
+              - cell "订单编号"
+              - cell "产品编号"
+              - cell "产线编号"
+              - cell "合格需求"
+              - cell "数量单位"
+              - cell "要求可交付分钟"
+              - cell "优先顺序"
+              - cell "是否允许拆分"
+              - cell "需求类型"
+              - cell "订单状态"
+              - cell "已完成合格数量"
+          - rowgroup:
+            - row "选择第1行 订单编号：A A HC40 L01 240 kg 480 1 否 正式订单 有效":
+              - cell "选择第1行 订单编号：A":
+                - checkbox "选择第1行"
+                - text: 订单编号：A
+              - cell "A":
+                - textbox "订单与交期 1 订单编号": A
+              - cell "HC40":
+                - textbox "订单与交期 1 产品编号": HC40
+              - cell "L01":
+                - textbox "订单与交期 1 产线编号": L01
+              - cell "240":
+                - textbox "订单与交期 1 合格需求": "240"
+              - cell "kg":
+                - textbox "订单与交期 1 数量单位": kg
+              - cell "480":
+                - textbox "订单与交期 1 要求可交付分钟": "480"
+              - cell "1":
+                - textbox "订单与交期 1 优先顺序": "1"
+              - cell "否":
+                - textbox "订单与交期 1 是否允许拆分": 否
+              - cell "正式订单":
+                - textbox "订单与交期 1 需求类型": 正式订单
+              - cell "有效":
+                - textbox "订单与交期 1 订单状态": 有效
+              - cell:
+                - textbox "订单与交期 1 已完成合格数量"
+            - row "选择第2行 订单编号：B B HC60 L01 240 kg 480 2 否 正式订单 有效":
+              - cell "选择第2行 订单编号：B":
+                - checkbox "选择第2行"
+                - text: 订单编号：B
+              - cell "B":
+                - textbox "订单与交期 2 订单编号": B
+              - cell "HC60":
+                - textbox "订单与交期 2 产品编号": HC60
+              - cell "L01":
+                - textbox "订单与交期 2 产线编号": L01
+              - cell "240":
+                - textbox "订单与交期 2 合格需求": "240"
+              - cell "kg":
+                - textbox "订单与交期 2 数量单位": kg
+              - cell "480":
+                - textbox "订单与交期 2 要求可交付分钟": "480"
+              - cell "2":
+                - textbox "订单与交期 2 优先顺序": "2"
+              - cell "否":
+                - textbox "订单与交期 2 是否允许拆分": 否
+              - cell "正式订单":
+                - textbox "订单与交期 2 需求类型": 正式订单
+              - cell "有效":
+                - textbox "订单与交期 2 订单状态": 有效
+              - cell:
+                - textbox "订单与交期 2 已完成合格数量"
+      - region "试算任务移动与锁定":
+        - heading "任务移动与锁定 · FR-027" [level=3]
+        - paragraph: 在时间轨道拖动任务：每像素 1 分钟，垂直拖到另一机器轨道可提出换机预览。也可用下方键盘表单输入准确分钟和设备。先预览，再独立复核，最后提交或取消。拖动不自动重排其他任务。机器权限仅取当前显式设备依赖；不推断替代设备。锁定冲突须处理，不自动解锁。
+        - text: MIX01 · 分钟 0 → 600
+        - button "移动任务 A-MIX" [disabled]: A-MIX
+        - text: FILL01 · 分钟 0 → 600
+        - button "移动任务 A-FILL" [disabled]: A-FILL
+        - text: MIX02 · 分钟 0 → 600
+        - button "移动任务 B-MIX" [disabled]: B-MIX
+        - text: FILL02 · 分钟 0 → 600
+        - button "移动任务 B-FILL" [disabled]: B-FILL
+        - text: 移动任务
+        - combobox "移动任务":
+          - option "选择任务" [selected]
+          - option "A-MIX · 未开始"
+          - option "A-FILL · 未开始 · 已锁定"
+          - option "B-MIX · 未开始"
+          - option "B-FILL · 未开始"
+        - text: 移动开始分钟
+        - spinbutton "移动开始分钟" [disabled]: "0"
+        - text: 移动机器
+        - combobox "移动机器" [disabled]
+        - button "预览移动" [disabled]
+        - button "预览锁定" [disabled]
+        - paragraph: 只采用当前显式设备依赖；不推断替代设备授权
+        - paragraph: 生产批/合批、最小模式及上游未支持条件不能由移动证明可行
+      - heading "计算范围与运行记录 · FR-018/038" [level=2]
+      - paragraph: 时间使用分钟轴，0 = 2026-11-02 08:00 +08:00。开始时间不移动原日历、停机、供给或人员窗口；完整工序须在结束范围内。已完成合格数量用于同单位模拟订单余量；R5执行事实、已投料核销与剩余工时未实现。
+      - text: 计算模式
+      - combobox "计算模式":
+        - option "已有支持模式（日历、人员、预计供给；物料须启用）" [selected]
+        - option "R1 最小模式（机器连续可用，仅机器与顺序）"
+      - text: 已有支持模式 · 工厂日历及设备停机连续窗口
+      - paragraph: 计算检查：单产线；给定机器不重叠；固定工时；工序先后；日历与停机；已配置人员依赖；显式预计供给可用时点
+      - paragraph: 未检查：模具与工装；完整物料/BOM/库存分配；设备容量与拆合批；程序兼容；最大等待与空间；换型清洗；交付与余保；执行事实与主管确认；速度换算及完整精度规则
+      - paragraph: 机器与顺序检查通过不代表完整业务可执行；未排任务不代表全局无解。独立复核仅覆盖单线、机器不重叠和工序先后。
+      - group "本产线有效正式订单":
+        - text: 本产线有效正式订单
+        - checkbox "A · L01 · 优先 1" [checked]
+        - text: A · L01 · 优先 1
+        - checkbox "B · L01 · 优先 2" [checked]
+        - text: B · L01 · 优先 2
+      - text: 开始分钟
+      - spinbutton "开始分钟": "0"
+      - text: 计划结束分钟
+      - spinbutton "计划结束分钟"
+      - text: 任务排序
+      - combobox "任务排序":
+        - option "规则设置" [selected]
+        - option "优先顺序"
+        - option "要求日期"
+      - group "本次规则配置（最小模式仅采用机器、顺序和排序；其余明确未检查）":
+        - text: 本次规则配置（最小模式仅采用机器、顺序和排序；其余明确未检查）
+        - checkbox "机器不重叠" [checked] [disabled]
+        - text: 机器不重叠
+        - checkbox "工序顺序" [checked] [disabled]
+        - text: 工序顺序
+        - checkbox "工厂及设备日历" [checked] [disabled]
+        - text: 工厂及设备日历
+        - checkbox "模具与工具占用"
+        - text: 模具与工具占用
+        - checkbox "人员技能及数量"
+        - text: 人员技能及数量
+        - checkbox "物料数量及可用时点"
+        - text: 物料数量及可用时点
+        - checkbox "设备装载"
+        - text: 设备装载
+        - checkbox "资源程序兼容"
+        - text: 资源程序兼容
+        - checkbox "工序最大等待"
+        - text: 工序最大等待
+        - checkbox "空间容量"
+        - text: 空间容量
+        - checkbox "执行保护"
+        - text: 执行保护
+        - checkbox "预计可交付"
+        - text: 预计可交付
+        - checkbox "库存质量状态可用性" [checked]
+        - text: 库存质量状态可用性
+      - button "另开计算（冻结当前输入）" [disabled]
+      - paragraph: 最多两个并行运行；状态按真实线程阶段显示，不估算百分比。已完成运行不可取消，取消不会保存部分结果。
+      - article "运行记录 b686e8f4-e0ad-443e-9ead-f3e212fe1226":
+        - text: 已得到安排（仅本次检查范围）
+        - paragraph: 2026-10-29T01:17:28.544Z · 产线 L01 · 订单 A、B · 0–日历末尾 分钟
+        - paragraph: 耗时 0.06 秒（含等待与停止时间）
+        - status: 结果已保存，请查看结果中的未排原因与检查范围。
+        - button "取消运行" [disabled]
+        - button "查看结果"
+        - group: 技术详情与原始输入
+      - article "运行记录 b4b6de0c-aaae-44e7-857b-70f420c6e558":
+        - text: 已得到安排（仅本次检查范围）
+        - paragraph: 2026-10-29T01:17:28.279Z · 产线 L01 · 订单 A、B · 0–日历末尾 分钟
+        - paragraph: 耗时 0.00 秒（含等待与停止时间）
+        - status: 结果已保存，请查看结果中的未排原因与检查范围。
+        - button "取消运行" [disabled]
+        - button "查看结果"
+        - group: 技术详情与原始输入
+      - article "运行记录 353eb918-cdc7-48e6-a32a-6168fd465cbb":
+        - text: 已得到安排（仅本次检查范围）
+        - paragraph: 2026-10-29T01:17:26.675Z · 产线 L01 · 订单 A、B · 0–日历末尾 分钟
+        - paragraph: 耗时 0.00 秒（含等待与停止时间）
+        - status: 结果已保存，请查看结果中的未排原因与检查范围。
+        - button "取消运行" [disabled]
+        - button "查看结果"
+        - group: 技术详情与原始输入
+  - heading "计算范围与运行记录 · FR-018/038" [level=2]
+  - paragraph: 时间使用分钟轴，0 = 2026-11-02 08:00 +08:00。开始时间不移动原日历、停机、供给或人员窗口；完整工序须在结束范围内。已完成合格数量用于同单位模拟订单余量；R5执行事实、已投料核销与剩余工时未实现。
+  - text: 计算模式
+  - combobox "计算模式":
+    - option "已有支持模式（日历、人员、预计供给；物料须启用）" [selected]
+    - option "R1 最小模式（机器连续可用，仅机器与顺序）"
+  - text: 已有支持模式 · 工厂日历及设备停机连续窗口
+  - paragraph: 计算检查：单产线；给定机器不重叠；固定工时；工序先后；日历与停机；已配置人员依赖；显式预计供给可用时点
+  - paragraph: 未检查：模具与工装；完整物料/BOM/库存分配；设备容量与拆合批；程序兼容；最大等待与空间；换型清洗；交付与余保；执行事实与主管确认；速度换算及完整精度规则
+  - paragraph: 机器与顺序检查通过不代表完整业务可执行；未排任务不代表全局无解。独立复核仅覆盖单线、机器不重叠和工序先后。
+  - group "本产线有效正式订单":
+    - text: 本产线有效正式订单
+    - checkbox "A · L01 · 优先 1" [checked]
+    - text: A · L01 · 优先 1
+    - checkbox "B · L01 · 优先 2" [checked]
+    - text: B · L01 · 优先 2
+  - text: 开始分钟
+  - spinbutton "开始分钟": "0"
+  - text: 计划结束分钟
+  - spinbutton "计划结束分钟": "600"
+  - text: 任务排序
+  - combobox "任务排序":
+    - option "规则设置" [selected]
+    - option "优先顺序"
+    - option "要求日期"
+  - group "本次规则配置（最小模式仅采用机器、顺序和排序；其余明确未检查）":
+    - text: 本次规则配置（最小模式仅采用机器、顺序和排序；其余明确未检查）
+    - checkbox "机器不重叠" [checked] [disabled]
+    - text: 机器不重叠
+    - checkbox "工序顺序" [checked] [disabled]
+    - text: 工序顺序
+    - checkbox "工厂及设备日历" [checked] [disabled]
+    - text: 工厂及设备日历
+    - checkbox "模具与工具占用"
+    - text: 模具与工具占用
+    - checkbox "人员技能及数量"
+    - text: 人员技能及数量
+    - checkbox "物料数量及可用时点"
+    - text: 物料数量及可用时点
+    - checkbox "设备装载"
+    - text: 设备装载
+    - checkbox "资源程序兼容"
+    - text: 资源程序兼容
+    - checkbox "工序最大等待"
+    - text: 工序最大等待
+    - checkbox "空间容量"
+    - text: 空间容量
+    - checkbox "执行保护"
+    - text: 执行保护
+    - checkbox "预计可交付"
+    - text: 预计可交付
+    - checkbox "库存质量状态可用性" [checked]
+    - text: 库存质量状态可用性
+  - button "另开计算（冻结当前输入）" [disabled]
+  - paragraph: 最多两个并行运行；状态按真实线程阶段显示，不估算百分比。已完成运行不可取消，取消不会保存部分结果。
+  - article "运行记录 b686e8f4-e0ad-443e-9ead-f3e212fe1226":
+    - text: 已得到安排（仅本次检查范围）
+    - paragraph: 2026-10-29T01:17:28.544Z · 产线 L01 · 订单 A、B · 0–日历末尾 分钟
+    - paragraph: 耗时 0.06 秒（含等待与停止时间）
+    - status: 结果已保存，请查看结果中的未排原因与检查范围。
+    - button "取消运行" [disabled]
+    - button "查看结果"
+    - button "用本次原输入复算" [disabled]
+    - group: 技术详情与原始输入
+  - article "运行记录 b4b6de0c-aaae-44e7-857b-70f420c6e558":
+    - text: 已得到安排（仅本次检查范围）
+    - paragraph: 2026-10-29T01:17:28.279Z · 产线 L01 · 订单 A、B · 0–日历末尾 分钟
+    - paragraph: 耗时 0.00 秒（含等待与停止时间）
+    - status: 结果已保存，请查看结果中的未排原因与检查范围。
+    - button "取消运行" [disabled]
+    - button "查看结果"
+    - button "用本次原输入复算" [disabled]
+    - group: 技术详情与原始输入
+  - article "运行记录 353eb918-cdc7-48e6-a32a-6168fd465cbb":
+    - text: 已得到安排（仅本次检查范围）
+    - paragraph: 2026-10-29T01:17:26.675Z · 产线 L01 · 订单 A、B · 0–日历末尾 分钟
+    - paragraph: 耗时 0.00 秒（含等待与停止时间）
+    - status: 结果已保存，请查看结果中的未排原因与检查范围。
+    - button "取消运行" [disabled]
+    - button "查看结果"
+    - button "用本次原输入复算" [disabled]
+    - group: 技术详情与原始输入
+  - article "运行记录 086ab4ef-0d39-47d9-9327-344bba982eec":
+    - text: 已得到安排（仅本次检查范围）
+    - paragraph: 2026-10-29T01:17:25.634Z · 产线 L01 · 订单 A、B · 0–日历末尾 分钟
+    - paragraph: 耗时 0.01 秒（含等待与停止时间）
+    - status: 结果已保存，请查看结果中的未排原因与检查范围。
+    - button "取消运行" [disabled]
+    - button "查看结果"
+    - button "用本次原输入复算" [disabled]
+    - group: 技术详情与原始输入
+  - article: 单线订单 2 FR-009 / BR-01
+  - article: 已排任务 0 机器 + 前后序
+  - article: 问题定位 0 问题与甘特联动
+  - article: 保存方案 5 快照保留输入版本
+  - heading "已有支持模式 · 同步计算 / 方案操作" [level=2]
+  - paragraph: 任务完整落入工厂工作窗口；机器自动运行时段与人员参与阶段分开计算。人员须同时满足人数、技能、班次和可用时间。
+  - text: BR-02 工序顺序 BR-03 机器占用 FR-008 日历窗口 FR-007 人数与技能 已配置启用：MACHINE · PRECEDENCE · CALENDAR · INVENTORY（实际采用见方案设置）
+  - button "同步计算全部（无取消）" [disabled]
+  - button "独立复核" [disabled]
+  - button "保存快照" [disabled]
+  - button "导出 CSV" [disabled]
+  - heading "独立结果复核 · 主管确认前" [level=2]
+  - paragraph: 复核器独立检查单线、机器不重叠、优先关系；新方案使用本次冻结的订单与路线，当前输入变化后须重新计算。
+  - text: 尚未复核 运行“独立复核”后显示通过、问题和未检查明细。主管确认前应重新复核一次。
+  - region "资源负荷、物料缺口与提醒":
+    - heading "资源负荷、物料缺口与提醒 · FR032" [level=2]
+    - paragraph: 方案 未知 · 运行 未知 · 输入 未知 · 哈希 未知 · 状态 未知
+    - paragraph: 本页仅展示所选保存方案；保存执行事实不叠加计划占用，当前事实对照沿用下方 FR033。订单延后直接取保存交付评估，不累加工序数量。
+    - paragraph: 仅保存方案的计划负荷，不是实时剩余可用量；未分配不代表可排或资源空闲事实；DEC02 工装阶段/动态归还、DEC03 人员阶段/技能替代、最大等待及完整联合规则仍待确认；仅解释显式保存占用；候选分配不计入已提交消耗；不跨工序累加订单完成；不把预计到料当真实到货；确认快照、保存的执行事实与当前事实分别保留；不以当前输入补算历史
+    - status: 历史原始输入缺失；不使用当前配置填补。
+    - text: 负荷窗口开始分钟
+    - spinbutton "负荷窗口开始分钟": "0"
+    - text: 负荷窗口结束分钟
+    - spinbutton "负荷窗口结束分钟": "120"
+    - text: 负荷类别
+    - combobox "负荷类别":
+      - option "全部" [selected]
+      - option "设备"
+      - option "工装 / 人员 / 空间"
+      - option "物料"
+      - option "提醒"
+    - button "导出当前负荷视图 CSV" [disabled]
+    - paragraph: 负荷统计窗口：2026-11-02 08:00:00（分钟 0） — 2026-11-02 10:00:00（分钟 120）。物料与提醒保留整份方案，不受负荷窗口截断。
+    - table "设备计划忙闲；未分配时间不等于动态可用":
+      - caption: 设备计划忙闲；未分配时间不等于动态可用
+      - rowgroup:
+        - row "设备 计划忙时 / 未分配分钟 溯源":
+          - cell "设备"
+          - cell "计划忙时 / 未分配分钟"
+          - cell "溯源"
+      - rowgroup
+    - table "保存工装占用、人员需求、空间使用；峰值按完整占用窗口计算":
+      - caption: 保存工装占用、人员需求、空间使用；峰值按完整占用窗口计算
+      - rowgroup:
+        - row "资源 / 单位 配置总量 / 计划峰值 / 数量×分钟 溯源":
+          - cell "资源 / 单位"
+          - cell "配置总量 / 计划峰值 / 数量×分钟"
+          - cell "溯源"
+      - rowgroup
+    - paragraph: 无保存资源占用；未知，不代表资源充足。
+    - table "逐投料物料缺口；候选分配与已提交分配分开，不重复消费库存":
+      - caption: 逐投料物料缺口；候选分配与已提交分配分开，不重复消费库存
+      - rowgroup:
+        - row "物料 / 需求 / 单位 分配 / 缺口 / 已提交分配 投料时点 / 依据":
+          - cell "物料 / 需求 / 单位"
+          - cell "分配 / 缺口 / 已提交分配"
+          - cell "投料时点 / 依据"
+      - rowgroup
+    - paragraph: 无保存物料评估；缺口未知，不视为零。
+    - table "订单延后、条件到料、缺口与缺失输入提醒":
+      - caption: 订单延后、条件到料、缺口与缺失输入提醒
+      - rowgroup:
+        - row "提醒 / 原因 数量 / 时间 溯源":
+          - cell "提醒 / 原因"
+          - cell "数量 / 时间"
+          - cell "溯源"
+      - rowgroup:
+        - row "MISSING_SAVED_INPUT · 缺少保存原始输入；负荷配置、条件与原始数据未知 未知 未知 未知":
+          - cell "MISSING_SAVED_INPUT · 缺少保存原始输入；负荷配置、条件与原始数据未知":
+            - text: MISSING_SAVED_INPUT ·
+            - paragraph: 缺少保存原始输入；负荷配置、条件与原始数据未知
+          - cell "未知 未知 未知":
+            - text: 未知 未知
+            - paragraph: 未知
+          - cell:
+            - group: 保存的原始数据与判断依据
+        - row "DELIVERY_UNCHECKED · 无保存交付评估；订单延后未知 未知 未知 未知":
+          - cell "DELIVERY_UNCHECKED · 无保存交付评估；订单延后未知":
+            - text: DELIVERY_UNCHECKED ·
+            - paragraph: 无保存交付评估；订单延后未知
+          - cell "未知 未知 未知":
+            - text: 未知 未知
+            - paragraph: 未知
+          - cell:
+            - group: 保存的原始数据与判断依据
+  - region "任务与问题联动核对":
+    - heading "任务与问题联动核对 · FR034" [level=2]
+    - paragraph: 方案 未知 · 来源方案 原始 / 未记录 · 来源运行 未记录 · 运行 未知 · 输入 未知 · 快照哈希 未知
+    - button "主动运行独立检查" [disabled]
+    - checkbox "仅显示问题任务"
+    - text: 仅显示问题任务
+    - paragraph: 主动检查仅核对单线、机器与前后序，沿用保存/过期/已确认保护。下列资源证据来自保存的计算记录，未再次验证全部规则。当前输入不补写历史。问题任务 0 个。
+  - region "机器甘特图与任务时间表":
+    - heading "机器甘特图与任务时间表 · FR033 / PG04 / BP05" [level=2]
+    - paragraph: 流程：导入 → 计算 → 核对 → 提交。分钟 0 = 2026-11-02 08:00 Asia/Shanghai；所有区间为 [开始,结束)。完成不等于合格入库或可交付；全局可行性未知。
+    - paragraph: 方案 尚无方案 · 运行 未知 · 输入版本 未知 · 快照 未知 · 执行事实版本 未知
+    - status: 历史方案缺少原始输入；停机、原始配置未知，禁止用当前输入重建。
+    - text: 机器筛选
+    - combobox "机器筛选":
+      - option "全部机器" [selected]
+    - text: 订单筛选
+    - combobox "订单筛选":
+      - option "全部订单" [selected]
+    - text: 计划状态
+    - combobox "计划状态":
+      - option "全部状态" [selected]
+      - option "已排计划"
+      - option "未排"
+    - text: 搜索任务
+    - textbox "搜索任务"
+    - text: 缩放
+    - combobox "缩放":
+      - option "0.25 像素/分钟"
+      - option "1 像素/分钟" [selected]
+      - option "3 像素/分钟"
+      - option "8 像素/分钟"
+    - text: 窗口开始分钟
+    - spinbutton "窗口开始分钟"
+    - text: 窗口结束分钟
+    - spinbutton "窗口结束分钟"
+    - text: 模拟时点分钟
+    - spinbutton "模拟时点分钟"
+    - checkbox "前后序连线" [checked]
+    - text: 前后序连线
+    - checkbox "资源占用" [checked]
+    - text: 资源占用
+    - button "清除筛选与窗口"
+    - button "向前滚动"
+    - button "向后滚动"
+    - paragraph: 图例：已排计划（按钮文字）；停机（斜线及原因）；模拟事实（原始状态）；箭头为保存的前序引用。极短任务不放大工时，完整文字见时间表。跨度较大时显示宽度最多 60000 像素，可缩小窗口核对。
+    - status: 实际比例 1 像素/分钟；时间轴宽度 120 像素。
+    - paragraph: 窗口开始：2026-11-02 08:00:00（分钟 0） 窗口结束（不含）：2026-11-02 10:00:00（分钟 120） 轴宽不足以显示日期刻度；请参照窗口起止时间或放大。
+    - region "可滚动机器时间轴，任务同下方时间表"
+    - paragraph: 暂无保存的任务；请先计算或选择方案。
+    - group:
+      - text: 保存的工装 / 人员 / 空间占用（计划模拟）
+      - paragraph: 只绘制保存的显式占用；工装 未检查 / 未知，空间 未检查 / 未知。无记录不表示资源充足。动态释放、未批准占用口径未知；配置不自动生成占用。
+      - table "占用窗口含提前取得与后延释放；人员参与窗口独立于机器运行窗口":
+        - caption: 占用窗口含提前取得与后延释放；人员参与窗口独立于机器运行窗口
+        - rowgroup:
+          - row "资源 / 数量 占用与释放 保存配置 关联任务 窗口示意":
+            - cell "资源 / 数量"
+            - cell "占用与释放"
+            - cell "保存配置"
+            - cell "关联任务"
+            - cell "窗口示意"
+        - rowgroup
+    - table "任务时间表：筛选结果 0 / 0；数量按原任务列出，不跨工序累加":
+      - caption: 任务时间表：筛选结果 0 / 0；数量按原任务列出，不跨工序累加
+      - rowgroup:
+        - row "任务 / 状态 订单 / 工序 原任务数量 机器 开始 / 结束 时长 / 前序 解释":
+          - cell "任务 / 状态"
+          - cell "订单 / 工序"
+          - cell "原任务数量"
+          - cell "机器"
+          - cell "开始 / 结束"
+          - cell "时长 / 前序"
+          - cell "解释"
+      - rowgroup
+    - group: 本方案停机来源与范围
+  - complementary:
+    - heading "问题定位" [level=2]
+    - paragraph: 点击问题突出关联任务；输入错误定位到表格更正。
+    - text: 0 ✓ 尚无计算结果 检查范围见当前方案记录；无问题不代表全订单覆盖或完整业务可执行。 检查边界
+    - paragraph: R1 最小模式不判断日历、停机、人员、工装或物料；已有支持模式保留既有依赖保护。跨班和可中断策略尚无已确认业务口径；显式声明的工装/空间以及物料/拆合批是否检查见本方案范围；动态释放、最大等待、执行事实及主管确认尚未实现；显式预计供给引用按可用时点等待。
+  - heading "任务明细 / 已保存方案" [level=2]
+  - button "查询关联输入与任务"
+  - paragraph: 任务时间、资源和前序引用支持核查；保存方案在此回看。
+  - combobox "已保存方案":
+    - option "当前计算" [selected]
+    - option "单线计算 2026/10/29 01:17:28"
+    - option "单线计算 2026/10/29 01:17:28"
+    - option "单线计算 2026/10/29 01:17:26"
+    - option "单线计算 2026/10/29 01:17:25 · 独立试算"
+    - option "单线计算 2026/10/29 01:17:25"
+  - text: APS-Dev 原型 · R2.1 阶段预览 · 未发布上线 · v0.3 UAT-02 虚构数据

@@ -1,0 +1,516 @@
+{
+  "base": "c8aeb9283776207853efbdb0c5ea8b3eb09ab039",
+  "count": 24,
+  "requirement": "Unique originals FR014/015 only; acceptance issue12 remains open",
+  "categories": [
+    {
+      "key": "simulationEvents",
+      "fields": [
+        "事件编号",
+        "事件分钟",
+        "保护截止分钟",
+        "保护策略",
+        "事件类型",
+        "参数JSON",
+        "原因",
+        "需处理事实JSON"
+      ],
+      "uniqueKey": [
+        "事件编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "ordinary structured payload editing and explicit referenced-resource navigation missing"
+    },
+    {
+      "key": "executionSources",
+      "fields": [
+        "来源编号",
+        "原始任务编号",
+        "事实编号",
+        "原始汇总耗料",
+        "耗料单位",
+        "来源说明",
+        "原始分配JSON"
+      ],
+      "uniqueKey": [
+        "来源编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "order/product filter controls missing; ordinary structured source mapping missing"
+    },
+    {
+      "key": "executionFacts",
+      "fields": [
+        "事实编号",
+        "订单编号",
+        "工序编号",
+        "状态",
+        "开始分钟",
+        "完成分钟",
+        "观测分钟",
+        "工序完成数量",
+        "数量单位",
+        "剩余工时分钟",
+        "当前设备",
+        "暂停原因",
+        "累计报废数量",
+        "报废补做口径"
+      ],
+      "uniqueKey": [
+        "事实编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "machine/task navigation incomplete"
+    },
+    {
+      "key": "executionMaterials",
+      "fields": [
+        "记录编号",
+        "事实编号",
+        "批次编号",
+        "物料编号",
+        "累计已用数量",
+        "单位"
+      ],
+      "uniqueKey": [
+        "记录编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "order/product filter controls missing despite fact-reference resolver"
+    },
+    {
+      "key": "products",
+      "fields": [
+        "产品编号",
+        "产品名称",
+        "单支净重kg",
+        "每袋支数",
+        "总收率",
+        "模拟交付等待分钟"
+      ],
+      "uniqueKey": [
+        "产品编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "common record identity, readable nested values and keyboard source/error navigation needed"
+    },
+    {
+      "key": "materials",
+      "fields": [
+        "物料编号",
+        "物料名称",
+        "单位",
+        "类别"
+      ],
+      "uniqueKey": [
+        "物料编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "common record identity, readable nested values and keyboard source/error navigation needed"
+    },
+    {
+      "key": "supplies",
+      "fields": [
+        "供给编号",
+        "物料编号",
+        "批次编号",
+        "预计数量",
+        "预计到达时间",
+        "预计可用时间",
+        "质量状态",
+        "有效期"
+      ],
+      "uniqueKey": [
+        "供给编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "common record identity, readable nested values and keyboard source/error navigation needed"
+    },
+    {
+      "key": "supplyDelays",
+      "fields": [
+        "记录编号",
+        "供给编号",
+        "记录时间",
+        "调整后到达时间",
+        "调整后可用时间",
+        "原因"
+      ],
+      "uniqueKey": [
+        "记录编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "common record identity, readable nested values and keyboard source/error navigation needed"
+    },
+    {
+      "key": "supplyUses",
+      "fields": [
+        "引用编号",
+        "订单编号",
+        "工序编号",
+        "供给编号",
+        "使用数量"
+      ],
+      "uniqueKey": [
+        "引用编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "common record identity, readable nested values and keyboard source/error navigation needed"
+    },
+    {
+      "key": "inventory",
+      "fields": [
+        "批次编号",
+        "物料编号",
+        "账面数量",
+        "已占用数量",
+        "有效期",
+        "位置",
+        "质量状态",
+        "预计可用时间"
+      ],
+      "uniqueKey": [
+        "批次编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "common record identity, readable nested values and keyboard source/error navigation needed"
+    },
+    {
+      "key": "orders",
+      "fields": [
+        "订单编号",
+        "产品编号",
+        "产线编号",
+        "合格需求",
+        "数量单位",
+        "要求可交付分钟",
+        "优先顺序",
+        "是否允许拆分",
+        "需求类型",
+        "订单状态",
+        "已完成合格数量"
+      ],
+      "uniqueKey": [
+        "订单编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "common record identity, readable nested values and keyboard source/error navigation needed"
+    },
+    {
+      "key": "bom",
+      "fields": [
+        "版本编号",
+        "产品编号",
+        "生效日期",
+        "投料工序编号",
+        "用量类型",
+        "物料编号",
+        "配置用量",
+        "用量单位",
+        "用量基准",
+        "收率/损耗口径备注",
+        "损坏比例"
+      ],
+      "uniqueKey": [
+        "产品编号",
+        "版本编号",
+        "投料工序编号",
+        "物料编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "common record identity, readable nested values and keyboard source/error navigation needed"
+    },
+    {
+      "key": "routes",
+      "fields": [
+        "产品编号",
+        "工序编号",
+        "工序名称",
+        "前序工序",
+        "最大等待分钟",
+        "程序编号"
+      ],
+      "uniqueKey": [
+        "产品编号",
+        "工序编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "common record identity, readable nested values and keyboard source/error navigation needed"
+    },
+    {
+      "key": "times",
+      "fields": [
+        "产品编号",
+        "工序编号",
+        "计算方式",
+        "固定分钟",
+        "速度支每分钟"
+      ],
+      "uniqueKey": [
+        "产品编号",
+        "工序编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "common record identity, readable nested values and keyboard source/error navigation needed"
+    },
+    {
+      "key": "machines",
+      "fields": [
+        "设备编号",
+        "设备名称",
+        "产线编号",
+        "工序编号",
+        "日历编号",
+        "最小装载kg",
+        "最大装载kg",
+        "装载计量基准"
+      ],
+      "uniqueKey": [
+        "设备编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "common record identity, readable nested values and keyboard source/error navigation needed"
+    },
+    {
+      "key": "tools",
+      "fields": [
+        "工装编码",
+        "工装名称",
+        "适用任务",
+        "可用数量",
+        "每任务需求数量",
+        "提前占用分钟",
+        "后延占用分钟",
+        "是否启用",
+        "说明"
+      ],
+      "uniqueKey": [
+        "工装编码"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "explicit resource-claim navigation missing"
+    },
+    {
+      "key": "deliveryConditions",
+      "fields": [
+        "订单编号",
+        "模拟质量状态",
+        "模拟质量可用时间",
+        "模拟有效期截止时间",
+        "要求剩余有效分钟"
+      ],
+      "uniqueKey": [
+        "订单编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "ISO expiry timestamp filter incorrectly took date-only path"
+    },
+    {
+      "key": "resourceClaims",
+      "fields": [
+        "声明编号",
+        "订单编号",
+        "工序编号",
+        "资源类型",
+        "资源编号",
+        "需求数量",
+        "单位",
+        "提前占用分钟",
+        "后延占用分钟",
+        "占用口径"
+      ],
+      "uniqueKey": [
+        "声明编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "explicit order/task/tool/space navigation incomplete"
+    },
+    {
+      "key": "batchResources",
+      "fields": [
+        "资源编号",
+        "资源类型",
+        "容量",
+        "单位",
+        "允许程序",
+        "说明"
+      ],
+      "uniqueKey": [
+        "资源编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "explicit resource-claim navigation missing"
+    },
+    {
+      "key": "calendars",
+      "fields": [
+        "日历编号",
+        "工厂编号",
+        "起始分钟",
+        "结束分钟",
+        "是否工作",
+        "说明"
+      ],
+      "uniqueKey": [
+        "日历编号",
+        "起始分钟",
+        "结束分钟",
+        "是否工作"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "common record identity, readable nested values and keyboard source/error navigation needed"
+    },
+    {
+      "key": "downtime",
+      "fields": [
+        "设备编号",
+        "起始分钟",
+        "结束分钟",
+        "原因"
+      ],
+      "uniqueKey": [
+        "设备编号",
+        "起始分钟",
+        "结束分钟"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "common record identity, readable nested values and keyboard source/error navigation needed"
+    },
+    {
+      "key": "dependencies",
+      "fields": [
+        "订单编号",
+        "工序编号",
+        "资源类型",
+        "资源编号",
+        "需求数量",
+        "提前占用分钟",
+        "后延占用分钟",
+        "所需技能",
+        "所需班次",
+        "人员参与阶段",
+        "人员开始偏移",
+        "人员结束偏移"
+      ],
+      "uniqueKey": [
+        "订单编号",
+        "工序编号",
+        "资源类型",
+        "资源编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "common record identity, readable nested values and keyboard source/error navigation needed"
+    },
+    {
+      "key": "personnelGroups",
+      "fields": [
+        "人员组编号",
+        "人员组名称",
+        "人员数量",
+        "技能",
+        "班次",
+        "可用起始分钟",
+        "可用结束分钟"
+      ],
+      "uniqueKey": [
+        "人员组编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "common record identity, readable nested values and keyboard source/error navigation needed"
+    },
+    {
+      "key": "rules",
+      "fields": [
+        "规则编号",
+        "中文名称",
+        "是否启用",
+        "参数JSON",
+        "适用对象",
+        "生效时间"
+      ],
+      "uniqueKey": [
+        "规则编号"
+      ],
+      "baseline": {
+        "mainEditor": "generic cross-table drafts/add/copy/delete/save; complete-state saveInputs and executionTransition guards already existed",
+        "mainQuery": "generic list/filter/detail/export existed; see finiteGap"
+      },
+      "finiteGap": "common record identity, readable nested values and keyboard source/error navigation needed"
+    }
+  ],
+  "preserved": "FR013 batch import / execution reconciliation / FR027 / FR035 / FR036 / FR038 modules retained; minimal App source provenance and shared record-key import changes are explicit in manifest",
+  "knownBounds": [
+    "No expansion of factory/line/contracts/DEC02/03/all-rule semantics",
+    "No platform publication/main merge/new card/self-dispatch",
+    "Original independent APS-Test report direct read denied403; live original cards and issue12 record its reported153 checks and issue11 closure; no claim to have reread unavailable file"
+  ]
+}

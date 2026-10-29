@@ -1,0 +1,1040 @@
+{
+  "base": "c8aeb9283776207853efbdb0c5ea8b3eb09ab039",
+  "sourceManifest": "qa/fr014015-source-sha256.json",
+  "identity": "Actual React App/Express/membership; explicit synthetic QA actor and runtime alias. No real gateway/SSO/UAT claim.",
+  "coverage": "Observed finite main-App browser operations. Fields absent from operations are NOT claimed tested.",
+  "categories": [
+    {
+      "key": "products",
+      "label": "产品与包装规格",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 2,
+        "filters": {
+          "keyword": "positive/negative",
+          "product": "selected and row count checked",
+          "order": "selected and row count checked"
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 8,
+          "targets": [
+            "orders",
+            "routes",
+            "routes",
+            "times",
+            "times",
+            "bom",
+            "tasks",
+            "tasks"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/products.csv",
+          "bytes": 391
+        }
+      },
+      "uniqueKey": [
+        "产品编号"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "materials",
+      "label": "物料主数据",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "addCopyDelete": "browser add200/copy with new identity200/allowed delete200; row counts and original confirmation checked",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 5,
+        "filters": {
+          "keyword": "positive/negative"
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 4,
+          "targets": [
+            "executionMaterials",
+            "inventory",
+            "supplies",
+            "bom"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/materials.csv",
+          "bytes": 326
+        }
+      },
+      "uniqueKey": [
+        "物料编号"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "supplies",
+      "label": "预计到料",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 1,
+        "filters": {
+          "keyword": "positive/negative",
+          "status": {
+            "name": "质量状态",
+            "value": "预计可用"
+          },
+          "date": {
+            "name": "预计到达时间",
+            "value": "2026-11-02T08:30:00+08:00",
+            "invalid": "zero rows"
+          }
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 3,
+          "targets": [
+            "materials",
+            "supplyDelays",
+            "supplyUses"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/supplies.csv",
+          "bytes": 481
+        }
+      },
+      "uniqueKey": [
+        "供给编号"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "supplyDelays",
+      "label": "延期模拟记录",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 1,
+        "filters": {
+          "keyword": "positive/negative",
+          "date": {
+            "name": "记录时间",
+            "value": "2026-11-01T08:00:00+08:00",
+            "invalid": "zero rows"
+          }
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 1,
+          "targets": [
+            "supplies"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/supplyDelays.csv",
+          "bytes": 453
+        }
+      },
+      "uniqueKey": [
+        "记录编号"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "supplyUses",
+      "label": "计划供给引用",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 1,
+        "filters": {
+          "keyword": "positive/negative",
+          "product": "selected and row count checked",
+          "order": "selected and row count checked"
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 5,
+          "targets": [
+            "orders",
+            "supplies",
+            "dependencies",
+            "tasks",
+            "routes"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/supplyUses.csv",
+          "bytes": 342
+        }
+      },
+      "uniqueKey": [
+        "引用编号"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "inventory",
+      "label": "库存批次",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "addCopyDelete": "browser add200/copy with new identity200/allowed delete200; row counts and original confirmation checked",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 1,
+        "filters": {
+          "keyword": "positive/negative",
+          "status": {
+            "name": "质量状态",
+            "value": "合格"
+          },
+          "date": {
+            "name": "有效期",
+            "value": "2026-12-31",
+            "invalid": "zero rows"
+          }
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 2,
+          "targets": [
+            "executionMaterials",
+            "materials"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/inventory.csv",
+          "bytes": 423
+        }
+      },
+      "uniqueKey": [
+        "批次编号"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "orders",
+      "label": "订单与交期",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 1,
+        "filters": {
+          "keyword": "positive/negative",
+          "product": "selected and row count checked",
+          "order": "selected and row count checked",
+          "status": {
+            "name": "订单状态",
+            "value": "有效"
+          },
+          "date": {
+            "name": "要求可交付分钟",
+            "value": "480",
+            "invalid": "zero rows"
+          }
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 16,
+          "targets": [
+            "executionFacts",
+            "products",
+            "deliveryConditions",
+            "resourceClaims",
+            "resourceClaims",
+            "dependencies",
+            "dependencies",
+            "dependencies",
+            "supplyUses",
+            "tasks",
+            "tasks",
+            "routes",
+            "routes",
+            "times",
+            "times",
+            "bom"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/orders.csv",
+          "bytes": 502
+        }
+      },
+      "uniqueKey": [
+        "订单编号"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "bom",
+      "label": "BOM 与包装用量",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 1,
+        "filters": {
+          "keyword": "positive/negative",
+          "product": "selected and row count checked",
+          "order": "selected and row count checked",
+          "date": {
+            "name": "生效日期",
+            "value": "2026-01-01",
+            "invalid": "zero rows"
+          }
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 4,
+          "targets": [
+            "products",
+            "materials",
+            "orders",
+            "routes"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/bom.csv",
+          "bytes": 516
+        }
+      },
+      "uniqueKey": [
+        "产品编号",
+        "版本编号",
+        "投料工序编号",
+        "物料编号"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "routes",
+      "label": "工艺路线",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 4,
+        "filters": {
+          "keyword": "positive/negative",
+          "product": "selected and row count checked",
+          "order": "selected and row count checked"
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 10,
+          "targets": [
+            "products",
+            "orders",
+            "times",
+            "machines",
+            "machines",
+            "machines",
+            "tasks",
+            "dependencies",
+            "supplyUses",
+            "bom"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/routes.csv",
+          "bytes": 572
+        }
+      },
+      "uniqueKey": [
+        "产品编号",
+        "工序编号"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "times",
+      "label": "工序工时",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 4,
+        "filters": {
+          "keyword": "positive/negative",
+          "product": "selected and row count checked",
+          "order": "selected and row count checked",
+          "date": {
+            "name": "速度支每分钟",
+            "value": "120",
+            "invalid": "zero rows"
+          }
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 7,
+          "targets": [
+            "products",
+            "orders",
+            "routes",
+            "machines",
+            "machines",
+            "machines",
+            "tasks"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/times.csv",
+          "bytes": 558
+        }
+      },
+      "uniqueKey": [
+        "产品编号",
+        "工序编号"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "machines",
+      "label": "设备资源",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "allowedDelete": "browser200 current MIX01 deletion in new revision; actual confirmed task and original input machine retained byte-for-byte",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 6,
+        "filters": {
+          "keyword": "positive/negative"
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 8,
+          "targets": [
+            "routes",
+            "routes",
+            "times",
+            "times",
+            "calendars",
+            "tasks",
+            "executionFacts",
+            "dependencies"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/machines.csv",
+          "bytes": 440
+        }
+      },
+      "uniqueKey": [
+        "设备编号"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "tools",
+      "label": "工装配置（不自动参与排程）",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "addCopyDelete": "browser add200/copy with new identity200/allowed delete200; row counts and original confirmation checked",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 1,
+        "filters": {
+          "keyword": "positive/negative",
+          "status": {
+            "name": "是否启用",
+            "value": "是"
+          }
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 1,
+          "targets": [
+            "resourceClaims"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/tools.csv",
+          "bytes": 473
+        }
+      },
+      "uniqueKey": [
+        "工装编码"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "deliveryConditions",
+      "label": "订单模拟交付条件",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 1,
+        "filters": {
+          "keyword": "positive/negative",
+          "product": "selected and row count checked",
+          "order": "selected and row count checked",
+          "status": {
+            "name": "模拟质量状态",
+            "value": "模拟合格"
+          },
+          "date": {
+            "name": "模拟有效期截止时间",
+            "value": "2026-12-31T08:00:00+08:00",
+            "invalid": "zero rows"
+          }
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 1,
+          "targets": [
+            "orders"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/deliveryConditions.csv",
+          "bytes": 416
+        }
+      },
+      "uniqueKey": [
+        "订单编号"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "resourceClaims",
+      "label": "显式逐生产批占用声明",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 2,
+        "filters": {
+          "keyword": "positive/negative",
+          "product": "selected and row count checked",
+          "order": "selected and row count checked"
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 3,
+          "targets": [
+            "orders",
+            "tasks",
+            "tools"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/resourceClaims.csv",
+          "bytes": 480
+        }
+      },
+      "uniqueKey": [
+        "声明编号"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "batchResources",
+      "label": "空间与组批配置（存储不代表检查）",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 1,
+        "filters": {
+          "keyword": "positive/negative"
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 1,
+          "targets": [
+            "resourceClaims"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/batchResources.csv",
+          "bytes": 382
+        }
+      },
+      "uniqueKey": [
+        "资源编号"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "calendars",
+      "label": "工厂工作日历",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 1,
+        "filters": {
+          "keyword": "positive/negative",
+          "status": {
+            "name": "是否工作",
+            "value": "是"
+          },
+          "date": {
+            "name": "起始分钟",
+            "value": "0",
+            "invalid": "zero rows"
+          }
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 6,
+          "targets": [
+            "machines",
+            "machines",
+            "machines",
+            "machines",
+            "machines",
+            "machines"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/calendars.csv",
+          "bytes": 403
+        }
+      },
+      "uniqueKey": [
+        "日历编号",
+        "起始分钟",
+        "结束分钟",
+        "是否工作"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "downtime",
+      "label": "设备停机例外",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 2,
+        "filters": {
+          "keyword": "positive/negative",
+          "date": {
+            "name": "起始分钟",
+            "value": "120",
+            "invalid": "zero rows"
+          }
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 1,
+          "targets": [
+            "machines"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/downtime.csv",
+          "bytes": 532
+        }
+      },
+      "uniqueKey": [
+        "设备编号",
+        "起始分钟",
+        "结束分钟"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "dependencies",
+      "label": "工序资源依赖",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 3,
+        "filters": {
+          "keyword": "positive/negative",
+          "product": "selected and row count checked",
+          "order": "selected and row count checked"
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 6,
+          "targets": [
+            "orders",
+            "supplyUses",
+            "tasks",
+            "executionFacts",
+            "machines",
+            "routes"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/dependencies.csv",
+          "bytes": 978
+        }
+      },
+      "uniqueKey": [
+        "订单编号",
+        "工序编号",
+        "资源类型",
+        "资源编号"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "personnelGroups",
+      "label": "人员组与可用时间",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 1,
+        "filters": {
+          "keyword": "positive/negative",
+          "date": {
+            "name": "可用起始分钟",
+            "value": "0",
+            "invalid": "zero rows"
+          }
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 1,
+          "targets": [
+            "dependencies"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/personnelGroups.csv",
+          "bytes": 407
+        }
+      },
+      "uniqueKey": [
+        "人员组编号"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "rules",
+      "label": "排程规则",
+      "operations": {
+        "edit": "browser save200, persisted value checked",
+        "copyDuplicate": "browser400, exact persisted state/plans/audit unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 13,
+        "filters": {
+          "keyword": "positive/negative",
+          "status": {
+            "name": "是否启用",
+            "value": "是"
+          }
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 2,
+          "targets": [
+            "tasks",
+            "tasks"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/rules.csv",
+          "bytes": 388
+        }
+      },
+      "uniqueKey": [
+        "规则编号"
+      ],
+      "boundary": "Current records form a new immutable input revision; original confirmed snapshot retained. Cross-table references validated."
+    },
+    {
+      "key": "executionFacts",
+      "label": "模拟任务执行事实（累计）",
+      "operations": {
+        "edit": "browser cumulative advance200",
+        "delete": "browser protected execution/source/event deletion409, persisted bytes unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 1,
+        "filters": {
+          "keyword": "positive/negative",
+          "product": "selected and row count checked",
+          "order": "selected and row count checked",
+          "status": {
+            "name": "状态",
+            "value": "部分完成"
+          },
+          "date": {
+            "name": "开始分钟",
+            "value": "0",
+            "invalid": "zero rows"
+          }
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 6,
+          "targets": [
+            "executionSources",
+            "orders",
+            "executionMaterials",
+            "tasks",
+            "dependencies",
+            "machines"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/executionFacts.csv",
+          "bytes": 549
+        }
+      },
+      "uniqueKey": [
+        "事实编号"
+      ],
+      "boundary": "Original execution/source/event protections apply; no automatic undo/rebase"
+    },
+    {
+      "key": "executionMaterials",
+      "label": "模拟累计耗料（账面扣前口径）",
+      "operations": {
+        "edit": "browser cumulative advance200",
+        "delete": "browser protected execution/source/event deletion409, persisted bytes unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 1,
+        "filters": {
+          "keyword": "positive/negative",
+          "product": "selected and row count checked",
+          "order": "selected and row count checked"
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 4,
+          "targets": [
+            "executionSources",
+            "executionFacts",
+            "materials",
+            "inventory"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/executionMaterials.csv",
+          "bytes": 373
+        }
+      },
+      "uniqueKey": [
+        "记录编号"
+      ],
+      "boundary": "Original execution/source/event protections apply; no automatic undo/rebase"
+    },
+    {
+      "key": "executionSources",
+      "label": "模拟进度来源对账（显式映射）",
+      "operations": {
+        "edit": "browser protected original overwrite409, persisted bytes unchanged",
+        "delete": "browser protected execution/source/event deletion409, persisted bytes unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 1,
+        "filters": {
+          "keyword": "positive/negative",
+          "product": "selected and row count checked",
+          "order": "selected and row count checked"
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 2,
+          "targets": [
+            "executionFacts",
+            "executionMaterials"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/executionSources.csv",
+          "bytes": 513
+        }
+      },
+      "uniqueKey": [
+        "来源编号"
+      ],
+      "boundary": "Original execution/source/event protections apply; no automatic undo/rebase"
+    },
+    {
+      "key": "simulationEvents",
+      "label": "模拟异常事件（先更新时点事实）",
+      "operations": {
+        "edit": "browser protected original overwrite409, persisted bytes unchanged",
+        "delete": "browser protected execution/source/event deletion409, persisted bytes unchanged",
+        "unexercised": [
+          "positive add/copy/delete not listed above remain unverified in this browser run"
+        ]
+      },
+      "query": {
+        "list": 1,
+        "filters": {
+          "keyword": "positive/negative",
+          "date": {
+            "name": "事件分钟",
+            "value": "30",
+            "invalid": "zero rows"
+          }
+        },
+        "detail": "keyboard Enter focuses record identity heading; full Chinese fields rendered",
+        "related": {
+          "count": 1,
+          "targets": [
+            "machines"
+          ],
+          "keyboard": "first real link selected target and detail"
+        },
+        "export": {
+          "file": "fr014015-csv/simulationEvents.csv",
+          "bytes": 503
+        }
+      },
+      "uniqueKey": [
+        "事件编号"
+      ],
+      "boundary": "Original execution/source/event protections apply; no automatic undo/rebase"
+    }
+  ],
+  "history": {
+    "id": "d285aab3-5325-40c7-8f0b-c2bfafb176dc",
+    "planId": "d025f478-e775-4c6b-be0c-6ff248ee75af",
+    "inputVersionId": "9534741de4a735c36561e40bf9c551e7e30357883b5cf206e7e410c7db75f04c",
+    "actor": "test#supervisor"
+  },
+  "checks": [
+    "actual UI calculate, independent verify, planner submit and supervisor confirm (no confirmed fixtures)",
+    "20 configuration categories: real edit/save and duplicate-copy rejection preserve confirmed plan/input/confirmation bytes",
+    "material master, tool and inventory positive add/copy/allowed delete use actual main editor",
+    "allowed current deletion of an original confirmed-plan machine creates a new revision, preserving the original machine and task",
+    "cross-category invalid save is atomic; keyboard error link switches table and focuses exact source field",
+    "browser reference, unit, impossible-date guards reject all writes; no-op saves keep persisted bytes unchanged",
+    "browser referenced deletion is rejected; stale draft cannot overwrite a concurrent saved revision",
+    "nontrivial cumulative execution updates and immutable sources/events: actual edit/delete guards and historical bytes",
+    "execution references cannot be rebased by changing machine/master data; structured source mapping visible without raw JSON",
+    "all24 populated categories: list, positive/negative applicable filters, keyboard detail/related navigation and actual CSV downloads",
+    "material allocation navigation keeps saved plan provenance; genuine confirmed snapshot retains original inputs after edits",
+    "query role read-only; explicit export grant/revoke, role spoof, member removal and audit trusted actor",
+    "supervisor actual main editor save200 preserves confirmation"
+  ],
+  "remaining": [
+    "Full positive add/copy/delete coverage for categories not explicitly listed",
+    "True signed gateway/SSO and real-person role provisioning",
+    "Full UAT01/02 and complete AC02/03/17/24/26/31/32 across R6/R7",
+    "Unsupported factory/line/contracts/DEC02/03/all-rule semantics",
+    "Scale, multiwriter and crash durability; full accessibility/device coverage"
+  ]
+}

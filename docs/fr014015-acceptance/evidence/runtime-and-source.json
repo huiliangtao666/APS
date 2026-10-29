@@ -1,0 +1,7 @@
+{
+  "image": "aps-fr038-qa-runtime:latest",
+  "imageId": "sha256:0d45a31aa25c4cca1eaacbfd1ba4ee6d5028d899b329e49a6036a66fd0c35da8",
+  "sourceManifestSha256": "17ac2237f7c9bba78ef88ba3180e7d4f3136d13be53a595f953a44b465c5852c",
+  "base": "c8aeb9283776207853efbdb0c5ea8b3eb09ab039",
+  "browser": "141.0.7390.37"
+}

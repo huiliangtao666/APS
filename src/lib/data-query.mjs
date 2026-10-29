@@ -15,16 +15,33 @@ export function related(data,table,index){
  ['executionFacts','executionSources',['事实编号']],['executionSources','executionMaterials',['事实编号']],['orders','executionFacts',['订单编号']],['executionFacts','executionMaterials',['事实编号']],['materials','executionMaterials',['物料编号']],['inventory','executionMaterials',['批次编号']],
  ['products','orders',['产品编号']],['products','routes',['产品编号']],['products','times',['产品编号']],['products','bom',['产品编号']],['products','tasks',['产品编号']],
  ['materials','inventory',['物料编号']],['materials','supplies',['物料编号']],['materials','bom',['物料编号']],
- ['orders','deliveryConditions',['订单编号']],['orders','dependencies',['订单编号']],['orders','supplyUses',['订单编号']],['orders','tasks',['订单编号']],
+ ['orders','deliveryConditions',['订单编号']],['orders','resourceClaims',['订单编号']],['orders','dependencies',['订单编号']],['orders','supplyUses',['订单编号']],['orders','tasks',['订单编号']],
  ['orders','routes',['产品编号']],['orders','times',['产品编号']],['orders','bom',['产品编号']],
  ['routes','times',['产品编号','工序编号']],['routes','machines',['工序编号']],['routes','tasks',['产品编号','工序编号']],
  ['times','machines',['工序编号']],['times','tasks',['产品编号','工序编号']],
  ['machines','downtime',['设备编号']],['machines','calendars',['日历编号']],['machines','tasks',['设备编号']],
  ['supplies','supplyDelays',['供给编号']],['supplies','supplyUses',['供给编号']],
- ['dependencies','supplyUses',['订单编号','工序编号']],['dependencies','tasks',['订单编号','工序编号']],['supplyUses','tasks',['订单编号','工序编号']]
+ ['dependencies','supplyUses',['订单编号','工序编号']],['dependencies','tasks',['订单编号','工序编号']],['supplyUses','tasks',['订单编号','工序编号']],
+ ['resourceClaims','tasks',['订单编号','工序编号']],['executionFacts','tasks',['订单编号','工序编号']],['executionFacts','dependencies',['订单编号','工序编号']]
  ];
  for(const [a,b,keys] of edges){const target=table===a?b:table===b?a:null;if(!target)continue;
   (data[target]||[]).forEach((other,i)=>{if(pair(row,other,keys))results.push({table:target,index:i});});
+ }
+ // Explicit resource declarations have their own type namespace; never join a
+ // similarly named tool, space and machine merely because their IDs coincide.
+ const resources=[['tools','工装编码',['工装']],['batchResources','资源编号',['空间']]];
+ for(const [target,field,types] of resources){
+  const match=(claim,r)=>types.includes(claim['资源类型'])&&!!claim['资源编号']&&claim['资源编号']===r[field];
+  if(table==='resourceClaims')(data[target]||[]).forEach((r,i)=>{if(match(row,r))results.push({table:target,index:i});});
+  if(table===target)(data.resourceClaims||[]).forEach((r,i)=>{if(match(r,row))results.push({table:'resourceClaims',index:i});});
+ }
+ if(table==='executionFacts')(data.machines||[]).forEach((r,i)=>{if(row['当前设备']&&row['当前设备']===r['设备编号'])results.push({table:'machines',index:i});});
+ if(table==='machines')(data.executionFacts||[]).forEach((r,i)=>{if(r['当前设备']===row['设备编号'])results.push({table:'executionFacts',index:i});});
+ // Event payloads reference only named fields, never substring matches.
+ for(const [target,field,reference] of [['machines','设备编号','machineId'],['inventory','批次编号','lotId'],['personnelGroups','人员组编号','groupId'],['supplies','供给编号','supplyId']]){
+  const match=(event,r)=>{try{const p=JSON.parse(event['参数JSON']);return !!p[reference]&&p[reference]===r[field];}catch{return false;}};
+  if(table==='simulationEvents')(data[target]||[]).forEach((r,i)=>{if(match(row,r))results.push({table:target,index:i});});
+  if(table===target)(data.simulationEvents||[]).forEach((r,i)=>{if(match(r,row))results.push({table:'simulationEvents',index:i});});
  }
  // Resource IDs have a type namespace; operation IDs have a product namespace.
  for(const [target,field,type] of [['machines','设备编号','设备'],['personnelGroups','人员组编号','人员技能'],['materials','物料编号','物料']]){
@@ -50,7 +67,7 @@ function queryTime(raw,field){
  const date=value.slice(0,10);
  const validDate=/^\d{4}-\d{2}-\d{2}$/.test(date)&&Number.isFinite(Date.parse(date+'T00:00:00Z'))&&new Date(date+'T00:00:00Z').toISOString().slice(0,10)===date;
  if(!validDate)return NaN;
- if(/有效期|日期/.test(field))return value===date?Date.parse(date+'T00:00:00Z'):NaN;
+ if(field==='有效期'||/日期/.test(field))return value===date?Date.parse(date+'T00:00:00Z'):NaN;
  const match=value.match(/^\d{4}-\d{2}-\d{2}T(\d{2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?(Z|[+-]\d{2}:\d{2})$/);
  if(!match||Number(match[1])>23||Number(match[2])>59||Number(match[3]||0)>59)return NaN;
  return Date.parse(value);
@@ -75,9 +92,10 @@ export function filterRows(data,table,filters={}){
  });
 }
 export function displayValue(field,value){
- if(field==='方案状态')return ({draft:'草稿',legacy:'历史快照'})[value]||String(value??'未记录');
- if(field!=='参数JSON')return String(value??'');
- try{const parsed=JSON.parse(value||'{}');const human=v=>Array.isArray(v)?v.map(human).join('、'):v&&typeof v==='object'?Object.entries(v).map(([k,x])=>`${k}：${human(x)}`).join('；'):String(v);return human(parsed)||'无附加参数';}catch{return '参数格式无效，请维护人员检查';}
+ if(field==='方案状态')return ({draft:'草稿',legacy:'历史快照',confirmed:'已确认',submitted:'已提交',released:'已发布',archived:'已归档'})[value]||String(value??'未记录');
+ if(!/JSON$/.test(field)&&!['物料需求与批次分配','精确合格数量','精确投入装载','联合资源检查','联合资源占用','任务时间因果','订单完成与交期影响'].includes(field))return String(value??'');
+ const labels={machineId:'设备编号',endMinute:'结束分钟',lotId:'批次编号',status:'模拟状态',groupId:'人员组编号',supplyId:'供给编号',arrival:'预计到达时间',available:'预计可用时间',taskId:'任务编号',orderId:'订单编号',materialId:'物料编号',quantity:'数量',unit:'单位',source:'来源',kind:'类型',id:'编号',start:'开始分钟',end:'结束分钟',numerator:'分子',denominator:'分母',allocations:'批次分配',shortage:'缺口',conditional:'条件性供给',committed:'已模拟占用',readyAt:'可用分钟',expiry:'有效期',quality:'模拟质量状态',remaining:'剩余数量',exactQuantity:'精确数量',exactLoadKg:'精确投入量',resourceId:'资源编号',type:'类型',capacity:'容量',taskIds:'任务编号',productionBatchId:'生产批编号',before:'提前占用分钟',after:'后延占用分钟',note:'说明',message:'说明',code:'代码',checked:'已检查',unchecked:'尚未检查'};
+ try{const parsed=JSON.parse(value||'{}');const human=v=>v===null?'未记录':Array.isArray(v)?v.map(human).join('、'):v&&typeof v==='object'?Object.entries(v).map(([k,x])=>`${labels[k]||(/^[A-Za-z]/.test(k)?'未识别字段（'+k+'）':k)}：${human(x)}`).join('；'):typeof v==='boolean'?(v?'是':'否'):String(v);return human(parsed)||'无附加参数';}catch{return '结构化内容格式无效，请维护人员检查';}
 }
 export function queryCsv(defs,data,plans,revision,query){
  const def=[...defs,taskDef].find(d=>d.key===query.table);if(!def)throw new Error('unknown_table');
