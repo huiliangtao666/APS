@@ -1,0 +1,14 @@
+{
+  "source_event_key": "dlv_c0e89812-c8ea-4b7a-91e8-7a100beae70a:r1",
+  "dispatch_event_key": "fr014-skill-rel01:c8e16d40:independent-retest-r1",
+  "delivery": "dlv_65bd029a-fb90-4808-ab0d-c7be761e3cfc",
+  "status": "waiting; SENT only at dispatch",
+  "product_sha": "c8e16d408b2d0207cb9886b55f39a52ebc9c1665",
+  "base": "18c2f59761c9db69554f33a2870b68e15d092320",
+  "requirement": "FR-014",
+  "defect": "FR014-SKILL-REL01",
+  "delivered_repair_round": 1,
+  "completed_retest_round": 0,
+  "issue_comment": "https://github.com/huiliangtao666/APS/issues/12#issuecomment-6489979041",
+  "dispatched_at": "2026-10-29T14:48:25+08:00"
+}

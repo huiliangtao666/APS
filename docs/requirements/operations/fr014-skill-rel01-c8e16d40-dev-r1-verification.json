@@ -1,0 +1,28 @@
+{
+  "product_sha": "c8e16d408b2d0207cb9886b55f39a52ebc9c1665",
+  "base": "18c2f59761c9db69554f33a2870b68e15d092320",
+  "external_sha256": "PASS",
+  "zip_entries": 36,
+  "zip_crc": "PASS",
+  "internal_hashes_verified": 35,
+  "github_source_blobs_verified": 6,
+  "source_file_count": 6,
+  "product_source_file_count": 3,
+  "design_execution": "Artifact/hash/source review only; Dev tests not rerun; independent Test still pending",
+  "dev_checks": {
+    "unit": 9,
+    "existing_react": 8,
+    "resource_policy": 14,
+    "browser_groups": 8
+  },
+  "limitations": [
+    "synthetic QA actor, not GatewaySSO/UAT",
+    "history is real calculate snapshot, not new supervisor confirmation",
+    "first runner export expectation error preserved",
+    "01 factory/line remains PARTIAL; implementation not dispatched"
+  ],
+  "screenshots_reviewed": [
+    "rel1.png",
+    "history.png"
+  ]
+}

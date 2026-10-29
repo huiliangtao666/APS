@@ -1,6 +1,6 @@
 # 当前需求跟踪表
 
-快照：2026-10-29T14:43:36+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
+快照：2026-10-29T14:49:25+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
 
 | 编号 | 名称 | 要求版本 | 生效CR | 原卡状态 | 当前环节 | 验收结论 | 原卡 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -17,7 +17,7 @@
 | FR-011 | 预计到料与可用时间 | v0.3+CR-DEC04-05-06-20261029 | CR-DEC04-05-06-20261029 | Done | CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgn8) |
 | FR-012 | 在制品与模拟进度 | v0.3 |  | In progress | 实施或验收未闭环，见原卡/关联Issue | 未登记原需求完整版本验收；有限通过证据见原卡 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgp0) |
 | FR-013 | 各类CSV模拟数据导入 | v0.3 |  | In progress | 实施或验收未闭环，见原卡/关联Issue | 未登记原需求完整版本验收；有限通过证据见原卡 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgrg) |
-| FR-014 | 各类模拟数据查询 | v0.3 |  | In progress | 已接受技能替代关联缺陷，待最小修复及新SHA独立复测 | FAIL / NOT_READY；49 PASS、1 FAIL、1 PARTIAL；原SHA通过范围保留 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgs4) |
+| FR-014 | 各类模拟数据查询 | v0.3 |  | In review | SKILL-REL01 round1已交付；固定新SHA独立复测已投递 | Dev限定PASS / 整卡NOT_READY；旧Test 49 PASS、1 FAIL、1 PARTIAL保留，等待目标缺陷独立复测 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgs4) |
 | FR-015 | 各类模拟数据编辑 | v0.3 |  | In progress | 四类已有代码新增/复制有限补证已接受；等待原01类别最小交付，不重复八操作 | PARTIAL / NOT_READY；108 PASS、1 PARTIAL、0 NOT_EXECUTED；四项fresh补证PASS（八操作），旧104 PASS沿原SHA继承；无新产品FAIL | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgto) |
 | FR-016 | 数据检查与问题处理 | v0.3 |  | In progress | 实施或验收未闭环，见原卡/关联Issue | 未登记原需求完整版本验收；有限通过证据见原卡 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgu4) |
 | FR-017 | 业务规则配置与启用 | v0.3+CR-DEC02-03-20261029+CR-DEC04-05-06-20261029 | CR-DEC02-03-20261029、CR-DEC04-05-06-20261029 | In progress | S06/S07独立验收PASS；本卡剩余条件归集待闭环；CR-DEC04-05-06仍仅设计/mock，未派实现 | S06/S07有限PASS；整卡NOT_READY。FR007原范围Done、D01-D03 round1 PASS及原48历史保留；非完整CR/UAT | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgv4) |
