@@ -1,0 +1,114 @@
+{
+  "kind": "DESIGN_SOURCE_INDEX_NOT_IMPLEMENTATION_MASTER",
+  "event_key": "dlv_778b0eb7-a369-44c2-9a41-315c2dd72e1b:r1",
+  "read_at": "2026-10-29T20:57:00.729278+00:00",
+  "controlled_main_sha": "0a0e135aa496cb7aa5a1c2e8f61641fdcbed5673",
+  "original_card": {
+    "project_id": "PVT_kwHOFM9WU84BpE1c",
+    "item_id": "PVTI_lAHOFM9WU84BpE1czhEHg1o",
+    "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg1o",
+    "snapshot_in_archive": "reads/fr022-original-card.json"
+  },
+  "issue": "https://github.com/huiliangtao666/APS/issues/3",
+  "baseline_url": "https://github.com/huiliangtao666/APS/blob/0a0e135aa496cb7aa5a1c2e8f61641fdcbed5673/docs/requirements/baselines/APS-BL-001-v0.3.json",
+  "CR_url": "https://github.com/huiliangtao666/APS/blob/0a0e135aa496cb7aa5a1c2e8f61641fdcbed5673/docs/requirements/changes/change-register.json",
+  "dev_readiness_commit": "0c2802401db2376075473b8e3764caeb47efc58b",
+  "dev_readiness_url": "https://github.com/huiliangtao666/APS/tree/0c2802401db2376075473b8e3764caeb47efc58b/docs/n06-readiness",
+  "dev_manifest_checks": {
+    "items": 33,
+    "result": "MATCH",
+    "sha256_by_original_path": {
+      "ASSERTIONS.csv": "e64c3f69579fedc356c31354b34c8a0bbaec53d4f10a296f0064f36647f2da45",
+      "FIELD-BLOCKERS.csv": "9a71927cb5ff700b6836aec99bf5dbc113eb95809b4903540836557ed8b2119b",
+      "REPORT.txt": "4c55dbcd0d2198395d040bbf5ff894ddc88397abdd05dc373f3eca40a845414c",
+      "VALIDATION.json": "3fb923e0e369123e76b328fd0393303f2d9daaa54845005f0de5217ebfd3056c",
+      "authority/APS-BL-001-v0.3.json": "e30733655359e71b0c98220910303aefbc922ac123b96fb3025c4976a4067e36",
+      "authority/change-register.json": "4a81c7a8dec5615bea870d9347a9f615e3a66fec625c49f787675b544fff2e5f",
+      "authority/comments.json": "3b0301d418ee7f4b3e0d0f62ede215e14d8605cc7b5e85116a70540ac1d4ba29",
+      "authority/fr022-live-card.json": "a14315736eb3dfb3dca8e83ca0d701bfee493a002725e09c2f6e49b30d998cee",
+      "authority/issue3.json": "ab0788e7267a305835d5e4c2334bd0e04dc86fc9f74a7aa243f80825d0904c58",
+      "authority/p10-business-contract.md": "16a78a47b56629b5e4eca8d9423eda41b8aeec53b61873cb425cc74ef6dd59aa",
+      "authority/source-docx-hits.json": "815e0ab4dad5160758741ac6fb3a61f42c570c5cfba4a9ab03e9e6522e254105",
+      "authority/source-zip-files.json": "4d36dd06bdc2bf363916312b27dcbafba686b2d11876815c1d1227c029bbf7ca",
+      "authority/uat15-resource-and-progress.json": "741274d2cfffedc940d30ae029aab684ef18fc74b45e4de559b0dbda1e554054",
+      "probe.mjs": "a250e0ef5c439624f419ef9b71e1a41f0ca0581796ba1ea178c0d99e0ecf6cd6",
+      "product-source-sha256.json": "c9fbd81e8d9011fabf812cee317d36afec480611a4883b109167a4a97e7fccee",
+      "provenance.json": "9f8ffb4ab3f2ae3b35517345d0cf016ee482c5ad9a7d23db14f3efba67607d94",
+      "run-container.sh": "d9b9b58392b761915e06e5798a8381012d8c7a8ddcd2fd645791f473f9f8030f",
+      "runtime/D03-active-ledger-rejected.png": "d3c8459235ae475398a1bfe6f6761d34e4ec559f95e6d01d984c5fc769f5f054",
+      "runtime/browser-install.log": "2458dede4154a46fd46c0f47f7d72326d0d4f5f4b4135219f04a9e81052a1c1d",
+      "runtime/browser.log": "a5f233d68fa305442a07be7ac253883c5b172716da2bd8b084f4719de06fa068",
+      "runtime/build.log": "d48aa6d36cc1fa5c81f80b152d5e92408261c0a129a036a529854d8eb6d71da7",
+      "runtime/executed-product-source-sha256.json": "b61586f26f0c8fb8e90195fb726551e846bcc84b976a4c01e7a824e5d227997a",
+      "runtime/n06-probe-results.json": "9ad2272a734a52d3a618e30b8e222344768088fd3a7ff3ed6afd2e7006b9c67a",
+      "runtime/node-version.txt": "c42fcf0db5a550bda2f566fcdc21955df3e5a8ec3aeb90ac533f3776e7fce32a",
+      "runtime/probe-initial-harness-error.log": "8ddd2cbadc951b33a9c367bed41d2ceaaed71929ef1b33cbe2d99cc4f4d66d42",
+      "runtime/probe.log": "804a6fe5255a8a484d1ecbe3809effeda9125ad0afffdd55497b194bd606f155",
+      "runtime/regression.log": "409a9ac8301f706d045234c465776b2d1ceb0fa46fa8e4bd780fca030a32ba48",
+      "runtime/repair-browser-results.json": "af9a0f43e1f1fc2a0d67dbaf79e816036640d39dae4e315b1356255ec3e09b1c",
+      "runtime/runtime-image.json": "ec901863bdd215dce9b84e5320f8b4693db3e3d15cbd66ff298c86c7d7e0a0ee",
+      "runtime/人员开始偏移-rejected.png": "ce43b0f8c7d80b73eedf8cf15df59f49af0d92d347c04df0f1d392a30e12047f",
+      "runtime/人员结束偏移-rejected.png": "e66ecad7bff67731a316a6d5aaf95317a139c0acf369b7c67575bb1829ff2553",
+      "source-analysis.json": "0c4655f77ee8e512715815c9b83b83d7ab7e28c6e72907518464bcb01ad42e01",
+      "verify-source.mjs": "4a949fa18763384b0d9bda388243f26117eaa9b096b3c0139b05eb1a366da088"
+    }
+  },
+  "files_api_attempt": "403 Workspace token cannot act for another workspace; fallback only fixed GitHub authenticated read",
+  "outer_dev_artifacts_not_acquired": [
+    "MATRIX.csv",
+    "HANDOFF.json",
+    "EVIDENCE.zip"
+  ],
+  "not_acquired_reason": "Not in sender-fixed docs/n06-readiness tree; sender workspace Files API denied. ASSERTIONS.csv and all33 manifest entries acquired instead; no claim of outer archive verification.",
+  "original_uploads": {
+    "source_sha256": {
+      "APS需求分析与设计说明书_v0.3.docx": "4eb29f7cfaf4fe30f76329775d32930b806da941282098b7de163591807bc7d4",
+      "APS测试数据_v0.3_约束场景与配置数据.zip": "01aa86f90d257e3e6c948531f1010d0a0fdf502a68266176991dc0fb8f107759"
+    },
+    "read_access": "Included byte-for-byte in private delivery ZIP under originals/ for PM/receivers; not committed to GitHub; original Files API paths are APS-Design/upload/<filename>",
+    "UAT15_csv_extracts": 12,
+    "all12_match_dev_authority_csv": true,
+    "archive_entries": "original-extracts/uat15-original-csv-extracts.json; original-extracts/docx-focused-extracts.json",
+    "resource_fact_limitation": "Original task progress/configuration fixtures are not real customer execution resource ledger."
+  },
+  "referenced_design_sha": "9c230d4aeda124915bcb917b929050f020a11951",
+  "referenced_product_sha": "7a26732efc0fb440ca6f8ac7aa6261e33757eb81",
+  "new_product_sha": null,
+  "source_code_read_scope": [
+    "src/lib/execution-facts.mjs",
+    "src/lib/production-batches.mjs",
+    "server/run-input.mjs",
+    "server/confirmation.mjs"
+  ],
+  "customer_fact_status": "MISSING_NOT_REPLACED_BY_MOCK",
+  "required_customer_materials": [
+    {
+      "material": "原任务/原生产批清册及累计事实交叉映射、实际采用全资源清单和覆盖声明",
+      "authorized_provider": "原生产进度/生产调度负责人",
+      "named_provider": null,
+      "assignment": "APS-PM协调客户指定具体责任人并交原件"
+    },
+    {
+      "material": "逐工装原身份、实际量/单位、领用/归还或未释放观测、原规则",
+      "authorized_provider": "工装保管/车间资源负责人；原规则由维护主管核对",
+      "named_provider": null
+    },
+    {
+      "material": "逐空间批次、物理池、计量/位置单位、进入/移出记录",
+      "authorized_provider": "空间/库位/冷却区域负责人",
+      "named_provider": null
+    },
+    {
+      "material": "原岗位参与人数/起止、组池映射、班次技能/实际替代记录、旧新身份连续性",
+      "authorized_provider": "班组长/人员调度负责人；资格配置主管核规则",
+      "named_provider": null
+    },
+    {
+      "material": "真实释放/纠正事件原件及前占用引用、原因、责任核对",
+      "authorized_provider": "原事实责任方及相应资源主管",
+      "named_provider": null
+    }
+  ],
+  "product_execution": "NOT_EXECUTED",
+  "QA_UAT": "NOT_EXECUTED"
+}
