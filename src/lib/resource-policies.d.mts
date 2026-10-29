@@ -1,3 +1,4 @@
+export function personnelCandidates(r:any):string[];
 export const whole:string;
 export const windowMode:string;
 export function migratePolicies(input:any):any;

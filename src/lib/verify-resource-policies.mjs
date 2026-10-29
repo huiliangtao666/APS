@@ -31,21 +31,32 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
    const members=task.resourceBatchId?tasks.filter(t=>t.resourceBatchId===task.resourceBatchId):[task];
    const requirements=members.flatMap(m=>(data.dependencies||[]).filter(d=>d['订单编号']===m.orderId&&d['工序编号']===m.operation&&d['资源类型']==='人员技能').map(d=>({...d,__policyRoleSource:m.productionBatchId||m.orderId})));
    const saved=reservations.filter(r=>r.type==='人员'&&(r.taskIds||[r.taskId]).includes(task.id));
-   const expected=requirements.map(d=>({d,start:d['窗口外释放']==='否'?task.start:task.start+num(d,'人员开始偏移'),end:d['窗口外释放']==='否'?task.end:task.end-num(d,'人员结束偏移'),count:num(d,'需求数量')}));
-   for(const e of expected)if(!(e.end>e.start))add(`${task.id} 人员窗口超出实际工序`);
-   const roles=new Set([...expected.map(e=>JSON.stringify([e.d['资源编号'],e.d['所需技能'],e.d.__policyRoleSource])),...saved.map(r=>JSON.stringify([r.resourceId,r.requiredSkill,r.roleSource]))]);
+   // Independently derive allowed sets and role identities from frozen rows.
+   // Old ledgers without demandKey are accepted only for original single groups.
+   const expected=requirements.map((d,index)=>{
+    const ids=d['候选人员组']?.trim()?String(d['候选人员组']).split(/[,，]/).map(s=>s.trim()):d['资源编号']?.trim()?[d['资源编号'].trim()]:[];
+    if(!ids.length||ids.some(id=>!id)||new Set(ids).size!==ids.length||ids.length>32||d['候选人员组']?.trim()&&d['资源编号']?.trim())add(`${task.id} 冻结人员候选配置无效`);
+    const key=JSON.stringify([[...ids].sort(),d['所需技能']||'',d['所需班次']||'',d.__policyRoleSource,d['人员参与阶段']?'窗口集合':index]);
+    const start=d['窗口外释放']==='否'?task.start:task.start+num(d,'人员开始偏移'),end=d['窗口外释放']==='否'?task.end:task.end-num(d,'人员结束偏移');
+    if(!(end>start))add(`${task.id} 人员窗口超出实际工序`);
+    return {d,ids,key,start,end,count:num(d,'需求数量')};
+   });
+   const keyFor=r=>r.demandKey||expected.find(e=>!e.d['候选人员组']?.trim()&&e.ids[0]===r.resourceId&&e.d['所需技能']===r.requiredSkill&&e.d.__policyRoleSource===r.roleSource)?.key;
+   const roles=new Set([...expected.map(e=>e.key),...saved.map(r=>keyFor(r))]);
    for(const role of roles){
-    const [group,skill,source]=JSON.parse(role),want=expected.filter(e=>e.d['资源编号']===group&&e.d['所需技能']===skill&&e.d.__policyRoleSource===source),got=saved.filter(r=>r.resourceId===group&&r.requiredSkill===skill&&r.roleSource===source);
+    const want=expected.filter(e=>e.key===role),got=saved.filter(r=>keyFor(r)===role);
     const points=[...new Set([...want.flatMap(e=>[e.start,e.end]),...got.flatMap(e=>[e.start,e.end])])].sort((a,b)=>a-b);
     for(const t of points.slice(0,-1)){
-     const demand=Math.max(0,...want.filter(e=>e.start<=t&&e.end>t).map(e=>e.count));
+     const active=want.filter(e=>e.start<=t&&e.end>t);
+     const demand=Math.max(0,...active.map(e=>e.count));
      const allocated=got.filter(r=>r.start<=t&&r.end>t).reduce((s,r)=>s+Number(r.quantity),0);
-     if(demand!==allocated)add(`${task.id} ${group}/${skill} 在分钟 ${t} 人员覆盖 ${allocated} ≠ 配置 ${demand}`);
+     if(demand!==allocated)add(`${task.id} ${role||'未知需求'} 在分钟 ${t} 人员覆盖 ${allocated} ≠ 配置 ${demand}`);
     }
    }
    for(const r of saved){
-    const g=(data.personnelGroups||[]).find(g=>g['人员组编号']===r.resourceId),needs=requirements.filter(d=>d['资源编号']===r.resourceId&&d['所需技能']===r.requiredSkill);
-    if(!g||!matches(g,r.requiredSkill,task.operation,r)||!needs.length||needs.some(d=>d['所需班次']&&g['班次']!==d['所需班次']))add(`${task.id} 人员技能/有向替代/班次来源不匹配`);
+    expectedReservations.add(r);
+    const g=(data.personnelGroups||[]).find(g=>g['人员组编号']===r.resourceId),needs=expected.filter(e=>e.key===keyFor(r)&&e.ids.includes(r.resourceId)&&e.d['所需技能']===r.requiredSkill&&e.d.__policyRoleSource===r.roleSource);
+    if(!Number.isSafeInteger(Number(r.quantity))||!g||!matches(g,r.requiredSkill,task.operation,r)||!needs.length||needs.some(e=>e.d['所需班次']&&g['班次']!==e.d['所需班次']))add(`${task.id} 人员候选/需求/技能/有向替代/班次来源不匹配`);
    }
   }
   for(const c of (data.resourceClaims||[]).filter(c=>c['订单编号']===task.orderId&&c['工序编号']===task.operation&&enabled(c['资源类型']==='工装'?'MOLD':'STORAGE'))){
@@ -58,7 +69,7 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
   }
  }
  for(const r of reservations.filter(r=>r.type!=='设备')){
-  if(r.type!=='人员'&&!expectedReservations.has(r))add(`${r.resourceId} 存在无有效配置来源的工装/空间占用`);
+  if(!expectedReservations.has(r))add(`${r.resourceId} 存在无有效配置来源的资源占用`);
   const g=r.type==='人员'?(data.personnelGroups||[]).find(g=>g['人员组编号']===r.resourceId):r.type==='工装'?(data.tools||[]).find(g=>g['工装编码']===r.resourceId):(data.batchResources||[]).find(g=>g['资源编号']===r.resourceId);
   const capacity=Number(g?.[r.type==='人员'?'人员数量':r.type==='工装'?'可用数量':'容量']);
   if(!g||!(capacity>0)||!Number.isFinite(r.start)||!Number.isFinite(r.end)||r.start<0||r.end<=r.start||(!Number.isFinite(Number(r.quantity))||!(Number(r.quantity)>0))){add(`${r.resourceId} 资源/数量/区间无效`);continue;}

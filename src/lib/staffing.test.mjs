@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { allocatePersonnel } from './staffing.mjs';
 
-const requirement = { '工序编号': 'LOAD', '需求数量': '2', '所需技能': '装卸', '所需班次': '早班', '人员开始偏移': '0', '人员结束偏移': '10' };
+// Allocator fixtures explicitly bind the same single pool as saved input rows.
+const requirement = { '资源编号': 'G1', '工序编号': 'LOAD', '需求数量': '2', '所需技能': '装卸', '所需班次': '早班', '人员开始偏移': '0', '人员结束偏移': '10' };
 const group = { '人员组编号': 'G1', '人员数量': '2', '技能': '装卸,操作', '班次': '早班', '可用起始分钟': '0', '可用结束分钟': '300' };
 
 test('matches required headcount, skill, shift and the personnel phase window', () => {

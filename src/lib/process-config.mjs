@@ -90,7 +90,7 @@ export function validateProcessConfig({ products = [], orders = [], routes = [],
       if (product && !routeByProduct.get(product)?.some(item => (item['工序编号'] || '').trim() === operation)) at('dependencies',index,'资源编号').push({ code:'INPUT / DEPENDENCY_OPERATION', message:`${prefix}引用订单 ${order} 产品路线中不存在的工序 ${operation}` });
     }
     if (!resourceTypes.has(type)) at('dependencies',index,'资源编号').push({ code:'INPUT / DEPENDENCY_TYPE', message:`${prefix}资源类型为空或不支持` });
-    if (!id) at('dependencies',index,'资源编号').push({ code:'INPUT / DEPENDENCY_ID', message:`${prefix}缺少资源编号` });
+    if (!id && !(type==='人员技能'&&row['候选人员组']?.trim())) at('dependencies',index,'资源编号').push({ code:'INPUT / DEPENDENCY_ID', message:`${prefix}缺少资源编号` });
     if (type === '设备' && id && !machineIds.has(id)) at('dependencies',index,'资源编号').push({ code:'INPUT / DEPENDENCY_REFERENCE', message:`${prefix}引用未配置的设备 ${id}` });
     if (type === '物料' && id && !materialIds.has(id)) at('dependencies',index,'资源编号').push({ code:'INPUT / DEPENDENCY_REFERENCE', message:`${prefix}引用未配置的物料 ${id}` });
     if (type === '人员技能' && id && personnelGroupIds.size && !personnelGroupIds.has(id)) at('dependencies',index,'资源编号').push({ code:'INPUT / DEPENDENCY_REFERENCE', message:`${prefix}引用未配置的人员组 ${id}` });

@@ -2,7 +2,7 @@ import {parseInputCsvRecords} from '../src/lib/input-csv.mjs';
 // The isolated prototype used these same table keys, but older field shapes.
 // Reuse physical-record parsing/inspection; actual runtime defs are authoritative.
 export const batchKeys=['orders','routes','times','machines','dependencies','rules'];
-export const optionalFields={orders:['已完成合格数量'],dependencies:['所需班次','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'],rules:['适用对象','生效时间']};
+export const optionalFields={orders:['已完成合格数量'],dependencies:['候选人员组','所需班次','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'],rules:['适用对象','生效时间']};
 export function inspectCsvBatch(files,defs){
  const tables={},sources={},issues=[],seen=new Set();
  const add=(file,row,field,reason,extra={})=>issues.push({file,row,field,reason,message:reason,severity:'error',...extra});

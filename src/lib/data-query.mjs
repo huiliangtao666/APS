@@ -1,3 +1,4 @@
+import {personnelCandidates} from './resource-policies.mjs';
 // Read-only view model. Links represent explicit input references, never allocation.
 export const taskDef={key:'tasks',label:'方案任务',file:'方案任务.csv',fields:['任务编号','订单编号','产品编号','工序编号','工序名称','设备编号','开始分钟','结束分钟','工时分钟','前序任务','来源说明','方案编号','方案状态','输入版本','方案记录规则','运行编号','计算模式','方案检查范围','尚未检查','物料检查','物料需求与批次分配','检查结论边界','生产批编号','资源批编号','合格数量kg','精确合格数量','投入装载kg','精确投入装载','拆合批检查','联合资源检查','联合资源占用','任务时间因果','订单完成与交期影响']};
 export function queryData(data,plans,planId){
@@ -45,8 +46,8 @@ export function related(data,table,index){
  }
  // Resource IDs have a type namespace; operation IDs have a product namespace.
  for(const [target,field,type] of [['machines','设备编号','设备'],['personnelGroups','人员组编号','人员技能'],['materials','物料编号','物料']]){
-  if(table==='dependencies'&&row['资源类型']===type)(data[target]||[]).forEach((r,i)=>{if(row['资源编号']&&row['资源编号']===r[field])results.push({table:target,index:i});});
-  if(table===target)(data.dependencies||[]).forEach((r,i)=>{if(r['资源类型']===type&&r['资源编号']&&r['资源编号']===row[field])results.push({table:'dependencies',index:i});});
+  if(table==='dependencies'&&row['资源类型']===type)(data[target]||[]).forEach((r,i)=>{if(type==='人员技能'?personnelCandidates(row).includes(r[field]):row['资源编号']&&row['资源编号']===r[field])results.push({table:target,index:i});});
+  if(table===target)(data.dependencies||[]).forEach((r,i)=>{if(r['资源类型']===type&&(type==='人员技能'?personnelCandidates(r).includes(row[field]):r['资源编号']&&r['资源编号']===row[field]))results.push({table:'dependencies',index:i});});
  }
  for(const [target,reference] of [['dependencies','工序编号'],['supplyUses','工序编号'],['bom','投料工序编号']]){
   const matches=(r,route)=>{

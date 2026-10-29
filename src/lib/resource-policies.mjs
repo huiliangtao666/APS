@@ -1,5 +1,7 @@
 // One policy source per declaration; no name/grade based skill rules.
 export const skillsOf=value=>String(value||'').split(/[;,，；\s]+/).filter(Boolean);
+// Empty candidate field preserves an explicit single group; never means all groups.
+export const personnelCandidates=r=>r['候选人员组']?.trim()?String(r['候选人员组']).split(/[,，]/).map(s=>s.trim()):r['资源编号']?.trim()?[r['资源编号'].trim()]:[];
 export const whole='显式逐生产批完整区间';
 export const windowMode='明确窗口';
 export function migratePolicies(input){
@@ -66,7 +68,7 @@ export function validatePolicies(data,at=new Date().toISOString(),mode='supporte
    if(!(Number(a)+Number(b)<duration))fail('窗口结束偏移分钟','明确窗口须短于已配置固定工时；从开始+偏移到结束−偏移，不猜阶段时长');
   }
  }
- for(const [i,r]of (data.dependencies||[]).entries())if(r['资源类型']!=='人员技能'&&['人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'].some(k=>r[k]?.trim()))add('dependencies',i,'人员参与阶段','人员阶段/偏移/释放仅适用于人员技能依赖；设备及其他资源请使用其对应配置');
+ for(const [i,r]of (data.dependencies||[]).entries())if(r['资源类型']!=='人员技能'&&['候选人员组','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'].some(k=>r[k]?.trim()))add('dependencies',i,'人员参与阶段','人员阶段/偏移/释放仅适用于人员技能依赖；设备及其他资源请使用其对应配置');
  for(const [i,r]of (data.dependencies||[]).entries())if(r['资源类型']==='人员技能'){
   if(r['窗口外释放']!==undefined&&!['是','否'].includes(r['窗口外释放']))add('dependencies',i,'窗口外释放','仅接受是或否；否表示全工序保留人数');
   if(!Number.isSafeInteger(Number(r['需求数量']))||Number(r['需求数量'])<1)add('dependencies',i,'需求数量','人员需求必须为安全正整数');
@@ -74,8 +76,10 @@ export function validatePolicies(data,at=new Date().toISOString(),mode='supporte
   // Unnamed legacy rows retain the old blank=whole-operation protocol. A
   // named window must supply both boundaries, including an explicit zero.
   if(r['人员参与阶段']?.trim())for(const k of ['人员开始偏移','人员结束偏移'])if(!minute(r[k]))add('dependencies',i,k,'明确人员窗口须显式填写0–525600整数分钟；空值不按0采用');
-  const group=(data.personnelGroups||[]).find(g=>g['人员组编号']===r['资源编号']);
-  if(!group)add('dependencies',i,'资源编号','须引用现有人员组；同池多个技能只共享一份人数容量');
+  const ids=personnelCandidates(r),field=r['候选人员组']?.trim()?'候选人员组':'资源编号';
+  if(r['候选人员组']?.trim()&&r['资源编号']?.trim())add('dependencies',i,field,'候选集合与单组资源编号互斥，请仅填写一种；不隐含优先组');
+  if(!ids.length||ids.some(id=>!id)||new Set(ids).size!==ids.length||ids.length>32)add('dependencies',i,field,'显式填写1–32个不重复人员组编号，以逗号分隔；空集合不代表任意组');
+  for(const id of ids)if(!(data.personnelGroups||[]).some(g=>g['人员组编号']===id))add('dependencies',i,field,`须引用现有人员组 ${id}；同池多个技能只共享一份人数容量`);
  }
  return issues;
 }

@@ -1,3 +1,4 @@
+import {personnelCandidates} from './resource-policies.mjs';
 import {timetable,validInterval} from './timetable.mjs';
 import {quantityMath as Q} from './material-allocation.mjs';
 import {resolveExpectedSupply,PLAN_TIME_ORIGIN} from './expected-supply.mjs';
@@ -24,12 +25,12 @@ export function resourceLoad(plan,{start=0,end=120}={}){
  });
  const reservations=[...new Map(model.reservations.map(r=>[JSON.stringify([r.type,r.resourceId,r.unit,r.start,r.end,r.quantity,[...(r.taskIds||[])].sort(),r.resourceBatchId??null,r.declarationId??null,r.productionBatchId??null,r.taskId??null]),r])).values()];
  const configs=[...refs('tools',input?.tools||[]).map(r=>({...r,type:'工装',id:r.row['工装编码'],capacity:r.row['可用数量']})),...refs('personnelGroups',input?.personnelGroups||[]).map(r=>({...r,type:'人员',id:r.row['人员组编号'],capacity:r.row['人员数量']})),...refs('batchResources',(input?.batchResources||[]).filter(r=>r['资源类型']?.includes('空间'))).map(r=>({...r,type:'空间',id:r.row['资源编号'],capacity:r.row['容量']}))];
- const declarations=[...refs('dependencies',input?.dependencies||[]),...refs('resourceClaims',input?.resourceClaims||[])].filter(d=>['人员技能','工装','空间'].includes(d.row['资源类型'])).map(d=>({...d,type:d.row['资源类型']==='人员技能'?'人员':d.row['资源类型'],id:d.row['资源编号']}));
+ const declarations=[...refs('dependencies',input?.dependencies||[]),...refs('resourceClaims',input?.resourceClaims||[])].filter(d=>['人员技能','工装','空间'].includes(d.row['资源类型'])).flatMap(d=>(d.row['资源类型']==='人员技能'?personnelCandidates(d.row):[d.row['资源编号']]).map(id=>({...d,type:d.row['资源类型']==='人员技能'?'人员':d.row['资源类型'],id,candidateGroupIds:d.row['候选人员组']?.trim()?personnelCandidates(d.row):null})));
  const keys=unique([...configs.map(c=>JSON.stringify([c.type,c.id])),...declarations.map(c=>JSON.stringify([c.type,c.id])),...reservations.filter(r=>r.type!=='设备').map(r=>JSON.stringify([r.type,r.resourceId]))]);
  const resources=keys.map(key=>{
   const [type,id]=JSON.parse(key),config=configs.find(c=>c.type===type&&c.id===id);
   const demandRows=declarations.filter(d=>d.type===type&&d.id===id);
-  const demands=demandRows.map(d=>({quantity:d.row['需求数量']??null,unit:d.row['单位']||(type==='人员'?'人':'未知'),orderId:d.row['订单编号'],operation:d.row['工序编号'],taskIds:model.tasks.filter(t=>t.orderId===d.row['订单编号']&&t.operation===d.row['工序编号']).map(t=>t.id)}));
+  const demands=demandRows.map(d=>({candidateGroupIds:d.candidateGroupIds,quantity:d.row['需求数量']??null,unit:d.row['单位']||(type==='人员'?'人':'未知'),orderId:d.row['订单编号'],operation:d.row['工序编号'],taskIds:model.tasks.filter(t=>t.orderId===d.row['订单编号']&&t.operation===d.row['工序编号']).map(t=>t.id)}));
   const all=reservations.filter(r=>r.type===type&&r.resourceId===id);
   const rows=all.filter(r=>validInterval(r.start,r.end)&&r.start<end&&r.end>start);
   const units=unique(all.map(r=>r.unit).filter(Boolean));
