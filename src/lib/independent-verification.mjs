@@ -1,3 +1,4 @@
+import {verifyJointConditions} from './verify-joint-conditions.mjs';
 import {verifyResourcePolicies} from './verify-resource-policies.mjs';
 import {savedInterval} from './verification-endpoints.mjs';
 
@@ -113,6 +114,11 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
       const structured=details.resourcePolicies.findings||[];findings.push(...structured);
       findings.push(...details.resourcePolicies.details.filter(message=>!structured.some(f=>{const m=message.match(/^(.*) 在分钟 ([\d.]+) 超容量 /);return m&&m[1]===f.interval.resourceId&&Number(m[2])>=f.interval.start&&Number(m[2])<f.interval.end;})).map(message=>({code:'VERIFY / RESOURCE_POLICY',message,taskIds:[]})));
     }
+  }
+  if(frozenConditions?.jointConditionsContract){
+    const problems=verifyJointConditions(plan,frozenData,frozenConditions);
+    details.jointConditions=result(problems.length?'problem':tasks.length?'pass':'not_checked',problems.length?problems:['按冻结输入复核机器完整日历与停机、物料需求覆盖、来源资格及累计分配守恒；不调用排程或分配器。']);
+    findings.push(...problems.map(message=>({code:'VERIFY / JOINT_CONDITIONS',message,taskIds:[]})));
   }
   return { checkedAt, planId: plan?.id ?? '', findings, scopeNote:'独立复核检查单线、机器不重叠、工序先后，以及有完整冻结配置的新契约资源窗口、技能资格与容量；未检查项另列，不代表完整业务可执行。', checks: details };
 }

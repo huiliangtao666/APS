@@ -1,0 +1,60 @@
+Issue3 / FR022 R01/R02, authorized delivery dlv_75566101-2c33-4e46-afef-f98685a323e5:r1
+APS-BL-001 v0.3 + effective CR-DEC02-03-20261029, AC05/06/07/14(resource capacity)/15.
+Direct product parent: beae5b4ff309f0e108bebf16f96f9c0a69297f89.
+Branch: feat/issue3-fr022-joint-enabled. This is an existing implementation/evidence gap,
+not a new product FAIL or a new defect repair round. Full FR022/CR remains NOT_READY.
+
+Engineering decisions
+Keep the existing whole-route grouping and personnel/physical pool contracts. Introduce
+FR022-joint-v1 only on new supported runs. Each candidate clears all prior previews;
+calendar, machine, declared tool/space, personnel and material must succeed at one start
+before any allocation is committed. Every shift reruns the whole path. Frozen jointAttempts
+records member task links, attempted starts, success/unscheduled/horizon and timing causes.
+Existing result details and CSV now expose the trace, including completely unscheduled cases.
+The 1000-candidate bound is explicitly search-not-found, never proof of global infeasibility.
+P10 personnel search remains bounded by its existing 256-window/50000-state protections.
+
+Independent fixed-output checking
+No planner, resource preview, staffing allocator or material allocator is called. The checker
+rebuilds machine dependencies and calendar/off/downtime coverage, material demands from
+frozen sources, inventory quality/expiry/readiness, conditional supply eligibility/reference
+limits, exact lot capacity/cumulative consumption and allocation conservation. The approved
+material-demand formula helper and rational primitives are shared, explicitly not independent
+implementations of BOM formulas. Tests separately assert 480kg qualified -> 500kg total input
+and 325kg lean; they do not obtain expected totals from the allocator. Split quantity is derived
+from original order/yield and route maxima before material verification; a smaller result
+quantity cannot reduce requirements silently. Existing resource checker independently rebuilds
+member tool/space declarations, personnel post identity and physical pool/group capacity.
+Exact resource demand/capacity comparisons no longer round via Number.
+Confirmation requires the new joint check to pass as well as existing replay/checks.
+Minimal runs remain explicitly unchecked and cannot be confirmed. Explicitly disabled or
+future tools remain unchecked; FR022-joint-v1 does not pretend they were adopted.
+
+Compatibility and rollback
+Old frozen runs have no new contract; calculate/replay does not synthesize the new fields.
+No schema migration or bulk historical write. Old confirmed plans, confirmations, original
+inputs and execution facts are preserved byte-for-byte/structurally as applicable. Candidate
+confirmation under new software still requires current inputs and current complete checking;
+recompute old drafts where the current freeze hash changes, rather than rewriting history.
+Rollback by retaining old software/store backups and stopping new writes; never strip fields
+or overwrite confirmed records to manufacture compatibility. No deployment performed.
+
+Scope isolation
+Shared-off U01 and handover U02 remain unapproved and rejected at enablement/save; they
+are BLOCKED business subcases, not accepted default values. No P06 multi-shift, N06 original
+execution resource ledger, disjoint tooling windows, cross-line identity model, FR017 branch
+integration, maximum-wait/upstream-backtracking or DEC04-06 application implementation.
+FR021 fix 2662b2b39e5ae63b0ba3a0b0040e28c41c963337 and FR016 U1
+c30276b626927fcc49bee6248946ff0819a5ee1e are not merged or re-certified here.
+An old joint-resources test only expected the phrase 未支持 although the unchanged validator
+says 不支持; its assertion now accepts either phrase while retaining the zero-task assertion.
+No independent acceptance expectation or business threshold was weakened.
+
+Validation and reproducibility
+qa/r01r02-container.sh is the host entry. It needs Docker and the preexisting QA runtime image
+(default aps-fr038-qa-runtime:latest, recorded image digest in evidence). It copies source read-only
+into a disposable container with its own data, dependencies, Express and Chromium, and does not
+change the bound Portal app. Set JOINT_REPO and JOINT_OUT to absolute paths. The source includes
+fixture, test, browser and exact-parent upgrade/replay probes. No host npm install/run.
+All browser users are synthetic test membership, not real platform SSO or QA/UAT signoff.
+Root report/matrix/evidence ZIP/SHA256 identify final SHA and exact execution results.

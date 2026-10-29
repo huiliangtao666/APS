@@ -137,6 +137,7 @@ function validate(tasks: Task[]): Finding[] {
 
 export function calculate(data:Record<string,Row[]>, inputVersion:number, calculatedAt=new Date().toISOString(), conditions:{startMinute?:number;endMinute?:number|null;priority?:string;mode?:string;taskPositions?:Record<string,any>}={}) {
  const positions=conditions.taskPositions||{};
+ const jointAttempts:any[]=[];
  const resourceReservations:any[]=[];const flags=conditions.mode==='minimal-r1'?{}:jointFlags(data,calculatedAt);
  const sourceData=data;let batches:ReturnType<typeof prepareProductionBatches>|null=null;
  const demandFor=(order:Row,operation:string,minute:number)=>batches?batches.demands(order,operation,minute):remainingExecutionDemand(sourceData,order,operation,minute);
@@ -145,7 +146,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
  const materialDemands:MaterialDemandRow[]=[];const allocator=policy?createMaterialAllocator(data,policy):null;
  const ruleSnapshot=assessRules(data,calculatedAt,true,conditions.mode);
  let result:Plan|null=null;
- const setActivePlan=(p:Plan)=>{result={...p,resourcePolicyContract:'CR-DEC02-03-v1',execution:{...executionSummary((sourceData as any).executionContext||sourceData,calculatedAt),projectedTasks:p.tasks.map(t=>({taskId:t.id,orderId:t.orderId,operation:t.operation,start:t.start,end:t.end})),blockedTasks:p.findings.map(f=>({code:f.code,taskIds:f.taskIds,message:f.message}))},jointResourceChecks:flags,resourceReservations:resourceReservations.map(r=>({...r,taskIds:batches?(r.productionBatchId?p.tasks.filter((t:any)=>t.productionBatchId===r.productionBatchId&&t.operation===r.operation).map(t=>t.id):batches.taskIds(r.taskId)):[r.taskId]})),materialChecked:!!policy,materialDemands,...(batches?{batchChecked:true,...batchSummary(batches,p.tasks)}:{batchChecked:false}),ruleSnapshot,rules:ruleSnapshot.settings.filter(r=>r.active).map(r=>r.id)};};
+ const setActivePlan=(p:Plan)=>{result={...p,...((conditions as any).jointConditionsContract?{jointConditionsContract:(conditions as any).jointConditionsContract,jointAttempts}:{}),resourcePolicyContract:'CR-DEC02-03-v1',execution:{...executionSummary((sourceData as any).executionContext||sourceData,calculatedAt),projectedTasks:p.tasks.map(t=>({taskId:t.id,orderId:t.orderId,operation:t.operation,start:t.start,end:t.end})),blockedTasks:p.findings.map(f=>({code:f.code,taskIds:f.taskIds,message:f.message}))},jointResourceChecks:flags,resourceReservations:resourceReservations.map(r=>({...r,taskIds:batches?(r.productionBatchId?p.tasks.filter((t:any)=>t.productionBatchId===r.productionBatchId&&t.operation===r.operation).map(t=>t.id):batches.taskIds(r.taskId)):[r.taskId]})),materialChecked:!!policy,materialDemands,...(batches?{batchChecked:true,...batchSummary(batches,p.tasks)}:{batchChecked:false}),ruleSnapshot,rules:ruleSnapshot.settings.filter(r=>r.active).map(r=>r.id)};};
  const finishDelivery=()=>{if(result){(result as any).deliveryAssessment=assessDelivery(sourceData,result,calculatedAt,conditions);(result as any).resultAssessment=assessResult(sourceData,result,conditions);}};
  const setIssues=(_x:Finding[])=>{}; const setVerification=(_x:null)=>{};const setMessage=(_x:string)=>{};
  const enabledRules=(data.rules||[]).filter(r=>r['是否启用']==='是').map(r=>r['规则编号']);
@@ -239,7 +240,11 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
         const personnelRequirements=minimal?[]:(data.dependencies||[]).filter(d=>d['订单编号']===oid&&d['工序编号']===operation&&d['资源类型']==='人员技能');
         let jointPreview:ReturnType<typeof previewResources>={ok:true,allocations:[]};
         let personnel:ReturnType<typeof allocatePersonnel>={ok:true,allocations:[]};
+        let readyMinute:number|null=null;let attemptCount=0;const attemptOffset=jointAttempts.length;
         for(let attempt=0;attempt<1000;attempt++){
+          attemptCount++;readyMinute=null;materialPreview=null;
+          jointPreview={ok:false,allocations:[]};personnel={ok:false,allocations:[]};
+          jointAttempts.push({taskIds:batches?batches.taskIds(`${oid}-${operation}`):[`${oid}-${operation}`],candidate,attempt:attempt+1});
           if(position&&candidate!==position.start){reason='固定位置与资源/物料占用冲突；禁止自动顺延或解锁';break;}
           if(fact&&candidate!==Number(fact['观测分钟'])){reason='已开始任务余料/资源不满足；禁止自动延迟、转机或恢复，须核对';break;}
           const fit=minimal?{start:candidate,reason:''}:findCalendarWindow(calendarId,candidate,duration,data.calendars||[],data.downtime||[],machineId);
@@ -261,8 +266,13 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
            catch(e){materialError=e instanceof Error?e.message:'物料口径无效';break;}
            if(!materialPreview.ok){const next=allocator.futureMinutes.find(m=>m>fit.start!);if(next!==undefined){timingReasons.push({code:'MATERIAL',from:fit.start,to:next,demands:materialPreview.rows.map(r=>({materialId:r.materialId,quantity:r.quantity,shortage:r.shortage,allocations:r.allocations}))});candidate=next;continue;}materialError='物料不足';break;}
           }
-          start=fit.start;break;
+          readyMinute=fit.start;start=fit.start;break;
         }
+        const lastAttempt=jointAttempts.at(-1);
+        const searchLimited=start===null&&attemptCount===1000;
+        if(searchLimited){const limit='候选搜索达到1000次边界；未找到联合可行位置，不代表全局无解';reason=limit;if(resourceError)resourceError=limit+'；最后冲突：'+resourceError;else if(personnelError)personnelError=limit+'；最后冲突：'+personnelError;else if(materialError)materialError=limit+'；最后冲突：'+materialError;}
+        if(lastAttempt&&jointAttempts.length>attemptOffset)Object.assign(lastAttempt,{searchStatus:searchLimited?'limit':start===null?'no_candidate':'found',outcome:start===null?'unscheduled':'ready',reason:start===null?(resourceError||personnelError||materialError||reason||'候选搜索达到1000次边界；未找到联合可行位置，不代表全局无解'):'全部已启用条件在同一候选时点通过',timingReasons:structuredClone(timingReasons)});
+        if(start!==null&&(readyMinute!==start||!jointPreview.ok||!personnel.ok||allocator&&!materialPreview?.ok))throw Error('联合候选未完整通过，禁止提交任何资源或物料');
         if(start===null&&fact){const hold=busy.find(t=>t.id==='事实:'+fact['事实编号']);if(hold)hold.end=Number.POSITIVE_INFINITY;}
         if(allocator && (materialError||start===null&&materialPreview&&!materialPreview.ok)){
          if(materialPreview)materialDemands.push(...materialPreview.rows);
@@ -273,9 +283,10 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
          findings.push({code:resourceError?'UNPLANNED / JOINT_RESOURCE':'UNPLANNED / PERSONNEL',message:`订单 ${oid} / 工序 ${operation} 未排：${resourceError||personnelError}。全部候选资源/物料未提交；请调整显式数量、参与/释放窗口或计划范围。`,taskIds:[`${oid}-${operation}`],context:failureContext(candidate)});continue;
         }
         if(start===null){if(fact)busy.push({id:'待核对:'+fact['事实编号'],orderId:oid,productId:product,operation,label:'待处理执行',machine:machineId,start:Number(fact['开始分钟']),end:Number.POSITIVE_INFINITY,duration:Number.POSITIVE_INFINITY,predecessor:'',source:'模拟执行保护'});machineBusy.set(machineId,busy);retainBlockedDemand(order,operation,candidate,'无可用日历窗口；投料分钟仅为候选检查时点');findings.push({code:'UNPLANNED / CALENDAR',message:`订单 ${oid} / 工序 ${operation} 未排：设备 ${machineId} 不可用。${reason||'找不到满足连续工作时长的窗口'}。任务要求连续 ${duration} 分钟；跨班或中断规则尚未配置。`,taskIds:[`${oid}-${operation}`],context:failureContext(candidate)});continue;}
-        if(conditions.endMinute!=null&&start+duration>conditions.endMinute){if(fact){const hold=busy.find(t=>t.id==='事实:'+fact['事实编号']);if(hold)hold.end=Number.POSITIVE_INFINITY;}if(materialPreview)materialDemands.push(...materialPreview.rows.map(r=>({...r,blockedReason:'完整工序超出计划范围'})));findings.push({code:'UNPLANNED / HORIZON',message:`订单 ${oid} / 工序 ${operation} 完整工序超出计划结束分钟 ${conditions.endMinute}，未排；不代表无可行排法。`,taskIds:[`${oid}-${operation}`],context:failureContext(start)});continue;}
+        if(conditions.endMinute!=null&&start+duration>conditions.endMinute){if(lastAttempt)Object.assign(lastAttempt,{outcome:'horizon',reason:'完整工序超出计划范围；全部候选未提交'});if(fact){const hold=busy.find(t=>t.id==='事实:'+fact['事实编号']);if(hold)hold.end=Number.POSITIVE_INFINITY;}if(materialPreview)materialDemands.push(...materialPreview.rows.map(r=>({...r,blockedReason:'完整工序超出计划范围'})));findings.push({code:'UNPLANNED / HORIZON',message:`订单 ${oid} / 工序 ${operation} 完整工序超出计划结束分钟 ${conditions.endMinute}，未排；不代表无可行排法。`,taskIds:[`${oid}-${operation}`],context:failureContext(start)});continue;}
         const stop=minimal?null:findDowntimeShiftReason(data.downtime||[],machineId,initialEarliest,duration,firstCalendarFit??start);
         const calendarShift=firstCalendarFit!==null&&firstCalendarFit!==undefined&&firstCalendarFit>initialEarliest?(stop?`日历顺延：设备停机「${stop.reason}」${fmt(stop.start)}–${fmt(stop.end)}，安排至${fmt(start)}`:`日历顺延：工厂工作窗口，安排至${fmt(start)}`):'';
+        if(lastAttempt)lastAttempt.outcome='committed';
         if(materialPreview){materialPreview.commit();materialDemands.push(...materialPreview.rows);}
         const taskId=`${oid}-${operation}`;
         resourceReservations.push(...(jointPreview.allocations||[]).map(r=>({...r,taskId})),...(personnel.allocations||[]).map(r=>({...r,type:'人员',resourceId:r.groupId,quantity:String(r.count),unit:'人',start:r.start,end:r.end,taskId})),{type:'设备',resourceId:machineId,quantity:'1',unit:'台',start,end:start+duration,taskId});

@@ -1,3 +1,4 @@
+import {verifyJointConditions} from './verify-joint-conditions.mjs';
 import {hasPhysicalPools,validatePhysicalPools} from './physical-pools.mjs';
 import {resourceConflicts} from './resource-conflicts.mjs';
 import {quantityMath as Q} from './material-allocation.mjs';
@@ -69,7 +70,7 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
    const start=task.start+(c['占用口径']==='明确窗口'?num(c,'窗口开始偏移分钟'):0)-Number(before),end=task.end-(c['占用口径']==='明确窗口'?num(c,'窗口结束偏移分钟'):0)+Number(after);
    const got=reservations.filter(r=>r.declarationId===c['声明编号']&&(r.taskIds||[r.taskId]).includes(task.id)&&(!task.productionBatchId||r.productionBatchId===task.productionBatchId));
    got.forEach(r=>expectedReservations.add(r));
-   if(got.length!==1||got[0].resourceId!==c['资源编号']||got[0].start!==start||got[0].end!==end||Number(got[0].quantity)!==Number(quantity))add(`${task.id} ${c['声明编号']} 工装/空间占用与配置不一致或缺失`);
+   if(got.length!==1||got[0].resourceId!==c['资源编号']||got[0].start!==start||got[0].end!==end||Q.cmp(Q.q(got[0].quantity),Q.q(quantity))!==0n)add(`${task.id} ${c['声明编号']} 工装/空间占用与配置不一致或缺失`);
   }
  }
  for(const r of reservations.filter(r=>r.type!=='设备')){
@@ -80,7 +81,7 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
   if(r.start<num(g,'可用起始分钟')||r.end>num(g,'可用结束分钟',525600))add(`${r.resourceId} 不在实际可用期 [${g['可用起始分钟']??0},${g['可用结束分钟']??525600})`);
   if(r.type==='人员')for(const e of data.simulationEvents||[])if(e['事件类型']==='人员缺勤'){try{const v=JSON.parse(e['参数JSON']);if(v.groupId===r.resourceId&&Number(e['事件分钟'])<r.end&&v.endMinute>r.start)add(`${r.resourceId} 与冻结缺勤 [${e['事件分钟']},${v.endMinute}) 冲突`);}catch{add('冻结缺勤配置无效');}}
   const same=reservations.filter(x=>x.type===r.type&&x.resourceId===r.resourceId);
-  for(const t of [r.start,...same.map(x=>x.start).filter(t=>t>=r.start&&t<r.end)])if(Q.cmp(same.filter(x=>x.start<=t&&x.end>t).reduce((s,x)=>Q.add(s,Q.q(x.quantity)),Q.zero),Q.q(String(capacity)))>0n)add(`${r.resourceId} 在分钟 ${t} 超容量 ${capacity}（所有技能合计）`);
+  for(const t of [r.start,...same.map(x=>x.start).filter(t=>t>=r.start&&t<r.end)])if(Q.cmp(same.filter(x=>x.start<=t&&x.end>t).reduce((s,x)=>Q.add(s,Q.q(x.quantity)),Q.zero),Q.q(g[r.type==='人员'?'人员数量':r.type==='工装'?'可用数量':'容量']))>0n)add(`${r.resourceId} 在分钟 ${t} 超容量 ${capacity}（所有技能合计）`);
   if(!(r.taskIds||[r.taskId]).some(id=>tasks.some(t=>t.id===id)))add(`${r.resourceId} 存在无任务资源占用`);
  }
  // Independent sweep of frozen group->pool identity; allocator and ledger labels
@@ -98,6 +99,7 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
    }
   }
  }
+ if(conditions?.jointConditionsContract){if(plan.jointConditionsContract!==conditions.jointConditionsContract)add('联合条件冻结契约缺失/不符');for(const message of verifyJointConditions(plan,data,conditions))add(message);}
  const findings=resourceConflicts(plan,data,conditions);
  const hasPolicy=enabled('MOLD')||enabled('STORAGE')||(data.dependencies||[]).some(d=>d['资源类型']==='人员技能');
  return {findings,status:problems.length?'problem':tasks.length&&hasPolicy?'pass':'not_checked',details:problems.length?problems:[`工装 ${enabled('MOLD')?'已启用':'未检查（未启用）'}；空间 ${enabled('STORAGE')?'已启用':'未检查（未启用）'}；人员按已配置依赖检查。`,tasks.length&&hasPolicy?'按冻结配置重建已采用的工装/人员窗口、覆盖人数、单向替代、可用期与同池总容量；相邻释放合法。':'没有已排任务或已采用的资源配置可复核。']};

@@ -86,7 +86,7 @@ test('FR022 declared dependency quantity/offset conflicts and dynamic release se
   const d=jointFixture(seed);d.dependencies.push({'订单编号':'A','工序编号':'MIX','资源类型':'模具','资源编号':'G40','需求数量':'1','提前占用分钟':'0','后延占用分钟':'0',[key]:value});
   const p=plan(d);assert.equal(p.tasks.length,0);assert.ok(p.findings.some(f=>f.message.includes('冲突')));
  }
- const d=jointFixture(seed);d.resourceClaims[0]['占用口径']='下游开始释放';assert.equal(plan(d).tasks.length,0);assert.match(plan(d).findings[0].message,/未支持/);
+ const d=jointFixture(seed);d.resourceClaims[0]['占用口径']='下游开始释放';assert.equal(plan(d).tasks.length,0);assert.match(plan(d).findings[0].message,/(未支持|不支持)/);
  d.resourceClaims[0]['占用口径']='显式逐生产批完整区间';d.dependencies[0]['后延占用分钟']='10';assert.equal(plan(d).tasks.length,0);assert.ok(plan(d).findings.some(f=>f.message.includes('机器阶段')));
 });
 test('FR022 explicit per-production-batch space quantity repeats without inferred scaling and retains each original member link',()=>{
