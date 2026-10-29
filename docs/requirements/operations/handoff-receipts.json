@@ -2487,6 +2487,34 @@
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES",
       "next_test_delivery": "dlv_0e20f2fa-2d44-47bd-8ad6-5effe130fd04"
+    },
+    {
+      "event_key": "dlv_0e20f2fa-2d44-47bd-8ad6-5effe130fd04:r1",
+      "original_delivery": "dlv_0e20f2fa-2d44-47bd-8ad6-5effe130fd04",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T02:02:07+08:00",
+      "requirement": "FR-007/FR-022/Issue3",
+      "product_sha": "beae5b4ff309f0e108bebf16f96f9c0a69297f89",
+      "result": "P10核心固定beae5b4独立Test 19 PASS/4 PARTIAL/21 NOT_EXECUTED；216组容量与真实React/CSV/Worker/冻结链通过；0产品FAIL",
+      "external_hashes": {
+        "P10-CORE-beae5b4f-INDEPENDENT-Test-r1-report.md": "0387d07bedf8f7a146853d2f5c44cb0edeb3732d9289644f9a006e056ac3ff5a",
+        "P10-CORE-beae5b4f-INDEPENDENT-Test-r1-matrix.csv": "f17688a6dc8ffcb812e5df9c7fbb9be9fc9f07ed3d687bf41054c35d2e7281c8",
+        "P10-CORE-beae5b4f-INDEPENDENT-Test-r1-evidence.zip": "aba9301a72eb08e03c4dd77c29a6796e34f876bfbd5f57424ed2a33a96a44c0f",
+        "P10-CORE-beae5b4f-INDEPENDENT-Test-r1-sha256.txt": "664a56e78e671b24f7e5da396204f9aca1524364012c5816b544dacfbcc49cf8"
+      },
+      "zip_crc": "PASS",
+      "zip_entries": 70,
+      "internal_hashes_verified": 69,
+      "matrix_rows_verified": 44,
+      "project_status": {
+        "FR-007": "In progress",
+        "FR-022": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6504474505",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
