@@ -17,7 +17,13 @@ API = 'https://api.github.com'
 
 def api(path, data=None, method=None):
     headers = {'Authorization': 'Bearer ' + os.environ['GITHUB_TOKEN'], 'Content-Type': 'application/json'}
-    request = urllib.request.Request(API + path, data=None if data is None else json.dumps(data).encode(), headers=headers, method=method)
+    if path.startswith('https://'):
+        assert path.startswith(API + '/'), 'Do not send GitHub credentials to another origin'
+        url = path
+    else:
+        assert path.startswith('/')
+        url = API + path
+    request = urllib.request.Request(url, data=None if data is None else json.dumps(data).encode(), headers=headers, method=method)
     return json.load(urllib.request.urlopen(request, timeout=45))
 
 def gql(query, variables=None):
