@@ -2651,6 +2651,37 @@
       "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6505347999",
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_e237f736-d935-41d0-9cda-aef6fc52147a:r1",
+      "original_delivery": "dlv_e237f736-d935-41d0-9cda-aef6fc52147a",
+      "type": "DEV_DELIVERED",
+      "source": "APS-Dev",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T02:44:53+08:00",
+      "requirement": "FR-016/Issue4",
+      "product_sha": "08954ccb330147159ae3b1779a7f59ce67a51659",
+      "result": "FR016 U2聚合来源新SHA08954ccb Dev限定交付；22 PASS/2旧来源BLOCKED/3未执行；独立Test待执行，非Test通过",
+      "external_hashes": {
+        "FR016-G01-U2-R1-REPORT.txt": "ba200aba687b38b9bdfb346ca0c19b122af0517fd19513889f362f10394f4b87",
+        "FR016-G01-U2-R1-MATRIX.csv": "016d4934635220b9b20b8dc86708697e5cca8a20bbeb9948a69f30dcd505b250",
+        "FR016-G01-U2-R1-EVIDENCE.zip": "24adb1b1130b7be69594eaff04442e80df3374a5e53e4752d8ce5afe0622a959",
+        "FR016-G01-U2-R1-HANDOFF.json": "4ac8994078769fe51a38491abbe67246f42d67ea442849aab61b96ef366bd564",
+        "FR016-G01-U2-R1-SHA256.txt": "9c69137d19fa43f59984b13228f17ba568c02b22155907717c0b640c1dc5fbb1"
+      },
+      "zip_crc": "PASS",
+      "zip_entries": 84,
+      "matrix_rows_verified": 27,
+      "branch": "feat/issue4-fr016-g01-u2",
+      "direct_parent": "6ba6ee7069631edac24dcb5ceeac83ff3e25ae96",
+      "base_sha": "c30276b626927fcc49bee6248946ff0819a5ee1e",
+      "change_files_from_base": 17,
+      "project_status": {
+        "FR-016": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6505405166",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
