@@ -8,7 +8,7 @@ import {validInterval} from '../src/lib/timetable.mjs';
 import {reviewPlan,contentHash,validConfirmation} from './confirmation.mjs';
 import {stageEvents} from '../src/lib/simulation-events.mjs';
 import {executionState,executionTransition,executionAdmission,executionSummary,factTables,executionTrialIssues} from '../src/lib/execution-facts.mjs';
-import {executionInventory} from '../src/lib/material-allocation.mjs';
+import {executionInventory,executionMaterialDemand} from '../src/lib/material-allocation.mjs';
 import {queryInventoryAvailability} from '../src/lib/inventory.mjs';
 import {comparePlans,restoreBlockers,conditionChanges} from '../src/lib/plan-comparison.mjs';
 import {resultState,resultCsv} from '../src/lib/result-assessment.mjs';
@@ -36,6 +36,8 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   const activeWorkers=new Map();
   const positionPreviews=new Map();
   const csvPreviews=new Map();
+  const restorePreviews=new Map();
+  let pendingRestores=0;
   const stopping=new Map();
   const terminal=new Set(['completed','partial','cancelled','timed_out','failed']);
   // A new process cannot resume a lost thread. Preserve the snapshot and explain it.
@@ -61,7 +63,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     next();
   };
   const record=(s,req,action,target,details={})=>s.records.push({id:randomUUID(),action,target,actor:subjectKey(req.praetorActor),role:req.member.role,at:new Date().toISOString(),reason:req.body.reason.trim(),requestId:req.praetorActor.requestId,...details});
-  router.get('/meta',permission('read'),(_req,res)=>res.json({release:'R1 prototype + FR-037 supported-flow slice',baseline:'APS v0.3 review draft',supportedRules:['BR-02 precedence','BR-03 exclusive machine overlap','FR-008 calendar','FR-007 personnel','FR-022 explicit joint occupancy'],timeOrigin:'2026-11-02T08:00:00+08:00',interval:'[start,end)',unsupportedWorkflows:['external-dispatch','historical-restore'],confirmation:'FR030-v1 internal only'}));
+  router.get('/meta',permission('read'),(_req,res)=>res.json({release:'R1 prototype + FR-037 supported-flow slice',baseline:'APS v0.3 review draft',supportedRules:['BR-02 precedence','BR-03 exclusive machine overlap','FR-008 calendar','FR-007 personnel','FR-022 explicit joint occupancy'],timeOrigin:'2026-11-02T08:00:00+08:00',interval:'[start,end)',unsupportedWorkflows:['external-dispatch'],confirmation:'FR030-v1 internal only'}));
   router.get('/rules/capabilities',permission('read'),(_req,res)=>res.json(ruleCatalog));
   router.get('/session',permission('read'),(req,res)=>res.json({role:req.member.role,canWrite:['planner','supervisor'].includes(req.member.role),canExport:req.member.role!=='query'||req.member.canExport===true}));
   router.get('/state',permission('read'),(_req,res)=>{const s=read();res.json({data:s.data,revision:s.revision});});
@@ -261,12 +263,88 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(!historical(s,a)||!historical(s,b))return res.status(409).json({error:'historical_inputs_unavailable'});
     res.json(comparePlans(a,inputs(s,a).data,b,inputs(s,b).data));
   });
+  // Restore reuses the saved selection, never the old stock, facts or master data.
+  // Preview uses a real worker without writing even an audit row on rejection.
+  const restoreError=(res,code,message,details={})=>res.status(409).json({error:code,message,...details});
+  function restoreSource(s,p){
+    try{
+    if(!p||p.copiedResult||!historical(s,p)||!p.conditions||!['completed','partial'].includes(historical(s,p).status))return '原方案的服务端运行或原始输入缺失，不能恢复；复制结果须先重算。';
+    if(p.trialId&&s.trials?.find(t=>t.id===p.trialId)?.status!=='active')return '来源试算已放弃或缺失，不能采用。';
+    if(executionTransition(inputs(s,p).data,s.data).length)return '当前事实、累计耗料或已执行范围与来源记录不一致，禁止恢复缺失或倒退的事实；请核对来源。';
+    for(const c of s.confirmations||[]){
+      const original=s.plans.find(x=>x.id===c.planId);
+      if(!validConfirmation(c)||!original||contentHash(original)!==contentHash(c.snapshot.plan)||!historical(s,original)||inputHash(c.snapshot.originalInput)!==original.inputVersionId)return '确认记录或其保护的方案/原始输入不一致，须先核对历史。';
+    }
+    if(s.plans.some(x=>['confirmed','released','archived'].includes(x.status)&&(!(s.confirmations||[]).some(c=>c.planId===x.id)||!historical(s,x))))return '已确认方案缺少完整确认或原始记录，须先修复历史。';
+    const run=historical(s,p),replay=calculate(run.executionData,run.revision,run.createdAt,run.conditions);
+    if(inputHash(p.conditions)!==inputHash(run.conditions)||Object.keys(replay).filter(k=>!['id','name','createdAt'].includes(k)).some(k=>inputHash(replay[k])!==inputHash(p[k])))return '旧方案结果与保存运行重放不一致，禁止采用被改写的结果。';
+    return null;
+    }catch{return '原方案或确认历史的结构/内容不完整，无法重放核对；未保存恢复结果。';}
+  }
+  async function restoreCalculation(frozen,revision){
+    return new Promise((resolve,reject)=>{
+      let worker,timer,settled=false;
+      const done=(error,result)=>{if(settled)return;settled=true;clearTimeout(timer);worker?.terminate();error?reject(error):resolve(result);};
+      try{
+        worker=workerFactory({executionData:frozen.executionData,revision,conditions:frozen.conditions,calculatedAt:frozen.conditions.ruleEvaluationAt});
+        timer=setTimeout(()=>done(Error('恢复预检超时，未保存任何业务数据。')),runTimeoutMs);
+        worker.on('message',m=>{if(m?.kind==='progress')return;if(m?.kind==='result'&&Array.isArray(m.plan?.tasks)&&Array.isArray(m.plan?.findings))done(null,m.plan);else done(Error('恢复计算未返回有效结果，未保存。'));});
+        worker.on('error',()=>done(Error('恢复计算线程失败，未保存。')));worker.on('exit',()=>done(Error('恢复计算线程已退出，未保存。')));
+      }catch{done(Error('恢复计算线程无法启动，未保存。'));}
+    });
+  }
+  router.post('/plans/:id/restore/check',permission('edit'),async(req,res,next)=>{try{
+    const s=read(),p=s.plans.find(p=>p.id===req.params.id);
+    if(!p)return res.status(404).json({error:'plan_not_found'});
+    if(req.body.revision!==s.revision)return restoreError(res,'stale_input','当前输入已变化，请刷新后重新检查。');
+    const sourceIssue=restoreSource(s,p);if(sourceIssue)return restoreError(res,'restore_blocked',sourceIssue);
+    for(const [id,v] of restorePreviews)if(Date.now()-v.createdAt>15*60*1000)restorePreviews.delete(id);
+    if(pendingRestores>=2)return res.status(429).json({error:'restore_capacity',message:'已有两个恢复预检计算，请稍后重试。'});
+    if(restorePreviews.size>=20)return res.status(429).json({error:'restore_capacity',message:'恢复预检已达上限，请稍后重试。'});
+    const currentRules=s.data.rules.filter(r=>r['是否启用']==='是').map(r=>r['规则编号']).sort();
+    if(inputHash(currentRules)!==inputHash([...(p.conditions.enabledRuleIds||[])].sort()))return restoreError(res,'restore_blocked','旧方案规则选择与当前启用规则不一致；不自动启停规则，请按当前规则新算。');
+    try{for(const fact of s.data.executionFacts||[]){
+      const order=s.data.orders.find(o=>o['订单编号']===fact['订单编号']);
+      const required=executionMaterialDemand(s.data,order,fact['工序编号'],Number(fact['开始分钟'])).filter(d=>d.quantity>0);
+      if(required.some(d=>!(s.data.executionMaterials||[]).some(c=>c['事实编号']===fact['事实编号']&&c['物料编号']===d.materialId)))return restoreError(res,'restore_blocked','已开始工序缺少所声明物料的累计耗料记录；须核对来源，不推定零耗料。',{factId:fact['事实编号']});
+    }}catch{return restoreError(res,'restore_blocked','当前执行工序的适用BOM、事实或耗料口径不完整，须先核对来源。');}
+    const token=contentHash(s),at=new Date().toISOString();let frozen;
+    const selection=Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds'].map(k=>[k,p.conditions[k]]));
+    try{frozen=Object.keys(p.lockSnapshot||{}).length?freezePositions(s.data,p.conditions,p.lockSnapshot,at):freezeRunInput(s.data,selection,at);}catch(e){return restoreError(res,'restore_blocked','旧方案选择在当前数据下已失效，请核对订单、范围与规则；不自动扩大范围。',{cause:e.message});}
+    const issues=[...validateInputs(defs,s.data),...executionAdmission(frozen.executionData,frozen.conditions),...assessRules(frozen.executionData,at,true,frozen.conditions.mode).issues];
+    if(issues.length)return restoreError(res,'restore_blocked','当前模拟输入、执行或物料来源需核对，未保存恢复版本。',{issues});
+    let result;pendingRestores++;try{result=await restoreCalculation(frozen,s.revision);}catch(e){return restoreError(res,'restore_blocked',e.message);}finally{pendingRestores--;}
+    if(contentHash(read())!==token)return restoreError(res,'stale_restore','预检期间当前输入、确认或业务记录已变化，请重新检查。');
+    const run={id:randomUUID(),status:'completed',createdAt:at,finishedAt:new Date().toISOString(),revision:s.revision,trialId:null,sourcePlanId:p.id,inputVersionId:versionId(s.data),...frozen,lockSnapshot:structuredClone(p.lockSnapshot||{}),actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim(),restoreSourcePlanId:p.id};
+    const plan=makePlan(result,run);run.planId=plan.id;
+    plan.verification={...independentlyVerifyPlan(plan,frozen.executionData.orders,frozen.executionData.routes,plan.rules,at,frozen.executionData,frozen.conditions),contentHash:contentHash(plan)};
+    const candidate=structuredClone(s);preserve(candidate);candidate.runs??=[];candidate.runs.unshift(run);candidate.plans.unshift(plan);
+    const review=reviewPlan(candidate,plan);
+    const blockers=[...review.blockers];
+    if(review.unplanned.length||plan.findings.length)blockers.push({code:'RESTORE_INCOMPLETE',message:'旧条件在当前事实下存在未排或冲突，不能自动采用部分结果。'});
+    if(frozen.executionData.bom.some(b=>frozen.executionData.orders.some(o=>o['产品编号']===b['产品编号']))&&!plan.materialChecked)blockers.push({code:'MATERIAL_UNCHECKED',message:'本方案声明的BOM物料尚未检查，不能恢复采用。'});
+    if(blockers.length)return restoreError(res,'restore_blocked','当前事实下未通过恢复检查；原方案与全部业务数据保持原值。',{blockers});
+    const id=randomUUID(),comparison=comparePlans(p,inputs(s,p).data,plan,s.data);
+    const provenance={sourcePlanId:p.id,sourceRunId:p.runId,sourceInputVersionId:p.inputVersionId,currentInputVersionId:run.inputVersionId,currentProgressVersion:frozen.conditions.executionFactsVersion,confirmationReferences:(s.confirmations||[]).map(c=>({id:c.id,snapshotHash:c.snapshotHash})),policy:'旧计算条件＋当前全部输入/事实；新草稿不替换确认计划',limits:review.limits};
+    restorePreviews.set(id,{owner:subjectKey(req.praetorActor),createdAt:Date.now(),token,sourcePlanId:p.id,run,plan,provenance});
+    res.json({id,revision:s.revision,plan,comparison,provenance,message:'已按当前事实、累计耗料与启用规则重算并复核；核对变化后可保存新草稿。原确认继续保留，真实Gateway及完整业务保护未在此证明。'});
+  }catch(e){next(e);}});
   router.post('/plans/:id/restore',permission('edit'),(req,res)=>{
     const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});
-    if(req.body.revision!==s.revision)return res.status(409).json({error:'stale_input'});
-    // Facts are versioned; historical replacement still requires FR031 and a real confirmation contract.
-    // Even an unchanged input hash cannot prove that no execution has occurred.
-    res.status(409).json({error:'restore_blocked',...restoreBlockers(s,p),historicalInputsAvailable:!!historical(s,p)});
+    if(req.body.revision!==s.revision)return restoreError(res,'stale_input','当前输入已变化，请刷新后重新检查。');
+    const v=restorePreviews.get(req.body.previewId);
+    if(!v)return res.status(409).json({error:'restore_blocked',...restoreBlockers(s,p)});
+    if(v.owner!==subjectKey(req.praetorActor)||v.sourcePlanId!==p.id||Date.now()-v.createdAt>15*60*1000)return restoreError(res,'restore_preview_invalid','恢复预检已过期或不属于当前用户/方案，请重新检查。');
+    if(v.token!==contentHash(s))return restoreError(res,'stale_restore','预检后输入、执行事实、确认或业务记录已变化，请重新检查。');
+    const sourceIssue=restoreSource(s,p);if(sourceIssue)return restoreError(res,'restore_blocked',sourceIssue);
+    preserve(s);s.runs??=[];s.runs.unshift(v.run);s.plans.unshift(v.plan);
+    const review=reviewPlan(s,v.plan);if(review.blockers.length)return restoreError(res,'restore_blocked','保存前重新复核未通过，未写入业务数据。',{blockers:review.blockers});
+    v.plan.restoreProvenance=v.provenance;
+    // Provenance participates in content hashes; regenerate verification for the final saved bytes.
+    v.plan.verification.contentHash=contentHash(v.plan);
+    s.restorations??=[];s.restorations.push({id:req.body.previewId,planId:v.plan.id,runId:v.run.id,...v.provenance});
+    record(s,req,'plan_restored',v.plan.id,{previewId:req.body.previewId,...v.provenance});write(s);restorePreviews.delete(req.body.previewId);
+    res.status(201).json({plan:v.plan,provenance:v.provenance,message:'恢复已保存为按当前事实重算的新草稿；原方案、确认、执行事实和库存未回滚。请按现有流程提交主管确认。'});
   });
   function prepare(req,res) {
     if(req.body.trialId!==undefined&&(typeof req.body.trialId!=='string'||!req.body.trialId)){res.status(400).json({error:'invalid_trial'});return;}
