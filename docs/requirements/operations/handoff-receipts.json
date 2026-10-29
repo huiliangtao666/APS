@@ -2597,6 +2597,60 @@
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES",
       "next_test_delivery": null
+    },
+    {
+      "event_key": "dlv_d6eeeda3-f729-4fef-9c40-bf0767387b7a:r1",
+      "original_delivery": "dlv_d6eeeda3-f729-4fef-9c40-bf0767387b7a",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T02:42:16+08:00",
+      "requirement": "FR-022/Issue3",
+      "product_sha": "2016258169074d1e29292e5a3e58a0fa9304b4bf",
+      "reference_sha": null,
+      "result": "R01/R02共享开启且无交接的联合资源路径独立23 PASS/2 U01-U02 BLOCKED/6未执行；0产品FAIL",
+      "external_hashes": {
+        "Issue3-FR022-R01R02-2016258-INDEPENDENT-Test-r1-REPORT.txt": "488fdb428724ff064c357c8ffceced023d2351b74a4e2d8c2aa9963267cc3e2e",
+        "Issue3-FR022-R01R02-2016258-INDEPENDENT-Test-r1-SHA256.json": "bc012a59fdd054165594ee6e17577fdf8a05b6390c6195684b2647822f172268",
+        "Issue3-FR022-R01R02-2016258-INDEPENDENT-Test-r1-ASSERTIONS.csv": "8f8cf2e54f0adb20b4a833c2aa2fdcb1888418ffa61a3a039b40886cc4233192",
+        "Issue3-FR022-R01R02-2016258-INDEPENDENT-Test-r1-EVIDENCE.zip": "fd1954761c8b58442d546bc19cd3c3ad484ca1409bdfd05135dbabcdf6d49fc6"
+      },
+      "zip_crc": "PASS",
+      "zip_entries": 63,
+      "matrix_rows_verified": 31,
+      "project_status": {
+        "FR-022": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6505345043",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_a05cfff3-deba-43a5-aa2a-2b0d2aac306d:r1",
+      "original_delivery": "dlv_a05cfff3-deba-43a5-aa2a-2b0d2aac306d",
+      "type": "TEST_PREP_RESULT",
+      "source": "APS-Test2",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T02:42:22+08:00",
+      "requirement": "FR-016/Issue4",
+      "product_sha": null,
+      "reference_sha": "c30276b626927fcc49bee6248946ff0819a5ee1e",
+      "result": "FR016 U2独立测试准备完成：5组固定输入、精确关联成员及44条执行断言；新产品SHA尚未交付，产品结果NOT_EXECUTED",
+      "external_hashes": {
+        "FR016-U2-TEST-PREP-r1-sha256.txt": "6578abd4eb0e9756e9cdf242d61b00989fa9c751c447d4e772f62c867a7f545b",
+        "FR016-U2-TEST-PREP-r1-fixtures.json": "61afe7a429c52312560fead58926e2000a3359d6dc2b85d09ac549bda14daed2",
+        "FR016-U2-TEST-PREP-r1-report.md": "4c9cd5af21ad8fa41da6806afb34cb5bc6c0de160cebec69d5391ea57a4a5116",
+        "FR016-U2-TEST-PREP-r1-matrix.csv": "b59ddea87a50c1f414d1acb2554f0c0f62398fba31a762c18db89a5fdd14990a"
+      },
+      "zip_crc": null,
+      "zip_entries": 0,
+      "matrix_rows_verified": 44,
+      "project_status": {
+        "FR-016": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6505347999",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
