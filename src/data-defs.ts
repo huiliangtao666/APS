@@ -3,6 +3,7 @@ export const defs: TableDef[] = [
   { key: 'factoryLines', label: '工厂与产线', file: '01_工厂与产线配置.csv', fields: ['工厂编号','工厂名称','产线编号','产线名称','时区'] },
   { key: 'simulationEvents', label: '模拟异常事件（先更新时点事实）', file: '28_模拟异常事件.csv', fields: ['事件编号','事件分钟','保护截止分钟','保护策略','事件类型','参数JSON','原因','需处理事实JSON'] },
   { key: 'executionSources', label: '模拟进度来源对账（显式映射）', file: '27_模拟进度来源对账.csv', fields: ['来源编号','原始任务编号','事实编号','原始汇总耗料','耗料单位','来源说明','原始分配JSON'] },
+  {key:'originalResourceEvents',label:'原始资源事实账（追加事件）',file:'32_原始资源事实账.csv',fields:['事件编号','原账编号','前事件编号','事件类型','原账JSON']},
   { key: 'executionFacts', label: '模拟任务执行事实（累计）', file: '25_模拟任务执行事实.csv', fields: ['事实编号','订单编号','工序编号','状态','开始分钟','完成分钟','观测分钟','工序完成数量','数量单位','剩余工时分钟','当前设备','暂停原因','累计报废数量','报废补做口径'] },
   { key: 'executionMaterials', label: '模拟累计耗料（账面扣前口径）', file: '26_模拟累计耗料.csv', fields: ['记录编号','事实编号','批次编号','物料编号','累计已用数量','单位'] },
 

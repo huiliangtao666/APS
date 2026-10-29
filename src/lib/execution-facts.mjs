@@ -1,8 +1,9 @@
+import {originalIssues,originalTransition} from './original-resources.mjs';
 import {quantityMath as Q,executionMaterialDemand,materialPolicy} from './material-allocation.mjs';
 import {getUsableQualityStatuses} from './inventory.mjs';
 import {eventRisks,eventSummary} from './simulation-events.mjs';
-export const factTables=['executionFacts','executionMaterials','executionSources','simulationEvents'];
-export const executionState=data=>Object.fromEntries(factTables.map(k=>[k,data[k]||[]]));
+export const factTables=['originalResourceEvents','executionFacts','executionMaterials','executionSources','simulationEvents'];
+export const executionState=data=>Object.fromEntries([...factTables.filter(k=>k!=='originalResourceEvents'),...((data.originalResourceEvents||[]).length?['originalResourceEvents']:[])].map(k=>[k,data[k]||[]]));
 const compare=(a,b)=>{try{return Q.cmp(Q.q(a),Q.q(b));}catch{return null;}};
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 const decimal=v=>typeof v==='string'&&/^\d+(?:\.\d{1,12})?$/.test(v)&&Number.isFinite(Number(v))&&Number(v)<=1e12&&Q.cmp(Q.q(v),Q.q('1000000000000'))<=0n;
@@ -87,8 +88,9 @@ export function validateExecution(data){
  return issues;
 }
 export function executionTransition(before,after){
- const issues=[],bad=message=>issues.push({code:'EXECUTION_RECONCILIATION_REQUIRED',table:'executionFacts',file:'25_模拟任务执行事实.csv',row:0,field:'原始事实',message});
+ const issues=[...originalTransition(before,after)],bad=message=>issues.push({code:'EXECUTION_RECONCILIATION_REQUIRED',table:'executionFacts',file:'25_模拟任务执行事实.csv',row:0,field:'原始事实',message});
  for(const key of factTables)for(const old of before[key]||[]){
+  if(key==='originalResourceEvents')continue;
   if(key==='simulationEvents'){const next=(after[key]||[]).find(e=>e['事件编号']===old['事件编号']);if(!next||!same(old,next))bad('已接纳事件不可删除或改写；恢复/撤销策略未定');continue;}
   const id=key==='executionFacts'?'事实编号':key==='executionSources'?'来源编号':'记录编号',next=(after[key]||[]).find(f=>f[id]===old[id]);
   if(key==='executionSources'){
@@ -121,20 +123,23 @@ export function executionTransition(before,after){
 }
 export function executionAdmission(data,conditions){
  const eventIssues=[];if((data.simulationEvents||[]).length){const ids=(conditions.enabledRuleIds||(data.rules||[]).filter(r=>r['是否启用']==='是').map(r=>r['规则编号'])).filter(id=>{const r=(data.rules||[]).find(r=>r['规则编号']===id);return !r?.['生效时间']||Date.parse(r['生效时间'])<=Date.parse(conditions.ruleEvaluationAt||new Date().toISOString());});if(conditions.mode==='minimal-r1'||!ids.includes('CALENDAR')||(data.simulationEvents||[]).some(e=>['物料状态变化','到料延期'].includes(e['事件类型']))&&!ids.includes('MATERIAL'))eventIssues.push({code:'EVENT_POLICY_REQUIRED',message:'异常事件须使用完整支持模式及日历；物料/延期事件须启用物料规则，不得绕过事件约束'});}
- if(!facts(data).length)return eventIssues;
- const issues=[...eventIssues],bad=message=>issues.push({code:'EXECUTION_SCOPE_UNDECIDED',table:'executionFacts',file:'25_模拟任务执行事实.csv',row:0,field:'计算口径',message});
+ const hasOriginal=(data.originalResourceEvents||[]).length>0;
+ const original=hasOriginal?originalIssues(data,{forRun:true}):[];
+ if(hasOriginal)for(const r of data.originalResourceEvents){const d=JSON.parse(r['原账JSON']);if(d.status==='已核对'&&Number(conditions.startMinute??0)<d.observedAt)original.push({code:'N06_OBSERVATION_BOUNDARY',message:'新运行下界不得早于原账观测点；历史重放只作容量核对'});}
+ if(!facts(data).length)return [...eventIssues,...original];
+ const issues=[...eventIssues,...original],bad=message=>issues.push({code:'EXECUTION_SCOPE_UNDECIDED',table:'executionFacts',file:'25_模拟任务执行事实.csv',row:0,field:'计算口径',message});
  for(const f of facts(data))if(compare(f['累计报废数量']||'0','0')>0n&&f['报废补做口径']!=='按本工序BOM补做')bad('报废任务 '+f['事实编号']+' 的补做/补料口径待核对；不自动推断替代品、合格量或释放材料');
  if(conditions.mode==='minimal-r1')bad('有执行事实不能使用忽略保护的最小模式');
  const enabled=(conditions.enabledRuleIds||[]).filter(id=>{const row=(data.rules||[]).find(r=>r['规则编号']===id);return !row?.['生效时间']||Date.parse(row['生效时间'])<=Date.parse(conditions.ruleEvaluationAt||new Date().toISOString());});
  const full=data.executionContext||data;
  if(enabled.includes('MATERIAL'))for(const f of facts(full).filter(f=>f['状态']==='已完成'))try{const o=full.orders.find(o=>o['订单编号']===f['订单编号']);for(const demand of executionMaterialDemand(full,o,f['工序编号'],Number(f['开始分钟']))){const used=(full.executionMaterials||[]).filter(c=>c['事实编号']===f['事实编号']&&c['物料编号']===demand.materialId).reduce((a,c)=>Q.add(a,Q.q(c['累计已用数量'])),Q.zero);if(Q.cmp(used,Q.fromExact(demand.exactQuantity))!==0n)bad('已完成工序耗料与支持BOM定额未齐；不能默认其物料仍未使用或擅自补耗料');}}catch{bad('已完成工序的BOM/耗料映射不明，须核对');}
- if(['CAPACITY','PROGRAM','MOLD','STORAGE','DELIVERY'].some(id=>enabled.includes(id)))bad('执行事实与拆合批/联合占用/交付质量的完整协调待FR031；禁止虚构已确认执行或合格产出');
- if((data.dependencies||[]).some(d=>d['资源类型']==='人员技能'&&factFor(data,d['订单编号'],d['工序编号'])))bad('已开始任务人员阶段剩余范围未定，禁止重复占用');
+ if((hasOriginal?['CAPACITY','PROGRAM','DELIVERY']:['CAPACITY','PROGRAM','MOLD','STORAGE','DELIVERY']).some(id=>enabled.includes(id)))bad('执行事实与拆合批/联合占用/交付质量的完整协调待FR031；禁止虚构已确认执行或合格产出');
+ if(!hasOriginal&&(data.dependencies||[]).some(d=>d['资源类型']==='人员技能'&&factFor(data,d['订单编号'],d['工序编号'])))bad('已开始任务人员阶段剩余范围未定，禁止重复占用');
  if(conditions.endMinute!==null&&conditions.endMinute!==undefined&&facts(data).some(f=>Number(f['观测分钟'])>conditions.endMinute))bad('计算结束早于执行观测时点，禁止裁去事实');
  return issues;
 }
 export function executionSummary(data,at=new Date().toISOString()){
- return {simulation:true,events:eventSummary(data),sources:structuredClone(data.executionSources||[]),orderImpact:executionOrderImpact(data),risks:executionRisks(data,at),protection:facts(data).map(f=>({factId:f['事实编号'],machine:f['当前设备'],originalStart:Number(f['开始分钟']),originalEnd:f['完成分钟']?Number(f['完成分钟']):null,observedUntil:Number(f['观测分钟']),policy:f['状态']==='已完成'?'保留原始完成区间':f['状态']==='暂停'?'暂停恢复未知，保留设备占用':'仅显式剩余投影；异常或失败时保留设备占用待核对'})),quantityMeaning:'工序累计产出，不是合格入库；不跨工序累加，不自动改订单合格完成量',facts:structuredClone(facts(data)),consumption:structuredClone(data.executionMaterials||[]),remaining:facts(data).map(f=>{const o=data.orders.find(o=>o['订单编号']===f['订单编号']);return {factId:f['事实编号'],orderId:f['订单编号'],operation:f['工序编号'],remainingQuantity:o?Q.num(Q.sub(Q.q(o['合格需求']),Q.q(f['工序完成数量']))):null,unit:f['数量单位'],usableOutput:Number(f['工序完成数量']),scrapQuantity:Number(f['累计报废数量']||0),scrapPolicy:f['报废补做口径']||'待核对',remainingMinutes:Number(f['剩余工时分钟']),paused:f['状态']==='暂停'};})};
+ return {...((data.originalResourceEvents||[]).length?{originalResourceEvents:structuredClone(data.originalResourceEvents)}:{}),simulation:true,events:eventSummary(data),sources:structuredClone(data.executionSources||[]),orderImpact:executionOrderImpact(data),risks:executionRisks(data,at),protection:facts(data).map(f=>({factId:f['事实编号'],machine:f['当前设备'],originalStart:Number(f['开始分钟']),originalEnd:f['完成分钟']?Number(f['完成分钟']):null,observedUntil:Number(f['观测分钟']),policy:f['状态']==='已完成'?'保留原始完成区间':f['状态']==='暂停'?'暂停恢复未知，保留设备占用':'仅显式剩余投影；异常或失败时保留设备占用待核对'})),quantityMeaning:'工序累计产出，不是合格入库；不跨工序累加，不自动改订单合格完成量',facts:structuredClone(facts(data)),consumption:structuredClone(data.executionMaterials||[]),remaining:facts(data).map(f=>{const o=data.orders.find(o=>o['订单编号']===f['订单编号']);return {factId:f['事实编号'],orderId:f['订单编号'],operation:f['工序编号'],remainingQuantity:o?Q.num(Q.sub(Q.q(o['合格需求']),Q.q(f['工序完成数量']))):null,unit:f['数量单位'],usableOutput:Number(f['工序完成数量']),scrapQuantity:Number(f['累计报废数量']||0),scrapPolicy:f['报废补做口径']||'待核对',remainingMinutes:Number(f['剩余工时分钟']),paused:f['状态']==='暂停'};})};
 }
 // Current unusable consumed material or overlapping fault cannot silently become good product.
 export function executionRisks(data,at=new Date().toISOString()){

@@ -1,3 +1,4 @@
+import {originalIssues} from './original-resources.mjs';
 import {validatePhysicalPools} from './physical-pools.mjs';
 // One policy source per declaration; no name/grade based skill rules.
 export const skillsOf=value=>String(value||'').split(/[;,，；\s]+/).filter(Boolean);
@@ -21,6 +22,7 @@ const minute=v=>typeof v==='string'&&/^\d+$/.test(v)&&Number.isSafeInteger(Numbe
 // original execution ledger. Personnel dependencies remain intrinsic even when LABOR is off.
 export function validatePolicyExecution(data,at=new Date().toISOString(),mode='supported'){
  if(mode==='minimal-r1')return [];
+ if((data.originalResourceEvents||[]).length)return originalIssues(data);
  const active=id=>(data.rules||[]).some(r=>r['规则编号']===id&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at)));
  return (data.executionFacts||[]).flatMap((f,i)=>{
   const same=r=>r['订单编号']===f['订单编号']&&r['工序编号']===f['工序编号'];

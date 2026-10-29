@@ -29,6 +29,7 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
  };
  const seen=new Set(),expectedReservations=new Set();
  for(const task of tasks){
+  if(conditions?.originalResourceContract==='N06-finite-v1'&&(data.executionFacts||[]).some(f=>f['订单编号']===task.orderId&&f['工序编号']===task.operation&&f['状态']==='已完成'))continue; // Actual resource use is reconstructed separately from historical source events.
   // One resource-batch leader represents personnel; tooling declarations remain per production batch.
   const personnelKey=task.resourceBatchId||task.id;
   if(!seen.has(personnelKey)){
