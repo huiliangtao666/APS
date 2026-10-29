@@ -3422,6 +3422,36 @@
       "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6509017648",
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_38a76f28-3f1a-4414-a534-74f6421644a3:c1",
+      "original_delivery": "dlv_38a76f28-3f1a-4414-a534-74f6421644a3",
+      "type": "DEV_DELIVERED",
+      "source": "APS-Dev",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T05:53:27+08:00",
+      "requirement": "FR-013/Issue4",
+      "product_sha": "e7881a9725f59a2f74a517ddfe3c79e6d814460f",
+      "parent_sha": "bd58868fc210867b6f56c8262e3c35c8d5496831",
+      "design_sha": null,
+      "result": "FR013-NONDEVICE-REF-01修复首轮Dev自测原探测22 PASS/新增15 PASS；独立Test待执行；整卡NOT_READY",
+      "external_hashes": {
+        "FR013-NONDEVICE-REF-01-R1-c1-EVIDENCE.zip": "82502926ba57474354688778fed2a6a0d195fc57dab5c3ca4b30dd4016b0767b",
+        "FR013-NONDEVICE-REF-01-R1-c1-ORIGINAL36-MATRIX.csv": "d8026e2efd1ff2b2aa163292d1508d65c58fc45c3925cfd63fdeb9c6344b556a",
+        "FR013-NONDEVICE-REF-01-R1-c1-REPORT.md": "61309d42f77a469a027bd87b58880058412e3fd81e1ad806776191242f5d1f2d",
+        "FR013-NONDEVICE-REF-01-R1-c1-REPAIR15-MATRIX.csv": "46818e52dd675e402f6701253cf6d2c9b9721b8ae6c6489f7e3ffa53138e6753"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": {
+        "original": 36,
+        "repair": 15
+      },
+      "project_status": {
+        "FR-013": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6509178235",
+      "repair_round": "1/2 delivered, independent retest pending",
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }

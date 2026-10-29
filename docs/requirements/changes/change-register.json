@@ -485,7 +485,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR013受影响需求增量；不等于已实现或UAT通过",
-      "implementation_status": "Original17 explicit mapping bd58868 delivered; Test1 source probe found FR013-NONDEVICE-REF-01 real reference-validation defect; first repair pending; original05/06/09/12 positive source mapping blocked",
+      "implementation_status": "FR013-NONDEVICE-REF-01 first repair delivered on e7881a9 (parent bd58868), Dev self-test 22 original probes and 15 repair cases PASS; independent Test pending; original05/06/09/12 positive source mapping blocked",
       "primary_requirements": [
         "FR-013"
       ],
@@ -503,7 +503,7 @@
       "acceptance_delta": "CSV模板/预览/导入按批准配置校验：小数袋支拒绝，总收率>100%拒绝；合法配置保存刷新后生效，非法/越权整批零写入；保留旧确认/历史。",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006",
       "related_issue_urls": [],
-      "acceptance_result": "Fixed bd58868 Test1 17 PASS/5 FAIL (one confirmed product defect)/12 BLOCKED/2 NOT_EXECUTED; full FR013/CR NOT_READY; old PASS remains old SHA",
+      "acceptance_result": "No new independent Test verdict on e7881a9; bd58868 Test1 17 PASS/5 FAIL (one confirmed defect)/12 BLOCKED/2 NOT_EXECUTED stays on old SHA; full FR013/CR NOT_READY; UAT waiting dependencies",
       "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
       "history": [
         {
