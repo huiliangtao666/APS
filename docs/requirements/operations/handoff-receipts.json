@@ -287,6 +287,77 @@
       "no_new_product_defects": true,
       "no_new_execution_dispatch": true,
       "ack_delivery_policy": "本Inbox最终PROCESSED由平台hook记录/回送，不另发通知或ACK任务，避免循环"
+    },
+    {
+      "event_key": "dlv_71d770dd-6faf-4314-bd38-1bf91e6b5fc9:r1",
+      "original_delivery": "dlv_71d770dd-6faf-4314-bd38-1bf91e6b5fc9",
+      "notification_delivery": "dlv_348264ed-fdb1-4f76-9cf0-a396456674fa",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T13:33:35+08:00",
+      "product_sha": "12eed5514c702f730aae65a39a08747c532f8536",
+      "design_document_sha": "030caee9c33b44bf88593827cf36715163eeb3ca",
+      "requirement_version": "v0.3",
+      "issue_comments": {
+        "14": "https://github.com/huiliangtao666/APS/issues/14#issuecomment-6488876853",
+        "15": "https://github.com/huiliangtao666/APS/issues/15#issuecomment-6488877387"
+      },
+      "audit_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/operations/fr018019024-12eed551-test-r1.md",
+      "evidence_hashes": {
+        "FR018019024-12eed551-ACCEPTANCE-R1-FR018-REPORT.txt": "0cf4851e96f6374d5ec21738f4253f279c6ffe094d44ddfaccfc74a86c5261f2",
+        "FR018019024-12eed551-ACCEPTANCE-R1-FR019-REPORT.txt": "7e140865f6b1ff20eb1b48c95be54d0a91424e2b880acd737bce2d126b697971",
+        "FR018019024-12eed551-ACCEPTANCE-R1-FR024-REPORT.txt": "ba288e17a63391af33724fea33d167ce8a3f1971b7972a0e1bfe94c77102e711",
+        "FR018019024-12eed551-ACCEPTANCE-R1-ASSERTIONS.csv": "972ffb0966091791b1a65bf6861b7b11650bbe8d37aeee6af16fe7a7505ed2e7",
+        "FR018019024-12eed551-ACCEPTANCE-R1-EVIDENCE.zip": "f61381232d209917bcf502185dabf8b5da7b080f2f79eea7d0cbe8faad45d670"
+      },
+      "verification": "File API；5外部hash/92 ZIP CRC/87内部hash/4源码hash/三旧SHA祖先/原卡状态回读",
+      "outcomes": [
+        {
+          "requirement": "FR-018",
+          "before": "In progress",
+          "after": "In progress",
+          "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgxI",
+          "code_sha": "12eed5514c702f730aae65a39a08747c532f8536",
+          "card_recommendation": "NOT_READY",
+          "remaining_in_scope": [
+            "FR018-SCOPE-NOTE01"
+          ],
+          "repair_round": 0,
+          "retest_round": 0,
+          "defect": "FR018-SCOPE-NOTE01",
+          "defect_status": "OPEN",
+          "repair_delivery": "dlv_feadb3b5-bb46-4433-ab5a-f89d4f76a7e0",
+          "dispatch_status": "queued；仅投递，不据此记已开始/修复完成",
+          "next_owner": "APS-Dev",
+          "next_step": "限定说明修正普通push后，Design固定完整新SHA交APS-Test两路径独立复测；当前等待修复交付，不重复已PASS同版本范围"
+        },
+        {
+          "requirement": "FR-019",
+          "before": "In progress",
+          "after": "Done",
+          "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgyQ",
+          "code_sha": "12eed5514c702f730aae65a39a08747c532f8536",
+          "card_recommendation": "READY_DONE",
+          "remaining_in_scope": [],
+          "repair_round": 0,
+          "retest_round": 0
+        },
+        {
+          "requirement": "FR-024",
+          "before": "In progress",
+          "after": "Done",
+          "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg3Q",
+          "code_sha": "12eed5514c702f730aae65a39a08747c532f8536",
+          "card_recommendation": "READY_DONE",
+          "remaining_in_scope": [],
+          "repair_round": 0,
+          "retest_round": 0
+        }
+      ],
+      "ack_delivery_policy": "本Inbox最终PROCESSED结果回送，不另投递通知/ACK任务",
+      "test_continuation": "优先可执行修复；等待本FR018修复完整SHA后续派独立复测。未预派无固定版本的验证，不重复已PASS范围。",
+      "repair_dispatch_comment": "https://github.com/huiliangtao666/APS/issues/14#issuecomment-6488890344"
     }
   ]
 }
