@@ -1,0 +1,1209 @@
+{
+  "version": "FR036-v1",
+  "baseSHA": "9082e3d82a11f00947d82f1f672c51fb08f3536a",
+  "classification": {
+    "data": "D1/D2 CSV simulation; D3 deferred",
+    "configuration": [
+      "产品",
+      "物料",
+      "BOM",
+      "路线",
+      "工时",
+      "资源",
+      "日历",
+      "依赖",
+      "规则"
+    ],
+    "business": [
+      "订单",
+      "库存",
+      "到料",
+      "累计进度",
+      "事件"
+    ],
+    "result": "保存方案及六类报表",
+    "timeOrigin": "2026-11-02T08:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "simulation": true
+  },
+  "chapter9": [
+    {
+      "number": 1,
+      "category": "工厂与产线配置",
+      "tables": [],
+      "limitation": "无独立01导入；F01/L01边界由日历/设备/订单表达，不能导入任意工厂/多线"
+    },
+    {
+      "number": 2,
+      "category": "工厂工作日历",
+      "tables": [
+        "calendars"
+      ],
+      "limitation": ""
+    },
+    {
+      "number": 3,
+      "category": "设备资源配置",
+      "tables": [
+        "machines"
+      ],
+      "limitation": ""
+    },
+    {
+      "number": 4,
+      "category": "设备停机与例外日历",
+      "tables": [
+        "downtime"
+      ],
+      "limitation": ""
+    },
+    {
+      "number": 5,
+      "category": "模具与工具配置",
+      "tables": [
+        "tools",
+        "resourceClaims"
+      ],
+      "limitation": "配置与显式占用分表，非自动推导"
+    },
+    {
+      "number": 6,
+      "category": "人员技能与班次",
+      "tables": [
+        "personnelGroups",
+        "dependencies"
+      ],
+      "limitation": ""
+    },
+    {
+      "number": 7,
+      "category": "产品与包装规格",
+      "tables": [
+        "products"
+      ],
+      "limitation": "无每箱支数，箱换算不能凭空补齐"
+    },
+    {
+      "number": 8,
+      "category": "物料主数据",
+      "tables": [
+        "materials"
+      ],
+      "limitation": ""
+    },
+    {
+      "number": 9,
+      "category": "物料BOM配置",
+      "tables": [
+        "bom"
+      ],
+      "limitation": "当前09_BOM与包装用量，不等于库存09文件"
+    },
+    {
+      "number": 10,
+      "category": "工艺路线配置",
+      "tables": [
+        "routes"
+      ],
+      "limitation": ""
+    },
+    {
+      "number": 11,
+      "category": "工序工时配置",
+      "tables": [
+        "times"
+      ],
+      "limitation": ""
+    },
+    {
+      "number": 12,
+      "category": "工序资源与物料依赖",
+      "tables": [
+        "dependencies",
+        "resourceClaims"
+      ],
+      "limitation": "BOM负责物料用量"
+    },
+    {
+      "number": 13,
+      "category": "物料库存批次",
+      "tables": [
+        "inventory"
+      ],
+      "limitation": "原13现09_库存批次"
+    },
+    {
+      "number": 14,
+      "category": "预计到料与可用时间",
+      "tables": [
+        "supplies",
+        "supplyDelays",
+        "supplyUses"
+      ],
+      "limitation": "原14拆20/21/22"
+    },
+    {
+      "number": 15,
+      "category": "空间与组批规则配置",
+      "tables": [
+        "batchResources"
+      ],
+      "limitation": "字段存储不保证所有规则检查"
+    },
+    {
+      "number": 16,
+      "category": "排程规则配置",
+      "tables": [
+        "rules"
+      ],
+      "limitation": ""
+    },
+    {
+      "number": 17,
+      "category": "生产订单与交期",
+      "tables": [
+        "orders"
+      ],
+      "limitation": ""
+    },
+    {
+      "number": 18,
+      "category": "模拟执行进度",
+      "tables": [
+        "executionFacts",
+        "executionMaterials",
+        "executionSources"
+      ],
+      "limitation": "原18拆25/26/27；与18工装区分"
+    },
+    {
+      "number": 19,
+      "category": "模拟异常与条件变更",
+      "tables": [
+        "simulationEvents"
+      ],
+      "limitation": "原19现28；19现为人员组"
+    }
+  ],
+  "inbound": [
+    {
+      "key": "simulationEvents",
+      "label": "模拟异常事件（先更新时点事实）",
+      "file": "28_模拟异常事件.csv",
+      "fields": [
+        "事件编号",
+        "事件分钟",
+        "保护截止分钟",
+        "保护策略",
+        "事件类型",
+        "参数JSON",
+        "原因",
+        "需处理事实JSON"
+      ],
+      "systems": [
+        "MES",
+        "APS"
+      ],
+      "sourceOwner": "模拟异常提供方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "事件编号"
+      ],
+      "references": "参数JSON随事件类型解释；先保存同分钟事实，事件接纳后不可改写删除",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "事件分钟",
+        "保护截止分钟"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/28_模拟异常事件.csv"
+    },
+    {
+      "key": "executionSources",
+      "label": "模拟进度来源对账（显式映射）",
+      "file": "27_模拟进度来源对账.csv",
+      "fields": [
+        "来源编号",
+        "原始任务编号",
+        "事实编号",
+        "原始汇总耗料",
+        "耗料单位",
+        "来源说明",
+        "原始分配JSON"
+      ],
+      "systems": [
+        "MES"
+      ],
+      "sourceOwner": "模拟来源映射维护方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "来源编号"
+      ],
+      "references": "事实编号→executionFacts；原始任务编号显式映射，不能把外部任务号当本系统稳定任务ID",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/27_模拟进度来源对账.csv"
+    },
+    {
+      "key": "executionFacts",
+      "label": "模拟任务执行事实（累计）",
+      "file": "25_模拟任务执行事实.csv",
+      "fields": [
+        "事实编号",
+        "订单编号",
+        "工序编号",
+        "状态",
+        "开始分钟",
+        "完成分钟",
+        "观测分钟",
+        "工序完成数量",
+        "数量单位",
+        "剩余工时分钟",
+        "当前设备",
+        "暂停原因",
+        "累计报废数量",
+        "报废补做口径"
+      ],
+      "systems": [
+        "MES"
+      ],
+      "sourceOwner": "模拟执行事实提供方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "事实编号"
+      ],
+      "references": "订单+工序→routes；当前设备→machines；累计事实，原始开始/完成受保护",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "开始分钟",
+        "完成分钟",
+        "观测分钟",
+        "剩余工时分钟"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/25_模拟任务执行事实.csv"
+    },
+    {
+      "key": "executionMaterials",
+      "label": "模拟累计耗料（账面扣前口径）",
+      "file": "26_模拟累计耗料.csv",
+      "fields": [
+        "记录编号",
+        "事实编号",
+        "批次编号",
+        "物料编号",
+        "累计已用数量",
+        "单位"
+      ],
+      "systems": [
+        "MES",
+        "WMS"
+      ],
+      "sourceOwner": "模拟耗料提供方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "记录编号"
+      ],
+      "references": "事实→executionFacts；批次→inventory；物料→materials；累计不重复扣减",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/26_模拟累计耗料.csv"
+    },
+    {
+      "key": "products",
+      "label": "产品与包装规格",
+      "file": "07_产品与包装规格.csv",
+      "fields": [
+        "产品编号",
+        "产品名称",
+        "单支净重kg",
+        "每袋支数",
+        "总收率",
+        "模拟交付等待分钟"
+      ],
+      "systems": [
+        "ERP",
+        "OMS"
+      ],
+      "sourceOwner": "产品主数据维护方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "产品编号"
+      ],
+      "references": "产品规格；净重kg、每袋支数用于显式换算；没有每箱支数字段，不臆造箱换算",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "模拟交付等待分钟"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/07_产品与包装规格.csv"
+    },
+    {
+      "key": "materials",
+      "label": "物料主数据",
+      "file": "08_物料主数据.csv",
+      "fields": [
+        "物料编号",
+        "物料名称",
+        "单位",
+        "类别"
+      ],
+      "systems": [
+        "ERP",
+        "WMS"
+      ],
+      "sourceOwner": "物料主数据维护方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "物料编号"
+      ],
+      "references": "物料单位是库存、到料和耗料数量的解释基准",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/08_物料主数据.csv"
+    },
+    {
+      "key": "supplies",
+      "label": "预计到料",
+      "file": "20_预计到料.csv",
+      "fields": [
+        "供给编号",
+        "物料编号",
+        "批次编号",
+        "预计数量",
+        "预计到达时间",
+        "预计可用时间",
+        "质量状态",
+        "有效期"
+      ],
+      "systems": [
+        "WMS",
+        "ERP"
+      ],
+      "sourceOwner": "预计到料提供方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "供给编号"
+      ],
+      "references": "物料编号→materials；物料+批次另需唯一；到达不等于可用，不入库存账",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "预计到达时间",
+        "预计可用时间",
+        "有效期"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/20_预计到料.csv"
+    },
+    {
+      "key": "supplyDelays",
+      "label": "延期模拟记录",
+      "file": "21_延期模拟记录.csv",
+      "fields": [
+        "记录编号",
+        "供给编号",
+        "记录时间",
+        "调整后到达时间",
+        "调整后可用时间",
+        "原因"
+      ],
+      "systems": [
+        "WMS",
+        "ERP"
+      ],
+      "sourceOwner": "到料延期提供方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "记录编号"
+      ],
+      "references": "供给编号→supplies；同一供给记录时点唯一，延期不可提前",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "记录时间",
+        "调整后到达时间",
+        "调整后可用时间"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/21_延期模拟记录.csv"
+    },
+    {
+      "key": "supplyUses",
+      "label": "计划供给引用",
+      "file": "22_计划供给引用.csv",
+      "fields": [
+        "引用编号",
+        "订单编号",
+        "工序编号",
+        "供给编号",
+        "使用数量"
+      ],
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "计划员",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "引用编号"
+      ],
+      "references": "订单→orders；工序→订单产品routes；供给→supplies；跨引用合计不可超供给",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/22_计划供给引用.csv"
+    },
+    {
+      "key": "inventory",
+      "label": "库存批次",
+      "file": "09_库存批次.csv",
+      "fields": [
+        "批次编号",
+        "物料编号",
+        "账面数量",
+        "已占用数量",
+        "有效期",
+        "位置",
+        "质量状态",
+        "预计可用时间"
+      ],
+      "systems": [
+        "WMS"
+      ],
+      "sourceOwner": "库存来源方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "批次编号"
+      ],
+      "references": "物料编号→materials；账面扣耗前、已占用为独立占用；质量状态是模拟输入",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "有效期",
+        "预计可用时间"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/09_库存批次.csv"
+    },
+    {
+      "key": "orders",
+      "label": "订单与交期",
+      "file": "17_生产订单与交期.csv",
+      "fields": [
+        "订单编号",
+        "产品编号",
+        "产线编号",
+        "合格需求",
+        "数量单位",
+        "要求可交付分钟",
+        "优先顺序",
+        "是否允许拆分",
+        "需求类型",
+        "订单状态",
+        "已完成合格数量"
+      ],
+      "systems": [
+        "ERP",
+        "OMS"
+      ],
+      "sourceOwner": "订单来源方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "订单编号"
+      ],
+      "references": "产品编号→products；L01单线；订单状态、需求类型不等于真实订单订阅",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "要求可交付分钟"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/17_生产订单与交期.csv"
+    },
+    {
+      "key": "bom",
+      "label": "BOM 与包装用量",
+      "file": "09_BOM与包装用量.csv",
+      "fields": [
+        "版本编号",
+        "产品编号",
+        "生效日期",
+        "投料工序编号",
+        "用量类型",
+        "物料编号",
+        "配置用量",
+        "用量单位",
+        "用量基准",
+        "收率/损耗口径备注",
+        "损坏比例"
+      ],
+      "systems": [
+        "PLM"
+      ],
+      "sourceOwner": "配方/BOM维护方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "产品编号",
+        "版本编号",
+        "投料工序编号",
+        "物料编号"
+      ],
+      "references": "产品→products；投料工序→routes；物料→materials；版本+生效日期，不自动外部审核",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "生效日期"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/09_BOM与包装用量.csv"
+    },
+    {
+      "key": "routes",
+      "label": "工艺路线",
+      "file": "10_工艺路线配置.csv",
+      "fields": [
+        "产品编号",
+        "工序编号",
+        "工序名称",
+        "前序工序",
+        "最大等待分钟",
+        "程序编号"
+      ],
+      "systems": [
+        "PLM"
+      ],
+      "sourceOwner": "工艺维护方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "产品编号",
+        "工序编号"
+      ],
+      "references": "产品→products；前序→同产品工序；顺序路线，不支持复杂分支返工",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "最大等待分钟"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/10_工艺路线配置.csv"
+    },
+    {
+      "key": "times",
+      "label": "工序工时",
+      "file": "11_工序工时配置.csv",
+      "fields": [
+        "产品编号",
+        "工序编号",
+        "计算方式",
+        "固定分钟",
+        "速度支每分钟"
+      ],
+      "systems": [
+        "PLM"
+      ],
+      "sourceOwner": "工时维护方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "产品编号",
+        "工序编号"
+      ],
+      "references": "产品+工序→routes；固定分钟或速度支每分钟，不能混用kg/小时",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "固定分钟",
+        "速度支每分钟"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/11_工序工时配置.csv"
+    },
+    {
+      "key": "machines",
+      "label": "设备资源",
+      "file": "03_设备资源配置.csv",
+      "fields": [
+        "设备编号",
+        "设备名称",
+        "产线编号",
+        "工序编号",
+        "日历编号",
+        "最小装载kg",
+        "最大装载kg",
+        "装载计量基准"
+      ],
+      "systems": [
+        "ERP",
+        "MES"
+      ],
+      "sourceOwner": "设备配置维护方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "设备编号"
+      ],
+      "references": "日历→calendars；工序→适用工序；L01；容量字段存在不表示约束已启用",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/03_设备资源配置.csv"
+    },
+    {
+      "key": "tools",
+      "label": "工装配置（不自动参与排程）",
+      "file": "18_工装配置.csv",
+      "fields": [
+        "工装编码",
+        "工装名称",
+        "适用任务",
+        "可用数量",
+        "每任务需求数量",
+        "提前占用分钟",
+        "后延占用分钟",
+        "是否启用",
+        "说明"
+      ],
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "工装维护方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "工装编码"
+      ],
+      "references": "工装编码被resourceClaims引用；此表存储不自动参与排程",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "提前占用分钟",
+        "后延占用分钟"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/18_工装配置.csv"
+    },
+    {
+      "key": "deliveryConditions",
+      "label": "订单模拟交付条件",
+      "file": "24_订单模拟交付条件.csv",
+      "fields": [
+        "订单编号",
+        "模拟质量状态",
+        "模拟质量可用时间",
+        "模拟有效期截止时间",
+        "要求剩余有效分钟"
+      ],
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "模拟交付条件维护方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "订单编号"
+      ],
+      "references": "订单→orders；质量/可用/有效期为模拟输入，无QA审批",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "模拟质量可用时间",
+        "模拟有效期截止时间",
+        "要求剩余有效分钟"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/24_订单模拟交付条件.csv"
+    },
+    {
+      "key": "resourceClaims",
+      "label": "显式逐生产批占用声明",
+      "file": "23_资源占用声明.csv",
+      "fields": [
+        "声明编号",
+        "订单编号",
+        "工序编号",
+        "资源类型",
+        "资源编号",
+        "需求数量",
+        "单位",
+        "提前占用分钟",
+        "后延占用分钟",
+        "占用口径"
+      ],
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "计划员",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "声明编号"
+      ],
+      "references": "订单工序→routes；按类型引用工装/人员/空间；逐生产批显式声明，不推导隐含占用",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "提前占用分钟",
+        "后延占用分钟"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/23_资源占用声明.csv"
+    },
+    {
+      "key": "batchResources",
+      "label": "空间与组批配置（存储不代表检查）",
+      "file": "15_空间与组批规则配置.csv",
+      "fields": [
+        "资源编号",
+        "资源类型",
+        "容量",
+        "单位",
+        "允许程序",
+        "说明"
+      ],
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "空间与组批维护方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "资源编号"
+      ],
+      "references": "资源编号被占用声明引用；存储不代表已检查合炉/空间所有规则",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/15_空间与组批规则配置.csv"
+    },
+    {
+      "key": "calendars",
+      "label": "工厂工作日历",
+      "file": "02_工厂工作日历.csv",
+      "fields": [
+        "日历编号",
+        "工厂编号",
+        "起始分钟",
+        "结束分钟",
+        "是否工作",
+        "说明"
+      ],
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "工厂日历维护方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "日历编号",
+        "起始分钟",
+        "结束分钟",
+        "是否工作"
+      ],
+      "references": "工厂F01；日历编号被设备引用；分钟窗口，非独立工厂导入",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "起始分钟",
+        "结束分钟"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/02_工厂工作日历.csv"
+    },
+    {
+      "key": "downtime",
+      "label": "设备停机例外",
+      "file": "04_设备停机与例外日历.csv",
+      "fields": [
+        "设备编号",
+        "起始分钟",
+        "结束分钟",
+        "原因"
+      ],
+      "systems": [
+        "MES",
+        "APS"
+      ],
+      "sourceOwner": "设备例外维护方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "设备编号",
+        "起始分钟",
+        "结束分钟"
+      ],
+      "references": "设备编号→machines；结束>开始；不覆盖全厂不工作限制",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "起始分钟",
+        "结束分钟"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/04_设备停机与例外日历.csv"
+    },
+    {
+      "key": "dependencies",
+      "label": "工序资源依赖",
+      "file": "12_工序资源与物料依赖.csv",
+      "fields": [
+        "订单编号",
+        "工序编号",
+        "资源类型",
+        "资源编号",
+        "需求数量",
+        "提前占用分钟",
+        "后延占用分钟",
+        "所需技能",
+        "所需班次",
+        "人员参与阶段",
+        "人员开始偏移",
+        "人员结束偏移"
+      ],
+      "systems": [
+        "PLM",
+        "APS"
+      ],
+      "sourceOwner": "工艺/资源配置维护方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "订单编号",
+        "工序编号",
+        "资源类型",
+        "资源编号"
+      ],
+      "references": "订单→orders→产品工序；设备→machines同工序；人员技能→personnelGroups；按资源类型解释引用",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "提前占用分钟",
+        "后延占用分钟"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/12_工序资源与物料依赖.csv"
+    },
+    {
+      "key": "personnelGroups",
+      "label": "人员组与可用时间",
+      "file": "19_人员组与可用时间.csv",
+      "fields": [
+        "人员组编号",
+        "人员组名称",
+        "人员数量",
+        "技能",
+        "班次",
+        "可用起始分钟",
+        "可用结束分钟"
+      ],
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "人员组维护方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "人员组编号"
+      ],
+      "references": "人员组编号被dependencies/resourceClaims引用；技能/班次为模拟值，无考勤连接",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "可用起始分钟",
+        "可用结束分钟"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/19_人员组与可用时间.csv"
+    },
+    {
+      "key": "rules",
+      "label": "排程规则",
+      "file": "16_排程规则配置.csv",
+      "fields": [
+        "规则编号",
+        "中文名称",
+        "是否启用",
+        "参数JSON",
+        "适用对象",
+        "生效时间"
+      ],
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "规则配置维护方",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "规则编号"
+      ],
+      "references": "规则编号及参数由当前已支持规则决定；未支持不能报通过",
+      "units": "字段带kg/分钟/支每分钟按列名；数量单位/单位按值；无单位数量引用物料或资源定义，不自动换算",
+      "dates": [
+        "生效时间"
+      ],
+      "version": "服务端revision并发保护；运行inputVersionId/snapshotHash冻结原输入；BOM另有版本编号、生效日期",
+      "validation": [
+        "src/App.tsx#importCsv",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "template": "templates/16_排程规则配置.csv"
+    }
+  ],
+  "outbound": [
+    {
+      "kind": "orders",
+      "label": "订单计划",
+      "systems": [
+        "ERP",
+        "OMS",
+        "WMS",
+        "MES"
+      ],
+      "direction": "outbound-file-only",
+      "sourceOwner": "APS保存方案",
+      "uniqueKey": "viewId + 行类别/保存记录；不是外部生产指令ID",
+      "fields": [
+        "类别",
+        "保存记录（数量、单位、日期、输入与判断依据）"
+      ],
+      "referenceKeys": [
+        "planId",
+        "runId",
+        "inputVersionId",
+        "snapshotHash",
+        "confirmationId",
+        "query",
+        "lines",
+        "executionFactsVersion"
+      ],
+      "contractVersion": "FR035-v1",
+      "example": "exports/orders.csv",
+      "source": "server/scoped-report.mjs"
+    },
+    {
+      "kind": "tasks",
+      "label": "任务计划",
+      "systems": [
+        "ERP",
+        "OMS",
+        "WMS",
+        "MES"
+      ],
+      "direction": "outbound-file-only",
+      "sourceOwner": "APS保存方案",
+      "uniqueKey": "viewId + 行类别/保存记录；不是外部生产指令ID",
+      "fields": [
+        "类别",
+        "保存记录（数量、单位、日期、输入与判断依据）"
+      ],
+      "referenceKeys": [
+        "planId",
+        "runId",
+        "inputVersionId",
+        "snapshotHash",
+        "confirmationId",
+        "query",
+        "lines",
+        "executionFactsVersion"
+      ],
+      "contractVersion": "FR035-v1",
+      "example": "exports/tasks.csv",
+      "source": "server/scoped-report.mjs"
+    },
+    {
+      "kind": "occupation",
+      "label": "资源占用",
+      "systems": [
+        "ERP",
+        "OMS",
+        "WMS",
+        "MES"
+      ],
+      "direction": "outbound-file-only",
+      "sourceOwner": "APS保存方案",
+      "uniqueKey": "viewId + 行类别/保存记录；不是外部生产指令ID",
+      "fields": [
+        "类别",
+        "保存记录（数量、单位、日期、输入与判断依据）"
+      ],
+      "referenceKeys": [
+        "planId",
+        "runId",
+        "inputVersionId",
+        "snapshotHash",
+        "confirmationId",
+        "query",
+        "lines",
+        "executionFactsVersion"
+      ],
+      "contractVersion": "FR035-v1",
+      "example": "exports/occupation.csv",
+      "source": "server/scoped-report.mjs"
+    },
+    {
+      "kind": "materials",
+      "label": "物料需求",
+      "systems": [
+        "ERP",
+        "OMS",
+        "WMS",
+        "MES"
+      ],
+      "direction": "outbound-file-only",
+      "sourceOwner": "APS保存方案",
+      "uniqueKey": "viewId + 行类别/保存记录；不是外部生产指令ID",
+      "fields": [
+        "类别",
+        "保存记录（数量、单位、日期、输入与判断依据）"
+      ],
+      "referenceKeys": [
+        "planId",
+        "runId",
+        "inputVersionId",
+        "snapshotHash",
+        "confirmationId",
+        "query",
+        "lines",
+        "executionFactsVersion"
+      ],
+      "contractVersion": "FR035-v1",
+      "example": "exports/materials.csv",
+      "source": "server/scoped-report.mjs"
+    },
+    {
+      "kind": "unplanned",
+      "label": "未排原因",
+      "systems": [
+        "ERP",
+        "OMS",
+        "WMS",
+        "MES"
+      ],
+      "direction": "outbound-file-only",
+      "sourceOwner": "APS保存方案",
+      "uniqueKey": "viewId + 行类别/保存记录；不是外部生产指令ID",
+      "fields": [
+        "类别",
+        "保存记录（数量、单位、日期、输入与判断依据）"
+      ],
+      "referenceKeys": [
+        "planId",
+        "runId",
+        "inputVersionId",
+        "snapshotHash",
+        "confirmationId",
+        "query",
+        "lines",
+        "executionFactsVersion"
+      ],
+      "contractVersion": "FR035-v1",
+      "example": "exports/unplanned.csv",
+      "source": "server/scoped-report.mjs"
+    },
+    {
+      "kind": "differences",
+      "label": "方案差异",
+      "systems": [
+        "ERP",
+        "OMS",
+        "WMS",
+        "MES"
+      ],
+      "direction": "outbound-file-only",
+      "sourceOwner": "APS保存方案",
+      "uniqueKey": "viewId + 行类别/保存记录；不是外部生产指令ID",
+      "fields": [
+        "类别",
+        "保存记录（数量、单位、日期、输入与判断依据）"
+      ],
+      "referenceKeys": [
+        "planId",
+        "runId",
+        "inputVersionId",
+        "snapshotHash",
+        "confirmationId",
+        "query",
+        "lines",
+        "executionFactsVersion"
+      ],
+      "contractVersion": "FR035-v1",
+      "example": "exports/differences.csv",
+      "source": "server/scoped-report.mjs"
+    }
+  ],
+  "unsupported": [
+    "真实连接、订阅、外部写回、生产指令、真实账号",
+    "独立工厂/产线01表、P1多线、预测去重补库、复杂分支返工",
+    "MES外部稳定任务ID协商、更新顺序/频率/权限/冲突解决均待D3批准"
+  ],
+  "metadataConvention": "来源方是模拟责任划分，非已连接或已认证来源；额外元数据写sidecar，不加未知CSV列；模版仅表头不能直接导入；示例必须在声明的fixture上下文使用"
+}

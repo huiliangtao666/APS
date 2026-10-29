@@ -1,0 +1,368 @@
+- complementary: FR033 DISPOSABLE VALIDATION · SYNTHETIC DATA / TEST IDENTITY · NO GATEWAY AUTHENTICATION Product source FR036-working-source
+- banner:
+  - text: APS APS · 单线最小排程 R1 原型 / v0.3 需求基线
+  - navigation:
+    - button "排程工作台"
+    - button "模拟数据查询"
+    - button "数据与 CSV"
+    - button "查询报表与导出"
+    - button "范围与待决"
+- main:
+  - heading "权限与操作记录" [level=2]
+  - paragraph: 当前权限：planner · 所有质量状态均为模拟数据，无 QA 在线审批。主管确认、退回与发布流程尚未提供。
+  - text: 操作原因（必填）
+  - textbox "操作原因"
+  - button "退出登录"
+  - button "刷新数据与记录"
+  - group: 操作记录（35）
+  - paragraph: 单线排程 · R1 最小模式 / 已有支持模式
+  - heading "日历与排程数据" [level=1]
+  - paragraph: 基于 v0.3 UAT-02 / 2026-11-02 08:00（Asia/Shanghai）；样例业务值均为虚构，仅用于软件验证。
+  - text: 追溯基线 FR-008 · UAT-02 · AC-05 工厂窗口继承 · 设备停机例外 · 连续工作窗口
+  - heading "主数据、单位与排程输入" [level=2]
+  - paragraph: FR-002 新增产品/包装规格与物料主数据；同时维护 R1/R2.1 排程表。CSV 导入只替换当前表；预计供给使用带时区 ISO 时间，其余排程时间字段使用分钟，0 = 2026-11-02 08:00 Asia/Shanghai。
+  - text: 导入 CSV
+  - button "导出当前表" [disabled]
+  - group:
+    - text: 外部系统与 CSV 模拟说明（FR-036 · PG-01）
+    - paragraph: 全部为离线模拟，无需 ERP / OMS / WMS / PLM / MES 账号。计划确认仅在本系统生效；不连接、不订阅、不向外部下发生产指令。
+    - table "可能交换的数据及模拟责任来源":
+      - caption: 可能交换的数据及模拟责任来源
+      - rowgroup:
+        - row "系统 输入类别 / 来源 输出":
+          - cell "系统"
+          - cell "输入类别 / 来源"
+          - cell "输出"
+      - rowgroup:
+        - row "ERP / OMS 产品、订单与需求，由主数据及订单维护方提供 保存方案的订单与任务计划文件":
+          - cell "ERP / OMS"
+          - cell "产品、订单与需求，由主数据及订单维护方提供"
+          - cell "保存方案的订单与任务计划文件"
+        - row "WMS 物料、库存批次、独立占用、预计到料，由库存来源方提供 物料需求文件；不扣真实库存":
+          - cell "WMS"
+          - cell "物料、库存批次、独立占用、预计到料，由库存来源方提供"
+          - cell "物料需求文件；不扣真实库存"
+        - row "PLM BOM版本、生效日期、路线、工时及依赖，由工艺维护方提供 本期无 PLM 写回契约":
+          - cell "PLM"
+          - cell "BOM版本、生效日期、路线、工时及依赖，由工艺维护方提供"
+          - cell "本期无 PLM 写回契约"
+        - row "MES 累计进度、累计耗料、来源映射及异常，由模拟执行来源方提供 任务、资源占用等报表文件；不是生产指令":
+          - cell "MES"
+          - cell "累计进度、累计耗料、来源映射及异常，由模拟执行来源方提供"
+          - cell "任务、资源占用等报表文件；不是生产指令"
+    - list:
+      - listitem: 先读说明，按日历资源→产品物料→BOM/路线/工时→依赖→库存到料→规则订单→进度事件准备数据。模板只有表头，填写后使用；示例所需关联数据见说明。
+      - listitem: 填写操作原因，选择对应数据类别，再导入 CSV。当前主应用每次替换当前整表，服务器检查合并后的完整数据；错误拒绝此次写入。多个文件连续导入不是跨文件事务，也没有六表批次预览。
+      - listitem: 重复编号须修正完整表后重导；相同集合替换不追加。不要给 CSV 添加来源、版本或模拟标记等未知列；这些说明保存在配套清单和系统输入版本中。
+      - listitem: 分钟 0 = 2026-11-02 08:00 +08:00。预计到达/可用须带时区，例如 2026-11-02T08:00:00+08:00；有效期用 YYYY-MM-DD。kg、支、袋和物料单位不能混写。
+      - listitem: 计算并保存后进入“查询报表与导出”，按方案和筛选查询，再填写原因导出。六类报表保留方案、运行、原输入、单位、日期及模拟说明；查询权限与导出权限分别检查。
+    - paragraph:
+      - text: 当前类别：订单与交期。
+      - link "下载当前类别 CSV 表头模板":
+        - /url: /fr036/templates/17_生产订单与交期.csv
+    - paragraph:
+      - link "下载中文说明与案例步骤":
+        - /url: /fr036/使用说明.txt
+      - text: ·
+      - link "下载字段、唯一键与引用矩阵 JSON":
+        - /url: /fr036/matrix.json
+      - text: ·
+      - link "下载示例清单与上下文":
+        - /url: /fr036/samples.json
+    - group:
+      - text: 全部类别模板与模拟示例下载
+      - list:
+        - listitem:
+          - link "28_模拟异常事件.csv（表头模板）":
+            - /url: /fr036/templates/28_模拟异常事件.csv
+        - listitem:
+          - link "27_模拟进度来源对账.csv（表头模板）":
+            - /url: /fr036/templates/27_模拟进度来源对账.csv
+        - listitem:
+          - link "25_模拟任务执行事实.csv（表头模板）":
+            - /url: /fr036/templates/25_模拟任务执行事实.csv
+        - listitem:
+          - link "26_模拟累计耗料.csv（表头模板）":
+            - /url: /fr036/templates/26_模拟累计耗料.csv
+        - listitem:
+          - link "07_产品与包装规格.csv（表头模板）":
+            - /url: /fr036/templates/07_产品与包装规格.csv
+        - listitem:
+          - link "08_物料主数据.csv（表头模板）":
+            - /url: /fr036/templates/08_物料主数据.csv
+        - listitem:
+          - link "20_预计到料.csv（表头模板）":
+            - /url: /fr036/templates/20_预计到料.csv
+        - listitem:
+          - link "21_延期模拟记录.csv（表头模板）":
+            - /url: /fr036/templates/21_延期模拟记录.csv
+        - listitem:
+          - link "22_计划供给引用.csv（表头模板）":
+            - /url: /fr036/templates/22_计划供给引用.csv
+        - listitem:
+          - link "09_库存批次.csv（表头模板）":
+            - /url: /fr036/templates/09_库存批次.csv
+        - listitem:
+          - link "17_生产订单与交期.csv（表头模板）":
+            - /url: /fr036/templates/17_生产订单与交期.csv
+        - listitem:
+          - link "09_BOM与包装用量.csv（表头模板）":
+            - /url: /fr036/templates/09_BOM与包装用量.csv
+        - listitem:
+          - link "10_工艺路线配置.csv（表头模板）":
+            - /url: /fr036/templates/10_工艺路线配置.csv
+        - listitem:
+          - link "11_工序工时配置.csv（表头模板）":
+            - /url: /fr036/templates/11_工序工时配置.csv
+        - listitem:
+          - link "03_设备资源配置.csv（表头模板）":
+            - /url: /fr036/templates/03_设备资源配置.csv
+        - listitem:
+          - link "18_工装配置.csv（表头模板）":
+            - /url: /fr036/templates/18_工装配置.csv
+        - listitem:
+          - link "24_订单模拟交付条件.csv（表头模板）":
+            - /url: /fr036/templates/24_订单模拟交付条件.csv
+        - listitem:
+          - link "23_资源占用声明.csv（表头模板）":
+            - /url: /fr036/templates/23_资源占用声明.csv
+        - listitem:
+          - link "15_空间与组批规则配置.csv（表头模板）":
+            - /url: /fr036/templates/15_空间与组批规则配置.csv
+        - listitem:
+          - link "02_工厂工作日历.csv（表头模板）":
+            - /url: /fr036/templates/02_工厂工作日历.csv
+        - listitem:
+          - link "04_设备停机与例外日历.csv（表头模板）":
+            - /url: /fr036/templates/04_设备停机与例外日历.csv
+        - listitem:
+          - link "12_工序资源与物料依赖.csv（表头模板）":
+            - /url: /fr036/templates/12_工序资源与物料依赖.csv
+        - listitem:
+          - link "19_人员组与可用时间.csv（表头模板）":
+            - /url: /fr036/templates/19_人员组与可用时间.csv
+        - listitem:
+          - link "16_排程规则配置.csv（表头模板）":
+            - /url: /fr036/templates/16_排程规则配置.csv
+      - paragraph:
+        - link "主应用订单示例":
+          - /url: /fr036/examples/orders.csv
+        - text: ·
+        - link "预计到料示例":
+          - /url: /fr036/examples/supplies.csv
+        - text: ·
+        - link "重复订单反例":
+          - /url: /fr036/examples/duplicate-orders.csv
+        - text: ·
+        - link "错单位反例":
+          - /url: /fr036/examples/bad-unit-orders.csv
+        - text: ·
+        - link "错引用反例":
+          - /url: /fr036/examples/bad-reference-supplies.csv
+        - text: ·
+        - link "错日期反例":
+          - /url: /fr036/examples/bad-date-supplies.csv
+      - list:
+        - listitem:
+          - link "订单计划导出示例（不可回导）":
+            - /url: /fr036/exports/orders.csv
+        - listitem:
+          - link "任务计划导出示例（不可回导）":
+            - /url: /fr036/exports/tasks.csv
+        - listitem:
+          - link "资源占用导出示例（不可回导）":
+            - /url: /fr036/exports/occupation.csv
+        - listitem:
+          - link "物料需求导出示例（不可回导）":
+            - /url: /fr036/exports/materials.csv
+        - listitem:
+          - link "未排原因导出示例（不可回导）":
+            - /url: /fr036/exports/unplanned.csv
+        - listitem:
+          - link "方案差异导出示例（不可回导）":
+            - /url: /fr036/exports/differences.csv
+      - list:
+        - listitem:
+          - link "独立原型六表：17_生产订单与交期.csv":
+            - /url: /fr036/prototype-six/17_生产订单与交期.csv
+        - listitem:
+          - link "独立原型六表：10_工艺路线配置.csv":
+            - /url: /fr036/prototype-six/10_工艺路线配置.csv
+        - listitem:
+          - link "独立原型六表：11_工序工时配置.csv":
+            - /url: /fr036/prototype-six/11_工序工时配置.csv
+        - listitem:
+          - link "独立原型六表：03_设备资源配置.csv":
+            - /url: /fr036/prototype-six/03_设备资源配置.csv
+        - listitem:
+          - link "独立原型六表：12_工序资源与物料依赖.csv":
+            - /url: /fr036/prototype-six/12_工序资源与物料依赖.csv
+        - listitem:
+          - link "独立原型六表：16_排程规则配置.csv":
+            - /url: /fr036/prototype-six/16_排程规则配置.csv
+      - paragraph: FR013 六表预览是独立原型，旧订单字段为“合格需求kg”，不可直接用于主应用。完整案例及六类导出文件链接见中文说明和示例清单。独立工厂表、箱换算、全规则业务验收和真实身份验收仍有限制。
+  - region "模拟执行事实与历史":
+    - heading "模拟执行事实 / R5" [level=2]
+    - paragraph: 所有记录均为离线模拟输入。工序产出不代表质量合格或真实车间执行，不跨工序累加。已耗材料从扣耗前账面中一次扣除；重算只分配余料，不写库存、不入完成量。
+    - heading "异常事件与保护时段" [level=3]
+    - paragraph: 事件表支持插单、设备故障、人员缺勤、到料延期及物料状态变化。先在同一批输入更新全部在制任务的事件时点累计事实，再接纳事件，最后从当前版本重算。保护策略“禁止未开始任务开工”：保护区间内只保留已有事实/未受影响的显式剩余工作，未开始任务最早在保护截止开工；不承诺冻结旧方案的未执行任务位置。恢复、撤销、转机与自动判合格不支持。
+    - paragraph: 最近事件分钟 0 · 未开始任务保护截止 0
+    - text: "[]"
+    - paragraph: 事实 1 条 · 累计耗料 1 条。查询页可按订单、状态、分钟查询两表；数据页可导入模板/示例及编辑。开始/完成原记录、历次修改及操作原因保留。
+    - table:
+      - rowgroup:
+        - row "模拟事实 订单 / 工序 状态 工序余量 累计报废 补做口径 剩余分钟 当前设备 暂停原因":
+          - cell "模拟事实"
+          - cell "订单 / 工序"
+          - cell "状态"
+          - cell "工序余量"
+          - cell "累计报废"
+          - cell "补做口径"
+          - cell "剩余分钟"
+          - cell "当前设备"
+          - cell "暂停原因"
+      - rowgroup:
+        - row "F-A-MIX A / MIX 部分完成 50 kg 0 kg 待核对 15 MIX01 —":
+          - cell "F-A-MIX"
+          - cell "A / MIX"
+          - cell "部分完成"
+          - cell "50 kg"
+          - cell "0 kg"
+          - cell "待核对"
+          - cell "15"
+          - cell "MIX01"
+          - cell "—"
+    - heading "未完成任务与订单影响" [level=3]
+    - paragraph: 更新后从当前版本重算，结果中的投影任务、阻断原因与事实版本一同保存。下表展示当前累计口径；工序完成量不跨工序相加，报废不抵扣订单需求。
+    - article:
+      - heading "订单 A" [level=4]
+      - paragraph: 订单待合格数量 100 kg · 未完成工序 MIX、FILL · 显式剩余工时可重算，非交付承诺
+      - table:
+        - rowgroup:
+          - row "工序 / 前序 状态 可用产出 报废 待完成 剩余分钟":
+            - cell "工序 / 前序"
+            - cell "状态"
+            - cell "可用产出"
+            - cell "报废"
+            - cell "待完成"
+            - cell "剩余分钟"
+        - rowgroup:
+          - row "MIX / — 部分完成 50 0 50 15":
+            - cell "MIX / —"
+            - cell "部分完成"
+            - cell "50"
+            - cell "0"
+            - cell "50"
+            - cell "15"
+          - row "FILL / MIX 未开始 0 0 100 未提供":
+            - cell "FILL / MIX"
+            - cell "未开始"
+            - cell "0"
+            - cell "0"
+            - cell "100"
+            - cell "未提供"
+    - group: 原始汇总耗料显式映射（0）
+    - group: 模拟耗料与账面守恒（扣耗前账面、独立占用）
+    - group: 原记录与修改历史（3）
+    - paragraph: FR031：累计报废与可用产出分开；正报废量未指定补做口径时阻断。选择“按本工序BOM补做”仅按本工序定额增加模拟补料，不推断其他工序返工，剩余工时须显式填写。状态倒退/超量提示核对；退料/转机、暂停恢复与拆合批/联合占用/质量协调未定时阻断。旧方案恢复仍受保护；试算保留/放弃不修改当前事实。
+  - button "模拟异常事件（先更新时点事实）0"
+  - button "模拟进度来源对账（显式映射）0"
+  - button "模拟任务执行事实（累计）1"
+  - button "模拟累计耗料（账面扣前口径）1"
+  - button "产品与包装规格2"
+  - button "物料主数据5"
+  - button "预计到料0"
+  - button "延期模拟记录0"
+  - button "计划供给引用0"
+  - button "库存批次1"
+  - button "订单与交期1"
+  - button "BOM 与包装用量1"
+  - button "工艺路线4"
+  - button "工序工时4"
+  - button "设备资源6"
+  - button "工装配置（不自动参与排程）0"
+  - button "订单模拟交付条件0"
+  - button "显式逐生产批占用声明0"
+  - button "空间与组批配置（存储不代表检查）0"
+  - button "工厂工作日历1"
+  - button "设备停机例外0"
+  - button "工序资源依赖2"
+  - button "人员组与可用时间0"
+  - button "排程规则13"
+  - text: 17_生产订单与交期.csv 字段：订单编号、产品编号、产线编号、合格需求、数量单位、要求可交付分钟、优先顺序、是否允许拆分、需求类型、订单状态、已完成合格数量 可追溯：FR-013/014/015/016 · DT-09/11/13 FR-009 · 订单与需求 需求类型“正式订单”参与本次排程；“预测”独立保存且不混入正式排程。取消订单保留已有排程快照，之后不再生成新任务。MATERIAL 使用已声明的数量换算；CAPACITY/PROGRAM 同时启用时仅支持 kg、BOM总投入和均分，遵守“是否允许拆分”。固定程序连续执行；其他装载节点和跨产品兼容须先决定配置。
+  - table:
+    - rowgroup:
+      - row "订单 变更字段 原值 新值 记录时间":
+        - cell "订单"
+        - cell "变更字段"
+        - cell "原值"
+        - cell "新值"
+        - cell "记录时间"
+    - rowgroup:
+      - row "A 合格需求 240 480 2026-10-29T00:19:37.831Z":
+        - cell "A"
+        - cell "合格需求"
+        - cell "240"
+        - cell "480"
+        - cell "2026-10-29T00:19:37.831Z"
+      - row "A 合格需求 480 240 2026-10-29T00:19:37.857Z":
+        - cell "A"
+        - cell "合格需求"
+        - cell "480"
+        - cell "240"
+        - cell "2026-10-29T00:19:37.857Z"
+      - row "A 合格需求 240 100 2026-10-29T00:19:37.889Z":
+        - cell "A"
+        - cell "合格需求"
+        - cell "240"
+        - cell "100"
+        - cell "2026-10-29T00:19:37.889Z"
+  - region "模拟记录编辑":
+    - paragraph: 可跨类别暂存修改，全部草稿一起保存；新增工艺路线和工时等关联数据须一起保存。离开数据页将丢弃草稿。修改先保存在本页草稿，点击“保存修改”后由服务端检查；取消不会写入。复制后请填写新的唯一编号。删除仅影响新输入版本，已保存方案保留原输入。质量状态均为模拟状态。
+    - button "新增一行"
+    - button "复制选中" [disabled]
+    - button "删除选中" [disabled]
+    - button "保存修改" [disabled]
+    - button "取消修改" [disabled]
+    - table:
+      - rowgroup:
+        - row "选 订单编号 产品编号 产线编号 合格需求 数量单位 要求可交付分钟 优先顺序 是否允许拆分 需求类型 订单状态 已完成合格数量":
+          - cell "选"
+          - cell "订单编号"
+          - cell "产品编号"
+          - cell "产线编号"
+          - cell "合格需求"
+          - cell "数量单位"
+          - cell "要求可交付分钟"
+          - cell "优先顺序"
+          - cell "是否允许拆分"
+          - cell "需求类型"
+          - cell "订单状态"
+          - cell "已完成合格数量"
+      - rowgroup:
+        - row "选择第1行 A HC40 L01 100 kg 480 1 否 正式订单 有效":
+          - cell "选择第1行":
+            - checkbox "选择第1行"
+          - cell "A":
+            - textbox "订单与交期 1 订单编号": A
+          - cell "HC40":
+            - textbox "订单与交期 1 产品编号": HC40
+          - cell "L01":
+            - textbox "订单与交期 1 产线编号": L01
+          - cell "100":
+            - textbox "订单与交期 1 合格需求": "100"
+          - cell "kg":
+            - textbox "订单与交期 1 数量单位": kg
+          - cell "480":
+            - textbox "订单与交期 1 要求可交付分钟": "480"
+          - cell "1":
+            - textbox "订单与交期 1 优先顺序": "1"
+          - cell "否":
+            - textbox "订单与交期 1 是否允许拆分": 否
+          - cell "正式订单":
+            - textbox "订单与交期 1 需求类型": 正式订单
+          - cell "有效":
+            - textbox "订单与交期 1 订单状态": 有效
+          - cell:
+            - textbox "订单与交期 1 已完成合格数量"
+  - text: 数据质量检查 · FR-004 校验产品路线工序编号/名称、重复工序、前序引用与循环，逐工序固定分钟工时，以及资源依赖的订单、工序、类型和资源编号。路线按可配置前序关系排序，CSV 行顺序不定义工艺顺序。设备依赖进入当前排程；FR-007 人员技能依赖按人数、技能、班次、参与阶段和可用窗口核验；模具、工具及空间依赖须在表23明确声明并启用对应规则后才检查容量与完整释放区间；投料依赖仍只保存标识。 APS-Dev 原型 · R2.1 阶段预览 · 未发布上线 · v0.3 UAT-02 虚构数据

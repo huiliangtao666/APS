@@ -1,0 +1,305 @@
+Downloading Chromium Headless Shell 141.0.7390.37 (playwright build v1194) from https://cdn.playwright.dev/dbazure/download/playwright/builds/chromium/1194/chromium-headless-shell-linux-arm64.zip
+|                                                                                |   0% of 106.1 MiB
+|■■■■■■■■                                                                        |  10% of 106.1 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 106.1 MiB
+Chromium Headless Shell 141.0.7390.37 (playwright build v1194) downloaded to /root/.cache/ms-playwright/chromium_headless_shell-1194
+PASS canonical
+1..88
+# tests 124
+# suites 7
+# pass 124
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6701.398377
+PASS business
+1..164
+# tests 164
+# suites 0
+# pass 164
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2494.779257
+PASS query
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 60.309559
+PASS csv
+CSV validation regression checks passed: valid six-table batch + CSV-DEF-01..04.
+PASS build
+✓ built in 1.24s
+
+  dist/server.mjs  376.6kb
+
+⚡ Done in 14ms
+
+  dist/calculation-worker.mjs  209.8kb
+
+⚡ Done in 7ms
+PASS worker
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 368.394392
+PASS bundle-run-panel
+
+  .qa-run-panel.cjs  21.8kb
+
+⚡ Done in 2ms
+PASS run-panel
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 52.054696
+PASS bundle-editor-interaction
+
+  .qa-editor-interaction.cjs  327.1kb
+
+⚡ Done in 10ms
+PASS editor-interaction
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 129.11602
+PASS bundle-resource-panel
+
+  .qa-resource-panel.cjs  6.2kb
+
+⚡ Done in 2ms
+PASS resource-panel
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 49.919919
+PASS bundle-delivery-panel
+
+  .qa-delivery-panel.cjs  225.2kb
+
+⚡ Done in 7ms
+PASS delivery-panel
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 76.242537
+PASS bundle-result-panel
+
+  .qa-result-panel.cjs  51.0kb
+
+⚡ Done in 3ms
+PASS result-panel
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 51.112495
+PASS bundle-trial-panel
+
+  .qa-trial-panel.cjs  60.5kb
+
+⚡ Done in 3ms
+PASS trial-panel
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 86.92434
+PASS bundle-confirmation-panel
+
+  .qa-confirmation-panel.cjs  16.9kb
+
+⚡ Done in 2ms
+PASS confirmation-panel
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 67.32422
+PASS bundle-execution-panel
+
+  .qa-execution-panel.cjs  59.1kb
+
+⚡ Done in 5ms
+PASS execution-panel
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 70.617532
+PASS bundle-timeline-panel
+
+  .qa-timeline-panel.cjs  59.2kb
+
+⚡ Done in 3ms
+PASS timeline-panel
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 153.662232
+PASS bundle-task-linkage-panel
+
+  .qa-task-linkage-panel.cjs  21.1kb
+
+⚡ Done in 3ms
+PASS task-linkage-panel
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 48.662594
+PASS bundle-load-panel
+
+  .qa-load-panel.cjs  43.4kb
+
+⚡ Done in 5ms
+PASS load-panel
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 61.296927
+PASS run-history
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1200.907499
+PASS scoped-report
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 145.310954
+vite v5.4.21 building for production...
+transforming...
+✓ 74 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../tmp/fr033-real-app-LjeyhT/dist/index.html                   0.71 kB │ gzip:   0.50 kB
+../../../tmp/fr033-real-app-LjeyhT/dist/assets/index-CPKwIIVN.css   20.25 kB │ gzip:   5.50 kB
+../../../tmp/fr033-real-app-LjeyhT/dist/assets/index-D5G-q7Hn.js   315.24 kB │ gzip: 116.29 kB
+✓ built in 1.23s
+{"action":"export","decision":"deny","requestId":"fr033-disposable","actor":"fr033-test#synthetic-planner"}
+{"action":"export","decision":"deny","requestId":"fr033-disposable","actor":"fr033-test#synthetic-planner"}
+{"at":"2026-10-29T00:18:56.396Z","action":"deny","requestId":"fr033-disposable","actor":"user","reason":"membership_required"}
+{"at":"2026-10-29T00:18:56.399Z","action":"deny","requestId":"fr033-disposable","actor":"user","reason":"membership_required"}
+FR035_BROWSER_PASS 13 groups / 8 downloadable byte comparisons
+{"action":"edit","decision":"deny","requestId":"independent-FR034","actor":"test#query"}
+FR035_CONFIRMED_HISTORY_PASS 5 groups; includes preserved original19 responses plus report requests
+vite v5.4.21 building for production...
+transforming...
+✓ 74 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../tmp/fr033-real-app-5HM4SE/dist/index.html                   0.71 kB │ gzip:   0.50 kB
+../../../tmp/fr033-real-app-5HM4SE/dist/assets/index-CPKwIIVN.css   20.25 kB │ gzip:   5.50 kB
+../../../tmp/fr033-real-app-5HM4SE/dist/assets/index-D5G-q7Hn.js   315.24 kB │ gzip: 116.29 kB
+✓ built in 1.25s
+FR038_BROWSER_PASS 6 groups
+vite v5.4.21 building for production...
+transforming...
+✓ 74 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../tmp/fr033-real-app-DCSYvf/dist/index.html                   0.71 kB │ gzip:   0.50 kB
+../../../tmp/fr033-real-app-DCSYvf/dist/assets/index-CPKwIIVN.css   20.25 kB │ gzip:   5.50 kB
+../../../tmp/fr033-real-app-DCSYvf/dist/assets/index-D5G-q7Hn.js   315.24 kB │ gzip: 116.29 kB
+✓ built in 1.16s
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: {"error":"execution_reconciliation_required","issues":[{"code":"EXECUTION_RECONCILIATION_REQUIRED","table":"executionFacts","file":"25_模拟任务执行事实.csv","row":0,"field":"原始事实","message":"已有执行事实的订单需求/状态/合格量不可自动重基；请核对"}]}
+
+409 !== 400
+
+    at post (file:///workspace/apps/aps-fr032/qa/fr036-browser.mjs:14:403)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async file:///workspace/apps/aps-fr032/qa/fr036-browser.mjs:16:70 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 409,
+  expected: 400,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.23.2

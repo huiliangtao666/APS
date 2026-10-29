@@ -1,3 +1,4 @@
+import {ExchangeGuide} from './ExchangeGuide';
 import {ReportPanel} from './ReportPanel';
 import {LoadPanel} from './LoadPanel';
 import {TaskLinkage} from './TaskLinkage';
@@ -144,6 +145,7 @@ export default function App() {
       </>}
       {view==='query'&&<DataQueries key={inputVersion+'-'+plans.map(p=>p.id).join(',')} data={data} plans={plans} revision={inputVersion} initialTable={queryInputTable} initialRow={queryInputTable?queryInputRow:undefined} initialPlan={activePlan?.id} initialTask={selected.find(id=>activePlan?.tasks.some(t=>t.id===id))} canExport={!!session?.canExport} reason={reason} onExport={(query)=>download({query},'模拟数据查询.csv')} onRestore={session?.canWrite?(tables)=>perform(async()=>{await api('/inputs',{tables,revision:inputVersion,operation:'restore'});await refresh();setMessage('已恢复为新输入版本；历史方案保持原值。');}):undefined} onTask={(planId,taskId)=>{const plan=plans.find(p=>p.id===planId);if(plan){setActivePlan(plan);setIssues(plan.findings);setVerification(plan.verification||null);setSelected([taskId]);setView('schedule');}}}/>}
       {view==='data'&&<section className="panel data-panel"><div className="panel-head"><div><h2>主数据、单位与排程输入</h2><p>FR-002 新增产品/包装规格与物料主数据；同时维护 R1/R2.1 排程表。CSV 导入只替换当前表；预计供给使用带时区 ISO 时间，其余排程时间字段使用分钟，0 = 2026-11-02 08:00 Asia/Shanghai。</p></div><div className="actions"><label className="upload">导入 CSV<input type="file" disabled={!session?.canWrite||busy||!reason.trim()} accept=".csv,text/csv" onChange={e=>importCsv(e.target.files?.[0])}/></label><button onClick={downloadCsv} disabled={!session?.canExport||busy||!reason.trim()}>导出当前表</button></div></div>
+        <ExchangeGuide current={currentDef}/>
         <ExecutionPanel data={data} operations={operations} historical={activePlan?.conditions as any}/>
         <div className="data-tabs">{defs.map(d=><button className={d.key===tableKey?'chosen':''} key={d.key} onClick={()=>{setTableKey(d.key);setSelected([]);}}>{d.label}<small>{data[d.key]?.length||0}</small></button>)}</div>
         {tableKey==='rules'&&<RulePanel data={data} history={operations}/>}
