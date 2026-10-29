@@ -1,0 +1,34 @@
+{
+  "event_key": "dlv_5962eb4d-0906-4760-8426-2b8cb124f919:r1",
+  "product_sha": "18c2f59761c9db69554f33a2870b68e15d092320",
+  "design_document_sha": "38f48f680b6368eb2f52222a8d231dfc77af2980",
+  "files": {
+    "FR014015-18c2f597-ACCEPTANCE-R1-FR014-REPORT.txt": {
+      "sha256": "0d0ad78a16ad849a550915498bc0d5a1af896a8e33feb02957ce7f19c40d8cf4",
+      "bytes": 8383
+    },
+    "FR014015-18c2f597-ACCEPTANCE-R1-FR015-REPORT.txt": {
+      "sha256": "e7aa5aea265d757b49f5e17a15faa7afe8a2a90c47f2892d405ba31b1d0b0784",
+      "bytes": 10594
+    },
+    "FR014015-18c2f597-ACCEPTANCE-R1-ASSERTIONS.csv": {
+      "sha256": "645bb83e503420d2bee7876c7920da8e08f72bb77f25a025af68518667bdb7ee",
+      "bytes": 78122
+    },
+    "FR014015-18c2f597-ACCEPTANCE-R1-CATEGORY-MATRIX.json": {
+      "sha256": "992ec05d5dc0f2b9311904b4e05e145f8d056dce0bead16b6dc5089ff3e1805d",
+      "bytes": 10510
+    },
+    "FR014015-18c2f597-ACCEPTANCE-R1-EVIDENCE.zip": {
+      "sha256": "ed01cd0a72b3e7f650246f7c9d2c48d3cb88fb30ea20d6dbb270212f41ee5c31",
+      "bytes": 1953511
+    }
+  },
+  "old_artifact_hashes": {
+    "FR-014-015-MAIN-INDEPENDENT-REPORT.txt": "3bc043d8ee19de383fd1bcd0634a75a53eb99bbb1ec9e906ec6e9cc576c338ef",
+    "FR-014-015-OPERATION-MATRIX-INDEPENDENT.json": "4ed555883a9f468192857fe280b8ff74c69799758c32c0f99c710a37e9df2ddd",
+    "FR-014-015-MAIN-INDEPENDENT-EVIDENCE.zip": "5d331febeefe4bd3a0e7b9aa2c1b1c77a6b6038ec2bcf14ceee711c4560cbd8b",
+    "FR-014-015-ROUND1-REGRESSION.md": "32c5360629b29b41f2f35e4c47b94b049bab79c3bd21f51a5659e967e8c00040",
+    "FR-014-015-ROUND1-EVIDENCE.zip": "d60e2454072d2ec5c2afbfd2868f82da2335b6176f203dad8410fa49bb9ccaf5"
+  }
+}

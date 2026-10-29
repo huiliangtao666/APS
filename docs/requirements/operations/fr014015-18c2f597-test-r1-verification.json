@@ -1,0 +1,29 @@
+{
+  "external_hashes": {
+    "FR014-REPORT.txt": "0d0ad78a16ad849a550915498bc0d5a1af896a8e33feb02957ce7f19c40d8cf4",
+    "FR015-REPORT.txt": "e7aa5aea265d757b49f5e17a15faa7afe8a2a90c47f2892d405ba31b1d0b0784",
+    "ASSERTIONS.csv": "645bb83e503420d2bee7876c7920da8e08f72bb77f25a025af68518667bdb7ee",
+    "CATEGORY-MATRIX.json": "992ec05d5dc0f2b9311904b4e05e145f8d056dce0bead16b6dc5089ff3e1805d",
+    "EVIDENCE.zip": "ed01cd0a72b3e7f650246f7c9d2c48d3cb88fb30ea20d6dbb270212f41ee5c31"
+  },
+  "zip_crc": "PASS",
+  "zip_entries": 125,
+  "assertion_count": 160,
+  "source_sha": "18c2f59761c9db69554f33a2870b68e15d092320",
+  "internal_hashes_verified": 120,
+  "github_tree_source_blobs_verified": 126,
+  "clean_tracked_tree": true,
+  "old_is_ancestor": true,
+  "counts": {
+    "FR014": {
+      "PASS": 49,
+      "FAIL": 1,
+      "PARTIAL": 1
+    },
+    "FR015": {
+      "PASS": 104,
+      "NOT_EXECUTED": 4,
+      "PARTIAL": 1
+    }
+  }
+}

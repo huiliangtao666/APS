@@ -1,0 +1,22 @@
+{
+  "source_event_key": "dlv_5962eb4d-0906-4760-8426-2b8cb124f919:r1",
+  "product_sha": "18c2f59761c9db69554f33a2870b68e15d092320",
+  "dev_repair": {
+    "delivery": "dlv_c0e89812-c8ea-4b7a-91e8-7a100beae70a",
+    "dispatch_event_key": "fr014-skill-rel01:18c2f597:repair-r1",
+    "scope": "FR014-SKILL-REL01首次最小修复",
+    "completed_repair_round": 0,
+    "completed_retest_round": 0,
+    "status": "queued/waiting; SENT only"
+  },
+  "test_supplement": {
+    "delivery": "dlv_03a2516f-1eb4-432a-95e9-2bb025a44274",
+    "dispatch_event_key": "fr015-fresh-execution:18c2f597:finite-supplement-r1",
+    "scope": "四类已有执行/来源/事件React合法新增复制有限补证",
+    "repair_round": "N/A",
+    "status": "queued/waiting; SENT only"
+  },
+  "factory_line": "原01责任映射已记录；仍PARTIAL；01实现未派",
+  "issue_comment": "https://github.com/huiliangtao666/APS/issues/12#issuecomment-6489686458",
+  "dispatched_at": "2026-10-29T14:32:50+08:00"
+}
