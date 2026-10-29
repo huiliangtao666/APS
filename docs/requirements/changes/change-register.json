@@ -47,13 +47,13 @@
         "UAT-08"
       ],
       "before": "FR006/BR06已有数量、占用起止及提前/后延释放要求；FR007/BR07已有人员组、人数、技能、班次、参与阶段及未经配置不得替代要求。DEC02/03具体业务选择仍待决。原有要求不重复计为新增。",
-      "approved_delta": "将DEC02/03涉及的业务选择统一明确为前台可维护、可保存并实际作用于新试算的参数：工装占用/归还策略，人员参与阶段/窗口、人数与释放，显式技能替代关系及禁止替代；保留基线既有权限、历史输入/方案保护和结果可追溯要求。",
-      "design_detail_status": "Issue3参数契约为设计细化；具体枚举、默认值、迁移策略和模型限制须评审留痕，不将Design建议自动视为业务批准",
+      "approved_delta": "将DEC02/03涉及的业务选择统一明确为前台可维护、可保存并实际作用于新试算的参数：工装占用/归还策略，人员参与阶段/窗口、人数与释放，显式技能替代关系及禁止替代；保留基线既有权限、历史输入/方案保护和结果可追溯要求。\n用户补充：相关资源可共用；是否共用、交接容量和占用方式均应为可维护配置，实际共享仍受实体身份、容量、时间窗口与历史保护约束。",
+      "design_detail_status": "用户批准共享及交接参数化方向；默认值、具体配置枚举与跨组同物理池/N06契约待细化",
       "reason": "用户要求在前台调整业务策略，避免按单一业务选择固化逻辑，并明确作为基线增加能力管理",
       "impact": "主数据/规则配置、前台表单、服务端校验持久化、运行输入版本、Worker及独立复核、资源人数容量与历史兼容；不包含人员考勤或恢复其他新backlog",
       "plan_impact": "原R2.2/R2.3/R2.4及相关联合资源验收；未另承诺完成日期",
       "effort": "未正式登记工时/成本评估，不推定已批准预算",
-      "acceptance_delta": "实际前台修改→保存→刷新读回→新试算行为变化；占用/释放边界、有向替代与共享人数容量正确；非法/越权原子拒绝、历史方案不变。原AC继续有效，新增检查为CR专项验收，不篡改基线AC条文。",
+      "acceptance_delta": "实际前台修改→保存→刷新读回→新试算行为变化；占用/释放边界、有向替代与共享人数容量正确；非法/越权原子拒绝、历史方案不变。原AC继续有效，新增检查为CR专项验收，不篡改基线AC条文。\n补充：验证共用开/关、交接容量/占用参数调整后新试算结果变化，非法组合拒绝且原确认/执行事实不变。",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/3",
       "related_issue_urls": [
         "https://github.com/huiliangtao666/APS/issues/13",
@@ -109,6 +109,12 @@
           "date": "2026-10-29",
           "event_key": "dlv_93ded349-85c5-4020-863c-79c10b6720b5:r1",
           "event": "Test P08/P09 fixed e0be9b6d 15/15 scoped independent PASS; FR007/022 and full CR NOT_READY; old SHA PASS preserved; zero repair round"
+        },
+        {
+          "date": "2026-10-29",
+          "event_key": "USER-DECISIONS-20261029-R1:dec0203",
+          "event": "用户确认可共用，是否共用、交接容量与占用均可配置；既有P08/P09有限PASS不改签，FR007/022与完整CR未完成",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6500755581"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
@@ -340,7 +346,7 @@
       ],
       "uat_owner": "QA",
       "before": "基线已有BOM/收率/包装、质量状态/预计供给、路线/工时/容量/等待空间及规则配置。DEC04/05/06的详细口径及验证参数待明确；原有能力不重复计为新增。",
-      "approved_delta": "深入补充DEC04数量基准/收率损失与取整、DEC05质量映射/时点/预计供给、DEC06工时/容量/程序/等待空间的参数化需求设计；提供可追溯基线及派生mock和专项验收依据。",
+      "approved_delta": "深入补充DEC04数量基准/收率损失与取整、DEC05质量映射/时点/预计供给、DEC06工时/容量/程序/等待空间的参数化需求设计；提供可追溯基线及派生mock和专项验收依据。\n用户补充：BOM/质量可用性/工艺相关规则与参数均设计为可配置，不硬编码mock数值；可配置仍须定义合法组合、范围、单位、来源、版本及冲突拒绝。",
       "requirement_deltas": {
         "FR-002": "新增/细化单位维度、物理计量粒度、显示精度及版本化产品换算；业务量不从显示值回算。",
         "FR-003": "明确BOM投入/产出基准、总/分阶段/已含收率互斥路径、损失只计一次、投料节点及包装/尾包可维护口径。",
@@ -364,7 +370,7 @@
         "BR-14": "原料投料有效期与成品交付余保分别维护；条件供给和后续等待的假设可追溯，不含真实运输。",
         "BR-18": "计算精确量、物理粒度、采购建议取整和显示舍入分离；保持单位/时间及分摊守恒。"
       },
-      "design_detail_status": "具体枚举/公式和样例为候选设计契约，待独立审查；仿真参数不是现场批准值。用户已授权设计深化，无须重复批准同一方向。",
+      "design_detail_status": "用户确认全部相关规则/参数可配置；F01-F04具体合法组合及追踪契约仍待细化；本CR仅设计/mock，应用实现未派发",
       "reason": "用户要求将深入内容纳入受控需求变更，尽量可配置，不以单一业务假设写死；基于原验证数据准备mock。",
       "impact": "11项FR主影响、10条BR；BOM/单位/质量与库存/工艺及规则配置，前台校验、输入冻结、数量资源检查与导出受支持性影响。",
       "plan_impact": "原R3/R4相关功能与验收；先独立设计审查，应用实现尚未安排，不恢复其他未开始backlog。",
@@ -401,6 +407,12 @@
         {
           "date": "2026-10-29",
           "event": "独立设计/mock审查已排队 dlv_ca267537-fa49-42fb-bc46-22e19b565ab5；前CR修复独立复测优先"
+        },
+        {
+          "date": "2026-10-29",
+          "event_key": "USER-DECISIONS-20261029-R1:dec040506",
+          "event": "用户确认DEC04-06规则/参数均可配置；F01-F04仍需可执行契约；维持仅设计/mock，不启动产品实现",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/25#issuecomment-6500756125"
         }
       ],
       "design_commit": "4db95a4c4bfb4ec2fe9178b6dc787e69630c9005",
@@ -428,6 +440,114 @@
         }
       ],
       "test_report_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/changes/CR-DEC04-05-06-20261029/test-review-20261029.md"
+    },
+    {
+      "id": "CR-FR013-VALIDATION-20261029",
+      "title": "FR013袋支/收率及字段可配置校验",
+      "classification": "用户新增业务验收边界；非已确认产品缺陷",
+      "baseline_id": "APS-BL-001",
+      "from_version": "v0.3",
+      "target_version": "v0.3+CR-FR013-VALIDATION-20261029",
+      "requested_by": "项目用户（本会话）",
+      "requested_on": "2026-10-29",
+      "request_quote": "每袋支数不能为小数，总收率不超过100%；总收率、物料单位/类别可配置；如果不能从唯一需求确定，则也可配置修改。",
+      "approval_status": "已批准具体校验与可配置方向；具体其他业务默认值未批准",
+      "approved_by": "项目用户（会话授权；未另登记实名签批）",
+      "approved_on": "2026-10-29（未补造精确时刻）",
+      "effective": true,
+      "effective_scope": "当前FR013受影响需求增量；不等于已实现或UAT通过",
+      "implementation_status": "用户业务决定已登记；应用实现与独立Test尚未交付",
+      "primary_requirements": [
+        "FR-013"
+      ],
+      "related_rules": [],
+      "decisions": [],
+      "acceptance_ids": [],
+      "uat_ids": [],
+      "before": "v0.3未明确本项具体数值/可配置边界",
+      "approved_delta": "每袋支数只允许整数；总收率取值须在0%至100%有效范围内且值可由授权配置维护；物料单位/类别及唯一需求未确定的业务值设计为显式可配置项，不暗设默认，配置须有类型、单位、范围、版本、权限及新运行生效边界。",
+      "design_detail_status": "配置字段枚举与旧CSV兼容迁移由实现前核定；不得静默将未知值设为0",
+      "reason": "用户明确回复待决业务问题",
+      "impact": "FR013 CSV字段校验、主数据配置、历史兼容及独立验收",
+      "plan_impact": "原Issue4/FR013优先于新Backlog",
+      "effort": "未登记工时/成本评估",
+      "acceptance_delta": "CSV模板/预览/导入按批准配置校验：小数袋支拒绝，总收率>100%拒绝；合法配置保存刷新后生效，非法/越权整批零写入；保留旧确认/历史。",
+      "issue_url": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006",
+      "related_issue_urls": [],
+      "acceptance_result": "未进行本CR产品验收；旧原范围PASS保留原SHA",
+      "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event_key": "USER-DECISIONS-20261029-R1:fr-013",
+          "event": "用户确认本CR增量，原卡仍In progress/NOT_READY；待实现与独立验收"
+        }
+      ],
+      "dev_delivery": "",
+      "contract_review_delivery": "",
+      "product_test_delivery": "",
+      "code_sha": "",
+      "code_branch": "",
+      "dev_report": "",
+      "test_report": "",
+      "design_commit": "",
+      "repair_delivery": "",
+      "test_contract": ""
+    },
+    {
+      "id": "CR-FR038-PERF-20261029",
+      "title": "FR038排程时间暂定目标",
+      "classification": "用户新增业务验收边界；非已确认产品缺陷",
+      "baseline_id": "APS-BL-001",
+      "from_version": "v0.3",
+      "target_version": "v0.3+CR-FR038-PERF-20261029",
+      "requested_by": "项目用户（本会话）",
+      "requested_on": "2026-10-29",
+      "request_quote": "FR038，暂定30秒内可排程。",
+      "approval_status": "已批准暂定30秒目标；AC27规模/规则/环境仍待确认",
+      "approved_by": "项目用户（会话授权；未另登记实名签批）",
+      "approved_on": "2026-10-29（未补造精确时刻）",
+      "effective": true,
+      "effective_scope": "当前FR038性能目标暂定；须补齐测试负载与环境才可验收",
+      "implementation_status": "用户业务决定已登记；应用实现与独立Test尚未交付",
+      "primary_requirements": [
+        "FR-038"
+      ],
+      "related_rules": [],
+      "decisions": [],
+      "acceptance_ids": [
+        "AC-27"
+      ],
+      "uat_ids": [],
+      "before": "v0.3未明确本项具体数值/可配置边界",
+      "approved_delta": "在AC27事先约定的单线数据规模、设备、启用规则组合及测量环境下，暂定排程计算30秒内完成；规模与环境未约定前不能判性能PASS/FAIL。",
+      "design_detail_status": "单线订单、任务、设备数量及规则组合仍待业务确认；目标可能随正式场景调整",
+      "reason": "用户明确回复待决业务问题",
+      "impact": "计算耗时、运行状态与取消体验",
+      "plan_impact": "AC27测试规格待明确",
+      "effort": "未登记工时/成本评估",
+      "acceptance_delta": "固定输入/环境/版本后独立测量排程耗时≤30秒，并验证较长计算可取消、状态不假报及失败不破坏方案/源数据。",
+      "issue_url": "",
+      "related_issue_urls": [],
+      "acceptance_result": "未进行本CR产品验收；旧原范围PASS保留原SHA",
+      "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
+      "history": [
+        {
+          "date": "2026-10-29",
+          "event_key": "USER-DECISIONS-20261029-R1:fr-038",
+          "event": "用户确认本CR增量，原卡仍In progress/NOT_READY；待实现与独立验收"
+        }
+      ],
+      "dev_delivery": "",
+      "contract_review_delivery": "",
+      "product_test_delivery": "",
+      "code_sha": "",
+      "code_branch": "",
+      "dev_report": "",
+      "test_report": "",
+      "design_commit": "",
+      "repair_delivery": "",
+      "test_contract": ""
     }
   ]
 }
