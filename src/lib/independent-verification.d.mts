@@ -12,6 +12,7 @@ export type VerificationReport = {
     machineOverlap: VerificationCheck;
     precedence: VerificationCheck;
     resourcePolicies?: VerificationCheck;
+    batchAndWait?: VerificationCheck;
   };
 };
 export function independentlyVerifyPlan(

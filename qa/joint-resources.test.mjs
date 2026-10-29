@@ -28,7 +28,7 @@ test('FR022 cooling 600+600 cannot share1000kg; full delayed release shifts the 
  const d=jointFixture(seed);enableJoint(d,'STORAGE');d.batchResources=[{'资源编号':'COLD','资源类型':'共享冷却空间','容量':'1000','单位':'kg','允许程序':'','说明':'显式占用测试'}];
  d.resourceClaims.push(...d.orders.map(o=>claim('SPACE-'+o['订单编号'],o['订单编号'],'MIX','COLD','空间','600','kg','0','30')));
  const p=plan(d);assert.deepEqual(mix(p).map(t=>t.start),[0,60,120]);assert.equal(peak(p,'COLD'),600);
- assert.equal(p.jointResourceChecks.STORAGE,true);assert.ok(p.ruleSnapshot.checkScope.unchecked.some(s=>s.includes('最大等待')));
+ assert.equal(p.jointResourceChecks.STORAGE,true);assert.ok(p.ruleSnapshot.checkScope.checked.some(s=>s.includes('最大等待')));
 });
 test('FR022 space locations require integers and explicit same units; no kg inference from notes',()=>{
  const d=jointFixture(seed);enableJoint(d,'STORAGE');d.batchResources=[{'资源编号':'COLD','资源类型':'共享冷却空间','容量':'2','单位':'位置','允许程序':'','说明':'not executable'}];
@@ -61,10 +61,10 @@ test('FR022 missing policy/units/intervals or dependency release declaration blo
  }
  const d=jointFixture(seed);d.resourceClaims=[];d.rules.find(r=>r['规则编号']==='MOLD')['是否启用']='否';assert.equal(plan(d).tasks.length,6);assert.equal(plan(d).jointResourceChecks.MOLD,false);
 });
-test('FR022 minimal mode and future rules remain truthfully unchecked; max lag refuses activation',()=>{
+test('FR022 minimal mode and future rules remain truthfully unchecked; explicit max lag now supports draft gap checks',()=>{
  const d=jointFixture(seed);const p=plan(d,{mode:'minimal-r1'});assert.equal(mix(p).filter(t=>t.start===0).length,3);assert.ok(!p.resourceReservations.some(r=>r.type==='工装'));assert.ok(p.ruleSnapshot.checkScope.unchecked.includes('模具与工装'));assert.deepEqual(p.jointResourceChecks,{});
  d.rules.find(r=>r['规则编号']==='MOLD')['生效时间']='2027-01-01T00:00:00Z';assert.equal(jointFlags(d,at).MOLD,false);assert.equal(mix(plan(d)).filter(t=>t.start===0).length,3);
- d.rules.find(r=>r['规则编号']==='MAX_LAG')['是否启用']='是';assert.equal(plan(d).tasks.length,0);
+ d.rules.find(r=>r['规则编号']==='MAX_LAG')['是否启用']='是';assert.equal(plan(d).tasks.length,6);
 });
 test('FR022 resource shortage rolls back whole FR021 member cycle, material ledger and reservations',()=>{
  const d=batchFixture(seed);d.orders[0]['合格需求']='240';d.orders.push({...d.orders[0],'订单编号':'B','优先顺序':'2'});d.dependencies.push(...d.dependencies.filter(r=>r['订单编号']==='A').map(r=>({...r,'订单编号':'B'})));
@@ -86,7 +86,7 @@ test('FR022 declared dependency quantity/offset conflicts and dynamic release se
   const d=jointFixture(seed);d.dependencies.push({'订单编号':'A','工序编号':'MIX','资源类型':'模具','资源编号':'G40','需求数量':'1','提前占用分钟':'0','后延占用分钟':'0',[key]:value});
   const p=plan(d);assert.equal(p.tasks.length,0);assert.ok(p.findings.some(f=>f.message.includes('冲突')));
  }
- const d=jointFixture(seed);d.resourceClaims[0]['占用口径']='下游开始释放';assert.equal(plan(d).tasks.length,0);assert.match(plan(d).findings[0].message,/未支持/);
+ const d=jointFixture(seed);d.resourceClaims[0]['占用口径']='下游开始释放';assert.equal(plan(d).tasks.length,0);assert.match(plan(d).findings[0].message,/不支持下游事件动态释放/);
  d.resourceClaims[0]['占用口径']='显式逐生产批完整区间';d.dependencies[0]['后延占用分钟']='10';assert.equal(plan(d).tasks.length,0);assert.ok(plan(d).findings.some(f=>f.message.includes('机器阶段')));
 });
 test('FR022 explicit per-production-batch space quantity repeats without inferred scaling and retains each original member link',()=>{

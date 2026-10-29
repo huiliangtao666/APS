@@ -1,9 +1,18 @@
 import {quantityMath as Q, calculateMaterialDemand} from './material-allocation.mjs';
+import {claimsFor,previewResources,jointFlags} from './joint-resources.mjs';
 import {isOrderSchedulable} from './orders.mjs';
 export {batchParameters,activeBatchRule} from './batch-policy.mjs';
 // A conservative whole-route grouping: no product-name matching or implicit compatibility.
-// kg/BOM total input is explicitly selected; arbitrary operation load nodes remain blocked.
-export function prepareProductionBatches(source,orders,minute){
+// Device rows explicitly select total input or qualified output. Intermediate nodes stay blocked.
+export function prepareProductionBatches(source,orders,minute,at=new Date().toISOString()){
+ const flags=jointFlags(source,at);
+ // Evaluate the declared windows of a candidate furnace together, before committing any resource.
+ const fitsClaims=(members,route)=>route.every(op=>{
+  const duration=Number(source.times.find(t=>t['产品编号']===op['产品编号']&&t['工序编号']===op['工序编号'])?.['固定分钟']);
+  const claims=claimsFor(source,members,op['工序编号'],flags).filter(c=>c.type==='空间');
+  const anchor=Math.max(0,...claims.map(c=>c.before-(c.offsetStart||0)));
+  return previewResources(claims,anchor,anchor+duration,[]).ok;
+ });
  const records=[],groups=[],findings=[];let serial=0,productionCount=0;
  const issue=(order,message)=>findings.push({code:'UNPLANNED / BATCH_CONFIG',message:`订单 ${order['订单编号']}：${message}`,taskIds:[],context:{orderId:order['订单编号']}});
  for(const order of orders.filter(isOrderSchedulable)){
@@ -18,12 +27,13 @@ export function prepareProductionBatches(source,orders,minute){
     const dep=source.dependencies.filter(d=>d['订单编号']===order['订单编号']&&d['工序编号']===op['工序编号']&&d['资源类型']==='设备');
     if(dep.length!==1)throw Error('设备依赖必须唯一');
     const machine=source.machines.find(m=>m['设备编号']===dep[0]['资源编号']);
-    if(!machine||machine['装载计量基准']!=='BOM总投入')throw Error('设备须显式采用 BOM总投入；其他装载重量节点未决定');
+    if(!machine||!['BOM总投入','合格产出'].includes(machine['装载计量基准']))throw Error('设备须显式采用 BOM总投入 或 合格产出；其他装载重量节点未决定');
     const low=Q.q(machine['最小装载kg']),high=Q.q(machine['最大装载kg']);
     if(Q.cmp(high,Q.zero)<=0n||Q.cmp(low,high)>0n)throw Error('装载上下限须满足 0 ≤ 最小 ≤ 最大且最大 > 0');
     const batch=(source.batchResources||[]).find(r=>r['资源编号']===machine['设备编号']&&r['资源类型']==='批处理装载');
     if(batch&&(!op['程序编号']?.trim()||!batch['允许程序'].split(';').includes(op['程序编号'])))throw Error(`工序 ${op['工序编号']} 缺少设备允许的显式程序；不能推断兼容`);
-    return {machine,low,high,batch};
+    const factor=machine['装载计量基准']==='合格产出'?Q.q(product['总收率']):Q.q('1');
+    return {machine,low:Q.div(low,factor),high:Q.div(high,factor),nodeLow:low,nodeHigh:high,factor,batch};
    });
    let high=machines[0].high,low=machines[0].low;
    for(const m of machines){high=Q.min(high,m.high);if(Q.cmp(m.low,low)>0n)low=m.low;}
@@ -48,7 +58,7 @@ export function prepareProductionBatches(source,orders,minute){
    records.push(...made);productionCount+=n;
    for(const member of made){
     // First fit preserves order priority. No extra production to repair an under-min group.
-    let g=machines.every(m=>m.batch)&&groups.find(g=>g.signature===signature&&Q.cmp(Q.add(g.exactLoad,load),high)<=0n);
+    let g=machines.every(m=>m.batch)&&groups.find(g=>g.signature===signature&&Q.cmp(Q.add(g.exactLoad,load),high)<=0n&&fitsClaims([...g.members,member],route));
     if(!g){g={id:`FR021-RB-${++serial}`,signature,members:[],exactLoad:Q.zero,low,high,route,machines};groups.push(g);}
     g.members.push(member);g.exactLoad=Q.add(g.exactLoad,load);
    }
@@ -77,8 +87,8 @@ export function prepareProductionBatches(source,orders,minute){
    return part.map(d=>({...d,taskId:JSON.stringify([m.orderId,m.index,operation]),productionBatchId:m.id,resourceBatchId:JSON.stringify([order['订单编号'],operation])}));
   });},
   taskIds(id){for(const g of groups)for(const op of g.route)if(id===`${g.id}-${op['工序编号']}`)return g.members.map(m=>JSON.stringify([m.orderId,m.index,op['工序编号']]));return [id];},
-  expand(tasks){return tasks.flatMap(t=>byId.get(t.orderId).members.map(m=>({...t,id:JSON.stringify([m.orderId,m.index,t.operation]),orderId:m.orderId,productionBatchId:m.id,productionBatchIndex:m.index,resourceBatchId:JSON.stringify([t.orderId,t.operation]),batchGroupId:t.orderId,quantity:m.quantity,exactQuantity:m.qualifiedKg,loadKg:m.load,exactLoadKg:m.inputKg,quantityUnit:'kg',predecessor:t.predecessor?JSON.stringify([m.orderId,m.index,gPredecessor(t,source)]):'',source:t.source+' · FR021 BOM总投入/均分；资源批 '+t.orderId})));}
+  expand(tasks){return tasks.flatMap(t=>byId.get(t.orderId).members.map(m=>({...t,id:JSON.stringify([m.orderId,m.index,t.operation]),orderId:m.orderId,productionBatchId:m.id,productionBatchIndex:m.index,resourceBatchId:JSON.stringify([t.orderId,t.operation]),batchGroupId:t.orderId,quantity:m.quantity,exactQuantity:m.qualifiedKg,loadKg:source.machines.find(x=>x['设备编号']===t.machine)?.['装载计量基准']==='合格产出'?m.quantity:m.load,exactLoadKg:source.machines.find(x=>x['设备编号']===t.machine)?.['装载计量基准']==='合格产出'?m.qualifiedKg:m.inputKg,quantityUnit:'kg',predecessor:t.predecessor?JSON.stringify([m.orderId,m.index,gPredecessor(t,source)]):'',source:t.source+' · FR021 显式设备重量节点/均分；资源批 '+t.orderId})));}
  };
 }
 function gPredecessor(t,source){return source.routes.find(r=>r['产品编号']===t.productId&&r['工序编号']===t.operation)?.['前序工序']||'';}
-export function batchSummary(context,tasks){return {productionBatches:context.records.map(({order,...m})=>m),resourceBatches:context.groups.flatMap(g=>g.route.map((op,i)=>({id:JSON.stringify([g.id,op['工序编号']]),groupId:g.id,operation:op['工序编号'],machine:g.machines[i].machine['设备编号'],members:g.members.map(m=>m.id),loadKg:g.load,exactLoadKg:g.exactInputKg,minimum:Q.num(g.machines[i].low),maximum:Q.num(g.machines[i].high),basis:'BOM总投入',status:g.status==='blocked-under-min'?g.status:tasks.some(t=>t.batchGroupId===g.id&&t.operation===op['工序编号'])?'scheduled':'unplanned'})))};}
+export function batchSummary(context,tasks){return {productionBatches:context.records.map(({order,...m})=>m),resourceBatches:context.groups.flatMap(g=>g.route.map((op,i)=>({id:JSON.stringify([g.id,op['工序编号']]),groupId:g.id,operation:op['工序编号'],machine:g.machines[i].machine['设备编号'],members:g.members.map(m=>m.id),loadKg:Q.num(Q.mul(g.exactLoad,g.machines[i].factor)),exactLoadKg:Q.exact(Q.mul(g.exactLoad,g.machines[i].factor)),minimum:Q.num(g.machines[i].nodeLow),maximum:Q.num(g.machines[i].nodeHigh),basis:g.machines[i].machine['装载计量基准'],status:g.status==='blocked-under-min'?g.status:tasks.some(t=>t.batchGroupId===g.id&&t.operation===op['工序编号'])?'scheduled':'unplanned'})))};}

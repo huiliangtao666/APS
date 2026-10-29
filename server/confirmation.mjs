@@ -29,7 +29,7 @@ export function reviewPlan(s,p,now=new Date().toISOString()){
  for(const f of p.findings||[])if(!partialCode.test(f.code)||!f.taskIds?.length||f.taskIds.some(id=>scheduled.has(id)||!unplanned.some(t=>t.id===id)))add('rule_conflict',f.message||'存在规则冲突或未支持的未排语义');
  if(unplanned.some(t=>!t.reasons?.length||t.reasons.some(r=>['unknown','unresolved'].includes(r.classification))||t.quantity==null||!t.unit)||p.resultAssessment?.orders?.some(o=>o.status==='unknown-route'))add('unknown_demand','未排数量、原因或路线未知，不能确认');
  if(p.deliveryAssessment?.active)for(const order of p.deliveryAssessment.orders||[])if(order.reasons?.some(r=>!['INCOMPLETE','NO_REMAINING_WORK','POST_COMPLETION_WAIT','SIMULATED_QUALITY_READY'].includes(r.code)))add('delivery_condition_blocked','已启用交付规则存在质量、效期、关键数据或未支持条件，不能确认');
- if((p.conditions?.orderIds||[]).some(id=>{const o=s.data.orders.find(o=>o['订单编号']===id);return s.data.routes.some(r=>r['产品编号']===o?.['产品编号']&&r['最大等待分钟']?.trim());}))add('unsupported_semantics','路线声明的最大等待尚未实现，不能确认');
+ if((p.conditions?.orderIds||[]).some(id=>{const o=s.data.orders.find(o=>o['订单编号']===id);return s.data.routes.some(r=>r['产品编号']===o?.['产品编号']&&r['最大等待分钟']?.trim());}))add('unsupported_semantics','路线最大等待目前仅支持草稿检查与缺口报告；主管确认链路未验收，不能确认');
  for(const [type,flag] of [['工装','MOLD'],['空间','STORAGE']])if(!p.jointResourceChecks?.[flag]&&[...(s.data.dependencies||[]),...(s.data.resourceClaims||[])].some(r=>p.conditions?.orderIds?.includes(r['订单编号'])&&r['资源类型']===type))add('unchecked_resource','已声明资源条件未检查，不能确认');
  let checks=null;
  if(!blockers.length){

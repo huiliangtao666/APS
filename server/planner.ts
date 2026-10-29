@@ -187,7 +187,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
       setActivePlan({id:uid(),name:'固定位置检查受阻',createdAt:calculatedAt,tasks:[],findings:[{code:'POSITION / UNSUPPORTED',message:'最小模式或生产批/合批位置语义未支持；保留锁定，不推断可行',taskIds:Object.keys(positions)}],rules:enabledRules,inputVersion:`v${inputVersion}`});return;
     }
     if(!minimal&&activeBatchRule(data,calculatedAt)){
-     batches=prepareProductionBatches(data,sorted,conditions.startMinute??0);findings.push(...batches.findings);data=batches.data;sorted=batches.orders;
+     batches=prepareProductionBatches(data,sorted,conditions.startMinute??0,calculatedAt);findings.push(...batches.findings);data=batches.data;sorted=batches.orders;
      for(const g of batches.groups.filter((g:any)=>g.status==='blocked-under-min'))for(const op of g.route){
       try{const demands=g.members.flatMap((m:any)=>calculateMaterialDemand(sourceData,m.order,op['工序编号'],conditions.startMinute??0,m.qualifiedKg).map(d=>({...d,taskId:JSON.stringify([m.orderId,m.index,op['工序编号']])})));if(allocator)materialDemands.push(...allocator.preview(demands,conditions.startMinute??0).rows.map(r=>({...r,blockedReason:'低于最小装载；候选未占用'})));}catch(e){findings.push({code:'UNPLANNED / BATCH_MATERIAL',message:String(e),taskIds:[]});}
      }
@@ -273,6 +273,10 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
         }
         if(start===null){if(fact)busy.push({id:'待核对:'+fact['事实编号'],orderId:oid,productId:product,operation,label:'待处理执行',machine:machineId,start:Number(fact['开始分钟']),end:Number.POSITIVE_INFINITY,duration:Number.POSITIVE_INFINITY,predecessor:'',source:'模拟执行保护'});machineBusy.set(machineId,busy);retainBlockedDemand(order,operation,candidate,'无可用日历窗口；投料分钟仅为候选检查时点');findings.push({code:'UNPLANNED / CALENDAR',message:`订单 ${oid} / 工序 ${operation} 未排：设备 ${machineId} 不可用。${reason||'找不到满足连续工作时长的窗口'}。任务要求连续 ${duration} 分钟；跨班或中断规则尚未配置。`,taskIds:[`${oid}-${operation}`],context:failureContext(candidate)});continue;}
         if(conditions.endMinute!=null&&start+duration>conditions.endMinute){if(fact){const hold=busy.find(t=>t.id==='事实:'+fact['事实编号']);if(hold)hold.end=Number.POSITIVE_INFINITY;}if(materialPreview)materialDemands.push(...materialPreview.rows.map(r=>({...r,blockedReason:'完整工序超出计划范围'})));findings.push({code:'UNPLANNED / HORIZON',message:`订单 ${oid} / 工序 ${operation} 完整工序超出计划结束分钟 ${conditions.endMinute}，未排；不代表无可行排法。`,taskIds:[`${oid}-${operation}`],context:failureContext(start)});continue;}
+        if(!minimal&&predecessor&&op['最大等待分钟']?.trim()){
+         const limit=Number(op['最大等待分钟']),wait=start-predecessor.end;
+         if(wait>limit)findings.push({code:'CONSTRAINT / MAX_LAG',message:`订单 ${oid} / 工序 ${operation} 等待 ${wait} 分钟 > 最大 ${limit} 分钟，缺口 ${wait-limit} 分钟；前序结束 ${predecessor.end}、后序开始 ${start}。须联动调整上游或冷却资源后重算；当前草稿不满足等待约束。`,taskIds:[predecessor.id,`${oid}-${operation}`],context:{...failureContext(start),predecessorEnd:predecessor.end,successorStart:start,maximumWait:limit,actualWait:wait,gap:wait-limit}});
+        }
         const stop=minimal?null:findDowntimeShiftReason(data.downtime||[],machineId,initialEarliest,duration,firstCalendarFit??start);
         const calendarShift=firstCalendarFit!==null&&firstCalendarFit!==undefined&&firstCalendarFit>initialEarliest?(stop?`日历顺延：设备停机「${stop.reason}」${fmt(stop.start)}–${fmt(stop.end)}，安排至${fmt(start)}`:`日历顺延：工厂工作窗口，安排至${fmt(start)}`):'';
         if(materialPreview){materialPreview.commit();materialDemands.push(...materialPreview.rows);}
