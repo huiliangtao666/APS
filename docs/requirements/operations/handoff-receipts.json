@@ -93,6 +93,40 @@
         }
       ],
       "ack_delivery_policy": "本次Inbox最终PROCESSED结果由平台hook记录/回送；不再投递完成通知/ACK任务，避免循环"
+    },
+    {
+      "event_key": "dlv_870a893a-a332-4eac-a209-719af311d3e8:r1",
+      "original_delivery": "dlv_870a893a-a332-4eac-a209-719af311d3e8",
+      "notification_delivery": "dlv_64ad5c7c-5bda-462a-bd88-ca61a6847dd1",
+      "type": "DEV_DELIVERED",
+      "source": "APS-Dev",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T12:55:34+08:00",
+      "product_sha": "12eed5514c702f730aae65a39a08747c532f8536",
+      "design_document_sha": "730556fd18bd1b15d6c37005bf5ac4c09356cc93",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/13#issuecomment-6488320266",
+      "audit_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/operations/fr034-resource-explain-12eed551-dev-r1.md",
+      "report_sha256": "1cb0115f48c281213fa9aa22cd21d31073e6940e95af522f33f5dcf1dc2d40d2",
+      "evidence_sha256": "5fbd995d832ce735b6ad2c90a566df0d15e784047cfaa1fab98f1a3fd7b3a6e5",
+      "outcomes": [
+        {
+          "requirement": "FR-034",
+          "before": "In progress",
+          "after": "In review",
+          "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhDI",
+          "code_sha": "12eed5514c702f730aae65a39a08747c532f8536",
+          "dev_result": "PASS",
+          "card_recommendation": "NOT_READY",
+          "defect": "FR034-RESOURCE-EXPLAIN-01",
+          "repair_round": 1,
+          "retest_round": 0,
+          "test_delivery": "dlv_0f7e77e1-2dde-492c-9dd8-b6e35f5a742d",
+          "dispatch_status": "queued；不据此宣称已开始或通过",
+          "next_owner": "APS-Test",
+          "next_step": "固定SHA独立复测T01/P01/R03及相关保护；Design收到结果按本卡适用范围判定"
+        }
+      ],
+      "ack_delivery_policy": "Inbox最终PROCESSED由平台hook记录/回送；不另派ACK或DEV_DELIVERED通知"
     }
   ]
 }

@@ -1,6 +1,6 @@
 # 当前需求跟踪表
 
-快照：2026-10-29T12:43:09+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
+快照：2026-10-29T12:55:49+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
 
 | 编号 | 名称 | 要求版本 | 生效CR | 原卡状态 | 当前环节 | 验收结论 | 原卡 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -37,7 +37,7 @@
 | FR-031 | 维护模拟进度并检查剩余工作 | v0.3 |  | In progress | 实施或验收未闭环，见原卡/关联Issue | 未登记原需求完整版本验收；有限通过证据见原卡 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg_o) |
 | FR-032 | 资源负荷、物料缺口与提醒 | v0.3 |  | Done | 本卡适用需求已独立验收，Design复核完成 | v0.3本卡全部适用责任断言独立PASS，Design按原文复核后接受；无本范围阻断，Done。不是全项目UAT签收或应用上线。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhAY) |
 | FR-033 | 机器甘特图与任务时间表 | v0.3 |  | Done | 本卡适用需求已独立验收，Design复核完成 | v0.3本卡全部适用责任断言独立PASS，Design按原文复核后接受；无本范围阻断，Done。不是全项目UAT签收或应用上线。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhB4) |
-| FR-034 | 甘特、明细与问题联动核对 | v0.3 |  | In progress | FR034既有资源解释/区间展示缺口；APS-Dev限定修复待独立Test | 有限验收PARTIAL，整卡NOT_READY，保持In progress；T01/P01 FAIL、R03 PARTIAL；R01/R02/M01/H01 PASS；B01旧基础及D01-D03 round1 PASS沿用，不重开。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhDI) |
+| FR-034 | 甘特、明细与问题联动核对 | v0.3 |  | In review | RESOURCE-EXPLAIN-01 round1已push；等待APS-Test固定12eed551有限复测 | Dev有限修复PASS；整卡NOT_READY，In review等待独立Test。原失败/历史PASS保留，未宣称修复通过、完整验收或业务UAT。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhDI) |
 | FR-035 | 查询、报表与文件导出 | v0.3 |  | Done | 本卡适用需求已独立验收，Design复核完成 | v0.3本卡全部适用责任断言独立PASS，Design按原文复核后接受；无本范围阻断，Done。不是全项目UAT签收或应用上线。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhEU) |
 | FR-036 | 外部系统接口说明与模拟替代 | v0.3 |  | Done | 本卡适用需求已独立验收，Design复核完成 | v0.3本卡全部适用责任断言独立PASS，Design按原文复核后接受；无本范围阻断，Done。不是全项目UAT签收或应用上线。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhFg) |
 | FR-037 | 简单权限与操作记录 | v0.3 |  | In progress | 实施或验收未闭环，见原卡/关联Issue | 未登记原需求完整版本验收；有限通过证据见原卡 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhGM) |

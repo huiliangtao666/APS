@@ -128,7 +128,7 @@ def export(workbook_path=None, refresh=True):
             row['blocker'] = review['blocker']
             row['acceptance_result'] = review['conclusion']
             row['code_reference'] = review['code_sha']
-            row['code_reference_note'] = '独立Test固定版本；结论见原卡review记录，不代表验收通过'
+            row['code_reference_note'] = review.get('code_sha_status', '独立Test固定版本；结论见原卡review记录，不代表验收通过')
         if uat_owner:
             row['owner'] += '；UAT业务验收：' + uat_owner
         requirements.append(row)
