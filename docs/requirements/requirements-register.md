@@ -1,6 +1,6 @@
 # 当前需求跟踪表
 
-快照：2026-10-29T15:31:22+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
+快照：2026-10-29T15:43:53+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
 
 | 编号 | 名称 | 要求版本 | 生效CR | 原卡状态 | 当前环节 | 验收结论 | 原卡 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -30,8 +30,8 @@
 | FR-024 | 结果状态、未排任务与原因 | v0.3 |  | Done | 本卡适用需求已独立验收，Design复核完成 | v0.3本卡全部适用责任断言独立PASS，Design复核接受；无本范围阻断或必测未执行，Done。不是全项目UAT或上线。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg3Q) |
 | FR-025 | 独立检查排程结果 | v0.3 |  | Done | 原卡已完成；按历史验收范围 | 原卡Done，保留原通过记录；不推定完整业务UAT通过 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg4k) |
 | FR-026 | 保存、复制与比较方案 | v0.3 |  | In progress | 实施或验收未闭环，见原卡/关联Issue | 未登记原需求完整版本验收；有限通过证据见原卡 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg5k) |
-| FR-027 | 拖拽调整与锁定 | v0.3 |  | In review | FR027已有交付本卡责任验收r1等待APS-Test | 原FR027有限独立PASS保留；当前完整本卡结论待r1，非新增产品缺陷 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg7Y) |
-| FR-028 | 修改条件后重新试算 | v0.3 |  | In progress | 实施或验收未闭环，见原卡/关联Issue | 未登记原需求完整版本验收；有限通过证据见原卡 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg8s) |
+| FR-027 | 拖拽调整与锁定 | v0.3 |  | Done | 本卡适用需求已独立验收，Design复核完成 | v0.3本卡22条适用责任断言22 PASS；Design复核接受固定产品SHA，无本卡阻断，Done。真实平台/部署/生产持久性及业务UAT未执行；Issue13其他FR/CR责任保留。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg7Y) |
+| FR-028 | 修改条件后重新试算 | v0.3 |  | In review | FR028已有交付本卡责任验收r1等待APS-Test | 原7465159d有限独立PASS与限制保留；完整本卡结论待r1，非新增产品缺陷 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg8s) |
 | FR-029 | 模拟异常与重新排程 | v0.3 |  | In progress | 实施或验收未闭环，见原卡/关联Issue | 未登记原需求完整版本验收；有限通过证据见原卡 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg9s) |
 | FR-030 | 主管确认、发布与归档 | v0.3 |  | Done | 本卡适用需求已独立验收，Design复核完成 | v0.3本卡20条适用责任断言20 PASS；Design复核接受固定产品SHA，无本卡阻断，Done。真实平台/部署/生产持久性及业务UAT未执行；Issue13其他FR/CR责任保留。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg-Y) |
 | FR-031 | 维护模拟进度并检查剩余工作 | v0.3 |  | In progress | 实施或验收未闭环，见原卡/关联Issue | 未登记原需求完整版本验收；有限通过证据见原卡 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg_o) |
