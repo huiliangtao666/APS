@@ -3795,6 +3795,84 @@
       "issue_comment": null,
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_4c338e0c-3fb8-4138-b6b1-a09333d0fa94:c1",
+      "original_delivery": "dlv_4c338e0c-3fb8-4138-b6b1-a09333d0fa94",
+      "type": "DEV_EVIDENCE",
+      "source": "APS-Dev",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T07:23:09+08:00",
+      "requirement": "FR-016/Issue4",
+      "product_sha": "723fea514931a05ddb276bda4d0842cb9d90d255",
+      "result": "U2已保存SUPPLY_OVERALLOCATED目标自然入口调查：Dev 13 PASS/2 BLOCKED/2未执行，当前正常链失败预检400/422无plan/run持久记录；无产品改动，受控条款未明确失败预检必须作为历史方案重开。等待业务适用性裁决或可认证旧历史原件，整卡NOT_READY",
+      "external_hashes": {
+        "FR016-U2-SAVED-TARGET-723fea51-DEV-c1-MATRIX.csv": "2109fb40cf829f6f0762df0be3f2d13257a71d135bc5adfa86fb244a47ce4626",
+        "FR016-U2-SAVED-TARGET-723fea51-DEV-c1-SHA256.json": "1f0900aa186aa1a0c70bd6161db0aedc7206010ed6cfcc6dc5971b2218ac7659",
+        "FR016-U2-SAVED-TARGET-723fea51-DEV-c1-EVIDENCE.zip": "f7471b9c398ce3ab716f2a951b18dd13e9d76dcb1397ef40d74b4e76b2313352",
+        "FR016-U2-SAVED-TARGET-723fea51-DEV-c1-REPORT.md": "156fd670c89f5b504876ca25a502a532bfdf1a2857017c78f3c0f2d953361f6a"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 17,
+      "project_status": {
+        "FR-016": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6510867027",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES",
+      "new_product_sha": null
+    },
+    {
+      "event_key": "dlv_c815df47-725e-493b-a447-b6c3069c38e2:c1",
+      "original_delivery": "dlv_c815df47-725e-493b-a447-b6c3069c38e2",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T07:23:09+08:00",
+      "requirement": "FR-016/Issue4",
+      "product_sha": "723fea514931a05ddb276bda4d0842cb9d90d255",
+      "result": "P28/P29固定723fea51独立可达性复核20 PASS/1 PARTIAL/4 BLOCKED/3未执行、0 FAIL：当前正常链晚期CONFIG/CYCLE/helper首次异常不可达；早期零写/定位有证据但完整成员/版本SOURCE尚缺，晚期UI与历史原件未执行。旧P29缺陷首轮PASS留原SHA，整卡NOT_READY",
+      "external_hashes": {
+        "FR016-P28-P29-INDEPENDENT-723fea51-Test1-c1-MATRIX.csv": "ff18557ea30fc47a31120ff2c6ec536cd6aeec88143c016b1e7ff3dcb074234a",
+        "FR016-P28-P29-INDEPENDENT-723fea51-Test1-c1-REPORT.md": "37c8f198d2e725afdb84c68aea4f40bdb6b0f5f227c86a859a7d164f006824cb",
+        "FR016-P28-P29-INDEPENDENT-723fea51-Test1-c1-EVIDENCE.zip": "2f81c50f5ef90add94a7ec4ff568a58cb322c2ec2bcf8e62e453df5317fe45de",
+        "FR016-P28-P29-INDEPENDENT-723fea51-Test1-c1-SHA256.json": "525c168721f5ce2dc3b972bd1b4aa9df20973997e0c78fa13d9bdfb87e9d5372"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 28,
+      "project_status": {
+        "FR-016": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6510873206",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES",
+      "new_product_sha": null
+    },
+    {
+      "event_key": "dlv_00da1d3f-153c-4368-b154-a90acde940be:c1",
+      "original_delivery": "dlv_00da1d3f-153c-4368-b154-a90acde940be",
+      "type": "TEST_EVIDENCE_FOLLOWUP",
+      "source": "APS-Test2",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T07:23:09+08:00",
+      "requirement": "FR-022/Issue3",
+      "product_sha": "cd115f077593cb4c1fc991cbaf54053e305e03ee",
+      "result": "N06固定cd115f0九项定向补证各新增独立API证据，但S04/05/06/08/09/10/11/14/16仍PARTIAL，累计7 PASS/9 PARTIAL/0 FAIL，B01–B05仍BLOCKED；旧7 PASS及P10旧结论留原SHA，整卡NOT_READY",
+      "external_hashes": {
+        "Issue3-FR022-N06-cd115f0-Test2-PARTIAL-c1-SHA256.json": "ea643855d025aeb2f31196927288a4aff1bcb8fd40cfcf5512daf0fdfe3bce1f",
+        "Issue3-FR022-N06-cd115f0-Test2-PARTIAL-c1-EVIDENCE.zip": "1677878f8e9a1c23b7a7cdf42f0a9b99b18801fe3f8827a5489cbd3c7ce68b0d",
+        "Issue3-FR022-N06-cd115f0-Test2-PARTIAL-c1-MATRIX.csv": "b7b5641067910fc5cda8b7f8e8daf84acda38a2ae2896f96a7758e9d87c1c911",
+        "Issue3-FR022-N06-cd115f0-Test2-PARTIAL-c1-REPORT.md": "2c269d53742951e56f75b54ad917180508a6b6d81c25b1d62987e96f6801a111"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 9,
+      "project_status": {
+        "FR-022": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6510873659",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES",
+      "new_product_sha": null
     }
   ]
 }
