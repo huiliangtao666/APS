@@ -120,6 +120,15 @@ def export(workbook_path=None, refresh=True):
                 row['current_phase'] = '本卡适用需求已独立验收，Design复核完成'
                 row['blocker'] = ''
                 row['acceptance_result'] = record['conclusion']
+        reviewed = re.search(r'<!-- aps-card-review:(.*?) -->', body, re.S)
+        if reviewed and status != 'Done':
+            review = json.loads(reviewed.group(1))
+            row['review_record'] = review
+            row['current_phase'] = review['current_phase']
+            row['blocker'] = review['blocker']
+            row['acceptance_result'] = review['conclusion']
+            row['code_reference'] = review['code_sha']
+            row['code_reference_note'] = '独立Test固定版本；结论见原卡review记录，不代表验收通过'
         if uat_owner:
             row['owner'] += '；UAT业务验收：' + uat_owner
         requirements.append(row)

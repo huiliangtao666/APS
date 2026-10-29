@@ -56,6 +56,43 @@
           "code_sha": ""
         }
       ]
+    },
+    {
+      "event_key": "dlv_40ab364a-e651-424a-b211-5fcf85cbd17e:r1",
+      "original_delivery": "dlv_40ab364a-e651-424a-b211-5fcf85cbd17e",
+      "notification_delivery": "dlv_01a83626-7f63-4932-88eb-fc1baecab25b",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "received_via": "Inbox delivery；Design主动读取报告/断言/归档并核对固定GitHub源码",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T12:42:33+08:00",
+      "audit_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/operations/fr034-resource-linkage-24ba688-report.md",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/13#issuecomment-6488135522",
+      "product_sha": "24ba6884b3a5f07425a728b7733a677563c6aa44",
+      "design_document_sha": "3267e6b9fd93d1d3772811729e6930a4f04c6c6e",
+      "report_sha256": "22236ee6c7690313723e2290c8aef0cb5a0b58d778f74402a942666bb5791a59",
+      "assertions_sha256": "37fb76feb8e5e02e808d68d36246777ea91e09c1a3a8a628859a93400ea86221",
+      "evidence_sha256": "d01db82aedbbd02bc781bf047fb88d73c90e3e1e5b807a5215356974fb0cf532",
+      "outcomes": [
+        {
+          "requirement": "FR-034",
+          "before": "In progress",
+          "after": "In progress",
+          "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhDI",
+          "code_sha": "24ba6884b3a5f07425a728b7733a677563c6aa44",
+          "finite_result": "PARTIAL",
+          "card_recommendation": "NOT_READY",
+          "defect": "FR034-RESOURCE-EXPLAIN-01",
+          "repair_round": 0,
+          "retest_round": 0,
+          "repair_delivery": "dlv_870a893a-a332-4eac-a209-719af311d3e8",
+          "dispatch_status": "queued；不据此宣称已开始/交付",
+          "next_owner": "APS-Dev",
+          "next_step": "S06安全检查点优先限定修复；普通push后Design派Test固定修复SHA有限复测",
+          "retained_pass": "R01/R02/M01/H01；B01旧基础及D01-D03 round1沿用"
+        }
+      ],
+      "ack_delivery_policy": "本次Inbox最终PROCESSED结果由平台hook记录/回送；不再投递完成通知/ACK任务，避免循环"
     }
   ]
 }
