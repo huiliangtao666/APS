@@ -57,7 +57,11 @@ export function validateInputs(defs,data,{at=new Date().toISOString(),checkPolic
   const line=f.line||Number(f.message.match(/第\s*(\d+)\s*行/)?.[1]);
   const field=f.field||def.fields.find(x=>f.message.includes(x))||'关联配置';
   // Aggregate checks have no single source row; row 0 explicitly means table-level.
-  issues.push({...f,table,file:def.file,row:f.row??(line?line+1:0),field});
+  // Legacy display metadata may be inferred from prose above; it is not a record association.
+  // Keep those messages/locations intact, but require producer-owned references for navigation.
+  const association=f.relatedRecords||f.table&&Number.isInteger(f.row)&&f.row>=2?{}
+    :{relatedRecords:[],associationGap:'检查未提供明确的逐条来源记录；请联系维护人员补齐来源后重新检查。'};
+  issues.push({...f,...association,table,file:def.file,row:f.row??(line?line+1:0),field});
  }};
  collect('orders',validateOrders(data.orders));collect('machines',validateSingleLineScope(data.orders,data.machines));collect('products',validateMasterData(data));collect('routes',validateProcessConfig(data));collect('bom',validateBomConfig(data));collect('inventory',validateInventoryBatches(data.inventory,data.materials));
  collect('supplies',validateExpectedSupply({supplies:data.supplies,delays:data.supplyDelays,uses:data.supplyUses,materials:data.materials,orders:data.orders,routes:data.routes}));

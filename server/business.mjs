@@ -1,3 +1,5 @@
+import {validateSingleLineScope} from '../src/lib/line-scope.mjs';
+import {attachProblemRecords} from '../src/lib/problem-records.mjs';
 import {inspectSingleCsv} from './csv-single.mjs';
 import {migratePolicies} from '../src/lib/resource-policies.mjs';
 import {inspectCsvBatch,physicalIssues,batchKeys} from './csv-batch.mjs';
@@ -284,9 +286,16 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(trial&&inputHash(executionState(trial.data))!==inputHash(executionState(s.data))){res.status(409).json({error:'current_execution_changed',message:'试算执行事实已落后当前版本；保留旧记录，请从当前事实新算再复制'});return;}
     if(trial){const reconciliation=executionTrialIssues(s.data,trial.data);if(reconciliation.length){res.status(409).json({error:'execution_reconciliation_required',issues:reconciliation});return;}}
     const calculatedAt=new Date().toISOString();let frozen;
-    try{frozen=freezeRunInput(target.data,req.body.selection??trial?.selection,calculatedAt);if(trial&&Object.keys(trial.locks||{}).length)frozen=freezePositions(target.data,frozen.conditions,trial.locks,calculatedAt);}catch(e){res.status(400).json({error:e.message});return;}
+    try{frozen=freezeRunInput(target.data,req.body.selection??trial?.selection,calculatedAt);if(trial&&Object.keys(trial.locks||{}).length)frozen=freezePositions(target.data,frozen.conditions,trial.locks,calculatedAt);}
+    catch(e){
+      const selection=req.body.selection??trial?.selection;
+      const selected=e.message==='invalid_line_scope'?target.data.orders.filter(o=>o['需求类型']==='正式订单'&&o['订单状态']==='有效'&&(!selection?.orderIds||selection.orderIds.includes(o['订单编号']))):[];
+      const findings=e.message==='invalid_line_scope'
+        ?validateSingleLineScope(selected,target.data.machines).map(f=>({...f,sourceRevision:target.revision})):undefined;
+      res.status(400).json({error:e.message,...(findings?{findings}:{})});return;
+    }
     const issues=[...validateInputs(defs,target.data,{at:calculatedAt,checkPolicyExecution:false}),...executionAdmission(frozen.executionData,frozen.conditions),...assessRules(frozen.executionData,calculatedAt,true,frozen.conditions.mode).issues];
-    if(issues.length){res.status(422).json({error:'rule_configuration_blocked',issues});return;}
+    if(issues.length){res.status(422).json({error:'rule_configuration_blocked',issues,findings:issues.map(i=>({...attachProblemRecords({...i,code:i.code||'INPUT / CHECK',taskIds:[]},target.data),sourceRevision:target.revision}))});return;}
     const run={id:randomUUID(),status:'queued',phase:'等待计算线程',createdAt:calculatedAt,revision:target.revision,trialId:trial?.id||null,sourcePlanId:trial?.sourcePlanId||null,inputVersionId:preserve(s,target),...frozen,lockSnapshot:structuredClone(trial?.locks||{}),actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim(),timeoutMs:runTimeoutMs};
     s.runs??=[];s.runs.unshift(run);return {s,run};
   }
