@@ -1278,6 +1278,38 @@
       "old_48_sha256": "223d68e9582b4ae9710931a1685e4545d1c3ac107e9ed0303da850846193d6bb",
       "limitations": "FR007/022 and full CR/UAT remain open; CR-DEC04-05-06 design/mock only; old S06/S07/D01-D03 PASS retain original SHAs",
       "uat_dependency": "WAITING_DEPENDENCIES; QA not dispatched"
+    },
+    {
+      "event_key": "dlv_7eece95f-fb3f-4bd1-a8be-b32ea455d49b:r1",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test original delivery and Files API; active notification failed 403",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T18:08:35+08:00",
+      "requirement": "FR-029",
+      "product_sha": "ca13c6d26a40eb329011c0fa66a747aa735570da",
+      "parent_sha": "c8e16d408b2d0207cb9886b55f39a52ebc9c1665",
+      "branch": "feat/fr-013-016-main-batch",
+      "project_status": "Done",
+      "issue14_state": "closed",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/14#issuecomment-6493821973",
+      "result": "READY_DONE; 24/24 card assertions PASS; 0 product FAIL; no repair round",
+      "external_hashes": {
+        "FR029-ca13c6d2-ACCEPTANCE-R1-REPORT.txt": "f1b71fdf33d0daddd0993fb465cf65ba96e2f079863f36ff3809a15041a6fe49",
+        "FR029-ca13c6d2-ACCEPTANCE-R1-ASSERTIONS.csv": "29bb44940839ebe74095ae8e733392c0b7c1f2b377b1aac1da70dbe230ac073b",
+        "FR029-ca13c6d2-ACCEPTANCE-R1-LAYERS.json": "1e03877e75ebd1c217349a60ff450eca196ed2f18274e087dbb4e97f2cf06c38",
+        "FR029-ca13c6d2-ACCEPTANCE-R1-EVIDENCE.zip": "1844d676aae8d11de6bef0345448571871ea37148ca59ed9ab39c44613a733c2"
+      },
+      "verified_individual_originals": {
+        "browser-results.json": "742d02170b5fd6977c32af95cf557c5d4111c18724ab8cf9523411717bd28e13",
+        "event-0.json": "19ed75654931170e78ca1aa0f0e4c500698dc1b21e5c46d0a2f51be8c32d535b",
+        "event-1.json": "9abff4e763fd168a8da89d82fe6e2ee30b7293c364b00d88eb613c1129d01848",
+        "event-2.json": "e3bc9cac96319c1d4085983aeea89f0e5b74500356672b9ca65ef947b5df34c7",
+        "event-3.json": "40f1f2175492204dddb3ecf0f24ee2873efd0ac735db96b2c0d245f848ad026f",
+        "event-4.json": "23c244c88d968b3ddef02fcc29aa4a7e1ccc33c6d9dc609d526baa0aac7dce99",
+        "targeted.log": "133b6e939e4e5bd20eb0bb12ddf45a9198bcb65f3ab47a3fd18f60f0083cc52e"
+      },
+      "zip_limit": "Files API HTTP 413 for 97 MB ZIP; whole ZIP hash not independently checked",
+      "remaining": "FR026/007/022, original UAT15 approval, real platform and QA UAT separate"
     }
   ]
 }
