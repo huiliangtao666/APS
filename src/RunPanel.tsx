@@ -1,4 +1,5 @@
 import {schedulingScope,type SchedulingScope} from './lib/scheduling-scope.mjs';
+import {assessRules} from './lib/business-rules.mjs';
 import {useState} from 'react';
 type Row=Record<string,string>;
 export type Run = {id:string;status:string;phase:string;createdAt:string;finishedAt?:string;durationMs?:number;outcome?:string;retryOf?:string;planId?:string;inputVersionId:string;snapshotHash:string;conditions:{mode?:string;checkScope?:SchedulingScope;orderIds:string[];lineId:string;startMinute:number;endMinute:number|null;priority:string;enabledRuleIds:string[];timeOrigin:string};failure?:{code:string;message:string};resultState?:{label:string;code:string;globalFeasibility:string}};
@@ -10,10 +11,14 @@ export function RunPanel({data,runs,canWrite,busy,onStart,onCancel,onResult,onIn
  const eligible=(data.orders||[]).filter(o=>o['需求类型']==='正式订单'&&o['订单状态']==='有效');
  const selected=(orders??eligible.map(o=>o['订单编号'])).filter(id=>eligible.some(o=>o['订单编号']===id));const enabled=(rules??(data.rules||[]).filter(r=>r['是否启用']==='是').map(r=>r['规则编号'])).filter(id=>(data.rules||[]).some(r=>r['规则编号']===id));
  const toggle=(list:string[],id:string)=>list.includes(id)?list.filter(x=>x!==id):[...list,id];
+ const hasFacts=!!data.executionFacts?.length;
+ const currentScope=mode==='minimal-r1'?schedulingScope(mode):assessRules({...data,rules:(data.rules||[]).map(r=>({...r,'是否启用':enabled.includes(r['规则编号'])?'是':'否'}))},undefined,false,mode).checkScope;
  const states:Record<string,string>={queued:'等待线程',running:'正在计算',completed:'已得到安排（仅本次检查范围）',partial:'存在未排任务或问题',cancelled:'已取消',timed_out:'已超时（不代表无解）',failed:'失败'};
- return <section className="panel"><h2>计算范围与运行记录 · FR-018/038</h2><p>时间使用分钟轴，0 = 2026-11-02 08:00 +08:00。开始时间不移动原日历、停机、供给或人员窗口；完整工序须在结束范围内。已完成合格数量用于同单位模拟订单余量；R5执行事实、已投料核销与剩余工时未实现。</p>
+ return <section className="panel"><h2>计算范围与运行记录 · FR-018/038</h2><p>时间使用分钟轴，0 = 2026-11-02 08:00 +08:00。开始时间不移动原日历、停机、供给或人员窗口；完整工序须在结束范围内。已完成合格数量用于同单位模拟订单余量。已有支持模式支持模拟累计执行事实、原始保护区间与显式剩余工时；剩余分钟取自输入，不按完成数量比例推算。耗料仅覆盖已声明的模拟口径，不代表真实执行、完整投料核销或质量确认；恢复、转机与冲销未定时须核对，不表示 FR031 恢复已完成。</p>
  <label>计算模式<select aria-label="计算模式" value={mode} onChange={e=>setMode(e.target.value)}><option value="supported">已有支持模式（日历、人员、预计供给；物料须启用）</option><option value="minimal-r1">R1 最小模式（机器连续可用，仅机器与顺序）</option></select></label>
- <CheckScope scope={schedulingScope(mode,enabled.includes('MATERIAL')&&!(data.rules.find(r=>r['规则编号']==='MATERIAL')?.['生效时间']&&Date.parse(data.rules.find(r=>r['规则编号']==='MATERIAL')!['生效时间'])>Date.now()))}/>
+ <p>当前配置预览（尚未冻结）：{mode==='minimal-r1'?(hasFacts?'最小模式仅检查机器与顺序等明确范围；当前有模拟执行事实，不能使用忽略保护的最小模式，发起计算会被拒绝。':'最小模式仅检查下列明确范围，不采用执行事实、日历、人员或物料检查。'):hasFacts?'当前输入含模拟执行事实；计算保留原始保护区间并采用显式剩余分钟，关闭执行保护开关也不解除事实保护。物料分配须选择且生效 MATERIAL 规则；异常、暂停或不支持的协调条件仍可能阻断。':'当前输入没有模拟执行事实，本次不据此声称已采用执行事实或剩余工时；物料分配须选择且生效 MATERIAL 规则。'}实际采用范围由服务端在发起时按输入、规则及生效时刻冻结。</p>
+ <CheckScope scope={currentScope}/>
+ <p>历史运行实际采用范围以各记录保存的检查范围及原始输入为准；当前配置预览不会补写旧运行，未知范围仍保留未知。</p>
  <fieldset><legend>本产线有效正式订单</legend>{eligible.map(o=><label key={o['订单编号']}><input type="checkbox" checked={selected.includes(o['订单编号'])} onChange={()=>setOrders(toggle(selected,o['订单编号']))}/>{o['订单编号']} · {o['产线编号']} · 优先 {o['优先顺序']}</label>)}</fieldset>
  <label>开始分钟<input aria-label="开始分钟" type="number" min="0" value={start} onChange={e=>setStart(e.target.value)}/></label>
  <label>计划结束分钟<input aria-label="计划结束分钟" type="number" min="1" value={end} onChange={e=>setEnd(e.target.value)}/></label>
