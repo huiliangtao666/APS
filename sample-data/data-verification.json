@@ -1,0 +1,13 @@
+{
+  "version": "v0.3",
+  "cases": 18,
+  "passed": 18,
+  "stage_subsets_passed": 18,
+  "claim": "检查CSV配置、引用、数量和给定参考安排；未执行目标APS产品UAT，未证明全局最优。",
+  "scope": "STATIC_REFERENCE_DATA_ONLY",
+  "verification_input": "从待提交sample-data文件按原source_member重建后运行原始检查器",
+  "source_zip_sha256": "01aa86f90d257e3e6c948531f1010d0a0fdf502a68266176991dc0fb8f107759",
+  "source_files_checked": 868,
+  "legacy_csv_to_preserve": 14,
+  "relative_links": "PASS"
+}
