@@ -8,7 +8,7 @@ export function personnelWindows(requirements,start,end){
   const count=Number(r['需求数量']||0),a=Number(r['人员开始偏移']||0),b=Number(r['人员结束偏移']||0);
   if(!Number.isInteger(count)||count<0||![a,b].every(Number.isFinite)||a<0||b<0||a+b>=end-start)throw Error(`工序 ${r['工序编号']} 人数或明确参与窗口无效`);
   if(!count)continue;
-  const key=JSON.stringify([[...personnelCandidates(r)].sort(),r['所需技能']||'',r['所需班次']||'',r['__policyRoleSource']||r['订单编号'],r['人员参与阶段']?'窗口集合':index]);
+  const key=JSON.stringify([[...personnelCandidates(r)].sort(),r['所需技能']||'',r['所需班次']||'',r['__policyRoleSource']||r['订单编号'],...(r['人员岗位编号']?.trim()?['岗位',r['人员岗位编号'].trim()]:[r['人员参与阶段']?'窗口集合':index])]);
   const rows=roles.get(key)||[];rows.push({r,count,start:r['窗口外释放']==='否'?start:start+a,end:r['窗口外释放']==='否'?end:end-b});roles.set(key,rows);
  }
  const windows=[];
@@ -44,7 +44,7 @@ export function allocatePersonnel(requirements,groups,start,end,reservations=[],
    const g=w.candidates[c],max=Math.min(remaining,available(g,w));
    const rest=w.candidates.slice(c+1).reduce((sum,g)=>sum+available(g,w),0),min=Math.max(0,remaining-rest);
    for(let n=max;n>=min;n--){
-    if(n){const match=skillMatch(g,w.r['所需技能'],w.r['工序编号'],substitutions);allocations.push({demandKey:w.demandKey,roleSource:w.r['__policyRoleSource']||w.r['订单编号'],groupId:g['人员组编号'],count:n,start:w.start,end:w.end,...match,reason:`${match.reason}；显式候选 ${personnelCandidates(w.r).join('、')}；${w.r['窗口外释放']==='否'?'窗口外保留，全工序占用':'窗口外释放'}；同池统一扣人数`});}
+    if(n){const match=skillMatch(g,w.r['所需技能'],w.r['工序编号'],substitutions);allocations.push({demandKey:w.demandKey,postId:w.r['人员岗位编号']?.trim()||'',roleSource:w.r['__policyRoleSource']||w.r['订单编号'],groupId:g['人员组编号'],count:n,start:w.start,end:w.end,...match,reason:`${match.reason}；岗位 ${w.r['人员岗位编号']?.trim()||'旧配置未编号'}；显式候选 ${personnelCandidates(w.r).join('、')}；${w.r['窗口外释放']==='否'?'窗口外保留，全工序占用':'窗口外释放'}；同池统一扣人数`});}
     if(distribute(c+1,remaining-n))return true;
     if(n)allocations.pop();if(limited)return false;
    }

@@ -68,8 +68,9 @@ export function validatePolicies(data,at=new Date().toISOString(),mode='supporte
    if(!(Number(a)+Number(b)<duration))fail('窗口结束偏移分钟','明确窗口须短于已配置固定工时；从开始+偏移到结束−偏移，不猜阶段时长');
   }
  }
- for(const [i,r]of (data.dependencies||[]).entries())if(r['资源类型']!=='人员技能'&&['候选人员组','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'].some(k=>r[k]?.trim()))add('dependencies',i,'人员参与阶段','人员阶段/偏移/释放仅适用于人员技能依赖；设备及其他资源请使用其对应配置');
+ for(const [i,r]of (data.dependencies||[]).entries())if(r['资源类型']!=='人员技能'&&['人员岗位编号','候选人员组','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'].some(k=>r[k]?.trim()))add('dependencies',i,'人员参与阶段','人员阶段/偏移/释放仅适用于人员技能依赖；设备及其他资源请使用其对应配置');
  for(const [i,r]of (data.dependencies||[]).entries())if(r['资源类型']==='人员技能'){
+  if(r['人员岗位编号']!==undefined&&(typeof r['人员岗位编号']!=='string'||r['人员岗位编号'].length>64||r['人员岗位编号']!==r['人员岗位编号'].trim()||/[\x00-\x1f\x7f]/.test(r['人员岗位编号'])))add('dependencies',i,'人员岗位编号','岗位编号为1–64字符（旧配置可留空），不得包含首尾空白或控制字符');
   if(r['窗口外释放']!==undefined&&!['是','否'].includes(r['窗口外释放']))add('dependencies',i,'窗口外释放','仅接受是或否；否表示全工序保留人数');
   if(!Number.isSafeInteger(Number(r['需求数量']))||Number(r['需求数量'])<1)add('dependencies',i,'需求数量','人员需求必须为安全正整数');
   if(!r['所需技能']?.trim())add('dependencies',i,'所需技能','人员必须填写所需技能');
@@ -80,6 +81,13 @@ export function validatePolicies(data,at=new Date().toISOString(),mode='supporte
   if(r['候选人员组']?.trim()&&r['资源编号']?.trim())add('dependencies',i,field,'候选集合与单组资源编号互斥，请仅填写一种；不隐含优先组');
   if(!ids.length||ids.some(id=>!id)||new Set(ids).size!==ids.length||ids.length>32)add('dependencies',i,field,'显式填写1–32个不重复人员组编号，以逗号分隔；空集合不代表任意组');
   for(const id of ids)if(!(data.personnelGroups||[]).some(g=>g['人员组编号']===id))add('dependencies',i,field,`须引用现有人员组 ${id}；同池多个技能只共享一份人数容量`);
+ }
+ const posts=new Map();
+ for(const [i,r] of (data.dependencies||[]).entries())if(r['资源类型']==='人员技能'&&r['人员岗位编号']?.trim()){
+  const key=JSON.stringify([r['订单编号'],r['工序编号'],r['人员岗位编号']]);
+  const contract=JSON.stringify([[...personnelCandidates(r)].sort(),r['所需技能'],r['所需班次']||'']);
+  if(posts.has(key)&&posts.get(key)!==contract)add('dependencies',i,'人员岗位编号','同订单同工序同岗位的候选组、技能及班次须一致；独立岗位请使用不同编号');
+  posts.set(key,contract);
  }
  return issues;
 }

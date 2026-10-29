@@ -1,0 +1,2 @@
+import {s06Fixture,requirements} from './s06-fixture.mjs';
+export function p08Fixture(capacity=2){const d=s06Fixture();d.skillSubstitutions=[];d.personnelGroups=[{...d.personnelGroups[0],'人员数量':String(capacity),'技能':'A'}];d.dependencies=d.dependencies.filter(r=>r['资源类型']!=='人员技能');d.dependencies.push(...['P08','P09'].map(id=>({...requirements[1],'资源编号':'A','候选人员组':'','人员岗位编号':id,'人员参与阶段':'操作','需求数量':'1'})));return d;}

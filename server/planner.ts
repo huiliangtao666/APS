@@ -50,7 +50,7 @@ export const defs: TableDef[] = [
   { key: 'batchResources', label: '空间与组批配置（存储不代表检查）', file: '15_空间与组批规则配置.csv', fields: ['资源编号','资源类型','容量','单位','允许程序','说明'] },
   { key: 'calendars', label: '工厂工作日历', file: '02_工厂工作日历.csv', fields: ['日历编号','工厂编号','起始分钟','结束分钟','是否工作','说明'] },
   { key: 'downtime', label: '设备停机例外', file: '04_设备停机与例外日历.csv', fields: ['设备编号','起始分钟','结束分钟','原因'] },
-  { key: 'dependencies', label: '工序资源依赖', file: '12_工序资源与物料依赖.csv', fields: ['订单编号','工序编号','资源类型','资源编号','需求数量','提前占用分钟','后延占用分钟','所需技能','所需班次','候选人员组','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'] },
+  { key: 'dependencies', label: '工序资源依赖', file: '12_工序资源与物料依赖.csv', fields: ['订单编号','工序编号','资源类型','资源编号','需求数量','提前占用分钟','后延占用分钟','所需技能','所需班次','候选人员组','人员岗位编号','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'] },
   { key: 'skillSubstitutions', label: '有向技能替代', file: '29_有向技能替代.csv', fields: ['关系编号','可提供技能','所需技能','是否启用','适用工序','说明'] },
   { key: 'personnelGroups', label: '人员组与可用时间', file: '19_人员组与可用时间.csv', fields: ['人员组编号','人员组名称','人员数量','技能','班次','可用起始分钟','可用结束分钟'] },
   { key: 'rules', label: '排程规则', file: '16_排程规则配置.csv', fields: ['规则编号','中文名称','是否启用','参数JSON','适用对象','生效时间'] },
@@ -279,7 +279,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
         const taskId=`${oid}-${operation}`;
         resourceReservations.push(...(jointPreview.allocations||[]).map(r=>({...r,taskId})),...(personnel.allocations||[]).map(r=>({...r,type:'人员',resourceId:r.groupId,quantity:String(r.count),unit:'人',start:r.start,end:r.end,taskId})),{type:'设备',resourceId:machineId,quantity:'1',unit:'台',start,end:start+duration,taskId});
         personnelReservations.push(...(personnel.allocations||[]));
-        const participation=personnelRequirements.filter(r=>Number(r['需求数量']||0)>0).map(r=>`${r['人员参与阶段']||'全工序'} ${r['人员开始偏移']||0}–${duration-Number(r['人员结束偏移']||0)} 分钟`).join('、');
+        const participation=personnelRequirements.filter(r=>Number(r['需求数量']||0)>0).map(r=>`岗位 ${r['人员岗位编号']||'旧配置未编号'} · ${r['人员参与阶段']||'全工序'} ${r['人员开始偏移']||0}–${duration-Number(r['人员结束偏移']||0)} 分钟`).join('、');
         const task:Task={timingReasons,id:`${oid}-${operation}`,orderId:oid,productId:product,operation,label:op['工序名称']||operation,machine:machineId,start,end:start+duration,duration,predecessor:predecessor?.id||'',source:minimal?'R1 最小模式 · 订单17 · 路线10 · 固定工时11 · 给定机器12 · 机器连续可用；日历/人员/工装/物料未检查':`${fact?'模拟剩余工作 '+fact['事实编号']+'（非合格入库） · ':''}订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04${personnelRequirements.length?` · 人员阶段：${participation}`:''}${calendarShift?` · ${calendarShift}`:''}${start>initialEarliest&&resourceError?` · 联合资源顺延：${resourceError}`:''}${start>initialEarliest&&personnelError?` · 人员顺延：${personnelError}`:''}`};built.push(task);done.set(operation,task);busy.push(task);machineBusy.set(machineId,busy);
       }
     }

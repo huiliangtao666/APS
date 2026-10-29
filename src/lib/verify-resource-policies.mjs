@@ -37,12 +37,12 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
    const expected=requirements.map((d,index)=>{
     const ids=d['候选人员组']?.trim()?String(d['候选人员组']).split(/[,，]/).map(s=>s.trim()):d['资源编号']?.trim()?[d['资源编号'].trim()]:[];
     if(!ids.length||ids.some(id=>!id)||new Set(ids).size!==ids.length||ids.length>32||d['候选人员组']?.trim()&&d['资源编号']?.trim())add(`${task.id} 冻结人员候选配置无效`);
-    const key=JSON.stringify([[...ids].sort(),d['所需技能']||'',d['所需班次']||'',d.__policyRoleSource,d['人员参与阶段']?'窗口集合':index]);
+    const key=JSON.stringify([[...ids].sort(),d['所需技能']||'',d['所需班次']||'',d.__policyRoleSource,...(d['人员岗位编号']?.trim()?['岗位',d['人员岗位编号'].trim()]:[d['人员参与阶段']?'窗口集合':index])]);
     const start=d['窗口外释放']==='否'?task.start:task.start+num(d,'人员开始偏移'),end=d['窗口外释放']==='否'?task.end:task.end-num(d,'人员结束偏移');
     if(!(end>start))add(`${task.id} 人员窗口超出实际工序`);
     return {d,ids,key,start,end,count:num(d,'需求数量')};
    });
-   const keyFor=r=>r.demandKey||expected.find(e=>!e.d['候选人员组']?.trim()&&e.ids[0]===r.resourceId&&e.d['所需技能']===r.requiredSkill&&e.d.__policyRoleSource===r.roleSource)?.key;
+   const keyFor=r=>r.demandKey||expected.find(e=>!e.d['人员岗位编号']?.trim()&&!e.d['候选人员组']?.trim()&&e.ids[0]===r.resourceId&&e.d['所需技能']===r.requiredSkill&&e.d.__policyRoleSource===r.roleSource)?.key;
    const roles=new Set([...expected.map(e=>e.key),...saved.map(r=>keyFor(r))]);
    for(const role of roles){
     const want=expected.filter(e=>e.key===role),got=saved.filter(r=>keyFor(r)===role);
@@ -57,7 +57,7 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
    for(const r of saved){
     expectedReservations.add(r);
     const g=(data.personnelGroups||[]).find(g=>g['人员组编号']===r.resourceId),needs=expected.filter(e=>e.key===keyFor(r)&&e.ids.includes(r.resourceId)&&e.d['所需技能']===r.requiredSkill&&e.d.__policyRoleSource===r.roleSource);
-    if(!Number.isSafeInteger(Number(r.quantity))||!g||!matches(g,r.requiredSkill,task.operation,r)||!needs.length||needs.some(e=>e.d['所需班次']&&g['班次']!==e.d['所需班次']))add(`${task.id} 人员候选/需求/技能/有向替代/班次来源不匹配`);
+    if(!Number.isSafeInteger(Number(r.quantity))||!g||!matches(g,r.requiredSkill,task.operation,r)||!needs.length||needs.some(e=>e.d['人员岗位编号']?.trim()&&(r.postId||'')!==e.d['人员岗位编号'].trim())||needs.some(e=>e.d['所需班次']&&g['班次']!==e.d['所需班次']))add(`${task.id} 人员候选/需求/技能/有向替代/班次来源不匹配`);
    }
   }
   for(const c of (data.resourceClaims||[]).filter(c=>c['订单编号']===task.orderId&&c['工序编号']===task.operation&&enabled(c['资源类型']==='工装'?'MOLD':'STORAGE'))){
