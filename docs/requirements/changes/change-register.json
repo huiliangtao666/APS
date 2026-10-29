@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "S06候选联合分配有限检查点Dev已push，固定12eed551独立Test已入队；D01-D03 round1 PASS及其他未闭合范围保留",
+      "implementation_status": "固定12eed551的S06/S07独立有限验收PASS；FR007/017/022均NOT_READY，逐卡剩余条件见原卡/Issue3/13/16；D01-D03 round1 PASS保持",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "原48项25 PASS/19 PARTIAL/2 FAIL_SCOPE/2 NOT_EXECUTABLE及D01-D03独立round1 PASS保留；S06/S07本次Dev有限PASS，六类独立断言待执行，不升级旧矩阵或完整CR/UAT结论。",
+      "acceptance_result": "A01-A24 PASS；L01额外强制栈耗尽未执行、L02其余完整范围未扩测。原48项25 PASS/19 PARTIAL/2 FAIL_SCOPE/2 NOT_EXECUTABLE逐单元格保持；S06新PASS仅追加Test列。岗位身份/跨组物理池/多班、原始执行资源账、多窗口与各FR维护/联合验证缺口仍在。",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -84,6 +84,11 @@
         {
           "date": "2026-10-29",
           "event": "Design处理S06 DEV_DELIVERED dlv_3a49b951-ccd7-4575-b44e-45d70684be50:r1；固定12eed5514c702f730aae65a39a08747c532f8536交独立Test dlv_f4ebcde5-67f6-4898-a740-535c299548de；非D01-D03新轮次"
+        },
+        {
+          "date": "2026-10-29",
+          "event_key": "dlv_f4ebcde5-67f6-4898-a740-535c299548de:r1",
+          "event": "Design处理S06/S07独立TEST_VERDICT；有限PASS，FR007/017/022各NOT_READY，状态In progress；保留原通过和缺陷轮次，不恢复其他backlog"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
@@ -123,7 +128,7 @@
       ],
       "repair_runtime_blocker": "Original dlv_105360d7-1929-489d-85b3-d769a1e15db6 failed server_overloaded at 2026-10-29T03:14:20.564Z; recovery dlv_197f09db-af6a-4cbf-96cf-16ae535359c2; infrastructure retry does not increment defect repair round",
       "repair_original_delivery": "dlv_105360d7-1929-489d-85b3-d769a1e15db6",
-      "acceptance_status": "S06 Dev有限PASS待独立Test；整卡NOT_READY，完整CR及业务UAT未通过",
+      "acceptance_status": "S06/S07有限检查点独立PASS；FR007/017/022整体NOT_READY；完整CR与业务UAT未通过",
       "test_completed_at": "2026-10-29T11:42:40+08:00",
       "test_matrix_summary": {
         "PASS": 25,
@@ -133,7 +138,7 @@
       },
       "test_report_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/changes/CR-DEC02-03-20261029/test-review-20261029.md",
       "active_dev_delivery": "dlv_3a49b951-ccd7-4575-b44e-45d70684be50",
-      "active_checkpoint": "S06候选组维护/有限联合分配/独立复核已交付，S07与兼容保护待独立Test",
+      "active_checkpoint": "S06/S07有限独立验收已通过并由Design处理；本事件不新增执行投递，不重复已完成验证",
       "checkpoint_delivery": {
         "event_key": "dlv_3a49b951-ccd7-4575-b44e-45d70684be50:r1",
         "notification_delivery": "dlv_12bd1b32-b929-4c2e-9a92-a190bd36d6e4",
@@ -141,11 +146,57 @@
         "product_sha": "12eed5514c702f730aae65a39a08747c532f8536",
         "design_document_sha": "730556fd18bd1b15d6c37005bf5ac4c09356cc93",
         "test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-        "test_status": "queued；不表示已开始或通过",
+        "test_status": "completed；Design PROCESSED，S06/S07有限PASS，三原卡NOT_READY",
         "dev_result": "PASS（有限检查点）",
         "card_recommendation": "NOT_READY",
         "report_sha256": "2d7c9182e196aee5273ab4fc03811ba0a528063034ce66667cb99aace16e7d0e",
-        "evidence_sha256": "9d6c0ee99c9d5906dbcca73af9567e8ffcd288feb4125f7598536291270a662a"
+        "evidence_sha256": "9d6c0ee99c9d5906dbcca73af9567e8ffcd288feb4125f7598536291270a662a",
+        "test_event_key": "dlv_f4ebcde5-67f6-4898-a740-535c299548de:r1",
+        "test_notification_delivery": "dlv_67474553-92d4-4155-848f-f6b32a324b5a",
+        "test_result": "PASS（有限检查点）",
+        "test_report": "APS-Test/S06-CANDIDATE-12eed551-INDEPENDENT-REPORT.txt",
+        "test_report_sha256": "bd8e3659b5181164582999c3136b92a7e5eef0031fecfb6c942782d8dfa05be5",
+        "test_evidence_sha256": "d9fd514dcb14268b9449b7fd27d0a5f2dd3eb33276ff0d3e6824bc3cbe5c9c00",
+        "test_audit_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/operations/s06-candidate-12eed551-test-r1.md"
+      },
+      "checkpoint_test_verdict": {
+        "event_key": "dlv_f4ebcde5-67f6-4898-a740-535c299548de:r1",
+        "test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
+        "product_sha": "12eed5514c702f730aae65a39a08747c532f8536",
+        "design_document_sha": "730556fd18bd1b15d6c37005bf5ac4c09356cc93",
+        "processed_at": "2026-10-29T13:13:07+08:00",
+        "finite_result": "PASS",
+        "card_recommendations": {
+          "FR-007": "NOT_READY",
+          "FR-017": "NOT_READY",
+          "FR-022": "NOT_READY"
+        },
+        "assertions_pass": 24,
+        "not_executed": [
+          "L01",
+          "L02"
+        ],
+        "no_new_product_defects": true,
+        "d01_d03_rounds_unchanged": true,
+        "evidence_hashes": {
+          "S06-CANDIDATE-12eed551-INDEPENDENT-REPORT.txt": "bd8e3659b5181164582999c3136b92a7e5eef0031fecfb6c942782d8dfa05be5",
+          "S06-CANDIDATE-12eed551-INDEPENDENT-ASSERTIONS.csv": "21b98392ba7832298978e51e76be4cf120eefa4609bb4021703d8dd14f4058f6",
+          "S06-CANDIDATE-12eed551-INDEPENDENT-48-RESULTS.csv": "223d68e9582b4ae9710931a1685e4545d1c3ac107e9ed0303da850846193d6bb",
+          "S06-CANDIDATE-12eed551-INDEPENDENT-EVIDENCE.zip": "d9fd514dcb14268b9449b7fd27d0a5f2dd3eb33276ff0d3e6824bc3cbe5c9c00"
+        },
+        "issue_comments": {
+          "3": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6488574838",
+          "13": "https://github.com/huiliangtao666/APS/issues/13#issuecomment-6488575154",
+          "16": "https://github.com/huiliangtao666/APS/issues/16#issuecomment-6488575443"
+        },
+        "audit_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/operations/s06-candidate-12eed551-test-r1.md",
+        "remaining_by_fr": {
+          "FR-007": "P08/P09：独立同技能岗位身份及人数累加；P10：跨组同物理池身份、容量与禁止说明；P06：多班/交接表达或明确阻断。原P02等PARTIAL保持。",
+          "FR-017": "T08/T10/U01：全参数适用范围/继承及中文预览；U05：未启用、待生效、未支持与缺项状态；H02：升级/回滚/缺旧snapshot迁移保留。岗位/物理池/多班未支持组合须前台说明并守卫，不以字段可保存声称采用。",
+          "FR-022": "独立岗位/跨组物理池/多班容量语义；N06：已执行且采用资源任务的原始资源事实账；同工装多不连续窗口；R01：多成员工具+人员联合Worker；R02：全部已启用物料/资源联合回退。"
+        },
+        "next_owner": "APS-Design",
+        "next_step": "按唯一原卡归集本卡剩余责任并细化已有契约；后续仅既有授权缺项实现、固定SHA定向验证；本事件未新增投递"
       }
     },
     {

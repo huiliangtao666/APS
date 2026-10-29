@@ -1,0 +1,27 @@
+﻿断言ID,适用断言,结果,证据/未执行说明,责任FR,产品SHA
+A01,"React候选B,A保存刷新真实Worker",PASS,browser-results save/cases1; candidate-saved-refreshed.png,FR007/017/022,12eed5514c702f730aae65a39a08747c532f8536
+A02,8种需求/候选/组顺序置换,PASS,I01; browser workerPermutations 8,FR007/022,12eed5514c702f730aae65a39a08747c532f8536
+A03,等候选数量需回退例,PASS,I02; targeted.log,FR022,12eed5514c702f730aae65a39a08747c532f8536
+A04,320个独立穷举对照小例,PASS,I03; independent-results oracle[],FR022,12eed5514c702f730aae65a39a08747c532f8536
+A05,显式1–32/互斥/旧单组无默认/无任意组,PASS,I07; source contract/validation/migration,FR007/017,12eed5514c702f730aae65a39a08747c532f8536
+A06,S07前台去B保留两同窗需求/无幽灵账,PASS,browser-results cases11; worker-audit,FR007/022,12eed5514c702f730aae65a39a08747c532f8536
+A07,未接受B不可偷用,PASS,browser-results cases12,FR007/022,12eed5514c702f730aae65a39a08747c532f8536
+A08,基准allocator诊断与合法Worker区分,PASS,baseline/results.json; original FAIL_SCOPE untouched,FR022,12eed5514c702f730aae65a39a08747c532f8536
+A09,同技能/有向一跳/禁止精确范围/不反向不传递,PASS,I04; browser disabled; targeted.log,FR007/017/022,12eed5514c702f730aae65a39a08747c532f8536
+A10,实际半开窗口/可用期/班次/既有占用,PASS,I03-I04; targeted.log,FR007/022,12eed5514c702f730aae65a39a08747c532f8536
+A11,同池跨技能/整数拆分/失败原占用不变,PASS,I01/I03; targeted.log; S07 Worker,FR007/022,12eed5514c702f730aae65a39a08747c532f8536
+A12,256窗口/50000状态边界不声称数学不可行,PASS,I05 two actual limit results,FR022,12eed5514c702f730aae65a39a08747c532f8536
+A13,递归保护/不重排已提交任务/无全局最优承诺,PASS,staffing.mjs search catch RangeError/read-only input; historyBefore=After; contract,FR022,12eed5514c702f730aae65a39a08747c532f8536
+A14,独立检查器冻结重建及导入闭包,PASS,checker-import-closure.json; source audit,FR017/022,12eed5514c702f730aae65a39a08747c532f8536
+A15,14类伪造来源/技能/关系/覆盖/容量账拒绝,PASS,I06; checker[] full bad plans and frozen inputs,FR022,12eed5514c702f730aae65a39a08747c532f8536
+A16,旧单组无demandKey历史账兼容,PASS,I06 legacy,FR007/022,12eed5514c702f730aae65a39a08747c532f8536
+A17,非法/引用删除/越权/stale原子拒绝,PASS,I07 log/stale; browser rejected/queryReadOnly,FR007/017,12eed5514c702f730aae65a39a08747c532f8536
+A18,新旧CSV兼容及坏候选预览不提交,PASS,I07 invalid/preview/legacy/fresh,FR007/017,12eed5514c702f730aae65a39a08747c532f8536
+A19,审计actor/time/reason/from-to版本,PASS,I07 audit; browser audit,FR017,12eed5514c702f730aae65a39a08747c532f8536
+A20,14组独立冻结hash/输入身份/人员峰值,PASS,worker-audit.json,FR017/022,12eed5514c702f730aae65a39a08747c532f8536
+A21,完整confirmed plan+confirmation+plan/run inputs不变,PASS,browser-results historyBefore/historyAfter; worker-audit hashes,FR007/017/022,12eed5514c702f730aae65a39a08747c532f8536
+A22,34保护文件原字节,PASS,protected34-independent.json vs24ba688+originalTest,FR007/017/022,12eed5514c702f730aae65a39a08747c532f8536
+A23,D01-D03及相关构建回归,PASS,d01-d03/repair-independent-results 8PASS; regression logs/build,FR007/017/022,12eed5514c702f730aae65a39a08747c532f8536
+A24,原48列/旧结论原样保留并追加Test列,PASS,48-RESULTS.csv and matrix-integrity.json,FR007/017/022,12eed5514c702f730aae65a39a08747c532f8536
+L01,强制真实运行时栈耗尽,NOT_EXECUTED,仅源码RangeError保护审查；已实测256/50000两个边界。非本检查点必测强制栈注入要求,FR022,12eed5514c702f730aae65a39a08747c532f8536
+L02,原CR其他未完范围/全卡剩余逐条扩展测试,NOT_EXECUTED,原48项限制保持；不将本检查点通过升级完整CR,FR007/017/022,12eed5514c702f730aae65a39a08747c532f8536

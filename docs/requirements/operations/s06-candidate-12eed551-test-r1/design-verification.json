@@ -1,0 +1,34 @@
+{
+  "event_key": "dlv_f4ebcde5-67f6-4898-a740-535c299548de:r1",
+  "product_sha": "12eed5514c702f730aae65a39a08747c532f8536",
+  "outer_hashes": {
+    "S06-CANDIDATE-12eed551-INDEPENDENT-REPORT.txt": "bd8e3659b5181164582999c3136b92a7e5eef0031fecfb6c942782d8dfa05be5",
+    "S06-CANDIDATE-12eed551-INDEPENDENT-ASSERTIONS.csv": "21b98392ba7832298978e51e76be4cf120eefa4609bb4021703d8dd14f4058f6",
+    "S06-CANDIDATE-12eed551-INDEPENDENT-48-RESULTS.csv": "223d68e9582b4ae9710931a1685e4545d1c3ac107e9ed0303da850846193d6bb",
+    "S06-CANDIDATE-12eed551-INDEPENDENT-EVIDENCE.zip": "d9fd514dcb14268b9449b7fd27d0a5f2dd3eb33276ff0d3e6824bc3cbe5c9c00"
+  },
+  "zip_entries": 80,
+  "internal_hashes_verified": 79,
+  "github_source_hashes_verified": 3,
+  "original48_cells_unchanged": true,
+  "dev19_columns_unchanged": true,
+  "original48_verdicts": {
+    "PASS": 25,
+    "PARTIAL": 19,
+    "NOT_EXECUTABLE": 2,
+    "FAIL_SCOPE": 2
+  },
+  "assertions_pass": 24,
+  "additional_not_executed": [
+    "L01",
+    "L02"
+  ],
+  "browser_permutations": 8,
+  "oracle_cases": 320,
+  "checker_tamper_classes": 14,
+  "worker_frozen_identities": 14,
+  "confirmed_history_equal": true,
+  "protected34_audit_checked": true,
+  "d01_d03_regression_cases": 8,
+  "verification_limit": "Design检查交付hash/结构/原矩阵/固定GitHub源码及Test结果，不重复产品执行；34文件逐字节对照与人员峰值由Test独立执行并存证"
+}
