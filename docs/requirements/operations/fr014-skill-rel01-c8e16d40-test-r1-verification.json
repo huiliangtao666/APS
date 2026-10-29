@@ -1,0 +1,38 @@
+{
+  "product_sha": "c8e16d408b2d0207cb9886b55f39a52ebc9c1665",
+  "base": "18c2f59761c9db69554f33a2870b68e15d092320",
+  "external_hashes_verified": 4,
+  "zip_entries": 101,
+  "zip_crc": "PASS",
+  "internal_hashes_verified": 100,
+  "source_blobs_verified_against_github_tree": 127,
+  "dev_changed_source_blobs_verified": 6,
+  "source_access": "Test File API downloads; authorized read-only local Test clone for source bytes, not shared mount",
+  "effective_assertions": 51,
+  "effective_counts": {
+    "PASS": 50,
+    "FAIL": 0,
+    "PARTIAL": 1,
+    "NOT_EXECUTED": 0
+  },
+  "only_changed_assertion": "14-SKILL-REL01",
+  "preserved_old_rows_byte_equivalent_fields": 50,
+  "independent_test_assertions": "13 PASS + 1 inherited PARTIAL; not additional card ACs",
+  "test_execution": {
+    "unit": 12,
+    "browser_groups": 6,
+    "build": "PASS",
+    "pageerror": []
+  },
+  "design_execution": "Evidence/hash/source/DOM/screenshot review only; no product/application test rerun",
+  "evidence_hashes": {
+    "FR014-SKILL-REL01-c8e16d40-INDEPENDENT-R1-REPORT.txt": "7e6773ddd6287b5bb75f7fa7caf42974202208a46ce71ecfff4ee0c40073bf26",
+    "FR014-SKILL-REL01-c8e16d40-INDEPENDENT-R1-ASSERTIONS.csv": "526de1efea2ab2c2b68d1053f529ec3a5bf21be1ef261ce0e2ac1ac516f87fc1",
+    "FR014-SKILL-REL01-c8e16d40-INDEPENDENT-R1-EFFECTIVE-FR014.csv": "8bdf0de98bad6f56f5a61b414e01db6b2e0ca4794a44da26b8afd22130800a52",
+    "FR014-SKILL-REL01-c8e16d40-INDEPENDENT-R1-EVIDENCE.zip": "7f108f14dc7f78f1df73e33c5552556c98f5e5c09aa8061af11dc90f35b76ad4"
+  },
+  "screenshots_reviewed": [
+    "original-rel1.png",
+    "historical-source.png"
+  ]
+}

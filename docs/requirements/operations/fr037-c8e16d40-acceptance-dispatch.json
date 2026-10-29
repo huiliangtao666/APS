@@ -1,0 +1,15 @@
+{
+  "source_event_key": "dlv_65bd029a-fb90-4808-ab0d-c7be761e3cfc:r1",
+  "dispatch_event_key": "fr037:c8e16d40:card-responsibility-acceptance-r1",
+  "delivery": "dlv_88a6254b-a3ac-4e5c-a218-7db64b5580fa",
+  "status": "queued",
+  "semantics": "SENT only at dispatch; no execution/PASS claim",
+  "requirement": "FR-037",
+  "issue": "https://github.com/huiliangtao666/APS/issues/10",
+  "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhGM",
+  "product_sha": "c8e16d408b2d0207cb9886b55f39a52ebc9c1665",
+  "repair_round": 0,
+  "retest_round": 0,
+  "issue_comment": "https://github.com/huiliangtao666/APS/issues/10#issuecomment-6490177221",
+  "dispatched_at": "2026-10-29T14:59:29+08:00"
+}
