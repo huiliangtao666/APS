@@ -1,3 +1,4 @@
+import {sourceRefs} from './problem-records.mjs';
 // One policy source per declaration; no name/grade based skill rules.
 export const skillsOf=value=>String(value||'').split(/[;,，；\s]+/).filter(Boolean);
 // Empty candidate field preserves an explicit single group; never means all groups.
@@ -24,11 +25,12 @@ export function validatePolicyExecution(data,at=new Date().toISOString(),mode='s
  return (data.executionFacts||[]).flatMap((f,i)=>{
   const same=r=>r['订单编号']===f['订单编号']&&r['工序编号']===f['工序编号'];
   const missing=[...(data.resourceClaims||[]).filter(c=>same(c)&&active(c['资源类型']==='工装'?'MOLD':'STORAGE')).map(c=>`${c['资源类型']} ${c['资源编号']}（声明 ${c['声明编号']}）`),...(data.dependencies||[]).filter(d=>same(d)&&d['资源类型']==='人员技能').map(d=>`人员 ${d['资源编号']} / ${d['所需技能']}`)];
-  return missing.length?[{code:'INPUT / RESOURCE_POLICY',table:'executionFacts',file:'25_模拟任务执行事实.csv',row:i+2,field:'工序编号',message:`${f['订单编号']}/${f['工序编号']} 该任务已有执行事实，原始工装/人员占用事实未建模；缺少 ${missing.join('、')} 的原始取得/参与起止、数量及归还/释放事实。本次阻断采用这些资源约束，不把阶段偏移重置到剩余工时，也不改写历史。`}]:[];
+  return missing.length?[{relatedRecords:[...sourceRefs('executionFacts',[f],data.executionFacts),...sourceRefs('resourceClaims',(data.resourceClaims||[]).filter(c=>same(c)&&active(c['资源类型']==='工装'?'MOLD':'STORAGE')),data.resourceClaims||[]),...sourceRefs('dependencies',(data.dependencies||[]).filter(d=>same(d)&&d['资源类型']==='人员技能'),data.dependencies||[])],code:'INPUT / RESOURCE_POLICY',table:'executionFacts',file:'25_模拟任务执行事实.csv',row:i+2,field:'工序编号',message:`${f['订单编号']}/${f['工序编号']} 该任务已有执行事实，原始工装/人员占用事实未建模；缺少 ${missing.join('、')} 的原始取得/参与起止、数量及归还/释放事实。本次阻断采用这些资源约束，不把阶段偏移重置到剩余工时，也不改写历史。`}]:[];
  });
 }
 export function validatePolicies(data,at=new Date().toISOString(),mode='supported',checkExecution=true){
- const issues=[];const add=(table,i,field,message)=>issues.push({code:'INPUT / RESOURCE_POLICY',table,row:i+2,field,message,...(table==='dependencies'?{file:'12_工序资源与物料依赖.csv'}:{})});
+ const refs=(table,rows)=>sourceRefs(table,rows,data[table]||[]);
+ const issues=[];const add=(table,i,field,message,relatedRecords=refs(table,[data[table][i]]))=>issues.push({relatedRecords,code:'INPUT / RESOURCE_POLICY',table,row:i+2,field,message,...(table==='dependencies'?{file:'12_工序资源与物料依赖.csv'}:{})});
  const skillSet=new Set((data.personnelGroups||[]).flatMap(g=>skillsOf(g['技能'])));
  for(const [i,r]of (data.dependencies||[]).entries())if(r['资源类型']==='人员技能'&&r['所需技能'])skillSet.add(r['所需技能']);
  if(checkExecution)issues.push(...validatePolicyExecution(data,at,mode));
@@ -49,23 +51,23 @@ export function validatePolicies(data,at=new Date().toISOString(),mode='supporte
  for(const [i,g]of (data.personnelGroups||[]).entries())if(!Number.isSafeInteger(Number(g['人员数量']))||Number(g['人员数量'])<1)add('personnelGroups',i,'人员数量','人数须为安全正整数；所有技能共用该人数池');
  const claimKeys=new Set();
  for(const [i,c]of (data.resourceClaims||[]).entries()){
-  const fail=(f,m)=>add('resourceClaims',i,f,m);
+  const fail=(f,m,relatedRecords)=>add('resourceClaims',i,f,m,relatedRecords);
   const claimKey=JSON.stringify([c['订单编号'],c['工序编号'],c['资源类型'],c['资源编号']]);
-  if(claimKeys.has(claimKey))fail('资源编号','同一订单/工序/资源仅允许一条占用声明；多个或重叠工装窗口当前禁止，避免整段与阶段叠加');claimKeys.add(claimKey);
+  if(claimKeys.has(claimKey))fail('资源编号','同一订单/工序/资源仅允许一条占用声明；多个或重叠工装窗口当前禁止，避免整段与阶段叠加',refs('resourceClaims',(data.resourceClaims||[]).filter(x=>JSON.stringify([x['订单编号'],x['工序编号'],x['资源类型'],x['资源编号']])===claimKey)));claimKeys.add(claimKey);
   if(c['参数来源']!==undefined&&!['逐项声明','工装配置'].includes(c['参数来源']))fail('参数来源','仅支持逐项声明或工装配置');
   if(c['参数来源']==='工装配置'){
    if(c['资源类型']!=='工装')fail('参数来源','空间只能逐项声明');
    for(const k of ['需求数量','提前占用分钟','后延占用分钟'])if(c[k]?.trim())fail(k,'采用工装配置时此字段须留空，避免两套冲突来源；预览显示有效值');
   }
   const effective=effectiveClaim(c,data);
-  for(const k of ['提前占用分钟','后延占用分钟'])if(!minute(effective[k]))fail(k,'有效值须为0–525600整数分钟');
+  for(const k of ['提前占用分钟','后延占用分钟'])if(!minute(effective[k]))fail(k,'有效值须为0–525600整数分钟',[...refs('resourceClaims',[c]),...(c['参数来源']==='工装配置'?refs('tools',(data.tools||[]).filter(t=>t['工装编码']===c['资源编号']).slice(0,1)):[])]);
   const a=c['窗口开始偏移分钟']??'0',b=c['窗口结束偏移分钟']??'0';
   if(!minute(a)||!minute(b))fail('窗口开始偏移分钟','窗口偏移须为0–525600的整数分钟');
   if(c['占用口径']===whole&&(Number(a)!==0||Number(b)!==0))fail('占用口径','整工序占用不能同时配置阶段窗口');
   if(c['占用口径']===windowMode){
    const o=(data.orders||[]).find(o=>o['订单编号']===c['订单编号']);
    const duration=Number((data.times||[]).find(t=>t['产品编号']===o?.['产品编号']&&t['工序编号']===c['工序编号'])?.['固定分钟']);
-   if(!(Number(a)+Number(b)<duration))fail('窗口结束偏移分钟','明确窗口须短于已配置固定工时；从开始+偏移到结束−偏移，不猜阶段时长');
+   if(!(Number(a)+Number(b)<duration))fail('窗口结束偏移分钟','明确窗口须短于已配置固定工时；从开始+偏移到结束−偏移，不猜阶段时长',[...refs('resourceClaims',[c]),...refs('orders',o?[o]:[]),...refs('times',(data.times||[]).filter(t=>t['产品编号']===o?.['产品编号']&&t['工序编号']===c['工序编号']).slice(0,1))]);
   }
  }
  for(const [i,r]of (data.dependencies||[]).entries())if(r['资源类型']!=='人员技能'&&['人员岗位编号','候选人员组','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'].some(k=>r[k]?.trim()))add('dependencies',i,'人员参与阶段','人员阶段/偏移/释放仅适用于人员技能依赖；设备及其他资源请使用其对应配置');

@@ -1,4 +1,4 @@
-import {attachProblemRecords} from '../src/lib/problem-records.mjs';
+import {attachProblemRecords,sourceRefs} from '../src/lib/problem-records.mjs';
 import {eventSummary,eventAbsences,validateEvents} from '../src/lib/simulation-events.mjs';
 import {factFor,executionSummary,executionAdmission,validateExecution,executionRisks} from '../src/lib/execution-facts.mjs';
 import {remainingExecutionDemand} from '../src/lib/material-allocation.mjs';
@@ -155,7 +155,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
  const resolvedSupplies=resolveExpectedSupply(data.supplies||[],data.supplyDelays||[]);
   function schedule(){
     const built:Task[]=[]; const findings:Finding[]=[]; const machineBusy=new Map<string,Task[]>(); const personnelReservations:PersonnelReservation[]=[];
-    const executionIssues=[...validateEvents(sourceData),...validateExecution((sourceData as any).executionContext||sourceData),...executionAdmission(sourceData,{...conditions,ruleEvaluationAt:calculatedAt,enabledRuleIds:enabledRules})];if(executionIssues.length){setActivePlan({id:uid(),name:'模拟执行须核对',createdAt:calculatedAt,tasks:[],findings:executionIssues.map(i=>({...i,code:i.code,message:i.message,taskIds:[]})),rules:[],inputVersion:`v${inputVersion}`});return;}
+    const executionIssues=[...validateEvents(sourceData),...validateExecution((sourceData as any).executionContext||sourceData).map(f=>(sourceData as any).executionContext?{...f,relatedRecords:(f.relatedRecords||[]).map(r=>({...r,sourceContext:'executionContext'}))}:f),...executionAdmission(sourceData,{...conditions,ruleEvaluationAt:calculatedAt,enabledRuleIds:enabledRules})];if(executionIssues.length){setActivePlan({id:uid(),name:'模拟执行须核对',createdAt:calculatedAt,tasks:[],findings:executionIssues.map(i=>({...i,code:i.code,message:i.message,taskIds:[]})),rules:[],inputVersion:`v${inputVersion}`});return;}
     const risks=executionRisks((sourceData as any).executionContext||sourceData,calculatedAt);
     for(const risk of risks)findings.push({code:'UNPLANNED / EXECUTION_EVENT_REVIEW',message:risk.message,taskIds:[`${risk.orderId}-${risk.operation}`]});
     personnelReservations.push(...eventAbsences(sourceData));
@@ -200,7 +200,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
     };
     sorted.sort((a:Row,b:Row)=>Number((sourceData.executionFacts||[]).some(f=>f['订单编号']===b['订单编号']))-Number((sourceData.executionFacts||[]).some(f=>f['订单编号']===a['订单编号'])));
     for(const order of sorted){const oid=order['订单编号'], product=order['产品编号'];const route=(data.routes||[]).filter(r=>r['产品编号']===product);
-      if(!route.length){findings.push({code:'INPUT / ROUTE_MISSING',message:`订单 ${oid} 的产品 ${product} 没有工艺路线`,taskIds:[]});continue;}
+      if(!route.length){findings.push({relatedRecords:[...sourceRefs('orders',sourceData.orders.filter(o=>o['订单编号']===oid),sourceData.orders),...sourceRefs('products',sourceData.products.filter(p=>p['产品编号']===product),sourceData.products)],missingTarget:{table:'routes',key:product},code:'INPUT / ROUTE_MISSING',message:`订单 ${oid} 的产品 ${product} 没有工艺路线`,taskIds:[]});continue;}
       const routeByOperation=new Map<string,Row>(); const routeProblems:string[]=[];
       for(const op of route){const operation=op['工序编号']?.trim();if(!operation){routeProblems.push('存在工序编号为空的路线记录');continue;}if(routeByOperation.has(operation))routeProblems.push(`工序 ${operation} 重复定义`);else routeByOperation.set(operation,op);}
       for(const [operation,op] of routeByOperation){const predecessor=op['前序工序']?.trim();if(predecessor&&!routeByOperation.has(predecessor))routeProblems.push(`工序 ${operation} 引用不存在的前序工序 ${predecessor}`);}

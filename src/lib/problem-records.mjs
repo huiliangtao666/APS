@@ -25,11 +25,12 @@ export function bindProblemSource(finding, source, original, sourceMap) {
  return {...finding,source,relatedRecords:(finding.relatedRecords||[]).map(ref=>{
   if(!(ref.occurrence?.index>=0))return ref;
   let occurrence=ref.occurrence;
-  if(sourceMap){
+  if(sourceMap&&ref.sourceContext!=='executionContext'){
    const index=sourceMap[ref.table]?.[occurrence.index],rows=original?.[ref.table],keys=recordKeys[ref.table]||[];
-   if(!Number.isInteger(index)||!rows?.[index])return {...ref,origin:undefined};
+   if(!Number.isInteger(index)||!rows?.[index]||JSON.stringify(rows[index])!==JSON.stringify(ref.row))return {...ref,origin:undefined};
    occurrence={index,logicalRow:index+2,keyCount:rows.filter(r=>keys.every(k=>(r[k]||'').trim()===(ref.row[k]||'').trim())).length};
   }
+  if(ref.sourceContext==='executionContext'&&(!original?.[ref.table]?.[occurrence.index]||JSON.stringify(original[ref.table][occurrence.index])!==JSON.stringify(ref.row)))return {...ref,origin:undefined};
   return {...ref,origin:{...source,occurrence}};
  })};
 }

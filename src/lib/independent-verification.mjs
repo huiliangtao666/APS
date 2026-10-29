@@ -111,7 +111,7 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
     details.resourcePolicies=verifyResourcePolicies(plan,frozenData,frozenConditions??plan.conditions);
     if(details.resourcePolicies.status==='problem'){
       const structured=details.resourcePolicies.findings||[];findings.push(...structured);
-      findings.push(...details.resourcePolicies.details.filter(message=>!structured.some(f=>{const m=message.match(/^(.*) 在分钟 ([\d.]+) 超容量 /);return m&&m[1]===f.interval.resourceId&&Number(m[2])>=f.interval.start&&Number(m[2])<f.interval.end;})).map(message=>({code:'VERIFY / RESOURCE_POLICY',message,taskIds:[]})));
+      findings.push(...(details.resourcePolicies.diagnostics||details.resourcePolicies.details.map(message=>({code:'VERIFY / RESOURCE_POLICY',message,taskIds:[],relatedRecords:[],associationGap:'旧复核没有保存生产端逐条来源；需按原冻结输入重新复核。'}))).filter(diagnostic=>{const message=diagnostic.message;return !structured.some(f=>{const m=message.match(/^(.*) 在分钟 ([\d.]+) 超容量 /);return m&&m[1]===f.interval.resourceId&&Number(m[2])>=f.interval.start&&Number(m[2])<f.interval.end;});}));
     }
   }
   return { checkedAt, planId: plan?.id ?? '', findings, scopeNote:'独立复核检查单线、机器不重叠、工序先后，以及有完整冻结配置的新契约资源窗口、技能资格与容量；未检查项另列，不代表完整业务可执行。', checks: details };

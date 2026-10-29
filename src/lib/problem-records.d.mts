@@ -1,6 +1,6 @@
 export type Source={domain:string;inputVersionId:string;revision:number;checkedAt:string;scope?:unknown;executionVersionId?:string};
 export type Occurrence={index:number;logicalRow:number;keyCount:number};
-export type RecordRef={table:string;row:Record<string,string>;occurrence?:Occurrence;origin?:Source & {occurrence:Occurrence}};
+export type RecordRef={table:string;row:Record<string,string>;occurrence?:Occurrence;versionSide?:'before'|'after';sourceContext?:'executionContext';origin?:Source & {occurrence:Occurrence}};
 export type IdentityContext={inputVersionId?:string;operations?:any[]};
 export function recordRefs(table:string,rows:Record<string,string>[]):RecordRef[];
 export function sourceRefs(table:string,rows:Record<string,string>[],original?:Record<string,string>[]):RecordRef[];

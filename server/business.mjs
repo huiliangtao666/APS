@@ -82,6 +82,12 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const s=read();res.json({revision:s.revision,inputVersionId:inputHash(s.data),asOf,rows:inventoryView(s.data,asOf),scope:'模拟库存；当前查询与分配前余额；方案内分配保留在方案中，不写入库存占用'});
   });
   router.get('/execution',permission('read'),(_req,res)=>{const s=read();const history=s.records.filter(r=>!r.trialId&&factTables.includes(r.target));res.json({...executionSummary(s.data),version:inputHash(executionState(s.data)),revision:s.revision,history,inventory:queryInventoryAvailability(executionInventory(s.data),{rules:s.data.rules}).map(row=>({...row,'扣耗后余额':row['账面数量'],'扣耗前账面数量':s.data.inventory.find(b=>b['批次编号']===row['批次编号'])?.['账面数量'],'说明':'模拟账面减累计耗料，再减独立占用；不是真实库存'}))});});
+  // Rejected transitions carry two explicit, independently versioned inputs.
+  function transitionEvidence(issues,before,after,revision,domain='current'){
+    const at=new Date().toISOString(),sources={before:{domain,inputVersionId:inputHash(before),revision,checkedAt:at},after:{domain:'candidate:'+domain,inputVersionId:inputHash(after),revision,checkedAt:at}};
+    const bound=issues.map(f=>({...f,taskIds:[],relatedRecords:(f.relatedRecords||[]).map(ref=>({...ref,origin:{...sources[ref.versionSide],occurrence:ref.occurrence}}))}));
+    return {findings:bound,checkedInputs:{before:{data:before,...sources.before},after:{data:after,...sources.after}},issues:bound};
+  }
   function saveInputs(req,res,tables,trialId,dryRun=false){
     const {revision,operation}=req.body;
     const s=read(),target=trialId?s.trials?.find(t=>t.id===trialId):s;
@@ -99,7 +105,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     }
     if(trialId&&factTables.some(k=>tables[k]!==undefined))return res.status(409).json({error:'trial_execution_edit_forbidden'});
     if(!trialId){const staged=stageEvents(target.data,proposed,Object.keys(tables));if(staged.issues.length)return res.status(409).json({error:'event_reconciliation_required',issues:staged.issues});proposed=staged.data;for(const def of defs.filter(d=>JSON.stringify(proposed[d.key])!==JSON.stringify(target.data[d.key]))){const rows=proposed[def.key]||[];if(rows.some(r=>!r||typeof r!=='object'||Array.isArray(r)||Object.keys(r).some(k=>!def.fields.includes(k))||Object.values(r).some(v=>typeof v!=='string')))return res.status(400).json({error:'invalid_event_effect'});proposed[def.key]=rows.map(r=>Object.fromEntries(def.fields.map(f=>[f,r[f]??''])));}}
-    const transition=(trialId?executionTrialIssues(s.data,proposed):executionTransition(target.data,proposed));if(transition.length)return res.status(409).json({error:'execution_reconciliation_required',issues:transition});
+    const transition=(trialId?executionTrialIssues(s.data,proposed):executionTransition(target.data,proposed));if(transition.length)return res.status(409).json({error:'execution_reconciliation_required',...transitionEvidence(transition,trialId?s.data:target.data,proposed,trialId?s.revision:target.revision)});
     const newlyEnabled=(proposed.rules||[]).some(r=>r['是否启用']==='是'&&!(target.data.rules||[]).some(old=>old['规则编号']===r['规则编号']&&old['是否启用']==='是'));
     const issues=[...validateInputs(defs,proposed),...(newlyEnabled?assessRules(proposed,new Date().toISOString(),true).issues:[])];if(issues.length)return res.status(400).json({error:'invalid_input',issues});
     if(operation==='restore')return res.status(409).json({error:'restore_blocked',...restoreBlockers(s,null)});
@@ -247,7 +253,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(!source||!historical(s,source)||!historical(s,plan))return res.status(409).json({error:'historical_inputs_unavailable'});
     const comparison=comparePlans(source,inputs(s,source).data,plan,inputs(s,plan).data);
     if(inputHash(executionState(trial.data))!==inputHash(executionState(s.data)))return res.status(409).json({error:'current_execution_changed'});
-    const protectedIssues=executionTrialIssues(s.data,trial.data);if(protectedIssues.length)return res.status(409).json({error:'execution_reconciliation_required',issues:protectedIssues});
+    const protectedIssues=executionTrialIssues(s.data,trial.data);if(protectedIssues.length)return res.status(409).json({error:'execution_reconciliation_required',...transitionEvidence(protectedIssues,s.data,trial.data,s.revision)});
     const retained={id:randomUUID(),planId:plan.id,runId:plan.runId,inputVersionId:plan.inputVersionId,snapshotHash:plan.snapshotHash,trialRevision:trial.revision,at:new Date().toISOString(),actor:subjectKey(req.praetorActor),comparison};
     trial.retainedSnapshots??=[];trial.retainedSnapshots.push(retained);
     record(s,req,'trial_retained',trial.id,{retainedId:retained.id,planId:plan.id,runId:plan.runId,inputVersionId:plan.inputVersionId,snapshotHash:plan.snapshotHash,sourcePlanId:source.id});write(s);
@@ -286,7 +292,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const target=trial||s;
     if(req.body.revision!==target.revision){res.status(409).json({error:'stale_input'});return;}
     if(trial&&inputHash(executionState(trial.data))!==inputHash(executionState(s.data))){res.status(409).json({error:'current_execution_changed',message:'试算执行事实已落后当前版本；保留旧记录，请从当前事实新算再复制'});return;}
-    if(trial){const reconciliation=executionTrialIssues(s.data,trial.data);if(reconciliation.length){res.status(409).json({error:'execution_reconciliation_required',issues:reconciliation});return;}}
+    if(trial){const reconciliation=executionTrialIssues(s.data,trial.data);if(reconciliation.length){res.status(409).json({error:'execution_reconciliation_required',...transitionEvidence(reconciliation,s.data,trial.data,s.revision)});return;}}
     const calculatedAt=new Date().toISOString();let frozen;
     const source={domain:trial?'trial:'+trial.id:'current',inputVersionId:inputHash(target.data),revision:target.revision,checkedAt:calculatedAt,scope:req.body.selection??trial?.selection??null};
     try{frozen=freezeRunInput(target.data,req.body.selection??trial?.selection,calculatedAt);if(trial&&Object.keys(trial.locks||{}).length)frozen=freezePositions(target.data,frozen.conditions,trial.locks,calculatedAt);}
@@ -414,7 +420,9 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const run=p.runId?s.runs?.find(r=>r.id===p.runId):null;
     if(p.runId&&(!run||run.snapshotHash!==p.snapshotHash||inputHash({conditions:run.conditions,executionData:run.executionData})!==p.snapshotHash||!inputs(s,p)))return res.status(409).json({error:'historical_inputs_unavailable'});
     const execution=run?.executionData;
-    p.verification={...independentlyVerifyPlan(p,execution?.orders??s.data.orders,execution?.routes??s.data.routes,p.rules,new Date().toISOString(),execution,run?.conditions),contentHash:contentHash(p)};record(s,req,'edit',p.id,{kind:'verify'});write(s);res.json(p);
+    const verification=independentlyVerifyPlan(p,execution?.orders??s.data.orders,execution?.routes??s.data.routes,p.rules,new Date().toISOString(),execution,run?.conditions);
+    const source={domain:p.trialId?'trial:'+p.trialId:'current',inputVersionId:p.inputVersionId,revision:p.revision,checkedAt:verification.checkedAt,scope:run?.conditions};
+    p.verification={...verification,findings:verification.findings.map(f=>execution?bindProblemSource(f,source,inputs(s,p)?.data,run.sourceMap||{}):f),contentHash:contentHash(p)};record(s,req,'edit',p.id,{kind:'verify'});write(s);res.json(p);
   });
   router.get('/plans/:id/review',permission('read'),(req,res)=>{
     const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});
