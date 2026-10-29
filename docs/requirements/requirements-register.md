@@ -1,6 +1,6 @@
 # 当前需求跟踪表
 
-快照：2026-10-29T23:27:18+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
+快照：2026-10-29T23:40:00+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
 
 | 编号 | 名称 | 要求版本 | 生效CR | 原卡状态 | 当前环节 | 验收结论 | 原卡 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -13,7 +13,7 @@
 | FR-007 | 人员数量与技能配置 | v0.3+CR-DEC02-03-20261029 | CR-DEC02-03-20261029 | In progress | P08/P09限定PASS；用户确认共享开关、交接容量与占用可配置；其余责任待闭环 | P08/P09旧SHA限定PASS；共享/交接参数化未验；整卡NOT_READY | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgjs) |
 | FR-008 | 工作日历与停机配置 | v0.3 |  | Done | 原卡已完成；按历史验收范围 | 原卡Done，保留原通过记录；不推定完整业务UAT通过 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgk0) |
 | FR-009 | 订单与需求数据 | v0.3 |  | Done | 原卡已完成；按历史验收范围 | 原卡Done，保留原通过记录；不推定完整业务UAT通过 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHglg) |
-| FR-010 | 库存批次与模拟质量状态 | v0.3+CR-DEC04-05-06-20261029 | CR-DEC04-05-06-20261029 | In progress | CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgm8) |
+| FR-010 | 库存批次与模拟质量状态 | v0.3+CR-DEC04-05-06-20261029 | CR-DEC04-05-06-20261029 | In progress | FR010 v0.3 e0be9b6d 独立Test PARTIAL；原范围整卡NOT_READY；b7189157定向复测中。CR-DEC04-05-06仅设计/mock。 | FR010 v0.3固定e0be9b6d独立任务级PARTIAL、整卡NOT_READY；I02-I05限定PASS；旧c9fd687e D1/D2 PASS保留；无新产品FAIL。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgm8) |
 | FR-011 | 预计到料与可用时间 | v0.3+CR-DEC04-05-06-20261029 | CR-DEC04-05-06-20261029 | Done | CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgn8) |
 | FR-012 | 在制品与模拟进度 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | FR012本卡两原条款及AC12/21/32责任18/18 PASS；旧PASS按原SHA证据经影响分析承接，新三状态页面/API/Worker补证；产品修复轮次0。FR026恢复、原UAT15业务批准、真实平台及QA UAT单列未完成 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgp0) |
 | FR-013 | 各类CSV模拟数据导入 | v0.3+CR-FR013-VALIDATION-20261029 | CR-FR013-VALIDATION-20261029 | In progress | 袋支整数、总收率≤100%及收率/物料单位/类别可配置已批准；待实现与独立验收 | 旧原07/08等有限PASS保留各原SHA；新业务增量未验；整卡NOT_READY | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgrg) |

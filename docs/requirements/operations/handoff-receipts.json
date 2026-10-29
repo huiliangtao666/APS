@@ -1770,6 +1770,26 @@
       "issue_comment": "https://github.com/huiliangtao666/APS/issues/14#issuecomment-6500882222",
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES (actual UAT separately)"
+    },
+    {
+      "event_key": "dlv_c183ad81-7e1e-42be-9109-c46ee5caf4e4:r1",
+      "type": "DEV_DELIVERED",
+      "state": "PROCESSED",
+      "source": "APS-Dev delivery dlv_861b30b2-a7bc-4c96-9222-b2ea05e8f9b6",
+      "processed_at": "2026-10-29T23:40:37+08:00",
+      "requirement": "FR-010 v0.3 / Issue9 / AC10/11/24",
+      "product_sha": "b7189157106ecc18cc87fd1821fd19c6d55ffed2",
+      "result": "Dev PARTIAL, 11 PASS / 1 NOT_EXECUTED / 2 BLOCKED; independent Test dispatched, full card NOT_READY",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/9#issuecomment-6501214592",
+      "project_status": {
+        "FR-010": "In progress"
+      },
+      "test_dispatches": [
+        "dlv_4cd15f89-56f8-4f1d-b5f9-6c056d2be208",
+        "dlv_efe3ad4a-a89c-4fbc-8340-02cb13eea572"
+      ],
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
