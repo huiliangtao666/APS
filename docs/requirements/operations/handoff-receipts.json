@@ -3368,6 +3368,60 @@
       "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6508710192",
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_de217f6d-a8e6-4d4a-b544-577ef3646d06:c1",
+      "original_delivery": "dlv_de217f6d-a8e6-4d4a-b544-577ef3646d06",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T05:43:18+08:00",
+      "requirement": "FR-013/Issue4",
+      "product_sha": "bd58868fc210867b6f56c8262e3c35c8d5496831",
+      "result": "FR013固定bd58868独立17 PASS/5 FAIL/12 BLOCKED/2未执行；5 FAIL收敛为真实产品缺陷FR013-NONDEVICE-REF-01：不存在的工具/模具引用预览valid=true且可提交持久化；整卡NOT_READY。旧PASS保留原SHA。",
+      "external_hashes": {
+        "FR013-05060912-bd58868-SOURCE-PROBE-c1-REPORT.md": "5ad894a930765e7f4a7efd03961ace6c57fcf1bb6f6889be232a53b3bf54720b",
+        "FR013-05060912-bd58868-SOURCE-PROBE-c1-PREP72-TRACE.csv": "e854444d34cd78c1dfbcfa41a76c6cd06271e43ba926b7d26da68b375211eb9f",
+        "FR013-05060912-bd58868-SOURCE-PROBE-c1-SHA256.json": "fc5e28235e5d0539dfa225fa4aaa22e3a5f3f83525ffe406659730bce345b344",
+        "FR013-05060912-bd58868-SOURCE-PROBE-c1-EVIDENCE.zip": "f45c3b63a7ea718424a0b3fbb309f7fda67092377f825cc653964e2f0e9de56b",
+        "FR013-05060912-bd58868-SOURCE-PROBE-c1-MATRIX.csv": "da4045e0f884410d7863f9869c41760354ba0d0abcedef9d4e46d41fe72bdaba"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 36,
+      "project_status": {
+        "FR-013": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6509015897",
+      "confirmed_product_defects": [
+        "FR013-NONDEVICE-REF-01"
+      ],
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_bfd38055-4c2a-49e3-a005-7af95b38803d:c1",
+      "original_delivery": "dlv_bfd38055-4c2a-49e3-a005-7af95b38803d",
+      "type": "TEST_PREP_RESULT",
+      "source": "APS-Test2",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T05:43:18+08:00",
+      "requirement": "FR-022/Issue3",
+      "product_sha": null,
+      "design_sha": "ea1338ba9e1627b91c51aca55fa0fc9f484b4e34",
+      "result": "N06设计ea1338固定16样例独立测试准备完成，原账守卫/oracle已就绪；新产品SHA null，16/16产品NOT_EXECUTED，真实客户原账、未知释放、U01/U02仍BLOCKED，FR022整卡NOT_READY",
+      "external_hashes": {
+        "N06-ea1338-Test2-PREP-r1-report.md": "d5844606251963133a98d774322fcccc518b173652d5e1f3d8975ae6305c8b2b",
+        "N06-ea1338-Test2-PREP-r1-evidence.zip": "07652588a2ccee284acd3a529e1507fb969702ee193980cb5571701381078ce3",
+        "N06-ea1338-Test2-PREP-r1-sha256.txt": "7e8ae94a03031288f23724d009041c2d1b92a7e6bd8b7b5a38dcc538ab735bcb"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 16,
+      "project_status": {
+        "FR-022": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6509017648",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
