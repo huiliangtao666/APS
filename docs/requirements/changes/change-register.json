@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "D01-D03首轮修复已push，独立复测已派发；其余范围未完成",
+      "implementation_status": "D01/D02/D03首轮修复经独立Test通过；完整CR仍有范围及验收缺口",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/DEC02-03-Issue3-Round1-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_2c5caf14-f798-43ae-bb2f-737f33a40570",
-      "acceptance_result": "原0d2de88验收失败保留；修复24ba688待独立Test，不宣称3缺陷已通过或完整CR/UAT通过。",
+      "acceptance_result": "24ba688独立复测D01/D02/D03均PASS；48项为25 PASS、19 PARTIAL、2 FAIL_SCOPE、2 NOT_EXECUTABLE。候选分配、独立岗位、跨组物理池、多班及原始执行资源账等仍未闭环；保留原失败和原范围通过记录。",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -88,23 +88,29 @@
         {
           "id": "DEC0203-D01",
           "round": 1,
-          "status": "Dev修复已交付，待独立Test",
+          "status": "独立Test round1 PASS",
           "description": "检查器信任被检结果自报规则，删除MOLD及工装账可绕过冻结启用配置",
-          "repair_delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2"
+          "repair_delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2",
+          "test_delivery": "dlv_2c5caf14-f798-43ae-bb2f-737f33a40570",
+          "verified_sha": "24ba6884b3a5f07425a728b7733a677563c6aa44"
         },
         {
           "id": "DEC0203-D02",
           "round": 1,
-          "status": "Dev修复已交付，待独立Test",
+          "status": "独立Test round1 PASS",
           "description": "明确窗口人员开始偏移空值可保存并隐式0，须原子拒绝且显式0合法",
-          "repair_delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2"
+          "repair_delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2",
+          "test_delivery": "dlv_2c5caf14-f798-43ae-bb2f-737f33a40570",
+          "verified_sha": "24ba6884b3a5f07425a728b7733a677563c6aa44"
         },
         {
           "id": "DEC0203-D03",
           "round": 1,
-          "status": "Dev修复已交付，待独立Test",
+          "status": "独立Test round1 PASS",
           "description": "未到生效时间的MOLD误拦合法执行事实，须按实际生效范围判断",
-          "repair_delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2"
+          "repair_delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2",
+          "test_delivery": "dlv_2c5caf14-f798-43ae-bb2f-737f33a40570",
+          "verified_sha": "24ba6884b3a5f07425a728b7733a677563c6aa44"
         }
       ],
       "repair_delivery_history": [
@@ -112,7 +118,16 @@
         "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2"
       ],
       "repair_runtime_blocker": "Original dlv_105360d7-1929-489d-85b3-d769a1e15db6 failed server_overloaded at 2026-10-29T03:14:20.564Z; recovery dlv_197f09db-af6a-4cbf-96cf-16ae535359c2; infrastructure retry does not increment defect repair round",
-      "repair_original_delivery": "dlv_105360d7-1929-489d-85b3-d769a1e15db6"
+      "repair_original_delivery": "dlv_105360d7-1929-489d-85b3-d769a1e15db6",
+      "acceptance_status": "三项缺陷round1复测通过；完整CR及业务UAT未通过",
+      "test_completed_at": "2026-10-29T11:42:40+08:00",
+      "test_matrix_summary": {
+        "PASS": 25,
+        "PARTIAL": 19,
+        "FAIL_SCOPE": 2,
+        "NOT_EXECUTABLE": 2
+      },
+      "test_report_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/changes/CR-DEC02-03-20261029/test-review-20261029.md"
     },
     {
       "id": "CR-DEC04-05-06-20261029",
@@ -129,7 +144,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求的设计增量；不是应用实现/发布或UAT通过",
-      "implementation_status": "需求设计与mock完成，待独立设计审查；应用实现未派发",
+      "implementation_status": "独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发",
       "primary_requirements": [
         "FR-002",
         "FR-003",
@@ -243,7 +258,7 @@
       "dev_report": "未派发应用开发",
       "test_contract": "changes/CR-DEC04-05-06-20261029/acceptance-matrix.csv（44项，产品测试未执行）",
       "acceptance_status": "本CR仅设计/mock数据核验；产品实现和验收未开始",
-      "acceptance_result": "来源/CSV/算术38项自洽，非产品通过；独立设计审查待结果，应用实现/业务UAT未执行。",
+      "acceptance_result": "独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。",
       "limitations": "现有应用扩展导入/执行接口尚无本CR交付证据；新策略文件为设计契约。基础样例及派生mock均非真实工艺/配方/放行参数。",
       "design_path": "changes/CR-DEC04-05-06-20261029/README.md",
       "mock_manifest": "changes/CR-DEC04-05-06-20261029/mock/manifest.json",
@@ -262,7 +277,31 @@
           "event": "独立设计/mock审查已排队 dlv_ca267537-fa49-42fb-bc46-22e19b565ab5；前CR修复独立复测优先"
         }
       ],
-      "design_commit": "4db95a4c4bfb4ec2fe9178b6dc787e69630c9005"
+      "design_commit": "4db95a4c4bfb4ec2fe9178b6dc787e69630c9005",
+      "design_review_completed_at": "2026-10-29T11:49:01+08:00",
+      "review_findings": [
+        {
+          "id": "F01",
+          "status": "Design待修正；非产品缺陷修复轮次",
+          "description": "物理投料粒度与订单汇总粒度/分摊可行性须区分"
+        },
+        {
+          "id": "F02",
+          "status": "Design待修正；非产品缺陷修复轮次",
+          "description": "补齐BOM基准、收率、损失合法组合和逐物料公式"
+        },
+        {
+          "id": "F03",
+          "status": "Design待修正；非产品缺陷修复轮次",
+          "description": "预计来源需独立开关门控并保留风险，补来源×质量组合"
+        },
+        {
+          "id": "F04",
+          "status": "Design待修正；非产品缺陷修复轮次",
+          "description": "细化配置覆盖/版本、来源去重、客户余保、换型依赖及机器验收状态"
+        }
+      ],
+      "test_report_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/changes/CR-DEC04-05-06-20261029/test-review-20261029.md"
     }
   ]
 }
