@@ -36,7 +36,7 @@ import { validateBomConfig } from './lib/bom-config.mjs';
 
 type Row = Record<string, string>;
 type Task = { productionBatchId?:string;resourceBatchId?:string; id: string; orderId: string; productId: string; operation: string; label: string; machine: string; start: number; end: number; duration: number; predecessor: string; source: string };
-type Finding = { code: string; message: string; taskIds: string[]; relatedRecords?:RecordRef[];associationGap?:string;sourceRevision?:number };
+type Finding = { code: string; message: string; taskIds: string[]; relatedRecords?:RecordRef[];associationGap?:string;associationState?:string;missingTarget?:{table:string;key?:string;requirement?:string};sourceRevision?:number };
 type StoredVerificationReport = VerificationReport & { inputFingerprint?: string };
 type Plan = ResultPlan & DeliveryPlan & JointPlan & BatchPlan & { id: string; name: string; createdAt: string; tasks: Task[]; findings: Finding[]; rules: string[]; inputVersion: string; verification?: StoredVerificationReport; supplyConditions?: SupplyCondition[]; supplyInput?: string; materialChecked?:boolean;materialDemands?:MaterialDemandRow[]; ruleSnapshot?: RuleSnapshot; inputSnapshot?:Record<string,Row[]>;runId?:string;conditions?:Run["conditions"] };
 

@@ -295,6 +295,8 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
       const selected=e.message==='invalid_line_scope'?target.data.orders.filter(o=>o['需求类型']==='正式订单'&&o['订单状态']==='有效'&&(!selection?.orderIds||selection.orderIds.includes(o['订单编号']))):[];
       const findings=e.message==='invalid_line_scope'
         ?validateSingleLineScope(selected,target.data.machines).map(f=>({...bindProblemSource(f,{...source,scope:selection??null},target.data,{orders:selected.map(o=>target.data.orders.indexOf(o)),machines:target.data.machines.map((_,i)=>i)}),sourceRevision:target.revision})):[...validateOrders(target.data.orders),...validateMasterData(target.data)].map(f=>({...bindProblemSource({...f,taskIds:[]},{...source,scope:'complete saved input validation'}),sourceRevision:target.revision}));
+      // Keep the early selection rejection; expose only actually absent mandatory rules.
+      if(e.message==='invalid_rule_selection')findings.push(...assessRules(target.data,calculatedAt,false).issues.filter(i=>i.associationState==='known-absent').map(i=>({...bindProblemSource({...i,code:'RULE / CONFIG',taskIds:[]},{...source,scope:'complete saved input rule presence'}),sourceRevision:target.revision})));
       res.status(400).json({error:e.message,...(findings?{findings,checkedInput:{data:target.data,inputVersionId:source.inputVersionId}}:{})});return;
     }
     const native=validateInputs(defs,target.data,{at:calculatedAt,checkPolicyExecution:false});

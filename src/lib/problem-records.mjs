@@ -11,9 +11,10 @@ export function attachProblemRecords(finding, data) {
  return {...finding,relatedRecords:[],associationGap:'问题来源未提供逐条关联记录；请提供表名及稳定记录身份后重新检查。'};
 }
 export function sourceRefs(table, rows, original=rows) {
- const keys=recordKeys[table]||[];
+ const keys=recordKeys[table]||[], nextOccurrence=new Map();
  return rows.map((row,index)=>{
-  const sourceIndex=rows===original?index:original.indexOf(row);
+  const sourceIndex=rows===original?index:original.indexOf(row,nextOccurrence.get(row)||0);
+  nextOccurrence.set(row,sourceIndex+1);
   return {table,row:{...row},occurrence:{index:sourceIndex,logicalRow:sourceIndex+2,
    keyCount:original.filter(r=>keys.every(k=>(r[k]||'').trim()===(row[k]||'').trim())).length}};
  });

@@ -1,3 +1,4 @@
+import {sourceRefs} from './problem-records.mjs';
 import {validatePolicies} from './resource-policies.mjs';
 import {deliveryParameters,deliveryActive,validateDelivery} from './delivery-policy.mjs';
 import {jointParameters,legacyJointParameters,jointFlags,validateJointResources} from './joint-policy.mjs';
@@ -30,15 +31,16 @@ export function assessRules(data, at=new Date().toISOString(), checkCoverage=fal
  const issues=validateBatchResources(data).map(f=>({...f,table:'batchResources',file:'15_空间与组批规则配置.csv',row:0,field:'关联配置'})),settings=[];const rows=data.rules||[];
  issues.push(...validateJointResources(data,at).map(f=>({...f,table:f.table||'resourceClaims',file:f.table==='tools'?'18_工装配置.csv':'23_资源占用声明.csv',row:f.row||0,field:'关联配置'})));
  issues.push(...validateDelivery(data),...validatePolicies(data,at,mode,checkPolicyExecution));
- const add=(index,field,message)=>issues.push({table:'rules',file:'16_排程规则配置.csv',row:index<0?0:index+2,field,message});
- for(const c of ruleCatalog.filter(c=>c.required))if(!rows.some(r=>r['规则编号']===c.id))add(-1,'规则编号',`必要规则 ${c.id} 不得删除`);
+ const refs=(table,rows)=>sourceRefs(table,rows,data[table]||[]);
+ const add=(index,field,message,relatedRecords=refs('rules',index<0?[]:[rows[index]]),missingTarget)=>issues.push({table:'rules',file:'16_排程规则配置.csv',row:index<0?0:index+2,field,message,relatedRecords,...(missingTarget?{missingTarget}:{}),...(index<0&&!relatedRecords.length?{associationState:'known-absent',associationGap:'必要规则记录不存在；本次检查没有现存触发记录，不生成虚构记录。'}:{})});
+ for(const c of ruleCatalog.filter(c=>c.required))if(!rows.some(r=>r['规则编号']===c.id))add(-1,'规则编号',`必要规则 ${c.id} 不得删除`,[],{table:'rules',key:c.id});
  rows.forEach((r,i)=>{
   const c=ruleCatalog.find(c=>c.id===r['规则编号']);const enabled=r['是否启用']==='是';
   const effectiveFrom=r['生效时间']||'';const scope=r['适用对象']||'*';
   let parameters;try{parameters=JSON.parse(r['参数JSON']||'{}');if(!parameters||typeof parameters!=='object'||Array.isArray(parameters))throw Error();}catch{add(i,'参数JSON','须为 JSON 对象');parameters={};}
   if(effectiveFrom&&!validRuleTime(effectiveFrom))add(i,'生效时间','须为真实日历日期且带时区的 ISO 时间（精确至秒）');
   if(!['是','否'].includes(r['是否启用']))add(i,'是否启用','仅接受是或否');
-  if(!r['规则编号']?.trim()||rows.filter(x=>x['规则编号']===r['规则编号']).length!==1)add(i,'规则编号','规则编号须非空且唯一');
+  if(!r['规则编号']?.trim()||rows.filter(x=>x['规则编号']===r['规则编号']).length!==1)add(i,'规则编号','规则编号须非空且唯一',refs('rules',rows.filter(x=>x['规则编号']===r['规则编号'])));
   if(enabled&&!c?.supported)add(i,'是否启用',`${r['规则编号']} 尚未实现，不得启用；保存字段不代表检查通过`);
   if(c?.required&&(!enabled||(effectiveFrom&&Date.parse(effectiveFrom)>Date.parse(at))))add(i,'是否启用',`${c.id} 是始终有效的必要约束，不得关闭或延后生效`);
   if(enabled&&c?.supported){
@@ -57,17 +59,17 @@ export function assessRules(data, at=new Date().toISOString(), checkCoverage=fal
    if(c.id==='CAPACITY'||c.id==='PROGRAM'){
     const expected=c.id==='CAPACITY'?batchParameters:{兼容条件:batchParameters.合批条件};
     for(const [key,value]of Object.entries(expected))if(parameters[key]!==value)add(i,'参数JSON',`${key}须显式配置为 ${value}；其他语义未决定`);
-    if(!effectiveFrom||Date.parse(effectiveFrom)<=Date.parse(at))for(const id of ['MATERIAL','CAPACITY','PROGRAM'])if(!rows.some(x=>x['规则编号']===id&&x['是否启用']==='是'&&(!x['生效时间']||Date.parse(x['生效时间'])<=Date.parse(at))))add(i,'是否启用',`拆合批须同时采用 MATERIAL/CAPACITY/PROGRAM；缺少 ${id}`);
+    if(!effectiveFrom||Date.parse(effectiveFrom)<=Date.parse(at))for(const id of ['MATERIAL','CAPACITY','PROGRAM'])if(!rows.some(x=>x['规则编号']===id&&x['是否启用']==='是'&&(!x['生效时间']||Date.parse(x['生效时间'])<=Date.parse(at))))add(i,'是否启用',`拆合批须同时采用 MATERIAL/CAPACITY/PROGRAM；缺少 ${id}`,undefined,{table:'rules',key:id,requirement:'已启用且生效'});
    }
    if(c.id==='MATERIAL'){
     if(typeof parameters['允许预计供给']!=='boolean')add(i,'参数JSON','须显式声明允许预计供给 true/false');
     for(const k of ['可用状态','预计状态','不可用状态']){const p=parameters[k];if(!Array.isArray(p)||!p.length||p.some(x=>typeof x!=='string'||!x.trim()||x!==x.trim())||new Set(p).size!==p.length)add(i,'参数JSON',`${k}须为非空、无重复状态列表`);}
     const groups=['可用状态','预计状态','不可用状态'].map(k=>Array.isArray(parameters[k])?parameters[k]:[]);const combined=groups.flat();if(new Set(combined).size!==combined.length)add(i,'参数JSON','可用/预计/不可用状态不能重叠');
-    if(!data.bom?.length)add(i,'是否启用','启用物料规则须先配置 BOM');
+    if(!data.bom?.length)add(i,'是否启用','启用物料规则须先配置 BOM',undefined,{table:'bom'});
    }
-   if(c.id==='LABOR'&&(!data.dependencies?.some(d=>d['资源类型']==='人员技能')||!data.personnelGroups?.length))add(i,'是否启用','启用人员规则须先配置人员需求及人员组');
+   if(c.id==='LABOR'&&(!data.dependencies?.some(d=>d['资源类型']==='人员技能')||!data.personnelGroups?.length))add(i,'是否启用','启用人员规则须先配置人员需求及人员组',undefined,{table:!data.dependencies?.some(d=>d['资源类型']==='人员技能')?'dependencies':'personnelGroups'});
    const needed={MACHINE:['machines','dependencies'],PRECEDENCE:['routes','times'],CALENDAR:['calendars']}[c.id]||[];
-   for(const key of needed)if(!data[key]?.length)add(i,'是否启用',`${c.id} 缺少必要数据 ${key}`);
+   for(const key of needed)if(!data[key]?.length)add(i,'是否启用',`${c.id} 缺少必要数据 ${key}`,undefined,{table:key});
   }
   const inScope=!minimal||['MACHINE','PRECEDENCE','SORT'].includes(c?.id);
   const active=inScope&&enabled&&!!c?.supported&&(!effectiveFrom||Date.parse(effectiveFrom)<=Date.parse(at));
@@ -76,14 +78,14 @@ export function assessRules(data, at=new Date().toISOString(), checkCoverage=fal
  if(checkCoverage){
   for(const order of (data.orders||[]).filter(o=>o['需求类型']!=='预测'&&!['取消','已取消','完成','已完成'].includes(o['订单状态']))){
    const routes=(data.routes||[]).filter(r=>r['产品编号']===order['产品编号']);
-   if(!routes.length)add(-1,'是否启用',`订单 ${order['订单编号']} 缺少路线，不能执行必要规则`);
+   if(!routes.length)add(-1,'是否启用',`订单 ${order['订单编号']} 缺少路线，不能执行必要规则`,refs('orders',[order]),{table:'routes',key:order['产品编号']});
    for(const r of routes){
     const duration=(data.times||[]).find(t=>t['产品编号']===order['产品编号']&&t['工序编号']===r['工序编号']);
-    if(!duration||duration['计算方式']!=='固定'||!(Number(duration['固定分钟'])>0))add(-1,'是否启用',`订单 ${order['订单编号']} / ${r['工序编号']} 缺少有效固定工时`);
+    if(!duration||duration['计算方式']!=='固定'||!(Number(duration['固定分钟'])>0))add(-1,'是否启用',`订单 ${order['订单编号']} / ${r['工序编号']} 缺少有效固定工时`,[...refs('orders',[order]),...refs('routes',[r]),...(duration?refs('times',[duration]):[])],{table:'times',key:order['产品编号']+'/'+r['工序编号'],requirement:'有效固定工时'});
     const dep=(data.dependencies||[]).filter(d=>d['订单编号']===order['订单编号']&&d['工序编号']===r['工序编号']&&d['资源类型']==='设备');
     const machine=dep.length===1&&(data.machines||[]).find(m=>m['设备编号']===dep[0]['资源编号']&&m['工序编号']===r['工序编号']);
-    if(!machine)add(-1,'是否启用',`订单 ${order['订单编号']} / ${r['工序编号']} 须配置唯一、有效的设备依赖`);
-    else if(!minimal&&(!machine['日历编号']||(data.calendars||[]).filter(c=>c['日历编号']===machine['日历编号']).length===0))add(-1,'是否启用',`设备 ${machine['设备编号']} 缺少明确引用的日历`);
+    if(!machine)add(-1,'是否启用',`订单 ${order['订单编号']} / ${r['工序编号']} 须配置唯一、有效的设备依赖`,[...refs('orders',[order]),...refs('routes',[r]),...refs('dependencies',dep)],{table:'dependencies',requirement:'唯一有效设备依赖'});
+    else if(!minimal&&(!machine['日历编号']||(data.calendars||[]).filter(c=>c['日历编号']===machine['日历编号']).length===0))add(-1,'是否启用',`设备 ${machine['设备编号']} 缺少明确引用的日历`,[...refs('orders',[order]),...refs('routes',[r]),...refs('dependencies',dep),...refs('machines',[machine])],{table:'calendars',key:machine['日历编号']});
    }
   }
  }
