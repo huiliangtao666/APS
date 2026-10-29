@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "P06 7a26732 independent limited 27 PASS/3 BLOCKED/7 NOT_EXECUTED, delivery provenance PARTIAL pending Dev evidence access; U01/U02/N06/cross-branch/full FR007/022 NOT_READY",
+      "implementation_status": "P06 7a26732 Test1 limited functional 27 PASS/0 FAIL; Test2 provenance PASS; N06 source contract BLOCKED with no new product SHA; U01/U02/full FR007/022 NOT_READY",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "P06 task-level functional limited PASS on 7a26732; no product FAIL; full CR NOT_READY; old R01/R02 PASS retained on 2016258",
+      "acceptance_result": "P06 task-level limited PASS on 7a26732, provenance PASS; N06 not implemented; full CR NOT_READY; old R01/R02 PASS retained on 2016258",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -485,7 +485,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR013受影响需求增量；不等于已实现或UAT通过",
-      "implementation_status": "Original17 explicit-entry Dev bd58868 limited 15 PASS/2 BLOCKED/1 NOT_EXECUTED; independent Test dlv_d84c7659 executing; FULL-03/16 source contract review pending; full FR013 NOT_READY",
+      "implementation_status": "Original17 bd58868 independent scoped 40 PASS/3 BLOCKED/3 NOT_EXECUTED/0 FAIL; FULL-03/16 business proposals unapproved; full FR013 NOT_READY",
       "primary_requirements": [
         "FR-013"
       ],
@@ -503,7 +503,7 @@
       "acceptance_delta": "CSV模板/预览/导入按批准配置校验：小数袋支拒绝，总收率>100%拒绝；合法配置保存刷新后生效，非法/越权整批零写入；保留旧确认/历史。",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006",
       "related_issue_urls": [],
-      "acceptance_result": "Dev partial only on bd58868; independent original17 result pending; prior fc273 scoped PASS retained on old SHA",
+      "acceptance_result": "Original17 and original12 four-equipment scoped PASS on bd58868; complete original batch BLOCKED; old fc273 scoped PASS retained on old SHA",
       "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
       "history": [
         {
