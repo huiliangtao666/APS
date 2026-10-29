@@ -1488,6 +1488,41 @@
       "old_fail_sha_preserved": "66af9caceb57eff429dd8b14bbad690f62bfe749",
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_bc1da013-612d-4424-a625-4a1e3b613bba:r1",
+      "type": "DEV_DELIVERED",
+      "source": "APS-Dev delivery to APS-PM and original task",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T20:42:22+08:00",
+      "requirement": "FR-013 / Issue #4, original 02/04 R2.1",
+      "product_sha": "d1afb8203db23f951002d4a912b6011994a1a37a",
+      "parent_sha": "7338108a01e4bcfa18e98d9c1ad5a17a187665e4",
+      "branch": "feat/fr-013-016-main-batch",
+      "changed_files": [
+        "qa/fr013-main-fixture.mjs",
+        "qa/issue4-0204-browser.mjs",
+        "qa/issue4-0204-fixture.mjs",
+        "qa/issue4-0204.test.mjs",
+        "qa/issue4-category-r1-browser.mjs",
+        "qa/issue4-category-r1.test.mjs",
+        "server/business.mjs",
+        "server/csv-batch.mjs",
+        "src/CsvBatchPanel.tsx"
+      ],
+      "result": "Dev 22/22 bounded self-check PASS; independent Test executing; FR013 NOT_READY",
+      "report_sha256": "088fcc362971bdf7a3975af3c04902d62dc842a9a0ea68fe9e9e5754eeb20a66",
+      "assertions_sha256": "4b435aca9738b6de909e5b2b5e3a6233f138cef6f37917ba478828338a77a9c7",
+      "evidence_zip_sha256": "1b5bb6f63b39653ab0de0cee82d7149561fe330d01682036d7c268436dde7305",
+      "zip_crc": "PASS",
+      "zip_internal_hashes_verified": 53,
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6496870220",
+      "test_delivery": "dlv_ea1a91e2-8717-42d8-b5cd-f481887086b9",
+      "project_status": {
+        "FR-013": "In progress"
+      },
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
