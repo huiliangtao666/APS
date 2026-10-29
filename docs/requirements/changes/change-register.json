@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "独立验收未通过；D01/D02/D03各第1轮修复执行中（In progress）",
+      "implementation_status": "In progress: D01/D02/D03 same repair round1 capacity recovery dispatched; no final pushed fix yet",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -83,27 +83,35 @@
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
-      "repair_delivery": "dlv_105360d7-1929-489d-85b3-d769a1e15db6",
+      "repair_delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2",
       "defects": [
         {
           "id": "DEC0203-D01",
           "round": 1,
-          "status": "Dev修复执行中，尚无已push修复交付",
-          "description": "检查器信任被检结果自报规则，删除MOLD及工装账可绕过冻结启用配置"
+          "status": "Same round1 capacity recovery dispatched; final pushed fix and independent retest pending",
+          "description": "检查器信任被检结果自报规则，删除MOLD及工装账可绕过冻结启用配置",
+          "repair_delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2"
         },
         {
           "id": "DEC0203-D02",
           "round": 1,
-          "status": "Dev修复执行中，尚无已push修复交付",
-          "description": "明确窗口人员开始偏移空值可保存并隐式0，须原子拒绝且显式0合法"
+          "status": "Same round1 capacity recovery dispatched; final pushed fix and independent retest pending",
+          "description": "明确窗口人员开始偏移空值可保存并隐式0，须原子拒绝且显式0合法",
+          "repair_delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2"
         },
         {
           "id": "DEC0203-D03",
           "round": 1,
-          "status": "Dev修复执行中，尚无已push修复交付",
-          "description": "未到生效时间的MOLD误拦合法执行事实，须按实际生效范围判断"
+          "status": "Same round1 capacity recovery dispatched; final pushed fix and independent retest pending",
+          "description": "未到生效时间的MOLD误拦合法执行事实，须按实际生效范围判断",
+          "repair_delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2"
         }
-      ]
+      ],
+      "repair_delivery_history": [
+        "dlv_105360d7-1929-489d-85b3-d769a1e15db6",
+        "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2"
+      ],
+      "repair_runtime_blocker": "Original dlv_105360d7-1929-489d-85b3-d769a1e15db6 failed server_overloaded at 2026-10-29T03:14:20.564Z; recovery dlv_197f09db-af6a-4cbf-96cf-16ae535359c2; infrastructure retry does not increment defect repair round"
     }
   ]
 }
