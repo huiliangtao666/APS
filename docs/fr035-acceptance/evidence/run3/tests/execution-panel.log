@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: FR012 UI current remaining, original correction history, historical snapshot and simulation boundaries remain visible
+ok 1 - FR012 UI current remaining, original correction history, historical snapshot and simulation boundaries remain visible
+  ---
+  duration_ms: 6.40453
+  type: 'test'
+  ...
+# Subtest: FR012 execution editor submits cumulative full table and preserves server reconciliation errors
+ok 2 - FR012 execution editor submits cumulative full table and preserves server reconciliation errors
+  ---
+  duration_ms: 10.395496
+  type: 'test'
+  ...
+# Subtest: FR012 query membership keeps execution editor inputs and save disabled
+ok 3 - FR012 query membership keeps execution editor inputs and save disabled
+  ---
+  duration_ms: 1.378447
+  type: 'test'
+  ...
+# Subtest: FR031 UI shows scrap separately, unfinished task/order impact, pending reconciliation and mapped source history
+ok 4 - FR031 UI shows scrap separately, unfinished task/order impact, pending reconciliation and mapped source history
+  ---
+  duration_ms: 1.485488
+  type: 'test'
+  ...
+# Subtest: FR031 editor submits cumulative scrap and explicit policy without mutating input and shows reconciliation errors
+ok 5 - FR031 editor submits cumulative scrap and explicit policy without mutating input and shows reconciliation errors
+  ---
+  duration_ms: 6.263114
+  type: 'test'
+  ...
+# Subtest: FR031 source query role cannot edit immutable original mapping
+ok 6 - FR031 source query role cannot edit immutable original mapping
+  ---
+  duration_ms: 0.793452
+  type: 'test'
+  ...
+# Subtest: FR029 UI shows event-time/protection/handling history and forbids query editing events
+ok 7 - FR029 UI shows event-time/protection/handling history and forbids query editing events
+  ---
+  duration_ms: 1.695611
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 72.47918

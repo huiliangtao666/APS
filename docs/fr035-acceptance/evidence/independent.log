@@ -1,0 +1,23 @@
+Downloading Chromium Headless Shell 141.0.7390.37 (playwright build v1194) from https://cdn.playwright.dev/dbazure/download/playwright/builds/chromium/1194/chromium-headless-shell-linux-arm64.zip
+|                                                                                |   0% of 106.1 MiB
+|■■■■■■■■                                                                        |  10% of 106.1 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 106.1 MiB
+Chromium Headless Shell 141.0.7390.37 (playwright build v1194) downloaded to /root/.cache/ms-playwright/chromium_headless_shell-1194
+vite v5.4.21 building for production...
+transforming...
+✓ 73 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../tmp/fr033-real-app-baF4g6/dist/index.html                   0.71 kB │ gzip:   0.50 kB
+../../../tmp/fr033-real-app-baF4g6/dist/assets/index-CPKwIIVN.css   20.25 kB │ gzip:   5.50 kB
+../../../tmp/fr033-real-app-baF4g6/dist/assets/index-_7FsV09R.js   311.77 kB │ gzip: 114.61 kB
+✓ built in 1.48s
+{"probeGroups":12,"passed":12,"downloads":6}

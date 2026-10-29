@@ -1,0 +1,52 @@
+{
+  "results": [
+    {
+      "name": "Independent query/filter/identity/CSV: orders",
+      "pass": true
+    },
+    {
+      "name": "Independent query/filter/identity/CSV: tasks",
+      "pass": true
+    },
+    {
+      "name": "Independent query/filter/identity/CSV: occupation",
+      "pass": true
+    },
+    {
+      "name": "Independent query/filter/identity/CSV: materials",
+      "pass": true
+    },
+    {
+      "name": "Independent query/filter/identity/CSV: unplanned",
+      "pass": true
+    },
+    {
+      "name": "Independent query/filter/identity/CSV: differences",
+      "pass": true
+    },
+    {
+      "name": "Task half-open boundaries and no operation quantity sum",
+      "pass": true
+    },
+    {
+      "name": "Whole-plan categories retain data outside task window with explicit limits",
+      "pass": true
+    },
+    {
+      "name": "Decimal source/escaping/formula controls round trip",
+      "pass": true
+    },
+    {
+      "name": "Unknown resource values stay null; explicit reservation deduplicated",
+      "pass": true
+    },
+    {
+      "name": "Reject malformed scope and corrupt input/run history; current-only edits stable",
+      "pass": true
+    },
+    {
+      "name": "Order-filtered differences must retain resource changes linked to that order",
+      "pass": true
+    }
+  ]
+}

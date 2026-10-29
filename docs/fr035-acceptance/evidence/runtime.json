@@ -1,0 +1,11 @@
+{
+  "image": "sha256:0d45a31aa25c4cca1eaacbfd1ba4ee6d5028d899b329e49a6036a66fd0c35da8",
+  "recipe": "qa/fr038-docker.sh; final execution reused cached container dependencies, overlaid complete read-only checkout; installed Chromium headless shell",
+  "sdk": {
+    "lite-app-runtime.tgz": "32884090246c8a23783425c93b3ae26a1279eace2045aed5dee2e43ac014951f",
+    "lite-app-server.tgz": "bcc66c06dbff896653d54dfc671e547382e367e7239609196a74a87cd379a18a"
+  },
+  "testProbeOriginalSha256": "9286136b78933ed0c525cf62d3097c69571cba04b6fa704fd59711ade8a778b2",
+  "testProbeReplaySha256": "bd183ccda82807fc62f0844cd47a20e36ba0f711aced17fdcd86d575c34b9fd9",
+  "probeAdaptation": "absolute import checkout path only; assertions unchanged"
+}

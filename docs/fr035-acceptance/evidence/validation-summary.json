@@ -1,0 +1,56 @@
+{
+  "sha": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+  "tapTotal": 458,
+  "tapBySuite": {
+    "query": 5,
+    "trial-panel": 6,
+    "delivery-panel": 1,
+    "timeline-panel": 13,
+    "editor-interaction": 10,
+    "worker": 9,
+    "confirmation-panel": 4,
+    "resource-panel": 1,
+    "business": 164,
+    "canonical": 213,
+    "run-history": 8,
+    "run-panel": 2,
+    "scoped-report": 7,
+    "result-panel": 3,
+    "execution-panel": 7,
+    "load-panel": 3,
+    "task-linkage-panel": 2
+  },
+  "fr035BrowserGroups": 13,
+  "fr035Downloads": 9,
+  "fr035RecordedDownloads": 8,
+  "fr038BrowserGroups": 6,
+  "confirmedHistoryGroups": 5,
+  "independentProbeGroups": 12,
+  "independentDownloads": 6,
+  "originalTestProbeResults": {
+    "results": [
+      {
+        "name": "Order-filtered differences must retain resource changes linked to that order",
+        "pass": true
+      },
+      {
+        "name": "Real calculated plans/API order filter retains linked resource differences",
+        "pass": true
+      }
+    ]
+  },
+  "resourceCompleteness": [
+    {
+      "direction": "forward",
+      "allRows": 46,
+      "filteredRows": 17,
+      "expectedResourceRows": 6
+    },
+    {
+      "direction": "reverse",
+      "allRows": 46,
+      "filteredRows": 17,
+      "expectedResourceRows": 6
+    }
+  ]
+}

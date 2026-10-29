@@ -1,0 +1,25 @@
+{
+  "id": "PVTI_lAHOFM9WU84BpE1czhEHg5k",
+  "content": {
+    "id": "DI_lAHOFM9WU84BpE1czgLhAic",
+    "title": "[FR] FR-026 保存、复制与比较方案",
+    "body": "## 需求\n范围：P0；关联流程：BP-05/06；页面：PG-04/06；开始提供：R1；完整提供：R6。\n前置功能：FR-018/024。\n• 保存计算输入和结果；复制为独立试算方案；比较任务时间、资源、物料分配、订单交期和未排数量。\n• 放弃试算不影响已确认计划。恢复旧方案时用当前模拟进度重新检查，不恢复过时库存或抹去已执行事实。\n\n## 验收追踪\n验收用例：AC-03/12/20/32。\n\n来源：需求分析与设计说明书 v0.3，第 6 章；状态：基线需求，具体实现状态待跟踪。\n\n\n## Patrol evidence and assignment (2026-10-29)\nOwner APS-Dev delivery dlv_dc94ac69-a592-499e-a136-43f18251c075. Dev idle no queue/duplicate. Dependencies FR018/024 source delivered2375487b3d630190434fd4be4e3313de18d8df7a. Original AC03/12/20/32 save/copy/compare independent trials and safe restore against current progress assigned; stale inventory/execution facts must not be overwritten, unsupported realconfirmation/R5 safety blocks explicit. Meaningful container tests/build and ordinary push/fullSHA/report/limits required. In progress, no parallel backlog.\n\n\n## Patrol delivery and assignment (2026-10-29)\nDev delivery dlv_dc94ac69-a592-499e-a136-43f18251c075 complete. Remote feat/fr-026-plan-trials SHAe93fadce55d3f1deef0a602d3a01ebfe561a01b4 verified https://github.com/huiliangtao666/APS/commit/e93fadce55d3f1deef0a602d3a01ebfe561a01b4 . Report APS-Dev/FR-026-DELIVERY-REPORT.txt and docs/FR-026-HANDOFF.txt. Container265/265/all builds pass; independent trial copy/edit/run/compare/discard preserves originals. Restore failclosed without current R5 facts/realconfirmation, fullAC/browser/identity/UAT incomplete. Owner APS-Test delivery dlv_3b754a45-7d45-4902-bca6-64e0fcc82429; independent report pending. In review.\n\n\n## Independent Test / In-review exit (2026-10-29)\nFR026 related restore/R5 acceptance update: Test dlv_3b754a45-7d45-4902-bca6-64e0fcc82429 at e93fadce55d3f1deef0a602d3a01ebfe561a01b4 passed265 canonical+12 independent=277/277, FR013/build. Report APS-Test/FR-026-independent-regression-report.txt and FR-026-independent-evidence.zip. No reproducible defect. Copy/edit/parallelWorkers isolation, comparison/lineage, discard cancellation/race guard and failclosed restore passed. Restore still blocked by missing current R5 execution facts/current-state reconciliation/real confirmation(issue10); fixtures not actual confirmed workflow. FullFR026 AC03/12/20/32/browser/realidentity/UAT unaccepted. Link originalFR026 to existing issue14 for restore/current-fact evidence, exit In review to In progress. Not a product defect/repair round, no duplicate gap issue. ActiveFR028 preserved.\nLive feature SHA reverified. Linked [issue14](https://github.com/huiliangtao666/APS/issues/14); status In progress.\n"
+  },
+  "fieldValues": {
+    "nodes": [
+      {},
+      {
+        "name": "In progress",
+        "field": {
+          "name": "Status"
+        }
+      },
+      {
+        "name": "P0",
+        "field": {
+          "name": "Priority"
+        }
+      }
+    ]
+  }
+}

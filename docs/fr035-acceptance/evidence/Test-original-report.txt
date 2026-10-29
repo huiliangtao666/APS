@@ -1,0 +1,187 @@
+FR035 independent scoped-report/export regression — APS-Test
+Delivery dlv_28145543-22a2-4d70-a7a0-2df8fb116e69
+2026-10-29 Asia/Singapore
+
+VERDICT: FAIL — one independently confirmed scoped-query defect.
+The supplied finite replay passes, including all 447 TAP assertions, build,
+CSV, 13 browser groups and five history groups. An additional Test-authored
+API check finds order-filtered differences omit real linked resource changes.
+Do not mark FR035 fully Done. No GitHub mutation, publication or product edits.
+
+SOURCE AND REFERENCES
+Repository: https://github.com/huiliangtao666/APS.git
+Remote branch: feat/fr-035-scoped-reports
+Requested SHA = fresh remote ls-remote = detached HEAD:
+5cb08e86d42e982fb8d763db5376f7a8478af8c9
+Fresh clone: temp/fr035-independent, clean before and after execution.
+Verified ancestor f3316991e4e2e5e4fce6b0a419fa1e4fc27f05ae, the FR034 integrated
+entrypoint. History then contains 41bede7 (scoped reports) and 5cb08e8 (Chinese
+summaries). All 113 manifest files match working bytes AND pinned Git objects.
+The manifest's FR035-working-source label is not an exact SHA; independent Git
+and file checks provide the exact provenance here.
+
+Reopened original v0.3 DOCX locally via ZIP/XML, not only copied excerpts.
+SHA256 4eb29f7cfaf4fe30f76329775d32930b806da941282098b7de163591807bc7d4.
+Read original FR035 and AC23/26/31, pinned FR035 livecard/baseline/open-issue
+snapshot, QA scripts, report/server/UI code and predecessor integrated checklist.
+There is no dedicated docs/FR-035-HANDOFF.md or .txt at the requested SHA;
+commands/source/livecard supplied the executable handoff. This is a documentation
+observation, not an additional product defect. No live board state was changed.
+Original AC23 requires no real external connection or outbound dispatch; AC26
+requires scoped quantity/unit/time/permission parity; AC31 requires understandable
+Chinese operation/errors and traceable workflow. Original FR035 starts R1 and
+is fully provided R7. A finite fixture pass cannot certify all of R7.
+
+NEW DEFECT — FR035-DIFF-ORDER-01
+Priority recommendation: P2, functional acceptance blocker for scoped differences.
+Location: server/scoped-report.mjs, orderMatches predicate (line 38).
+Reproduced through genuine /api/reports with two plans generated and saved by
+validated import/calculate/save routes, using the existing joint-resource and
+saved-execution fixtures. No hand-edited plan output is needed for this failure.
+
+Steps:
+1. Start the disposable validation runtime from the exact pin.
+2. Query kind=differences, planId=jointPlanId, otherPlanId=historicalPlanId,
+   start=0, end=120, text='', order=''. The response contains 46 rows.
+3. Inspect resource differences linked by taskId/taskIds to A-MIX or A-FILL.
+   Six resource differences explicitly belong to order A.
+4. Repeat the same query with order='A'. Response contains 13 rows total,
+   but only TWO resource differences; FOUR linked changes disappear.
+
+Missing records (fully retained in independent/real-api-resource-filter.json):
+- Personnel G, A-MIX, before [5,10), quantity 2 people, after absent.
+- Machine FILL01, A-FILL, before [30,60), after [50,80), quantity 1 machine.
+- Machine MIX01, A-MIX, before absent, after [30,50), quantity 1 machine.
+- Machine MIX02, A-MIX, before [0,30), after absent, quantity 1 machine.
+
+Expected: retain all six explicitly linked resource differences for order A.
+Actual: retain only two rows with direct orderId; omit four rows linked solely
+by taskId/taskIds inside before/after arrays. The predicate checks nested
+before/after orderId fields but does not resolve their task references. Both
+comparison plans need to participate in resolving task ownership.
+
+Impact: an order-specific comparison hides personnel/machine changes. Page/CSV
+parity can still pass because both use the same incomplete projection. This is
+a query completeness defect, not a demonstrated identity or authorization bypass.
+Proposed repair direction: resolve before/after taskId/taskIds against both saved
+plans, retaining complete shared rows without fabricating per-order fractions.
+Add this exact calculated-plan case; existing tests only cover direct nested
+order IDs and a tooling fixture whose resource row already carries orderId.
+
+Independent targeted run: 2 checks, 1 pass / 1 FAIL, process exit 1.
+The passing synthetic tooling comparison is a control and does not contradict
+the failing real-route fixture. No failed product assertion was retried away.
+
+EXECUTION AND COUNTS
+All install/build/server/browser commands ran in disposable node:22-slim Docker
+containers with read-only checkout/SDK mounts and writable evidence only. No
+host npm/pip/server, live-app binding/restart, gateway change or publication.
+The shipped FR035 Docker recipe explicitly uses this isolated runtime; it
+serves a loopback-only actual App, not an existing Portal production session.
+
+Three distinct executions, counted separately:
+A. Unchanged supplied qa/fr035-docker.sh: exit 0.
+   TAP 447/447 pass, zero failures/cancelled/skipped/todo:
+   - npm test: 213 (89 library + 124 auth/business)
+   - additional business suites: 164
+   - query UI: 5
+   - built calculation worker: 9
+   - component suites: 50
+     editor10/resource1/delivery1/result3/trial6/confirmation4/execution7/
+     timeline13/task-linkage2/load3
+   - scoped-report unit groups: 6
+   Thus 447 is the full TAP total, not the npm-test subtotal.
+   TypeScript/Vite/Express/Worker build PASS (separate gate).
+   Six-table CSV + CSV-DEF-01..04 PASS (separate gate).
+   Browser 13/13 groups PASS; six category downloads plus one filtered-task
+   download. Downloaded bytes checked against BOM + exact reportCsv projection;
+   DOM raw cells match API rows, including collapsed saved-record details.
+   History 5/5 groups PASS, independently inspected assertions.
+
+B. Test-authored independent.mjs: exit 0, 12/12 probe groups, plus SIX additional
+   actual-App browser downloads. Six per-category groups check query filters,
+   canonical key-order identity, provenance and CSV rows. Remaining groups check
+   half-open task windows/no operation sum, declared whole-plan windows,
+   decimal/escaping/formula controls, null/deduplication, history/input errors,
+   and a synthetic tooling-difference control.
+   Saved each category's actual DOM HTML, API JSON and downloaded CSV. Offline
+   Python csv parsing independently validates all metadata, comparison, columns,
+   rows, view IDs and SHA256 hashes. The two browser sessions use separate
+   generated plan IDs/timestamps, so cross-session hashes legitimately differ.
+
+C. Targeted Test-authored resource-defect.mjs: exit 1, 1/2 pass as above.
+   This is the new failing assertion; do not add it to a passing TAP total.
+
+Browser category row counts, in both independent sessions:
+orders2 / tasks4 / occupation9 / materials5 / unplanned2 / differences46.
+The supplied browser report records 13 explicit API-export requests:
+200x2, 400x3, 403x5, 409x3. These do not include all browser/fixture requests.
+Its audit evidence contains nine successful scoped exports. History JSON records
+21 call-helper requests; four additional report-export fetches occur outside
+that recorder. Neither 13 nor five means a total number of HTTP requests.
+These counts were parsed from fresh outputs, not accepted from a Dev summary.
+
+SUPPORTED BEHAVIOR VERIFIED
+- Six report kinds select the saved plan and immutable input/run provenance.
+- Query key order canonicalizes to stable viewId; malformed/extra fields reject.
+- Task windows are half-open and occupation clips plan time. Orders/materials/
+  unplanned/differences deliberately retain whole-plan quantities, with explicit
+  Chinese limits; changing their window does not truncate business quantities.
+- Text filtering, exact order IDs, empty states and form invalidation work in
+  covered fixtures. The resource-difference order defect is the exception above.
+- Page raw records and CSV preserve quantity, unit, saved date/time, line,
+  input/snapshot/run identity, UTC+08:00 origin and simulation statements.
+- Source decimal string 480.1000000000000000001 survives report/CSV without
+  rounding; exact fractions remain in saved records. Commas, quotes, Chinese
+  and embedded CR/LF round-trip. Leading =/+/-/@ and whitespace-prefixed formula
+  or tab/CR/LF cells receive an apostrophe guard. This verifies serialized bytes,
+  not every spreadsheet application's import behavior.
+- Order demand remains one row per order; operation quantities are not summed
+  into fabricated order completion. Duplicate physical reservation occupancy
+  does not double-count. Unknown live machine availability remains null, and
+  unchecked material comparison stays '未知 / 未检查'.
+- Genuine server membership enforces query read access and export grants;
+  grant, revocation and removed-member checks rerun per request. Forged body
+  actor/role/canExport cannot override stored roles. Cross-origin and cross-site
+  writes fail; empty reason fails; mismatched/stale/scope-altered view IDs fail.
+- Successful exports audit synthetic server actor, reason, request ID, query,
+  viewId, inputVersionId and snapshotHash. Denial observations are not new
+  successful export audit entries.
+- Saved fact quantity40 versus current50 remains distinct. Current input edits
+  do not rewrite saved reports/plans. Real verify/submit/supervisor-confirm,
+  confirmed write rejection, archive and persisted confirmation bytes pass.
+  Damaged confirmation/history fail closed; restored confirmed export retains
+  exact CSV bytes after current-input edit/archive.
+- Chinese summaries show saved values, with expandable exact records; narrow
+  keyboard interactions and query-user disabled export were exercised.
+
+LIMITS / ACCEPTANCE GAPS (SEPARATE FROM THE NEW DEFECT)
+Identity: real React App/Express/business/member middleware, fixed synthetic
+actors and QA runtime alias. No gateway signed-context/SSO login, production
+session, real-user grant/revocation journey or real-identity UAT is certified.
+The QA-only banner is removed by the supplied browser before interaction; this
+is still a clearly synthetic disposable test environment, not production UAT.
+All-rule feasibility is not certified: reports expose saved supported checks;
+DEC02 dynamic tooling and DEC03 staffing semantics, full joint rules and broader
+R7 workflows retain predecessor limits. CSV parity cannot make an unchecked
+business rule checked. No real external integration is required by AC23.
+No full-scale performance, all data-category combinations, all spreadsheets,
+all Chinese accessibility flows or business-owner UAT sign-off was completed.
+These are evidence/acceptance gaps, not newly reproduced product defects.
+
+REPRODUCTION COMMANDS (FROM APS-Test WORKSPACE ROOT)
+  git clone --no-checkout https://github.com/huiliangtao666/APS.git temp/fr035-independent
+  git -C temp/fr035-independent checkout --detach 5cb08e86d42e982fb8d763db5376f7a8478af8c9
+  git -C temp/fr035-independent ls-remote origin refs/heads/feat/fr-035-scoped-reports
+  git -C temp/fr035-independent merge-base --is-ancestor f3316991e4e2e5e4fce6b0a419fa1e4fc27f05ae HEAD
+  mkdir -p temp/fr035-evidence/run
+  FR035_REPO="$PWD/temp/fr035-independent" FR035_SDK="$PWD/.praetor/sdk" \
+    FR035_OUT="$PWD/temp/fr035-evidence/run" \
+    bash temp/fr035-independent/qa/fr035-docker.sh
+  bash temp/fr035-evidence/independent-run.sh
+  bash temp/fr035-evidence/resource-defect-run.sh
+Output directories must be new/empty for supplied replay. Existing authorized
+SDK tgz files are prerequisites and intentionally excluded from delivery.
+The evidence archive includes exact Test probes/runners, fresh logs/exit codes,
+113-file provenance, count audit, original acceptance text, pinned report/UI/QA
+sources, per-page JSON/HTML/CSV, confirmation/export audit and failing diff JSON.

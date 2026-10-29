@@ -1,0 +1,158 @@
+PASS canonical
+1..88
+# tests 124
+# suites 7
+# pass 124
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6403.736427
+PASS business
+1..164
+# tests 164
+# suites 0
+# pass 164
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2340.38922
+PASS query
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 67.099363
+PASS csv
+CSV validation regression checks passed: valid six-table batch + CSV-DEF-01..04.
+PASS build
+✓ built in 1.36s
+
+  dist/server.mjs  376.6kb
+
+⚡ Done in 11ms
+
+  dist/calculation-worker.mjs  209.8kb
+
+⚡ Done in 9ms
+PASS worker
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 384.76395
+PASS bundle-run-panel
+
+  .qa-run-panel.cjs  21.8kb
+
+⚡ Done in 2ms
+PASS run-panel
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 58.318539
+PASS bundle-editor-interaction
+
+  .qa-editor-interaction.cjs  327.1kb
+
+⚡ Done in 11ms
+TAP version 13
+# Subtest: draft editing, copying and cancel never write until explicit save; failures retain draft
+ok 1 - draft editing, copying and cancel never write until explicit save; failures retain draft
+  ---
+  duration_ms: 20.767172
+  type: 'test'
+  ...
+# Subtest: cross-category drafts save together and retain original revision; stale refresh disables save
+ok 2 - cross-category drafts save together and retain original revision; stale refresh disables save
+  ---
+  duration_ms: 5.936758
+  type: 'test'
+  ...
+# Subtest: deletion is staged and query members cannot mutate through editor controls
+ok 3 - deletion is staged and query members cannot mutate through editor controls
+  ---
+  duration_ms: 3.343356
+  type: 'test'
+  ...
+# Subtest: historical query toggle renders and exports old inputs, current toggle restores current rows
+ok 4 - historical query toggle renders and exports old inputs, current toggle restores current rows
+  ---
+  duration_ms: 5.58326
+  type: 'test'
+  ...
+# Subtest: FR017 rule editor stages scope/time/parameters, preserves rejected drafts, and used settings remain historical
+ok 5 - FR017 rule editor stages scope/time/parameters, preserves rejected drafts, and used settings remain historical
+  ---
+  duration_ms: 10.939728
+  type: 'test'
+  ...
+# Subtest: FR018 run controls select real scope/conditions and inspect immutable history; only active runs cancel
+ok 6 - FR018 run controls select real scope/conditions and inspect immutable history; only active runs cancel
+  ---
+  duration_ms: 9.533237
+  type: 'test'
+  ...
+# Subtest: FR018 failed snapshot query is visible without replacing the selected conditions
+not ok 7 - FR018 failed snapshot query is visible without replacing the selected conditions
+  ---
+  duration_ms: 8.16137
+  type: 'test'
+  location: '/workspace/apps/aps-fr032/.qa-editor-interaction.cjs:3264:30'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      ok(text(tree).includes("historical_inputs_unavailable"))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/workspace/apps/aps-fr032/.qa-editor-interaction.cjs:3278:25)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: FR019 mode is explicit in selection, historical scope stays visible and does not follow current controls
+ok 8 - FR019 mode is explicit in selection, historical scope stays visible and does not follow current controls
+  ---
+  duration_ms: 3.708145
+  type: 'test'
+  ...
+# Subtest: FR020 material panel shows saved quantities/conditional lots/shortages and links task without relabelling unchecked plans
+ok 9 - FR020 material panel shows saved quantities/conditional lots/shortages and links task without relabelling unchecked plans
+  ---
+  duration_ms: 21.619376
+  type: 'test'
+  ...
+# Subtest: FR021 saved batch display shows original quantities, blocked tails, unchecked mode and selects production tasks
+ok 10 - FR021 saved batch display shows original quantities, blocked tails, unchecked mode and selects production tasks
+  ---
+  duration_ms: 0.937161
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 9
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 138.183454

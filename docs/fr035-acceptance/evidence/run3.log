@@ -1,0 +1,286 @@
+Downloading Chromium Headless Shell 141.0.7390.37 (playwright build v1194) from https://cdn.playwright.dev/dbazure/download/playwright/builds/chromium/1194/chromium-headless-shell-linux-arm64.zip
+|                                                                                |   0% of 106.1 MiB
+|■■■■■■■■                                                                        |  10% of 106.1 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 106.1 MiB
+Chromium Headless Shell 141.0.7390.37 (playwright build v1194) downloaded to /root/.cache/ms-playwright/chromium_headless_shell-1194
+PASS canonical
+1..88
+# tests 124
+# suites 7
+# pass 124
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6913.352857
+PASS business
+1..164
+# tests 164
+# suites 0
+# pass 164
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2568.826371
+PASS query
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 74.080415
+PASS csv
+CSV validation regression checks passed: valid six-table batch + CSV-DEF-01..04.
+PASS build
+✓ built in 1.33s
+
+  dist/server.mjs  376.6kb
+
+⚡ Done in 14ms
+
+  dist/calculation-worker.mjs  209.8kb
+
+⚡ Done in 9ms
+PASS worker
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 507.27242
+PASS bundle-run-panel
+
+  .qa-run-panel.cjs  21.8kb
+
+⚡ Done in 2ms
+PASS run-panel
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 60.873569
+PASS bundle-editor-interaction
+
+  .qa-editor-interaction.cjs  327.1kb
+
+⚡ Done in 12ms
+PASS editor-interaction
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 154.172489
+PASS bundle-resource-panel
+
+  .qa-resource-panel.cjs  6.2kb
+
+⚡ Done in 2ms
+PASS resource-panel
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 52.642222
+PASS bundle-delivery-panel
+
+  .qa-delivery-panel.cjs  225.2kb
+
+⚡ Done in 12ms
+PASS delivery-panel
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 91.442061
+PASS bundle-result-panel
+
+  .qa-result-panel.cjs  51.0kb
+
+⚡ Done in 3ms
+PASS result-panel
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 58.233175
+PASS bundle-trial-panel
+
+  .qa-trial-panel.cjs  60.5kb
+
+⚡ Done in 4ms
+PASS trial-panel
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 95.212904
+PASS bundle-confirmation-panel
+
+  .qa-confirmation-panel.cjs  16.9kb
+
+⚡ Done in 2ms
+PASS confirmation-panel
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 75.146157
+PASS bundle-execution-panel
+
+  .qa-execution-panel.cjs  59.1kb
+
+⚡ Done in 7ms
+PASS execution-panel
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 72.47918
+PASS bundle-timeline-panel
+
+  .qa-timeline-panel.cjs  59.2kb
+
+⚡ Done in 4ms
+PASS timeline-panel
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 166.429885
+PASS bundle-task-linkage-panel
+
+  .qa-task-linkage-panel.cjs  21.1kb
+
+⚡ Done in 2ms
+PASS task-linkage-panel
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 77.241931
+PASS bundle-load-panel
+
+  .qa-load-panel.cjs  43.4kb
+
+⚡ Done in 5ms
+PASS load-panel
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 67.512305
+PASS run-history
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1254.607146
+PASS scoped-report
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 161.579885
+vite v5.4.21 building for production...
+transforming...
+✓ 73 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../tmp/fr033-real-app-e1HcpJ/dist/index.html                   0.71 kB │ gzip:   0.50 kB
+../../../tmp/fr033-real-app-e1HcpJ/dist/assets/index-CPKwIIVN.css   20.25 kB │ gzip:   5.50 kB
+../../../tmp/fr033-real-app-e1HcpJ/dist/assets/index-_7FsV09R.js   311.77 kB │ gzip: 114.61 kB
+✓ built in 1.30s
+{"action":"export","decision":"deny","requestId":"fr033-disposable","actor":"fr033-test#synthetic-planner"}
+{"action":"export","decision":"deny","requestId":"fr033-disposable","actor":"fr033-test#synthetic-planner"}
+{"at":"2026-10-29T00:04:10.216Z","action":"deny","requestId":"fr033-disposable","actor":"user","reason":"membership_required"}
+{"at":"2026-10-29T00:04:10.219Z","action":"deny","requestId":"fr033-disposable","actor":"user","reason":"membership_required"}
+FR035_BROWSER_PASS 13 groups / 8 downloadable byte comparisons
+{"action":"edit","decision":"deny","requestId":"independent-FR034","actor":"test#query"}
+FR035_CONFIRMED_HISTORY_PASS 5 groups; includes preserved original19 responses plus report requests
+vite v5.4.21 building for production...
+transforming...
+✓ 73 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../tmp/fr033-real-app-zgGf4G/dist/index.html                   0.71 kB │ gzip:   0.50 kB
+../../../tmp/fr033-real-app-zgGf4G/dist/assets/index-CPKwIIVN.css   20.25 kB │ gzip:   5.50 kB
+../../../tmp/fr033-real-app-zgGf4G/dist/assets/index-_7FsV09R.js   311.77 kB │ gzip: 114.61 kB
+✓ built in 1.35s
+FR038_BROWSER_PASS 6 groups
+vite v5.4.21 building for production...
+transforming...
+✓ 73 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../tmp/fr033-real-app-SBI6qJ/dist/index.html                   0.71 kB │ gzip:   0.50 kB
+../../../tmp/fr033-real-app-SBI6qJ/dist/assets/index-CPKwIIVN.css   20.25 kB │ gzip:   5.50 kB
+../../../tmp/fr033-real-app-SBI6qJ/dist/assets/index-_7FsV09R.js   311.77 kB │ gzip: 114.61 kB
+✓ built in 1.14s
+[{"name":"Order-filtered differences must retain resource changes linked to that order","pass":true},{"name":"Real calculated plans/API order filter retains linked resource differences","pass":true}]

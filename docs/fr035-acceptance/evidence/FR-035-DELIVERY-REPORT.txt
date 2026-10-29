@@ -1,0 +1,64 @@
+FR-035 查询、报表与文件导出 — 中断恢复交付
+
+交付身份
+原投递 dlv_65d4c366-7faa-4177-b0ad-f8962a01d91c；恢复投递 dlv_e3feefad-cb05-49a3-9d45-8816a5fd9f78。
+唯一 Project2 原卡 PVTI_lAHOFM9WU84BpE1czhEHhEU。恢复时重新读取 live card、AC23/26/31 摘录与 open issues；未新增卡。
+基线 f3316991e4e2e5e4fce6b0a419fa1e4fc27f05ae。
+产品提交 5cb08e86d42e982fb8d763db5376f7a8478af8c9（包括先前 41bede7210855cd546af8a3c328695e64a57f62c）。
+分支 feat/fr-035-scoped-reports。
+恢复时工作树干净，中文摘要 UI 已提交，最终 UI 验证实际上已完成；本轮保留既有实现，未重新实现功能。
+
+取消记录核对
+平台记录 interrupted / run ended cancelled；原会话可读用户消息仅 AGENTS/environment 与原任务两条，没有明确用户取消指令。
+可用记录无法确认取消发起者。default thread 消息为空，额外 chat-runs 查询返回401；不推断为用户主动取消。
+原状态与核对结论分别见 recovery/original-delivery-status.json、cancellation-review.json。
+
+实现与复用
+提供订单计划、任务计划、资源占用、物料需求、未排原因、方案差异六类查询与 UTF-8 BOM CSV。
+新增查询入口 GET /reports；导出复用 POST /export 的 stored membership、export grant、CSRF、原因与审计链路。
+复用 FR032 resourceLoad、历史 queryData/timetable、comparePlans，不另建导出权限或模拟计算系统。
+服务端共享报表对象生成 UI 精确记录及 CSV，viewId 为完整报表内容哈希；导出重新核验查询与保存快照，过期或扩大范围返回409。
+页面显示中文数量/时间/状态摘要，保存的完整原始记录可展开，精确数量、单位、日期和溯源可查看。
+元数据包含产线、方案、run、输入版本、snapshot、确认标识、保存日期、UTC+08:00、时间原点、模拟与非当前事实说明。
+历史原始输入/运行/确认副本损坏时拒绝；当前输入修改不重写保存计划与已确认报表。
+CSV 使用 CRLF、双引号转义、公式前缀防护；保留保存数量及精确分数，未知与条件说明不转为通过。
+
+原任务内缺陷与失败日志
+run1 为测试夹具未携带 conditions 的失败，修正夹具后继续。
+run2 浏览器发现语义相同查询仅键顺序不同导致 viewId 不同，统一查询字段顺序并加回归。
+run3 浏览器发现差异订单筛选把单对象当数组处理，统一对象/数组处理并加回归。
+两处产品缺陷均在原任务内完成首轮修正；本次恢复无新增源码修复，不把中断算修复轮次。
+run1/run2/run3、final、final-ui 和各次原日志全部保留；早期失败与后续成功按目录区分。
+
+验收证据边界
+AC23：模拟数据路径可查可导出，无自动外部发送；未接真实 ERP/OMS/WMS/PLM/MES。
+AC26：六类浏览器下载均核对 UI 原始单元格、服务端视图和实际 CSV 字节；筛选后另有任务下载比对。
+任务/资源使用半开窗口 [start,end)；订单、物料、未排和差异明确按整份保存方案，不截断业务数量。
+共享资源按关联订单保留物理整行占用，不伪造分摊份额；资源动态剩余未知，计划物料分配不是已发生耗料。
+AC31：中文摘要、原生查询/导出按钮、键盘筛选/查询/下载及640宽度滚动实测；窄屏控件排布仍密集，非完整响应式/屏幕阅读器认证。
+真实 React/Express App 与 membership 中间件已运行，但固定合成 actor 与 QA runtime alias，不等同签名网关/SSO 身份验收。
+浏览器六类导出与期望序列化复用了 reportCsv；另有 CSV 转义/公式与现有导入验证，但不是独立业务算法认证。
+历史确认验证覆盖 calculate/verify/submit/supervisor-confirm、当前输入改变、归档、篡改409及恢复字节相等；保留原19期望响应并扩展报表请求。
+独立 APS-Test、真实身份、完整全规则与五阶段 UAT 仍待验收；FR014/024/026/032 支持源码可用不代表上游全部验收完结。
+未发布、未合并 main、未修改权限、未关闭 issue/改卡状态、未宣称 full Done。结果由 Inbox hook 回传，未另行外发消息。
+
+复现
+在已下载该分支的 checkout，用 Docker、既有两个 SDK tgz 和空证据目录运行：
+FR035_REPO=<checkout绝对路径> FR035_SDK=<SDK目录绝对路径> FR035_OUT=<空证据目录绝对路径> bash qa/fr035-docker.sh
+脚本在只读源挂载的独立 node:22-slim 容器安装、构建、运行测试和 Chromium；不启动或改动 Portal 已发布实例。
+运行依赖 npm/Playwright 网络；具体镜像和 SDK 哈希参见 runtime.json，测试源码及产品清单在 checkout/qa。
+
+恢复轮最终结果
+独立容器命令退出0。447/447测试（213 canonical、164业务、5查询UI、9worker、50组件、6 scoped-report）；build与CSV检查通过。
+Chromium 141.0.7390.37：13/13组，六类实际下载精确字节比对，另加筛选任务CSV字节比对；5/5确认历史组通过。
+保存的113产品文件哈希与最终源码及前一轮final-ui证据相同。fresh日志见 recovery-run.log、recovery-run/tests、浏览器/历史JSON、截图、HTML、ARIA、CSV及审计JSON。
+普通非force push成功；GitHub API200、ls-remote、本地HEAD三方一致：5cb08e86d42e982fb8d763db5376f7a8478af8c9。
+提交：https://github.com/huiliangtao666/APS/commit/5cb08e86d42e982fb8d763db5376f7a8478af8c9
+分支：https://github.com/huiliangtao666/APS/tree/feat/fr-035-scoped-reports
+无未提交源码。推送原日志与远端证据见 recovery/push.log、github-verification.json。
+
+交付包
+FR-035-DELIVERY-REPORT.txt：本报告。
+FR-035-DEV-EVIDENCE.zip：保留所有既有run1/run2/run3/final/final-ui失败与成功记录，加入fresh recovery-run、live读取、取消核对、源码哈希和远端核对；附最终差异源码及QA入口。
+证据包 MANIFEST-SHA256.json 为每个内部文件的SHA256；根目录 FR-035-DELIVERY-MANIFEST.json 记录报告与证据包摘要。
+独立Test请从上述已推送SHA开始；本结果是Dev交付和可复现证据，非原卡完整验收结论。

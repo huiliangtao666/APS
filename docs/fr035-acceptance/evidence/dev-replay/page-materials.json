@@ -1,0 +1,102 @@
+{
+  "version": "FR035-v1",
+  "query": {
+    "planId": "7de9a77b-83b3-4ecd-b86d-3594e4ceb68e",
+    "kind": "materials",
+    "text": "",
+    "order": "",
+    "start": 0,
+    "end": 120
+  },
+  "provenance": {
+    "planId": "7de9a77b-83b3-4ecd-b86d-3594e4ceb68e",
+    "runId": "b72fb7d5-8f54-4652-97fc-c98fdbd2b21a",
+    "inputVersionId": "299677bf822fe470484031edd7dde71007594866976112d0aa8b95d104928fe6",
+    "snapshotHash": "54f5924219708004112c7d40d1020d10f80ba711775d79ee90c950ee68873190",
+    "confirmationId": null,
+    "status": "draft",
+    "createdAt": "2026-10-29T00:03:16.702Z",
+    "lines": [
+      "L01"
+    ],
+    "executionFactsVersion": "f4c2ab5ea0557c694ffddedf9d1716a8105592015bac93fb6fd9df537190ee24",
+    "checkScope": {
+      "mode": "supported",
+      "label": "已有支持模式",
+      "machineAvailability": "工厂日历及设备停机连续窗口",
+      "checked": [
+        "单产线",
+        "给定机器不重叠",
+        "固定工时",
+        "工序先后",
+        "日历与停机",
+        "已配置人员依赖",
+        "显式预计供给可用时点",
+        "已声明口径的BOM需求、库存FEFO及条件供给分配"
+      ],
+      "unchecked": [
+        "模具与工装",
+        "工序加料、完整BOM/执行耗料与任意单位换算",
+        "设备容量与拆合批",
+        "程序兼容",
+        "最大等待与空间",
+        "换型清洗",
+        "交付与余保",
+        "执行事实与主管确认",
+        "速度换算及完整精度规则"
+      ],
+      "note": "机器与顺序检查通过不代表完整业务可执行；未排任务不代表全局无解。独立复核仅覆盖单线、机器不重叠和工序先后。"
+    },
+    "materialChecked": true,
+    "query": {
+      "planId": "7de9a77b-83b3-4ecd-b86d-3594e4ceb68e",
+      "kind": "materials",
+      "text": "",
+      "order": "",
+      "start": 0,
+      "end": 120
+    },
+    "timeOrigin": "2026-11-02T08:00:00+08:00",
+    "timezone": "UTC+08:00",
+    "interval": "[start,end)",
+    "source": "保存方案及其原始输入；不是当前执行事实",
+    "simulation": "模拟数据；不发送外部系统、不承诺真实交付"
+  },
+  "limits": [
+    "任务和资源使用半开窗口；订单、物料、未排及方案差异保留整份保存方案，窗口不截断其业务数量。",
+    "共享资源按关联订单保留整行总占用，不拆算订单份额；搜索逐行匹配。",
+    "数量、精确分数、单位和日期原样保留；null 表示未知，条件到料不是已到货。",
+    "仅保存方案的计划负荷，不是实时剩余可用量；未分配不代表可排或资源空闲事实",
+    "DEC02 工装阶段/动态归还、DEC03 人员阶段/技能替代、最大等待及完整联合规则仍待确认；仅解释显式保存占用",
+    "候选分配不计入已提交消耗；不跨工序累加订单完成；不把预计到料当真实到货",
+    "确认快照、保存的执行事实与当前事实分别保留；不以当前输入补算历史"
+  ],
+  "comparison": null,
+  "columns": [
+    "类别",
+    "保存记录（数量、单位、日期、输入与判断依据）"
+  ],
+  "rows": [
+    [
+      "物料需求",
+      "{\"category\":\"物料需求\",\"orderId\":\"A\",\"record\":{\"orderId\":\"A\",\"productId\":\"HC40\",\"operation\":\"MIX\",\"taskId\":\"A-MIX\",\"materialId\":\"LEAN\",\"unit\":\"kg\",\"version\":\"V1\",\"effective\":\"2026-01-01\",\"feedMinute\":0,\"feedAt\":\"2026-11-02T00:00:00.000Z\",\"remainingKg\":480,\"quantity\":325,\"exactQuantity\":{\"numerator\":\"325\",\"denominator\":\"1\"},\"formula\":\"订单余量kg ÷ 总收率 × 定额 ÷ 1000（仅损失、无工序加料）；减同任务已记录累计耗料（不再扣减工序产出，避免双计）\",\"executionConsumed\":0,\"exactExecutionConsumed\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"allocations\":[],\"shortage\":325,\"exactShortage\":{\"numerator\":\"325\",\"denominator\":\"1\"},\"committed\":false,\"suggestion\":\"建议采购/备料或推迟；不生成采购单、不确认到货\",\"index\":0,\"taskIds\":[\"A-MIX\"],\"allocated\":{\"value\":0,\"exact\":{\"numerator\":\"0\",\"denominator\":\"1\"}},\"committedConsumption\":{\"value\":0,\"exact\":{\"numerator\":\"0\",\"denominator\":\"1\"}},\"exactGap\":{\"numerator\":\"325\",\"denominator\":\"1\"},\"inputRefs\":[{\"table\":\"bom\",\"row\":{\"版本编号\":\"V1\",\"产品编号\":\"HC40\",\"生效日期\":\"2026-01-01\",\"投料工序编号\":\"MIX\",\"用量类型\":\"BOM物料\",\"物料编号\":\"LEAN\",\"配置用量\":\"650\",\"用量单位\":\"kg\",\"用量基准\":\"每1000kg投入\",\"收率/损耗口径备注\":\"\",\"损坏比例\":\"\"}},{\"table\":\"inventory\",\"row\":{\"批次编号\":\"LEAN-LOT\",\"物料编号\":\"LEAN\",\"账面数量\":\"0\",\"已占用数量\":\"0\",\"有效期\":\"2026-12-31\",\"位置\":\"模拟库\",\"质量状态\":\"合格\",\"预计可用时间\":\"\"}}]}}"
+    ],
+    [
+      "物料需求",
+      "{\"category\":\"物料需求\",\"orderId\":\"A\",\"record\":{\"orderId\":\"A\",\"productId\":\"HC40\",\"operation\":\"MIX\",\"taskId\":\"A-MIX\",\"materialId\":\"FAT\",\"unit\":\"kg\",\"version\":\"V1\",\"effective\":\"2026-01-01\",\"feedMinute\":0,\"feedAt\":\"2026-11-02T00:00:00.000Z\",\"remainingKg\":480,\"quantity\":75,\"exactQuantity\":{\"numerator\":\"75\",\"denominator\":\"1\"},\"formula\":\"订单余量kg ÷ 总收率 × 定额 ÷ 1000（仅损失、无工序加料）；减同任务已记录累计耗料（不再扣减工序产出，避免双计）\",\"executionConsumed\":0,\"exactExecutionConsumed\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"allocations\":[{\"lotId\":\"FAT-LOT\",\"supplyId\":\"\",\"quantity\":75,\"exactQuantity\":{\"numerator\":\"75\",\"denominator\":\"1\"},\"conditional\":false,\"expiry\":\"2026-12-31\",\"quality\":\"合格\",\"readyAt\":\"\",\"remaining\":9925,\"source\":\"模拟库存（扣除已有占用及本方案分配）\"}],\"shortage\":0,\"exactShortage\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"committed\":false,\"suggestion\":\"\",\"index\":1,\"taskIds\":[\"A-MIX\"],\"allocated\":{\"value\":75,\"exact\":{\"numerator\":\"75\",\"denominator\":\"1\"}},\"committedConsumption\":{\"value\":0,\"exact\":{\"numerator\":\"0\",\"denominator\":\"1\"}},\"exactGap\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"inputRefs\":[{\"table\":\"bom\",\"row\":{\"版本编号\":\"V1\",\"产品编号\":\"HC40\",\"生效日期\":\"2026-01-01\",\"投料工序编号\":\"MIX\",\"用量类型\":\"BOM物料\",\"物料编号\":\"FAT\",\"配置用量\":\"150\",\"用量单位\":\"kg\",\"用量基准\":\"每1000kg投入\",\"收率/损耗口径备注\":\"\",\"损坏比例\":\"\"}},{\"table\":\"inventory\",\"row\":{\"批次编号\":\"FAT-LOT\",\"物料编号\":\"FAT\",\"账面数量\":\"10000\",\"已占用数量\":\"0\",\"有效期\":\"2026-12-31\",\"位置\":\"模拟库\",\"质量状态\":\"合格\",\"预计可用时间\":\"\"}}]}}"
+    ],
+    [
+      "物料需求",
+      "{\"category\":\"物料需求\",\"orderId\":\"A\",\"record\":{\"orderId\":\"A\",\"productId\":\"HC40\",\"operation\":\"MIX\",\"taskId\":\"A-MIX\",\"materialId\":\"WATER\",\"unit\":\"kg\",\"version\":\"V1\",\"effective\":\"2026-01-01\",\"feedMinute\":0,\"feedAt\":\"2026-11-02T00:00:00.000Z\",\"remainingKg\":480,\"quantity\":75,\"exactQuantity\":{\"numerator\":\"75\",\"denominator\":\"1\"},\"formula\":\"订单余量kg ÷ 总收率 × 定额 ÷ 1000（仅损失、无工序加料）；减同任务已记录累计耗料（不再扣减工序产出，避免双计）\",\"executionConsumed\":0,\"exactExecutionConsumed\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"allocations\":[{\"lotId\":\"WATER-LOT\",\"supplyId\":\"\",\"quantity\":75,\"exactQuantity\":{\"numerator\":\"75\",\"denominator\":\"1\"},\"conditional\":false,\"expiry\":\"2026-12-31\",\"quality\":\"合格\",\"readyAt\":\"\",\"remaining\":9925,\"source\":\"模拟库存（扣除已有占用及本方案分配）\"}],\"shortage\":0,\"exactShortage\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"committed\":false,\"suggestion\":\"\",\"index\":2,\"taskIds\":[\"A-MIX\"],\"allocated\":{\"value\":75,\"exact\":{\"numerator\":\"75\",\"denominator\":\"1\"}},\"committedConsumption\":{\"value\":0,\"exact\":{\"numerator\":\"0\",\"denominator\":\"1\"}},\"exactGap\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"inputRefs\":[{\"table\":\"bom\",\"row\":{\"版本编号\":\"V1\",\"产品编号\":\"HC40\",\"生效日期\":\"2026-01-01\",\"投料工序编号\":\"MIX\",\"用量类型\":\"BOM物料\",\"物料编号\":\"WATER\",\"配置用量\":\"150\",\"用量单位\":\"kg\",\"用量基准\":\"每1000kg投入\",\"收率/损耗口径备注\":\"\",\"损坏比例\":\"\"}},{\"table\":\"inventory\",\"row\":{\"批次编号\":\"WATER-LOT\",\"物料编号\":\"WATER\",\"账面数量\":\"10000\",\"已占用数量\":\"0\",\"有效期\":\"2026-12-31\",\"位置\":\"模拟库\",\"质量状态\":\"合格\",\"预计可用时间\":\"\"}}]}}"
+    ],
+    [
+      "物料需求",
+      "{\"category\":\"物料需求\",\"orderId\":\"A\",\"record\":{\"orderId\":\"A\",\"productId\":\"HC40\",\"operation\":\"MIX\",\"taskId\":\"A-MIX\",\"materialId\":\"PREMIX\",\"unit\":\"kg\",\"version\":\"V1\",\"effective\":\"2026-01-01\",\"feedMinute\":0,\"feedAt\":\"2026-11-02T00:00:00.000Z\",\"remainingKg\":480,\"quantity\":25,\"exactQuantity\":{\"numerator\":\"25\",\"denominator\":\"1\"},\"formula\":\"订单余量kg ÷ 总收率 × 定额 ÷ 1000（仅损失、无工序加料）；减同任务已记录累计耗料（不再扣减工序产出，避免双计）\",\"executionConsumed\":0,\"exactExecutionConsumed\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"allocations\":[{\"lotId\":\"PREMIX-LOT\",\"supplyId\":\"\",\"quantity\":25,\"exactQuantity\":{\"numerator\":\"25\",\"denominator\":\"1\"},\"conditional\":false,\"expiry\":\"2026-12-31\",\"quality\":\"合格\",\"readyAt\":\"\",\"remaining\":9975,\"source\":\"模拟库存（扣除已有占用及本方案分配）\"}],\"shortage\":0,\"exactShortage\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"committed\":false,\"suggestion\":\"\",\"index\":3,\"taskIds\":[\"A-MIX\"],\"allocated\":{\"value\":25,\"exact\":{\"numerator\":\"25\",\"denominator\":\"1\"}},\"committedConsumption\":{\"value\":0,\"exact\":{\"numerator\":\"0\",\"denominator\":\"1\"}},\"exactGap\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"inputRefs\":[{\"table\":\"bom\",\"row\":{\"版本编号\":\"V1\",\"产品编号\":\"HC40\",\"生效日期\":\"2026-01-01\",\"投料工序编号\":\"MIX\",\"用量类型\":\"BOM物料\",\"物料编号\":\"PREMIX\",\"配置用量\":\"50\",\"用量单位\":\"kg\",\"用量基准\":\"每1000kg投入\",\"收率/损耗口径备注\":\"\",\"损坏比例\":\"\"}},{\"table\":\"inventory\",\"row\":{\"批次编号\":\"PREMIX-LOT\",\"物料编号\":\"PREMIX\",\"账面数量\":\"10000\",\"已占用数量\":\"0\",\"有效期\":\"2026-12-31\",\"位置\":\"模拟库\",\"质量状态\":\"合格\",\"预计可用时间\":\"\"}}]}}"
+    ],
+    [
+      "物料需求",
+      "{\"category\":\"物料需求\",\"orderId\":\"A\",\"record\":{\"orderId\":\"A\",\"productId\":\"HC40\",\"operation\":\"FILL\",\"taskId\":\"A-FILL\",\"materialId\":\"BAG\",\"unit\":\"个\",\"version\":\"V1\",\"effective\":\"2026-01-01\",\"feedMinute\":0,\"feedAt\":\"2026-11-02T00:00:00.000Z\",\"remainingKg\":480,\"quantity\":1213,\"exactQuantity\":{\"numerator\":\"1213\",\"denominator\":\"1\"},\"formula\":\"向上取整（余量kg ÷ 单支净重 ÷ 每袋支数 × 定额 ÷ (1−损坏比例)）；减同任务已记录累计耗料（不再扣减工序产出，避免双计）\",\"executionConsumed\":0,\"exactExecutionConsumed\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"allocations\":[{\"lotId\":\"BAG-LOT\",\"supplyId\":\"\",\"quantity\":1213,\"exactQuantity\":{\"numerator\":\"1213\",\"denominator\":\"1\"},\"conditional\":false,\"expiry\":\"2026-12-31\",\"quality\":\"合格\",\"readyAt\":\"\",\"remaining\":8787,\"source\":\"模拟库存（扣除已有占用及本方案分配）\"}],\"shortage\":0,\"exactShortage\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"committed\":false,\"suggestion\":\"\",\"blockedReason\":\"前序未排；投料分钟仅为候选检查时点\",\"index\":4,\"taskIds\":[\"A-FILL\"],\"allocated\":{\"value\":1213,\"exact\":{\"numerator\":\"1213\",\"denominator\":\"1\"}},\"committedConsumption\":{\"value\":0,\"exact\":{\"numerator\":\"0\",\"denominator\":\"1\"}},\"exactGap\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"inputRefs\":[{\"table\":\"bom\",\"row\":{\"版本编号\":\"V1\",\"产品编号\":\"HC40\",\"生效日期\":\"2026-01-01\",\"投料工序编号\":\"FILL\",\"用量类型\":\"包装物料\",\"物料编号\":\"BAG\",\"配置用量\":\"1\",\"用量单位\":\"个\",\"用量基准\":\"每袋\",\"收率/损耗口径备注\":\"\",\"损坏比例\":\"0.01\"}},{\"table\":\"inventory\",\"row\":{\"批次编号\":\"BAG-LOT\",\"物料编号\":\"BAG\",\"账面数量\":\"10000\",\"已占用数量\":\"0\",\"有效期\":\"2026-12-31\",\"位置\":\"模拟库\",\"质量状态\":\"合格\",\"预计可用时间\":\"\"}}]}}"
+    ]
+  ],
+  "viewId": "934c8e0ee5323240f35e83eefdd318e91b0f36bb68a9ede4700b062ef804f39c"
+}

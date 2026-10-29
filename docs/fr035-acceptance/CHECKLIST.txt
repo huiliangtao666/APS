@@ -1,0 +1,68 @@
+FR035 finite acceptance/delivery checklist — original card AC23/26/31
+Product pin: cf6e76e23722f142a08c552aacb43c924fc62f19
+Branch: feat/fr-038-run-guidance; parent8741bf0 preserved FR038.
+
+1. From the delivery checkout, run:
+   python3 qa/fr035-acceptance.py --check
+   Default invocation is also check-only. It does not install dependencies,
+   start servers, run Docker, change live apps or require network. It checks
+   evidence inventory/SHA256, source files against exact Git objects, existing
+   entrypoint bytes/shell syntax, all matrix source/evidence references and
+   retained TAP summaries. A PASS validates delivery consistency, not full AC.
+
+2. matrix.json records exact sourceSHA, commands, evidence, result and gap for
+   six kinds, filters/order/window, metadata, permissions, quantity/time/CSV,
+   comparison completeness, history, Chinese operation and simulation.
+   evidence/Test-original-report.txt is independent Test at OLD5cb08e8, with
+   the confirmed issue23 failure. evidence/dev-replay/* and run3/* are Dev
+   executions at the repaired source, NOT an independent repaired-SHA verdict.
+   Original v0.3 DOCX hash is recorded in the Test report; this package carries
+   original AC excerpts plus live original cards, not a claim to reread DOCX.
+
+3. No product/old QA changes in this delivery. Do not rerun the full suite just
+   for this matrix/script/document change. Existing run3 logs independently
+   recounted: 458 TAP = canonical213 + business164 + query5 + worker9 +
+   components52 + run-history8 + scoped7. Build/CSV/browser are separate gates.
+   Browser13, history5, FR038browser6; nine FR035 actual downloads = eight in
+   downloads[] plus filtered-tasks.csv separately checked. Independent Dev
+   replay12 plus six downloads; original defect probe2/2 are separate counts.
+
+4. If a fresh full replay is required by Test or a changed product/QA gate:
+   mkdir <new-empty-absolute-output-directory>
+   python3 qa/fr035-acceptance.py --run --sdk <absolute-authorized-sdk-dir> \
+     --out <new-empty-absolute-output-directory>
+   This calls existing qa/fr038-docker.sh with FR038_REPO/FR038_SDK/FR038_OUT.
+   Equivalently from checkout root:
+   FR038_REPO="$PWD" FR038_SDK=<absolute-authorized-sdk-dir> \
+     FR038_OUT=<new-empty-absolute-output-directory> bash qa/fr038-docker.sh
+   Requires Docker, authorized two SDK tgz, npm and Playwright network. Installs,
+   build, app and browser stay in disposable Linux Docker with read-only source
+   and SDK mounts. Never host npm install/dev. Output must exist and be empty.
+   --run reports actual TAP logs; never substitute a fixed expected total.
+
+5. Legacy qa/fr035-docker.sh invokes qa/fr035-checks.sh: at current source its
+   selected TAP subtotal derives to448 =458 minus run-panel2/run-history8.
+   It is NOT an observed448 pass in this delivery. Its browser step hardcodes
+   qa/fr035-source-sha256.json, which differs in six files from repaired current
+   source and fails source verification. Environment override alone cannot fix
+   that hardcoded assignment. Use the existing integrated FR038 entrypoint
+   with qa/fr038-source-sha256.json for this pin. Original447 passes belong to
+   old5cb08e8. No script was weakened or old manifest relabeled to claim448.
+
+6. Issue23: round1 sourcefixed pending independent Test. Original real API
+   failure46->13 rows/resource2 of6; repaired Dev forward/reverse46->17 with6
+   resources, task-ID-side isolation and whole shared quantities. Page/CSV
+   parity alone does not prove query completeness. Queued Test delivery
+   dlv_e953f391-fe29-4150-b0bb-108466d83f60 is already canonical; no redispatch.
+
+7. Preserve FR014/024/026/032 upstream incomplete acceptance, DEC02/03/full
+   joint/all-rule/R7, signed gateway/SSO/real-person permissions, scale, full
+   accessibility and five-stage business UAT as gaps. No new defect or repair
+   round follows from missing coverage. FR038 acceptance is separate.
+
+8. Live original FR036 is Backlog (AC02/23; data classification + FR013/035):
+   suitable next finite interface/CSV simulation-documentation candidate after
+   respecting existing retest gate. FR027 is Backlog (AC19/21; FR025/026/033/034):
+   assess prerequisites/current-fact safety before drag/lock work. These are
+   suggestions only. No self-dispatch/new card/publication/main merge/issue
+   closure/full Done; no open-ended new-boundary search.

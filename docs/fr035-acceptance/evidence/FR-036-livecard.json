@@ -1,0 +1,25 @@
+{
+  "id": "PVTI_lAHOFM9WU84BpE1czhEHhFg",
+  "content": {
+    "id": "DI_lAHOFM9WU84BpE1czgLhAjo",
+    "title": "[FR] FR-036 外部系统接口说明与模拟替代",
+    "body": "## 需求\n范围：P0；关联流程：BP-01/07；页面：PG-01；开始提供：R0；完整提供：R7。\n前置功能：数据分类和FR-013/035。\n• 对ERP、OMS、WMS、PLM、MES等可能交换的数据，说明对应类别、主要字段、唯一编号、来源和方向，并提供CSV模拟文件约定。\n• 本期不实现真实连接、数据订阅或生产指令下发；无需配置真实系统账号。接入实现不作为P0或P1验收必需项。\n\n## 验收追踪\n验收用例：AC-02/23。\n\n来源：需求分析与设计说明书 v0.3，第 6 章；状态：基线需求，具体实现状态待跟踪。\n"
+  },
+  "fieldValues": {
+    "nodes": [
+      {},
+      {
+        "name": "Backlog",
+        "field": {
+          "name": "Status"
+        }
+      },
+      {
+        "name": "P0",
+        "field": {
+          "name": "Priority"
+        }
+      }
+    ]
+  }
+}

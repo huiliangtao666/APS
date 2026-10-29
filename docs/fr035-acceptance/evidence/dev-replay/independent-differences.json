@@ -1,0 +1,177 @@
+{
+  "version": "FR035-v1",
+  "query": {
+    "planId": "P",
+    "kind": "differences",
+    "otherPlanId": "P",
+    "text": "",
+    "order": "",
+    "start": 0,
+    "end": 120
+  },
+  "provenance": {
+    "planId": "P",
+    "runId": "R",
+    "inputVersionId": "19aba4909352139c08da838ac0828061ffd3ddba12b4a92152da90811aea0c1e",
+    "snapshotHash": "812624017d3ea6abe3e8166ae94c8bdc741e93faab4fe0403bec410b09cc1a57",
+    "confirmationId": null,
+    "createdAt": "2026-10-29T00:03:14.773Z",
+    "lines": [
+      "L01"
+    ],
+    "executionFactsVersion": "f4c2ab5ea0557c694ffddedf9d1716a8105592015bac93fb6fd9df537190ee24",
+    "checkScope": {
+      "mode": "supported",
+      "label": "已有支持模式",
+      "machineAvailability": "工厂日历及设备停机连续窗口",
+      "checked": [
+        "单产线",
+        "给定机器不重叠",
+        "固定工时",
+        "工序先后",
+        "日历与停机",
+        "已配置人员依赖",
+        "显式预计供给可用时点",
+        "已声明口径的BOM需求、库存FEFO及条件供给分配"
+      ],
+      "unchecked": [
+        "模具与工装",
+        "工序加料、完整BOM/执行耗料与任意单位换算",
+        "设备容量与拆合批",
+        "程序兼容",
+        "最大等待与空间",
+        "换型清洗",
+        "交付与余保",
+        "执行事实与主管确认",
+        "速度换算及完整精度规则"
+      ],
+      "note": "机器与顺序检查通过不代表完整业务可执行；未排任务不代表全局无解。独立复核仅覆盖单线、机器不重叠和工序先后。"
+    },
+    "materialChecked": true,
+    "query": {
+      "planId": "P",
+      "kind": "differences",
+      "otherPlanId": "P",
+      "text": "",
+      "order": "",
+      "start": 0,
+      "end": 120
+    },
+    "timeOrigin": "2026-11-02T08:00:00+08:00",
+    "timezone": "UTC+08:00",
+    "interval": "[start,end)",
+    "source": "保存方案及其原始输入；不是当前执行事实",
+    "simulation": "模拟数据；不发送外部系统、不承诺真实交付"
+  },
+  "limits": [
+    "任务和资源使用半开窗口；订单、物料、未排及方案差异保留整份保存方案，窗口不截断其业务数量。",
+    "共享资源按关联订单保留整行总占用，不拆算订单份额；搜索逐行匹配。",
+    "数量、精确分数、单位和日期原样保留；null 表示未知，条件到料不是已到货。",
+    "仅保存方案的计划负荷，不是实时剩余可用量；未分配不代表可排或资源空闲事实",
+    "DEC02 工装阶段/动态归还、DEC03 人员阶段/技能替代、最大等待及完整联合规则仍待确认；仅解释显式保存占用",
+    "候选分配不计入已提交消耗；不跨工序累加订单完成；不把预计到料当真实到货",
+    "确认快照、保存的执行事实与当前事实分别保留；不以当前输入补算历史",
+    "仅比较保存的模拟结果；不承诺全局最优或真实交付",
+    "未检查的物料分配保持未知，空数组不代表已检查",
+    "未排数量按任务/工序展示；不跨工序相加",
+    "交期变化可能来自需求或检查范围变化，须查看输入与条件差异",
+    "副本初始结果来自原运行；重算后有独立运行编号"
+  ],
+  "comparison": {
+    "left": {
+      "kind": "saved-original",
+      "copiedResult": false,
+      "planId": "P",
+      "runId": "R",
+      "inputVersionId": "19aba4909352139c08da838ac0828061ffd3ddba12b4a92152da90811aea0c1e",
+      "snapshotHash": "812624017d3ea6abe3e8166ae94c8bdc741e93faab4fe0403bec410b09cc1a57",
+      "trialId": null
+    },
+    "right": {
+      "kind": "saved-original",
+      "copiedResult": false,
+      "planId": "P",
+      "runId": "R",
+      "inputVersionId": "19aba4909352139c08da838ac0828061ffd3ddba12b4a92152da90811aea0c1e",
+      "snapshotHash": "812624017d3ea6abe3e8166ae94c8bdc741e93faab4fe0403bec410b09cc1a57",
+      "trialId": null
+    },
+    "scope": {
+      "before": {
+        "mode": "supported",
+        "label": "已有支持模式",
+        "machineAvailability": "工厂日历及设备停机连续窗口",
+        "checked": [
+          "单产线",
+          "给定机器不重叠",
+          "固定工时",
+          "工序先后",
+          "日历与停机",
+          "已配置人员依赖",
+          "显式预计供给可用时点",
+          "已声明口径的BOM需求、库存FEFO及条件供给分配"
+        ],
+        "unchecked": [
+          "模具与工装",
+          "工序加料、完整BOM/执行耗料与任意单位换算",
+          "设备容量与拆合批",
+          "程序兼容",
+          "最大等待与空间",
+          "换型清洗",
+          "交付与余保",
+          "执行事实与主管确认",
+          "速度换算及完整精度规则"
+        ],
+        "note": "机器与顺序检查通过不代表完整业务可执行；未排任务不代表全局无解。独立复核仅覆盖单线、机器不重叠和工序先后。"
+      },
+      "after": {
+        "mode": "supported",
+        "label": "已有支持模式",
+        "machineAvailability": "工厂日历及设备停机连续窗口",
+        "checked": [
+          "单产线",
+          "给定机器不重叠",
+          "固定工时",
+          "工序先后",
+          "日历与停机",
+          "已配置人员依赖",
+          "显式预计供给可用时点",
+          "已声明口径的BOM需求、库存FEFO及条件供给分配"
+        ],
+        "unchecked": [
+          "模具与工装",
+          "工序加料、完整BOM/执行耗料与任意单位换算",
+          "设备容量与拆合批",
+          "程序兼容",
+          "最大等待与空间",
+          "换型清洗",
+          "交付与余保",
+          "执行事实与主管确认",
+          "速度换算及完整精度规则"
+        ],
+        "note": "机器与顺序检查通过不代表完整业务可执行；未排任务不代表全局无解。独立复核仅覆盖单线、机器不重叠和工序先后。"
+      },
+      "comparable": true
+    },
+    "impact": {
+      "claim": "仅保存结果的差异；不推断单项条件因果、全局最早或真实交付",
+      "noAutomaticImprovement": true,
+      "copiedResults": false
+    },
+    "conditions": {
+      "changed": false
+    },
+    "orderOutcome": "unchanged-no-delivery-improvement"
+  },
+  "columns": [
+    "类别",
+    "保存记录（数量、单位、日期、输入与判断依据）"
+  ],
+  "rows": [
+    [
+      "交期影响",
+      "{\"category\":\"交期影响\",\"orderId\":\"A\",\"record\":{\"orderId\":\"A\",\"before\":{\"orderId\":\"A\",\"productId\":\"HC40\",\"unit\":\"kg\",\"status\":\"unknown\",\"promised\":false,\"requiredQuantity\":480,\"exactRequiredQuantity\":{\"numerator\":\"480\",\"denominator\":\"1\"},\"remainingQuantity\":480,\"exactRemainingQuantity\":{\"numerator\":\"480\",\"denominator\":\"1\"},\"knownCompletedQuantity\":480,\"knownLateQuantity\":0,\"exactKnownLateQuantity\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"unknownDeliverableQuantity\":480,\"exactUnknownDeliverableQuantity\":{\"numerator\":\"480\",\"denominator\":\"1\"},\"delayedQuantity\":null,\"delayMinutes\":null,\"dueMinute\":480,\"dueAt\":\"2026-11-02T08:00:00.000Z\",\"completionMinute\":60,\"completionAt\":\"2026-11-02T01:00:00.000Z\",\"expectedDeliverableMinute\":null,\"expectedDeliverableAt\":null,\"batches\":[{\"productionBatchId\":null,\"quantity\":480,\"exactQuantity\":{\"numerator\":\"480\",\"denominator\":\"1\"},\"unit\":\"kg\",\"taskIds\":[\"A-MIX\",\"A-FILL\"],\"missingOperations\":[],\"completionMinute\":60,\"completionAt\":\"2026-11-02T01:00:00.000Z\",\"deliverableMinute\":null,\"deliverableAt\":null}],\"reasons\":[{\"code\":\"DELIVERY_UNCHECKED\",\"message\":\"DELIVERY未启用或未生效，交付与延后未知\"},{\"code\":\"SCOPE_INCOMPLETE\",\"message\":\"缺少物料齐套或拆合批/容量检查；不推断可交付或零延后\"},{\"code\":\"QUALITY_UNKNOWN\",\"message\":\"缺少显式订单模拟质量与有效期条件\"}],\"taskIds\":[\"A-MIX\",\"A-FILL\"],\"timingReasons\":[{\"taskId\":\"A-MIX\",\"reasons\":[],\"source\":\"订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04\"},{\"taskId\":\"A-FILL\",\"reasons\":[{\"code\":\"PRECEDENCE\",\"source\":\"A-MIX\",\"from\":0,\"to\":30}],\"source\":\"订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04\"}],\"supplyConditions\":[],\"materialAllocations\":[{\"lotId\":\"LEAN-LOT\",\"supplyId\":\"\",\"quantity\":325,\"exactQuantity\":{\"numerator\":\"325\",\"denominator\":\"1\"},\"conditional\":false,\"expiry\":\"2026-12-31\",\"quality\":\"合格\",\"readyAt\":\"\",\"remaining\":9675,\"source\":\"模拟库存（扣除已有占用及本方案分配）\",\"taskId\":\"A-MIX\",\"materialId\":\"LEAN\",\"feedMinute\":0},{\"lotId\":\"FAT-LOT\",\"supplyId\":\"\",\"quantity\":75,\"exactQuantity\":{\"numerator\":\"75\",\"denominator\":\"1\"},\"conditional\":false,\"expiry\":\"2026-12-31\",\"quality\":\"合格\",\"readyAt\":\"\",\"remaining\":9925,\"source\":\"模拟库存（扣除已有占用及本方案分配）\",\"taskId\":\"A-MIX\",\"materialId\":\"FAT\",\"feedMinute\":0},{\"lotId\":\"WATER-LOT\",\"supplyId\":\"\",\"quantity\":75,\"exactQuantity\":{\"numerator\":\"75\",\"denominator\":\"1\"},\"conditional\":false,\"expiry\":\"2026-12-31\",\"quality\":\"合格\",\"readyAt\":\"\",\"remaining\":9925,\"source\":\"模拟库存（扣除已有占用及本方案分配）\",\"taskId\":\"A-MIX\",\"materialId\":\"WATER\",\"feedMinute\":0},{\"lotId\":\"PREMIX-LOT\",\"supplyId\":\"\",\"quantity\":25,\"exactQuantity\":{\"numerator\":\"25\",\"denominator\":\"1\"},\"conditional\":false,\"expiry\":\"2026-12-31\",\"quality\":\"合格\",\"readyAt\":\"\",\"remaining\":9975,\"source\":\"模拟库存（扣除已有占用及本方案分配）\",\"taskId\":\"A-MIX\",\"materialId\":\"PREMIX\",\"feedMinute\":0},{\"lotId\":\"BAG-LOT\",\"supplyId\":\"\",\"quantity\":1213,\"exactQuantity\":{\"numerator\":\"1213\",\"denominator\":\"1\"},\"conditional\":false,\"expiry\":\"2026-12-31\",\"quality\":\"合格\",\"readyAt\":\"\",\"remaining\":8787,\"source\":\"模拟库存（扣除已有占用及本方案分配）\",\"taskId\":\"A-FILL\",\"materialId\":\"BAG\",\"feedMinute\":30}],\"qualityCondition\":null,\"waitMinutes\":\"0\",\"findings\":[]},\"after\":{\"orderId\":\"A\",\"productId\":\"HC40\",\"unit\":\"kg\",\"status\":\"unknown\",\"promised\":false,\"requiredQuantity\":480,\"exactRequiredQuantity\":{\"numerator\":\"480\",\"denominator\":\"1\"},\"remainingQuantity\":480,\"exactRemainingQuantity\":{\"numerator\":\"480\",\"denominator\":\"1\"},\"knownCompletedQuantity\":480,\"knownLateQuantity\":0,\"exactKnownLateQuantity\":{\"numerator\":\"0\",\"denominator\":\"1\"},\"unknownDeliverableQuantity\":480,\"exactUnknownDeliverableQuantity\":{\"numerator\":\"480\",\"denominator\":\"1\"},\"delayedQuantity\":null,\"delayMinutes\":null,\"dueMinute\":480,\"dueAt\":\"2026-11-02T08:00:00.000Z\",\"completionMinute\":60,\"completionAt\":\"2026-11-02T01:00:00.000Z\",\"expectedDeliverableMinute\":null,\"expectedDeliverableAt\":null,\"batches\":[{\"productionBatchId\":null,\"quantity\":480,\"exactQuantity\":{\"numerator\":\"480\",\"denominator\":\"1\"},\"unit\":\"kg\",\"taskIds\":[\"A-MIX\",\"A-FILL\"],\"missingOperations\":[],\"completionMinute\":60,\"completionAt\":\"2026-11-02T01:00:00.000Z\",\"deliverableMinute\":null,\"deliverableAt\":null}],\"reasons\":[{\"code\":\"DELIVERY_UNCHECKED\",\"message\":\"DELIVERY未启用或未生效，交付与延后未知\"},{\"code\":\"SCOPE_INCOMPLETE\",\"message\":\"缺少物料齐套或拆合批/容量检查；不推断可交付或零延后\"},{\"code\":\"QUALITY_UNKNOWN\",\"message\":\"缺少显式订单模拟质量与有效期条件\"}],\"taskIds\":[\"A-MIX\",\"A-FILL\"],\"timingReasons\":[{\"taskId\":\"A-MIX\",\"reasons\":[],\"source\":\"订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04\"},{\"taskId\":\"A-FILL\",\"reasons\":[{\"code\":\"PRECEDENCE\",\"source\":\"A-MIX\",\"from\":0,\"to\":30}],\"source\":\"订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04\"}],\"supplyConditions\":[],\"materialAllocations\":[{\"lotId\":\"LEAN-LOT\",\"supplyId\":\"\",\"quantity\":325,\"exactQuantity\":{\"numerator\":\"325\",\"denominator\":\"1\"},\"conditional\":false,\"expiry\":\"2026-12-31\",\"quality\":\"合格\",\"readyAt\":\"\",\"remaining\":9675,\"source\":\"模拟库存（扣除已有占用及本方案分配）\",\"taskId\":\"A-MIX\",\"materialId\":\"LEAN\",\"feedMinute\":0},{\"lotId\":\"FAT-LOT\",\"supplyId\":\"\",\"quantity\":75,\"exactQuantity\":{\"numerator\":\"75\",\"denominator\":\"1\"},\"conditional\":false,\"expiry\":\"2026-12-31\",\"quality\":\"合格\",\"readyAt\":\"\",\"remaining\":9925,\"source\":\"模拟库存（扣除已有占用及本方案分配）\",\"taskId\":\"A-MIX\",\"materialId\":\"FAT\",\"feedMinute\":0},{\"lotId\":\"WATER-LOT\",\"supplyId\":\"\",\"quantity\":75,\"exactQuantity\":{\"numerator\":\"75\",\"denominator\":\"1\"},\"conditional\":false,\"expiry\":\"2026-12-31\",\"quality\":\"合格\",\"readyAt\":\"\",\"remaining\":9925,\"source\":\"模拟库存（扣除已有占用及本方案分配）\",\"taskId\":\"A-MIX\",\"materialId\":\"WATER\",\"feedMinute\":0},{\"lotId\":\"PREMIX-LOT\",\"supplyId\":\"\",\"quantity\":25,\"exactQuantity\":{\"numerator\":\"25\",\"denominator\":\"1\"},\"conditional\":false,\"expiry\":\"2026-12-31\",\"quality\":\"合格\",\"readyAt\":\"\",\"remaining\":9975,\"source\":\"模拟库存（扣除已有占用及本方案分配）\",\"taskId\":\"A-MIX\",\"materialId\":\"PREMIX\",\"feedMinute\":0},{\"lotId\":\"BAG-LOT\",\"supplyId\":\"\",\"quantity\":1213,\"exactQuantity\":{\"numerator\":\"1213\",\"denominator\":\"1\"},\"conditional\":false,\"expiry\":\"2026-12-31\",\"quality\":\"合格\",\"readyAt\":\"\",\"remaining\":8787,\"source\":\"模拟库存（扣除已有占用及本方案分配）\",\"taskId\":\"A-FILL\",\"materialId\":\"BAG\",\"feedMinute\":30}],\"qualityCondition\":null,\"waitMinutes\":\"0\",\"findings\":[]},\"deliverableDeltaMinutes\":null,\"delayDeltaMinutes\":null,\"outcome\":\"unknown\",\"promised\":false}}"
+    ]
+  ],
+  "viewId": "0bb3e97f0b0681820ffac9874e03de4f37ee5b40a00b30a21b521f361dc68684"
+}
