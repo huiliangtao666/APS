@@ -34,8 +34,26 @@ try{
   const promise=page.waitForEvent('download');await page.keyboard.press('Tab');await page.keyboard.press('Enter');const d=await promise;await d.saveAs(output+'/filtered-tasks.csv');assert.deepEqual(fs.readFileSync(output+'/filtered-tasks.csv'),Buffer.from('\ufeff'+reportCsv(r)));
   await page.getByLabel('报表结束分钟',{exact:true}).fill('0');assert.ok(await button.isDisabled());assert.ok(await page.getByRole('button',{name:'导出当前报表 CSV',exact:true}).isDisabled());
  });
- await check('difference order filtering retains per-order impact, absent order stays empty',async()=>{
-  for(const order of ['A','absent-order']){const r=await api(query('differences',run.manifest.jointPlanId,{otherPlanId:run.manifest.historicalPlanId,order}));if(order==='absent-order')assert.deepEqual(r.rows,[]);else assert.ok(r.rows.length);}
+ await check('DIFF-ORDER01 real saved joint/execution plans: six linked resources, reverse comparison, actual page/download completeness',async()=>{
+  await page.getByLabel('报表结束分钟',{exact:true}).fill('120');
+  const plans=await run.call('/plans'),decode=r=>r.rows.map(row=>JSON.parse(row[1]));
+  const states=[];
+  for(const [left,right] of [[run.manifest.jointPlanId,run.manifest.historicalPlanId],[run.manifest.historicalPlanId,run.manifest.jointPlanId]]){
+   const q=query('differences',left,{otherPlanId:right}),all=await api(q),filtered=await api({...q,order:'A'});
+   const ids=new Set(plans.filter(p=>[left,right].includes(p.id)).flatMap(p=>p.tasks.filter(t=>t.orderId==='A').map(t=>t.id)));
+   const expected=decode(all).filter(x=>x.category==='resources'&&[...(x.record.before||[]),...(x.record.after||[])].some(v=>[...(v.taskIds||[]),v.taskId].some(id=>ids.has(id))));
+   assert.equal(expected.length,6);assert.deepEqual(decode(filtered).filter(x=>x.category==='resources'),expected);
+   assert.deepEqual((await api({...q,order:'absent-order'})).rows,[]);
+   await page.getByLabel('报表方案',{exact:true}).selectOption(left);await page.getByLabel('报表类别',{exact:true}).selectOption('differences');await page.getByLabel('对比方案',{exact:true}).selectOption(right);await page.getByLabel('报表订单',{exact:true}).fill('A');await read();
+   assert.equal(await page.locator('table[data-fr035-view]').getAttribute('data-fr035-view'),filtered.viewId);
+   assert.deepEqual(await page.locator('table[data-fr035-view] tbody tr').evaluateAll(es=>es.map(e=>[...e.querySelectorAll('td')].map(c=>c.querySelector('[data-fr035-cell]')?.textContent??c.textContent))),filtered.rows);
+   const direction=left===run.manifest.jointPlanId?'forward':'reverse',downloadPromise=page.waitForEvent('download');await page.getByRole('button',{name:'导出当前报表 CSV',exact:true}).click();const download=await downloadPromise;
+   const filename=output+'/diff-order-A-'+direction+'.csv';await download.saveAs(filename);const bytes=fs.readFileSync(filename);assert.deepEqual(bytes,Buffer.from('\ufeff'+reportCsv(filtered)));assert.deepEqual(parseInputCsv(bytes.toString()).slice(6),filtered.rows);
+   report.downloads.push({kind:'differences-order-A-'+direction,rows:filtered.rows.length,resources:6,viewId:filtered.viewId,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')});
+   fs.writeFileSync(output+'/diff-order-A-'+direction+'.html',await page.content());await page.screenshot({path:output+'/diff-order-A-'+direction+'.png',fullPage:true});states.push({direction,query:q,expectedResources:expected,all,filtered});
+  }
+  fs.writeFileSync(output+'/diff-order-completeness.json',JSON.stringify(states,null,2));
+  await page.getByLabel('报表订单',{exact:true}).fill('');
  });
  await check('narrow viewport native keyboard controls and readable result scroll',async()=>{
   await page.setViewportSize({width:640,height:900});await page.getByLabel('报表结束分钟',{exact:true}).fill('120');await read();

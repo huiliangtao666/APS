@@ -12,3 +12,26 @@ test('FR035 frozen history survives current input changes; CSV guards formulas, 
 test('FR035 semantically identical query key order retains identity and cannot widen saved run orders',()=>{const s=fixture(),a=q('orders'),b=Object.fromEntries(Object.entries(a).reverse());assert.deepEqual(scopedReport(s,a),scopedReport(s,b));const p=s.plans[0],run=s.runs[0];p.conditions=structuredClone(p.conditions);p.conditions.orderIds=[p.conditions.orderIds[0]];run.conditions=p.conditions;run.snapshotHash=inputHash({conditions:run.conditions,executionData:run.executionData});p.snapshotHash=run.snapshotHash;const report=scopedReport(s,a);assert.equal(report.rows.length,1);assert.equal(JSON.parse(report.rows[0][1]).orderId,p.conditions.orderIds[0]);});
 
 test('FR035 order filter handles both grouped diff arrays and per-order delivery objects',()=>{const s=fixture();assert.deepEqual(scopedReport(s,{...q('differences'),otherPlanId:'P',order:'absent-order'}).rows,[]);const order=s.plans[0].conditions.orderIds[0];const r=scopedReport(s,{...q('differences'),otherPlanId:'P',order});assert.ok(r.rows.every(row=>JSON.parse(row[1]).orderId===order||JSON.parse(row[1]).record.orderId===order));});
+
+
+test('FR035 DIFF-ORDER01 before/after-only task references, shared rows and reused IDs resolve against saved sides',()=>{
+ const s=fixture(),left=s.plans[0],right=structuredClone(left);right.id='P2';s.plans.push(right);
+ // Deliberate structural controls supplement the genuine saved-route browser case.
+ left.tasks=[{id:'before-only',orderId:'A'},{id:'shared',orderId:'A'},{id:'other',orderId:'B'},{id:'reused',orderId:'B'}];
+ right.tasks=[{id:'after-only',orderId:'A'},{id:'shared',orderId:'A'},{id:'other',orderId:'B'},{id:'reused',orderId:'A'}];
+ const row=(resourceId,links)=>({type:'空间',resourceId,quantity:100,unit:'kg',start:0,end:20,...links});
+ left.resourceReservations=[row('before',{taskId:'before-only'}),row('shared',{taskIds:['shared','other']}),row('unrelated',{taskId:'other'}),row('reused-before',{taskId:'reused'})];
+ right.resourceReservations=[row('after',{taskIds:['after-only']}),{...row('shared',{taskIds:['shared','other']}),quantity:200},row('unrelated',{taskId:'other'})];
+ const snapshot=structuredClone(s),read=(a,b,order='')=>scopedReport(s,{...q('differences'),planId:a,otherPlanId:b,order});
+ const resources=r=>r.rows.map(x=>JSON.parse(x[1])).filter(x=>x.category==='resources');
+ for(const [a,b] of [['P','P2'],['P2','P']]){
+  const all=resources(read(a,b)),filtered=resources(read(a,b,'A'));
+  assert.equal(all.length,4);assert.equal(filtered.length,3);
+  const selected=all.filter(x=>['before','after','shared'].some(id=>[...(x.record.before||[]),...(x.record.after||[])].some(v=>v.resourceId===id)));
+  assert.deepEqual(filtered,selected);assert.deepEqual(resources(read(a,b,'absent')),[]);
+  const shared=filtered.find(x=>[...(x.record.before||[]),...(x.record.after||[])].some(v=>v.resourceId==='shared'));
+  assert.deepEqual([shared.record.before[0].quantity,shared.record.after[0].quantity],a==='P'?[100,200]:[200,100]);
+  assert.equal(resources(read(a,b,'B')).length,2);
+ }
+ assert.deepEqual(s,snapshot);
+});
