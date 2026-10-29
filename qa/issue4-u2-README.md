@@ -20,6 +20,9 @@ Enabled-rule missing data retains existing rules and coverage triggers. Truly
 absent mandatory rules have zero records and explicit missing-target metadata.
 The existing early invalid_rule_selection remains HTTP400; its diagnostic now
 includes the already applicable absent-rule findings and the checked input.
+A read-only inventory projection with missing MATERIAL status parameters now
+shows untested eligibility instead of throwing before the rule diagnostic can
+be opened; it adds no fallback status and does not change allocation.
 No missing target is fabricated as a record. No code/message/taskId inference,
 automatic repair, lifecycle inheritance or history backfill was added.
 

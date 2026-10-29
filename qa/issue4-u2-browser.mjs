@@ -32,5 +32,8 @@ try{
   // Produce the finding under the authorized planner; then change the actual authenticated member.
   const ro=await browser.newPage();await ro.setExtraHTTPHeaders({'test-sub':'query'});await ro.goto(f.url);await ro.getByText('当前权限：query',{exact:false}).waitFor();assert.equal(await ro.getByRole('button',{name:'同步计算全部（无取消）',exact:true}).isEnabled(),false);await ro.close();dump('ui-zero-write-proof.json',{revision:state.revision,statuses:[403,409,400],beforeBytes:Buffer.byteLength(before),afterEqual:f.bytes()===before});
  });
+ await check('U2 enabled MATERIAL missing required state parameters does not crash read-only page; parameter and missing-BOM diagnostics retain real rule only',async()=>{
+  const d=structuredClone(seed);d.bom=[];d.rules.find(r=>r['规则编号']==='MATERIAL')['是否启用']='是';inject(d);await open();const before=f.bytes(),r=await calc();await click('可用状态须为非空、无重复状态列表');assert.equal(await panel().locator('tbody tr').count(),1);assert.match(await panel().innerText(),/MATERIAL/);await panel().getByRole('button',{name:'查询关联记录',exact:true}).click();assert.match(await query().getByRole('region',{name:'记录详情',exact:true}).innerText(),/MATERIAL/);assert.equal(f.bytes(),before);dump('ui-missing-rule-parameters.json',r);dump('ui-missing-rule-parameters-dom.txt',await panel().innerText());await panel().screenshot({path:out+'/ui-missing-rule-parameters.png'});
+ });
  assert.deepEqual(report.errors,[]);report.complete=true;
 }catch(e){report.failure=e.stack;if(page){dump('ui-failure-dom.txt',await page.locator('body').innerText());await page.screenshot({path:out+'/ui-failure.png',fullPage:true});}throw e;}finally{dump('u2-browser-report.json',report);await browser?.close();await f?.close();}
