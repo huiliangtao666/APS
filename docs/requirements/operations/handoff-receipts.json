@@ -2086,6 +2086,95 @@
       "issue_comment": "https://github.com/huiliangtao666/APS/issues/16#issuecomment-6502278417",
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_80aa3354-5aad-4e00-98fe-4ed9d338f174:r1",
+      "type": "DESIGN_DELIVERED",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T00:44:16+08:00",
+      "source": "APS-Design",
+      "requirement": "FR-007/022",
+      "product_sha": null,
+      "design_sha": "9c230d4aeda124915bcb917b929050f020a11951",
+      "result": "P10设计PARTIAL：池身份/唯一总容量/组资格上限与保存冻结可先实现；U01关闭互斥粒度、U02交接数量含义待用户确认；无产品验收",
+      "external_hashes": {
+        "P10-B01-B03-DESIGN-r1.zip": "8d1dc4b0ae4dd94da139695b12ee75b87fb894a0b67ee0c2c20d3e885784f724",
+        "P10-B01-B03-ACCEPTANCE-r1.csv": "07d1882b390fa7ec8a98681b5a656c247c1d672e0a25de3068263946b668af5c"
+      },
+      "zip_crc": "PASS",
+      "zip_entries": 9,
+      "matrix_rows_verified": 44,
+      "matrix_status": {
+        "NOT_EXECUTED": 44
+      },
+      "project_status": {
+        "FR-007/022": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6502353099",
+      "repair_rounds_completed": null,
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_2133edc3-3635-4e0e-984a-65ed8b44b633:r1",
+      "type": "TEST_VERDICT",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T00:44:16+08:00",
+      "source": "APS-Test",
+      "requirement": "FR-023",
+      "product_sha": "675f6fd81555230260d2245aabed6dbb7e3f20d2",
+      "design_sha": null,
+      "result": "固定675f6fd8浏览器定向7 PASS/0 FAIL；AC14联合语义、真实平台多成员身份及QA UAT待完成",
+      "external_hashes": {
+        "FR023-675f6fd8-BROWSER-RECOVERY-R1-MATRIX.csv": "ec405309ade5ed94421ac0abd27be8e8ab819e3b6ba8dfec13807cca79c573cf",
+        "FR023-675f6fd8-BROWSER-RECOVERY-R1-REPORT.md": "5c5f947c2355c317ed8185bd1735beaed26b7f6b6034759f2dfd86cd3fa14976",
+        "FR023-675f6fd8-BROWSER-RECOVERY-R1-EVIDENCE.zip": "f4b97fb914b930b231e842f46ebeebf57005db0145ea1f392c3329eacb945d60"
+      },
+      "zip_crc": "PASS",
+      "zip_entries": 46,
+      "matrix_rows_verified": 7,
+      "matrix_status": {
+        "PASS": 7
+      },
+      "project_status": {
+        "FR-023": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/16#issuecomment-6502735162",
+      "repair_rounds_completed": null,
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_f6826642-84e7-470b-9e86-0c741815493f:r1",
+      "type": "TEST_VERDICT",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T00:44:16+08:00",
+      "source": "APS-Test2",
+      "requirement": "FR-021",
+      "product_sha": "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc",
+      "design_sha": null,
+      "result": "固定e0be9b6d AC14定向4真实产品FAIL（W01、W03b、L01、L02）、2 PASS/1 PARTIAL/1 BLOCKED；旧B01-B10 PASS留原SHA；整卡NOT_READY",
+      "external_hashes": {
+        "FR021-AC14-e0be9b6d-Test2-R1-matrix.csv": "5bb35f0e51693aa89ab8555e498012c795daef0f15291724e6804038784e0281",
+        "FR021-AC14-e0be9b6d-Test2-R1-report.md": "abd6e42f3a3dc6298115ba674fb997f87ba3b94a00884b3fa8cbd3689d4ef59f",
+        "FR021-AC14-e0be9b6d-Test2-R1-evidence.zip": "54ceb0ab4c2085c457006507995ff1b104ee89ac7870155c12359f8f4e308051"
+      },
+      "zip_crc": "PASS",
+      "zip_entries": 27,
+      "matrix_rows_verified": 8,
+      "matrix_status": {
+        "FAIL": 4,
+        "PASS": 2,
+        "PARTIAL": 1,
+        "BLOCKED": 1
+      },
+      "project_status": {
+        "FR-021": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/16#issuecomment-6502746424",
+      "repair_rounds_completed": 0,
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
