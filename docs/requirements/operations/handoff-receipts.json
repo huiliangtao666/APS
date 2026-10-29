@@ -2976,6 +2976,84 @@
       "confirmed_defect": null,
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_1940d136-d3af-4e7b-9ba4-2f347c51f60f:r1",
+      "original_delivery": "dlv_1940d136-d3af-4e7b-9ba4-2f347c51f60f",
+      "type": "DEV_DELIVERED",
+      "source": "APS-Dev",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T04:23:09+08:00",
+      "requirement": "FR-007/FR-022/Issue3",
+      "product_sha": "7a26732efc0fb440ca6f8ac7aa6261e33757eb81",
+      "result": "P06多班次联合资源固定7a26732 Dev限定交付：27 PASS/2 U01-U02 BLOCKED/5未执行；独立Test dlv_ccae9b54-5f78-4ec0-873e-982826e8bc54在执行",
+      "external_hashes": {
+        "Issue3-FR007-FR022-P06-r1-EVIDENCE.zip": "783be1be1932d27e402d655025a0de2d7842912fbc38940d29466055e8b57940",
+        "Issue3-FR007-FR022-P06-r1-HANDOFF.json": "2222cf65ecde5ca3c446e64db095ca112dbb075048aaa9f960e5bbac8e79b4e6",
+        "Issue3-FR007-FR022-P06-r1-REPORT.txt": "71e45fe645c3072eb81b796b5f0b9d4fd0ca778daa36fffc77c99fcf04af38ff",
+        "Issue3-FR007-FR022-P06-r1-MATRIX.csv": "d8b35522cb26ce8d6eb938e6ebfc9bb0f4eb0717246864b979691f92c7f4e6eb",
+        "Issue3-FR007-FR022-P06-r1-SHA256.json": "30b1b72d9ae30f27814ad2c3821fdfef65fbc97c83afeeed0314abdfe4d93faf"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 34,
+      "project_status": {
+        "FR-007": "In progress",
+        "FR-022": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6507472035",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_04729472-9a4f-4302-b987-5e8fec47d37b:r1",
+      "original_delivery": "dlv_04729472-9a4f-4302-b987-5e8fec47d37b",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T04:23:09+08:00",
+      "requirement": "FR-013/Issue4",
+      "product_sha": "fc273441ca93dcc47996bf5a6f7031e73be7f226",
+      "result": "FR013原12设备依赖固定fc273独立10拒绝/定位PASS、2 BLOCKED、6未执行、0 FAIL；164原行中4预览但未入库",
+      "external_hashes": {
+        "FR013-Original12-Equipment-fc273441-Test1-r1-EVIDENCE.zip": "f3dd0fd600902606cbbcc5815830f8974150003122a3d96584e98a936c84aa90",
+        "FR013-Original12-Equipment-fc273441-Test1-r1-REPORT.txt": "c3eaf9dd54831aab52eb8c7034ee078a902e38c1cd25b31abdecd3ee6f848291",
+        "FR013-Original12-Equipment-fc273441-Test1-r1-MATRIX.csv": "043e288d8760b212871b46ba814bbaab37548fb16f49f19946d1d733ee0b1b73",
+        "FR013-Original12-Equipment-fc273441-Test1-r1-RECORDS.csv": "4c7e083a4647a2594a2988725c5272336dceb9139334609325579f809589e330",
+        "FR013-Original12-Equipment-fc273441-Test1-r1-SHA256.json": "bed3e503b9e1d261c22791eed4952649c1ddd55be85a980bc523ab4e130543c7"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 18,
+      "project_status": {
+        "FR-013": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6507472292",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_5deef448-231e-4dcd-9727-26bf90cfd6a4:r1",
+      "original_delivery": "dlv_5deef448-231e-4dcd-9727-26bf90cfd6a4",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test2",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T04:23:10+08:00",
+      "requirement": "FR-016/Issue4",
+      "product_sha": "240605f1683189a27857aba473f9084c073af039",
+      "result": "FR016 P23/P24/P27独立浏览器补证BLOCKED：Test2容器Chromium缺libglib等系统库，未进入页面；0新产品FAIL",
+      "external_hashes": {
+        "FR016-U3-P23-P24-P27-BROWSER-240605f1-Test2-R1-report.md": "bfe599af1fd53064691c47a56380439125ce93f6e9b105000dc57d209c58a940",
+        "FR016-U3-P23-P24-P27-BROWSER-240605f1-Test2-R1-evidence.zip": "ebcc64853f49f448d29c085ae2713469f97c81e5f0ab8d50abeda3f9b4a9e3e5",
+        "FR016-U3-P23-P24-P27-BROWSER-240605f1-Test2-R1-matrix.csv": "47652472dcad446c95c65fd2bf226b81c5339451c5038b69c86dc9d2d9d5533a",
+        "FR016-U3-P23-P24-P27-BROWSER-240605f1-Test2-R1-sha256.txt": "105be5a33088e5abbc1e3217b42ab54ace69bc3b95a6f1941cde4109b43a4234"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 6,
+      "project_status": {
+        "FR-016": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6507472568",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }

@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "P10 core beae5b4 independent limited PASS; R01/R02 2016258 independent 23 PASS/2 BLOCKED/6 NOT_EXECUTED; U01/U02/full FR007/022/CR NOT_READY",
+      "implementation_status": "P10 core beae5b4 limited independent PASS; R01/R02 2016258 independent 23 PASS/2 BLOCKED/6 NOT_EXECUTED; P06 7a26732 Dev 27 PASS/2 BLOCKED/5 NOT_EXECUTED, independent Test dlv_ccae9b54 in progress; U01/U02/full FR007/022/CR NOT_READY",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "R01/R02 joint enabled-resource path scoped 23 independent PASS at 2016258; U01/U02 and other FR022 responsibility open; P08/P09/FR017/P10 old results retain original SHAs; full CR NOT_READY",
+      "acceptance_result": "P06 multi-shift Dev delivery 7a26732, independent Test pending; R01/R02 scoped 2016258 independent PASS remains on old SHA; U01/U02 and other responsibility open; full CR NOT_READY",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
