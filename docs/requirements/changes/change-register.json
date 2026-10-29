@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "P08/P09 fixed e0be9b6d scoped independent 15/15 PASS; FR017 prior scoped PASS; FR007/022 and full CR NOT_READY",
+      "implementation_status": "P08/P09 fixed e0be9b6d scoped independent 15/15 PASS; FR017 prior scoped PASS; P10 readiness BLOCKED (no new product SHA); FR007/022 and full CR NOT_READY",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "P08/P09 scoped 15/15 independent PASS at e0be9b6d; prior S06/S07, D01-D03 and FR017 PASS stay original SHAs; P06/P10, N06, R01/R02 and full FR007/022/CR/UAT remain open",
+      "acceptance_result": "P08/P09 scoped 15/15 independent PASS at e0be9b6d; prior S06/S07, D01-D03 and FR017 PASS stay original SHAs; P10 business contract B01/B02/B03 blocked, no P10 product/Test acceptance; P06, N06, R01/R02 and full FR007/022/CR/UAT remain open",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -115,6 +115,11 @@
           "event_key": "USER-DECISIONS-20261029-R1:dec0203",
           "event": "用户确认可共用，是否共用、交接容量与占用均可配置；既有P08/P09有限PASS不改签，FR007/022与完整CR未完成",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6500755581"
+        },
+        {
+          "date": "2026-10-30",
+          "event": "PM processed P10 readiness dlv_e3bdd41f-abdb-4a17-9a5b-b7a26fcce2f9:r1: BLOCKED design contract B01/B02/B03; no product SHA, no new FAIL/repair round; Issue3 and original FR007/FR022 remain In progress; Design clarification required before Dev continuation",
+          "evidence_commit": "37e7677059c387981db6d8f27964fa0d1d5fc3d8"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
