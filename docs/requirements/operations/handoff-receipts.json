@@ -1719,6 +1719,32 @@
       },
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_3e79eeae-e281-4ebe-876d-53d7f03dad92:r1",
+      "type": "DEV_DELIVERED",
+      "state": "PROCESSED",
+      "source": "APS-Dev delivery dlv_50c609a9-55ef-4992-997f-98035ea89ef6",
+      "processed_at": "2026-10-29T23:13:48+08:00",
+      "requirement": "FR-026 v0.3 / AC-03/12/20/32, Issue #14 historical link",
+      "product_sha": "e684ee162d2dc743692cc154733d1a494a8f6ef6",
+      "direct_parent": "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc",
+      "branch": "fix/fr026-current-restore",
+      "result": "Dev scoped 20/20 PASS; independent Test executing; FR026 NOT_READY",
+      "test_followup_delivery": "dlv_39dfd0df-3a9c-4ee7-9b42-3cd7bd167c5e",
+      "external_hashes": {
+        "FR026-e684ee16-RESTORE-R1-REPORT.html": "c8b825ddda501a7437252a4a65c6fb5631e75e2b8bf9f6d3fbd1aaaf5b1ed55d",
+        "FR026-e684ee16-RESTORE-R1-MATRIX.csv": "edbf8af686a9a6259f22b2280585c633aa10734cb8b7fb3e4a0466370f075633",
+        "FR026-e684ee16-RESTORE-R1-RESULT.json": "7202edd0c3ade5385a34688dff82e8ce6a52d422c5b53c59f27ef779420802d2",
+        "FR026-e684ee16-RESTORE-R1-EVIDENCE.zip": "c594b210d4c2d269ce81bd1c78010dbbce14ceb9608c779a966fc6410150a79c"
+      },
+      "zip_crc": "PASS",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/14#issuecomment-6500516074",
+      "project_status": {
+        "FR-026": "In progress"
+      },
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
