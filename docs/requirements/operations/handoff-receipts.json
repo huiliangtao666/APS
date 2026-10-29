@@ -1310,6 +1310,64 @@
       },
       "zip_limit": "Files API HTTP 413 for 97 MB ZIP; whole ZIP hash not independently checked",
       "remaining": "FR026/007/022, original UAT15 approval, real platform and QA UAT separate"
+    },
+    {
+      "event_key": "dlv_52f5ecfe-75de-4c1d-be9e-d1352cdaba38:r1",
+      "type": "DEV_DELIVERED",
+      "source": "APS-Dev Inbox delivery and original task",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T19:05:47+08:00",
+      "requirement": "FR-013/014/015",
+      "product_sha": "66af9caceb57eff429dd8b14bbad690f62bfe749",
+      "parent_sha": "ca13c6d26a40eb329011c0fa66a747aa735570da",
+      "branch": "feat/fr-013-016-main-batch",
+      "result": "Dev PARTIAL: 16/17 PASS; filename observation pending independent Test; original cards/Issues updated and Test dispatched",
+      "test_delivery": "dlv_e2ac5f26-6f61-4e8c-badf-6fefd374af7c",
+      "external_hashes": {
+        "FACTORY-LINE-01-R1-REPORT.txt": "fb17a4ea52fedf3965b908cb3e464f705cef7d96a4cbbe76ec8b6ab5f1272c68",
+        "FACTORY-LINE-01-R1-ASSERTIONS.json": "2bcfccac8144dfa33c8bc2a0290ae095e01b5716730994d98241b286946467a3",
+        "FACTORY-LINE-01-R1-CHANGES.json": "0aa0f60a4e1e30f3cf49616c4718ee7a7a315322e5338844ea6d53f607668585",
+        "FACTORY-LINE-01-R1-EVIDENCE.zip": "02dc18c39f09217a9bfd052f5700e35672e9c5a07d7bf172ee06b5478ba9a1c8"
+      },
+      "issue_comments": [
+        "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6494973578",
+        "https://github.com/huiliangtao666/APS/issues/12#issuecomment-6494974135"
+      ]
+    },
+    {
+      "event_key": "dlv_e2ac5f26-6f61-4e8c-badf-6fefd374af7c:r1",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test original delivery and accessible Files API originals",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T19:05:47+08:00",
+      "requirement": "FR-013/014/015",
+      "product_sha": "66af9caceb57eff429dd8b14bbad690f62bfe749",
+      "parent_sha": "ca13c6d26a40eb329011c0fa66a747aa735570da",
+      "branch": "feat/fr-013-016-main-batch",
+      "result": "37/37 target PASS; FR014 51/51 and FR015 109/109 current applicable responsibility Done; FR013 original01 PASS but whole card In progress",
+      "external_hashes": {
+        "FACTORY-LINE-01-66af9cac-INDEPENDENT-R1-REPORT.txt": {
+          "sha256": "5af4342c9176e11713938f2ac61fe1847e08884ffc497782d8f91af23f31f1b1",
+          "bytes": 14439
+        },
+        "FACTORY-LINE-01-66af9cac-INDEPENDENT-R1-ASSERTIONS.csv": {
+          "sha256": "4b2655d713c8242b59315b987a47ca14708720ac2f8d6c4a950137792480d250",
+          "bytes": 22685
+        },
+        "FACTORY-LINE-01-66af9cac-INDEPENDENT-R1-EVIDENCE.zip": {
+          "sha256": "7bff467be15f3dde4fcf1b9d309a3764d2f08d784af55488a9efa702f9d55ece",
+          "bytes": 6910966
+        }
+      },
+      "issue4_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6494973578",
+      "issue12_comment": "https://github.com/huiliangtao666/APS/issues/12#issuecomment-6494974135",
+      "issue12_state": "closed",
+      "project_status": {
+        "FR-013": "In progress",
+        "FR-014": "Done",
+        "FR-015": "Done"
+      },
+      "repair_rounds_added": 0
     }
   ]
 }
