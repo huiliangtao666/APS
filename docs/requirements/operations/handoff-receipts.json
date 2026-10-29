@@ -1114,6 +1114,37 @@
       "receipt_transport": "This Inbox final result is returned by platform hook; no extra ACK delivery"
     },
     {
+      "event_key": "dlv_5f219f82-c21d-4783-8949-c35ff1f1ba91:r1",
+      "delivery": "dlv_f038c15d-6efc-45aa-9497-ec369107eea9",
+      "original_delivery": "dlv_5f219f82-c21d-4783-8949-c35ff1f1ba91",
+      "type": "DEV_DELIVERED",
+      "source": "APS-Dev retried Inbox delivery; original active notification failed 403",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T18:02:23+08:00",
+      "product_sha": "ca13c6d26a40eb329011c0fa66a747aa735570da",
+      "parent_sha": "c8e16d408b2d0207cb9886b55f39a52ebc9c1665",
+      "branch": "feat/fr-013-016-main-batch",
+      "requirement": "FR-031",
+      "project_card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg_o",
+      "project_status": "Done",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/14#issuecomment-6492385032",
+      "issue14_state": "closed",
+      "result": {
+        "dev_scope": "PASS",
+        "card_at_dev_delivery": "NOT_READY pending independent retest",
+        "repair_round": 1,
+        "retest_delivery": "dlv_0038ba5b-7098-4930-b115-b8a2ad1816c9",
+        "retest_event_key": "dlv_0038ba5b-7098-4930-b115-b8a2ad1816c9:r1",
+        "retest_state": "PROCESSED; PASS 31-22/31-23 and 14 direct checks; effective card 23 PASS"
+      },
+      "external_hashes": {
+        "FR031-FIX-R1-REPORT.txt": "5ea65f4665fa2fef87bb74c46ca4eab416e11e27a2fcd6a8e5968ba0a634612a",
+        "FR031-FIX-R1-EVIDENCE.zip": "3a74d84ce7fdb4d8341df273e71f3ee06cb0a3bed10fb8d6ad57f2d85cbc3b4a",
+        "FR031-FIX-R1-SHA256.txt": "f18a3507dd5c27bb6845d8a8c45f2546e89d3d127ebdb748c4c6487313073076"
+      },
+      "processing_note": "Late same-key retry. Independent Test and original card/Issue14 already processed; no duplicate dispatch, status change, or new repair round. FR026 successful restore, original UAT15, platform identity and QA UAT remain separate."
+    },
+    {
       "event_key": "dlv_0038ba5b-7098-4930-b115-b8a2ad1816c9:r1",
       "type": "TEST_VERDICT",
       "source": "APS-Test task result (active send failed 403)",
