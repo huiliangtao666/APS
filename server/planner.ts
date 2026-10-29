@@ -192,7 +192,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
      for(const g of batches.groups.filter((g:any)=>g.status==='blocked-under-min'))for(const op of g.route){
       const materialSources:any[]=[];const trace=(table:string,rows:Row[])=>materialSources.push(...sourceRefs(table,rows,sourceData[table]||[]));
       g.members.forEach((m:any)=>trace('orders',[m.order]));trace('routes',[op]);
-      try{const demands=g.members.flatMap((m:any)=>calculateMaterialDemand(sourceData,m.order,op['工序编号'],conditions.startMinute??0,m.qualifiedKg,trace).map(d=>({...d,taskId:JSON.stringify([m.orderId,m.index,op['工序编号']])})));if(allocator)materialDemands.push(...allocator.preview(demands,conditions.startMinute??0).rows.map(r=>({...r,blockedReason:'低于最小装载；候选未占用'})));}catch(e){findings.push({relatedRecords:materialSources,code:'UNPLANNED / BATCH_MATERIAL',message:String(e),taskIds:[]});}
+      try{const demands=g.members.flatMap((m:any)=>calculateMaterialDemand(sourceData,m.order,op['工序编号'],conditions.startMinute??0,m.qualifiedKg,trace).map(d=>({...d,taskId:JSON.stringify([m.orderId,m.index,op['工序编号']])})));if(allocator)materialDemands.push(...allocator.preview(demands,conditions.startMinute??0,trace).rows.map(r=>({...r,blockedReason:'低于最小装载；候选未占用'})));}catch(e){findings.push({relatedRecords:materialSources,code:'UNPLANNED / BATCH_MATERIAL',message:String(e),taskIds:[]});}
      }
     }
     const retainBlockedDemand=(order:Row,operation:string,minute:number,blockedReason:string)=>{

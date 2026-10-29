@@ -4,7 +4,7 @@ export type MaterialDemandRow={orderId:string;productId:string;operation:string;
 export function feedTime(minute:number):string;
 export function materialPolicy(data:Record<string,Row[]>,at:string):Record<string,any>|null;
 export function calculateMaterialDemand(data:Record<string,Row[]>,order:Row,operation:string,minute:number,remainingKg?:{numerator:string;denominator:string},trace?:(table:string,rows:Row[])=>void):Omit<MaterialDemandRow,'allocations'|'shortage'|'exactShortage'|'committed'|'suggestion'>[];
-export function createMaterialAllocator(data:Record<string,Row[]>,policy:Record<string,any>):{futureMinutes:number[];preview(demands:ReturnType<typeof calculateMaterialDemand>,minute:number):{ok:boolean;rows:MaterialDemandRow[];commit():void}};
+export function createMaterialAllocator(data:Record<string,Row[]>,policy:Record<string,any>):{futureMinutes:number[];preview(demands:ReturnType<typeof calculateMaterialDemand>,minute:number,trace?:(table:string,rows:Row[])=>void):{ok:boolean;rows:MaterialDemandRow[];commit():void}};
 
 export function orderHasRemaining(order:Row):boolean;
 

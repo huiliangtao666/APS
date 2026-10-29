@@ -78,8 +78,13 @@ export function createMaterialAllocator(data,policy) {
  const futureMinutes=[...(data.inventory||[]).map(b=>b['预计可用时间']),...resolved.map(s=>s['生效可用时间'])].filter(Boolean).map(t=>(Date.parse(t)-Date.parse(PLAN_TIME_ORIGIN))/60000).filter(Number.isFinite).sort((a,b)=>a-b);
  return {
   futureMinutes,
-  preview(demands,minute){
-   if(collisions.length)throw Error('库存与预计供给重复批次：'+collisions.map(s=>s['批次编号']).join('、'));
+  preview(demands,minute,trace=()=>{}){
+   if(collisions.length){
+    // Resolve preserves supply occurrence order; trace original inputs, never the derived rows.
+    trace('inventory',(data.inventory||[]).filter(b=>collisions.some(s=>s['批次编号']===b['批次编号'])));
+    trace('supplies',(data.supplies||[]).filter((_s,i)=>collisions.includes(resolved[i])));
+    throw Error('库存与预计供给重复批次：'+collisions.map(s=>s['批次编号']).join('、'));
+   }
    const baseGeneration=generation;let committed=false;const staged=new Map(used),rows=[];
    for(const demand of demands){
     let left=fromExact(demand.exactQuantity);const allocations=[];
