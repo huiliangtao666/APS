@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "D01/D02/D03首轮修复经独立Test通过；完整CR仍有范围及验收缺口",
+      "implementation_status": "S06候选联合分配范围缺口已派Dev实施；D01-D03独立round1 PASS保留；其他CR范围仍未完成",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/DEC02-03-Issue3-Round1-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_2c5caf14-f798-43ae-bb2f-737f33a40570",
-      "acceptance_result": "24ba688独立复测D01/D02/D03均PASS；48项为25 PASS、19 PARTIAL、2 FAIL_SCOPE、2 NOT_EXECUTABLE。候选分配、独立岗位、跨组物理池、多班及原始执行资源账等仍未闭环；保留原失败和原范围通过记录。",
+      "acceptance_result": "D01-D03 round1已PASS；48项25 PASS/19 PARTIAL/2 FAIL_SCOPE/2 NOT_EXECUTABLE历史结论保留。S06范围实现已派发，待新SHA独立Test，不提前升级原矩阵或完整CR/UAT结论。",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -127,7 +127,9 @@
         "FAIL_SCOPE": 2,
         "NOT_EXECUTABLE": 2
       },
-      "test_report_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/changes/CR-DEC02-03-20261029/test-review-20261029.md"
+      "test_report_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/changes/CR-DEC02-03-20261029/test-review-20261029.md",
+      "active_dev_delivery": "dlv_3a49b951-ccd7-4575-b44e-45d70684be50",
+      "active_checkpoint": "S06候选组前台维护/有限联合分配及独立复核；S07及旧单组兼容回归"
     },
     {
       "id": "CR-DEC04-05-06-20261029",
