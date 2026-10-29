@@ -109,7 +109,10 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
   details.resourcePolicies=result('not_checked',['旧方案缺少资源参数契约，未检查资源参数。']);
   if(frozenData||plan.resourcePolicyContract==='CR-DEC02-03-v1'){
     details.resourcePolicies=verifyResourcePolicies(plan,frozenData,frozenConditions??plan.conditions);
-    if(details.resourcePolicies.status==='problem')findings.push(...details.resourcePolicies.details.map(message=>({code:'VERIFY / RESOURCE_POLICY',message,taskIds:tasks.map(t=>t.id)})));
+    if(details.resourcePolicies.status==='problem'){
+      const structured=details.resourcePolicies.findings||[];findings.push(...structured);
+      findings.push(...details.resourcePolicies.details.filter(message=>!structured.some(f=>{const m=message.match(/^(.*) 在分钟 ([\d.]+) 超容量 /);return m&&m[1]===f.interval.resourceId&&Number(m[2])>=f.interval.start&&Number(m[2])<f.interval.end;})).map(message=>({code:'VERIFY / RESOURCE_POLICY',message,taskIds:[]})));
+    }
   }
-  return { checkedAt, planId: plan?.id ?? '', findings, scopeNote:'独立复核仅检查单线、机器不重叠、工序先后；资源参数复核仅适用于携带冻结配置的新契约；不代表完整业务可执行。', checks: details };
+  return { checkedAt, planId: plan?.id ?? '', findings, scopeNote:'独立复核检查单线、机器不重叠、工序先后，以及有完整冻结配置的新契约资源窗口、技能资格与容量；未检查项另列，不代表完整业务可执行。', checks: details };
 }

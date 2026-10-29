@@ -1,3 +1,4 @@
+import {resourceConflicts} from './resource-conflicts.mjs';
 import {quantityMath as Q} from './material-allocation.mjs';
 // Fixed-output checker: rebuild expected windows from frozen inputs, never call
 // allocation/preview/scheduler functions and never search for a new position.
@@ -79,6 +80,7 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
   for(const t of [r.start,...same.map(x=>x.start).filter(t=>t>=r.start&&t<r.end)])if(Q.cmp(same.filter(x=>x.start<=t&&x.end>t).reduce((s,x)=>Q.add(s,Q.q(x.quantity)),Q.zero),Q.q(String(capacity)))>0n)add(`${r.resourceId} 在分钟 ${t} 超容量 ${capacity}（所有技能合计）`);
   if(!(r.taskIds||[r.taskId]).some(id=>tasks.some(t=>t.id===id)))add(`${r.resourceId} 存在无任务资源占用`);
  }
+ const findings=resourceConflicts(plan,data,conditions);
  const hasPolicy=enabled('MOLD')||enabled('STORAGE')||(data.dependencies||[]).some(d=>d['资源类型']==='人员技能');
- return {status:problems.length?'problem':tasks.length&&hasPolicy?'pass':'not_checked',details:problems.length?problems:[`工装 ${enabled('MOLD')?'已启用':'未检查（未启用）'}；空间 ${enabled('STORAGE')?'已启用':'未检查（未启用）'}；人员按已配置依赖检查。`,tasks.length&&hasPolicy?'按冻结配置重建已采用的工装/人员窗口、覆盖人数、单向替代、可用期与同池总容量；相邻释放合法。':'没有已排任务或已采用的资源配置可复核。']};
+ return {findings,status:problems.length?'problem':tasks.length&&hasPolicy?'pass':'not_checked',details:problems.length?problems:[`工装 ${enabled('MOLD')?'已启用':'未检查（未启用）'}；空间 ${enabled('STORAGE')?'已启用':'未检查（未启用）'}；人员按已配置依赖检查。`,tasks.length&&hasPolicy?'按冻结配置重建已采用的工装/人员窗口、覆盖人数、单向替代、可用期与同池总容量；相邻释放合法。':'没有已排任务或已采用的资源配置可复核。']};
 }

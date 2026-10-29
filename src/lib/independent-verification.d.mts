@@ -1,7 +1,8 @@
 export type VerificationStatus = 'pass' | 'problem' | 'not_checked';
-export type VerificationCheck = { status: VerificationStatus; details: string[] };
+export type VerificationFinding = {code:string;message:string;taskIds:string[];interval?:Record<string,any>;evidence?:Record<string,any>};
+export type VerificationCheck = { status: VerificationStatus; details: string[];findings?:VerificationFinding[] };
 export type VerificationReport = {
-  findings?: {code:string;message:string;taskIds:string[]}[];
+  findings?: VerificationFinding[];
   scopeNote?:string;
   checkedAt: string;
   planId: string;
