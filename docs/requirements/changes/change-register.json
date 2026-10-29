@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "P08/P09 e0be9b6d scoped 15/15 independent PASS; FR017 prior scoped PASS; P10 design PARTIAL with core pool identity/capacity ready for implementation, no P10 product SHA; U01/U02 business meaning pending; full CR NOT_READY",
+      "implementation_status": "P10 core product beae5b4 Dev delivered/verified; independent Test dlv_0e20f2fa-2d44-47bd-8ad6-5effe130fd04 executing; U01/U02 and full FR007/022/CR NOT_READY",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "P10 Design 44 assertions and 24 examples are design only; pool identity/unique total capacity/group qualification may proceed, U01 exclusive object and U02 handover quantity meaning await user; no P10 product acceptance. P08/P09 and older D01-D03/FR017 PASS stay original SHAs; P06/N06/R01/R02/full FR007/022/CR/UAT open.",
+      "acceptance_result": "P10 core Dev only, independent Test pending; P08/P09 e0be scoped PASS, FR017 prior PASS and historical results retain original SHAs; full CR NOT_READY",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -120,6 +120,12 @@
           "date": "2026-10-30",
           "event": "PM processed P10 readiness dlv_e3bdd41f-abdb-4a17-9a5b-b7a26fcce2f9:r1: BLOCKED design contract B01/B02/B03; no product SHA, no new FAIL/repair round; Issue3 and original FR007/FR022 remain In progress; Design clarification required before Dev continuation",
           "evidence_commit": "37e7677059c387981db6d8f27964fa0d1d5fc3d8"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "dlv_1e86ea88-67a6-4d95-85fc-98c63f2436ae:r1",
+          "event": "P10 core beae5b4 Dev delivered 19 PASS/4 PARTIAL/21 NOT_EXECUTED; independent Test executing, U01/U02 remain undecided; no new product FAIL or repair round",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6504064760"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
