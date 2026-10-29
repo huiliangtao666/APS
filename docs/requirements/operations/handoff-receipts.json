@@ -1638,6 +1638,29 @@
       "test_followup_delivery": "dlv_6dc040d4-81ea-4d5a-8e52-29bc3377a1d7",
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_6dc040d4-81ea-4d5a-8e52-29bc3377a1d7:r1",
+      "type": "TEST_VERDICT",
+      "state": "PROCESSED",
+      "source": "APS-Test2 original delivery and PM inbox dlv_68712825-cda3-40c6-b34d-2952036fb9a4",
+      "processed_at": "2026-10-29T22:54:00+08:00",
+      "requirement": "FR-026 v0.3 / AC-03/12/20/32, Issue #14 historical link",
+      "product_sha": "1cdf394eb954cd6ff15a48cc052edb64f6f093b4",
+      "result": "7/7 scoped browser and enabled MATERIAL checks PASS; successful restore remains NOT_EXECUTED and FR026 NOT_READY",
+      "external_hashes": {
+        "FR026-browser-material-report.md": "d4a86a58afb78400f9487b66b852991cdbcb6c623e983ec23d709754033b9ac1",
+        "FR026-browser-material-matrix.csv": "07ca7e9a828a0aa201b7c1574dc68e1da634d73e67647af3d68d65f8451243f6",
+        "FR026-browser-material-evidence.zip": "6dad84a285f35133ba0981f4acdf478f82c0effd6f827e9aeff8cc65e099053c"
+      },
+      "zip_crc": "PASS",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/14#issuecomment-6499990789",
+      "project_status": {
+        "FR-026": "In progress"
+      },
+      "remaining": "Successful restoration must reconcile current progress, consumption and confirmed version; await Dev new SHA and Test targeted retest",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
