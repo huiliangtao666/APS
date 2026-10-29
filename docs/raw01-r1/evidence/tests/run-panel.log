@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: FR038 stopping controls disable cancel/retry/result and diagnostics remain collapsed
+ok 1 - FR038 stopping controls disable cancel/retry/result and diagnostics remain collapsed
+  ---
+  duration_ms: 6.56921
+  type: 'test'
+  ...
+# Subtest: FR038 terminal failure/retry keeps original identity, no saved result; read-only permissions
+ok 2 - FR038 terminal failure/retry keeps original identity, no saved result; read-only permissions
+  ---
+  duration_ms: 1.673429
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 48.660392

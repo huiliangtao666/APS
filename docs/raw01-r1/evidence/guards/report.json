@@ -1,0 +1,885 @@
+{
+  "checks": [
+    "six distinct changed tables one rename; caller files/tables/actor/role/revision ignored; shared trusted audit; single use; repeat no-op; same-role owner; legacy and syntax rejection",
+    "actual current fact update invalidates token; re-preview revalidates changed facts; valid import preserves all fact/material/source values"
+  ],
+  "proofs": [
+    {
+      "name": "all six changed tables one rename and trusted shared audit; forged payload ignored",
+      "before": {
+        "whole": "53d4a3073ee8d57f382a1ef980b9d89a2db3a6159017d2be121f4789043bb2d6",
+        "bytes": 50900,
+        "revision": 0,
+        "data": "9534741de4a735c36561e40bf9c551e7e30357883b5cf206e7e410c7db75f04c",
+        "plans": "8c25375b569787a23b92f6b600d9518a632602c6b872763f5b61d2389a63cb65",
+        "audit": "cee1502045f1ddf87e99e178bfac86bc1023153c0e34efcd2b541a3ce995b27c",
+        "facts": "5ae1625b488b3935122d8dd627fe575b388a5aa360378fa4407aad08baaed1e2"
+      },
+      "after": {
+        "whole": "4a1b8ad17d6ad6e52d4d70fd52ce243762ccd134a5ef9de220c29cf2f60741af",
+        "bytes": 72428,
+        "revision": 1,
+        "data": "262c4b1a24bc510de0c573fa2d5fdca928fa9094e499ca87713907a06bb63d06",
+        "plans": "8c25375b569787a23b92f6b600d9518a632602c6b872763f5b61d2389a63cb65",
+        "audit": "9c86828a4aa5cb6eee7483e008620ba6286f92af736037eb08f427eb6b4b8e0d",
+        "facts": "5ae1625b488b3935122d8dd627fe575b388a5aa360378fa4407aad08baaed1e2"
+      },
+      "businessRenames": 1,
+      "audit": [
+        {
+          "id": "cef20021-f51e-474c-98b3-60495b4cf876",
+          "action": "import",
+          "target": "orders",
+          "actor": "test#planner",
+          "role": "planner",
+          "at": "2026-10-29T01:33:30.169Z",
+          "reason": "FR027 synthetic test",
+          "requestId": "fr027-synthetic",
+          "before": [
+            {
+              "订单编号": "A",
+              "产品编号": "HC40",
+              "产线编号": "L01",
+              "合格需求": "240",
+              "数量单位": "kg",
+              "要求可交付分钟": "480",
+              "优先顺序": "1",
+              "是否允许拆分": "否",
+              "需求类型": "正式订单",
+              "订单状态": "有效"
+            },
+            {
+              "订单编号": "B",
+              "产品编号": "HC60",
+              "产线编号": "L01",
+              "合格需求": "240",
+              "数量单位": "kg",
+              "要求可交付分钟": "480",
+              "优先顺序": "2",
+              "是否允许拆分": "否",
+              "需求类型": "正式订单",
+              "订单状态": "有效"
+            }
+          ],
+          "after": [
+            {
+              "订单编号": "A",
+              "产品编号": "HC40",
+              "产线编号": "L01",
+              "合格需求": "240",
+              "数量单位": "kg",
+              "要求可交付分钟": "480",
+              "优先顺序": "8",
+              "是否允许拆分": "否",
+              "需求类型": "正式订单",
+              "订单状态": "有效",
+              "已完成合格数量": ""
+            },
+            {
+              "订单编号": "B",
+              "产品编号": "HC60",
+              "产线编号": "L01",
+              "合格需求": "240",
+              "数量单位": "kg",
+              "要求可交付分钟": "480",
+              "优先顺序": "2",
+              "是否允许拆分": "否",
+              "需求类型": "正式订单",
+              "订单状态": "有效",
+              "已完成合格数量": ""
+            }
+          ],
+          "fromVersion": "9534741de4a735c36561e40bf9c551e7e30357883b5cf206e7e410c7db75f04c",
+          "toVersion": "262c4b1a24bc510de0c573fa2d5fdca928fa9094e499ca87713907a06bb63d06",
+          "batchId": "7d065102-6357-41d8-9bc5-5c38a8f97b67",
+          "trialId": null
+        },
+        {
+          "id": "a4b61680-128b-460a-a07e-84b530a84863",
+          "action": "import",
+          "target": "routes",
+          "actor": "test#planner",
+          "role": "planner",
+          "at": "2026-10-29T01:33:30.169Z",
+          "reason": "FR027 synthetic test",
+          "requestId": "fr027-synthetic",
+          "before": [
+            {
+              "产品编号": "HC40",
+              "工序编号": "MIX",
+              "工序名称": "混合",
+              "前序工序": "",
+              "最大等待分钟": "",
+              "程序编号": ""
+            },
+            {
+              "产品编号": "HC40",
+              "工序编号": "FILL",
+              "工序名称": "灌装",
+              "前序工序": "MIX",
+              "最大等待分钟": "",
+              "程序编号": ""
+            },
+            {
+              "产品编号": "HC60",
+              "工序编号": "MIX",
+              "工序名称": "混合",
+              "前序工序": "",
+              "最大等待分钟": "",
+              "程序编号": ""
+            },
+            {
+              "产品编号": "HC60",
+              "工序编号": "FILL",
+              "工序名称": "灌装",
+              "前序工序": "MIX",
+              "最大等待分钟": "",
+              "程序编号": ""
+            }
+          ],
+          "after": [
+            {
+              "产品编号": "HC40",
+              "工序编号": "MIX",
+              "工序名称": "independent route",
+              "前序工序": "",
+              "最大等待分钟": "",
+              "程序编号": ""
+            },
+            {
+              "产品编号": "HC40",
+              "工序编号": "FILL",
+              "工序名称": "灌装",
+              "前序工序": "MIX",
+              "最大等待分钟": "",
+              "程序编号": ""
+            },
+            {
+              "产品编号": "HC60",
+              "工序编号": "MIX",
+              "工序名称": "混合",
+              "前序工序": "",
+              "最大等待分钟": "",
+              "程序编号": ""
+            },
+            {
+              "产品编号": "HC60",
+              "工序编号": "FILL",
+              "工序名称": "灌装",
+              "前序工序": "MIX",
+              "最大等待分钟": "",
+              "程序编号": ""
+            }
+          ],
+          "fromVersion": "9534741de4a735c36561e40bf9c551e7e30357883b5cf206e7e410c7db75f04c",
+          "toVersion": "262c4b1a24bc510de0c573fa2d5fdca928fa9094e499ca87713907a06bb63d06",
+          "batchId": "7d065102-6357-41d8-9bc5-5c38a8f97b67",
+          "trialId": null
+        },
+        {
+          "id": "0d128da1-9eaa-4329-9660-56f1fd33a99a",
+          "action": "import",
+          "target": "times",
+          "actor": "test#planner",
+          "role": "planner",
+          "at": "2026-10-29T01:33:30.169Z",
+          "reason": "FR027 synthetic test",
+          "requestId": "fr027-synthetic",
+          "before": [
+            {
+              "产品编号": "HC40",
+              "工序编号": "MIX",
+              "计算方式": "固定",
+              "固定分钟": "30",
+              "速度支每分钟": "120"
+            },
+            {
+              "产品编号": "HC40",
+              "工序编号": "FILL",
+              "计算方式": "固定",
+              "固定分钟": "30",
+              "速度支每分钟": "120"
+            },
+            {
+              "产品编号": "HC60",
+              "工序编号": "MIX",
+              "计算方式": "固定",
+              "固定分钟": "30",
+              "速度支每分钟": "100"
+            },
+            {
+              "产品编号": "HC60",
+              "工序编号": "FILL",
+              "计算方式": "固定",
+              "固定分钟": "30",
+              "速度支每分钟": "100"
+            }
+          ],
+          "after": [
+            {
+              "产品编号": "HC40",
+              "工序编号": "MIX",
+              "计算方式": "固定",
+              "固定分钟": "31",
+              "速度支每分钟": "120"
+            },
+            {
+              "产品编号": "HC40",
+              "工序编号": "FILL",
+              "计算方式": "固定",
+              "固定分钟": "30",
+              "速度支每分钟": "120"
+            },
+            {
+              "产品编号": "HC60",
+              "工序编号": "MIX",
+              "计算方式": "固定",
+              "固定分钟": "30",
+              "速度支每分钟": "100"
+            },
+            {
+              "产品编号": "HC60",
+              "工序编号": "FILL",
+              "计算方式": "固定",
+              "固定分钟": "30",
+              "速度支每分钟": "100"
+            }
+          ],
+          "fromVersion": "9534741de4a735c36561e40bf9c551e7e30357883b5cf206e7e410c7db75f04c",
+          "toVersion": "262c4b1a24bc510de0c573fa2d5fdca928fa9094e499ca87713907a06bb63d06",
+          "batchId": "7d065102-6357-41d8-9bc5-5c38a8f97b67",
+          "trialId": null
+        },
+        {
+          "id": "2ae55f59-c6a1-4888-ab3f-c9592e24b9d3",
+          "action": "import",
+          "target": "machines",
+          "actor": "test#planner",
+          "role": "planner",
+          "at": "2026-10-29T01:33:30.169Z",
+          "reason": "FR027 synthetic test",
+          "requestId": "fr027-synthetic",
+          "before": [
+            {
+              "设备编号": "MIX01",
+              "设备名称": "混合设备1",
+              "产线编号": "L01",
+              "工序编号": "MIX",
+              "日历编号": "FC01",
+              "最小装载kg": "0",
+              "最大装载kg": "300",
+              "装载计量基准": "BOM总投入"
+            },
+            {
+              "设备编号": "MIX02",
+              "设备名称": "混合设备2",
+              "产线编号": "L01",
+              "工序编号": "MIX",
+              "日历编号": "FC01",
+              "最小装载kg": "0",
+              "最大装载kg": "300",
+              "装载计量基准": "BOM总投入"
+            },
+            {
+              "设备编号": "MIX03",
+              "设备名称": "混合设备3",
+              "产线编号": "L01",
+              "工序编号": "MIX",
+              "日历编号": "FC01",
+              "最小装载kg": "0",
+              "最大装载kg": "300",
+              "装载计量基准": "BOM总投入"
+            },
+            {
+              "设备编号": "FILL01",
+              "设备名称": "灌装设备1",
+              "产线编号": "L01",
+              "工序编号": "FILL",
+              "日历编号": "FC01",
+              "最小装载kg": "0",
+              "最大装载kg": "10000",
+              "装载计量基准": "BOM总投入"
+            },
+            {
+              "设备编号": "FILL02",
+              "设备名称": "灌装设备2",
+              "产线编号": "L01",
+              "工序编号": "FILL",
+              "日历编号": "FC01",
+              "最小装载kg": "0",
+              "最大装载kg": "10000",
+              "装载计量基准": "BOM总投入"
+            },
+            {
+              "设备编号": "FILL03",
+              "设备名称": "灌装设备3",
+              "产线编号": "L01",
+              "工序编号": "FILL",
+              "日历编号": "FC01",
+              "最小装载kg": "0",
+              "最大装载kg": "10000",
+              "装载计量基准": "BOM总投入"
+            }
+          ],
+          "after": [
+            {
+              "设备编号": "MIX01",
+              "设备名称": "independent",
+              "产线编号": "L01",
+              "工序编号": "MIX",
+              "日历编号": "FC01",
+              "最小装载kg": "0",
+              "最大装载kg": "300",
+              "装载计量基准": "BOM总投入"
+            },
+            {
+              "设备编号": "MIX02",
+              "设备名称": "混合设备2",
+              "产线编号": "L01",
+              "工序编号": "MIX",
+              "日历编号": "FC01",
+              "最小装载kg": "0",
+              "最大装载kg": "300",
+              "装载计量基准": "BOM总投入"
+            },
+            {
+              "设备编号": "MIX03",
+              "设备名称": "混合设备3",
+              "产线编号": "L01",
+              "工序编号": "MIX",
+              "日历编号": "FC01",
+              "最小装载kg": "0",
+              "最大装载kg": "300",
+              "装载计量基准": "BOM总投入"
+            },
+            {
+              "设备编号": "FILL01",
+              "设备名称": "灌装设备1",
+              "产线编号": "L01",
+              "工序编号": "FILL",
+              "日历编号": "FC01",
+              "最小装载kg": "0",
+              "最大装载kg": "10000",
+              "装载计量基准": "BOM总投入"
+            },
+            {
+              "设备编号": "FILL02",
+              "设备名称": "灌装设备2",
+              "产线编号": "L01",
+              "工序编号": "FILL",
+              "日历编号": "FC01",
+              "最小装载kg": "0",
+              "最大装载kg": "10000",
+              "装载计量基准": "BOM总投入"
+            },
+            {
+              "设备编号": "FILL03",
+              "设备名称": "灌装设备3",
+              "产线编号": "L01",
+              "工序编号": "FILL",
+              "日历编号": "FC01",
+              "最小装载kg": "0",
+              "最大装载kg": "10000",
+              "装载计量基准": "BOM总投入"
+            }
+          ],
+          "fromVersion": "9534741de4a735c36561e40bf9c551e7e30357883b5cf206e7e410c7db75f04c",
+          "toVersion": "262c4b1a24bc510de0c573fa2d5fdca928fa9094e499ca87713907a06bb63d06",
+          "batchId": "7d065102-6357-41d8-9bc5-5c38a8f97b67",
+          "trialId": null
+        },
+        {
+          "id": "0dd2838d-628c-4541-9dc7-afefa50d84f4",
+          "action": "import",
+          "target": "dependencies",
+          "actor": "test#planner",
+          "role": "planner",
+          "at": "2026-10-29T01:33:30.169Z",
+          "reason": "FR027 synthetic test",
+          "requestId": "fr027-synthetic",
+          "before": [
+            {
+              "订单编号": "A",
+              "工序编号": "MIX",
+              "资源类型": "设备",
+              "资源编号": "MIX01",
+              "需求数量": "1",
+              "提前占用分钟": "0",
+              "后延占用分钟": "0",
+              "所需技能": ""
+            },
+            {
+              "订单编号": "A",
+              "工序编号": "FILL",
+              "资源类型": "设备",
+              "资源编号": "FILL01",
+              "需求数量": "1",
+              "提前占用分钟": "0",
+              "后延占用分钟": "0",
+              "所需技能": ""
+            },
+            {
+              "订单编号": "B",
+              "工序编号": "MIX",
+              "资源类型": "设备",
+              "资源编号": "MIX02",
+              "需求数量": "1",
+              "提前占用分钟": "0",
+              "后延占用分钟": "0",
+              "所需技能": ""
+            },
+            {
+              "订单编号": "B",
+              "工序编号": "FILL",
+              "资源类型": "设备",
+              "资源编号": "FILL02",
+              "需求数量": "1",
+              "提前占用分钟": "0",
+              "后延占用分钟": "0",
+              "所需技能": ""
+            }
+          ],
+          "after": [
+            {
+              "订单编号": "A",
+              "工序编号": "MIX",
+              "资源类型": "设备",
+              "资源编号": "MIX02",
+              "需求数量": "1",
+              "提前占用分钟": "0",
+              "后延占用分钟": "0",
+              "所需技能": "",
+              "所需班次": "",
+              "人员参与阶段": "",
+              "人员开始偏移": "",
+              "人员结束偏移": ""
+            },
+            {
+              "订单编号": "A",
+              "工序编号": "FILL",
+              "资源类型": "设备",
+              "资源编号": "FILL01",
+              "需求数量": "1",
+              "提前占用分钟": "0",
+              "后延占用分钟": "0",
+              "所需技能": "",
+              "所需班次": "",
+              "人员参与阶段": "",
+              "人员开始偏移": "",
+              "人员结束偏移": ""
+            },
+            {
+              "订单编号": "B",
+              "工序编号": "MIX",
+              "资源类型": "设备",
+              "资源编号": "MIX02",
+              "需求数量": "1",
+              "提前占用分钟": "0",
+              "后延占用分钟": "0",
+              "所需技能": "",
+              "所需班次": "",
+              "人员参与阶段": "",
+              "人员开始偏移": "",
+              "人员结束偏移": ""
+            },
+            {
+              "订单编号": "B",
+              "工序编号": "FILL",
+              "资源类型": "设备",
+              "资源编号": "FILL02",
+              "需求数量": "1",
+              "提前占用分钟": "0",
+              "后延占用分钟": "0",
+              "所需技能": "",
+              "所需班次": "",
+              "人员参与阶段": "",
+              "人员开始偏移": "",
+              "人员结束偏移": ""
+            }
+          ],
+          "fromVersion": "9534741de4a735c36561e40bf9c551e7e30357883b5cf206e7e410c7db75f04c",
+          "toVersion": "262c4b1a24bc510de0c573fa2d5fdca928fa9094e499ca87713907a06bb63d06",
+          "batchId": "7d065102-6357-41d8-9bc5-5c38a8f97b67",
+          "trialId": null
+        },
+        {
+          "id": "6dcba327-9558-41ac-8f19-9804ad2b60f4",
+          "action": "import",
+          "target": "rules",
+          "actor": "test#planner",
+          "role": "planner",
+          "at": "2026-10-29T01:33:30.169Z",
+          "reason": "FR027 synthetic test",
+          "requestId": "fr027-synthetic",
+          "before": [
+            {
+              "规则编号": "MACHINE",
+              "中文名称": "机器不重叠",
+              "是否启用": "是",
+              "参数JSON": "{}"
+            },
+            {
+              "规则编号": "PRECEDENCE",
+              "中文名称": "工序顺序",
+              "是否启用": "是",
+              "参数JSON": "{}"
+            },
+            {
+              "规则编号": "CALENDAR",
+              "中文名称": "工厂及设备日历",
+              "是否启用": "是",
+              "参数JSON": "{}"
+            },
+            {
+              "规则编号": "MOLD",
+              "中文名称": "模具与工具占用",
+              "是否启用": "否",
+              "参数JSON": "{}"
+            },
+            {
+              "规则编号": "LABOR",
+              "中文名称": "人员技能及数量",
+              "是否启用": "否",
+              "参数JSON": "{}"
+            },
+            {
+              "规则编号": "MATERIAL",
+              "中文名称": "物料数量及可用时点",
+              "是否启用": "否",
+              "参数JSON": "{}"
+            },
+            {
+              "规则编号": "CAPACITY",
+              "中文名称": "设备装载",
+              "是否启用": "否",
+              "参数JSON": "{}"
+            },
+            {
+              "规则编号": "PROGRAM",
+              "中文名称": "资源程序兼容",
+              "是否启用": "否",
+              "参数JSON": "{}"
+            },
+            {
+              "规则编号": "MAX_LAG",
+              "中文名称": "工序最大等待",
+              "是否启用": "否",
+              "参数JSON": "{}"
+            },
+            {
+              "规则编号": "STORAGE",
+              "中文名称": "空间容量",
+              "是否启用": "否",
+              "参数JSON": "{}"
+            },
+            {
+              "规则编号": "PROGRESS",
+              "中文名称": "执行保护",
+              "是否启用": "否",
+              "参数JSON": "{}"
+            },
+            {
+              "规则编号": "DELIVERY",
+              "中文名称": "预计可交付",
+              "是否启用": "否",
+              "参数JSON": "{}"
+            },
+            {
+              "规则编号": "INVENTORY",
+              "中文名称": "库存质量状态可用性",
+              "是否启用": "是",
+              "参数JSON": "{\"可用质量状态\":[\"合格\"]}"
+            }
+          ],
+          "after": [
+            {
+              "规则编号": "MACHINE",
+              "中文名称": "independent rule",
+              "是否启用": "是",
+              "参数JSON": "{}",
+              "适用对象": "",
+              "生效时间": ""
+            },
+            {
+              "规则编号": "PRECEDENCE",
+              "中文名称": "工序顺序",
+              "是否启用": "是",
+              "参数JSON": "{}",
+              "适用对象": "",
+              "生效时间": ""
+            },
+            {
+              "规则编号": "CALENDAR",
+              "中文名称": "工厂及设备日历",
+              "是否启用": "是",
+              "参数JSON": "{}",
+              "适用对象": "",
+              "生效时间": ""
+            },
+            {
+              "规则编号": "MOLD",
+              "中文名称": "模具与工具占用",
+              "是否启用": "否",
+              "参数JSON": "{}",
+              "适用对象": "",
+              "生效时间": ""
+            },
+            {
+              "规则编号": "LABOR",
+              "中文名称": "人员技能及数量",
+              "是否启用": "否",
+              "参数JSON": "{}",
+              "适用对象": "",
+              "生效时间": ""
+            },
+            {
+              "规则编号": "MATERIAL",
+              "中文名称": "物料数量及可用时点",
+              "是否启用": "否",
+              "参数JSON": "{}",
+              "适用对象": "",
+              "生效时间": ""
+            },
+            {
+              "规则编号": "CAPACITY",
+              "中文名称": "设备装载",
+              "是否启用": "否",
+              "参数JSON": "{}",
+              "适用对象": "",
+              "生效时间": ""
+            },
+            {
+              "规则编号": "PROGRAM",
+              "中文名称": "资源程序兼容",
+              "是否启用": "否",
+              "参数JSON": "{}",
+              "适用对象": "",
+              "生效时间": ""
+            },
+            {
+              "规则编号": "MAX_LAG",
+              "中文名称": "工序最大等待",
+              "是否启用": "否",
+              "参数JSON": "{}",
+              "适用对象": "",
+              "生效时间": ""
+            },
+            {
+              "规则编号": "STORAGE",
+              "中文名称": "空间容量",
+              "是否启用": "否",
+              "参数JSON": "{}",
+              "适用对象": "",
+              "生效时间": ""
+            },
+            {
+              "规则编号": "PROGRESS",
+              "中文名称": "执行保护",
+              "是否启用": "否",
+              "参数JSON": "{}",
+              "适用对象": "",
+              "生效时间": ""
+            },
+            {
+              "规则编号": "DELIVERY",
+              "中文名称": "预计可交付",
+              "是否启用": "否",
+              "参数JSON": "{}",
+              "适用对象": "",
+              "生效时间": ""
+            },
+            {
+              "规则编号": "INVENTORY",
+              "中文名称": "库存质量状态可用性",
+              "是否启用": "是",
+              "参数JSON": "{\"可用质量状态\":[\"合格\"]}",
+              "适用对象": "",
+              "生效时间": ""
+            }
+          ],
+          "fromVersion": "9534741de4a735c36561e40bf9c551e7e30357883b5cf206e7e410c7db75f04c",
+          "toVersion": "262c4b1a24bc510de0c573fa2d5fdca928fa9094e499ca87713907a06bb63d06",
+          "batchId": "7d065102-6357-41d8-9bc5-5c38a8f97b67",
+          "trialId": null
+        }
+      ]
+    },
+    {
+      "name": "consumed token",
+      "status": 409,
+      "error": "preview_expired_or_unowned",
+      "before": {
+        "whole": "4a1b8ad17d6ad6e52d4d70fd52ce243762ccd134a5ef9de220c29cf2f60741af",
+        "bytes": 72428,
+        "revision": 1,
+        "data": "262c4b1a24bc510de0c573fa2d5fdca928fa9094e499ca87713907a06bb63d06",
+        "plans": "8c25375b569787a23b92f6b600d9518a632602c6b872763f5b61d2389a63cb65",
+        "audit": "9c86828a4aa5cb6eee7483e008620ba6286f92af736037eb08f427eb6b4b8e0d",
+        "facts": "5ae1625b488b3935122d8dd627fe575b388a5aa360378fa4407aad08baaed1e2"
+      },
+      "after": {
+        "whole": "4a1b8ad17d6ad6e52d4d70fd52ce243762ccd134a5ef9de220c29cf2f60741af",
+        "bytes": 72428,
+        "revision": 1,
+        "data": "262c4b1a24bc510de0c573fa2d5fdca928fa9094e499ca87713907a06bb63d06",
+        "plans": "8c25375b569787a23b92f6b600d9518a632602c6b872763f5b61d2389a63cb65",
+        "audit": "9c86828a4aa5cb6eee7483e008620ba6286f92af736037eb08f427eb6b4b8e0d",
+        "facts": "5ae1625b488b3935122d8dd627fe575b388a5aa360378fa4407aad08baaed1e2"
+      }
+    },
+    {
+      "name": "same-role different owner",
+      "status": 409,
+      "error": "preview_expired_or_unowned",
+      "before": {
+        "whole": "4a1b8ad17d6ad6e52d4d70fd52ce243762ccd134a5ef9de220c29cf2f60741af",
+        "bytes": 72428,
+        "revision": 1,
+        "data": "262c4b1a24bc510de0c573fa2d5fdca928fa9094e499ca87713907a06bb63d06",
+        "plans": "8c25375b569787a23b92f6b600d9518a632602c6b872763f5b61d2389a63cb65",
+        "audit": "9c86828a4aa5cb6eee7483e008620ba6286f92af736037eb08f427eb6b4b8e0d",
+        "facts": "5ae1625b488b3935122d8dd627fe575b388a5aa360378fa4407aad08baaed1e2"
+      },
+      "after": {
+        "whole": "4a1b8ad17d6ad6e52d4d70fd52ce243762ccd134a5ef9de220c29cf2f60741af",
+        "bytes": 72428,
+        "revision": 1,
+        "data": "262c4b1a24bc510de0c573fa2d5fdca928fa9094e499ca87713907a06bb63d06",
+        "plans": "8c25375b569787a23b92f6b600d9518a632602c6b872763f5b61d2389a63cb65",
+        "audit": "9c86828a4aa5cb6eee7483e008620ba6286f92af736037eb08f427eb6b4b8e0d",
+        "facts": "5ae1625b488b3935122d8dd627fe575b388a5aa360378fa4407aad08baaed1e2"
+      }
+    },
+    {
+      "name": "legacy kg explicit rejection",
+      "status": 200,
+      "issues": [
+        {
+          "file": "17_生产订单与交期.csv",
+          "row": 1,
+          "field": "合格需求kg",
+          "reason": "旧原型字段；请显式填写现行合格需求、数量单位，不自动转换",
+          "message": "旧原型字段；请显式填写现行合格需求、数量单位，不自动转换",
+          "severity": "error"
+        },
+        {
+          "file": "17_生产订单与交期.csv",
+          "row": 1,
+          "field": "合格需求",
+          "reason": "缺少契约字段",
+          "message": "缺少契约字段",
+          "severity": "error"
+        }
+      ],
+      "before": {
+        "whole": "4a1b8ad17d6ad6e52d4d70fd52ce243762ccd134a5ef9de220c29cf2f60741af",
+        "bytes": 72428,
+        "revision": 1,
+        "data": "262c4b1a24bc510de0c573fa2d5fdca928fa9094e499ca87713907a06bb63d06",
+        "plans": "8c25375b569787a23b92f6b600d9518a632602c6b872763f5b61d2389a63cb65",
+        "audit": "9c86828a4aa5cb6eee7483e008620ba6286f92af736037eb08f427eb6b4b8e0d",
+        "facts": "5ae1625b488b3935122d8dd627fe575b388a5aa360378fa4407aad08baaed1e2"
+      },
+      "after": {
+        "whole": "4a1b8ad17d6ad6e52d4d70fd52ce243762ccd134a5ef9de220c29cf2f60741af",
+        "bytes": 72428,
+        "revision": 1,
+        "data": "262c4b1a24bc510de0c573fa2d5fdca928fa9094e499ca87713907a06bb63d06",
+        "plans": "8c25375b569787a23b92f6b600d9518a632602c6b872763f5b61d2389a63cb65",
+        "audit": "9c86828a4aa5cb6eee7483e008620ba6286f92af736037eb08f427eb6b4b8e0d",
+        "facts": "5ae1625b488b3935122d8dd627fe575b388a5aa360378fa4407aad08baaed1e2"
+      }
+    },
+    {
+      "name": "syntax negative no token",
+      "status": 200,
+      "issues": [
+        {
+          "file": "10_工艺路线配置.csv",
+          "row": 6,
+          "field": "CSV 格式",
+          "reason": "CSV 第6行：引号未闭合",
+          "message": "CSV 第6行：引号未闭合",
+          "severity": "error"
+        }
+      ],
+      "before": {
+        "whole": "4a1b8ad17d6ad6e52d4d70fd52ce243762ccd134a5ef9de220c29cf2f60741af",
+        "bytes": 72428,
+        "revision": 1,
+        "data": "262c4b1a24bc510de0c573fa2d5fdca928fa9094e499ca87713907a06bb63d06",
+        "plans": "8c25375b569787a23b92f6b600d9518a632602c6b872763f5b61d2389a63cb65",
+        "audit": "9c86828a4aa5cb6eee7483e008620ba6286f92af736037eb08f427eb6b4b8e0d",
+        "facts": "5ae1625b488b3935122d8dd627fe575b388a5aa360378fa4407aad08baaed1e2"
+      },
+      "after": {
+        "whole": "4a1b8ad17d6ad6e52d4d70fd52ce243762ccd134a5ef9de220c29cf2f60741af",
+        "bytes": 72428,
+        "revision": 1,
+        "data": "262c4b1a24bc510de0c573fa2d5fdca928fa9094e499ca87713907a06bb63d06",
+        "plans": "8c25375b569787a23b92f6b600d9518a632602c6b872763f5b61d2389a63cb65",
+        "audit": "9c86828a4aa5cb6eee7483e008620ba6286f92af736037eb08f427eb6b4b8e0d",
+        "facts": "5ae1625b488b3935122d8dd627fe575b388a5aa360378fa4407aad08baaed1e2"
+      }
+    },
+    {
+      "name": "actual facts updated after preview",
+      "status": 409,
+      "error": "stale_preview",
+      "before": {
+        "whole": "d46d09e4cfae617be92bd0efd2c3521b3c2b31b1fd6d2835ae4ac992e134926f",
+        "bytes": 41252,
+        "revision": 2,
+        "data": "7669534abc350625f504ef0f50f21320139ff1c85b2073c2dcd2091b5c5c93b3",
+        "plans": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "audit": "f5ae68a37a4c581ce4f377822f67bba43b4fb0fb14761096c6365223c4bbd09a",
+        "facts": "9f1ba618d44736517e6234ebd81baf2bbb88655b40194414e32669fc6cac13cd"
+      },
+      "after": {
+        "whole": "d46d09e4cfae617be92bd0efd2c3521b3c2b31b1fd6d2835ae4ac992e134926f",
+        "bytes": 41252,
+        "revision": 2,
+        "data": "7669534abc350625f504ef0f50f21320139ff1c85b2073c2dcd2091b5c5c93b3",
+        "plans": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "audit": "f5ae68a37a4c581ce4f377822f67bba43b4fb0fb14761096c6365223c4bbd09a",
+        "facts": "9f1ba618d44736517e6234ebd81baf2bbb88655b40194414e32669fc6cac13cd"
+      }
+    },
+    {
+      "name": "re-preview stale demand data against new current facts",
+      "status": 409,
+      "error": "execution_reconciliation_required",
+      "issues": [
+        {
+          "code": "EXECUTION_RECONCILIATION_REQUIRED",
+          "table": "executionFacts",
+          "file": "25_模拟任务执行事实.csv",
+          "row": 0,
+          "field": "原始事实",
+          "message": "已有执行事实的订单需求/状态/合格量不可自动重基；请核对",
+          "reason": "已有执行事实的订单需求/状态/合格量不可自动重基；请核对",
+          "severity": "error",
+          "inBatch": false
+        }
+      ],
+      "before": {
+        "whole": "d46d09e4cfae617be92bd0efd2c3521b3c2b31b1fd6d2835ae4ac992e134926f",
+        "bytes": 41252,
+        "revision": 2,
+        "data": "7669534abc350625f504ef0f50f21320139ff1c85b2073c2dcd2091b5c5c93b3",
+        "plans": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "audit": "f5ae68a37a4c581ce4f377822f67bba43b4fb0fb14761096c6365223c4bbd09a",
+        "facts": "9f1ba618d44736517e6234ebd81baf2bbb88655b40194414e32669fc6cac13cd"
+      },
+      "after": {
+        "whole": "d46d09e4cfae617be92bd0efd2c3521b3c2b31b1fd6d2835ae4ac992e134926f",
+        "bytes": 41252,
+        "revision": 2,
+        "data": "7669534abc350625f504ef0f50f21320139ff1c85b2073c2dcd2091b5c5c93b3",
+        "plans": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "audit": "f5ae68a37a4c581ce4f377822f67bba43b4fb0fb14761096c6365223c4bbd09a",
+        "facts": "9f1ba618d44736517e6234ebd81baf2bbb88655b40194414e32669fc6cac13cd"
+      }
+    }
+  ]
+}

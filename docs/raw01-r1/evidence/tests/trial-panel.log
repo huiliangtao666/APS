@@ -1,0 +1,50 @@
+TAP version 13
+# Subtest: FR026 copy UI uses server copy and opens independent result after refresh
+ok 1 - FR026 copy UI uses server copy and opens independent result after refresh
+  ---
+  duration_ms: 14.774807
+  type: 'test'
+  ...
+# Subtest: FR026 restore UI shows explicit current-state blockers and query role cannot mutate
+ok 2 - FR026 restore UI shows explicit current-state blockers and query role cannot mutate
+  ---
+  duration_ms: 6.093486
+  type: 'test'
+  ...
+# Subtest: FR026 trial editor and discard target only trial routes with own revision; run initializes copied selection
+ok 3 - FR026 trial editor and discard target only trial routes with own revision; run initializes copied selection
+  ---
+  duration_ms: 6.929597
+  type: 'test'
+  ...
+# Subtest: FR026 compare UI renders unknown materials, unchanged outcomes and saved plan references
+ok 4 - FR026 compare UI renders unknown materials, unchanged outcomes and saved plan references
+  ---
+  duration_ms: 2.11361
+  type: 'test'
+  ...
+# The above error occurred in the <TrialPanel> component:
+#     at TrialPanel (/workspace/apps/aps-fr032/.qa-trial-panel.cjs:615:60)
+# Consider adding an error boundary to your tree to customize error handling behavior.
+# Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+# Subtest: FR028 conditions trial UI retains explicit latest snapshot and compares baseline to trial
+ok 5 - FR028 conditions trial UI retains explicit latest snapshot and compares baseline to trial
+  ---
+  duration_ms: 14.630176
+  type: 'test'
+  ...
+# Subtest: FR028 UI exposes changed conditions and honest unknown/improved order outcomes separately
+ok 6 - FR028 UI exposes changed conditions and honest unknown/improved order outcomes separately
+  ---
+  duration_ms: 5.662681
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 92.722594

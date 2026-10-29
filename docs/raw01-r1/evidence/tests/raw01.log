@@ -1,0 +1,88 @@
+TAP version 13
+# Subtest: RAW01 exact independent original/expected bytes: two corrections around untouched fields
+ok 1 - RAW01 exact independent original/expected bytes: two corrections around untouched fields
+  ---
+  duration_ms: 1.579779
+  type: 'test'
+  ...
+# Subtest: RAW01 no-change / local / multi corrections, commas quotes Unicode and intermediate fields: CR
+ok 2 - RAW01 no-change / local / multi corrections, commas quotes Unicode and intermediate fields: CR
+  ---
+  duration_ms: 0.406247
+  type: 'test'
+  ...
+# Subtest: RAW01 deletes / inserts / pasted multiline content retain unchanged raw spans: CR
+ok 3 - RAW01 deletes / inserts / pasted multiline content retain unchanged raw spans: CR
+  ---
+  duration_ms: 0.463663
+  type: 'test'
+  ...
+# Subtest: RAW01 no-change / local / multi corrections, commas quotes Unicode and intermediate fields: LF
+ok 4 - RAW01 no-change / local / multi corrections, commas quotes Unicode and intermediate fields: LF
+  ---
+  duration_ms: 0.313997
+  type: 'test'
+  ...
+# Subtest: RAW01 deletes / inserts / pasted multiline content retain unchanged raw spans: LF
+ok 5 - RAW01 deletes / inserts / pasted multiline content retain unchanged raw spans: LF
+  ---
+  duration_ms: 0.717327
+  type: 'test'
+  ...
+# Subtest: RAW01 no-change / local / multi corrections, commas quotes Unicode and intermediate fields: CRLF
+ok 6 - RAW01 no-change / local / multi corrections, commas quotes Unicode and intermediate fields: CRLF
+  ---
+  duration_ms: 0.250748
+  type: 'test'
+  ...
+# Subtest: RAW01 deletes / inserts / pasted multiline content retain unchanged raw spans: CRLF
+ok 7 - RAW01 deletes / inserts / pasted multiline content retain unchanged raw spans: CRLF
+  ---
+  duration_ms: 0.444204
+  type: 'test'
+  ...
+# Subtest: RAW01 no-change / local / multi corrections, commas quotes Unicode and intermediate fields: mixed
+ok 8 - RAW01 no-change / local / multi corrections, commas quotes Unicode and intermediate fields: mixed
+  ---
+  duration_ms: 0.24904
+  type: 'test'
+  ...
+# Subtest: RAW01 deletes / inserts / pasted multiline content retain unchanged raw spans: mixed
+ok 9 - RAW01 deletes / inserts / pasted multiline content retain unchanged raw spans: mixed
+  ---
+  duration_ms: 0.639745
+  type: 'test'
+  ...
+# Subtest: RAW01 repeated identical visible chunks keep their separate raw CR/LF/CRLF mappings
+ok 10 - RAW01 repeated identical visible chunks keep their separate raw CR/LF/CRLF mappings
+  ---
+  duration_ms: 0.575787
+  type: 'test'
+  ...
+# Subtest: RAW01 sequential edits and inserted LF do not impose a newline style
+ok 11 - RAW01 sequential edits and inserted LF do not impose a newline style
+  ---
+  duration_ms: 0.233623
+  type: 'test'
+  ...
+# Subtest: RAW01 deterministic edit matrix around uniquely anchored mixed raw blocks
+ok 12 - RAW01 deterministic edit matrix around uniquely anchored mixed raw blocks
+  ---
+  duration_ms: 9.371256
+  type: 'test'
+  ...
+# Subtest: RAW01 exhaustive short visible replacements always reconstruct the requested value
+ok 13 - RAW01 exhaustive short visible replacements always reconstruct the requested value
+  ---
+  duration_ms: 38.899054
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 91.060416

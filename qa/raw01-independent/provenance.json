@@ -1,0 +1,16 @@
+{
+  "origin": "APS-Test FR-013-016-MAIN-INDEPENDENT-EVIDENCE.zip, delivery dlv_2bf68719-7bdd-44e0-87c2-7a2a8f3293d5",
+  "pinnedSha": "c8aeb9283776207853efbdb0c5ea8b3eb09ab039",
+  "sha256": {
+    "original-machines.csv": "0475c42a7784863ad58838913a5bc411db2c5027503385afcd350819d11a0827",
+    "actual-corrected-machines.csv": "8616617c0811a4354fe026b929a2bc853a0f15d6e1f8ecd429919fd03c7871e0",
+    "independent.mjs": "1d767eaab09ea68b23ee75dd8128e98d4affb624a58433fcd423e3ceded510dc",
+    "guards.mjs": "c3416d5b737724a3c4acda2433b0ce1b03ad7ae3451f88b91209cbd7cc9bb2a9",
+    "reproduce.sh": "7ca0ae98cb8419e46d46a9e037817d1040289610c32976418f9ce630872bbe01",
+    "raw01-repro.mjs": "2f416fc5ba1ebd3dda7cfb51b14de14adc7eae219d49b637a29a67e41b711bdc",
+    "expected-corrected-machines.csv": "986cd5aa141bd2fed25913681b7a47b964d60eae8706158589f1639977b7df10"
+  },
+  "persistedBusinessSha256": "0b4219a6b8853d73f7785eebc3ca0d282e47625d48cb7210c6db257bd7d546f1",
+  "persistedCorruptedName": "CHANGED\r\nKEEP_CR\r\nKEEP_LF\r\nKEEP_CRLF",
+  "note": "Original Test scripts retained verbatim. Raw reproduction asserts the defect; repair runner changes its expected outcome only. Dev replay is not independent acceptance."
+}

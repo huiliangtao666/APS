@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: FR018 production worker bundle executes a frozen selection and returns actual horizon findings
+ok 1 - FR018 production worker bundle executes a frozen selection and returns actual horizon findings
+  ---
+  duration_ms: 41.65225
+  type: 'test'
+  ...
+# Subtest: FR019 production Worker bundle applies explicit minimal mode beyond calendar end
+ok 2 - FR019 production Worker bundle applies explicit minimal mode beyond calendar end
+  ---
+  duration_ms: 25.94108
+  type: 'test'
+  ...
+# Subtest: FR020 production Worker calculates BOM,FEFO lots and packaging from frozen canonical data
+ok 3 - FR020 production Worker calculates BOM,FEFO lots and packaging from frozen canonical data
+  ---
+  duration_ms: 28.051357
+  type: 'test'
+  ...
+# Subtest: FR021 production Worker preserves exact split/resource identities and material conservation
+ok 4 - FR021 production Worker preserves exact split/resource identities and material conservation
+  ---
+  duration_ms: 29.524071
+  type: 'test'
+  ...
+# Subtest: FR022 built production Worker enforces saved joint declarations with two-set capacity
+ok 5 - FR022 built production Worker enforces saved joint declarations with two-set capacity
+  ---
+  duration_ms: 27.91281
+  type: 'test'
+  ...
+# Subtest: FR023 built production Worker keeps completion distinct from conditional deliverable and unknown partial work
+ok 6 - FR023 built production Worker keeps completion distinct from conditional deliverable and unknown partial work
+  ---
+  duration_ms: 57.365754
+  type: 'test'
+  ...
+# Subtest: FR012 built production Worker preserves simulated partial facts and exact cumulative material conservation
+ok 7 - FR012 built production Worker preserves simulated partial facts and exact cumulative material conservation
+  ---
+  duration_ms: 28.185986
+  type: 'test'
+  ...
+# Subtest: FR031 built production Worker keeps scrap replacement and order/task projections frozen
+ok 8 - FR031 built production Worker keeps scrap replacement and order/task projections frozen
+  ---
+  duration_ms: 27.881684
+  type: 'test'
+  ...
+# Subtest: FR029 built production Worker retains event-time facts, explicit horizon, handling reasons and unchanged consumption
+ok 9 - FR029 built production Worker retains event-time facts, explicit horizon, handling reasons and unchanged consumption
+  ---
+  duration_ms: 27.81139
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 365.684501
