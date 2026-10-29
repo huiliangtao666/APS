@@ -91,8 +91,15 @@ export function executionTransition(before,after){
  for(const key of factTables)for(const old of before[key]||[]){
   if(key==='simulationEvents'){const next=(after[key]||[]).find(e=>e['事件编号']===old['事件编号']);if(!next||!same(old,next))bad('已接纳事件不可删除或改写；恢复/撤销策略未定');continue;}
   const id=key==='executionFacts'?'事实编号':key==='executionSources'?'来源编号':'记录编号',next=(after[key]||[]).find(f=>f[id]===old[id]);
+  if(key==='executionSources'){
+   if(!next||!same(old,next)){
+    const index=next?(after[key]||[]).indexOf(next):(before[key]||[]).indexOf(old);
+    const fields=next?Object.keys({...old,...next}).filter(field=>old[field]!==next[field]):[id];
+    for(const field of fields)issues.push({code:'EXECUTION_RECONCILIATION_REQUIRED',table:key,file:'27_模拟进度来源对账.csv',row:index+2,field,recordId:old[id],protectedRecord:structuredClone(old),message:'原始来源汇总及映射不可覆盖；请保留来源并用独立核对记录处理'});
+   }
+   continue;
+  }
   if(!next){bad('已记录模拟执行/耗料不能删除；须人工核对，原记录保留');continue;}
-  if(key==='executionSources'){if(!same(old,next))bad('原始来源汇总及映射不可覆盖；请保留来源并用独立核对记录处理');continue;}
   const immutable=key==='executionFacts'?['事实编号','订单编号','工序编号','开始分钟','当前设备','数量单位']:['记录编号','事实编号','批次编号','物料编号','单位'];
   if(immutable.some(k=>old[k]!==next[k]))bad('原始开始、设备、任务与耗料引用不可覆盖；转机/纠错待决');
   if(key==='executionFacts'){

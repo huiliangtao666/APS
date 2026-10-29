@@ -10,7 +10,7 @@ export function TrialPanel(p:Props){
  useEffect(()=>setComparison(null),[p.activeId]);
  const trial=p.trials.find(t=>t.id===trialId),disabled=p.busy||working,def=defs.find(d=>d.key===table)!;
  async function act(work:()=>Promise<void>){setError('');setWorking(true);try{await work();}catch(e){setError(e instanceof Error?e.message:'操作失败');}finally{setWorking(false);}}
- return <section className="panel" aria-label="方案副本与比较"><h2>条件试算与影响比较 · FR-028</h2><p>条件试算（What-if）：复制后模拟修改订单、日历、工装、人员或物料。原方案与当前真实数据独立保留。副本冻结原始输入和结果。编辑与计算仅写入试算；放弃保留历史。恢复须复查当前进度，当前缺少执行事实接口，会显示阻塞原因。</p>
+ return <section className="panel" aria-label="方案副本与比较"><h2>条件试算与影响比较 · FR-028</h2><p>条件试算（What-if）：复制后模拟修改订单、日历、工装、人员或物料。原方案与当前真实数据独立保留。副本冻结原始输入和结果。编辑与计算仅写入试算；放弃保留历史。当前模拟执行事实已支持导入、查询与更正。恢复历史方案仍受阻，尚未完成基于当前进度的恢复对账与采用；请查看具体阻塞原因。</p>
  <button disabled={!p.activeId||!p.canWrite||disabled||!p.reason.trim()} onClick={()=>act(async()=>{const t=await p.api('/plans/'+p.activeId+'/copy',{});await p.refresh();setTrialId(t.id);p.onResult(t.basePlanId);setComparison(null);})}>复制当前方案为独立试算</button>
  <button disabled={!p.activeId||!p.canWrite||disabled||!p.reason.trim()} onClick={()=>act(async()=>{await p.api('/plans/'+p.activeId+'/restore',{revision:p.revision});})}>检查能否恢复当前历史方案</button>
  <label>比较对象<select aria-label="比较对象" value={other} onChange={e=>{setOther(e.target.value);setComparison(null);}}><option value="">选择已保存方案</option>{p.plans.map(x=><option key={x.id} value={x.id}>{x.name} · {x.id}</option>)}</select></label>
