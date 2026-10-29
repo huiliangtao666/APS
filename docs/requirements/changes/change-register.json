@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "N06 finite ledger cd115f0 Dev 16 PASS/5 BLOCKED; independent Test2 dlv_e22a0f95 executing; P10 limited 7ae4ca8 independent result remains; U01/U02/real customer ledger/full CR NOT_READY",
+      "implementation_status": "N06 cd115f0 finite ledger Dev delivered; Test2 independent S01–S16 7 PASS/9 PARTIAL/0 FAIL; B01–B05 BLOCKED. P10 prior limited result retained old SHA. Full CR NOT_READY",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "N06 new product independent Test pending; Dev self-test not acceptance; P10 old scope PASS retained old SHA; full CR NOT_READY",
+      "acceptance_result": "N06 finite mock 7 independent PASS, 9 PARTIAL evidence gaps, 0 product FAIL; real customer ledger/unknown release/U01-U02/complex windows/cross-line BLOCKED; full CR NOT_READY",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -538,7 +538,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR038性能目标暂定；须补齐测试负载与环境才可验收",
-      "implementation_status": "Exploratory 18 tiers/62 Worker results at 8741bf0a; C2 reconciles 2048-order 4096 candidates =3993 planned+103 findings; Test1 full UI task platform interrupted; formal specification pending",
+      "implementation_status": "8741bf0a exploratory Test2 18 tiers/62 Worker runs and C2 count correction; Test1 React full-chain 8/128 orders <1.3s and 512 cancellation, fixed SHA; formal spec pending",
       "primary_requirements": [
         "FR-038"
       ],
@@ -558,7 +558,7 @@
       "acceptance_delta": "固定输入/环境/版本后独立测量排程耗时≤30秒，并验证较长计算可取消、状态不假报及失败不破坏方案/源数据。",
       "issue_url": "",
       "related_issue_urls": [],
-      "acceptance_result": "No AC27 product PASS/FAIL; C1 task-count wording corrected by C2; formal scenario/environment/time boundary still unspecified",
+      "acceptance_result": "Exploration only: no formal AC27 30s PASS/FAIL; C1 task-count wording corrected by C2, 4096=3993+53+50; formal scale/rules/environment/timing boundary pending",
       "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
       "history": [
         {
