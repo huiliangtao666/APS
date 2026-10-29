@@ -1,6 +1,6 @@
 # 当前需求跟踪表
 
-快照：2026-10-29T21:42:56+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
+快照：2026-10-29T22:43:27+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
 
 | 编号 | 名称 | 要求版本 | 生效CR | 原卡状态 | 当前环节 | 验收结论 | 原卡 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -29,7 +29,7 @@
 | FR-023 | 计算可行完成时间及交期影响 | v0.3+CR-DEC04-05-06-20261029 | CR-DEC04-05-06-20261029 | In progress | CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg2c) |
 | FR-024 | 结果状态、未排任务与原因 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | v0.3本卡全部适用责任断言独立PASS，Design复核接受；无本范围阻断或必测未执行，Done。不是全项目UAT或上线。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg3Q) |
 | FR-025 | 独立检查排程结果 | v0.3 |  | Done | 原卡已完成；按历史验收范围 | 原卡Done，保留原通过记录；不推定完整业务UAT通过 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg4k) |
-| FR-026 | 保存、复制与比较方案 | v0.3 |  | In progress | 实施或验收未闭环，见原卡/关联Issue | 未登记原需求完整版本验收；有限通过证据见原卡 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg5k) |
+| FR-026 | 保存、复制与比较方案 | v0.3 |  | In progress | 当前版本任务级补证已完成；恢复成功能力待实现，浏览器全路径待补证 | FR026 v0.3 NOT_READY；定向42/42、React组件6/6及真实Express内部确认→当前事实/耗料→复制→比较→放弃PASS；恢复409仅证安全拒绝，浏览器全路径PARTIAL；无新增修复轮次。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg5k) |
 | FR-027 | 拖拽调整与锁定 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | v0.3本卡22条适用责任断言22 PASS；Design复核接受固定产品SHA，无本卡阻断，Done。真实平台/部署/生产持久性及业务UAT未执行；Issue13其他FR/CR责任保留。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg7Y) |
 | FR-028 | 修改条件后重新试算 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | v0.3本卡22条适用责任断言22 PASS；Design复核接受固定产品SHA，无本卡阻断，Done。FR026成功恢复仍未完成，FR031原责任保留；真实平台/部署/生产持久性及业务UAT未执行。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg8s) |
 | FR-029 | 模拟异常与重新排程 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | FR029两条原文及AC12/21/24本卡责任24/24独立PASS；旧a5fa 373+18 PASS原SHA保留；FR026/007/022、原UAT15批准和真实平台/QA UAT另列 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg9s) |

@@ -1611,6 +1611,33 @@
       },
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_185ed14f-2bcd-4142-b845-8d1fcdf11ed2:r1",
+      "type": "TEST_VERDICT",
+      "state": "PROCESSED",
+      "source": "APS-Test2 original delivery and PM inbox dlv_ecab5aa4-766e-4a8f-825b-b1491938de49",
+      "processed_at": "2026-10-29T22:43:19+08:00",
+      "requirement": "FR-026 v0.3 / AC-03/12/20/32, Issue #14 historical link",
+      "product_sha": "1cdf394eb954cd6ff15a48cc052edb64f6f093b4",
+      "parent_sha": "d1afb8203db23f951002d4a912b6011994a1a37a",
+      "branch": "feat/fr-013-016-main-batch",
+      "result": "42/42 directed checks, 6/6 React component checks and Express integrated confirm/current facts/copy/compare/discard PASS; matrix 3 PASS/3 PARTIAL/1 FAIL for approved successful restore capability, FR026 NOT_READY",
+      "scope_gap": "Restore 409 safely preserves store; successful current-fact reconciliation/adoption absent. No confirmed new product defect repair round.",
+      "external_hashes": {
+        "FR026-current-version-report.md": "8050aa7f27e1f12aa1b77061ab19b94c582b8c9f063c2223d9dc2239519e80a9",
+        "FR026-current-version-matrix.csv": "08e6a12d57e9a4c9a408832b0c66cfa9ae95e210f945973c782fdb8c3c958ddc",
+        "FR026-current-version-evidence.zip": "77e45c215615fa61e1a3edb02a813817513601c9cbd69e0267f2ae70669b1855"
+      },
+      "zip_crc": "PASS",
+      "matrix_evidence_hashes_verified": 7,
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/14#issuecomment-6499668918",
+      "project_status": {
+        "FR-026": "In progress"
+      },
+      "test_followup_delivery": "dlv_6dc040d4-81ea-4d5a-8e52-29bc3377a1d7",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
