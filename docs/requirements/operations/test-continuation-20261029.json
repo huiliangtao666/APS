@@ -1,0 +1,27 @@
+{
+  "source": "用户2026-10-29会话",
+  "request_quote": "一旦接收到test的反馈就可以继续给test分配任务",
+  "recorded_at": "2026-10-29T13:20:28+08:00",
+  "dispatch_event_key": "fr018019024:12eed551:card-responsibility-acceptance-r1",
+  "test_delivery": "dlv_71d770dd-6faf-4314-bd38-1bf91e6b5fc9",
+  "dispatch_status": "queued；不代表已开始或通过",
+  "product_sha": "12eed5514c702f730aae65a39a08747c532f8536",
+  "requirements": [
+    "FR-018",
+    "FR-019",
+    "FR-024"
+  ],
+  "canonical_items": {
+    "FR-018": "PVTI_lAHOFM9WU84BpE1czhEHgxI",
+    "FR-019": "PVTI_lAHOFM9WU84BpE1czhEHgyQ",
+    "FR-024": "PVTI_lAHOFM9WU84BpE1czhEHg3Q"
+  },
+  "issue_comments": {
+    "14": "https://github.com/huiliangtao666/APS/issues/14#issuecomment-6488688903",
+    "15": "https://github.com/huiliangtao666/APS/issues/15#issuecomment-6488689117"
+  },
+  "request_file": "temp/test-continuation-request.txt",
+  "scope": "既有已交付原卡责任验收/有限补证；非新功能、非新缺陷轮次",
+  "next_owner": "APS-Test",
+  "policy": "收到Test反馈可直接续派，无需再次确认；其余未开始backlog仍暂停"
+}
