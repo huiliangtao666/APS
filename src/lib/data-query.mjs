@@ -1,4 +1,4 @@
-import {personnelCandidates} from './resource-policies.mjs';
+import {personnelCandidates,skillsOf} from './resource-policies.mjs';
 // Read-only view model. Links represent explicit input references, never allocation.
 export const taskDef={key:'tasks',label:'方案任务',file:'方案任务.csv',fields:['任务编号','订单编号','产品编号','工序编号','工序名称','设备编号','开始分钟','结束分钟','工时分钟','前序任务','来源说明','方案编号','方案状态','输入版本','方案记录规则','运行编号','计算模式','方案检查范围','尚未检查','物料检查','物料需求与批次分配','检查结论边界','生产批编号','资源批编号','合格数量kg','精确合格数量','投入装载kg','精确投入装载','拆合批检查','联合资源检查','联合资源占用','任务时间因果','订单完成与交期影响']};
 export function queryData(data,plans,planId){
@@ -10,6 +10,16 @@ const pair=(a,b,keys)=>keys.every(k=>equal(a,b,k));
 export function related(data,table,index){
  const row=data[table]?.[index];if(!row)return [];
  const results=[];
+ // These are declared-skill references, not eligibility or allocation. Keep
+ // the provided/required direction visible even when both refer to one group.
+ const skillRoles=[['可提供技能','声明可提供技能'],['所需技能','声明所需技能']];
+ const skillReference=(relation,group)=>skillRoles.filter(([field])=>!!relation[field]?.trim()&&skillsOf(group['技能']).includes(relation[field])).map(([,label])=>label).join(' / ');
+ if(table==='skillSubstitutions'){
+  (data.personnelGroups||[]).forEach((group,i)=>{const label=skillReference(row,group);if(label)results.push({table:'personnelGroups',index:i,label});});
+  if(row['适用工序']?.trim()&&row['适用工序']!=='*')(data.routes||[]).forEach((route,i)=>{if(row['适用工序']===route['工序编号'])results.push({table:'routes',index:i,label:'声明适用工序'});});
+ }
+ if(table==='personnelGroups')(data.skillSubstitutions||[]).forEach((relation,i)=>{const label=skillReference(relation,row);if(label)results.push({table:'skillSubstitutions',index:i,label});});
+ if(table==='routes'&&row['工序编号']?.trim())(data.skillSubstitutions||[]).forEach((relation,i)=>{if(relation['适用工序']===row['工序编号'])results.push({table:'skillSubstitutions',index:i,label:'声明适用工序'});});
  if(table==='rules'&&row['规则编号'])(data.tasks||[]).forEach((r,i)=>{if((r['方案记录规则']||'').split('、').includes(row['规则编号']))results.push({table:'tasks',index:i});});
  if(table==='tasks')(data.rules||[]).forEach((r,i)=>{if(r['规则编号']&&(row['方案记录规则']||'').split('、').includes(r['规则编号']))results.push({table:'rules',index:i});});
  const edges=[
