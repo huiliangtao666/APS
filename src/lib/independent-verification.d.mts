@@ -20,4 +20,5 @@ export function independentlyVerifyPlan(
   enabledRules?: string[],
   checkedAt?: string,
   frozenData?: any,
+  frozenConditions?: any,
 ): VerificationReport;

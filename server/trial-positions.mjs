@@ -32,7 +32,7 @@ export function freezePositions(data,conditions,positions,at){
 // A separate fixed-output checker. It never asks the engine to find a better slot.
 // Calendar and capacity sweeps inspect saved output at its exact proposed position.
 export function checkPositions(plan,base,data,conditions,positions,locks){
- const report=independentlyVerifyPlan(plan,data.orders,data.routes,plan.rules,new Date().toISOString(),data),issues=[];
+ const report=independentlyVerifyPlan(plan,data.orders,data.routes,plan.rules,new Date().toISOString(),data,conditions),issues=[];
  const add=(code,message,taskIds=[])=>issues.push({code:'POSITION / '+code,message,taskIds});
  for(const [name,c] of Object.entries(report.checks))if(c.status==='problem')add('INDEPENDENT_'+name,c.details.join('；'),plan.tasks.map(t=>t.id));
  if(conditions.mode!=='supported'||activeBatchRule(data,conditions.ruleEvaluationAt))add('UNSUPPORTED','最小模式及生产批/合批移动尚未检查');

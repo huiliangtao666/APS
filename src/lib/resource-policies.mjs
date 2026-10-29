@@ -14,11 +14,22 @@ export function effectiveClaim(c,data){
  return c['资源类型']==='工装'&&c['参数来源']==='工装配置'?{...c,...Object.fromEntries(['需求数量','提前占用分钟','后延占用分钟'].map(k=>[k,t?.[k==='需求数量'?'每任务需求数量':k]]))}:c;
 }
 const minute=v=>typeof v==='string'&&/^\d+$/.test(v)&&Number.isSafeInteger(Number(v))&&Number(v)<=525600;
-export function validatePolicies(data){
- const issues=[];const add=(table,i,field,message)=>issues.push({code:'INPUT / RESOURCE_POLICY',table,row:i+2,field,message});
+// Only constraints actually adopted at the evaluation instant require an
+// original execution ledger. Personnel dependencies remain intrinsic even when LABOR is off.
+export function validatePolicyExecution(data,at=new Date().toISOString(),mode='supported'){
+ if(mode==='minimal-r1')return [];
+ const active=id=>(data.rules||[]).some(r=>r['规则编号']===id&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at)));
+ return (data.executionFacts||[]).flatMap((f,i)=>{
+  const same=r=>r['订单编号']===f['订单编号']&&r['工序编号']===f['工序编号'];
+  const missing=[...(data.resourceClaims||[]).filter(c=>same(c)&&active(c['资源类型']==='工装'?'MOLD':'STORAGE')).map(c=>`${c['资源类型']} ${c['资源编号']}（声明 ${c['声明编号']}）`),...(data.dependencies||[]).filter(d=>same(d)&&d['资源类型']==='人员技能').map(d=>`人员 ${d['资源编号']} / ${d['所需技能']}`)];
+  return missing.length?[{code:'INPUT / RESOURCE_POLICY',table:'executionFacts',file:'25_模拟任务执行事实.csv',row:i+2,field:'工序编号',message:`${f['订单编号']}/${f['工序编号']} 该任务已有执行事实，原始工装/人员占用事实未建模；缺少 ${missing.join('、')} 的原始取得/参与起止、数量及归还/释放事实。本次阻断采用这些资源约束，不把阶段偏移重置到剩余工时，也不改写历史。`}]:[];
+ });
+}
+export function validatePolicies(data,at=new Date().toISOString(),mode='supported',checkExecution=true){
+ const issues=[];const add=(table,i,field,message)=>issues.push({code:'INPUT / RESOURCE_POLICY',table,row:i+2,field,message,...(table==='dependencies'?{file:'12_工序资源与物料依赖.csv'}:{})});
  const skillSet=new Set((data.personnelGroups||[]).flatMap(g=>skillsOf(g['技能'])));
  for(const [i,r]of (data.dependencies||[]).entries())if(r['资源类型']==='人员技能'&&r['所需技能'])skillSet.add(r['所需技能']);
- for(const [i,f]of (data.executionFacts||[]).entries())if((data.resourceClaims||[]).some(c=>c['订单编号']===f['订单编号']&&c['工序编号']===f['工序编号']&&(data.rules||[]).some(r=>r['规则编号']===(c['资源类型']==='工装'?'MOLD':'STORAGE')&&r['是否启用']==='是'))||(data.dependencies||[]).some(d=>d['资源类型']==='人员技能'&&d['订单编号']===f['订单编号']&&d['工序编号']===f['工序编号']))add('executionFacts',i,'工序编号','该任务已有执行事实，原始工装/人员占用事实未建模；本次参数窗口仅支持未开始任务，不把阶段偏移重置到剩余工时，也不改写历史。');
+ if(checkExecution)issues.push(...validatePolicyExecution(data,at,mode));
  const seen=new Set();
  for(const [i,r]of (data.skillSubstitutions||[]).entries()){
   const fail=(f,m)=>add('skillSubstitutions',i,f,m),key=JSON.stringify([r['可提供技能'],r['所需技能'],r['适用工序']]);
@@ -60,6 +71,9 @@ export function validatePolicies(data){
   if(r['窗口外释放']!==undefined&&!['是','否'].includes(r['窗口外释放']))add('dependencies',i,'窗口外释放','仅接受是或否；否表示全工序保留人数');
   if(!Number.isSafeInteger(Number(r['需求数量']))||Number(r['需求数量'])<1)add('dependencies',i,'需求数量','人员需求必须为安全正整数');
   if(!r['所需技能']?.trim())add('dependencies',i,'所需技能','人员必须填写所需技能');
+  // Unnamed legacy rows retain the old blank=whole-operation protocol. A
+  // named window must supply both boundaries, including an explicit zero.
+  if(r['人员参与阶段']?.trim())for(const k of ['人员开始偏移','人员结束偏移'])if(!minute(r[k]))add('dependencies',i,k,'明确人员窗口须显式填写0–525600整数分钟；空值不按0采用');
   const group=(data.personnelGroups||[]).find(g=>g['人员组编号']===r['资源编号']);
   if(!group)add('dependencies',i,'资源编号','须引用现有人员组；同池多个技能只共享一份人数容量');
  }

@@ -1,0 +1,866 @@
+TAP version 13
+# Subtest: FR028 actual bottleneck removal advances task and conditional delivery without changing original
+ok 1 - FR028 actual bottleneck removal advances task and conditional delivery without changing original
+  ---
+  duration_ms: 44.153401
+  type: 'test'
+  ...
+# Subtest: FR028 material shortage plus100 personnel never becomes delivery improvement
+ok 2 - FR028 material shortage plus100 personnel never becomes delivery improvement
+  ---
+  duration_ms: 18.229979
+  type: 'test'
+  ...
+# Subtest: FR028 tool capacity improvement changes actually checked reservations and never invents deliverability
+ok 3 - FR028 tool capacity improvement changes actually checked reservations and never invents deliverability
+  ---
+  duration_ms: 8.187564
+  type: 'test'
+  ...
+# Subtest: FR028 delayed expected supply exposes60 minute later delivery, lot conditions and full immutable provenance
+ok 4 - FR028 delayed expected supply exposes60 minute later delivery, lot conditions and full immutable provenance
+  ---
+  duration_ms: 14.796939
+  type: 'test'
+  ...
+# {"action":"export","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# Subtest: FR030 actual planner submit / supervisor return / resubmit / confirm / release / archive preserves immutable source and query/export provenance
+ok 5 - FR030 actual planner submit / supervisor return / resubmit / confirm / release / archive preserves immutable source and query/export provenance
+  ---
+  duration_ms: 609.918022
+  type: 'test'
+  ...
+# {"action":"submit","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"action":"confirm","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"action":"confirm","decision":"deny","requestId":"trusted-request","actor":"test\#planner"}
+# {"action":"return","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"action":"return","decision":"deny","requestId":"trusted-request","actor":"test\#planner"}
+# {"action":"release","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"action":"release","decision":"deny","requestId":"trusted-request","actor":"test\#planner"}
+# {"action":"archive","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# {"action":"archive","decision":"deny","requestId":"trusted-request","actor":"test\#planner"}
+# Subtest: FR030 role and CSRF gates cover every lifecycle path, audit cannot be body forged
+ok 6 - FR030 role and CSRF gates cover every lifecycle path, audit cannot be body forged
+  ---
+  duration_ms: 200.699137
+  type: 'test'
+  ...
+# Subtest: FR030 missing independent verification and minimal unchecked enabled rules fail closed
+ok 7 - FR030 missing independent verification and minimal unchecked enabled rules fail closed
+  ---
+  duration_ms: 69.087796
+  type: 'test'
+  ...
+# Subtest: FR030 explicit partial task list, quantities and reasons required from both actors
+ok 8 - FR030 explicit partial task list, quantities and reasons required from both actors
+  ---
+  duration_ms: 219.6014
+  type: 'test'
+  ...
+# Subtest: FR030 stale input requires new calculation/verification/submission; return remains available and old confirmation stays queryable
+ok 9 - FR030 stale input requires new calculation/verification/submission; return remains available and old confirmation stays queryable
+  ---
+  duration_ms: 270.667506
+  type: 'test'
+  ...
+# Subtest: FR030 concurrent/replayed decisions and old submission IDs fail without audit mutations
+ok 10 - FR030 concurrent/replayed decisions and old submission IDs fail without audit mutations
+  ---
+  duration_ms: 153.677689
+  type: 'test'
+  ...
+# Subtest: FR030 rejected running/failed/cancelled/infeasible/unchecked/conflicting/corrupt result leaves bytes and audit unchanged
+ok 11 - FR030 rejected running/failed/cancelled/infeasible/unchecked/conflicting/corrupt result leaves bytes and audit unchanged
+  ---
+  duration_ms: 518.992668
+  type: 'test'
+  ...
+# Subtest: FR030 source input changes and rule activation cannot bypass revision checks by restoring the old numeric revision
+ok 12 - FR030 source input changes and rule activation cannot bypass revision checks by restoring the old numeric revision
+  ---
+  duration_ms: 37.086033
+  type: 'test'
+  ...
+# Subtest: FR030 copied result and changed trial input cannot be promoted without current-input reconciliation
+ok 13 - FR030 copied result and changed trial input cannot be promoted without current-input reconciliation
+  ---
+  duration_ms: 67.57169
+  type: 'test'
+  ...
+# Subtest: FR030 conditional supply needs two explicit acknowledgments and preserves the original conditions
+ok 14 - FR030 conditional supply needs two explicit acknowledgments and preserves the original conditions
+  ---
+  duration_ms: 129.166872
+  type: 'test'
+  ...
+# Subtest: FR030 excluded effective demand is never silently accepted as a complete plan
+ok 15 - FR030 excluded effective demand is never silently accepted as a complete plan
+  ---
+  duration_ms: 31.497145
+  type: 'test'
+  ...
+# Subtest: FR030 time-based rule activation after submission invalidates approval without an input edit
+ok 16 - FR030 time-based rule activation after submission invalidates approval without an input edit
+  ---
+  duration_ms: 32.104512
+  type: 'test'
+  ...
+# Subtest: FR030 actual asynchronous worker result can be verified/submitted/confirmed and archived snapshot detects corruption
+ok 17 - FR030 actual asynchronous worker result can be verified/submitted/confirmed and archived snapshot detects corruption
+  ---
+  duration_ms: 169.029661
+  type: 'test'
+  ...
+# Subtest: FR030 enabled delivery quality/remaining-life failure and unsupported declared maximum wait cannot be acknowledged away
+ok 18 - FR030 enabled delivery quality/remaining-life failure and unsupported declared maximum wait cannot be acknowledged away
+  ---
+  duration_ms: 109.825907
+  type: 'test'
+  ...
+# Subtest: 24 category fixtures are genuine valid inputs; identity keys stay equal to save validator
+ok 19 - 24 category fixtures are genuine valid inputs; identity keys stay equal to save validator
+  ---
+  duration_ms: 16.820996
+  type: 'test'
+  ...
+# Subtest: new resource/event/execution relationships are explicit, bidirectional and type scoped
+ok 20 - new resource/event/execution relationships are explicit, bidirectional and type scoped
+  ---
+  duration_ms: 1.582563
+  type: 'test'
+  ...
+# Subtest: readable structured details preserve missing, nested values and confirmed status without exposing JSON syntax
+ok 21 - readable structured details preserve missing, nested values and confirmed status without exposing JSON syntax
+  ---
+  duration_ms: 0.387537
+  type: 'test'
+  ...
+# Subtest: timestamp expiry fields accept inclusive ISO instants while date-only expiry still rejects impossible days
+ok 22 - timestamp expiry fields accept inclusive ISO instants while date-only expiry still rejects impossible days
+  ---
+  duration_ms: 0.304288
+  type: 'test'
+  ...
+# Subtest: AC19 actual allowed time move requires preview then independent recheck and explicit immutable commit, save/reload/compare/CSV
+ok 23 - AC19 actual allowed time move requires preview then independent recheck and explicit immutable commit, save/reload/compare/CSV
+  ---
+  duration_ms: 318.818107
+  type: 'test'
+  ...
+# Subtest: AC19 forbidden machine and invalid precedence/calendar drops remain invalid with specific identity/conflicts; cancel never mutates
+ok 24 - AC19 forbidden machine and invalid precedence/calendar drops remain invalid with specific identity/conflicts; cancel never mutates
+  ---
+  duration_ms: 201.11784
+  type: 'test'
+  ...
+# Subtest: AC19 persisted unstarted locks survive Worker and synchronous recompute; lock-vs-calendar conflicts never silently move/unlock
+ok 25 - AC19 persisted unstarted locks survive Worker and synchronous recompute; lock-vs-calendar conflicts never silently move/unlock
+  ---
+  duration_ms: 299.426352
+  type: 'test'
+  ...
+# Subtest: AC19 lock cannot silently disappear on duration/rule change or missing task selection; explicit unlock preserves history
+ok 26 - AC19 lock cannot silently disappear on duration/rule change or missing task selection; explicit unlock preserves history
+  ---
+  duration_ms: 102.252837
+  type: 'test'
+  ...
+# Subtest: AC21 current started/partial/completed and historical executed tasks reject forged drag and lock APIs with no mutation
+ok 27 - AC21 current started/partial/completed and historical executed tasks reject forged drag and lock APIs with no mutation
+  ---
+  duration_ms: 190.791595
+  type: 'test'
+  ...
+# Subtest: AC21 changed current facts invalidate preview recheck/commit, trial verify and replay; consumed/remaining facts never change
+ok 28 - AC21 changed current facts invalidate preview recheck/commit, trial verify and replay; consumed/remaining facts never change
+  ---
+  duration_ms: 137.069106
+  type: 'test'
+  ...
+# Subtest: moving downstream of actual remaining work preserves exact material quantity and no double consumption
+ok 29 - moving downstream of actual remaining work preserves exact material quantity and no double consumption
+  ---
+  duration_ms: 62.326798
+  type: 'test'
+  ...
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# Subtest: stale plan hash, input revision, preview ownership/roles and malformed/forged quantity/status fail atomically
+ok 30 - stale plan hash, input revision, preview ownership/roles and malformed/forged quantity/status fail atomically
+  ---
+  duration_ms: 247.381382
+  type: 'test'
+  ...
+# Subtest: missing/corrupted historical snapshot blocks previews and preserves original bytes
+ok 31 - missing/corrupted historical snapshot blocks previews and preserves original bytes
+  ---
+  duration_ms: 31.921306
+  type: 'test'
+  ...
+# Subtest: independent preview reports personnel and joint tool conflicts without silently shifting task
+ok 32 - independent preview reports personnel and joint tool conflicts without silently shifting task
+  ---
+  duration_ms: 53.893154
+  type: 'test'
+  ...
+# Subtest: actual submit/confirm of moved supported trial preserves confirmation after later copies and moves
+ok 33 - actual submit/confirm of moved supported trial preserves confirmation after later copies and moves
+  ---
+  duration_ms: 137.888762
+  type: 'test'
+  ...
+# Subtest: unsupported active batch semantics and max-wait remain explicit rather than valid feasibility
+ok 34 - unsupported active batch semantics and max-wait remain explicit rather than valid feasibility
+  ---
+  duration_ms: 45.664466
+  type: 'test'
+  ...
+# Subtest: independent checker inspects the actual invalid candidate even when engine refuses to schedule it
+ok 35 - independent checker inspects the actual invalid candidate even when engine refuses to schedule it
+  ---
+  duration_ms: 31.907348
+  type: 'test'
+  ...
+# Subtest: specific machine-overlap candidate names both tasks instead of silently shifting or hiding rejected task
+ok 36 - specific machine-overlap candidate names both tasks instead of silently shifting or hiding rejected task
+  ---
+  duration_ms: 40.198868
+  type: 'test'
+  ...
+# Subtest: independent candidate calendar check names downtime source; personnel capacity conflict is explicit
+ok 37 - independent candidate calendar check names downtime source; personnel capacity conflict is explicit
+  ---
+  duration_ms: 84.674433
+  type: 'test'
+  ...
+# Subtest: explicit lock cancellation and successful unlock never alter earlier locked snapshot; stale locked retry is denied
+ok 38 - explicit lock cancellation and successful unlock never alter earlier locked snapshot; stale locked retry is denied
+  ---
+  duration_ms: 91.428265
+  type: 'test'
+  ...
+# Subtest: locks stay recorded when rule modes become unsupported or selected task scope excludes locked task
+ok 39 - locks stay recorded when rule modes become unsupported or selected task scope excludes locked task
+  ---
+  duration_ms: 81.467474
+  type: 'test'
+  ...
+# Subtest: current actual contracts, key parity, 19 chapter categories, five systems and all hashed sample bytes
+ok 40 - current actual contracts, key parity, 19 chapter categories, five systems and all hashed sample bytes
+  ---
+  duration_ms: 39.026842
+  type: 'test'
+  ...
+# Subtest: main validator accept examples/orders.csv
+ok 41 - main validator accept examples/orders.csv
+  ---
+  duration_ms: 5.900759
+  type: 'test'
+  ...
+# Subtest: main validator reject-duplicate examples/duplicate-orders.csv
+ok 42 - main validator reject-duplicate examples/duplicate-orders.csv
+  ---
+  duration_ms: 1.159277
+  type: 'test'
+  ...
+# Subtest: main validator reject-unit examples/bad-unit-orders.csv
+ok 43 - main validator reject-unit examples/bad-unit-orders.csv
+  ---
+  duration_ms: 1.006071
+  type: 'test'
+  ...
+# Subtest: main validator accept examples/supplies.csv
+ok 44 - main validator accept examples/supplies.csv
+  ---
+  duration_ms: 2.858589
+  type: 'test'
+  ...
+# Subtest: main validator reject-reference examples/bad-reference-supplies.csv
+ok 45 - main validator reject-reference examples/bad-reference-supplies.csv
+  ---
+  duration_ms: 1.18236
+  type: 'test'
+  ...
+# Subtest: main validator reject-date examples/bad-date-supplies.csv
+ok 46 - main validator reject-date examples/bad-date-supplies.csv
+  ---
+  duration_ms: 0.595742
+  type: 'test'
+  ...
+# Subtest: FR013 actual inspector: whole six batch duplicate/reference/unit reject, correction and replacement
+ok 47 - FR013 actual inspector: whole six batch duplicate/reference/unit reject, correction and replacement
+  ---
+  duration_ms: 13.072293
+  type: 'test'
+  ...
+# Subtest: FR021 AC13 500kg input splits into250+250; quantities identities, immutable source and fixed duration
+ok 48 - FR021 AC13 500kg input splits into250+250; quantities identities, immutable source and fixed duration
+  ---
+  duration_ms: 35.580385
+  type: 'test'
+  ...
+# Subtest: FR021 exact capacity boundary and just-over boundary do not disappear in tolerance
+ok 49 - FR021 exact capacity boundary and just-over boundary do not disappear in tolerance
+  ---
+  duration_ms: 6.381919
+  type: 'test'
+  ...
+# Subtest: FR021 equal split under-min tail is explicit with no overproduction or material commitment
+ok 50 - FR021 equal split under-min tail is explicit with no overproduction or material commitment
+  ---
+  duration_ms: 3.90291
+  type: 'test'
+  ...
+# Subtest: FR021 compatible multiorder resource batch preserves each order and rescues under-min load
+ok 51 - FR021 compatible multiorder resource batch preserves each order and rescues under-min load
+  ---
+  duration_ms: 8.896471
+  type: 'test'
+  ...
+# Subtest: FR021 different product, recipe, route or program cannot combine; missing semantics block explicitly
+ok 52 - FR021 different product, recipe, route or program cannot combine; missing semantics block explicitly
+  ---
+  duration_ms: 8.442394
+  type: 'test'
+  ...
+# Subtest: FR021 partial resource batch keeps full fixed program, personnel summed, stock shortage rolls all members back
+ok 53 - FR021 partial resource batch keeps full fixed program, personnel summed, stock shortage rolls all members back
+  ---
+  duration_ms: 16.871079
+  type: 'test'
+  ...
+# Subtest: FR021 exact remaining qty and packaging integer restrictions preserve material accounting
+ok 54 - FR021 exact remaining qty and packaging integer restrictions preserve material accounting
+  ---
+  duration_ms: 8.68064
+  type: 'test'
+  ...
+# Subtest: FR021 explicit minimal mode keeps batching/material/program unchecked and frozen run scope truthful
+ok 55 - FR021 explicit minimal mode keeps batching/material/program unchecked and frozen run scope truthful
+  ---
+  duration_ms: 5.166018
+  type: 'test'
+  ...
+# Subtest: FR021 packaging loss ceiling across splits blocks undecided redistribution instead of changing order total
+ok 56 - FR021 packaging loss ceiling across splits blocks undecided redistribution instead of changing order total
+  ---
+  duration_ms: 2.629841
+  type: 'test'
+  ...
+# Subtest: FR021 per-operation resource cycles retain each machine bounds and partial horizon status
+ok 57 - FR021 per-operation resource cycles retain each machine bounds and partial horizon status
+  ---
+  duration_ms: 2.585551
+  type: 'test'
+  ...
+# Subtest: FR021 split conditional supply uses original order caps and effective availability without duplicate allocation
+ok 58 - FR021 split conditional supply uses original order caps and effective availability without duplicate allocation
+  ---
+  duration_ms: 12.748756
+  type: 'test'
+  ...
+# Subtest: FR021 table15 whitelist is authoritative; unconfigured resources split but never implicitly combine
+ok 59 - FR021 table15 whitelist is authoritative; unconfigured resources split but never implicitly combine
+  ---
+  duration_ms: 6.012091
+  type: 'test'
+  ...
+# Subtest: FR021 AC14 waiting and undeclared space rules cannot be silently ignored and capacity conflicts use exact decimals
+ok 60 - FR021 AC14 waiting and undeclared space rules cannot be silently ignored and capacity conflicts use exact decimals
+  ---
+  duration_ms: 1.121945
+  type: 'test'
+  ...
+# Subtest: FR021 delayed feed BOM rechecks split rounding and preserves uncommitted downstream evidence
+ok 61 - FR021 delayed feed BOM rechecks split rounding and preserves uncommitted downstream evidence
+  ---
+  duration_ms: 2.215931
+  type: 'test'
+  ...
+# Subtest: FR031 scrap is separate from usable output; replacement demand is explicit and material conserved
+ok 62 - FR031 scrap is separate from usable output; replacement demand is explicit and material conserved
+  ---
+  duration_ms: 34.703146
+  type: 'test'
+  ...
+# Subtest: FR031 repeated scrap calculations do not add outputs or deduct source inventory
+ok 63 - FR031 repeated scrap calculations do not add outputs or deduct source inventory
+  ---
+  duration_ms: 18.419476
+  type: 'test'
+  ...
+# Subtest: FR031 pending scrap is recorded but blocks automatic remaining scheduling with order cause
+ok 64 - FR031 pending scrap is recorded but blocks automatic remaining scheduling with order cause
+  ---
+  duration_ms: 3.86016
+  type: 'test'
+  ...
+# Subtest: FR031 missing policy cannot invent replacement stock even when MATERIAL is disabled
+ok 65 - FR031 missing policy cannot invent replacement stock even when MATERIAL is disabled
+  ---
+  duration_ms: 1.140194
+  type: 'test'
+  ...
+# Subtest: FR031 scrap and supplementary consumption forward correction changes remainder without erasing original start
+ok 66 - FR031 scrap and supplementary consumption forward correction changes remainder without erasing original start
+  ---
+  duration_ms: 1.494981
+  type: 'test'
+  ...
+# Subtest: FR031 scrap rollback, invalid values and unrecognized replacement policy require reconciliation
+ok 67 - FR031 scrap rollback, invalid values and unrecognized replacement policy require reconciliation
+  ---
+  duration_ms: 1.110153
+  type: 'test'
+  ...
+# Subtest: FR031 overorder usable output is blocked while scrap never gives order qualified completion
+ok 68 - FR031 overorder usable output is blocked while scrap never gives order qualified completion
+  ---
+  duration_ms: 0.428536
+  type: 'test'
+  ...
+# Subtest: FR031 completed with scrap retains original actual interval and requires full replacement consumption
+ok 69 - FR031 completed with scrap retains original actual interval and requires full replacement consumption
+  ---
+  duration_ms: 2.326387
+  type: 'test'
+  ...
+# Subtest: FR031 replacement is same-operation only and does not silently change downstream time
+ok 70 - FR031 replacement is same-operation only and does not silently change downstream time
+  ---
+  duration_ms: 1.939684
+  type: 'test'
+  ...
+# Subtest: FR031 exact fractional scrap adds replacement material without float drift
+ok 71 - FR031 exact fractional scrap adds replacement material without float drift
+  ---
+  duration_ms: 1.718561
+  type: 'test'
+  ...
+# Subtest: FR031 source aggregate with explicit conserved mapping is accepted and frozen in summary
+ok 72 - FR031 source aggregate with explicit conserved mapping is accepted and frozen in summary
+  ---
+  duration_ms: 7.40199
+  type: 'test'
+  ...
+# Subtest: FR031 aggregate without explicit mapping is blocked instead of fabricating batch allocation
+ok 73 - FR031 aggregate without explicit mapping is blocked instead of fabricating batch allocation
+  ---
+  duration_ms: 2.527134
+  type: 'test'
+  ...
+# Subtest: FR031 aggregate mapping rejects mismatched sum, unit, lot, material, reference and duplicate records
+ok 74 - FR031 aggregate mapping rejects mismatched sum, unit, lot, material, reference and duplicate records
+  ---
+  duration_ms: 2.049099
+  type: 'test'
+  ...
+# Subtest: FR031 original multi-lot mapping is explicit, sums exactly and later cumulative correction preserves source
+ok 75 - FR031 original multi-lot mapping is explicit, sums exactly and later cumulative correction preserves source
+  ---
+  duration_ms: 6.044008
+  type: 'test'
+  ...
+# Subtest: FR031 source originals cannot be deleted or rewritten and duplicate task sources fail closed
+ok 76 - FR031 source originals cannot be deleted or rewritten and duplicate task sources fail closed
+  ---
+  duration_ms: 2.055932
+  type: 'test'
+  ...
+# Subtest: FR031 run snapshot freezes scrap, source and policy across newer corrections
+ok 77 - FR031 run snapshot freezes scrap, source and policy across newer corrections
+  ---
+  duration_ms: 3.960408
+  type: 'test'
+  ...
+# Subtest: FR031 query follows explicit fact/source/consumption links and exports matching order only
+ok 78 - FR031 query follows explicit fact/source/consumption links and exports matching order only
+  ---
+  duration_ms: 1.289942
+  type: 'test'
+  ...
+# Subtest: FR031 explicit scrap replacement re-evaluates original BOM packaging rounding rather than scaling rounded quantities
+ok 79 - FR031 explicit scrap replacement re-evaluates original BOM packaging rounding rather than scaling rounded quantities
+  ---
+  duration_ms: 0.323079
+  type: 'test'
+  ...
+# Subtest: FR031 scrap units follow order piece conversion exactly without converting cumulative stock units
+ok 80 - FR031 scrap units follow order piece conversion exactly without converting cumulative stock units
+  ---
+  duration_ms: 1.188527
+  type: 'test'
+  ...
+# Subtest: FR031 delivered quoted-JSON CSV samples roundtrip to explicitly mapped, conserved simulated execution
+ok 81 - FR031 delivered quoted-JSON CSV samples roundtrip to explicitly mapped, conserved simulated execution
+  ---
+  duration_ms: 5.985216
+  type: 'test'
+  ...
+# Subtest: RAW01 exact independent original/expected bytes: two corrections around untouched fields
+ok 82 - RAW01 exact independent original/expected bytes: two corrections around untouched fields
+  ---
+  duration_ms: 4.122656
+  type: 'test'
+  ...
+# Subtest: RAW01 no-change / local / multi corrections, commas quotes Unicode and intermediate fields: CR
+ok 83 - RAW01 no-change / local / multi corrections, commas quotes Unicode and intermediate fields: CR
+  ---
+  duration_ms: 0.506577
+  type: 'test'
+  ...
+# Subtest: RAW01 deletes / inserts / pasted multiline content retain unchanged raw spans: CR
+ok 84 - RAW01 deletes / inserts / pasted multiline content retain unchanged raw spans: CR
+  ---
+  duration_ms: 0.553409
+  type: 'test'
+  ...
+# Subtest: RAW01 no-change / local / multi corrections, commas quotes Unicode and intermediate fields: LF
+ok 85 - RAW01 no-change / local / multi corrections, commas quotes Unicode and intermediate fields: LF
+  ---
+  duration_ms: 0.37887
+  type: 'test'
+  ...
+# Subtest: RAW01 deletes / inserts / pasted multiline content retain unchanged raw spans: LF
+ok 86 - RAW01 deletes / inserts / pasted multiline content retain unchanged raw spans: LF
+  ---
+  duration_ms: 3.808702
+  type: 'test'
+  ...
+# Subtest: RAW01 no-change / local / multi corrections, commas quotes Unicode and intermediate fields: CRLF
+ok 87 - RAW01 no-change / local / multi corrections, commas quotes Unicode and intermediate fields: CRLF
+  ---
+  duration_ms: 0.308246
+  type: 'test'
+  ...
+# Subtest: RAW01 deletes / inserts / pasted multiline content retain unchanged raw spans: CRLF
+ok 88 - RAW01 deletes / inserts / pasted multiline content retain unchanged raw spans: CRLF
+  ---
+  duration_ms: 0.523076
+  type: 'test'
+  ...
+# Subtest: RAW01 no-change / local / multi corrections, commas quotes Unicode and intermediate fields: mixed
+ok 89 - RAW01 no-change / local / multi corrections, commas quotes Unicode and intermediate fields: mixed
+  ---
+  duration_ms: 0.283663
+  type: 'test'
+  ...
+# Subtest: RAW01 deletes / inserts / pasted multiline content retain unchanged raw spans: mixed
+ok 90 - RAW01 deletes / inserts / pasted multiline content retain unchanged raw spans: mixed
+  ---
+  duration_ms: 0.727366
+  type: 'test'
+  ...
+# Subtest: RAW01 repeated identical visible chunks keep their separate raw CR/LF/CRLF mappings
+ok 91 - RAW01 repeated identical visible chunks keep their separate raw CR/LF/CRLF mappings
+  ---
+  duration_ms: 3.788327
+  type: 'test'
+  ...
+# Subtest: RAW01 sequential edits and inserted LF do not impose a newline style
+ok 92 - RAW01 sequential edits and inserted LF do not impose a newline style
+  ---
+  duration_ms: 0.304371
+  type: 'test'
+  ...
+# Subtest: RAW01 deterministic edit matrix around uniquely anchored mixed raw blocks
+ok 93 - RAW01 deterministic edit matrix around uniquely anchored mixed raw blocks
+  ---
+  duration_ms: 21.577478
+  type: 'test'
+  ...
+# Subtest: RAW01 exhaustive short visible replacements always reconstruct the requested value
+ok 94 - RAW01 exhaustive short visible replacements always reconstruct the requested value
+  ---
+  duration_ms: 97.74981
+  type: 'test'
+  ...
+# Subtest: FR032 union of machine intervals gives planned busy/unallocated, never live availability
+ok 95 - FR032 union of machine intervals gives planned busy/unallocated, never live availability
+  ---
+  duration_ms: 1.765936
+  type: 'test'
+  ...
+# Subtest: FR032 shared tooling counted once, return extension and half-open peaks preserved
+ok 96 - FR032 shared tooling counted once, return extension and half-open peaks preserved
+  ---
+  duration_ms: 0.553034
+  type: 'test'
+  ...
+# Subtest: FR032 distinct declarations with identical windows and tasks remain separate physical demands
+ok 97 - FR032 distinct declarations with identical windows and tasks remain separate physical demands
+  ---
+  duration_ms: 0.208997
+  type: 'test'
+  ...
+# Subtest: FR032 personnel participation window does not inherit whole machine run; exact decimal space peak
+ok 98 - FR032 personnel participation window does not inherit whole machine run; exact decimal space peak
+  ---
+  duration_ms: 0.203206
+  type: 'test'
+  ...
+# Subtest: FR032 malformed or unchecked reservations and configuration only remain unknown
+ok 99 - FR032 malformed or unchecked reservations and configuration only remain unknown
+  ---
+  duration_ms: 0.956572
+  type: 'test'
+  ...
+# Subtest: FR032 AC10 real scheduler exact325 demand/300 eligible/25 gap, no committed candidate consumption
+ok 100 - FR032 AC10 real scheduler exact325 demand/300 eligible/25 gap, no committed candidate consumption
+  ---
+  duration_ms: 30.999526
+  type: 'test'
+  ...
+# Subtest: FR032 exact0.1 gap never becomes zero or feasible
+ok 101 - FR032 exact0.1 gap never becomes zero or feasible
+  ---
+  duration_ms: 3.160877
+  type: 'test'
+  ...
+# Subtest: FR032 AC06/14 real joint scheduler600+600 on1000 retains complete windows and no double occupancy
+ok 102 - FR032 AC06/14 real joint scheduler600+600 on1000 retains complete windows and no double occupancy
+  ---
+  duration_ms: 5.160269
+  type: 'test'
+  ...
+# Subtest: FR032 late order96kg/60min comes from saved delivery, not two operation quantities
+ok 103 - FR032 late order96kg/60min comes from saved delivery, not two operation quantities
+  ---
+  duration_ms: 4.547609
+  type: 'test'
+  ...
+# Subtest: FR032 saved late/conditional/missing supply alerts show quantity/time/reason and never infer physical arrival
+ok 104 - FR032 saved late/conditional/missing supply alerts show quantity/time/reason and never infer physical arrival
+  ---
+  duration_ms: 0.95603
+  type: 'test'
+  ...
+# Subtest: FR032 missing task inputs and legacy no snapshots stay unknown; projection immutable
+ok 105 - FR032 missing task inputs and legacy no snapshots stay unknown; projection immutable
+  ---
+  duration_ms: 0.311663
+  type: 'test'
+  ...
+# Subtest: FR032 AC26 CSV uses exact same projection/window/category, includes line/input/simulation and unknowns
+ok 106 - FR032 AC26 CSV uses exact same projection/window/category, includes line/input/simulation and unknowns
+  ---
+  duration_ms: 3.439956
+  type: 'test'
+  ...
+# Subtest: FR032 unplanned personnel declaration retains2-person demand and linked original row with unknown peak
+ok 107 - FR032 unplanned personnel declaration retains2-person demand and linked original row with unknown peak
+  ---
+  duration_ms: 1.804935
+  type: 'test'
+  ...
+# Subtest: FR032 deeply frozen confirmed evidence remains unchanged and missing material allocations stay unknown
+ok 108 - FR032 deeply frozen confirmed evidence remains unchanged and missing material allocations stay unknown
+  ---
+  duration_ms: 0.601951
+  type: 'test'
+  ...
+# Subtest: FR024 normal supported result and minimal scope distinguish arranged from delivery and global feasibility
+ok 109 - FR024 normal supported result and minimal scope distinguish arranged from delivery and global feasibility
+  ---
+  duration_ms: 44.452815
+  type: 'test'
+  ...
+# Subtest: FR024 horizon partial links concrete unscheduled task, date, duration, machine, suggestions and source without Gantt fabrication
+ok 110 - FR024 horizon partial links concrete unscheduled task, date, duration, machine, suggestions and source without Gantt fabrication
+  ---
+  duration_ms: 3.198877
+  type: 'test'
+  ...
+# Subtest: FR024 AC10 exact shortage25 from325 demand400 stock100 occupied with simulated quality provenance and no deduction
+ok 111 - FR024 AC10 exact shortage25 from325 demand400 stock100 occupied with simulated quality provenance and no deduction
+  ---
+  duration_ms: 4.596734
+  type: 'test'
+  ...
+# Subtest: FR024 calendar and predecessor retain per-task links, stop dates and counts
+ok 112 - FR024 calendar and predecessor retain per-task links, stop dates and counts
+  ---
+  duration_ms: 2.217639
+  type: 'test'
+  ...
+# Subtest: FR024 unresolved global issues never fabricate task causality; missing metadata remains unknown
+ok 113 - FR024 unresolved global issues never fabricate task causality; missing metadata remains unknown
+  ---
+  duration_ms: 0.545118
+  type: 'test'
+  ...
+# Subtest: FR024 lifecycle labels are distinct and timeout never infers infeasibility or a saved partial result
+ok 114 - FR024 lifecycle labels are distinct and timeout never infers infeasibility or a saved partial result
+  ---
+  duration_ms: 0.181622
+  type: 'test'
+  ...
+# Subtest: FR024 saved report and CSV preserve provenance and exact values despite changed inputs
+ok 115 - FR024 saved report and CSV preserve provenance and exact values despite changed inputs
+  ---
+  duration_ms: 4.655858
+  type: 'test'
+  ...
+# Subtest: FR024 explicit tooling shortage retains concrete claims/capacity and applicable simulated-capacity suggestion
+ok 116 - FR024 explicit tooling shortage retains concrete claims/capacity and applicable simulated-capacity suggestion
+  ---
+  duration_ms: 5.304517
+  type: 'test'
+  ...
+# Subtest: FR024 under-min batch links all member operations with exact recorded load and never invents production
+ok 117 - FR024 under-min batch links all member operations with exact recorded load and never invents production
+  ---
+  duration_ms: 4.636233
+  type: 'test'
+  ...
+# Subtest: FR024 batch unsupported unit keeps known source and unresolved reason distinct from data repair
+ok 118 - FR024 batch unsupported unit keeps known source and unresolved reason distinct from data repair
+  ---
+  duration_ms: 1.678187
+  type: 'test'
+  ...
+# Subtest: FR038 stop intent visible, repeated cancel joins, late result/progress cannot save or reopen
+ok 119 - FR038 stop intent visible, repeated cancel joins, late result/progress cannot save or reopen
+  ---
+  duration_ms: 135.025174
+  type: 'test'
+  ...
+# {"action":"calculate","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# Subtest: FR038 same-input retry pins original evaluation time and rules after current edits; server identity and permissions
+ok 120 - FR038 same-input retry pins original evaluation time and rules after current edits; server identity and permissions
+  ---
+  duration_ms: 279.536186
+  type: 'test'
+  ...
+# Subtest: FR038 result wins before cancel, terminal immutable, raw internal diagnostics never persisted
+ok 121 - FR038 result wins before cancel, terminal immutable, raw internal diagnostics never persisted
+  ---
+  duration_ms: 40.775528
+  type: 'test'
+  ...
+# Subtest: FR038 timeout owns stopping race and cannot become user cancelled or successful
+ok 122 - FR038 timeout owns stopping race and cannot become user cancelled or successful
+  ---
+  duration_ms: 69.291627
+  type: 'test'
+  ...
+# Subtest: FR038 malformed worker output and private failure return safe failed state without replacing saved plan
+ok 123 - FR038 malformed worker output and private failure return safe failed state without replacing saved plan
+  ---
+  duration_ms: 122.74412
+  type: 'test'
+  ...
+# Subtest: FR038 orphan recovery preserves frozen identity and history, retry corruption denied
+ok 124 - FR038 orphan recovery preserves frozen identity and history, retry corruption denied
+  ---
+  duration_ms: 40.572447
+  type: 'test'
+  ...
+# Subtest: FR038 retry rejects changed execution facts and discarded trials without modifying history
+ok 125 - FR038 retry rejects changed execution facts and discarded trials without modifying history
+  ---
+  duration_ms: 183.231607
+  type: 'test'
+  ...
+# Subtest: FR038 real crash/timeout/cancel leave actual confirmed snapshot and source/facts bytes intact
+ok 126 - FR038 real crash/timeout/cancel leave actual confirmed snapshot and source/facts bytes intact
+  ---
+  duration_ms: 625.78528
+  type: 'test'
+  ...
+# Subtest: FR033 original AC05 downtime30..60 and shifted continuous task agree with saved timetable and reasons
+ok 127 - FR033 original AC05 downtime30..60 and shifted continuous task agree with saved timetable and reasons
+  ---
+  duration_ms: 25.448888
+  type: 'test'
+  ...
+# Subtest: FR033 original identities, batch quantities and saved links never rebuilt or summed
+ok 128 - FR033 original identities, batch quantities and saved links never rebuilt or summed
+  ---
+  duration_ms: 2.940797
+  type: 'test'
+  ...
+# Subtest: FR033 explicit tooling release, personnel phase and space reservations retain precise saved windows and task IDs
+ok 129 - FR033 explicit tooling release, personnel phase and space reservations retain precise saved windows and task IDs
+  ---
+  duration_ms: 5.792802
+  type: 'test'
+  ...
+# Subtest: FR033 snapshot and confirmed envelope remain byte-identical after all presentation operations and changed live inputs
+ok 130 - FR033 snapshot and confirmed envelope remain byte-identical after all presentation operations and changed live inputs
+  ---
+  duration_ms: 4.841647
+  type: 'test'
+  ...
+# Subtest: FR033 legacy missing input/reasons/quantities stay unknown; unplanned never gets timeline coordinates
+ok 131 - FR033 legacy missing input/reasons/quantities stay unknown; unplanned never gets timeline coordinates
+  ---
+  duration_ms: 0.171331
+  type: 'test'
+  ...
+# Subtest: FR033 half-open boundaries, exact tiny geometry, overlapping sublanes and >24h labels
+ok 132 - FR033 half-open boundaries, exact tiny geometry, overlapping sublanes and >24h labels
+  ---
+  duration_ms: 0.305704
+  type: 'test'
+  ...
+# Subtest: FR033 exact filters and cursor projection share IDs, exclude touching windows and never claim actual completion
+ok 133 - FR033 exact filters and cursor projection share IDs, exclude touching windows and never claim actual completion
+  ---
+  duration_ms: 0.242538
+  type: 'test'
+  ...
+# Subtest: WINDOW02 round1: date-safe bounds and invalid values never throw; extended ISO years retain complete dates
+ok 134 - WINDOW02 round1: date-safe bounds and invalid values never throw; extended ISO years retain complete dates
+  ---
+  duration_ms: 0.497202
+  type: 'test'
+  ...
+# Subtest: AXIS-LABEL-03 date labels fit at supported scales without changing geometry
+ok 135 - AXIS-LABEL-03 date labels fit at supported scales without changing geometry
+  ---
+  duration_ms: 4.783815
+  type: 'test'
+  ...
+# Subtest: invalid endpoint matrix never passes machine checks or produces geometry and leaves frozen data intact
+ok 136 - invalid endpoint matrix never passes machine checks or produces geometry and leaves frozen data intact
+  ---
+  duration_ms: 19.571128
+  type: 'test'
+  ...
+# Subtest: unknown first start with abutting successor cannot falsely pass
+ok 137 - unknown first start with abutting successor cannot falsely pass
+  ---
+  duration_ms: 0.782156
+  type: 'test'
+  ...
+# Subtest: zero, signed decimals and trimmed numeric strings retain valid overlap and precedence semantics
+ok 138 - zero, signed decimals and trimmed numeric strings retain valid overlap and precedence semantics
+  ---
+  duration_ms: 1.42994
+  type: 'test'
+  ...
+# Subtest: invalid task excluded without hiding overlap between remaining valid tasks
+ok 139 - invalid task excluded without hiding overlap between remaining valid tasks
+  ---
+  duration_ms: 0.308163
+  type: 'test'
+  ...
+# Subtest: structured geometry must agree with raw task identity, machine, predecessor and every derived endpoint
+ok 140 - structured geometry must agree with raw task identity, machine, predecessor and every derived endpoint
+  ---
+  duration_ms: 0.476285
+  type: 'test'
+  ...
+1..140
+# tests 140
+# suites 0
+# pass 140
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2876.252461

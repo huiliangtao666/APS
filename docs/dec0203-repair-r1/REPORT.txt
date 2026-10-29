@@ -1,0 +1,42 @@
+Issue #3 / CR-DEC02-03-20261029 — D01/D02/D03 repair round1
+Date: 2026-10-29 Asia/Singapore
+Recovery delivery: dlv_197f09db-af6a-4cbf-96cf-16ae535359c2
+Interrupted delivery: dlv_105360d7-1929-489d-85b3-d769a1e15db6
+Branch: feat/fr-013-016-main-batch
+Base: 0d2de88b70b15c555f6d005c0e4d94674e160cdf
+Repair revision: the commit containing this report; final delivery receipt records full pushed SHA.
+
+Result: Dev repair and relevant verification completed for D01–D03 in the SAME round1. Capacity interruption is not a second repair round. Existing edits preserved; no reset/clean/force push. Independent acceptance awaits APS-Design assigning APS-Test to pushed revision. This is NOT complete CR acceptance, baseline acceptance or business UAT.
+
+D01 — frozen verifier scope
+Resource checks derive MOLD/STORAGE adoption from frozen executionData.rules, frozen run selection and ruleEvaluationAt, rather than result.rules. The API verify path, confirmation review and fixed-position checks pass run conditions explicitly. A falsified result conditions/mode cannot shrink API verification scope. Removing MOLD and its whole ledger reports problem, with and without personnel dependencies. Independent resource checks remain fixed-output checks; no scheduler invocation was added. Missing frozen data/rules/time/resource arrays produces explicit resourcePolicies.not_checked. Minimal mode is explicitly not_checked. Result adoption flags are compared against frozen scope. Disabled, future-effective and unselected resource rules are not presented as checked.
+
+D02 — explicit personnel offsets
+Named personnel windows require both endpoints as explicit safe integer strings in [0,525600]. Empty, omitted, whitespace, negative, fractional, nonfinite and excessive values are rejected. Runtime window construction also rejects bad explicit boundaries. API whole-state validation and CSV preview reject before business/revision/audit mutation; mixed-table rejection preserves complete business bytes. Real React tests cover clearing BOTH start and end offsets, preserving the invalid draft, fixing to explicit 0, saving and reading 0 after reload. Unnamed legacy single-window blank=whole-operation compatibility remains explicit; no migration/default change. Error diagnostics identify table12 CSV, row and field; preview shows missing named boundaries as 待填写.
+
+D03 — execution admission follows actual adoption
+Execution guard evaluates rule effective instant (inclusive boundary), selected frozen rules, supported/minimal mode and exact order/operation resource declarations. Future/disabled MOLD allows otherwise valid facts to save, reload and enter actual Worker calculation with no tooling ledger. Unselected and minimal scopes pass targeted checks. Adopted constraints with existing facts and no original ledger remain blocked atomically, identifying task, resource/declaration and missing original participation/acquisition, quantities and release/return facts in table25 CSV. Personnel dependencies retain intrinsic protection even with LABOR off. Structural input validation is retained; run-time admission assesses selected frozen execution inputs rather than blindly rejecting based on unselected global policy. Original execution facts and histories are not rebased to remaining work.
+
+Final application-container checks (new recovery-final output, successful launcher exit):
+- targeted: repair suite 6/6 + original DEC policy suite 8/8 = 14/14; not 14 independent acceptance outcomes.
+- related suites: 140/140, including RAW01, FR014/015, conditions, confirmation, FR036 contracts, run history, batches, timetable, resource load, result assessment, progress impact, unknown endpoints, FR027.
+- npm test: library 90/90 and auth/business 124/124; editor 10/10; resource panel 1/1. Counts overlap other suites and are not summed as unique coverage.
+- original real React/Express/Worker browser: 12 checks; repair browser: 3 scenarios (D02 start/end and D03 future-to-active); complete=true, errors=[]. Screenshots, request bodies/status and atomicity hashes retained.
+- cached isolated QA runtime production build passes; separate platform app-exec --validate standalone npm ci + tsc/Vite/server/Worker build passes. Both leave live dist/dependencies/data untouched. Build log retains npm audit summary; no dependency upgrades in this scope.
+- protected34: all 34 original FR016/RAW01/CsvBatchPanel/csv-draft protected files equal failure pin byte-for-byte and SHA256. This does not rerun or re-certify old FR016 acceptance or RAW01 independent Test.
+- unchanged original APS-Test independent.mjs rerun by Dev: 21 groups, 20 PASS / 1 FAIL. D01 scope and missing-input cases, D02 API/UI blanks and D03 future rule cases PASS. S06 candidate assignment still FAIL. Collector exits0 even on assertions: read cases, not process exit. Embedded original pin in original-test-dev-replay JSON identifies Test script origin; provenance source hashes bind this Dev replay to repaired source. It is not new independent acceptance or a replacement 48-row result.
+
+Reproduction:
+At workspace root, set DEC0203_REPO to absolute apps/aps-fr013-main checkout and DEC0203_OUT to new EMPTY absolute evidence dir; run bash "$DEC0203_REPO/qa/dec0203-repair-r1-docker.sh". Uses prepared aps-fr038-qa-runtime:latest isolated disposable containers, source mounted read-only, temporary business data; no live app binding changes. For clean build: .codex/skills/workspace-app-builder/scripts/app-exec.sh --validate --mode standalone --cwd /workspace/apps/aps-fr013-main --timeout-ms 240000 'npm ci && npm run build'. The original Test script is preserved at evidence/test-reference/independent.mjs; copy into disposable copied app as independent-test.mjs, run node --experimental-strip-types there with /evidence writable and prepared Playwright Chromium. No source oracle edits.
+
+Remaining limits / original CR scope stays OPEN:
+1. Candidate joint allocation remains order dependent in known feasible two-demand allocator example. Product API still requires explicit single group, so no claim of a legal frontend candidate Worker failure; candidate capability is unfulfilled.
+2. Independent same-skill role identity missing: same role stages merge max; independent positions cannot be represented. Distinct physical pools are not an equivalent solution.
+3. Cross-group shared physical pool identity and multiple shifts/adjacent shift handoff remain unexpressible/unverified; existing single-pool multiple-skill checks do not close them.
+4. Adopted resources with already executed tasks lack immutable original execution resource ledger. Correctly blocked cases remain an incomplete CR capability, not an approved reduction of user scope. Future/disabled/unselected/minimal exceptions repair the false block only.
+5. Tool/space declarations support one continuous window per task/resource, multiple discontinuous windows remain outside implemented slice. No claim of all STORAGE combinations.
+6. No Portal signed identity/SSO validation, business UAT, all-baseline acceptance or full mid-Worker race proof. Synthetic members use actual role middleware; browser QA runtime alias is not gateway authentication.
+7. Original APS-Test 48-row report remains 23 PASS / 18 PARTIAL / 3 FAIL / 2 FAIL_SCOPE / 2 NOT_EXECUTABLE at old pin. Dev repair does not rewrite those outcomes. Design owns original Issue/card and independent reassignment.
+
+Latest Issue read-only snapshot updated_at 2026-10-29T03:17:50Z, 9/9 comments includes recovery authorization. No GitHub issue/project/comment mutations, main merge, publish/restart, new backlog, self-dispatch, DEC04/05/06 implementation or independent round2 started.
+Evidence manifest: evidence/provenance.json; evidence SHA256 list: evidence-sha256.json. Pre-repair evidence is diagnostic only; old partial outputs remain in workspace unchanged.

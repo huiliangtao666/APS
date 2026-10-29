@@ -17,7 +17,7 @@ test('passes single-line, half-open machine, and precedence checks', () => {
     task('A-MIX', 'A', 'M1', 0, 10), task('A-FILL', 'A', 'M1', 10, 15, 'A-MIX'),
     task('B-MIX', 'B', 'M2', 0, 12),
   ] }, orders, routes, ['MACHINE', 'PRECEDENCE'], '2026-10-28T00:00:00.000Z');
-  assert.deepEqual(Object.values(report.checks).map((check) => check.status), ['pass', 'pass', 'pass']);
+  assert.deepEqual(Object.values(report.checks).map((check) => check.status), ['pass', 'pass', 'pass', 'not_checked']);
 });
 
 test('reports multiple lines, machine overlaps, and early successors as problems', () => {
@@ -32,7 +32,7 @@ test('reports multiple lines, machine overlaps, and early successors as problems
 
 test('marks checks not checked when there are no relevant records', () => {
   const report = independentlyVerifyPlan({ id: 'P3', tasks: [] }, [], routes, ['MACHINE', 'PRECEDENCE']);
-  assert.deepEqual(Object.values(report.checks).map((check) => check.status), ['not_checked', 'not_checked', 'not_checked']);
+  assert.deepEqual(Object.values(report.checks).map((check) => check.status), ['not_checked', 'not_checked', 'not_checked', 'not_checked']);
 });
 
 test('does not run disabled confirmed-rule checks', () => {

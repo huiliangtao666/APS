@@ -4,6 +4,7 @@ import {skillMatch} from './resource-policies.mjs';
 export function personnelWindows(requirements,start,end){
  const roles=new Map();
  for(const [index,r] of requirements.entries()){
+  if(r['人员参与阶段']?.trim()&&['人员开始偏移','人员结束偏移'].some(k=>typeof r[k]!=='string'||!/^\d+$/.test(r[k])||!Number.isSafeInteger(Number(r[k]))||Number(r[k])>525600))throw Error(`工序 ${r['工序编号']} 明确人员窗口须显式填写整数偏移，空值不按0采用`);
   const count=Number(r['需求数量']||0),a=Number(r['人员开始偏移']||0),b=Number(r['人员结束偏移']||0);
   if(!Number.isInteger(count)||count<0||![a,b].every(Number.isFinite)||a<0||b<0||a+b>=end-start)throw Error(`工序 ${r['工序编号']} 人数或明确参与窗口无效`);
   if(!count)continue;
