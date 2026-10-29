@@ -1523,6 +1523,31 @@
       },
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_ea1a91e2-8717-42d8-b5cd-f481887086b9:r1",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test original delivery and Files API originals",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T21:02:33+08:00",
+      "requirement": "FR-013 / Issue #4, original 02/04 R2.1",
+      "product_sha": "d1afb8203db23f951002d4a912b6011994a1a37a",
+      "parent_sha": "7338108a01e4bcfa18e98d9c1ad5a17a187665e4",
+      "branch": "feat/fr-013-016-main-batch",
+      "result": "45/45 scoped independent PASS for original 02/04 batch import; FR013 NOT_READY",
+      "external_hashes": {
+        "Issue4-FR013-0204-d1afb820-INDEPENDENT-R1-REPORT.txt": "70ad0bdba4996035ec52b4ece65e957e69ef593e53db2b32451285932ece6a30",
+        "Issue4-FR013-0204-d1afb820-INDEPENDENT-R1-ASSERTIONS.csv": "5787da3b78eb2a94b29dc0af1b1ad270e9fab68a9070417eb58aa206509ee240",
+        "Issue4-FR013-0204-d1afb820-INDEPENDENT-R1-EVIDENCE.zip": "2cb054158e6f6125946d2bbdf06a8fb40000267fbef42dc164f7fe645e9ed762"
+      },
+      "zip_crc": "PASS",
+      "zip_internal_hashes_verified": 291,
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6497411728",
+      "project_status": {
+        "FR-013": "In progress"
+      },
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
