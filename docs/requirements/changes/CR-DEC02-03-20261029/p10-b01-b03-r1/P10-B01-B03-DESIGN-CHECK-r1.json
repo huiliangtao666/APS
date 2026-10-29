@@ -1,0 +1,1091 @@
+{
+  "event_key": "dlv_80aa3354-5aad-4e00-98fe-4ed9d338f174:r1",
+  "checked_at": "2026-10-29T16:25:43.288790+00:00",
+  "scope": "设计样例算术/资产完整性核对；不是产品测试执行",
+  "controlled_read_sha": "bc41905e3ef3f99c8f89c30727e78c89488206fb",
+  "p10_evidence_sha": "37e7677059c387981db6d8f27964fa0d1d5fc3d8",
+  "old_product_sha": "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc",
+  "new_product_sha": null,
+  "design_result": "PARTIAL_U01_U02_PENDING",
+  "p10_product_result": "BLOCKED/NOT_EXECUTED",
+  "matrix_rows": 44,
+  "numeric_scenarios_checked": 24,
+  "readiness_file_hashes_verified": [
+    {
+      "path": "REPORT.txt",
+      "sha256": "ce4aed83c461708d927bf84765ae515f99d46eb6f59fbe466510d8a0ba67df4d"
+    },
+    {
+      "path": "browser-probe.mjs",
+      "sha256": "c7a99515f79582081a2f95e95e5718ff9367da4064209e710d7cd0c588958f6c"
+    },
+    {
+      "path": "evidence/authoritative-contract.json",
+      "sha256": "78a5859ad255910d099044ad54d16d72f6336ca7c8ed9ebc8dd7db097443424c"
+    },
+    {
+      "path": "evidence/browser-install.log",
+      "sha256": "2458dede4154a46fd46c0f47f7d72326d0d4f5f4b4135219f04a9e81052a1c1d"
+    },
+    {
+      "path": "evidence/browser-probe-results.json",
+      "sha256": "b69abbea9d024c5b0b10cff4cc43c1199f2026cc27626825a9927a9bae61811a"
+    },
+    {
+      "path": "evidence/browser-probe.log",
+      "sha256": "a24964b0f22b3ad9064df6bbb475ab70e69cbb1d72a24dfd6a3401473fed91e4"
+    },
+    {
+      "path": "evidence/build.log",
+      "sha256": "5ada3e2f8dc7a8e2ef8999064f5aac8257176941eb9f7fbe078c643ae276b98f"
+    },
+    {
+      "path": "evidence/current-personnel-ui.png",
+      "sha256": "6985a5ff6e55500340d2aad02fae627cc2c5a0b7cf2940dbd486c45c25028007"
+    },
+    {
+      "path": "evidence/dedup.json",
+      "sha256": "ab4c35196388d86ed8e745fe11f26168aefd0b6605ac1ccb73980bb0b82a257f"
+    },
+    {
+      "path": "evidence/environment.json",
+      "sha256": "00c508e7384f56c7eb8897109937d724f28764c2276131724bf815ef5152e789"
+    },
+    {
+      "path": "evidence/lineage.json",
+      "sha256": "a4580abc5b7472129edabcbfb029133b022e11adb082495c14a9c30d4a66b731"
+    },
+    {
+      "path": "evidence/original-card-status.json",
+      "sha256": "c67d42179ee68096b883bb57b30ce0899ded659b8fcb422610ea8f4b40329fdf"
+    },
+    {
+      "path": "evidence/probe-results.json",
+      "sha256": "ed821ccaac3164dcadb9045a0c16f1898acc804d8fb90a920e6d432b6a781683"
+    },
+    {
+      "path": "evidence/probe.log",
+      "sha256": "72ba58bb2e7625b54197c6d6421df94d3b055ccb485e4a4c25b58fd99e0368bf"
+    },
+    {
+      "path": "evidence/product-source-sha256.json",
+      "sha256": "4e4ef55a4d06d661efc085f4aa25770fb6279dc8a939805c7788dc3969218171"
+    },
+    {
+      "path": "evidence/regression-final.log",
+      "sha256": "473074ab1f9a60d7f1c7b175c6c9b46b3cf4151b2faf33d7c6741af2acae55b9"
+    },
+    {
+      "path": "probe.mjs",
+      "sha256": "3b420abab2efb95b6b8f1e1fd027c2ded87ebf7445373428e4b34d21a31da54f"
+    }
+  ],
+  "results": [
+    {
+      "id": "S01",
+      "expected_legal": true,
+      "peak_pool_load": 2,
+      "violations": [],
+      "segments": [
+        {
+          "start": 0,
+          "end": 30,
+          "group_load": {
+            "G1": 2,
+            "G2": 0
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "S02",
+      "expected_legal": true,
+      "peak_pool_load": 2,
+      "violations": [],
+      "segments": [
+        {
+          "start": 0,
+          "end": 30,
+          "group_load": {
+            "G1": 2,
+            "G2": 0
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "S03",
+      "expected_legal": true,
+      "peak_pool_load": 2,
+      "violations": [],
+      "segments": [
+        {
+          "start": 0,
+          "end": 30,
+          "group_load": {
+            "G1": 1,
+            "G2": 1
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "S04",
+      "expected_legal": true,
+      "peak_pool_load": 2,
+      "violations": [],
+      "segments": [
+        {
+          "start": 0,
+          "end": 30,
+          "group_load": {
+            "G1": 1,
+            "G2": 1
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A",
+            "B"
+          ],
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "S05",
+      "expected_legal": false,
+      "peak_pool_load": 2,
+      "violations": [
+        "task_exclusive"
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 30,
+          "group_load": {
+            "G1": 1,
+            "G2": 1
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A",
+            "B"
+          ],
+          "violations": [
+            "task_exclusive"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S06",
+      "expected_legal": false,
+      "peak_pool_load": 2,
+      "violations": [
+        "task_exclusive"
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 30,
+          "group_load": {
+            "G1": 2,
+            "G2": 0
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A",
+            "B"
+          ],
+          "violations": [
+            "task_exclusive"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S07",
+      "expected_legal": true,
+      "peak_pool_load": 1,
+      "violations": [],
+      "segments": [
+        {
+          "start": 0,
+          "end": 30,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 30,
+          "end": 60,
+          "group_load": {
+            "G1": 0,
+            "G2": 1
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "B"
+          ],
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "S08",
+      "expected_legal": false,
+      "peak_pool_load": 3,
+      "violations": [
+        "pool_capacity"
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 30,
+          "group_load": {
+            "G1": 1,
+            "G2": 2
+          },
+          "pool_load": 3,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": [
+            "pool_capacity"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S09",
+      "expected_legal": true,
+      "peak_pool_load": 1,
+      "violations": [],
+      "segments": [
+        {
+          "start": 0,
+          "end": 10,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 10,
+          "end": 20,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 20,
+          "end": 30,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "S10",
+      "expected_legal": false,
+      "peak_pool_load": 2,
+      "violations": [
+        "pool_capacity"
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 30,
+          "group_load": {
+            "G1": 1,
+            "G2": 1
+          },
+          "pool_load": 2,
+          "effective_cap": 1,
+          "owners": [
+            "A",
+            "B"
+          ],
+          "violations": [
+            "pool_capacity"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S11",
+      "expected_legal": false,
+      "peak_pool_load": 2,
+      "violations": [
+        "group_qualification_cap"
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 30,
+          "group_load": {
+            "G1": 2,
+            "G2": 0
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": [
+            "group_qualification_cap"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S12",
+      "expected_legal": true,
+      "peak_pool_load": 2,
+      "violations": [],
+      "segments": [
+        {
+          "start": 0,
+          "end": 30,
+          "group_load": {
+            "G1": 1,
+            "G2": 1
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A",
+            "B"
+          ],
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "S13",
+      "expected_legal": false,
+      "peak_pool_load": 3,
+      "violations": [
+        "pool_capacity"
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 30,
+          "group_load": {
+            "G1": 1,
+            "G2": 2
+          },
+          "pool_load": 3,
+          "effective_cap": 2,
+          "owners": [
+            "A",
+            "B",
+            "C"
+          ],
+          "violations": [
+            "pool_capacity"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S14",
+      "expected_legal": false,
+      "peak_pool_load": 3,
+      "violations": [
+        "pool_capacity"
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 25,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 25,
+          "end": 30,
+          "group_load": {
+            "G1": 2,
+            "G2": 1
+          },
+          "pool_load": 3,
+          "effective_cap": 2,
+          "owners": [
+            "A",
+            "B"
+          ],
+          "violations": [
+            "pool_capacity"
+          ]
+        },
+        {
+          "start": 30,
+          "end": 35,
+          "group_load": {
+            "G1": 1,
+            "G2": 1
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A",
+            "B"
+          ],
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "S15",
+      "expected_legal": true,
+      "peak_pool_load": 2,
+      "violations": [],
+      "segments": [
+        {
+          "start": 0,
+          "end": 25,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 25,
+          "end": 30,
+          "group_load": {
+            "G1": 2,
+            "G2": 0
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 30,
+          "end": 35,
+          "group_load": {
+            "G1": 1,
+            "G2": 1
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A",
+            "B"
+          ],
+          "violations": []
+        },
+        {
+          "start": 35,
+          "end": 40,
+          "group_load": {
+            "G1": 0,
+            "G2": 1
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "B"
+          ],
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "S16",
+      "expected_legal": false,
+      "peak_pool_load": 3,
+      "violations": [
+        "group_qualification_cap",
+        "pool_capacity"
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 25,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 25,
+          "end": 30,
+          "group_load": {
+            "G1": 3,
+            "G2": 0
+          },
+          "pool_load": 3,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": [
+            "pool_capacity",
+            "group_qualification_cap"
+          ]
+        },
+        {
+          "start": 30,
+          "end": 35,
+          "group_load": {
+            "G1": 2,
+            "G2": 0
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "S17",
+      "expected_legal": true,
+      "peak_pool_load": 2,
+      "violations": [],
+      "segments": [
+        {
+          "start": 0,
+          "end": 25,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 25,
+          "end": 30,
+          "group_load": {
+            "G1": 1,
+            "G2": 1
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A",
+            "B"
+          ],
+          "violations": []
+        },
+        {
+          "start": 30,
+          "end": 35,
+          "group_load": {
+            "G1": 1,
+            "G2": 1
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A",
+            "B"
+          ],
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "S18",
+      "expected_legal": true,
+      "peak_pool_load": 2,
+      "violations": [],
+      "segments": [
+        {
+          "start": 0,
+          "end": 25,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 25,
+          "end": 30,
+          "group_load": {
+            "G1": 2,
+            "G2": 0
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 30,
+          "end": 35,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 35,
+          "end": 45,
+          "group_load": {
+            "G1": 0,
+            "G2": 1
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "B"
+          ],
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "S19",
+      "expected_legal": false,
+      "peak_pool_load": 2,
+      "violations": [
+        "task_exclusive"
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 25,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 25,
+          "end": 30,
+          "group_load": {
+            "G1": 2,
+            "G2": 0
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 30,
+          "end": 35,
+          "group_load": {
+            "G1": 1,
+            "G2": 1
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A",
+            "B"
+          ],
+          "violations": [
+            "task_exclusive"
+          ]
+        },
+        {
+          "start": 35,
+          "end": 40,
+          "group_load": {
+            "G1": 0,
+            "G2": 1
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "B"
+          ],
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "S20",
+      "expected_legal": false,
+      "peak_pool_load": 2,
+      "violations": [
+        "pool_capacity"
+      ],
+      "segments": [
+        {
+          "start": 0,
+          "end": 25,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 25,
+          "end": 30,
+          "group_load": {
+            "G1": 1,
+            "G2": 1
+          },
+          "pool_load": 2,
+          "effective_cap": 1,
+          "owners": [
+            "A",
+            "B"
+          ],
+          "violations": [
+            "pool_capacity"
+          ]
+        },
+        {
+          "start": 30,
+          "end": 35,
+          "group_load": {
+            "G1": 0,
+            "G2": 1
+          },
+          "pool_load": 1,
+          "effective_cap": 1,
+          "owners": [
+            "B"
+          ],
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "S21",
+      "expected_legal": true,
+      "peak_pool_load": 1,
+      "violations": [],
+      "segments": [
+        {
+          "start": 0,
+          "end": 25,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 25,
+          "end": 30,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 1,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 30,
+          "end": 35,
+          "group_load": {
+            "G1": 0,
+            "G2": 0
+          },
+          "pool_load": 0,
+          "effective_cap": 1,
+          "owners": [],
+          "violations": []
+        },
+        {
+          "start": 35,
+          "end": 45,
+          "group_load": {
+            "G1": 0,
+            "G2": 1
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "B"
+          ],
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "S22",
+      "expected_legal": true,
+      "peak_pool_load": 2,
+      "violations": [],
+      "segments": [
+        {
+          "start": 0,
+          "end": 25,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 25,
+          "end": 30,
+          "group_load": {
+            "G1": 1,
+            "G2": 1
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A",
+            "B"
+          ],
+          "violations": []
+        },
+        {
+          "start": 30,
+          "end": 35,
+          "group_load": {
+            "G1": 0,
+            "G2": 1
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "B"
+          ],
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "S23",
+      "expected_legal": true,
+      "peak_pool_load": 2,
+      "violations": [],
+      "segments": [
+        {
+          "start": 0,
+          "end": 25,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 25,
+          "end": 30,
+          "group_load": {
+            "G1": 2,
+            "G2": 0
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 30,
+          "end": 35,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 35,
+          "end": 45,
+          "group_load": {
+            "G1": 0,
+            "G2": 1
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "B"
+          ],
+          "violations": []
+        }
+      ]
+    },
+    {
+      "id": "S24",
+      "expected_legal": false,
+      "peak_pool_load": 2,
+      "violations": [
+        "availability"
+      ],
+      "segments": [
+        {
+          "start": -10,
+          "end": 0,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 0,
+          "end": 30,
+          "group_load": {
+            "G1": 2,
+            "G2": 0
+          },
+          "pool_load": 2,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        },
+        {
+          "start": 30,
+          "end": 35,
+          "group_load": {
+            "G1": 1,
+            "G2": 0
+          },
+          "pool_load": 1,
+          "effective_cap": 2,
+          "owners": [
+            "A"
+          ],
+          "violations": []
+        }
+      ]
+    }
+  ],
+  "limits": "仅按本文显式合成输入分段核对数量、组/池容量、任务互斥及边界；未运行Worker/API/浏览器/独立产品检查器；不认证现场资格事实。"
+}

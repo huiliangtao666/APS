@@ -1,0 +1,25 @@
+{
+  "event_key": "dlv_80aa3354-5aad-4e00-98fe-4ed9d338f174:r1",
+  "controlled_read_sha": "bc41905e3ef3f99c8f89c30727e78c89488206fb",
+  "readiness_sha": "37e7677059c387981db6d8f27964fa0d1d5fc3d8",
+  "old_product_sha": "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc",
+  "new_product_sha": null,
+  "authority": "原基线+生效CR；本文新增设计分支，不改批准、实施状态或main",
+  "source_urls": [
+    "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6500755581",
+    "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6502106251",
+    "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6500333001"
+  ],
+  "project_id": "PVT_kwHOFM9WU84BpE1c",
+  "original_items": [
+    "PVTI_lAHOFM9WU84BpE1czhEHgjs",
+    "PVTI_lAHOFM9WU84BpE1czhEHg1o"
+  ],
+  "assets_sha256": {
+    "P10-B01-B03-BUSINESS-CONTRACT-r1.md": "16a78a47b56629b5e4eca8d9423eda41b8aeec53b61873cb425cc74ef6dd59aa",
+    "P10-B01-B03-ACCEPTANCE-r1.csv": "07d1882b390fa7ec8a98681b5a656c247c1d672e0a25de3068263946b668af5c",
+    "P10-B01-B03-SCENARIOS-r1.json": "b109b35454772cbad79b804290d78fe32aaf9dee0130cda91d8e4bba64fc8aa7",
+    "P10-B01-B03-DESIGN-CHECK-r1.json": "d46eafcc30b960e4f526293cd762e48494d9d5cfa0f62ec826d03fe6303c8d9a"
+  },
+  "design_math_script": "design_math.py（仅设计核对，不执行产品）"
+}
