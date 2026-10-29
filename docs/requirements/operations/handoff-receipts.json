@@ -2682,6 +2682,85 @@
       "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6505405166",
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_623aa0b2-9f0b-42c0-960d-fa79f1308d82:r1",
+      "original_delivery": "dlv_623aa0b2-9f0b-42c0-960d-fa79f1308d82",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test2",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T03:03:31+08:00",
+      "requirement": "FR-016/Issue4",
+      "product_sha": "08954ccb330147159ae3b1779a7f59ce67a51659",
+      "result": "U2固定08954ccb独立Test：8 PASS/31 PARTIAL/5未执行/0 FAIL；延期首条顺序依Design合同校正，零产品修复轮次",
+      "external_hashes": {
+        "FR016-U2-08954ccb-Test2-R1-matrix.csv": "bf80f4cc7952d8aad969ccb61c57679c71ff6e76b23806a68b60156ecf8bc8ef",
+        "FR016-U2-08954ccb-Test2-R1-evidence.zip": "15a6d3b1a01743a23a4ca657f35f3b681105bf30439d26b82ae76045d20f3ed3",
+        "FR016-U2-08954ccb-Test2-R1-report.md": "18c40b4dcdcbe187920df0a00ec21d6ef6891ff047e2570440d4413012492b3b",
+        "FR016-U2-08954ccb-Test2-R1-sha256.txt": "8eca7b792c8d6f37ebeeff2e10e5bbd9b20284dc1fc2caf3f837de1542621a2e"
+      },
+      "zip_crc": "PASS",
+      "zip_entries": 24,
+      "matrix_rows_verified": 44,
+      "project_status": {
+        "FR-016": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6505820906",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_d58b9d8a-0cc4-42a3-85a5-bec417ef8377:r1",
+      "original_delivery": "dlv_d58b9d8a-0cc4-42a3-85a5-bec417ef8377",
+      "type": "TEST_PREP_RESULT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T03:03:32+08:00",
+      "requirement": "FR-016/Issue4",
+      "product_sha": "08954ccb330147159ae3b1779a7f59ce67a51659",
+      "result": "U3独立准备完成：22来源场景、130身份版本场景、367条断言；产品NOT_EXECUTED",
+      "external_hashes": {
+        "FR016-U3-TEST-PREP-r1-REPORT.txt": "fb020010fc0d073c11d3189770b04b86931c2ece5a7cf753a438bed2c9ad89e0",
+        "FR016-U3-TEST-PREP-r1-MATRIX.csv": "5eeaba1a74b7d7216894f219d40e5508e07bdbeda5ab79880e446ae6dc05459a",
+        "FR016-U3-TEST-PREP-r1-EVIDENCE.zip": "aa641e5dd17b4be93178e743a78637d022d571cdad146f3e7a84ae1948027783",
+        "FR016-U3-TEST-PREP-r1-SHA256.json": "a4bcb8ac4f28bc2e1f40273b5bf93d2ca3e17bd17eecf35c0efe8636eaefe778"
+      },
+      "zip_crc": "PASS",
+      "zip_entries": 330,
+      "matrix_rows_verified": 367,
+      "project_status": {
+        "FR-016": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6505821410",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_2e4e4c89-3984-48c7-829d-fda1efe75b15:r1",
+      "original_delivery": "dlv_2e4e4c89-3984-48c7-829d-fda1efe75b15",
+      "type": "DEV_DELIVERED",
+      "source": "APS-Dev",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T03:03:33+08:00",
+      "requirement": "FR-016/Issue4",
+      "product_sha": "17b70e14082e91be44e56bbc3f59eca02db018c0",
+      "result": "U3固定17b70e14 Dev部分交付：15 PASS/3 PARTIAL/1 BLOCKED/4未执行；独立Test待执行",
+      "external_hashes": {
+        "FR016-G01-U3-R1-EVIDENCE.zip": "472c7a2f25d8248f1a340219553c5383ceb7983378cdb2e3e11c162d9dbd20ef",
+        "FR016-G01-U3-R1-REPORT.txt": "1380c2d8c60ea66ff99e00974150d98bc3c5a9073467f17dbe7b870b88d0c973",
+        "FR016-G01-U3-R1-MATRIX.csv": "80c91ad45fff49c4c03712b557753ec552fbab0a925ac8af6c408e630d03b41e",
+        "FR016-G01-U3-R1-HANDOFF.json": "04c86d36a21c64778b0b93034af4759ed6ca0429722b5a528fd61324a6945723",
+        "FR016-G01-U3-R1-SHA256.txt": "d42f8a0dc427b958279c805d66ca600aa3e453d56e3559c1e63d0b9e407487d4"
+      },
+      "zip_crc": "PASS",
+      "zip_entries": 106,
+      "matrix_rows_verified": 23,
+      "project_status": {
+        "FR-016": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6505821723",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
