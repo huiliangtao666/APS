@@ -1,0 +1,74 @@
+TAP version 13
+# Subtest: main batch valid six-table preview writes nothing, commit persists one version and trusted audit; repeat no-op
+ok 1 - main batch valid six-table preview writes nothing, commit persists one version and trusted audit; repeat no-op
+  ---
+  duration_ms: 82.203668
+  type: 'test'
+  ...
+# Subtest: DEF01..03 whitespace required fields and DEF04 multiline errors reject whole batch byte-for-byte
+ok 2 - DEF01..03 whitespace required fields and DEF04 multiline errors reject whole batch byte-for-byte
+  ---
+  duration_ms: 57.375423
+  type: 'test'
+  ...
+# Subtest: strict syntax/headers, legacy contract and duplicate file rejection preserve original text and physical rows
+ok 3 - strict syntax/headers, legacy contract and duplicate file rejection preserve original text and physical rows
+  ---
+  duration_ms: 1.400738
+  type: 'test'
+  ...
+# Subtest: cross-batch dependencies resolve new names regardless file order; invalid reference/unit/date/duplicate rejects atomically then correction works
+ok 4 - cross-batch dependencies resolve new names regardless file order; invalid reference/unit/date/duplicate rejects atomically then correction works
+  ---
+  duration_ms: 47.513175
+  type: 'test'
+  ...
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# Subtest: query role/spoof/csrf/reason/owner/consumed preview protections never mutate persisted state
+ok 5 - query role/spoof/csrf/reason/owner/consumed preview protections never mutate persisted state
+  ---
+  duration_ms: 36.460103
+  type: 'test'
+  ...
+# Subtest: stale previews cover revision, current state and plans/audit even when input revision unchanged; unknown token rejects
+ok 6 - stale previews cover revision, current state and plans/audit even when input revision unchanged; unknown token rejects
+  ---
+  duration_ms: 34.602327
+  type: 'test'
+  ...
+# Subtest: confirmed history missing returns409, valid immutable snapshot and originals survive batch import
+ok 7 - confirmed history missing returns409, valid immutable snapshot and originals survive batch import
+  ---
+  duration_ms: 21.112902
+  type: 'test'
+  ...
+# Subtest: current execution facts block rebasing 409, invalid CSV 400 and valid changes preserve fact bytes
+ok 8 - current execution facts block rebasing 409, invalid CSV 400 and valid changes preserve fact bytes
+  ---
+  duration_ms: 24.326458
+  type: 'test'
+  ...
+# Subtest: predecessor cycle and time references keep physical coordinates for actionable main editor
+ok 9 - predecessor cycle and time references keep physical coordinates for actionable main editor
+  ---
+  duration_ms: 7.470644
+  type: 'test'
+  ...
+# {"at":"2026-10-29T00:55:36.164Z","action":"member.remove","requestId":"fr027-synthetic","actor":"user","target":"test\#planner"}
+# {"at":"2026-10-29T00:55:36.171Z","action":"deny","requestId":"fr027-synthetic","actor":"user","reason":"membership_required"}
+# Subtest: real persisted confirm workflow survives batch import, and revoked membership blocks commit403
+ok 10 - real persisted confirm workflow survives batch import, and revoked membership blocks commit403
+  ---
+  duration_ms: 82.03142
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 512.660049

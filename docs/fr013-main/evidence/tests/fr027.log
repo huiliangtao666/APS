@@ -1,0 +1,117 @@
+TAP version 13
+# Subtest: AC19 actual allowed time move requires preview then independent recheck and explicit immutable commit, save/reload/compare/CSV
+ok 1 - AC19 actual allowed time move requires preview then independent recheck and explicit immutable commit, save/reload/compare/CSV
+  ---
+  duration_ms: 143.539849
+  type: 'test'
+  ...
+# Subtest: AC19 forbidden machine and invalid precedence/calendar drops remain invalid with specific identity/conflicts; cancel never mutates
+ok 2 - AC19 forbidden machine and invalid precedence/calendar drops remain invalid with specific identity/conflicts; cancel never mutates
+  ---
+  duration_ms: 120.808752
+  type: 'test'
+  ...
+# Subtest: AC19 persisted unstarted locks survive Worker and synchronous recompute; lock-vs-calendar conflicts never silently move/unlock
+ok 3 - AC19 persisted unstarted locks survive Worker and synchronous recompute; lock-vs-calendar conflicts never silently move/unlock
+  ---
+  duration_ms: 182.798636
+  type: 'test'
+  ...
+# Subtest: AC19 lock cannot silently disappear on duration/rule change or missing task selection; explicit unlock preserves history
+ok 4 - AC19 lock cannot silently disappear on duration/rule change or missing task selection; explicit unlock preserves history
+  ---
+  duration_ms: 87.697496
+  type: 'test'
+  ...
+# Subtest: AC21 current started/partial/completed and historical executed tasks reject forged drag and lock APIs with no mutation
+ok 5 - AC21 current started/partial/completed and historical executed tasks reject forged drag and lock APIs with no mutation
+  ---
+  duration_ms: 122.625154
+  type: 'test'
+  ...
+# Subtest: AC21 changed current facts invalidate preview recheck/commit, trial verify and replay; consumed/remaining facts never change
+ok 6 - AC21 changed current facts invalidate preview recheck/commit, trial verify and replay; consumed/remaining facts never change
+  ---
+  duration_ms: 91.853168
+  type: 'test'
+  ...
+# Subtest: moving downstream of actual remaining work preserves exact material quantity and no double consumption
+ok 7 - moving downstream of actual remaining work preserves exact material quantity and no double consumption
+  ---
+  duration_ms: 69.634151
+  type: 'test'
+  ...
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# Subtest: stale plan hash, input revision, preview ownership/roles and malformed/forged quantity/status fail atomically
+ok 8 - stale plan hash, input revision, preview ownership/roles and malformed/forged quantity/status fail atomically
+  ---
+  duration_ms: 208.247333
+  type: 'test'
+  ...
+# Subtest: missing/corrupted historical snapshot blocks previews and preserves original bytes
+ok 9 - missing/corrupted historical snapshot blocks previews and preserves original bytes
+  ---
+  duration_ms: 29.225123
+  type: 'test'
+  ...
+# Subtest: independent preview reports personnel and joint tool conflicts without silently shifting task
+ok 10 - independent preview reports personnel and joint tool conflicts without silently shifting task
+  ---
+  duration_ms: 38.929915
+  type: 'test'
+  ...
+# Subtest: actual submit/confirm of moved supported trial preserves confirmation after later copies and moves
+ok 11 - actual submit/confirm of moved supported trial preserves confirmation after later copies and moves
+  ---
+  duration_ms: 136.826281
+  type: 'test'
+  ...
+# Subtest: unsupported active batch semantics and max-wait remain explicit rather than valid feasibility
+ok 12 - unsupported active batch semantics and max-wait remain explicit rather than valid feasibility
+  ---
+  duration_ms: 30.255156
+  type: 'test'
+  ...
+# Subtest: independent checker inspects the actual invalid candidate even when engine refuses to schedule it
+ok 13 - independent checker inspects the actual invalid candidate even when engine refuses to schedule it
+  ---
+  duration_ms: 21.460649
+  type: 'test'
+  ...
+# Subtest: specific machine-overlap candidate names both tasks instead of silently shifting or hiding rejected task
+ok 14 - specific machine-overlap candidate names both tasks instead of silently shifting or hiding rejected task
+  ---
+  duration_ms: 33.325005
+  type: 'test'
+  ...
+# Subtest: independent candidate calendar check names downtime source; personnel capacity conflict is explicit
+ok 15 - independent candidate calendar check names downtime source; personnel capacity conflict is explicit
+  ---
+  duration_ms: 76.737006
+  type: 'test'
+  ...
+# Subtest: explicit lock cancellation and successful unlock never alter earlier locked snapshot; stale locked retry is denied
+ok 16 - explicit lock cancellation and successful unlock never alter earlier locked snapshot; stale locked retry is denied
+  ---
+  duration_ms: 83.709572
+  type: 'test'
+  ...
+# Subtest: locks stay recorded when rule modes become unsupported or selected task scope excludes locked task
+ok 17 - locks stay recorded when rule modes become unsupported or selected task scope excludes locked task
+  ---
+  duration_ms: 75.175854
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1673.073858

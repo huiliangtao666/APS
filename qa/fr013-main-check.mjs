@@ -1,0 +1,2 @@
+import fs from 'node:fs';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';
+for(const name of ['source','preserved']){const manifest=JSON.parse(fs.readFileSync('qa/fr013-main-'+name+'-sha256.json'));for(const [file,hash] of Object.entries(manifest.files))assert.equal(createHash('sha256').update(fs.readFileSync(file)).digest('hex'),hash,file);console.log('FR013_MAIN_'+name.toUpperCase()+'_PASS '+Object.keys(manifest.files).length);}

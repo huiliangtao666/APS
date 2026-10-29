@@ -1,3 +1,4 @@
+import {inspectCsvBatch,physicalIssues} from './csv-batch.mjs';
 import {taskPosition,movableTask,positionGuard,positionToken,freezePositions,evaluatePosition} from './trial-positions.mjs';
 import {scopedReport,reportCsv} from './scoped-report.mjs';
 import {resourceLoad,loadCsv} from '../src/lib/resource-load.mjs';
@@ -32,6 +33,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   const write=s=>{const tmp=`${file}.${randomUUID()}.tmp`;try{fs.writeFileSync(tmp,JSON.stringify(s),{mode:0o600,flag:'wx'});fs.renameSync(tmp,file);}finally{if(fs.existsSync(tmp))fs.unlinkSync(tmp);}};
   const activeWorkers=new Map();
   const positionPreviews=new Map();
+  const csvPreviews=new Map();
   const stopping=new Map();
   const terminal=new Set(['completed','partial','cancelled','timed_out','failed']);
   // A new process cannot resume a lost thread. Preserve the snapshot and explain it.
@@ -68,7 +70,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   router.get('/plans',permission('read'),(_req,res)=>{const s=read();res.json(s.plans.map(p=>({...p,inputSnapshot:inputs(s,p)?.data??null})));});
   router.get('/plans/:id/inputs',permission('read'),(req,res)=>{const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});const v=inputs(s,p);if(!v)return res.status(409).json({error:'historical_inputs_unavailable'});res.json(v);});
   router.get('/execution',permission('read'),(_req,res)=>{const s=read();const history=s.records.filter(r=>!r.trialId&&factTables.includes(r.target));res.json({...executionSummary(s.data),version:inputHash(executionState(s.data)),revision:s.revision,history,inventory:queryInventoryAvailability(executionInventory(s.data),{rules:s.data.rules}).map(row=>({...row,'扣耗后余额':row['账面数量'],'扣耗前账面数量':s.data.inventory.find(b=>b['批次编号']===row['批次编号'])?.['账面数量'],'说明':'模拟账面减累计耗料，再减独立占用；不是真实库存'}))});});
-  function saveInputs(req,res,tables,trialId){
+  function saveInputs(req,res,tables,trialId,dryRun=false){
     const {revision,operation}=req.body;
     const s=read(),target=trialId?s.trials?.find(t=>t.id===trialId):s;
     if(!target)return res.status(404).json({error:'trial_not_found'});
@@ -91,6 +93,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(operation==='restore')return res.status(409).json({error:'restore_blocked',...restoreBlockers(s,null)});
     // A missing original confirmed snapshot cannot be reconstructed from today's data.
     if(s.plans.some(p=>['confirmed','released','archived'].includes(p.status)&&!inputs(s,p)))return res.status(409).json({error:'protected_history_unavailable'});
+    if(dryRun)return res.json({valid:true,revision:target.revision});
     const changes=defs.map(d=>d.key).filter(key=>JSON.stringify(target.data[key])!==JSON.stringify(proposed[key]));
     if(!changes.length)return res.json({data:target.data,revision:target.revision,unchanged:true});
     const before=target.data;const fromVersion=preserve(s,target);
@@ -99,6 +102,39 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     for(const key of changes)record(s,req,operation||'edit',key,{before:before[key],after:proposed[key],fromVersion,toVersion,batchId,trialId:trialId||null});
     write(s);res.json({data:target.data,revision:target.revision,inputVersionId:toVersion});
   }
+  // Preview and commit pass through exactly the same transition/history/validation gates.
+  function checkCsv(req,s,inspection,dryRun){
+    const result={status:200,body:null};
+    const response={status(code){result.status=code;return this;},json(body){result.body=body;return this;}};
+    saveInputs(req,response,inspection.tables,undefined,dryRun);
+    if(result.body?.issues)result.body.issues=physicalIssues(result.body.issues,inspection.sources,defs);
+    return result;
+  }
+  router.post('/imports/preview',permission('edit'),(req,res)=>{
+    const {files,revision}=req.body,s=read();
+    if(revision!==s.revision)return res.status(409).json({error:'stale_input'});
+    if(!Array.isArray(files)||!files.length||files.length>6||files.some(f=>!f||typeof f.name!=='string'||typeof f.text!=='string'||f.text.length>1000000))return res.status(400).json({error:'invalid_files'});
+    const inspection=inspectCsvBatch(files,defs);
+    const base={tables:inspection.tables,sources:inspection.sources,revision};
+    if(inspection.issues.length)return res.json({...base,valid:false,issues:inspection.issues});
+    const checked=checkCsv({...req,body:{...req.body,operation:'import'}},s,inspection,true);
+    if(checked.status!==200)return res.status(checked.status).json({...base,valid:false,...checked.body});
+    for(const [id,p] of csvPreviews)if(Date.now()-p.createdAt>15*60*1000)csvPreviews.delete(id);
+    if(csvPreviews.size>=100)return res.status(429).json({error:'preview_capacity'});
+    const id=randomUUID();csvPreviews.set(id,{owner:subjectKey(req.praetorActor),createdAt:Date.now(),stateHash:contentHash(s),revision,files:structuredClone(files)});
+    res.json({...base,id,valid:true,issues:[]});
+  });
+  router.post('/imports/commit',permission('edit'),(req,res)=>{
+    const p=csvPreviews.get(req.body.previewId),s=read();
+    if(!p||p.owner!==subjectKey(req.praetorActor)||Date.now()-p.createdAt>15*60*1000)return res.status(409).json({error:'preview_expired_or_unowned'});
+    if(p.revision!==s.revision||p.stateHash!==contentHash(s))return res.status(409).json({error:'stale_preview'});
+    // Ignore caller-supplied tables/actor/revision; reparse the server-owned original files.
+    const inspection=inspectCsvBatch(p.files,defs);
+    if(inspection.issues.length)return res.status(400).json({error:'invalid_input',issues:inspection.issues});
+    const checked=checkCsv({...req,body:{reason:req.body.reason,revision:p.revision,operation:'import'}},s,inspection,false);
+    if(checked.status===200)csvPreviews.delete(req.body.previewId);
+    res.status(checked.status).json(checked.body);
+  });
   router.post('/tables/:table',permission('edit'),(req,res)=>saveInputs(req,res,{[req.params.table]:req.body.rows}));
   router.post('/inputs',permission('edit'),(req,res)=>saveInputs(req,res,req.body.tables));
   router.get('/trials',permission('read'),(_req,res)=>res.json(read().trials||[]));

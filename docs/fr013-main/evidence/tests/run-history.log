@@ -1,0 +1,59 @@
+TAP version 13
+# Subtest: FR038 stop intent visible, repeated cancel joins, late result/progress cannot save or reopen
+ok 1 - FR038 stop intent visible, repeated cancel joins, late result/progress cannot save or reopen
+  ---
+  duration_ms: 99.974432
+  type: 'test'
+  ...
+# {"action":"calculate","decision":"deny","requestId":"trusted-request","actor":"test\#query"}
+# Subtest: FR038 same-input retry pins original evaluation time and rules after current edits; server identity and permissions
+ok 2 - FR038 same-input retry pins original evaluation time and rules after current edits; server identity and permissions
+  ---
+  duration_ms: 178.421632
+  type: 'test'
+  ...
+# Subtest: FR038 result wins before cancel, terminal immutable, raw internal diagnostics never persisted
+ok 3 - FR038 result wins before cancel, terminal immutable, raw internal diagnostics never persisted
+  ---
+  duration_ms: 27.904926
+  type: 'test'
+  ...
+# Subtest: FR038 timeout owns stopping race and cannot become user cancelled or successful
+ok 4 - FR038 timeout owns stopping race and cannot become user cancelled or successful
+  ---
+  duration_ms: 67.045923
+  type: 'test'
+  ...
+# Subtest: FR038 malformed worker output and private failure return safe failed state without replacing saved plan
+ok 5 - FR038 malformed worker output and private failure return safe failed state without replacing saved plan
+  ---
+  duration_ms: 81.18176
+  type: 'test'
+  ...
+# Subtest: FR038 orphan recovery preserves frozen identity and history, retry corruption denied
+ok 6 - FR038 orphan recovery preserves frozen identity and history, retry corruption denied
+  ---
+  duration_ms: 19.628248
+  type: 'test'
+  ...
+# Subtest: FR038 retry rejects changed execution facts and discarded trials without modifying history
+ok 7 - FR038 retry rejects changed execution facts and discarded trials without modifying history
+  ---
+  duration_ms: 90.724969
+  type: 'test'
+  ...
+# Subtest: FR038 real crash/timeout/cancel leave actual confirmed snapshot and source/facts bytes intact
+ok 8 - FR038 real crash/timeout/cancel leave actual confirmed snapshot and source/facts bytes intact
+  ---
+  duration_ms: 523.36904
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1206.004459

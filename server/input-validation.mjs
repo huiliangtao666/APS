@@ -51,12 +51,12 @@ export function validateInputs(defs,data){
  });
  const collect=(fallback,findings)=>{for(const f of findings){
   const aliases=[['supplyUses',/计划供给引用|供给引用编号/],['supplyDelays',/延期模拟|延期记录|同一供给记录时点/],['supplies',/预计供给|供给编号|物料\/批次|^供给 /],['dependencies',/工序资源依赖/],['times',/工序工时|工时重复|缺少工时配置|需配置正数固定分钟/],['machines',/设备资源|设备编号 /],['routes',/工艺路线|路线存在循环|引用不存在的前序工序/],['materials',/^物料第|^物料编号 /],['products',/^产品第/],['orders',/^订单第/]];
-  const table=aliases.find(([,pattern])=>pattern.test(f.message))?.[0]||fallback;
+  const table=f.table||aliases.find(([,pattern])=>pattern.test(f.message))?.[0]||fallback;
   const def=defs.find(d=>d.key===table);
   const line=f.line||Number(f.message.match(/第\s*(\d+)\s*行/)?.[1]);
   const field=f.field||def.fields.find(x=>f.message.includes(x))||'关联配置';
   // Aggregate checks have no single source row; row 0 explicitly means table-level.
-  issues.push({...f,table,file:def.file,row:line?line+1:0,field});
+  issues.push({...f,table,file:def.file,row:f.row??(line?line+1:0),field});
  }};
  collect('orders',validateOrders(data.orders));collect('machines',validateSingleLineScope(data.orders,data.machines));collect('products',validateMasterData(data));collect('routes',validateProcessConfig(data));collect('bom',validateBomConfig(data));collect('inventory',validateInventoryBatches(data.inventory,data.materials));
  collect('supplies',validateExpectedSupply({supplies:data.supplies,delays:data.supplyDelays,uses:data.supplyUses,materials:data.materials,orders:data.orders,routes:data.routes}));

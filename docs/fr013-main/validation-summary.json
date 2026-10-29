@@ -1,0 +1,206 @@
+{
+  "base": "6857c1e569d8032a21a1ec4b32e9be7a024c791a",
+  "branch": "feat/fr-013-016-main-batch",
+  "productManifest": "qa/fr013-main-source-sha256.json",
+  "productFiles": 118,
+  "preservedBaseFiles": 150,
+  "tests": 494,
+  "passed": 494,
+  "suites": [
+    {
+      "suite": "business",
+      "tests": 164,
+      "pass": 164,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "canonical",
+      "tests": 214,
+      "pass": 214,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "confirmation-panel",
+      "tests": 4,
+      "pass": 4,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "delivery-panel",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "editor-interaction",
+      "tests": 10,
+      "pass": 10,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "execution-panel",
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "fr013-main",
+      "tests": 10,
+      "pass": 10,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "fr027",
+      "tests": 17,
+      "pass": 17,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "fr036-contract",
+      "tests": 8,
+      "pass": 8,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "load-panel",
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "query",
+      "tests": 5,
+      "pass": 5,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "resource-panel",
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "result-panel",
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "run-history",
+      "tests": 8,
+      "pass": 8,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "run-panel",
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "scoped-report",
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "task-linkage-panel",
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "timeline-panel",
+      "tests": 13,
+      "pass": 13,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "trial-panel",
+      "tests": 6,
+      "pass": 6,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "worker",
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    }
+  ],
+  "browser": {
+    "fr013-main": {
+      "groups": 9,
+      "complete": true,
+      "errors": []
+    },
+    "fr027": {
+      "groups": 7,
+      "complete": true,
+      "errors": []
+    },
+    "fr035": {
+      "groups": 13,
+      "complete": true,
+      "errors": []
+    },
+    "fr036": {
+      "groups": 3,
+      "complete": true,
+      "errors": []
+    },
+    "fr038": {
+      "groups": 6,
+      "complete": true,
+      "errors": []
+    }
+  },
+  "confirmedHistoryGroups": 5,
+  "atomicByteProofs": 13,
+  "csv": "legacy six-table DEF01..04 verify.mjs PASS plus new main batch tests",
+  "build": "TypeScript/Vite/API/worker and 11 component bundles PASS",
+  "runtimeImage": "sha256:0d45a31aa25c4cca1eaacbfd1ba4ee6d5028d899b329e49a6036a66fd0c35da8",
+  "node": "22.23.2",
+  "chromium": "141.0.7390.37",
+  "identity": "QA synthetic actors and runtime alias; genuine App/Express/membership/confirmation routes; no gateway/SSO/UAT claim"
+}
