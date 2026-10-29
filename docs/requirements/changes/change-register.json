@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "固定12eed551的S06/S07独立有限PASS；FR017当前适用实现责任在7077e536独立PASS/原卡Done；FR007/022及完整CR仍NOT_READY；D01-D03 round1 PASS保留",
+      "implementation_status": "P08/P09 fixed e0be9b6d scoped independent 15/15 PASS; FR017 prior scoped PASS; FR007/022 and full CR NOT_READY",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "FR017 T08/T10/U01/U05/H02独立PASS（7077e536）；原A01-A24及S06/S07有限PASS、原48项25 PASS/19 PARTIAL/2 FAIL_SCOPE/2 NOT_EXECUTABLE保留；FR007/022、L01/L02及完整CR/UAT未完成",
+      "acceptance_result": "P08/P09 scoped 15/15 independent PASS at e0be9b6d; prior S06/S07, D01-D03 and FR017 PASS stay original SHAs; P06/P10, N06, R01/R02 and full FR007/022/CR/UAT remain open",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -99,6 +99,16 @@
           "date": "2026-10-29",
           "event_key": "dlv_ef0c6e69-7c93-455b-bc96-98e52dee22e2:r1",
           "event": "PM核FR017固定7077e536d421b79a634b2792790344bc258acd51独立Test：T08/T10/U01/U05/H02 PASS，本卡Done；原48矩阵及S06/S07/D01-D03历史不改；FR007/022及完整CR/UAT仍NOT_READY"
+        },
+        {
+          "date": "2026-10-29",
+          "event_key": "dlv_8e493d57-3f86-48a9-85a3-b7dcb9a53968:r1",
+          "event": "Dev P08/P09 fixed e0be9b6d scoped self-check PASS; independent Test dispatched; full FR007/022 and CR NOT_READY"
+        },
+        {
+          "date": "2026-10-29",
+          "event_key": "dlv_93ded349-85c5-4020-863c-79c10b6720b5:r1",
+          "event": "Test P08/P09 fixed e0be9b6d 15/15 scoped independent PASS; FR007/022 and full CR NOT_READY; old SHA PASS preserved; zero repair round"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",

@@ -1661,6 +1661,64 @@
       "remaining": "Successful restoration must reconcile current progress, consumption and confirmed version; await Dev new SHA and Test targeted retest",
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_8e493d57-3f86-48a9-85a3-b7dcb9a53968:r1",
+      "type": "DEV_DELIVERED",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T23:04:27+08:00",
+      "product_sha": "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc",
+      "branch": "feat/fr-013-016-main-batch",
+      "result": "P08/P09 scoped Dev PASS; independent Test completed separately; full FR007/022 NOT_READY",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6500333001",
+      "external_hashes": {},
+      "project_status": {
+        "FR-007": "In progress",
+        "FR-022": "In progress"
+      },
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_93ded349-85c5-4020-863c-79c10b6720b5:r1",
+      "type": "TEST_VERDICT",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T23:04:27+08:00",
+      "product_sha": "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc",
+      "branch": "feat/fr-013-016-main-batch",
+      "result": "P08/P09 15/15 scoped independent PASS, 39 affected regression PASS; FR007/022 NOT_READY",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6500333001",
+      "external_hashes": {
+        "P08-P09-e0be9b6d-INDEPENDENT-R1-REPORT.txt": "ce6c86503525a62f02dc1f703c1d374d2f72cbf397b70acebe1b23624c3a72e3",
+        "P08-P09-e0be9b6d-INDEPENDENT-R1-MATRIX.csv": "4edd610e7c26e9b0960d31a2db528fae01716b6cffa96e745b35377112b7b10b",
+        "P08-P09-e0be9b6d-INDEPENDENT-R1-EVIDENCE.zip": "5f59068b57efb261ed1a20dbef3fe0b8b72be8aa9783c4e02aa548f3ab829beb"
+      },
+      "project_status": {
+        "FR-007": "In progress",
+        "FR-022": "In progress"
+      },
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "issue4:fr016:ac15-ac17-combined-navigation:test:v0.3:1cdf394e:r1",
+      "type": "TEST_VERDICT",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T23:04:27+08:00",
+      "product_sha": "1cdf394eb954cd6ff15a48cc052edb64f6f093b4",
+      "branch": "feat/fr-013-016-main-batch",
+      "result": "FR016 28 PASS/1 PARTIAL G01/1 NOT_EXECUTED, 0 product FAIL; full card NOT_READY",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500333689",
+      "external_hashes": {
+        "Issue4-13-FR016-1cdf394e-COMBINED-R1-REPORT.txt": "45208edb54aa8eaa0e669d72b3cc78f12daa3e7cf3d465cf86c47250b437d583",
+        "Issue4-13-FR016-1cdf394e-COMBINED-R1-ASSERTIONS.csv": "289cfba5fc37516da9b45a63d92d05d4629e0999c1c9dab3f7450a8abb76ede0",
+        "Issue4-13-FR016-1cdf394e-COMBINED-R1-EVIDENCE.zip": "e590dbad7d97e58a87c980088a6ef98a58eaf30aded39e2290262298a0958866"
+      },
+      "project_status": {
+        "FR-016": "In progress"
+      },
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
