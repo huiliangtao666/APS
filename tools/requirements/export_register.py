@@ -110,6 +110,16 @@ def export(workbook_path=None, refresh=True):
         if applied:
             row['current_text'] = b['text'] + ''.join('\n\n[' + c['id'] + ' 批准增量]\n' + c.get('requirement_deltas',{}).get(b['id'],c['approved_delta']) for c in applied)
             row['code_reference'] = next((c.get('code_sha') for c in reversed(applied) if c.get('code_sha')),(commits[-1] if commits else ''))
+        accepted = re.search(r'<!-- aps-card-acceptance:(.*?) -->', body, re.S)
+        if accepted:
+            record = json.loads(accepted.group(1))
+            row['accepted_requirement_version'] = record['requirement_version'] + '；' + record['code_sha'] + '；' + record['test_delivery']
+            row['acceptance_record'] = record
+            if status == 'Done' and not applied:
+                row['code_reference'] = record['code_sha']
+                row['current_phase'] = '本卡适用需求已独立验收，Design复核完成'
+                row['blocker'] = ''
+                row['acceptance_result'] = record['conclusion']
         if uat_owner:
             row['owner'] += '；UAT业务验收：' + uat_owner
         requirements.append(row)

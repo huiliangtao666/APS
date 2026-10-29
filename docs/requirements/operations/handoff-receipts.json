@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "authority": "交接事件处理证据；实施状态仍以Project唯一原卡为准，不是第二需求主账",
+  "events": [
+    {
+      "event_key": "dlv_371e16a8-dc2b-444a-8cf5-3abd84f9bf3d:1",
+      "original_delivery": "dlv_371e16a8-dc2b-444a-8cf5-3abd84f9bf3d",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "received_via": "用户提示后Design主动查取原报告；未验证hook自动回传",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T12:22:44+08:00",
+      "audit_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/operations/test-done-eligibility-20261029.md",
+      "report_sha256": "9d6ca600cc709f374897300a46c98defb050050ae8b5574eac080f96460cc849",
+      "outcomes": [
+        {
+          "requirement": "FR-032",
+          "before": "In progress",
+          "after": "Done",
+          "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhAY",
+          "code_sha": "28ed8f8e422173f9b83d8a974e26ea9af6f09c8e"
+        },
+        {
+          "requirement": "FR-033",
+          "before": "In progress",
+          "after": "Done",
+          "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhB4",
+          "code_sha": "799f0882e610fca0b6ee1dfe64c52de84a04350a"
+        },
+        {
+          "requirement": "FR-034",
+          "before": "In progress",
+          "after": "In progress",
+          "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhDI",
+          "code_sha": ""
+        },
+        {
+          "requirement": "FR-035",
+          "before": "In progress",
+          "after": "Done",
+          "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhEU",
+          "code_sha": "cf6e76e23722f142a08c552aacb43c924fc62f19"
+        },
+        {
+          "requirement": "FR-036",
+          "before": "In progress",
+          "after": "Done",
+          "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhFg",
+          "code_sha": "d8c8c3ef00d2358f4e6effc0bad0e089b73d95d8"
+        },
+        {
+          "requirement": "FR-038",
+          "before": "In progress",
+          "after": "In progress",
+          "card": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhHk",
+          "code_sha": ""
+        }
+      ]
+    }
+  ]
+}
