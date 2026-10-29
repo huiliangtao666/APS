@@ -20,7 +20,7 @@ export function ExchangeGuide({current}:{current:TableDef}){
    <p><a href={url('examples/01_工厂与产线配置.csv')} download="01_工厂与产线配置.csv">工厂与产线示例（虚构测试值）</a> · <a href={url('examples/orders.csv')} download>主应用订单示例</a> · <a href={url('examples/supplies.csv')} download>预计到料示例</a> · <a href={url('examples/duplicate-orders.csv')} download>重复订单反例</a> · <a href={url('examples/bad-unit-orders.csv')} download>错单位反例</a> · <a href={url('examples/bad-reference-supplies.csv')} download>错引用反例</a> · <a href={url('examples/bad-date-supplies.csv')} download>错日期反例</a></p>
    <ul>{['orders','tasks','occupation','materials','unplanned','differences'].map((k,i)=><li key={k}><a href={url('exports/'+k+'.csv')} download>{['订单计划','任务计划','资源占用','物料需求','未排原因','方案差异'][i]}导出示例（不可回导）</a></li>)}</ul>
    <ul>{defs.filter(d=>['orders','routes','times','machines','dependencies','rules'].includes(d.key)).map(d=><li key={d.key}><a href={url('prototype-six/'+d.file)} download>独立原型六表：{d.file}</a></li>)}</ul>
-   <p>下列独立原型六表保留旧字段“合格需求kg”，不可直接用于主应用；主批导使用现行表头模板，须显式填写“合格需求”和“数量单位”，不会自动转换。完整案例及六类导出文件链接见中文说明和示例清单。箱换算、全规则业务验收和真实身份验收仍有限制。</p>
+   <p>下列独立原型六表保留旧字段“合格需求kg”，主批导可保真拆为“合格需求”和显式 kg；原订单缺少的拆分、需求类型、订单状态须逐行显式补录并重新预览。完整案例及六类导出文件链接见中文说明和示例清单。箱换算、全规则业务验收和真实身份验收仍有限制。</p>
   </details>
  </details>;
 }

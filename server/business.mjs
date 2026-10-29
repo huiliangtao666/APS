@@ -101,7 +101,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const before=target.data;const fromVersion=preserve(s,target);
     target.data=proposed;target.revision++;const toVersion=preserve(s,target);
     const batchId=randomUUID();
-    for(const key of changes)record(s,req,operation||'edit',key,{before:before[key],after:proposed[key],fromVersion,toVersion,batchId,trialId:trialId||null});
+    for(const key of changes)record(s,req,operation||'edit',key,{before:before[key],after:proposed[key],fromVersion,toVersion,batchId,trialId:trialId||null,...(req.csvSources?{csvSources:{[key]:req.csvSources[key]}}:{})});
     write(s);res.json({data:target.data,revision:target.revision,inputVersionId:toVersion});
   }
   // Preview and commit pass through exactly the same transition/history/validation gates.
@@ -113,12 +113,12 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     return result;
   }
   router.post('/imports/preview',permission('edit'),(req,res)=>{
-    const {files,revision,table}=req.body,s=read();
+    const {files,revision,table,repairs=[]}=req.body,s=read();
     if(revision!==s.revision)return res.status(409).json({error:'stale_input'});
     if(!Array.isArray(files)||!files.length||files.length>batchKeys.length||files.some(f=>!f||typeof f.name!=='string'||typeof f.text!=='string'||f.text.length>1000000))return res.status(400).json({error:'invalid_files'});
     const def=table===undefined?null:defs.find(d=>d.key===table&&d.key!=='factoryLines');
     if(table!==undefined&&(!def||files.length!==1))return res.status(400).json({error:'invalid_single_table'});
-    const inspection=def?inspectSingleCsv(files[0],def):inspectCsvBatch(files,defs);
+    const inspection=def?inspectSingleCsv(files[0],def):inspectCsvBatch(files,defs,repairs);
     if(table==='simulationEvents')inspection.tables.executionFacts=s.data.executionFacts||[];
     const base={tables:inspection.tables,sources:inspection.sources,revision,beforeTables:Object.fromEntries(Object.keys(inspection.tables).map(key=>[key,s.data[key]||[]]))};
     if(inspection.issues.length)return res.json({...base,valid:false,issues:inspection.issues});
@@ -126,7 +126,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(checked.status!==200)return res.status(checked.status).json({...base,valid:false,...checked.body});
     for(const [id,p] of csvPreviews)if(Date.now()-p.createdAt>15*60*1000)csvPreviews.delete(id);
     if(csvPreviews.size>=100)return res.status(429).json({error:'preview_capacity'});
-    const id=randomUUID();csvPreviews.set(id,{owner:subjectKey(req.praetorActor),createdAt:Date.now(),stateHash:contentHash(s),revision,table,files:structuredClone(files)});
+    const id=randomUUID();csvPreviews.set(id,{owner:subjectKey(req.praetorActor),createdAt:Date.now(),stateHash:contentHash(s),revision,table,files:structuredClone(files),repairs:structuredClone(repairs)});
     res.json({...base,id,valid:true,issues:[]});
   });
   router.post('/imports/commit',permission('edit'),(req,res)=>{
@@ -134,10 +134,10 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(!p||p.owner!==subjectKey(req.praetorActor)||Date.now()-p.createdAt>15*60*1000)return res.status(409).json({error:'preview_expired_or_unowned'});
     if(p.revision!==s.revision||p.stateHash!==contentHash(s))return res.status(409).json({error:'stale_preview'});
     // Ignore caller-supplied tables/actor/revision; reparse the server-owned original files.
-    const inspection=p.table?inspectSingleCsv(p.files[0],defs.find(d=>d.key===p.table)):inspectCsvBatch(p.files,defs);
+    const inspection=p.table?inspectSingleCsv(p.files[0],defs.find(d=>d.key===p.table)):inspectCsvBatch(p.files,defs,p.repairs);
     if(p.table==='simulationEvents')inspection.tables.executionFacts=s.data.executionFacts||[];
     if(inspection.issues.length)return res.status(400).json({error:'invalid_input',issues:inspection.issues});
-    const checked=checkCsv({...req,body:{reason:req.body.reason,revision:p.revision,operation:'import'}},s,inspection,false);
+    const checked=checkCsv({...req,csvSources:inspection.sources,body:{reason:req.body.reason,revision:p.revision,operation:'import'}},s,inspection,false);
     if(checked.status===200)csvPreviews.delete(req.body.previewId);
     res.status(checked.status).json(checked.body);
   });
