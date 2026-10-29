@@ -23,6 +23,7 @@ export function related(data,table,index){
  if(table==='rules'&&row['规则编号'])(data.tasks||[]).forEach((r,i)=>{if((r['方案记录规则']||'').split('、').includes(row['规则编号']))results.push({table:'tasks',index:i});});
  if(table==='tasks')(data.rules||[]).forEach((r,i)=>{if(r['规则编号']&&(row['方案记录规则']||'').split('、').includes(r['规则编号']))results.push({table:'rules',index:i});});
  const edges=[
+ ['factoryLines','machines',['产线编号']],['factoryLines','orders',['产线编号']],['factoryLines','calendars',['工厂编号']],['factoryLines','factoryLines',['工厂编号']],
  ['executionFacts','executionSources',['事实编号']],['executionSources','executionMaterials',['事实编号']],['orders','executionFacts',['订单编号']],['executionFacts','executionMaterials',['事实编号']],['materials','executionMaterials',['物料编号']],['inventory','executionMaterials',['批次编号']],
  ['products','orders',['产品编号']],['products','routes',['产品编号']],['products','times',['产品编号']],['products','bom',['产品编号']],['products','tasks',['产品编号']],
  ['materials','inventory',['物料编号']],['materials','supplies',['物料编号']],['materials','bom',['物料编号']],
@@ -36,7 +37,7 @@ export function related(data,table,index){
  ['resourceClaims','tasks',['订单编号','工序编号']],['executionFacts','tasks',['订单编号','工序编号']],['executionFacts','dependencies',['订单编号','工序编号']]
  ];
  for(const [a,b,keys] of edges){const target=table===a?b:table===b?a:null;if(!target)continue;
-  (data[target]||[]).forEach((other,i)=>{if(pair(row,other,keys))results.push({table:target,index:i});});
+  (data[target]||[]).forEach((other,i)=>{if(!(target===table&&i===index)&&pair(row,other,keys))results.push({table:target,index:i});});
  }
  // Explicit resource declarations have their own type namespace; never join a
  // similarly named tool, space and machine merely because their IDs coincide.

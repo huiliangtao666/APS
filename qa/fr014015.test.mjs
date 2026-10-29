@@ -3,7 +3,7 @@ import {defs} from '../server/planner.ts';import {recordKeys,validateInputs} fro
 import {recordIdentity} from '../src/lib/record-identity.mjs';import {related,filterRows,displayValue} from '../src/lib/data-query.mjs';
 import {categoryInputs} from './fr014015-fixture.mjs';
 test('24 category fixtures are genuine valid inputs; identity keys stay equal to save validator',()=>{
- for(const execution of [false,true]){const d=categoryInputs(execution,true);assert.deepEqual(validateInputs(defs,d),[]);for(const def of defs){assert.ok(recordKeys[def.key]);if(d[def.key].length)assert.ok(recordIdentity(def.key,d[def.key][0]).includes(recordKeys[def.key][0]));}}
+ for(const execution of [false,true]){const d=categoryInputs(execution,true);assert.deepEqual(validateInputs(defs,d),[]);for(const def of defs){assert.ok(recordKeys[def.key]);if(d[def.key]?.length)assert.ok(recordIdentity(def.key,d[def.key][0]).includes(recordKeys[def.key][0]));}}
 });
 test('new resource/event/execution relationships are explicit, bidirectional and type scoped',()=>{
  const d=categoryInputs(true,true);d.tools.push({...d.tools[0],'工装编码':'SPACE1'});

@@ -1,5 +1,5 @@
 import {migratePolicies} from '../src/lib/resource-policies.mjs';
-import {inspectCsvBatch,physicalIssues} from './csv-batch.mjs';
+import {inspectCsvBatch,physicalIssues,batchKeys} from './csv-batch.mjs';
 import {taskPosition,movableTask,positionGuard,positionToken,freezePositions,evaluatePosition} from './trial-positions.mjs';
 import {scopedReport,reportCsv} from './scoped-report.mjs';
 import {resourceLoad,loadCsv} from '../src/lib/resource-load.mjs';
@@ -114,7 +114,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   router.post('/imports/preview',permission('edit'),(req,res)=>{
     const {files,revision}=req.body,s=read();
     if(revision!==s.revision)return res.status(409).json({error:'stale_input'});
-    if(!Array.isArray(files)||!files.length||files.length>6||files.some(f=>!f||typeof f.name!=='string'||typeof f.text!=='string'||f.text.length>1000000))return res.status(400).json({error:'invalid_files'});
+    if(!Array.isArray(files)||!files.length||files.length>batchKeys.length||files.some(f=>!f||typeof f.name!=='string'||typeof f.text!=='string'||f.text.length>1000000))return res.status(400).json({error:'invalid_files'});
     const inspection=inspectCsvBatch(files,defs);
     const base={tables:inspection.tables,sources:inspection.sources,revision};
     if(inspection.issues.length)return res.json({...base,valid:false,issues:inspection.issues});

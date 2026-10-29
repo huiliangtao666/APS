@@ -1,0 +1,34 @@
+Issue4/12 FR013/014/015 — original 01 category, APS-BL-001 v0.3 chapter9.1
+Original delivery: dlv_52f5ecfe-75de-4c1d-be9e-d1352cdaba38; result event_key same ID + :r1.
+Parent: ca13c6d26a40eb329011c0fa66a747aa735570da, feat/fr-013-016-main-batch.
+This implements the explicitly assigned existing category only. No CR-DEC04/05/06 product implementation, new scheduling capability, main merge or publication.
+
+Representation and references
+factoryLines contains exactly 工厂编号/工厂名称/产线编号/产线名称/时区, all strings.
+One record per globally unique line ID: existing machines and orders already reference scalar 产线编号 with no factory component. That existing namespace is retained. Same factory ID has one consistent name; multiple registry records may describe lines of a factory, but the existing single-line validator still rejects multi-line scheduling orders/machines. No workstation model is added.
+Orders/machines 产线编号 -> factoryLines 产线编号; calendars 工厂编号 -> factoryLines 工厂编号. A machine's explicitly selected calendar must belong to its line's factory. No reference guessing or factories inferred from calendars. Query links are exact and bidirectional. Same-factory sibling line records allow factory -> line -> existing device navigation.
+All five fields required; line ID unique; timezone validated against runtime IANA name support (aliases accepted). No quantities/dates in this category. Timezone is descriptive configuration; this delivery does not convert or change the existing fixed minute origin. Names/timezones must be supplied explicitly. Test sample F01/L01/Asia/Shanghai is fictional and is not installed as a seed or business default.
+
+Compatibility / activation / rollback
+Legacy data without the factoryLines key remains explicitly unconfigured and readable/editable under previous checks; no field is synthesized and no historical version is migrated. The data page identifies this state. An explicit first 01 save/import activates complete reference validation; all existing machine/order/calendar references must be covered in the proposed merged state. An explicitly saved empty array is not the legacy absence state: remaining references reject it. Current save requests cannot erase the key to bypass checking. Restoring historical data remains guarded by the existing restore policy.
+Rollback source to parent if needed; back up current business.json first. No automatic reverse migration or deletion is provided; historical inputVersions and confirmation bytes remain intact. A parent runtime cannot maintain the new category, so revert only as an operator-reviewed code rollback; do not silently discard newly supplied data.
+
+Persistence and historical protection
+All save/import entry points share server/input-validation.mjs and existing atomic rename, revision, inputVersions, trusted membership and operation audit. A current edit/deletion always creates a new input version; it never edits the version/plan/confirmation referenced by a confirmed scheme. In-use references block invalid line/factory removal or reassignment. Legal renames and unreferenced copies/deletions persist in a new version. The original confirmed row remains queryable through its exact input snapshot. No request can select an old inputVersion for in-place modification. Missing/corrupt protected history blocks saves under the existing guard. This is the existing FR015 versioned-edit contract, not a new arbitrary prohibition on current new-version edits.
+
+CSV and UI
+Chinese five-field header template and fictional sample are downloadable in the existing ExchangeGuide. Original01 uses the batch preview path in the UI; direct single-table upload is disabled for this category with instructions to preview above. Batch preview parses physical CSV records, shows all fields/line issues, writes no business data. Commit rechecks owner/token/revision/state hash and validation atomically. Identical table sets do not append rows or audit records. Existing six categories remain accepted. List/keyword filtering/detail/exact reference links and planner/supervisor add/edit/copy/allowed delete reuse the existing React controls. Query role is read only. Input versions are refreshed/reopened from the persistent API.
+
+Reproduction in disposable application container
+Use aps-fr038-qa-runtime:latest and copy this checkout over /workspace/apps/aps-fr032 excluding .git/node_modules/dist, keeping image dependencies. Bind an empty output directory at /evidence and an available Playwright Chromium cache read-only at /root/.cache/ms-playwright. No live application data is used.
+node --experimental-strip-types --test qa/factory-line-01.test.mjs
+npm test
+npm run build
+node --experimental-strip-types --test qa/fr013-main.test.mjs qa/fr014015.test.mjs qa/execution-facts.test.mjs qa/simulation-events.test.mjs qa/confirmation.test.mjs qa/dec0203.test.mjs qa/dec0203-repair-r1.test.mjs qa/fr036-contract.test.mjs
+node --test src/lib/data-query.test.mjs src/lib/skill-rel01.test.mjs
+node --experimental-strip-types qa/factory-line-01-browser.mjs
+node --experimental-strip-types qa/factory-line-fresh-browser.mjs
+For the skill regression, place the previously received Test initial-inputs.json under /evidence/skill/original/; run qa/factory-line-skill-browser.mjs. This is a replay of synthetic Test inputs plus explicit test-only 01 mapping, not re-signing old independent PASS.
+
+Evidence boundaries
+QA-only actor/runtime seams use real React/Express/stored membership in disposable containers; they are not real Gateway/SSO or business UAT. APS-Test must independently take the new GitHub SHA and judge only the assigned 01 assertions. Old FR014 skill PASS and FR015 four-fresh PASS retain their old SHAs. The new Dev regression results are separately attributed. No other card's Done or QA UAT is claimed.

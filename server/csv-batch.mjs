@@ -1,14 +1,14 @@
 import {parseInputCsvRecords} from '../src/lib/input-csv.mjs';
 // The isolated prototype used these same table keys, but older field shapes.
 // Reuse physical-record parsing/inspection; actual runtime defs are authoritative.
-export const batchKeys=['orders','routes','times','machines','dependencies','rules'];
+export const batchKeys=['factoryLines','orders','routes','times','machines','dependencies','rules'];
 export const optionalFields={orders:['已完成合格数量'],dependencies:['候选人员组','所需班次','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'],rules:['适用对象','生效时间']};
 export function inspectCsvBatch(files,defs){
  const tables={},sources={},issues=[],seen=new Set();
  const add=(file,row,field,reason,extra={})=>issues.push({file,row,field,reason,message:reason,severity:'error',...extra});
  for(const file of files){
   const def=defs.find(d=>d.file===file.name&&batchKeys.includes(d.key));
-  if(!def){add(file.name,1,'文件','不属于当前批导六表；请使用现行中文文件名及模板');continue;}
+  if(!def){add(file.name,1,'文件','不属于当前支持的批导类别；请使用现行中文文件名及模板');continue;}
   if(seen.has(def.key)){add(file.name,1,'文件','同一批次包含重复表');continue;}seen.add(def.key);
   let raw;try{raw=parseInputCsvRecords(file.text,{whitespace:true}).filter(r=>r.cells.some(c=>c.trim()));}catch(e){add(file.name,e.line||1,'CSV 格式',e.message);continue;}
   if(raw.length<2){add(file.name,1,'表头','CSV 必须包含表头和至少一行数据');continue;}

@@ -108,7 +108,7 @@ test('FR014 query export re-reads authoritative filtered rows, preserves grant a
 test('FR014 all UI category schemas match authoritative server definitions and can export current read view',async t=>{
  const {defs:uiDefs}=await import('../src/data-defs.ts');const {defs:serverDefs}=await import('./planner.ts');assert.deepEqual(uiDefs,serverDefs);
  const {call}=await fixture(t);const state=(await call('/state')).body;
- for(const def of uiDefs){const r=await call('/export',{query:{table:def.key,revision:state.revision,filters:{}}});assert.equal(r.status,200,def.key);assert.equal(r.body.split('\r\n').length,state.data[def.key].length+1,def.key);}
+ for(const def of uiDefs){const r=await call('/export',{query:{table:def.key,revision:state.revision,filters:{}}});assert.equal(r.status,200,def.key);assert.equal(r.body.split('\r\n').length,(state.data[def.key]||[]).length+1,def.key);}
 });
 
 test('FR015 identical replacement imports are idempotent; no duplicate quantities or version/audit churn',async t=>{

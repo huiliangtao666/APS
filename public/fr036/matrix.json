@@ -30,8 +30,10 @@
     {
       "number": 1,
       "category": "工厂与产线配置",
-      "tables": [],
-      "limitation": "无独立01导入；F01/L01边界由日历/设备/订单表达，不能导入任意工厂/多线"
+      "tables": [
+        "factoryLines"
+      ],
+      "limitation": "显式01五字段映射；旧数据未配置不回填；排程保持单线，时区不改变分钟基准"
     },
     {
       "number": 2,
@@ -186,6 +188,36 @@
     }
   ],
   "inbound": [
+    {
+      "key": "factoryLines",
+      "label": "工厂与产线",
+      "file": "01_工厂与产线配置.csv",
+      "fields": [
+        "工厂编号",
+        "工厂名称",
+        "产线编号",
+        "产线名称",
+        "时区"
+      ],
+      "uniqueKey": [
+        "产线编号"
+      ],
+      "references": "机器/订单产线→01产线；日历工厂→01工厂；机器日历工厂必须与产线工厂一致；首次录入覆盖全部现有引用",
+      "units": "五字段均为文本；时区为IANA名称；无数量/日期字段",
+      "example": "examples/01_工厂与产线配置.csv",
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "工厂与产线模拟配置提供方",
+      "direction": "inbound-simulation",
+      "template": "templates/01_工厂与产线配置.csv",
+      "dates": [],
+      "version": "服务端revision并发保护；运行inputVersionId冻结原输入；旧数据不回填",
+      "validation": [
+        "server/input-validation.mjs#validateInputs",
+        "src/lib/factory-lines.mjs#validateFactoryLines"
+      ]
+    },
     {
       "key": "simulationEvents",
       "label": "模拟异常事件（先更新时点事实）",
@@ -1243,7 +1275,7 @@
   ],
   "unsupported": [
     "真实连接、订阅、外部写回、生产指令、真实账号",
-    "独立工厂/产线01表、P1多线、预测去重补库、复杂分支返工",
+    "P1多线、预测去重补库、复杂分支返工",
     "MES外部稳定任务ID协商、更新顺序/频率/权限/冲突解决均待D3批准"
   ],
   "metadataConvention": "来源方是模拟责任划分，非已连接或已认证来源；额外元数据写sidecar，不加未知CSV列；模版仅表头不能直接导入；示例必须在声明的fixture上下文使用"

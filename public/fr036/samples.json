@@ -4,6 +4,15 @@
   "metadataPolicy": "sidecar-only; do not append unsupported CSV columns",
   "samples": [
     {
+      "file": "examples/01_工厂与产线配置.csv",
+      "contract": "main-single-table",
+      "table": "factoryLines",
+      "expected": "accept",
+      "context": "现有seed的F01/L01引用；名称/时区为虚构测试值，非业务默认；不自动写入seed",
+      "simulation": true,
+      "sha256": "5bdc7cacc6204809e2cb824a2b40d83eb147bf1fb49bf1c9d2e1d22f35cbe45c"
+    },
+    {
       "file": "examples/orders.csv",
       "contract": "main-single-table",
       "table": "orders",
