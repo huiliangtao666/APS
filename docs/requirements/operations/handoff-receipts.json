@@ -1368,6 +1368,58 @@
         "FR-015": "Done"
       },
       "repair_rounds_added": 0
+    },
+    {
+      "event_key": "dlv_69486ac0-f8c0-4cd1-bcac-cad4bc48b5a1:r1",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test original delivery and Files API originals",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-29T19:44:04+08:00",
+      "requirement": "FR-013 / Issue #4",
+      "product_sha": "66af9caceb57eff429dd8b14bbad690f62bfe749",
+      "parent_sha": "ca13c6d26a40eb329011c0fa66a747aa735570da",
+      "branch": "feat/fr-013-016-main-batch",
+      "result": "PARTIAL/NOT_READY: 29 PASS, 2 first-confirmed product FAIL (PRE01, LOC01), 13 implementation gaps, 7 contract gaps, 4 contract/context gaps, 2 preview-only PASS; original01 37/37 PASS preserved",
+      "external_hashes": {
+        "FR013-02-19-66af9cac-INDEPENDENT-R1-REPORT.txt": {
+          "bytes": 16904,
+          "sha256": "b834d2da0895bfc34c91f5f29d9dba73567533662c37eab8f42e3cb226f9c8ec"
+        },
+        "FR013-02-19-66af9cac-INDEPENDENT-R1-COVERAGE.csv": {
+          "bytes": 40967,
+          "sha256": "21f4599ae10e3326452c81bafe48fffaa209ce817e796ebddb189021789e0449"
+        },
+        "FR013-02-19-66af9cac-INDEPENDENT-R1-ASSERTIONS.csv": {
+          "bytes": 164948,
+          "sha256": "890d015e32993dbbb6a5fd13fffa9fd806c0f9406d9c6f1041214ddf7f2b97bd"
+        },
+        "FR013-02-19-66af9cac-INDEPENDENT-R1-REPRO-LOC01.csv": {
+          "bytes": 205,
+          "sha256": "794272042096d64290e4a6faded6d11a6074ed57e8f3c287bfbff4542117ac24"
+        },
+        "FR013-02-19-66af9cac-INDEPENDENT-R1-REPRO-PRE01.csv": {
+          "bytes": 207,
+          "sha256": "70621bee24dd68d8dc68c84162b954ce6c2497f47312e62acb0b2f2f9f47cb21"
+        },
+        "FR013-02-19-66af9cac-INDEPENDENT-R1-EVIDENCE-SHA256.json": {
+          "bytes": 18631,
+          "sha256": "b8db6f2ba898cf4080036ed572cbe8e05bed72b6a51cad2e7367ae085daac2f4"
+        },
+        "FR013-02-19-66af9cac-INDEPENDENT-R1-EVIDENCE.zip": {
+          "bytes": 3739556,
+          "sha256": "16f66010c440c12fad793e8e539e4ced0dbca19390c843f919a4a071090897b1"
+        }
+      },
+      "internal_hashes_verified": 187,
+      "zip_crc": "PASS",
+      "evidence_index_case_only_mismatches": 14,
+      "issue4_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6495725733",
+      "project_status": {
+        "FR-013": "In progress"
+      },
+      "repair_rounds_completed": 0,
+      "next_owner": "APS-Dev for first repair round; scope limited to PRE01 and LOC01",
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
