@@ -3562,6 +3562,110 @@
       "defect": "FR016-P29-COLLISION-SOURCE-01",
       "independent_test": "PENDING",
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_63336439-9b12-49f3-8825-c5925e81773b:c1",
+      "original_delivery": "dlv_63336439-9b12-49f3-8825-c5925e81773b",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T06:22:51+08:00",
+      "requirement": "FR-016/Issue4",
+      "product_sha": "723fea514931a05ddb276bda4d0842cb9d90d255",
+      "result": "P29 COLLISION-SOURCE-01首轮新723fea51独立12 PASS/2 BLOCKED/1未执行、0产品FAIL；原库存与预计供给双方来源在React和生产Worker可定位，缺陷关闭，修复轮次1/最多2；P28晚期及P29 helper自然入口仍缺，FR016整卡NOT_READY",
+      "external_hashes": {
+        "FR016-P29-COLLISION-SOURCE-01-723fea51-Test1-c1-SHA256.json": "da4192da0ab6e22a438b6fe55fe064973663e244e1eaea065a9c6d862081dc18",
+        "FR016-P29-COLLISION-SOURCE-01-723fea51-Test1-c1-REPORT.md": "27bbbc1dbfc8e0b6b53630dc3949ca8aabb355064568f5b2882e3405cf8eaa41",
+        "FR016-P29-COLLISION-SOURCE-01-723fea51-Test1-c1-MATRIX.csv": "5ae9f3fec5c9c933cbe01d9e9a1fd2cc586e4ac1d197d17eccef9986c3ff1418",
+        "FR016-P29-COLLISION-SOURCE-01-723fea51-Test1-c1-EVIDENCE.zip": "d70d79183e3412639b109e3777be303023008d2f999e1c2d71ba99daeee5df93"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 15,
+      "project_status": {
+        "FR-016": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6509700396",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES",
+      "confirmed_product_defects_closed": [
+        "FR016-P29-COLLISION-SOURCE-01"
+      ],
+      "repair_round_total": 1
+    },
+    {
+      "event_key": "dlv_880e4076-c2df-43f0-a32a-279ceca673e9:c1",
+      "original_delivery": "dlv_880e4076-c2df-43f0-a32a-279ceca673e9",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T06:22:51+08:00",
+      "requirement": "FR-016/Issue4",
+      "product_sha": "240605f1683189a27857aba473f9084c073af039",
+      "result": "U2固定240605f1真实浏览器46 PASS/1 PARTIAL/1 BLOCKED/5未执行，0新增产品FAIL；当前来源查询/V2编辑保存刷新通过，已保存目标问题重开仍缺自然入口，旧结论留原SHA；整卡NOT_READY",
+      "external_hashes": {
+        "FR016-U2-BROWSER-V2-240605f1-Test1-c1-EVIDENCE.zip": "d05101e74784fd12c3d11ea0dc4bd9d668bbbcde1058d66190352b723cffffaf",
+        "FR016-U2-BROWSER-V2-240605f1-Test1-c1-MATRIX.csv": "6d8bb84405eed47864bd2a15ed260026fad9d3f4522c2f51486a292141135bde",
+        "FR016-U2-BROWSER-V2-240605f1-Test1-c1-REPORT.md": "1c02b7bab7755dce0adafc8244f225f18aabdb8c75514a4f4018990f45d1487a",
+        "FR016-U2-BROWSER-V2-240605f1-Test1-c1-SHA256.json": "0fd6a9d61123a4e0edac80fdbf451a70bd8556a0834b276cea7c0d1374b5b4c2"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 53,
+      "project_status": {
+        "FR-016": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6509700994",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_bd3971bd-4815-41af-8a39-6efac00b2efd:c1",
+      "original_delivery": "dlv_bd3971bd-4815-41af-8a39-6efac00b2efd",
+      "type": "TEST_EVIDENCE",
+      "source": "APS-Test2",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T06:22:51+08:00",
+      "requirement": "FR-038",
+      "product_sha": "8741bf0a597fa11838a514259d8ffe7980382ee2",
+      "result": "AC27探索性18合成档/62次Worker结果，最大12.834秒仅属隔离2CPU/4GiB观察；2048单两工序构造上限4096与结果3993任务口径不一致待Test2解释。正式规模/规则/环境/计时边界未确认，不判产品PASS/FAIL，FR038 NOT_READY",
+      "external_hashes": {
+        "FR038-AC27-8741bf0a-Test2-C1-evidence.zip": "e00424358569423f642a61d9075a5a84c5f55e2e2e5c640c2b77761506521653",
+        "FR038-AC27-8741bf0a-Test2-C1-sha256.json": "7df0d88ae681fe4f31d71c1cca716e7f56c73f8f6532d467b4603975c6e7bbf5",
+        "FR038-AC27-8741bf0a-Test2-C1-tiers.csv": "6c06eb771c099152b608e1fd060adc993887cbe07b1c3c38af8f0d3586930544",
+        "FR038-AC27-8741bf0a-Test2-C1-report.md": "cae4146342f0550e06600d83bc731305f16d036c351e1ca6994285af1d7c7e21",
+        "FR038-AC27-8741bf0a-Test2-C1-runs.csv": "f311979c83ea34c71f5fd26fc0831d3ba4c99edf5fd5c5a9be79d74f4fbff7e2"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 62,
+      "project_status": {
+        "FR-038": "In progress"
+      },
+      "issue_comment": null,
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_618a4082-3137-4415-abb1-46007f423a4f:r1",
+      "original_delivery": "dlv_618a4082-3137-4415-abb1-46007f423a4f",
+      "type": "DESIGN_SPEC_PROPOSAL",
+      "source": "APS-Design",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T06:22:51+08:00",
+      "requirement": "FR-038",
+      "product_sha": null,
+      "result": "AC27 C01–C12正式规模、规则、环境、计时与取消体验确认提案已收；全部仍待用户/产品/计划主管输入与批准。候选起止及2秒/5秒取消值未生效；Test2任务数3993/4096口径差异待澄清；不判产品PASS/FAIL，FR038 NOT_READY",
+      "external_hashes": {
+        "FR038-AC27-业务规格确认提案-c1.html": "47847d9c18386b679affa4e6c753d6cb7dd7435bbe38ce31a23b409714259971",
+        "FR038-AC27-业务规格确认提案-c1-sha256.json": "71ee0c019c96e23bc8a50932c30ca773ef636d8663d0648ae4978603de054436",
+        "FR038-AC27-业务规格确认提案-c1.zip": "a6b3f7638c25172bb1bd4c38943d52a8110518a28045f31a89f76cd72cf4aaf3"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 12,
+      "project_status": {
+        "FR-038": "In progress"
+      },
+      "issue_comment": null,
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }

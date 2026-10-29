@@ -538,7 +538,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR038性能目标暂定；须补齐测试负载与环境才可验收",
-      "implementation_status": "用户业务决定已登记；应用实现与独立Test尚未交付",
+      "implementation_status": "Exploratory Worker-only 18 synthetic tiers/62 results on 8741bf0a; Design C01-C12 formal scope proposal pending user/product/planning owner facts and approval; no formal AC27 test",
       "primary_requirements": [
         "FR-038"
       ],
@@ -558,7 +558,7 @@
       "acceptance_delta": "固定输入/环境/版本后独立测量排程耗时≤30秒，并验证较长计算可取消、状态不假报及失败不破坏方案/源数据。",
       "issue_url": "",
       "related_issue_urls": [],
-      "acceptance_result": "未进行本CR产品验收；旧原范围PASS保留原SHA",
+      "acceptance_result": "No AC27 product PASS/FAIL; 30s provisional only; formal scenario/measurement environment unspecified; 2048-order 4096 upper bound versus 3993 output task count needs evidence clarification",
       "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
       "history": [
         {

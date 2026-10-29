@@ -1,6 +1,6 @@
 # 当前需求跟踪表
 
-快照：2026-10-30T06:12:01+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
+快照：2026-10-30T06:23:15+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
 
 | 编号 | 名称 | 要求版本 | 生效CR | 原卡状态 | 当前环节 | 验收结论 | 原卡 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -19,7 +19,7 @@
 | FR-013 | 各类CSV模拟数据导入 | v0.3+CR-FR013-VALIDATION-20261029 | CR-FR013-VALIDATION-20261029 | In progress | FR013-NONDEVICE-REF-01首轮修复e7881a9独立43 PASS/0 FAIL，缺陷关闭；完整原输入及其余映射仍待契约与实现 | 首轮修复e7881a9独立43 PASS，缺陷关闭1/最多2；FR013整卡NOT_READY | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgrg) |
 | FR-014 | 各类模拟数据查询 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | FR-014当前适用责任51/51PASS；原01唯一PARTIAL在新SHA独立PASS，其他旧PASS留原SHA；后续未提供类别/QA UAT另列 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgs4) |
 | FR-015 | 各类模拟数据编辑 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | FR-015当前适用责任109/109PASS；原01唯一PARTIAL在新SHA独立PASS，其他旧PASS留原SHA；后续未提供类别/QA UAT另列 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgto) |
-| FR-016 | 数据检查与问题处理 | v0.3 |  | In progress | P29冲突来源首轮Dev交付723fea51；待APS-Test独立定向复测；U2仍部分结果 | P29旧240605f1产品FAIL保留；新723fea51仅Dev PASS待独立Test；整卡FR016 NOT_READY | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgu4) |
+| FR-016 | 数据检查与问题处理 | v0.3 |  | In progress | P29新723fea51首轮独立12 PASS，COLLISION-SOURCE-01关闭；U2旧240605f1浏览器46 PASS/1 PARTIAL/1 BLOCKED/5未执行 | P29首轮修复独立PASS，轮次1/最多2；FR016整卡NOT_READY | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgu4) |
 | FR-017 | 业务规则配置与启用 | v0.3+CR-DEC02-03-20261029+CR-DEC04-05-06-20261029 | CR-DEC02-03-20261029、CR-DEC04-05-06-20261029 | Done | CR-DEC02-03-20261029：P10 E01-E04 7ae4ca8 independent 18 PASS/4 PARTIAL/22 BLOCKED/0 FAIL; N06 finite design available, product pending; U01/U02/full CR NOT_READY；CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 基线原范围历史记录保留；FR017当前适用实现责任独立PASS；FR007/022及完整CR和业务UAT未通过；原S06/S07与D01-D03有限结果保留；本CR仅设计/mock数据核验；产品实现和验收未开始 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgv4) |
 | FR-018 | 选择计算范围并保存输入 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | v0.3本卡适用责任断言全部独立PASS；原六条PASS按原SHA/来源保留，本轮18-06及A1–A5 PASS解除唯一阻断。Design接受完整产品SHA，FR018 Done。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgxI) |
 | FR-019 | 最小排程：机器与工序顺序 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | v0.3本卡全部适用责任断言独立PASS，Design复核接受；无本范围阻断或必测未执行，Done。不是全项目UAT或上线。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgyQ) |
@@ -41,7 +41,7 @@
 | FR-035 | 查询、报表与文件导出 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | v0.3本卡全部适用责任断言独立PASS，Design按原文复核后接受；无本范围阻断，Done。不是全项目UAT签收或应用上线。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhEU) |
 | FR-036 | 外部系统接口说明与模拟替代 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | v0.3本卡全部适用责任断言独立PASS，Design按原文复核后接受；无本范围阻断，Done。不是全项目UAT签收或应用上线。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhFg) |
 | FR-037 | 简单权限与操作记录 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | v0.3本卡25条适用责任断言25 PASS；Design复核接受固定产品SHA，无本卡阻断，Done。部署/平台四层与业务UAT未签收，历史范围及原SHA保留。 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhGM) |
-| FR-038 | 运行记录与故障提示 | v0.3+CR-FR038-PERF-20261029 | CR-FR038-PERF-20261029 | In progress | 排程30秒内暂定目标已登记；AC27规模/规则组合/环境待确认 | 旧有限功能证据保留原SHA；暂定30秒目标待固定场景后独立量测；整卡NOT_READY | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhHk) |
+| FR-038 | 运行记录与故障提示 | v0.3+CR-FR038-PERF-20261029 | CR-FR038-PERF-20261029 | In progress | 固定8741bf0a探索18档/62次Worker结果，最大12.834秒；C01–C12正式规格提案待确认 | 探索量测不判AC27产品PASS/FAIL；FR038整卡NOT_READY | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhHk) |
 | FR-039 | 多条产线及适用范围 | v0.3 |  | Backlog | 尚未开始；新功能分发暂停 | 未登记原需求完整版本验收；有限通过证据见原卡 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhJE) |
 | FR-040 | 多线分配与共享资源 | v0.3 |  | Backlog | 尚未开始；新功能分发暂停 | 未登记原需求完整版本验收；有限通过证据见原卡 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhKQ) |
 | FR-041 | 预测需求与补库策略 | v0.3 |  | Backlog | 尚未开始；新功能分发暂停 | 未登记原需求完整版本验收；有限通过证据见原卡 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhL8) |
