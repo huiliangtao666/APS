@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "Dev已交付；独立产品验收已派发（In review）",
+      "implementation_status": "独立验收未通过；D01/D02/D03各第1轮修复执行中（In progress）",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/DEC02-03-Delivery-2026-10-29.md",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_fdad89b2-cb94-49fb-bb7c-8cd83b653e97",
-      "acceptance_result": "尚无本次新SHA完整独立验收结论，不得标已验收/Done",
+      "acceptance_result": "Test固定0d2de88独立48项：23通过、18部分、3失败、2范围未满足、2不可表达；完整CR及UAT未通过，待修复push后独立复测",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -80,6 +80,28 @@
         {
           "date": "2026-10-29",
           "event": "登记基线清单与变更台账；原卡和原验收历史保留"
+        }
+      ],
+      "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
+      "repair_delivery": "dlv_105360d7-1929-489d-85b3-d769a1e15db6",
+      "defects": [
+        {
+          "id": "DEC0203-D01",
+          "round": 1,
+          "status": "Dev修复执行中，尚无已push修复交付",
+          "description": "检查器信任被检结果自报规则，删除MOLD及工装账可绕过冻结启用配置"
+        },
+        {
+          "id": "DEC0203-D02",
+          "round": 1,
+          "status": "Dev修复执行中，尚无已push修复交付",
+          "description": "明确窗口人员开始偏移空值可保存并隐式0，须原子拒绝且显式0合法"
+        },
+        {
+          "id": "DEC0203-D03",
+          "round": 1,
+          "status": "Dev修复执行中，尚无已push修复交付",
+          "description": "未到生效时间的MOLD误拦合法执行事实，须按实际生效范围判断"
         }
       ]
     }
