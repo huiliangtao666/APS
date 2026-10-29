@@ -1,0 +1,59 @@
+Issue3 / CR-DEC02-03 P10 E01–E04 限定交付 r1
+原delivery dlv_4a6b539d-352c-4925-8283-d6ef1e5d7aaa
+交接event_key dlv_4a6b539d-352c-4925-8283-d6ef1e5d7aaa:r1
+派工键 issue3:cr-dec02-03:p10-e01-e04-pool-identity:dev:v0.3:7a26732:r1
+
+结果 PARTIAL；本次无待决依赖可表达的单产线共享开启普通岗位链路Dev PASS。
+矩阵44条：19 PASS、4 PARTIAL、21 BLOCKED（条件U01/U02样例未执行）。整卡NOT_READY；UAT WAITING_DEPENDENCIES。
+无新增产品FAIL，修复轮次+0。本次是范围缺口补证及解释完善，不重开D01-D03 round1。
+
+来源与版本
+需求 APS-BL-001 v0.3 FR007/FR022 BR07 AC07/15 + 生效CR-DEC02-03-20261029；相关AC17/24/32。
+实时GitHub读取Issue3正文/30评论、Project2两唯一原卡（均In progress）及main
+ d6b8d2ec2d3efeace82d2d4f18d0ec433db7ae25 的原基线与CR；未改卡/Issue。
+受检产品分支 feat/issue3-p06-multishift SHA 7a26732efc0fb440ca6f8ac7aa6261e33757eb81，
+其直接父2016258169074d1e29292e5a3e58a0fa9304b4bf；新分支直接以7a26732为父。
+新产品分支 feat/issue3-p10-e01-e04；最终完整SHA在外层HANDOFF.json，不用文档SHA冒充产品。
+设计文档固定SHA 9c230d4aeda124915bcb917b929050f020a11951，PM根目录副本ZIP/CSV已核；
+原E01–E04数值样例7条逐项转换为产品输入，预期取原设计legal，不用算法自报值作预期。
+
+已有实现复用与本次变更
+7a26732已包含beae5b4 P10核心：池稳定ID/有限正整数唯一容量、明确G→P、多组累计、
+组资格人数Q、岗位max/独立岗sum、技能/班次/窗口、原子保存、版本冻结、独立重建及历史保护。
+本次未重复建表或制造新功能；补全当前设计映射及同SHA回归，改进组瓶颈解释与前台资格预览。
+人员分配失败现在分别列出组/池、岗位、半开窗口、需求、资格上限与差额；固定候选才计作固定组瓶颈，
+候选集合不重复计到每个组。预览明确每组同时受Q与C限制，不将Q相加当C。
+真实React保存/刷新后通过“另开计算（冻结当前输入）”按钮启动异步Worker；
+池1→2及2→1行为变化、同任务双独立岗、跨任务同池、半开30释放、组上限不足、负荷导出、
+旧确认/旧输入/执行事实不变、可信角色/原因/revision/原子拒绝等见机器证据。
+
+关键剩余范围（不弱化守卫）
+- U01关闭互斥对象、U02交接数量含义：条件场景全部未执行；关闭/交接输入仍禁止有效采用。
+  原空交接字段仅表示隔离输入列明普通岗位，没有新增“无交接”策略或现场默认。
+- F04普通技能/班次/整窗通过；交接[25,35)未执行，不能用普通窗口证明交接完成。
+- F11多池映射及未知引用拒绝；真实个人资格交集未建模，UI明确限制，不能声称自动识别交集。
+- F18普通池/组诊断与冻结负荷/导出通过，关闭与交接冲突仍未执行。
+- F20完整跨产线运行仍不支持：/inputs的ORDER_MULTI_LINE/SCOPE及freezeRunInput invalid_line_scope，
+  planner单线边界和独立检查器lineScope均保留。底层分配器跨工序统一扣P、相邻释放通过，
+  不能把此函数级证据说成多产线完整Worker PASS。并行运行是独立试算，不是实时生产占用总账。
+  下一步PM与Design明确原P0单线边界与此CR跨线采用的增量契约，再安排同Issue完整跨线联合运行；
+  需同时覆盖订单/设备归属、全局候选、范围冻结、独立lineScope与UI/历史，不只删输入守卫。
+- 未来容量版本保存后到时才可新运行；生效前明确阻止采用，不从当前行推算旧容量。
+- N06原始执行资源账继续BLOCKED。已接纳事实修改dependencies仍409，资源原账缺失守卫保留；
+  本次无事实合成输入不能证明N06实现。解除由PM/Design补原始来源、数量、身份与释放契约。
+- 无FR017跨分支集成、同工装多不连续窗口、完整FR/CR验收或QA UAT；DEC04/05/06不实施。
+
+验证与可复现
+全部Node、React/Express、异步Worker、Playwright和构建在隔离Docker应用环境；宿主只编排/读Git。
+qa/p10-e01-container.sh是完整复现入口；P10_REPO固定检出绝对路径，P10_OUT新证据目录。
+基镜像aps-fr038-qa-runtime:latest；运行前删除旧src/server/qa再拷当前源码，执行源码hash逐项匹配。
+权限使用显式合成membership，非平台SSO或QA UAT。源代码及历史均只在隔离业务库运行。
+首次测试脚本误用不存在operations/factoryLines并假定伪actor必拒绝；已按真实schema和可信actor审计规则修正，
+原失败日志保留，是harness错误。跨线尝试发现既有边界，保留原拒绝及矩阵PARTIAL，不记新产品FAIL。
+结果详见VALIDATION.json、evidence/与逐项MATRIX.csv；不累计重跑次数为新增业务覆盖。
+
+兼容与回退
+无存储schema变化；旧7a26732历史原字节/输入hash保持。回退代码仅移除诊断/预览增强，
+不能剥P10冻结字段或把新输入解释成旧组容量契约；缺输入明确未检查，损坏确认历史阻止写入。
+普通push固定新分支，未合main、未发布、未改原卡/Issue、未代QA签UAT。
+APS-PM核限定证据后安排固定SHA独立Test；已发送只记SENT，等待RECEIVED/PROCESSED。

@@ -1,0 +1,59 @@
+{
+  "name": "feat/issue3-p06-multishift",
+  "commit": {
+    "sha": "7a26732efc0fb440ca6f8ac7aa6261e33757eb81",
+    "node_id": "C_kwDOVaKehNoAKDdhMjY3MzJlZmMwZmI0NDBjYTZmOGFjN2FhNjI2MWUzMzc1N2ViODE",
+    "commit": {
+      "author": {
+        "name": "SG-CBB-MAC-1",
+        "email": "sg_cbb_mac_1@L-SGP010216.local",
+        "date": "2026-10-29T20:15:56Z"
+      },
+      "committer": {
+        "name": "SG-CBB-MAC-1",
+        "email": "sg_cbb_mac_1@L-SGP010216.local",
+        "date": "2026-10-29T20:15:56Z"
+      },
+      "message": "feat(p06): enforce frozen multi-shift joint working windows",
+      "tree": {
+        "sha": "587d8245922bea647fb4c5645753491e29660ea2",
+        "url": "https://api.github.com/repos/huiliangtao666/APS/git/trees/587d8245922bea647fb4c5645753491e29660ea2"
+      },
+      "url": "https://api.github.com/repos/huiliangtao666/APS/git/commits/7a26732efc0fb440ca6f8ac7aa6261e33757eb81",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/huiliangtao666/APS/commits/7a26732efc0fb440ca6f8ac7aa6261e33757eb81",
+    "html_url": "https://github.com/huiliangtao666/APS/commit/7a26732efc0fb440ca6f8ac7aa6261e33757eb81",
+    "comments_url": "https://api.github.com/repos/huiliangtao666/APS/commits/7a26732efc0fb440ca6f8ac7aa6261e33757eb81/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "2016258169074d1e29292e5a3e58a0fa9304b4bf",
+        "url": "https://api.github.com/repos/huiliangtao666/APS/commits/2016258169074d1e29292e5a3e58a0fa9304b4bf",
+        "html_url": "https://github.com/huiliangtao666/APS/commit/2016258169074d1e29292e5a3e58a0fa9304b4bf"
+      }
+    ]
+  },
+  "_links": {
+    "self": "https://api.github.com/repos/huiliangtao666/APS/branches/feat/issue3-p06-multishift",
+    "html": "https://github.com/huiliangtao666/APS/tree/feat/issue3-p06-multishift"
+  },
+  "protected": false,
+  "protection": {
+    "enabled": false,
+    "required_status_checks": {
+      "enforcement_level": "off",
+      "contexts": [],
+      "checks": []
+    }
+  },
+  "protection_url": "https://api.github.com/repos/huiliangtao666/APS/branches/feat/issue3-p06-multishift/protection"
+}

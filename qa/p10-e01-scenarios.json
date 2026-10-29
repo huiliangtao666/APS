@@ -1,0 +1,466 @@
+{
+  "contract_version": "P10-design-r1",
+  "event_key": "dlv_80aa3354-5aad-4e00-98fe-4ed9d338f174:r1",
+  "warning": "合成设计输入；U01/U02未批准，非生产schema、现场默认值、产品Test或UAT；ceiling仅业务决定对照，不授权新增多模式。",
+  "time_origin": "2026-11-02T08:00:00+08:00",
+  "interval": "[start,end)",
+  "normal_fixture_scope": "明确的普通岗位集合；不从缺省值推断现场无需交接；无执行事实；其他资源可用。",
+  "scenarios": [
+    {
+      "id": "S01",
+      "classification": "existing_cr_detail",
+      "decision_dependency": "E01-E04",
+      "simulation_only": true,
+      "input": {
+        "pool": {
+          "id": "P",
+          "capacity": 2,
+          "shared": true
+        },
+        "group_caps": {
+          "G1": 2,
+          "G2": 2
+        },
+        "group_to_pool": {
+          "G1": "P",
+          "G2": "P"
+        },
+        "availability": {
+          "G1": [
+            0,
+            120
+          ],
+          "G2": [
+            0,
+            120
+          ]
+        },
+        "posts": [
+          {
+            "task": "A",
+            "post": "p1",
+            "group": "G1",
+            "start": 0,
+            "end": 30,
+            "quantity": 1
+          },
+          {
+            "task": "A",
+            "post": "p2",
+            "group": "G1",
+            "start": 0,
+            "end": 30,
+            "quantity": 1
+          }
+        ],
+        "handovers": [],
+        "handover_meaning": "extra"
+      },
+      "expected": {
+        "legal": true,
+        "note": "同任务同组双独立岗总2合法"
+      },
+      "product_status": "NOT_EXECUTED"
+    },
+    {
+      "id": "S04",
+      "classification": "existing_cr_detail",
+      "decision_dependency": "E01-E04",
+      "simulation_only": true,
+      "input": {
+        "pool": {
+          "id": "P",
+          "capacity": 2,
+          "shared": true
+        },
+        "group_caps": {
+          "G1": 2,
+          "G2": 2
+        },
+        "group_to_pool": {
+          "G1": "P",
+          "G2": "P"
+        },
+        "availability": {
+          "G1": [
+            0,
+            120
+          ],
+          "G2": [
+            0,
+            120
+          ]
+        },
+        "posts": [
+          {
+            "task": "A",
+            "post": "p1",
+            "group": "G1",
+            "start": 0,
+            "end": 30,
+            "quantity": 1
+          },
+          {
+            "task": "B",
+            "post": "p1",
+            "group": "G2",
+            "start": 0,
+            "end": 30,
+            "quantity": 1
+          }
+        ],
+        "handovers": [],
+        "handover_meaning": "extra"
+      },
+      "expected": {
+        "legal": true,
+        "note": "跨任务跨组各1共用开总2合法"
+      },
+      "product_status": "NOT_EXECUTED"
+    },
+    {
+      "id": "S08",
+      "classification": "existing_cr_detail",
+      "decision_dependency": "E01-E04",
+      "simulation_only": true,
+      "input": {
+        "pool": {
+          "id": "P",
+          "capacity": 2,
+          "shared": true
+        },
+        "group_caps": {
+          "G1": 2,
+          "G2": 2
+        },
+        "group_to_pool": {
+          "G1": "P",
+          "G2": "P"
+        },
+        "availability": {
+          "G1": [
+            0,
+            120
+          ],
+          "G2": [
+            0,
+            120
+          ]
+        },
+        "posts": [
+          {
+            "task": "A",
+            "post": "p1",
+            "group": "G1",
+            "start": 0,
+            "end": 30,
+            "quantity": 1
+          },
+          {
+            "task": "A",
+            "post": "p2",
+            "group": "G2",
+            "start": 0,
+            "end": 30,
+            "quantity": 2
+          }
+        ],
+        "handovers": [],
+        "handover_meaning": "extra"
+      },
+      "expected": {
+        "legal": false,
+        "note": "同任务独立岗1+2超池2"
+      },
+      "product_status": "NOT_EXECUTED"
+    },
+    {
+      "id": "S09",
+      "classification": "existing_cr_detail",
+      "decision_dependency": "E01-E04",
+      "simulation_only": true,
+      "input": {
+        "pool": {
+          "id": "P",
+          "capacity": 2,
+          "shared": true
+        },
+        "group_caps": {
+          "G1": 2,
+          "G2": 2
+        },
+        "group_to_pool": {
+          "G1": "P",
+          "G2": "P"
+        },
+        "availability": {
+          "G1": [
+            0,
+            120
+          ],
+          "G2": [
+            0,
+            120
+          ]
+        },
+        "posts": [
+          {
+            "task": "A",
+            "post": "p1",
+            "group": "G1",
+            "start": 0,
+            "end": 30,
+            "quantity": 1
+          },
+          {
+            "task": "A",
+            "post": "p1",
+            "group": "G1",
+            "start": 10,
+            "end": 20,
+            "quantity": 1
+          }
+        ],
+        "handovers": [],
+        "handover_meaning": "extra"
+      },
+      "expected": {
+        "legal": true,
+        "note": "同岗重叠max=1；保留P08/P09"
+      },
+      "product_status": "NOT_EXECUTED"
+    },
+    {
+      "id": "S10",
+      "classification": "existing_cr_detail",
+      "decision_dependency": "E01-E04",
+      "simulation_only": true,
+      "input": {
+        "pool": {
+          "id": "P",
+          "capacity": 1,
+          "shared": true
+        },
+        "group_caps": {
+          "G1": 2,
+          "G2": 2
+        },
+        "group_to_pool": {
+          "G1": "P",
+          "G2": "P"
+        },
+        "availability": {
+          "G1": [
+            0,
+            120
+          ],
+          "G2": [
+            0,
+            120
+          ]
+        },
+        "posts": [
+          {
+            "task": "A",
+            "post": "p1",
+            "group": "G1",
+            "start": 0,
+            "end": 30,
+            "quantity": 1
+          },
+          {
+            "task": "B",
+            "post": "p1",
+            "group": "G2",
+            "start": 0,
+            "end": 30,
+            "quantity": 1
+          }
+        ],
+        "handovers": [],
+        "handover_meaning": "extra"
+      },
+      "expected": {
+        "legal": false,
+        "note": "跨任务同名岗位不合并，2>1"
+      },
+      "product_status": "NOT_EXECUTED"
+    },
+    {
+      "id": "S11",
+      "classification": "existing_cr_detail",
+      "decision_dependency": "E01-E04",
+      "simulation_only": true,
+      "input": {
+        "pool": {
+          "id": "P",
+          "capacity": 2,
+          "shared": true
+        },
+        "group_caps": {
+          "G1": 1,
+          "G2": 2
+        },
+        "group_to_pool": {
+          "G1": "P",
+          "G2": "P"
+        },
+        "availability": {
+          "G1": [
+            0,
+            120
+          ],
+          "G2": [
+            0,
+            120
+          ]
+        },
+        "posts": [
+          {
+            "task": "A",
+            "post": "p1",
+            "group": "G1",
+            "start": 0,
+            "end": 30,
+            "quantity": 1
+          },
+          {
+            "task": "A",
+            "post": "p2",
+            "group": "G1",
+            "start": 0,
+            "end": 30,
+            "quantity": 1
+          }
+        ],
+        "handovers": [],
+        "handover_meaning": "extra"
+      },
+      "expected": {
+        "legal": false,
+        "note": "池足2、组资格仅1仍超组"
+      },
+      "product_status": "NOT_EXECUTED"
+    },
+    {
+      "id": "S12",
+      "classification": "existing_cr_detail",
+      "decision_dependency": "E01-E04",
+      "simulation_only": true,
+      "input": {
+        "pool": {
+          "id": "P",
+          "capacity": 2,
+          "shared": true
+        },
+        "group_caps": {
+          "G1": 1,
+          "G2": 1
+        },
+        "group_to_pool": {
+          "G1": "P",
+          "G2": "P"
+        },
+        "availability": {
+          "G1": [
+            0,
+            120
+          ],
+          "G2": [
+            0,
+            120
+          ]
+        },
+        "posts": [
+          {
+            "task": "A",
+            "post": "p1",
+            "group": "G1",
+            "start": 0,
+            "end": 30,
+            "quantity": 1
+          },
+          {
+            "task": "B",
+            "post": "p1",
+            "group": "G2",
+            "start": 0,
+            "end": 30,
+            "quantity": 1
+          }
+        ],
+        "handovers": [],
+        "handover_meaning": "extra"
+      },
+      "expected": {
+        "legal": true,
+        "note": "各组资格1，同池总2，合法"
+      },
+      "product_status": "NOT_EXECUTED"
+    },
+    {
+      "id": "S13",
+      "classification": "existing_cr_detail",
+      "decision_dependency": "E01-E04",
+      "simulation_only": true,
+      "input": {
+        "pool": {
+          "id": "P",
+          "capacity": 2,
+          "shared": true
+        },
+        "group_caps": {
+          "G1": 2,
+          "G2": 2
+        },
+        "group_to_pool": {
+          "G1": "P",
+          "G2": "P"
+        },
+        "availability": {
+          "G1": [
+            0,
+            120
+          ],
+          "G2": [
+            0,
+            120
+          ]
+        },
+        "posts": [
+          {
+            "task": "A",
+            "post": "p1",
+            "group": "G1",
+            "start": 0,
+            "end": 30,
+            "quantity": 1
+          },
+          {
+            "task": "B",
+            "post": "p1",
+            "group": "G2",
+            "start": 0,
+            "end": 30,
+            "quantity": 1
+          },
+          {
+            "task": "C",
+            "post": "p1",
+            "group": "G2",
+            "start": 0,
+            "end": 30,
+            "quantity": 1
+          }
+        ],
+        "handovers": [],
+        "handover_meaning": "extra"
+      },
+      "expected": {
+        "legal": false,
+        "note": "两组人数不能复制物理池：3>2"
+      },
+      "product_status": "NOT_EXECUTED"
+    }
+  ]
+}

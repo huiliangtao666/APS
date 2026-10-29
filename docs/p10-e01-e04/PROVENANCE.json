@@ -1,0 +1,24 @@
+{
+  "original_delivery": "dlv_4a6b539d-352c-4925-8283-d6ef1e5d7aaa",
+  "design_document_sha": "9c230d4aeda124915bcb917b929050f020a11951",
+  "design_artifacts": {
+    "P10-B01-B03-DESIGN-r1-PM-COPY.zip": "8d1dc4b0ae4dd94da139695b12ee75b87fb894a0b67ee0c2c20d3e885784f724",
+    "P10-B01-B03-ACCEPTANCE-r1-PM-COPY.csv": "07d1882b390fa7ec8a98681b5a656c247c1d672e0a25de3068263946b668af5c"
+  },
+  "design_inner": {
+    "P10-B01-B03-BUSINESS-CONTRACT-r1.md": "16a78a47b56629b5e4eca8d9423eda41b8aeec53b61873cb425cc74ef6dd59aa",
+    "P10-B01-B03-ACCEPTANCE-r1.csv": "07d1882b390fa7ec8a98681b5a656c247c1d672e0a25de3068263946b668af5c",
+    "P10-B01-B03-SCENARIOS-r1.json": "b109b35454772cbad79b804290d78fe32aaf9dee0130cda91d8e4bba64fc8aa7",
+    "P10-B01-B03-DESIGN-CHECK-r1.json": "d46eafcc30b960e4f526293cd762e48494d9d5cfa0f62ec826d03fe6303c8d9a",
+    "P10-B01-B03-DESIGN-DELIVERED-r1.json": "a6c2ec55e56f1eabcd5c1f08925cf599beb858e3080229f881a315fc201f3ee3",
+    "README.md": "bbf95f538383f863d9ed4c9a3455d66906a8780756d5208c8831e3e7bb8e5b65",
+    "sources.json": "61cff6169932c343c9b3be545ba0b3be026ef791451ca3a2e3a5a2e43d05049b",
+    "design_math.py": "21eeb5e2bfdf2bede236ddb15b23e664daa82e17f04bea1d7f7bfa0236045ace",
+    "SHA256.json": "badd496103ed46c5d10ca28620364d82df09ab3b7b63370d5be294a6dc571ffb"
+  },
+  "product_direct_parent": "7a26732efc0fb440ca6f8ac7aa6261e33757eb81",
+  "parent_parent": "2016258169074d1e29292e5a3e58a0fa9304b4bf",
+  "authority_main_sha": "d6b8d2ec2d3efeace82d2d4f18d0ec433db7ae25",
+  "scope": "E01-E04 explicit shared ordinary posts only; full matrix partial boundaries retained",
+  "new_failure_and_repair_rounds": 0
+}

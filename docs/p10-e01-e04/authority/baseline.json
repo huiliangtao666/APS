@@ -1,0 +1,2071 @@
+{
+  "schema_version": 1,
+  "baseline_id": "APS-BL-001",
+  "version": "v0.3",
+  "source_date": "2026-10-28（上传登记日，非推定的签批日）",
+  "control_status": "用户指定受控需求依据；原文件及历史台账标注评审稿，历史正式冻结批准记录未补造",
+  "registration_date": "2026-10-29",
+  "authority": "源文件条文保持原样；GitHub原需求卡维护进度；批准生效CR叠加当前要求",
+  "normalization": "按DOCX抽取FR/BR，去掉误跟在上一FR尾部的下一节标题，未修改需求语义；段落号为word/document.xml正文段落序号（1起）",
+  "source_files": [
+    {
+      "path": "upload/APS测试数据_v0.3_约束场景与配置数据.zip",
+      "size_bytes": 7213105,
+      "sha256": "01aa86f90d257e3e6c948531f1010d0a0fdf502a68266176991dc0fb8f107759",
+      "location": "APS-Design工作区；不将完整附件复制到公开仓库"
+    },
+    {
+      "path": "upload/APS集成场景与可视化验收手册_v0.3.html",
+      "size_bytes": 1410455,
+      "sha256": "344a277106c1529d3d90ebbbd19bf3b2ffffbc1bf92094fb637c7d022c410832",
+      "location": "APS-Design工作区；不将完整附件复制到公开仓库"
+    },
+    {
+      "path": "upload/APS需求分析与设计说明书_v0.3.docx",
+      "size_bytes": 1222024,
+      "sha256": "4eb29f7cfaf4fe30f76329775d32930b806da941282098b7de163591807bc7d4",
+      "location": "APS-Design工作区；不将完整附件复制到公开仓库"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "FR-001",
+      "type": "功能需求",
+      "title": "产线、工位及资源归属",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R1；完整提供：R1。\n前置功能：无。\n• 支持维护一条产线及其工位、机器和其他资源归属。P0只允许一个排程产线，发现订单或资源引用其他产线时提示并阻止计算。\n• 同一产线可含多道工序和并行设备。不得把一台机器等同一条产线；多产线选择在P1提供。",
+      "acceptance_ids": [
+        "AC-01",
+        "AC-02"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 206,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgeo",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAe4",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgeo"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R1"
+    },
+    {
+      "id": "FR-002",
+      "type": "功能需求",
+      "title": "产品、物料与单位配置",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R1；完整提供：R3。\n前置功能：FR-001。\n• 支持产品、原料、半成品、包材编码，及kg、支、袋、箱的适用换算。净重、每袋支数、每箱支数等按产品配置。\n• 产品名称不参与规则判断；示例产品和火腿肠规格不写入程序固定逻辑。缺少所需换算时不能计算相应数量。",
+      "acceptance_ids": [
+        "AC-02",
+        "AC-08",
+        "AC-09"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 212,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgfQ",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAfA",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgfQ"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R3"
+    },
+    {
+      "id": "FR-003",
+      "type": "功能需求",
+      "title": "BOM、收率与包装用量配置",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R3；完整提供：R4。\n前置功能：FR-002/004。\n• 配置BOM计算基准、物料定额/比例、投料工序、适用产品、生效日期、工序加入量和损失。包装用量及损坏比例独立配置。\n• 支持同产品不同有效配置，并保存计划实际采用的配置。P0按给定配方计算用量，不自动研发或优化配方。",
+      "acceptance_ids": [
+        "AC-08",
+        "AC-09",
+        "AC-15",
+        "AC-32"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 218,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHggI",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAfE",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHggI"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R3；完整提供：R4"
+    },
+    {
+      "id": "FR-004",
+      "type": "功能需求",
+      "title": "工序与工艺路线配置",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R1；完整提供：R4。\n前置功能：FR-001/002。\n• 分别维护工艺路线、工序工时及资源依赖。资源依赖明确设备、模具、工具、人员/技能、空间及投料物料；物料数量由BOM计算。P0先支持顺序路线。\n• 不固定预处理、灌装、热加工等工序的名称、数量或顺序。配置不完整或出现循环顺序时给出具体问题，不自动忽略工序。",
+      "acceptance_ids": [
+        "AC-02",
+        "AC-04",
+        "AC-13",
+        "AC-14",
+        "AC-15"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 224,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHghY",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAfY",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHghY"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R4"
+    },
+    {
+      "id": "FR-005",
+      "type": "功能需求",
+      "title": "机器能力及适用范围",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R1；完整提供：R4。\n前置功能：FR-001/004。\n• 配置机器可执行工序、处理方式、固定工时、产品加工速度、容量及装载上下限。P0初期先提供机器及固定工时，容量等后续启用。\n• 加工速度按产品及适用单位配置，例如支/分钟或kg/小时；不能对所有规格统一套用相同重量速度。",
+      "acceptance_ids": [
+        "AC-04",
+        "AC-09",
+        "AC-13",
+        "AC-15"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 230,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgiI",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAfg",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgiI"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R4"
+    },
+    {
+      "id": "FR-006",
+      "type": "功能需求",
+      "title": "模具及工装配置",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R2.2；完整提供：R2.2。\n前置功能：FR-001/004/005。\n• 配置模具/工装编码、适用任务、数量及占用起止条件。先支持单套独占，再支持同类多套。\n• 任务结束后如仍需拆卸或等待归还，模具占用可后延。设备不同的任务也可能争用同一工装。",
+      "acceptance_ids": [
+        "AC-06",
+        "AC-15"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 236,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgjI",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAfs",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgjI"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R2.2；完整提供：R2.2"
+    },
+    {
+      "id": "FR-007",
+      "type": "功能需求",
+      "title": "人员数量与技能配置",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R2.3；完整提供：R2.4。\n前置功能：FR-004/005。\n• 先配置人员组数量及任务需要的人数，再配置技能、班次、装卸/操作阶段和可用时间。P0不建设人员考勤系统。\n• 机器可自动运行的时段与需要人员参与的时段分开设置；人数足够但技能不符时，不能按可用处理。",
+      "acceptance_ids": [
+        "AC-07",
+        "AC-15"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 242,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgjs",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAfw",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgjs"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R2.3；完整提供：R2.4"
+    },
+    {
+      "id": "FR-008",
+      "type": "功能需求",
+      "title": "工作日历与停机配置",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R2.1；完整提供：R4。\n前置功能：FR-005。\n• 配置工厂工作日历、设备停机及人员/工装例外时段。资源默认继承工厂工作窗口，例外停机进一步减少可用时间；工厂不开工时不能仅因设备为空而排任务。\n• 工序能否跨班运行、能否中断、开始结束是否需要人员，均由配置决定。初期不支持中断加工时，明确提示不能拆开执行。",
+      "acceptance_ids": [
+        "AC-05",
+        "AC-07",
+        "AC-14",
+        "AC-15"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 248,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgk0",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAf4",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgk0"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R2.1；完整提供：R4"
+    },
+    {
+      "id": "FR-009",
+      "type": "功能需求",
+      "title": "订单与需求数据",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/02；页面：PG-02；开始提供：R1；完整提供：R3。\n前置功能：FR-001/002。\n• 维护订单号、产品、数量/单位、要求完成时间、优先顺序、是否允许拆分和指定产线等信息。P0订单产线固定为本产线。\n• 数量或交期修改需保留记录；减少或取消订单时不能抹去已开始/已完成的模拟任务。预测数据先与正式订单分开处理。",
+      "acceptance_ids": [
+        "AC-01",
+        "AC-02",
+        "AC-12",
+        "AC-20"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 255,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHglg",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAgA",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHglg"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R3"
+    },
+    {
+      "id": "FR-010",
+      "type": "功能需求",
+      "title": "库存批次与模拟质量状态",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/02；页面：PG-01/02；开始提供：R3；完整提供：R3。\n前置功能：FR-002。\n• 维护每批库存的数量、已占用数量、有效期、所在位置、质量状态和预计可用时间。查询时区分账面数量与当前能使用的数量。\n• 待检、冻结、不合格等状态作为数据输入参与计算，不设置QA在线审批/放行流程。默认无法使用的状态由规则配置。",
+      "acceptance_ids": [
+        "AC-10",
+        "AC-11",
+        "AC-24"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 261,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgm8",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAgI",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgm8"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R3；完整提供：R3"
+    },
+    {
+      "id": "FR-011",
+      "type": "功能需求",
+      "title": "预计到料与可用时间",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/02；页面：PG-01/02；开始提供：R3；完整提供：R3。\n前置功能：FR-002/010。\n• 维护预计到达、数量、批次和预计可用时间，可导入迟到或延期的模拟记录。\n• 到货不等于立即能用；使用预计供给的计划需显示条件。系统不自动创建采购单或确认真实到货。",
+      "acceptance_ids": [
+        "AC-11",
+        "AC-20",
+        "AC-23"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 267,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgn8",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAgQ",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgn8"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R3；完整提供：R3"
+    },
+    {
+      "id": "FR-012",
+      "type": "功能需求",
+      "title": "在制品与模拟进度",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/02/06；页面：PG-01/08；开始提供：R5；完整提供：R5。\n前置功能：FR-009/010/018。\n• 导入、查询和编辑任务开始/完成、完成量、已用物料、剩余工时、所在设备及暂停原因等模拟数据。\n• 模拟已开始/完成任务须保留原记录，计算剩余工作时不能把其物料再算为未使用库存。",
+      "acceptance_ids": [
+        "AC-12",
+        "AC-21",
+        "AC-32"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 273,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgp0",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAgY",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgp0"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R5；完整提供：R5"
+    },
+    {
+      "id": "FR-013",
+      "type": "功能需求",
+      "title": "各类CSV模拟数据导入",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R1；完整提供：R6。\n前置功能：各阶段所需的数据定义。\n• 第9章列出的每类数据均提供CSV模板、示例和导入操作。先提供本阶段必需类别，后续随功能补充，不能只做一个通用上传按钮而不支持具体字段。\n• 导入前预览并检查字段、引用、单位和日期，报告文件/行号/字段及原因；同一批次发现影响使用的错误时不导入。支持修正后重新导入，避免重复数据。",
+      "acceptance_ids": [
+        "AC-02",
+        "AC-03",
+        "AC-26"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 280,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgrg",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAgk",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgrg"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R6"
+    },
+    {
+      "id": "FR-014",
+      "type": "功能需求",
+      "title": "各类模拟数据查询",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/02/05；页面：PG-01/02/08；开始提供：R1；完整提供：R6。\n前置功能：FR-013。\n• 每类已支持数据均提供列表、筛选、详情及关联查询，例如订单查任务、工序查机器、物料查批次及占用。\n• 支持按产品、订单、日期、状态等适用条件筛选；不能要求查询用户通过查看原始JSON文件理解数据。",
+      "acceptance_ids": [
+        "AC-02",
+        "AC-17",
+        "AC-26",
+        "AC-31"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 286,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgs4",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAgs",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgs4"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R6"
+    },
+    {
+      "id": "FR-015",
+      "type": "功能需求",
+      "title": "各类模拟数据编辑",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/02；页面：PG-01/02/08；开始提供：R1；完整提供：R6。\n前置功能：FR-013/014。\n• 计划员和主管可新增、编辑、复制及在允许时删除模拟记录；查询用户不能修改。保存时执行与导入相同的检查。\n• 被已确认计划引用的数据不能直接删除或覆盖；修改后保存新记录并保留原值，已确认计划仍能查到计算时的数据。",
+      "acceptance_ids": [
+        "AC-02",
+        "AC-03",
+        "AC-24",
+        "AC-32"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 292,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgto",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAg0",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgto"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R6"
+    },
+    {
+      "id": "FR-016",
+      "type": "功能需求",
+      "title": "数据检查与问题处理",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-02；页面：PG-01/03；开始提供：R1；完整提供：R6。\n前置功能：FR-013/014/015。\n• 检查必填、重复、外部引用、数量、日期、单位、工序顺序和本阶段已启用规则所需字段，区分阻止计算的问题与提醒。\n• 点击问题可转到相应记录进行查询或编辑；缺失值显示待补充，不把未知数量、工时或容量默认为0。",
+      "acceptance_ids": [
+        "AC-02",
+        "AC-03",
+        "AC-15",
+        "AC-17"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 298,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgu4",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAg8",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgu4"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R6"
+    },
+    {
+      "id": "FR-017",
+      "type": "功能需求",
+      "title": "业务规则配置与启用",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-03；页面：PG-03；开始提供：R1；完整提供：R7。\n前置功能：FR-004/005/016。\n• 第7章的规则按规则类别维护参数、适用对象、是否启用及生效时间。配置变化保留记录，并显示本方案采用的设置。\n• 每个阶段只能启用已经支持且数据完整的规则。未支持规则不能仅保存字段后就显示检查通过；已经启用的必要约束不能为获得结果而自动关闭。",
+      "acceptance_ids": [
+        "AC-15",
+        "AC-16",
+        "AC-32"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 304,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgv4",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAhA",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgv4"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R7"
+    },
+    {
+      "id": "FR-018",
+      "type": "功能需求",
+      "title": "选择计算范围并保存输入",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-03/04；页面：PG-03；开始提供：R1；完整提供：R5。\n前置功能：FR-009/016/017。\n• 选择本产线订单、开始时间、计划结束范围、任务排序及启用规则；保存本次使用的数据、规则和计算条件，提供运行编号。\n• 计算时使用同一份输入记录。新的数据修改不直接改变正在计算的结果；用户可另开计算。支持查看进度、取消及失败原因。",
+      "acceptance_ids": [
+        "AC-04",
+        "AC-12",
+        "AC-16",
+        "AC-32"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 311,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgxI",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAhI",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgxI"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R5"
+    },
+    {
+      "id": "FR-019",
+      "type": "功能需求",
+      "title": "最小排程：机器与工序顺序",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-04；页面：PG-03/04；开始提供：R1；完整提供：R1。\n前置功能：FR-004/005/009/018。\n• 第一版按给定机器、工时和工序顺序安排任务，只要求同机器任务不重叠、后序不得早于前序完成。机器暂按连续可用处理。\n• 在该版本中，模具、人员、物料等不参与判断；界面必须列明尚未检查的条件，不能把两类约束通过称为完整业务都可执行。",
+      "acceptance_ids": [
+        "AC-04",
+        "AC-17",
+        "AC-31"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 317,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgyQ",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAhQ",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgyQ"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R1"
+    },
+    {
+      "id": "FR-020",
+      "type": "功能需求",
+      "title": "物料需求计算与分配",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-04；页面：PG-04/07；开始提供：R3；完整提供：R4。\n前置功能：FR-003/010/011/018。\n• 根据订单余量、BOM和工序投料点计算原料及包材需求，扣除有效库存和可用供给，保留批次分配与缺口。\n• 选择先到期的合格批次时，同时检查数量、投料日期及质量状态。缺料则推迟或未排，不能出现负可用量。采购和备料只形成建议。",
+      "acceptance_ids": [
+        "AC-08",
+        "AC-09",
+        "AC-10",
+        "AC-11"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 323,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgy8",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAhY",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgy8"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R3；完整提供：R4"
+    },
+    {
+      "id": "FR-021",
+      "type": "功能需求",
+      "title": "生产拆批与批处理安排",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-04；页面：PG-03/04；开始提供：R4；完整提供：R4。\n前置功能：FR-003/004/005/017/020。\n• 按配置的装载上下限拆批，并按配方/路线/程序兼容条件组合资源批次。一个资源批可以包含多个生产批，但要保留各自订单和数量。\n• 固定程序加工时长不能因未满载自动缩短；尾批低于下限时给出问题或允许的调整，不自动多生产来填满设备。",
+      "acceptance_ids": [
+        "AC-13",
+        "AC-14",
+        "AC-15"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 329,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHg0E",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAhk",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg0E"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R4；完整提供：R4"
+    },
+    {
+      "id": "FR-022",
+      "type": "功能需求",
+      "title": "设备、模具、人员及空间联合安排",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-04；页面：PG-04/07；开始提供：R2.2；完整提供：R4。\n前置功能：FR-005/006/007/008/017/019。\n• 逐阶段加入模具、人员及空间占用。一个任务必须同时满足已启用的全部资源条件，不能只检查机器。\n• 按占用开始至释放的完整时段检查数量，例如两套模具不能供三任务同时用，冷却空间按同时占用的重量或位置数计算。",
+      "acceptance_ids": [
+        "AC-05",
+        "AC-06",
+        "AC-07",
+        "AC-14",
+        "AC-15"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 335,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHg1o",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAh4",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg1o"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R2.2；完整提供：R4"
+    },
+    {
+      "id": "FR-023",
+      "type": "功能需求",
+      "title": "计算可行完成时间及交期影响",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-04/05/06；页面：PG-02/04/06；开始提供：R4；完整提供：R6。\n前置功能：FR-019/020/021/022。\n• 输出任务完成、订单完成和满足配置条件后的预计可交付时间。与订单要求比较，显示延后数量/时间及原因。\n• 使用预计物料或模拟质量可用时间时列出条件；尚未证明最早的时间应称为“找到的可行时间”，不宣称全局最早。运输和跨工厂承诺不属于P0。",
+      "acceptance_ids": [
+        "AC-11",
+        "AC-14",
+        "AC-18",
+        "AC-20"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 341,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHg2c",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAiE",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg2c"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R4；完整提供：R6"
+    },
+    {
+      "id": "FR-024",
+      "type": "功能需求",
+      "title": "结果状态、未排任务与原因",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-04/05；页面：PG-04/05；开始提供：R1；完整提供：R6。\n前置功能：FR-018/019。\n• 区分已经得到安排、部分任务未排、规定时间内未找到可用结果、计算失败和用户取消。不得把超时直接解释为业务不可能。\n• 未排或冲突原因指出具体任务、资源/物料、日期和数量，并提供适用建议，例如补数据、推迟、增加模拟资源或修改需求。",
+      "acceptance_ids": [
+        "AC-10",
+        "AC-16",
+        "AC-17",
+        "AC-18",
+        "AC-21"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 347,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHg3Q",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAiM",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg3Q"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R6"
+    },
+    {
+      "id": "FR-025",
+      "type": "功能需求",
+      "title": "独立检查排程结果",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-05/07；页面：PG-04/05；开始提供：R1；完整提供：R7。\n前置功能：FR-017/019/024。\n• 通过独立检查重新核对每个已启用条件，并输出通过项、问题项及尚未检查项。新增约束时同步增加结果检查。\n• 主管确认前重新检查结果、缺口和输入是否变化；存在规则冲突或影响执行的关键数据缺失时无法发布。",
+      "acceptance_ids": [
+        "AC-04",
+        "AC-15",
+        "AC-17",
+        "AC-22",
+        "AC-32"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 354,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHg4k",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAiU",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg4k"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R7"
+    },
+    {
+      "id": "FR-026",
+      "type": "功能需求",
+      "title": "保存、复制与比较方案",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-05/06；页面：PG-04/06；开始提供：R1；完整提供：R6。\n前置功能：FR-018/024。\n• 保存计算输入和结果；复制为独立试算方案；比较任务时间、资源、物料分配、订单交期和未排数量。\n• 放弃试算不影响已确认计划。恢复旧方案时用当前模拟进度重新检查，不恢复过时库存或抹去已执行事实。",
+      "acceptance_ids": [
+        "AC-03",
+        "AC-12",
+        "AC-20",
+        "AC-32"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 360,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHg5k",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAic",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg5k"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R6"
+    },
+    {
+      "id": "FR-027",
+      "type": "功能需求",
+      "title": "拖拽调整与锁定",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0后期；关联流程：BP-06；页面：PG-04/06；开始提供：R6.1；完整提供：R6.1。\n前置功能：FR-025/026/033/034。\n• 计划用户可在试算方案拖动任务时间或改到允许机器，显示预览并重新检查。非法位置指出冲突，不允许直接作为有效计划。\n• 支持锁定未开始任务。锁定与其他条件冲突时报告原因，不静默解除。已开始/已完成任务不能自由拖动。",
+      "acceptance_ids": [
+        "AC-19",
+        "AC-21"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 366,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHg7Y",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAio",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg7Y"
+      },
+      "scope": "P0后期",
+      "stage": "开始提供：R6.1；完整提供：R6.1"
+    },
+    {
+      "id": "FR-028",
+      "type": "功能需求",
+      "title": "修改条件后重新试算",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0后期；关联流程：BP-06；页面：PG-06；开始提供：R6.2；完整提供：R6.2。\n前置功能：FR-017/025/026。\n• 复制方案后修改订单、日历、模具、人员或物料等模拟条件，再计算并比较结果。页面采用“条件试算”，可在帮助中说明What-if含义。\n• 清楚列出改了哪些条件、影响哪些任务和交期；可保留或放弃。增加资源但交期没有改善时也应如实说明。",
+      "acceptance_ids": [
+        "AC-20",
+        "AC-32"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 372,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHg8s",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAis",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg8s"
+      },
+      "scope": "P0后期",
+      "stage": "开始提供：R6.2；完整提供：R6.2"
+    },
+    {
+      "id": "FR-029",
+      "type": "功能需求",
+      "title": "模拟异常与重新排程",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0后期；关联流程：BP-06；页面：PG-06/08；开始提供：R6.3；完整提供：R6.3。\n前置功能：FR-012/024/025/026/028/031。\n• 通过CSV或模拟数据编辑引入插单、设备故障、人员缺勤、到料延期及物料状态变化。先更新事件时点的模拟执行数据，再安排剩余工作。\n• 保留已完成/已投料/已开始事实及设定保护时段。故障中任务或被不可用物料影响的任务应标为需处理，不能自动认定质量合格。",
+      "acceptance_ids": [
+        "AC-12",
+        "AC-21",
+        "AC-24"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 378,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHg9s",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAi0",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg9s"
+      },
+      "scope": "P0后期",
+      "stage": "开始提供：R6.3；完整提供：R6.3"
+    },
+    {
+      "id": "FR-030",
+      "type": "功能需求",
+      "title": "主管确认、发布与归档",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-07；页面：PG-09；开始提供：R7；完整提供：R7。\n前置功能：FR-025/026/037。\n• 计划员提交，主管查看规则检查、未排需求、预计供给条件及调整原因后确认或退回。确认后内容保存，供本系统查询和导出。\n• 输入或方案发生影响结果的变化后需重新提交。允许确认已排部分时，必须明确未排清单；存在已启用规则冲突时不能确认发布。不连接外部执行系统。",
+      "acceptance_ids": [
+        "AC-22",
+        "AC-23",
+        "AC-24",
+        "AC-32"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 384,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHg-Y",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAi4",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg-Y"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R7；完整提供：R7"
+    },
+    {
+      "id": "FR-031",
+      "type": "功能需求",
+      "title": "维护模拟进度并检查剩余工作",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/05/06；页面：PG-08；开始提供：R5；完整提供：R5。\n前置功能：FR-012/018/026。\n• 提供模拟任务进度的导入、查询和编辑。更新完成量、报废量、耗料和剩余工时后，显示对未完成任务和订单的影响。\n• 同一记录重复导入不能重复累计完成或扣料；发现状态倒退、超过订单数量等问题时提示核对。该功能不要求接MES。",
+      "acceptance_ids": [
+        "AC-02",
+        "AC-12",
+        "AC-21",
+        "AC-23"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 390,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHg_o",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAjA",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg_o"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R5；完整提供：R5"
+    },
+    {
+      "id": "FR-032",
+      "type": "功能需求",
+      "title": "资源负荷、物料缺口与提醒",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-05/07；页面：PG-07；开始提供：R2；完整提供：R7。\n前置功能：FR-020/022/024。\n• 按当前已支持范围显示设备忙闲、模具占用、人员需求、空间占用和物料缺口；从汇总转到任务和原始数据。\n• 显示订单延后、模拟到料未满足、输入缺失等提醒。优先实现具体数量和原因，不以复杂经营指标看板作为排程前置。",
+      "acceptance_ids": [
+        "AC-06",
+        "AC-07",
+        "AC-10",
+        "AC-14",
+        "AC-26"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 397,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhAY",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAjE",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhAY"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R2；完整提供：R7"
+    },
+    {
+      "id": "FR-033",
+      "type": "功能需求",
+      "title": "机器甘特图与任务时间表",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0优先；关联流程：BP-05；页面：PG-04；开始提供：R1；完整提供：R5。\n前置功能：FR-018/019/024。\n• 机器为行、时间为轴展示任务，支持基本缩放、滚动、筛选和任务详情；显示订单/工序、计划时间及状态。\n• 逐阶段加入停机背景、前后工序连线、模具/人员/空间占用和模拟进度。颜色附文字说明，不能仅靠颜色理解问题。",
+      "acceptance_ids": [
+        "AC-04",
+        "AC-05",
+        "AC-06",
+        "AC-07",
+        "AC-17",
+        "AC-31"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 403,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhB4",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAjM",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhB4"
+      },
+      "scope": "P0优先",
+      "stage": "开始提供：R1；完整提供：R5"
+    },
+    {
+      "id": "FR-034",
+      "type": "功能需求",
+      "title": "甘特、明细与问题联动核对",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0优先；关联流程：BP-05；页面：PG-04/05；开始提供：R1；完整提供：R4。\n前置功能：FR-014/024/025/033。\n• 点击任务可查原始输入、前后工序和资源需求；点击问题同时定位相关任务及区间。机器问题显示交叠，顺序问题显示前序结束、后序开始及违反时长。\n• 可主动运行检查并筛选问题任务。新增模具、人员、物料等规则时，对应显示需求/可用值及判断依据，不要求用户先导出再核对。",
+      "acceptance_ids": [
+        "AC-04",
+        "AC-15",
+        "AC-17",
+        "AC-31"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 409,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhDI",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAjc",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhDI"
+      },
+      "scope": "P0优先",
+      "stage": "开始提供：R1；完整提供：R4"
+    },
+    {
+      "id": "FR-035",
+      "type": "功能需求",
+      "title": "查询、报表与文件导出",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-05/07；页面：PG-02/04/07/09；开始提供：R1；完整提供：R7。\n前置功能：FR-014/024/026/032。\n• 查询订单/任务计划、资源占用、物料需求、未排原因和方案差异，提供CSV或Excel导出；按页面当前范围和权限处理。\n• 导出标识产线、方案、输入记录、单位、日期和模拟说明，保证与页面数量和时间一致。首期不要求自动向外部系统发送。",
+      "acceptance_ids": [
+        "AC-23",
+        "AC-26",
+        "AC-31"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 415,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhEU",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAjk",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhEU"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R7"
+    },
+    {
+      "id": "FR-036",
+      "type": "功能需求",
+      "title": "外部系统接口说明与模拟替代",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/07；页面：PG-01；开始提供：R0；完整提供：R7。\n前置功能：数据分类和FR-013/035。\n• 对ERP、OMS、WMS、PLM、MES等可能交换的数据，说明对应类别、主要字段、唯一编号、来源和方向，并提供CSV模拟文件约定。\n• 本期不实现真实连接、数据订阅或生产指令下发；无需配置真实系统账号。接入实现不作为P0或P1验收必需项。",
+      "acceptance_ids": [
+        "AC-02",
+        "AC-23"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 421,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhFg",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAjo",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhFg"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R0；完整提供：R7"
+    },
+    {
+      "id": "FR-037",
+      "type": "功能需求",
+      "title": "简单权限与操作记录",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01至BP-07；页面：所有适用页面；开始提供：R1；完整提供：R7。\n前置功能：第3章用户职责。\n• 计划员和主管可以维护模拟数据、运行和调整方案；主管可以确认发布；查询用户只可查询和按权限导出。\n• 记录导入、编辑、计算、确认、退回及导出的操作者、时间和原因。模拟质量状态通过数据维护设置，不设置质量审批角色。",
+      "acceptance_ids": [
+        "AC-03",
+        "AC-22",
+        "AC-24"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 427,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhGM",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAjw",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhGM"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R7"
+    },
+    {
+      "id": "FR-038",
+      "type": "功能需求",
+      "title": "运行记录与故障提示",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-04/05；页面：PG-03/05；开始提供：R1；完整提供：R7。\n前置功能：FR-018/024。\n• 保存每次计算的输入、规则、耗时、状态和错误提示，便于用相同数据复查问题。\n• 较长计算可取消；失败不破坏已保存方案或源数据。技术信息放在可展开详情，不要求普通用户理解算法名称。",
+      "acceptance_ids": [
+        "AC-16",
+        "AC-27",
+        "AC-31",
+        "AC-32"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 433,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhHk",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAkA",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhHk"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R1；完整提供：R7"
+    },
+    {
+      "id": "FR-039",
+      "type": "功能需求",
+      "title": "多条产线及适用范围",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P1；关联流程：BP-01/02/03；页面：PG-01/03；开始提供：R8；完整提供：R8。\n前置功能：P0数据及排程功能。\n• 维护多条产线、各线机器/人员/工装和产品适用范围。查询时明确当前产线及是否显示多线汇总。\n• P0完成前不启用多线分配；P1新增产线数据沿用导入、查询、编辑及检查功能。",
+      "acceptance_ids": [
+        "AC-28"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 440,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhJE",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAkI",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhJE"
+      },
+      "scope": "P1",
+      "stage": "开始提供：R8；完整提供：R8"
+    },
+    {
+      "id": "FR-040",
+      "type": "功能需求",
+      "title": "多线分配与共享资源",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P1；关联流程：BP-03至BP-06；页面：PG-03/04/06/07；开始提供：R8；完整提供：R8。\n前置功能：FR-039/022/028。\n• 按产品适用、交期和资源条件选择产线，比较指定线与多线分配方案；明确哪些人员/工装允许跨线共享。\n• 多条线有空也不能重复占用同一共享资源。P1不默认包括跨工厂生产或运输。",
+      "acceptance_ids": [
+        "AC-28",
+        "AC-29"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 446,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhKQ",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAkU",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhKQ"
+      },
+      "scope": "P1",
+      "stage": "开始提供：R8；完整提供：R8"
+    },
+    {
+      "id": "FR-041",
+      "type": "功能需求",
+      "title": "预测需求与补库策略",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P1；关联流程：BP-01/03/04；页面：PG-02/03；开始提供：R8；完整提供：按专题确定。\n前置功能：FR-009/020/039。\n• 按需要建设预测与销售订单去重、目标库存和补库规则。不同需求类型分开显示，避免同一需求重复计入。\n• 在规则未确定前只保存独立模拟需求，不宣称已提供自动补库。",
+      "acceptance_ids": [
+        "AC-30"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 452,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhL8",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAkg",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhL8"
+      },
+      "scope": "P1",
+      "stage": "开始提供：R8；完整提供：按专题确定"
+    },
+    {
+      "id": "FR-042",
+      "type": "功能需求",
+      "title": "复杂工艺与配方选择",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P1；关联流程：BP-01/03/04；页面：PG-01/03；开始提供：R8；完整提供：按专题确定。\n前置功能：FR-003/004/021。\n• 按需要扩展分支汇合、返工、多条可选路线或允许范围内的配方选择，并补齐各自数据与验收场景。\n• 不能通过添加名称或字段就宣称已支持复杂计算；未支持的配置应明确提示。",
+      "acceptance_ids": [
+        "AC-30"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 458,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhNY",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAkk",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhNY"
+      },
+      "scope": "P1",
+      "stage": "开始提供：R8；完整提供：按专题确定"
+    },
+    {
+      "id": "FR-043",
+      "type": "功能需求",
+      "title": "其他资源与优化目标",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P1；关联流程：BP-03/04/05；页面：PG-01/03/07；开始提供：R8；完整提供：按专题确定。\n前置功能：FR-017/022/032。\n• 按业务价值扩展蒸汽、制冷、周转器具等资源，以及换型、加班、库存或成本目标。资源占用方式与目标权重均需配置。\n• 新增目标不能抵消已启用的必要约束；以相同订单和条件比较实际效果。",
+      "acceptance_ids": [
+        "AC-30"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 464,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhOw",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAkw",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhOw"
+      },
+      "scope": "P1",
+      "stage": "开始提供：R8；完整提供：按专题确定"
+    },
+    {
+      "id": "BR-01",
+      "type": "业务规则",
+      "title": "产线范围",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "P0固定为一条产线；产线编号、工位及归属可维护。多线适用关系在P1配置。",
+      "scope": "按对应阶段启用",
+      "stage": "R1；多线R8",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 476,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhPY",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAk4",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhPY"
+      }
+    },
+    {
+      "id": "BR-02",
+      "type": "业务规则",
+      "title": "工序先后与工时",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "前后工序、固定/按数量工时、产品速度、最小/最大等待；后序开始不得早于前序完成。",
+      "scope": "按对应阶段启用",
+      "stage": "R1顺序；R4等待",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 479,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhQk",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAlE",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhQk"
+      }
+    },
+    {
+      "id": "BR-03",
+      "type": "业务规则",
+      "title": "机器占用",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "设备适用工序、独占/批处理、是否允许并行、可用台数；同一独占设备任务不能重叠。",
+      "scope": "按对应阶段启用",
+      "stage": "R1；批处理R4",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 482,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhRs",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAlI",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhRs"
+      }
+    },
+    {
+      "id": "BR-04",
+      "type": "业务规则",
+      "title": "加工速度与效率",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "按产品/机器/单位配置有效速度；明确已是实测速率还是还需乘效率，避免重复折减。",
+      "scope": "按对应阶段启用",
+      "stage": "R3/R4",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 485,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhTM",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAlQ",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhTM"
+      }
+    },
+    {
+      "id": "BR-05",
+      "type": "业务规则",
+      "title": "日历与停机",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "工厂工作窗口、资源继承关系、停机、清洗、加班、跨班及能否中断；非中断工序必须放在完整工作窗口内。",
+      "scope": "按对应阶段启用",
+      "stage": "R2.1；细化R4",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 488,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhUg",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAlc",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhUg"
+      }
+    },
+    {
+      "id": "BR-06",
+      "type": "业务规则",
+      "title": "模具/工装",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "适用任务、需求套数、可用数、提前取得/后延释放时间；全占用区间累计不超过可用数。",
+      "scope": "按对应阶段启用",
+      "stage": "R2.2",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 491,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhVk",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAlg",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhVk"
+      }
+    },
+    {
+      "id": "BR-07",
+      "type": "业务规则",
+      "title": "人员",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "技能组、人数、班次、任务需要的人数及参与阶段；不同技能不能未经配置互相替代。",
+      "scope": "按对应阶段启用",
+      "stage": "R2.3/R2.4",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 494,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhW8",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAls",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhW8"
+      }
+    },
+    {
+      "id": "BR-08",
+      "type": "业务规则",
+      "title": "物料状态与时间",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "质量状态和“可用/不可用”的对应关系、到达/预计可用/有效期；质量状态来自模拟数据。",
+      "scope": "按对应阶段启用",
+      "stage": "R3",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 497,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhYE",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAl0",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhYE"
+      }
+    },
+    {
+      "id": "BR-09",
+      "type": "业务规则",
+      "title": "库存分配",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "优先到期或优先到货等顺序、已有占用、是否允许预计供给；在投料工序开始时检查。",
+      "scope": "按对应阶段启用",
+      "stage": "R3",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 500,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhZA",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAl8",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhZA"
+      }
+    },
+    {
+      "id": "BR-10",
+      "type": "业务规则",
+      "title": "BOM与数量计算",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "计算基准、比例/定额、工序加料、收率、包材定额及损坏比例；每个加入或损失只计一次。",
+      "scope": "按对应阶段启用",
+      "stage": "R3/R4",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 503,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhag",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAmE",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhag"
+      }
+    },
+    {
+      "id": "BR-11",
+      "type": "业务规则",
+      "title": "拆批与合批",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "容量上下限、允许拆分、程序/产品兼容、装载重量节点、尾批处理；不自动超产补满设备。",
+      "scope": "按对应阶段启用",
+      "stage": "R4",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 506,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhbU",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAmI",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhbU"
+      }
+    },
+    {
+      "id": "BR-12",
+      "type": "业务规则",
+      "title": "等待与空间",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "工序最短停留、最大等待、冷却/存储占用、空间单位和容量；必要时推迟上游。",
+      "scope": "按对应阶段启用",
+      "stage": "R4",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 509,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhcM",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAmU",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhcM"
+      }
+    },
+    {
+      "id": "BR-13",
+      "type": "业务规则",
+      "title": "换型与清洗",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "前后产品方向、资源、时长、人员、验证等待和禁止组合；A到B可以不同于B到A。",
+      "scope": "按对应阶段启用",
+      "stage": "R4",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 512,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhdg",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAmg",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhdg"
+      }
+    },
+    {
+      "id": "BR-14",
+      "type": "业务规则",
+      "title": "预计可交付与余保",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "后续等待、有效期起算、客户最低剩余有效期及检查时点；P0不计算真实运输。",
+      "scope": "按对应阶段启用",
+      "stage": "R4/R6",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 515,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHheY",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAmo",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHheY"
+      }
+    },
+    {
+      "id": "BR-15",
+      "type": "业务规则",
+      "title": "任务排序与评价",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "优先顺序、要求日期、稳定排序；后期配置减少延期、调整或换型等目标，不能忽略约束。",
+      "scope": "按对应阶段启用",
+      "stage": "R1；细化R6",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 518,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhfc",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAmw",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhfc"
+      }
+    },
+    {
+      "id": "BR-16",
+      "type": "业务规则",
+      "title": "执行保护与异常",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "已开始/已完成的保护方式、未开始任务保护时段、锁定及故障处理；冲突必须指出。",
+      "scope": "按对应阶段启用",
+      "stage": "R5/R6",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 521,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhgY",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAm8",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhgY"
+      }
+    },
+    {
+      "id": "BR-17",
+      "type": "业务规则",
+      "title": "计划确认条件",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "无规则冲突、关键数据完整、输入未发生影响结果的变化；是否允许主管确认已排部分。",
+      "scope": "按对应阶段启用",
+      "stage": "R7",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 524,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhhA",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAnA",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhhA"
+      }
+    },
+    {
+      "id": "BR-18",
+      "type": "业务规则",
+      "title": "时间、单位与取整",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "本厂时区、计算/展示精度、支/袋/箱取整和误差范围；原始值用于计算，展示值不反复回算。",
+      "scope": "按对应阶段启用",
+      "stage": "R1基础；R3细化",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 527,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhh4",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAnI",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhh4"
+      }
+    }
+  ],
+  "acceptance": [
+    {
+      "id": "AC-01",
+      "title": "P0只有一条产线",
+      "source_paragraph": 1030,
+      "context": "阶段：R1；关联：FR-001/009。",
+      "content": "阶段：R1；关联：FR-001/009。\n项目\n内容\n数据\nL01及同线多个工位/并行设备；另准备L02引用错误记录。\n操作\n导入并计算。\n预期\nL01有效；引用其他产线提示且不计算，不把并行设备误认为多条产线。",
+      "feature_ids": [
+        "FR-001",
+        "FR-009"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-02",
+      "title": "各类模拟数据基本操作",
+      "source_paragraph": 1041,
+      "context": "阶段：各数据类别提供时；关联：FR-013至016。",
+      "content": "阶段：各数据类别提供时；关联：FR-013至016。\n项目\n内容\n数据\n第9章各类别正常CSV、缺字段/错单位/错引用文件。\n操作\n逐类导入、筛选查询、详情、新增、编辑、复制和按规则删除。\n预期\n每类均可操作，中文字段/单位清楚；错误定位文件/行号/字段；错误批次不破坏原数据，重导不重复。",
+      "feature_ids": [
+        "FR-013"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-03",
+      "title": "已引用数据与重复修改",
+      "source_paragraph": 1052,
+      "context": "阶段：R3至R7；关联：FR-015/026/037。",
+      "content": "阶段：R3至R7；关联：FR-015/026/037。\n项目\n内容\n数据\n一个已保存/已确认方案及引用数据。\n操作\n重复导入、修改、尝试删除被引用记录。\n预期\n不重复生成需求或数量；保存原值；被确认方案引用的数据不直接覆盖删除；旧方案可复查。",
+      "feature_ids": [
+        "FR-015",
+        "FR-026",
+        "FR-037"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-04",
+      "title": "两类基础约束及核对",
+      "source_paragraph": 1063,
+      "context": "阶段：R1；关联：FR-019/025/033/034。",
+      "content": "阶段：R1；关联：FR-019/025/033/034。\n项目\n内容\n数据\n同线两机器、固定工时和前后工序；另有机器交叠/后序提前样例。\n操作\n计算并从问题列表点击。\n预期\n正常结果通过；异常定位两任务、重叠区间或前后序时差，并能查到输入。",
+      "feature_ids": [
+        "FR-019",
+        "FR-025",
+        "FR-033",
+        "FR-034"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-05",
+      "title": "工作日历",
+      "source_paragraph": 1074,
+      "context": "阶段：R2.1；关联：FR-008/022/033。",
+      "content": "阶段：R2.1；关联：FR-008/022/033。\n项目\n内容\n数据\n一机器08:30–09:00停机；任务需要连续30分钟。\n操作\n计算及查询甘特。\n预期\n任务不跨停机；停机和顺延原因可见，不偷偷拆开任务。",
+      "feature_ids": [
+        "FR-008",
+        "FR-022",
+        "FR-033"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-06",
+      "title": "单套/多套工装与释放",
+      "source_paragraph": 1085,
+      "context": "阶段：R2.2；关联：FR-006/022/034。",
+      "content": "阶段：R2.2；关联：FR-006/022/034。\n项目\n内容\n数据\n同线两灌装设备共享G40；1套与2套；其中一任务后延归还10分钟。\n操作\n分别计算并看工装占用。\n预期\n1套不能同时用；2套最多供2任务；后延区间计入占用，问题可定位。",
+      "feature_ids": [
+        "FR-006",
+        "FR-022",
+        "FR-034"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-07",
+      "title": "人员数量、技能与班次",
+      "source_paragraph": 1096,
+      "context": "阶段：R2.3/R2.4；关联：FR-007/008/022。",
+      "content": "阶段：R2.3/R2.4；关联：FR-007/008/022。\n项目\n内容\n数据\n并行任务需2人和1人，可用2人；另有技能人员09:00到岗。\n操作\n计算、查看需求/可用人数。\n预期\n不能超员或用不符技能替代；机器跨班运行不表示装卸人员也可用。",
+      "feature_ids": [
+        "FR-007",
+        "FR-008",
+        "FR-022"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-08",
+      "title": "可配置BOM和收率",
+      "source_paragraph": 1107,
+      "context": "阶段：R3/R4；关联：FR-002/003/020。",
+      "content": "阶段：R3/R4；关联：FR-002/003/020。\n项目\n内容\n数据\n480kg产出、96%收率、500kg投入和第13章比例。\n操作\n计算物料，再修改比例/基准复算。\n预期\n数量分别325/75/75/25kg；加料和损失不重复；新配置生效且旧方案保留原配置。",
+      "feature_ids": [
+        "FR-002",
+        "FR-003",
+        "FR-020"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-09",
+      "title": "规格、包材与速度",
+      "source_paragraph": 1118,
+      "context": "阶段：R3/R4；关联：FR-002/003/005/020。",
+      "content": "阶段：R3/R4；关联：FR-002/003/005/020。\n项目\n内容\n数据\n40g/60g、10支/袋、1%袋损坏、各自包装速度。\n操作\n按两规格独立计算。\n预期\n12000/8000支；1213/809袋；净运行100/80分钟；改变规格无需改程序。",
+      "feature_ids": [
+        "FR-002",
+        "FR-003",
+        "FR-005",
+        "FR-020"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-10",
+      "title": "库存占用、质量状态与缺口",
+      "source_paragraph": 1129,
+      "context": "阶段：R3；关联：FR-010/020/024。",
+      "content": "阶段：R3；关联：FR-010/020/024。\n项目\n内容\n数据\n需瘦肉325kg，库存400kg占用100kg；另设待检、冻结、不合格批次。\n操作\n计算分配并查缺口。\n预期\n首例缺25kg；不可用状态不能投料，不能负库存；质量状态来源明确为模拟数据。",
+      "feature_ids": [
+        "FR-010",
+        "FR-020",
+        "FR-024"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-11",
+      "title": "到料与预计可用",
+      "source_paragraph": 1140,
+      "context": "阶段：R3；关联：FR-011/020/023。",
+      "content": "阶段：R3；关联：FR-011/020/023。\n项目\n内容\n数据\n原料10:00到，11:00预计可用；同时准备延期记录。\n操作\n修改日期并计算。\n预期\n不能按10:00直接投料；允许预计供给时显示条件；日期变化影响任务并解释。",
+      "feature_ids": [
+        "FR-011",
+        "FR-020",
+        "FR-023"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-12",
+      "title": "模拟进度及剩余工作",
+      "source_paragraph": 1151,
+      "context": "阶段：R5；关联：FR-012/031。",
+      "content": "阶段：R5；关联：FR-012/031。\n项目\n内容\n数据\n任务已开始、部分完成和已耗料记录。\n操作\n导入、编辑、重复导入并重新计算。\n预期\n开始/完成事实保留，不重复扣料/入完成量，余量正确；状态倒退和超量提示核对。",
+      "feature_ids": [
+        "FR-012",
+        "FR-031"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-13",
+      "title": "容量、拆批及兼容程序",
+      "source_paragraph": 1162,
+      "context": "阶段：R4；关联：FR-004/005/021。",
+      "content": "阶段：R4；关联：FR-004/005/021。\n项目\n内容\n数据\n500kg投入、混合机上限300kg；同/不同程序资源批。\n操作\n拆批并尝试合批。\n预期\n可拆两批250kg；不兼容程序不能合批；未满载不按比例缩短固定程序，不自动超产填满。",
+      "feature_ids": [
+        "FR-004",
+        "FR-005",
+        "FR-021"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-14",
+      "title": "等待、冷却与空间",
+      "source_paragraph": 1173,
+      "context": "阶段：R4；关联：FR-008/021/022/023。",
+      "content": "阶段：R4；关联：FR-008/021/022/023。\n项目\n内容\n数据\n热加工后最大等待10分钟；冷却晚30分钟可用；两批各600kg占1000kg空间。\n操作\n计算并看问题。\n预期\n必须调整上游或列出缺口；1200>1000不能同时占用；时间/重量依据可见。",
+      "feature_ids": [
+        "FR-008",
+        "FR-021",
+        "FR-022",
+        "FR-023"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-15",
+      "title": "配置规则逐步启用",
+      "source_paragraph": 1184,
+      "context": "阶段：R1至R7；关联：FR-003至008/016/017/025。",
+      "content": "阶段：R1至R7；关联：FR-003至008/016/017/025。\n项目\n内容\n数据\n两类基础规则；后续分别加入日历、工装、人料及未知规则。\n操作\n切换已支持规则、改参数、遗漏必要字段。\n预期\n规则来源和启用范围清楚；必要数据缺失时提示，未支持规则不伪装检查通过；已启用约束不自动忽略。",
+      "feature_ids": [
+        "FR-003"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-16",
+      "title": "计算状态、取消与失败",
+      "source_paragraph": 1195,
+      "context": "阶段：R1至R7；关联：FR-018/024/038。",
+      "content": "阶段：R1至R7；关联：FR-018/024/038。\n项目\n内容\n数据\n正常、部分未排、超时、取消和错误输入。\n操作\n运行、取消并查询记录。\n预期\n状态清楚；超时不等于无可行排法；原数据和已保存方案不损坏，原因可复查。",
+      "feature_ids": [
+        "FR-018",
+        "FR-024",
+        "FR-038"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-17",
+      "title": "甘特、输入和问题联动",
+      "source_paragraph": 1206,
+      "context": "阶段：R1至R4；关联：FR-014/025/033/034。",
+      "content": "阶段：R1至R4；关联：FR-014/025/033/034。\n项目\n内容\n数据\n机器/顺序及后续资源/物料问题样例。\n操作\n点击任务、问题、关联输入并筛选。\n预期\n三处定位同一任务；有具体时间、需求/可用量和规则解释；不用先导出再核对。",
+      "feature_ids": [
+        "FR-014",
+        "FR-025",
+        "FR-033",
+        "FR-034"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-18",
+      "title": "完成与可交付区分",
+      "source_paragraph": 1217,
+      "context": "阶段：R4/R6；关联：FR-023/024。",
+      "content": "阶段：R4/R6；关联：FR-023/024。\n项目\n内容\n数据\n包装完成12:00，配置后续等待2小时，要求13:00；另设剩余有效期限制。\n操作\n计算交期影响。\n预期\n不能把12:00当可交付；显示找到的可行时间、延后和条件；不放松工序/质量状态规则。",
+      "feature_ids": [
+        "FR-023",
+        "FR-024"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-19",
+      "title": "拖拽和锁定",
+      "source_paragraph": 1228,
+      "context": "阶段：R6.1；关联：FR-025/027。",
+      "content": "阶段：R6.1；关联：FR-025/027。\n项目\n内容\n数据\n可移动、锁定及已开始任务；一个非法时间位置。\n操作\n拖动时间或换允许设备。\n预期\n先预览再检查；非法原因清楚；不改已开始事实或直接覆盖确认计划；锁定冲突不自动解锁。",
+      "feature_ids": [
+        "FR-025",
+        "FR-027"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-20",
+      "title": "条件试算与无变化结果",
+      "source_paragraph": 1239,
+      "context": "阶段：R6.2；关联：FR-026/028。",
+      "content": "阶段：R6.2；关联：FR-026/028。\n项目\n内容\n数据\n复制方案，增人、改订单或延迟到料；物料瓶颈不随增人消失。\n操作\n重算并对比保留/放弃。\n预期\n修改条件与影响清楚；无交期改善如实显示；放弃试算不改原计划。",
+      "feature_ids": [
+        "FR-026",
+        "FR-028"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-21",
+      "title": "异常时点与执行保护",
+      "source_paragraph": 1250,
+      "context": "阶段：R6.3；关联：FR-012/024/027/029/031。",
+      "content": "阶段：R6.3；关联：FR-012/024/027/029/031。\n项目\n内容\n数据\n一个已开始任务；插单、故障、缺勤、延期或状态改不可用事件。\n操作\n更新事件时点模拟进度再重排。\n预期\n事实和保护时段保留；受影响任务标需处理并给原因；不把故障中的产品自动认定合格。",
+      "feature_ids": [
+        "FR-012",
+        "FR-024",
+        "FR-027",
+        "FR-029",
+        "FR-031"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-22",
+      "title": "主管确认与部分未排",
+      "source_paragraph": 1261,
+      "context": "阶段：R7；关联：FR-025/030/037。",
+      "content": "阶段：R7；关联：FR-025/030/037。\n项目\n内容\n数据\n合法方案、冲突方案、部分未排方案和确认前输入变化。\n操作\n计划员提交，主管确认/退回。\n预期\n有冲突无法发布；部分未排需明示并确认；输入变化重新核对；已确认内容不可直接改写。",
+      "feature_ids": [
+        "FR-025",
+        "FR-030",
+        "FR-037"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-23",
+      "title": "只预留外部接口",
+      "source_paragraph": 1272,
+      "context": "阶段：R7；关联：FR-011/030/031/035/036。",
+      "content": "阶段：R7；关联：FR-011/030/031/035/036。\n项目\n内容\n数据\n各系统对应字段/CSV说明、模拟进度和计划导出。\n操作\n在无ERP/OMS/WMS/PLM/MES账号和服务时完成P0流程。\n预期\n不依赖真实系统；无需发送接口消息，计划确认只在本系统生效；文件可查可导出。",
+      "feature_ids": [
+        "FR-011",
+        "FR-030",
+        "FR-031",
+        "FR-035",
+        "FR-036"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-24",
+      "title": "两类操作用户及查询用户",
+      "source_paragraph": 1283,
+      "context": "阶段：R1至R7；关联：FR-010/029/030/037。",
+      "content": "阶段：R1至R7；关联：FR-010/029/030/037。\n项目\n内容\n数据\n计划员、主管、其他查询用户，含模拟质量状态记录。\n操作\n执行数据维护、计算、确认、查询和导出。\n预期\n写入和确认权限正确；查询用户不能改；无QA在线放行流程；模拟状态由数据维护并标识。",
+      "feature_ids": [
+        "FR-010",
+        "FR-029",
+        "FR-030",
+        "FR-037"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-25",
+      "title": "P0单线完整流程",
+      "source_paragraph": 1294,
+      "context": "阶段：R7；关联：全部P0功能。",
+      "content": "阶段：R7；关联：全部P0功能。\n项目\n内容\n数据\n一条产线的配置、订单、资源、人料和模拟进度。\n操作\nBP-01至BP-07完整运行。\n预期\nP0功能可用；未排/冲突清楚；不依赖第二条产线、真实系统或额外审批角色。",
+      "feature_ids": [],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-26",
+      "title": "查询与导出一致",
+      "source_paragraph": 1305,
+      "context": "阶段：各阶段/R7；关联：FR-013/014/032/035。",
+      "content": "阶段：各阶段/R7；关联：FR-013/014/032/035。\n项目\n内容\n数据\n各数据类别与不同方案。\n操作\n筛选、关联查询、导出。\n预期\n权限、数量、单位、时间与方案一致；导出包含产线、输入和模拟说明。",
+      "feature_ids": [
+        "FR-013",
+        "FR-014",
+        "FR-032",
+        "FR-035"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-27",
+      "title": "性能与长任务体验",
+      "source_paragraph": 1316,
+      "context": "阶段：R7；关联：FR-018/038；NFR-03/04。",
+      "content": "阶段：R7；关联：FR-018/038；NFR-03/04。\n项目\n内容\n数据\n事先约定的一条产线规模、设备和规则组合。\n操作\n记录查询和计算时间，测试取消。\n预期\n按第11章确认后的目标检查；较长计算有状态可取消，不假报可用结果。",
+      "feature_ids": [
+        "FR-018",
+        "FR-03",
+        "FR-038",
+        "FR-04"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-28",
+      "title": "P1多产线配置与选择",
+      "source_paragraph": 1327,
+      "context": "阶段：R8/P1；关联：FR-039/040。",
+      "content": "阶段：R8/P1；关联：FR-039/040。\n项目\n内容\n数据\nL01/L02及不同产品适用范围。\n操作\n指定线与自动选择分别计算。\n预期\n只在允许产线安排；按产线查数据和结果；本用例不计入P0完成条件。",
+      "feature_ids": [
+        "FR-039",
+        "FR-040"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-29",
+      "title": "P1跨线共享资源",
+      "source_paragraph": 1338,
+      "context": "阶段：R8/P1；关联：FR-040。",
+      "content": "阶段：R8/P1；关联：FR-040。\n项目\n内容\n数据\n两条线共享同一工装或人员组。\n操作\n分别有空但并行争用时计算。\n预期\n全局共享数量不重复使用，影响对象和区间清楚。",
+      "feature_ids": [
+        "FR-040"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-30",
+      "title": "后续专题与未支持能力",
+      "source_paragraph": 1349,
+      "context": "阶段：R8/P1；关联：FR-041/042/043。",
+      "content": "阶段：R8/P1；关联：FR-041/042/043。\n项目\n内容\n数据\n预测补库、复杂路线、其他资源或优化目标输入。\n操作\n按专题启用或在未支持时尝试。\n预期\n每项需有配置及独立正常/异常用例；未支持时明确提示，不以字段存在代替功能完成。",
+      "feature_ids": [
+        "FR-041",
+        "FR-042",
+        "FR-043"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-31",
+      "title": "中文操作与流程跟踪",
+      "source_paragraph": 1360,
+      "context": "阶段：各阶段；关联：FR-014/033/034/035/038。",
+      "content": "阶段：各阶段；关联：FR-014/033/034/035/038。\n项目\n内容\n数据\n常用页面和流程图/功能/阶段编号。\n操作\n计划用户按导入、计算、核对、提交流程操作。\n预期\n中文状态与错误可理解；任务和问题可定位；页面优先级与构建阶段一致。",
+      "feature_ids": [
+        "FR-014",
+        "FR-033",
+        "FR-034",
+        "FR-035",
+        "FR-038"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-32",
+      "title": "保存、变化与复查",
+      "source_paragraph": 1371,
+      "context": "阶段：R3至R7；关联：FR-003/015/017/026/030/038。",
+      "content": "阶段：R3至R7；关联：FR-003/015/017/026/030/038。\n项目\n内容\n数据\n已保存方案及BOM/工艺/规则/输入修改。\n操作\n查询旧方案、保存新输入、重算、恢复模拟数据。\n预期\n旧方案可查原配置；新方案采用新输入；检查变化影响，不重复用料或改写已确认内容。",
+      "feature_ids": [
+        "FR-003",
+        "FR-015",
+        "FR-017",
+        "FR-026",
+        "FR-030",
+        "FR-038"
+      ],
+      "acceptance_ids": []
+    }
+  ],
+  "uat": [
+    {
+      "id": "UAT-01",
+      "title": "最小排程与可视核对完整流程",
+      "source_paragraph": 1386,
+      "context": "阶段：R1；关联：AC-01/02/04/17/26/31。",
+      "content": "阶段：R1；关联：AC-01/02/04/17/26/31。\n项目\n业务验收内容\n四维范围\nF1最小能力+可视验证；机器不重叠,工序顺序；D1离线CSV；L1单产线\n业务和数据\n先导入订单、工艺工时及设备依赖，再计算核对保存。\n约束边界\n两机器任务可并行；结束等于下一任务开始时不冲突。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n参考已排部分满足全部启用规则，需求全部覆盖；实际系统允许返回其他同样可行的安排。\n数值核对\n一种可行参考安排：A-MIX 08:00—08:30；A-FILL 08:30—09:00；B-MIX 08:00—08:30；B-FILL 08:30—09:00。不得只对比任务排列；还须检查全部启用约束、覆盖及数值边界。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-01",
+        "AC-02",
+        "AC-04",
+        "AC-17",
+        "AC-26",
+        "AC-31"
+      ]
+    },
+    {
+      "id": "UAT-02",
+      "title": "工厂日历继承与设备停机",
+      "source_paragraph": 1405,
+      "context": "阶段：R2.1；关联：AC-05/15/17。",
+      "content": "阶段：R2.1；关联：AC-05/15/17。\n项目\n业务验收内容\n四维范围\nF2核心能力+可视验证；机器不重叠,工序顺序,工厂及设备日历；D2规范化离线CSV；L1单产线\n业务和数据\n设备MIX02在08:00—08:15停机，其余资源继承工厂08:00—18:00。\n约束边界\n任务恰好从08:15开始合法，08:14开始不合法。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n参考已排部分满足全部启用规则，需求全部覆盖；实际系统允许返回其他同样可行的安排。\n数值核对\n一种可行参考安排：A-MIX 08:00—08:30；A-FILL 08:30—09:00；B-MIX 08:15—08:45；B-FILL 08:45—09:15。不得只对比任务排列；还须检查全部启用约束、覆盖及数值边界。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-05",
+        "AC-15",
+        "AC-17"
+      ]
+    },
+    {
+      "id": "UAT-03",
+      "title": "同线并行设备争用一套工装",
+      "source_paragraph": 1424,
+      "context": "阶段：R2.2；关联：AC-06/17。",
+      "content": "阶段：R2.2；关联：AC-06/17。\n项目\n业务验收内容\n四维范围\nF2核心能力+可视验证；机器不重叠,工序顺序,工厂及设备日历,模具与工具；D2规范化离线CSV；L1单产线\n业务和数据\n同线FILL01/FILL02都需要G01；B任务需等A归还。\n约束边界\n需求2套/可用1套；前任务结束时可立即交给后任务。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n参考已排部分满足全部启用规则，需求全部覆盖；实际系统允许返回其他同样可行的安排。\n数值核对\n一种可行参考安排：A-MIX 08:00—08:30；A-FILL 08:30—09:00；B-MIX 08:15—08:45；B-FILL 09:00—09:30。不得只对比任务排列；还须检查全部启用约束、覆盖及数值边界。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-06",
+        "AC-17"
+      ]
+    },
+    {
+      "id": "UAT-04",
+      "title": "机器工装可行但人员不足",
+      "source_paragraph": 1443,
+      "context": "阶段：R2.3；关联：AC-07/17。",
+      "content": "阶段：R2.3；关联：AC-07/17。\n项目\n业务验收内容\n四维范围\nF2核心能力+可视验证；机器不重叠,工序顺序,工厂及设备日历,模具与工具,人员数量及技能；D2规范化离线CSV；L1单产线\n业务和数据\n全部混合/灌装任务需要综合操作组1人，而可用只有1人。\n约束边界\n累计需求不能超过1人，不按机器空闲判断人力。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n参考已排部分满足全部启用规则，需求全部覆盖；实际系统允许返回其他同样可行的安排。\n数值核对\n一种可行参考安排：A-MIX 08:00—08:30；A-FILL 08:30—09:00；B-MIX 09:00—09:30；B-FILL 09:30—10:00。不得只对比任务排列；还须检查全部启用约束、覆盖及数值边界。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-07",
+        "AC-17"
+      ]
+    },
+    {
+      "id": "UAT-05",
+      "title": "物料到达与前四类约束组合",
+      "source_paragraph": 1462,
+      "context": "阶段：R3；关联：AC-08/10/11/17。",
+      "content": "阶段：R3；关联：AC-08/10/11/17。\n项目\n业务验收内容\n四维范围\nF2核心能力+可视验证；机器不重叠,工序顺序,工厂及设备日历,模具与工具,人员数量及技能,BOM及物料可用；D2规范化离线CSV；L1单产线\n业务和数据\n先到瘦肉只够A；B的瘦肉11:00预计可用，其他资源即使空也不能提前。\n约束边界\nA耗162.5kg；B最早投料180分钟，179分钟不合法。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n参考已排部分满足全部启用规则，需求全部覆盖；实际系统允许返回其他同样可行的安排。\n数值核对\n一种可行参考安排：A-MIX 08:00—08:30；A-FILL 08:30—09:00；B-MIX 11:00—11:30；B-FILL 11:30—12:00。不得只对比任务排列；还须检查全部启用约束、覆盖及数值边界。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-08",
+        "AC-10",
+        "AC-11",
+        "AC-17"
+      ]
+    },
+    {
+      "id": "UAT-06",
+      "title": "三任务与两套工装的容量边界",
+      "source_paragraph": 1481,
+      "context": "阶段：R2.2；关联：AC-06/15。",
+      "content": "阶段：R2.2；关联：AC-06/15。\n项目\n业务验收内容\n四维范围\nF2核心能力+可视验证；机器不重叠,工序顺序,工厂及设备日历,模具与工具；D2规范化离线CSV；L1单产线\n业务和数据\n三个并行工位需要3套，只有2套；允许2个任务同时用，第三个等归还。\n约束边界\n2套恰好够2任务，3任务同时用超1套。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n参考已排部分满足全部启用规则，需求全部覆盖；实际系统允许返回其他同样可行的安排。\n数值核对\n一种可行参考安排：A-MIX 08:00—08:30；B-MIX 08:00—08:30；C-MIX 08:00—08:30；A-FILL 08:30—09:00；B-FILL 08:30—09:00；C-FILL 09:00—09:30。不得只对比任务排列；还须检查全部启用约束、覆盖及数值边界。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-06",
+        "AC-15"
+      ]
+    },
+    {
+      "id": "UAT-07",
+      "title": "工装归还时间与工序后延占用",
+      "source_paragraph": 1500,
+      "context": "阶段：R2.2；关联：AC-06/17。",
+      "content": "阶段：R2.2；关联：AC-06/17。\n项目\n业务验收内容\n四维范围\nF2核心能力+可视验证；机器不重叠,工序顺序,工厂及设备日历,模具与工具；D2规范化离线CSV；L1单产线\n业务和数据\nA灌装09:00结束，G01需再占10分钟拆卸，B最早09:10开工。\n约束边界\n加工结束不等于工装释放；恰好09:10开始合法。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n参考已排部分满足全部启用规则，需求全部覆盖；实际系统允许返回其他同样可行的安排。\n数值核对\n一种可行参考安排：A-MIX 08:00—08:30；A-FILL 08:30—09:00；B-MIX 08:15—08:45；B-FILL 09:10—09:40。不得只对比任务排列；还须检查全部启用约束、覆盖及数值边界。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-06",
+        "AC-17"
+      ]
+    },
+    {
+      "id": "UAT-08",
+      "title": "任务人数与技能班次组合边界",
+      "source_paragraph": 1519,
+      "context": "阶段：R2.4；关联：AC-07/15。",
+      "content": "阶段：R2.4；关联：AC-07/15。\n项目\n业务验收内容\n四维范围\nF2核心能力+可视验证；机器不重叠,工序顺序,工厂及设备日历,模具与工具,人员数量及技能；D2规范化离线CSV；L1单产线\n业务和数据\nA混合需2名综合操作、B混合需1名，可用2名；另有10名普通辅助不能替代。随后A灌装与B混合可各用1人。\n约束边界\n需求2等于可用2合法，2+1大于2非法。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n参考已排部分满足全部启用规则，需求全部覆盖；实际系统允许返回其他同样可行的安排。\n数值核对\n一种可行参考安排：A-MIX 08:00—08:30；A-FILL 08:30—09:00；B-MIX 08:30—09:00；B-FILL 09:00—09:30。不得只对比任务排列；还须检查全部启用约束、覆盖及数值边界。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-07",
+        "AC-15"
+      ]
+    },
+    {
+      "id": "UAT-09",
+      "title": "库存预留质量效期与BOM精确齐套",
+      "source_paragraph": 1538,
+      "context": "阶段：R3；关联：AC-08/10。",
+      "content": "阶段：R3；关联：AC-08/10。\n项目\n业务验收内容\n四维范围\nF2核心能力+可视验证；机器不重叠,工序顺序,工厂及设备日历,模具与工具,人员数量及技能,BOM及物料可用；D2规范化离线CSV；L1单产线\n业务和数据\n需求瘦肉162.5kg；先排除冻结/过期，扣预留后早到期批100kg、晚到期批62.5kg。\n约束边界\n有效库存162.5kg恰好齐套；分配100+62.5。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n参考已排部分满足全部启用规则，需求全部覆盖；实际系统允许返回其他同样可行的安排。\n数值核对\n一种可行参考安排：A-MIX 08:00—08:30；A-FILL 08:30—09:00。不得只对比任务排列；还须检查全部启用约束、覆盖及数值边界。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-08",
+        "AC-10"
+      ]
+    },
+    {
+      "id": "UAT-10",
+      "title": "BOM净缺料0.1kg的不可排边界",
+      "source_paragraph": 1557,
+      "context": "阶段：R3；关联：AC-10/16/22。",
+      "content": "阶段：R3；关联：AC-10/16/22。\n项目\n业务验收内容\n四维范围\nF2核心能力+可视验证；机器不重叠,工序顺序,工厂及设备日历,模具与工具,人员数量及技能,BOM及物料可用；D2规范化离线CSV；L1单产线\n业务和数据\n需求瘦肉162.5kg；先排除冻结/过期，扣预留后早到期批100kg、晚到期批62.4kg。\n约束边界\n有效库存162.4kg，差0.1kg不能舍入为够料。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n有效瘦肉仅162.4kg，需求162.5kg；列出0.1kg缺口及未排任务，不生成负库存。\n数值核对\n需求162.5kg、净可用162.4kg、缺口0.1kg；参考不排任务，保留缺料订单和全部未排工序。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-10",
+        "AC-16",
+        "AC-22"
+      ]
+    },
+    {
+      "id": "UAT-11",
+      "title": "配置数据错误必须在排程前阻止",
+      "source_paragraph": 1576,
+      "context": "阶段：R3；关联：AC-02/03/15。",
+      "content": "阶段：R3；关联：AC-02/03/15。\n项目\n业务验收内容\n四维范围\nF2核心能力+可视验证；机器不重叠,工序顺序,工厂及设备日历,模具与工具,人员数量及技能,BOM及物料可用；D2规范化离线CSV；L1单产线\n业务和数据\n四种独立配置错误同时出现：工厂日历倒置、工序工时缺失、依赖不存在的工装、原料BOM合计错误。\n约束边界\n任何一类关键配置错误都不能靠默认值掩盖。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n输入检查拒绝，至少指出日历、工时、资源依赖、BOM四类问题；不得开始正常排程。\n数值核对\n参考输入同时包含四类错误：日历倒置、工时缺失、依赖不存在的工装及BOM合计错误；业务用户应能逐条定位并修正。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-02",
+        "AC-03",
+        "AC-15"
+      ]
+    },
+    {
+      "id": "UAT-12",
+      "title": "完整路线与冷却等待窗联合排程",
+      "source_paragraph": 1595,
+      "context": "阶段：R4；关联：AC-13/14/18。",
+      "content": "阶段：R4；关联：AC-13/14/18。\n项目\n业务验收内容\n四维范围\nF2核心能力+可视验证；机器不重叠,工序顺序,工厂及设备日历,模具与工具,人员数量及技能,BOM及物料可用,批次装载,程序兼容,最大等待,冷却空间,预计可交付；D2规范化离线CSV；L1单产线\n业务和数据\n热加工出炉后最多等10分钟；冷却11:30才空，必须推迟热加工，不能只把冷却往后排。\n约束边界\n最大等待10分钟；候选等30分钟非法，参考等0分钟。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n参考已排部分满足全部启用规则，需求全部覆盖；实际系统允许返回其他同样可行的安排。\n数值核对\n一种可行参考安排：A-MIX 08:00—08:30；A-FILL 08:30—09:00；A-HEAT 09:30—11:30；A-COOL 11:30—12:30；A-PACK 12:30—13:20。不得只对比任务排列；还须检查全部启用约束、覆盖及数值边界。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-13",
+        "AC-14",
+        "AC-18"
+      ]
+    },
+    {
+      "id": "UAT-13",
+      "title": "合炉500kg与冷却480kg恰好满足",
+      "source_paragraph": 1614,
+      "context": "阶段：R4；关联：AC-08/09/13/14。",
+      "content": "阶段：R4；关联：AC-08/09/13/14。\n项目\n业务验收内容\n四维范围\nF2核心能力+可视验证；机器不重叠,工序顺序,工厂及设备日历,模具与工具,人员数量及技能,BOM及物料可用,批次装载,程序兼容,最大等待,冷却空间,预计可交付；D2规范化离线CSV；L1单产线\n业务和数据\n两个250kg投入批可同炉500kg；冷却各240kg。冷却空间480kg恰好够。\n约束边界\n合炉按总投入500kg检查；冷却按产出480kg检查，两个数量基准不可混用。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n参考已排部分满足全部启用规则，需求全部覆盖；实际系统允许返回其他同样可行的安排。\n数值核对\n一种可行参考安排：A-MIX 08:00—08:30；B-MIX 08:00—08:30；A-FILL 08:30—09:00；B-FILL 09:00—09:30；A-HEAT 09:30—11:30；B-HEAT 09:30—11:30；A-COOL 11:30—12:30；B-COOL 11:30—12:30；A-PACK 12:30—13:20；B-PACK 13:20—14:10。不得只对比任务排列；还须检查全部启用约束、覆盖及数值边界。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-08",
+        "AC-09",
+        "AC-13",
+        "AC-14"
+      ]
+    },
+    {
+      "id": "UAT-14",
+      "title": "合炉后冷却不足必须联动拆炉",
+      "source_paragraph": 1633,
+      "context": "阶段：R4；关联：AC-13/14/17。",
+      "content": "阶段：R4；关联：AC-13/14/17。\n项目\n业务验收内容\n四维范围\nF2核心能力+可视验证；机器不重叠,工序顺序,工厂及设备日历,模具与工具,人员数量及技能,BOM及物料可用,批次装载,程序兼容,最大等待,冷却空间,预计可交付；D2规范化离线CSV；L1单产线\n业务和数据\n两个250kg投入批可同炉500kg；冷却各240kg。空间只有400kg，不能同出炉；拆成两炉后同时满足等待窗和空间。\n约束边界\n合炉按总投入500kg检查；冷却按产出480kg检查，两个数量基准不可混用。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n参考已排部分满足全部启用规则，需求全部覆盖；实际系统允许返回其他同样可行的安排。\n数值核对\n一种可行参考安排：A-MIX 08:00—08:30；B-MIX 08:00—08:30；A-FILL 08:30—09:00；B-FILL 09:00—09:30；A-HEAT 09:00—11:00；B-HEAT 11:00—13:00；A-COOL 11:00—12:00；B-COOL 13:00—14:00；A-PACK 12:00—12:50；B-PACK 14:00—14:50。不得只对比任务排列；还须检查全部启用约束、覆盖及数值边界。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-13",
+        "AC-14",
+        "AC-17"
+      ]
+    },
+    {
+      "id": "UAT-15",
+      "title": "已执行保护及增人无交期改善试算",
+      "source_paragraph": 1652,
+      "context": "阶段：R6；关联：AC-12/20/21/32。",
+      "content": "阶段：R6；关联：AC-12/20/21/32。\n项目\n业务验收内容\n四维范围\nF4条件试算+可视验证；机器不重叠,工序顺序,工厂及设备日历,模具与工具,人员数量及技能,BOM及物料可用,执行保护；D2规范化离线CSV；L1单产线\n业务和数据\n09:00时A两工序已完成，B仍等11:00物料；综合操作组1人改2人也不能让B提前投料。\n约束边界\n已完成任务0—30/30—60保持；B开始下界180不变。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n参考已排部分满足全部启用规则，需求全部覆盖；实际系统允许返回其他同样可行的安排。\n数值核对\n一种可行参考安排：A-MIX 08:00—08:30；A-FILL 08:30—09:00；B-MIX 11:00—11:30；B-FILL 11:30—12:00。不得只对比任务排列；还须检查全部启用约束、覆盖及数值边界。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-12",
+        "AC-20",
+        "AC-21",
+        "AC-32"
+      ]
+    },
+    {
+      "id": "UAT-16",
+      "title": "两产线共用库存工装与人员",
+      "source_paragraph": 1671,
+      "context": "阶段：R8/P1；关联：AC-28/29。",
+      "content": "阶段：R8/P1；关联：AC-28/29。\n项目\n业务验收内容\n四维范围\nF2核心能力+可视验证；机器不重叠,工序顺序,工厂及设备日历,模具与工具,人员数量及技能,BOM及物料可用；D2规范化离线CSV；L2多产线共享\n业务和数据\nL01/L02各有空机器，但共用G01、LP01和瘦肉库存。B要等共享库存09:30到，不得每条线各扣一份相同库存。\n约束边界\n共享资源按全工厂累计；库存初始162.5kg加到料162.5kg只够两单。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n参考已排部分满足全部启用规则，需求全部覆盖；实际系统允许返回其他同样可行的安排。\n数值核对\n一种可行参考安排：A-MIX 08:00—08:30；A-FILL 08:30—09:00；B-MIX 09:30—10:00；B-FILL 10:00—10:30。不得只对比任务排列；还须检查全部启用约束、覆盖及数值边界。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-28",
+        "AC-29"
+      ]
+    },
+    {
+      "id": "UAT-17",
+      "title": "完整工艺下原交期不可能满足",
+      "source_paragraph": 1690,
+      "context": "阶段：R6；关联：AC-18/20/22。",
+      "content": "阶段：R6；关联：AC-18/20/22。\n项目\n业务验收内容\n四维范围\nF2核心能力+可视验证；机器不重叠,工序顺序,工厂及设备日历,模具与工具,人员数量及技能,BOM及物料可用,批次装载,程序兼容,最大等待,冷却空间,预计可交付；D2规范化离线CSV；L1单产线\n业务和数据\n08:00接单，要求09:30；仅热加工就120分钟，完整路线290分钟再加模拟交付等待60分钟，参考13:50可交付。\n约束边界\n工艺最短链350分钟>交期90分钟；不能压缩程序冒充按期。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n完整工艺最短链及模拟交付等待合计350分钟，超过90分钟原要求；可给13:50参考可交付时间，迟交需明确确认。\n数值核对\n一种可行参考安排：A-MIX 08:00—08:30；A-FILL 08:30—09:00；A-HEAT 09:00—11:00；A-COOL 11:00—12:00；A-PACK 12:00—12:50。不得只对比任务排列；还须检查全部启用约束、覆盖及数值边界。参考可交付13:50，超过原要求260分钟，需明确确认迟交。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-18",
+        "AC-20",
+        "AC-22"
+      ]
+    },
+    {
+      "id": "UAT-18",
+      "title": "配置修改后联动重算并保留原方案",
+      "source_paragraph": 1709,
+      "context": "阶段：R6；关联：AC-02/08/15/20/32。",
+      "content": "阶段：R6；关联：AC-02/08/15/20/32。\n项目\n业务验收内容\n四维范围\nF2核心能力+可视验证；机器不重叠,工序顺序,工厂及设备日历,模具与工具,人员数量及技能,BOM及物料可用；D2规范化离线CSV；L1单产线\n业务和数据\n改工厂日历、混合工时30→40、灌装依赖G01→G60（10:10可用）、BOM瘦肉65%→70%。修改后混合09:00开始、灌装10:10开始。\n约束边界\n新BOM瘦肉需求175kg；工时40min必须放入连续工厂工作窗口；原方案保留原输入。\n操作\n导入阶段清单→查询日历/工时/依赖/BOM和订单→按本例边界设置→计算→点问题定位CSV及任务→保存导出。R7追加主管确认/退回；R6场景另存原方案后修改。\n预期\n参考已排部分满足全部启用规则，需求全部覆盖；实际系统允许返回其他同样可行的安排。\n数值核对\n一种可行参考安排：A-MIX 09:00—09:40；A-FILL 10:10—10:40。不得只对比任务排列；还须检查全部启用约束、覆盖及数值边界。\n配置和证据\n本例文件夹包含19类CSV；核对工厂日历、工序工时、资源/物料依赖与BOM。图、候选/参考安排、预期问题和导入清单使用同一场景编号。\n图示示例：合炉与下游冷却空间联动\nUAT-14中两个订单各投入250kg、产出240kg。合炉投入500kg未超热加工容量，但同时出炉的480kg超过冷却空间400kg。直接延迟一个冷却任务又会超过10分钟最大等待，需联动拆成两炉。下列三图与本例CSV、候选安排和参考安排使用同一数据；其余场景附图见配套HTML手册。\n图14-1 UAT-14 配置、订单、投入产出与联合约束关系\n图14-2 UAT-14 候选：同炉热加工可行，下游冷却空间超限\n图14-3 UAT-14 参考：拆炉后同时满足容量和最大等待",
+      "feature_ids": [],
+      "acceptance_ids": [
+        "AC-02",
+        "AC-08",
+        "AC-15",
+        "AC-20",
+        "AC-32"
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "DEC-01",
+      "title": "首条产线与仿真数据量",
+      "recommendation": "先用一条虚构火腿肠产线、小任务集，再约定完整P0订单/任务/设备规模。",
+      "owner_due": "计划主管/测试；影响R1样例与R7性能验收。",
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhws",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAo8",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhws"
+      }
+    },
+    {
+      "id": "DEC-02",
+      "title": "工装占用与归还",
+      "recommendation": "先按完整工序占用，允许设置提前取得/后延归还；是否细分准备/拆卸阶段另确认。",
+      "owner_due": "计划员/计划主管；R2.2前确定。",
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhyM",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhApI",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhyM"
+      }
+    },
+    {
+      "id": "DEC-03",
+      "title": "人员参与阶段与技能替代",
+      "recommendation": "先按人员组维护；明确哪些阶段需要人，技能能否替代。",
+      "owner_due": "计划主管；R2.3/R2.4前确定。",
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhzg",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhApU",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhzg"
+      }
+    },
+    {
+      "id": "DEC-04",
+      "title": "BOM基准、损失与包装换算",
+      "recommendation": "明确投入/产出基准、加料、收率、包材损坏及支/袋/箱取整。",
+      "owner_due": "计划用户/业务负责人；R3前确定；示例值不作真实参数。",
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHh0o",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhApc",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHh0o"
+      }
+    },
+    {
+      "id": "DEC-05",
+      "title": "模拟质量状态和预计供给",
+      "recommendation": "确定状态到可用性的配置；是否允许预计可用量参与试算及如何提示。",
+      "owner_due": "计划主管；R3前确定；无QA在线处理。",
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHh1Y",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhApg",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHh1Y"
+      }
+    },
+    {
+      "id": "DEC-06",
+      "title": "工艺和程序示例",
+      "recommendation": "选定用于软件验证的工序、设备、时长、容量与等待参数，全部作为可更改数据。",
+      "owner_due": "计划用户/业务负责人；R4前确定；不声称双汇实际工艺。",
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHh3Q",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAps",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHh3Q"
+      }
+    },
+    {
+      "id": "DEC-07",
+      "title": "主管确认和部分未排",
+      "recommendation": "确认是否禁止自审、是否允许确认已排部分以及必须查看哪些缺口。",
+      "owner_due": "计划主管；R7前确定。",
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHh5U",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAp4",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHh5U"
+      }
+    },
+    {
+      "id": "DEC-08",
+      "title": "性能与恢复要求",
+      "recommendation": "确认单线任务数、机器数、规则组合、运行设备、时间目标和数据恢复方式。",
+      "owner_due": "产品/开发/测试/计划主管；R7验收前确定。",
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHh6c",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAqA",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHh6c"
+      }
+    },
+    {
+      "id": "DEC-09",
+      "title": "P1多线专题范围",
+      "recommendation": "优先多线配置、产品适用及共享资源；其他功能按价值单独确定，不含默认跨厂运输。",
+      "owner_due": "业务负责人；R8/P1开始前确定。",
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHh7k",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAqI",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHh7k"
+      }
+    }
+  ]
+}
