@@ -16,6 +16,7 @@ export type VerificationReport = {
     resourcePolicies?: VerificationCheck;
     batchAndWait?: VerificationCheck;
     jointConditions?: VerificationCheck;
+    originalResources?: VerificationCheck;
   };
 };
 export function independentlyVerifyPlan(
