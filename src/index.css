@@ -9,3 +9,9 @@
 .fr033 p{color:#334155;font-size:13px;margin:6px 0;line-height:1.6}.fr033 td,.fr033 th{font-size:13px;line-height:1.5}.fr033 .fr033-detail button{margin:3px}.fr033 .timeline-controls input,.fr033 .timeline-controls select{padding:6px;border:1px solid #8794a8;border-radius:4px}.fr033 .timeline-controls label{font-size:13px;color:#24374f}.fr033-task:hover{z-index:4}.fr033 .fr033-machine-label small{font-size:12px}
 
 .fr034-interval{position:absolute;background:repeating-linear-gradient(45deg,#dc262630 0px,#dc262630 4px,transparent 4px,transparent 8px);border:2px dashed #b91c1c;pointer-events:none;z-index:3;color:#991b1b;font-weight:bold;overflow:hidden}.fr034-problems{max-height:320px;overflow:auto}.fr034 pre{white-space:pre-wrap;overflow-wrap:anywhere}.fr034 article{border-top:1px solid #cbd5e1;padding:12px 0}
+
+/* Keep operation feedback visible while long result lists scroll. */
+.toast{position:fixed;top:88px;right:16px;z-index:100;width:max-content;max-width:min(480px,calc(100vw - 32px));max-height:calc(50dvh - 16px);margin:0;gap:12px;align-items:flex-start;overflow:auto;box-shadow:0 6px 24px #173c6733}
+.toast>span{min-width:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.toast button{flex-shrink:0;min-width:32px;min-height:32px;padding:0;line-height:1}
+@media(max-width:650px){.toast{top:12px;right:12px;max-width:calc(100vw - 24px)}}

@@ -1,10 +1,10 @@
 {
-  "productSourceSHA": "FR038-working-source",
-  "base": "5cb08e86d42e982fb8d763db5376f7a8478af8c9",
+  "productSourceSHA": "Issue26-round1-working-source",
+  "base": "9082e3d82a11f00947d82f1f672c51fb08f3536a",
   "files": {
     "src/RunPanel.tsx": "9a3c1ecbd06493773932c548bc7695aac718989f88ec7f9724c159bd472d65ee",
     "src/BatchPanel.tsx": "f65bd61ca187abaafeb63ae1a32ab4331123a194edb8cd1061190a4e1c8fae61",
-    "src/App.tsx": "123b2efec6ae3c63064c776a3323ff1c930ca9c3824cd4e04041fb72a533544a",
+    "src/App.tsx": "4e0b559f7329152dcc53f5ce953e2560e72d4ce52ebce3832f60e35c3c3fe0fe",
     "src/DeliveryPanel.tsx": "aedb190ebf7c96cbc759e8435b1e5ea2c15ebd9d422af92054c95db3959dd08c",
     "src/main.tsx": "e190eb4a820c29ada0d0f8c29380b17bbe8c67de6dd5307fe3a36f5e51a3a37c",
     "src/ResourcePanel.tsx": "869bb547bfcc6e11eb6256c0506127b246b5a5ea1fbabc4b8af03c81475b69eb",
@@ -16,7 +16,7 @@
     "src/RulePanel.tsx": "79e08c855ea83fbed72ab55339a3cbb625f59ab3b73acfa8ed88f63f9b169c8a",
     "src/praetor-bridge.ts": "b1f5148f7bb2e6f44d05f3916fc197bf03d0af0a136a5c68b78109a5373e9f05",
     "src/LoadPanel.tsx": "8c01e4e32c1d6f3c9de4c3c0937138f94e6c27d4274bd83f40f65e230251eaf8",
-    "src/index.css": "21e15e93f12accef8c86837831a32cbf6fdff7f4f54f2805b0cdf462ab0c0aa5",
+    "src/index.css": "077d71334a25efd65252942d7691dac297e9915fe4fc17d3634a951b0c1c785d",
     "src/DataQueries.tsx": "5aafda603f6a7a2baa8f285a1efd1506a872d4c853f54bb88e58551d87e05e97",
     "src/ResultPanel.tsx": "d027d81e3ab8abff90c9a6472406db80d5f4dc642af465d5843d9ca679f869c9",
     "src/praetor-embedded.ts": "fb8e41589f0d7bd06c6e8c275a4345e132002b0980806606a19453d497fab25f",

@@ -109,7 +109,7 @@ export default function App() {
     <main>
       <section className="panel"><h2>权限与操作记录</h2><p>当前权限：{session?.role||'未取得业务权限'} · 所有质量状态均为模拟数据，无 QA 在线审批。主管确认、退回与发布流程尚未提供。</p><label>操作原因（必填）<input aria-label="操作原因" value={reason} onChange={e=>setReason(e.target.value)}/></label><button onClick={()=>{requestGeneration.current++;membership.signOut().catch(e=>setMessage(e.message));}}>退出登录</button><button onClick={()=>perform(refresh)}>刷新数据与记录</button><details><summary>操作记录（{operations.length}）</summary>{operations.map(r=><p key={r.id}>{r.at} · {r.actor} · {r.action} · {r.reason}</p>)}</details></section>
       <section className="hero"><div><p className="eyebrow">单线排程 · R1 最小模式 / 已有支持模式</p><h1>{view==='schedule'?'排程计算与范围核对':view==='data'?'日历与排程数据':view==='query'?'模拟数据与关联查询':view==='reports'?'查询报表与文件导出':'实现范围与业务决策'}</h1><p className="sub">基于 v0.3 UAT-02 / 2026-11-02 08:00（Asia/Shanghai）；样例业务值均为虚构，仅用于软件验证。</p></div><div className="hero-source"><span>追溯基线</span><b>FR-008 · UAT-02 · AC-05</b><small>工厂窗口继承 · 设备停机例外 · 连续工作窗口</small></div></section>
-      {message&&<div className="toast" role="status">{message}<button onClick={()=>setMessage('')}>×</button></div>}
+      {message&&<div className="toast" role="status" aria-live="polite" aria-atomic="true"><span>{message}</span><button aria-label="关闭提示" onClick={()=>setMessage('')}>×</button></div>}
       {view==='reports'&&<ReportPanel key={membership.state.kind} plans={plans} api={api} onExport={session?.canExport&&!busy&&!!reason.trim()?download:undefined}/>}
       {view==='schedule'&&<>
         <ConfirmationPanel plans={plans} role={session?.role} busy={busy} reason={reason} api={api} refresh={refresh} onExport={session?.canExport?id=>download({confirmationId:id},id+'-确认副本.json'):undefined}/>
