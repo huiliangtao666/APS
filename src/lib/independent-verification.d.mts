@@ -14,6 +14,7 @@ export type VerificationReport = {
     precedence: VerificationCheck;
     calendar?: VerificationCheck;
     resourcePolicies?: VerificationCheck;
+    batchAndWait?: VerificationCheck;
   };
 };
 export function independentlyVerifyPlan(
