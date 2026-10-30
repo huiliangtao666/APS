@@ -390,7 +390,8 @@
         "src/App.tsx#importCsv",
         "server/input-validation.mjs#validateInputs"
       ],
-      "template": "templates/07_产品与包装规格.csv"
+      "template": "templates/07_产品与包装规格.csv",
+      "approved_validation": "CR-FR013-VALIDATION-20261029: 每袋支数为正整数(支/袋)，不取整；总收率为比例0<值≤1(1=100%)；字段显式配置，无新默认。"
     },
     {
       "key": "materials",

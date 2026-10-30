@@ -1,3 +1,4 @@
+import {MasterDataContract} from './MasterDataContract';
 import {useEffect,useRef,useState} from 'react';
 import {editCsvDraft} from './lib/csv-draft.mjs';
 import {defs} from './data-defs';
@@ -17,6 +18,7 @@ export function CsvBatchPanel({revision,canWrite,busy,api,refresh,onLocate}:{rev
  function locate(issue:Issue){setActive(issue);const file=files.find(f=>f.name===issue.file);if(!file){if(issue.table)onLocate(issue.table,issue.index??Math.max(0,issue.row-2));return;}requestAnimationFrame(()=>{const el=editor.current;if(!el)return;const text=el.value;const lines=[0];for(let i=0;i<text.length;i++){if(text[i]==='\r'){if(text[i+1]==='\n')i++;lines.push(i+1);}else if(text[i]==='\n')lines.push(i+1);}el.focus();el.setSelectionRange(lines[Math.max(0,issue.row-1)]??0,lines[issue.row]??text.length);});}
  const disabled=!canWrite||busy||pending;
  return <section className="panel" data-csv-batch><h2>CSV 批量导入 · 预览与问题处理</h2><p>按中文文件名选择多个 CSV。整批替换所选表，引用在批次合并后检查；错误时全部不写入。只接受现行字段：旧原型“合格需求kg”须显式改为“合格需求”和“数量单位”。时间字段按分钟，生效时间按现行日期契约。</p><p>支持：{defs.filter(d=>keys.includes(d.key)).map(d=>d.file).join('、')}。其他已支持类别请使用下方单表操作；后续未支持类别不在本次批导范围。</p>
+ <MasterDataContract table={'batch'}/>
  <label>选择批量 CSV<input aria-label="选择批量 CSV" type="file" multiple accept=".csv,text/csv" disabled={disabled} onChange={async e=>{const chosen=Array.from(e.target.files||[]);e.target.value='';const run=++generation.current;setPreview(null);setPending(true);try{const next=await Promise.all(chosen.map(async f=>({name:f.name,text:await f.text()})));if(run===generation.current){setFiles(next);setActive(null);setMessage('已读取文件，请预览。');}}catch{setMessage('文件读取失败，请重新选择。');}finally{setPending(false);}}}/></label>
  <ul>{files.map((f,i)=><li key={i}><button disabled={pending} onClick={()=>{setActive({file:f.name,row:1,field:'整份文件'});requestAnimationFrame(()=>editor.current?.focus());}}>{f.name} · 编辑 CSV</button><button disabled={disabled} aria-label={'移除 '+f.name} onClick={()=>{change(files.filter((_,n)=>n!==i));setActive(null);}}>移除</button></li>)}</ul>
  <button disabled={disabled||!files.length} onClick={inspect}>预览并检查整批</button><button disabled={disabled||!preview?.valid||!preview.id} onClick={commit}>确认整批导入</button>
