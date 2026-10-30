@@ -19,8 +19,8 @@ for mode in ['api', 'ui']:
             with file.open(encoding='utf-8-sig', newline='') as stream:
                 rows = list(csv.DictReader(stream))
             expected = (old['data'] if historical else current)['resourceMappings']
-            if mode == 'ui':
-                expected = expected[:1]  # Actual UI filter selects first configuration ID.
+            if mode == 'ui' and not historical:
+                expected = expected[:1]  # Current UI filter selects first ID; historical toggle clears filters.
             assert len(rows) == len(expected), (filename, 'row count')
             for actual, source in zip(rows, expected):
                 for field, value in source.items():
