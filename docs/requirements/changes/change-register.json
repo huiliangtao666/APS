@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "N06 cd115f0 finite ledger Dev delivered; Test2 formal/followup/S06, Test1 UI/S16: cumulative 13 PASS/3 PARTIAL/0 FAIL; S08/09/14 plus B01–B05 unresolved. P10 old scope retained",
+      "implementation_status": "P08/P09 fixed e0be9b6d scoped independent 15/15 PASS; FR017 prior scoped PASS; FR007/022 and full CR NOT_READY",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "N06 fixed cd115f0 13 independent PASS/3 PARTIAL/0 product FAIL; S08 natural-path prerequisite, S09/14 observation boundary, customer facts/rule choices prevent full CR acceptance",
+      "acceptance_result": "P08/P09 scoped 15/15 independent PASS at e0be9b6d; prior S06/S07, D01-D03 and FR017 PASS stay original SHAs; P06/P10, N06, R01/R02 and full FR007/022/CR/UAT remain open",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -115,35 +115,6 @@
           "event_key": "USER-DECISIONS-20261029-R1:dec0203",
           "event": "用户确认可共用，是否共用、交接容量与占用均可配置；既有P08/P09有限PASS不改签，FR007/022与完整CR未完成",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6500755581"
-        },
-        {
-          "date": "2026-10-30",
-          "event": "PM processed P10 readiness dlv_e3bdd41f-abdb-4a17-9a5b-b7a26fcce2f9:r1: BLOCKED design contract B01/B02/B03; no product SHA, no new FAIL/repair round; Issue3 and original FR007/FR022 remain In progress; Design clarification required before Dev continuation",
-          "evidence_commit": "37e7677059c387981db6d8f27964fa0d1d5fc3d8"
-        },
-        {
-          "date": "2026-10-30",
-          "event_key": "dlv_1e86ea88-67a6-4d95-85fc-98c63f2436ae:r1",
-          "event": "P10 core beae5b4 Dev delivered 19 PASS/4 PARTIAL/21 NOT_EXECUTED; independent Test executing, U01/U02 remain undecided; no new product FAIL or repair round",
-          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6504064760"
-        },
-        {
-          "date": "2026-10-30",
-          "event_key": "dlv_0e20f2fa-2d44-47bd-8ad6-5effe130fd04:r1",
-          "event": "P10核心固定beae5b4独立Test 19 PASS/4 PARTIAL/21 NOT_EXECUTED；216组容量与真实React/CSV/Worker/冻结链通过；0产品FAIL; no new product FAIL or repair round",
-          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6504474505"
-        },
-        {
-          "date": "2026-10-30",
-          "event_key": "dlv_75566101-2c33-4e46-afef-f98685a323e5:r1",
-          "event": "R01/R02联合资源2016258 Dev 23 PASS/2 U01-U02 BLOCKED/6未执行；独立Test dlv_d6eeeda3-f729-4fef-9c40-bf0767387b7a执行中; no new product FAIL or repair round",
-          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6504958178"
-        },
-        {
-          "date": "2026-10-30",
-          "event_key": "dlv_d6eeeda3-f729-4fef-9c40-bf0767387b7a:r1",
-          "event": "R01/R02共享开启且无交接的联合资源路径独立23 PASS/2 U01-U02 BLOCKED/6未执行；0产品FAIL; no new product FAIL or repair round",
-          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6505345043"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
@@ -485,7 +456,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR013受影响需求增量；不等于已实现或UAT通过",
-      "implementation_status": "FR013-NONDEVICE-REF-01 first repair e7881a9 independently PASS 43 scoped cases; original05/06/09/12 positive source mappings and FULL03/16 blocked; full FR013/CR NOT_READY",
+      "implementation_status": "用户业务决定已登记；应用实现与独立Test尚未交付",
       "primary_requirements": [
         "FR-013"
       ],
@@ -503,7 +474,7 @@
       "acceptance_delta": "CSV模板/预览/导入按批准配置校验：小数袋支拒绝，总收率>100%拒绝；合法配置保存刷新后生效，非法/越权整批零写入；保留旧确认/历史。",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006",
       "related_issue_urls": [],
-      "acceptance_result": "First repair e7881a9 independent 43 PASS/0 FAIL/14 BLOCKED/2 NOT_EXECUTED; defect closed at round1/2; old bd58868 5 FAIL retained at old SHA; full CR NOT_READY",
+      "acceptance_result": "未进行本CR产品验收；旧原范围PASS保留原SHA",
       "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
       "history": [
         {
@@ -512,10 +483,10 @@
           "event": "用户确认本CR增量，原卡仍In progress/NOT_READY；待实现与独立验收"
         }
       ],
-      "dev_delivery": "dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1",
+      "dev_delivery": "",
       "contract_review_delivery": "",
-      "product_test_delivery": "dlv_b4987c57-516c-4c3a-b0d6-2cab6febb7c9；dlv_1aef3889-5dad-4483-a367-479e14a240dd",
-      "code_sha": "fc273441ca93dcc47996bf5a6f7031e73be7f226",
+      "product_test_delivery": "",
+      "code_sha": "",
       "code_branch": "",
       "dev_report": "",
       "test_report": "",
@@ -538,7 +509,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR038性能目标暂定；须补齐测试负载与环境才可验收",
-      "implementation_status": "8741bf0a exploratory Test2 18 tiers/62 Worker runs and C2 count correction; Test1 React full-chain 8/128 orders <1.3s and 512 cancellation, fixed SHA; formal spec pending",
+      "implementation_status": "用户业务决定已登记；应用实现与独立Test尚未交付",
       "primary_requirements": [
         "FR-038"
       ],
@@ -558,7 +529,7 @@
       "acceptance_delta": "固定输入/环境/版本后独立测量排程耗时≤30秒，并验证较长计算可取消、状态不假报及失败不破坏方案/源数据。",
       "issue_url": "",
       "related_issue_urls": [],
-      "acceptance_result": "Exploration only: no formal AC27 30s PASS/FAIL; C1 task-count wording corrected by C2, 4096=3993+53+50; formal scale/rules/environment/timing boundary pending",
+      "acceptance_result": "未进行本CR产品验收；旧原范围PASS保留原SHA",
       "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
       "history": [
         {
