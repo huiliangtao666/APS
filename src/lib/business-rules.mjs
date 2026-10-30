@@ -29,7 +29,7 @@ export function assessRules(data, at=new Date().toISOString(), checkCoverage=fal
  const checkScope=schedulingScope(mode,material,activeBatchRule(data,at),jointFlags(data,at),deliveryActive(data,at)), minimal=mode==='minimal-r1';
  const issues=validateBatchResources(data).map(f=>({...f,table:'batchResources',file:'15_空间与组批规则配置.csv',row:0,field:'关联配置'})),settings=[];const rows=data.rules||[];
  issues.push(...validateJointResources(data,at).map(f=>({...f,table:f.table||'resourceClaims',file:f.table==='tools'?'18_工装配置.csv':'23_资源占用声明.csv',row:f.row||0,field:f.field||'关联配置'})));
- issues.push(...validateDelivery(data),...validatePolicies(data,at,mode,checkPolicyExecution));
+ issues.push(...validateDelivery(data),...validatePolicies(data,at,mode,checkPolicyExecution).map(f=>f.table==='tools'?{...f,file:'18_工装配置.csv'}:f));
  const add=(index,field,message)=>issues.push({table:'rules',file:'16_排程规则配置.csv',row:index<0?0:index+2,field,message});
  for(const c of ruleCatalog.filter(c=>c.required))if(!rows.some(r=>r['规则编号']===c.id))add(-1,'规则编号',`必要规则 ${c.id} 不得删除`);
  rows.forEach((r,i)=>{

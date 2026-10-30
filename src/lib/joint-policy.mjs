@@ -13,7 +13,11 @@ export function validateJointResources(data,at){
  const issues=[],flags=jointFlags(data,at),claims=data.resourceClaims||[];
  const add=(message,table='resourceClaims',row=0)=>issues.push({code:'INPUT / JOINT_RESOURCE',message,table,row});
  issues.push(...validateToolRows(data.tools||[]));
- for(const t of data.tools||[])for(const k of ['可用数量','每任务需求数量'])if(!decimal(t[k])||!Number.isSafeInteger(Number(t[k]))||Number(t[k])<1)add(`工装 ${t['工装编码']} ${k} 须为安全正整数套，不支持科学计数或其他单位`,'tools');
+ for(const [i,t] of (data.tools||[]).entries())for(const k of ['可用数量','每任务需求数量']){
+  // Keep the stricter safe/decimal contract, without duplicating an existing field error.
+  if((!decimal(t[k])||!Number.isSafeInteger(Number(t[k]))||Number(t[k])<1)&&!issues.some(issue=>issue.table==='tools'&&issue.row===i+2&&issue.field===k))
+   issues.push({code:'INPUT / JOINT_RESOURCE',message:`工装 ${t['工装编码']} ${k} 须为安全正整数套，不支持科学计数或其他单位`,table:'tools',file:'18_工装配置.csv',row:i+2,field:k});
+ }
  const seen=new Set();
  for(const [i,raw] of claims.entries()){
   const c=effectiveClaim(raw,data);
