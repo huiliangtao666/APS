@@ -1,3 +1,4 @@
+import {mappingOptions} from './lib/resource-mapping.mjs';
 import {poolStrategyOptions} from './lib/physical-pools.mjs';
 import {effectiveClaim} from './lib/resource-policies.mjs';
 type Row=Record<string,string>;
@@ -15,6 +16,7 @@ export function PolicyPreview({table,data,revision}:{table:string;data:Record<st
  </aside>;
 }
 export function policyOptions(table:string,field:string):string[]|null{
+ if(table==='resourceMappings'&&mappingOptions[field])return mappingOptions[field];
  if(table==='resourceClaims'&&field==='占用口径')return ['显式逐生产批完整区间','明确窗口'];
  if(table==='resourceClaims'&&field==='参数来源')return ['逐项声明','工装配置'];
  if(table==='dependencies'&&field==='窗口外释放')return ['是','否'];

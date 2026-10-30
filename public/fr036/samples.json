@@ -384,6 +384,15 @@
       "expected": "source-import-only; runtime-mapping-pending",
       "simulation": true,
       "context": "所有值均为虚构示例；不批准共享池/任务占用/组名或班次映射"
+    },
+    {
+      "file": "examples/original0506-mapping-draft.csv",
+      "contract": "FR013-resource-map-v1",
+      "table": "resourceMappings",
+      "expected": "draft-only",
+      "context": "显式待配置映射示例；仅版本/来源身份/原行快照，不选择运行模式、实体、单位、容量或公式；禁止新运行",
+      "simulation": true,
+      "sha256": "aa940f4f64b280197e892ed242ecf686103a071ef39c075d52d93622fbd79c58"
     }
   ]
 }

@@ -10,6 +10,15 @@ const pair=(a,b,keys)=>keys.every(k=>equal(a,b,k));
 export function related(data,table,index){
  const row=data[table]?.[index];if(!row)return [];
  const results=[];
+ for(const [i,m] of (data.resourceMappings||[]).entries()){
+  const source=m['来源类别'],tool=source==='originalTools',target=tool?'tools':'personnelGroups';
+  const pairs=[[source,tool?'资源编号':'人员组编号','来源编号','来源字面记录'],[target,tool?'工装编码':'人员组编号','运行编号','显式运行绑定']];
+  for(const [key,id,field,label] of pairs){
+   if(table==='resourceMappings'&&index===i)(data[key]||[]).forEach((r,n)=>{if(r[id]===m[field])results.push({table:key,index:n,label});});
+   if(table===key&&row[id]===m[field])results.push({table:'resourceMappings',index:i,label:'显式来源/运行合同'});
+  }
+ }
+
  // These are declared-skill references, not eligibility or allocation. Keep
  // the provided/required direction visible even when both refer to one group.
  const skillRoles=[['可提供技能','声明可提供技能'],['所需技能','声明所需技能']];

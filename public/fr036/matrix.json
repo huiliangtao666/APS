@@ -1109,7 +1109,7 @@
       "uniqueKey": [
         "资源编号"
       ],
-      "references": "按原编号及类型关联查询；不推定到运行资源的语义映射",
+      "references": "原编号/类型可查询；运行采用另经表31显式绑定，不按同名自动匹配",
       "units": "数量为非负安全整数；时间为分钟偏移；其他原字段为必填文本",
       "systems": [
         "APS"
@@ -1123,7 +1123,7 @@
         "src/lib/original-resources.mjs#validateOriginalResources",
         "server/input-validation.mjs#validateInputs"
       ],
-      "limitations": "仅原字段预览/保存/查询；尚未确定的组名/班次/任务与占用策略、共享池映射待用户决定，不自动采用到排程",
+      "limitations": "保留原字段；新运行必须显式READY绑定表31及完整运行资源/需求合同；未配置或不支持组合安全拒绝，不改旧方案",
       "example": "examples/original05.csv"
     },
     {
@@ -1141,7 +1141,7 @@
       "uniqueKey": [
         "人员组编号"
       ],
-      "references": "按原编号及类型关联查询；不推定到运行资源的语义映射",
+      "references": "原编号/类型可查询；运行采用另经表31显式绑定，不按同名自动匹配",
       "units": "数量为非负安全整数；时间为分钟偏移；其他原字段为必填文本",
       "systems": [
         "APS"
@@ -1155,8 +1155,52 @@
         "src/lib/original-resources.mjs#validateOriginalResources",
         "server/input-validation.mjs#validateInputs"
       ],
-      "limitations": "仅原字段预览/保存/查询；尚未确定的组名/班次/任务与占用策略、共享池映射待用户决定，不自动采用到排程",
+      "limitations": "保留原字段；新运行必须显式READY绑定表31及完整运行资源/需求合同；未配置或不支持组合安全拒绝，不改旧方案",
       "example": "examples/original06.csv"
+    },
+    {
+      "key": "resourceMappings",
+      "label": "31_原05与06显式运行映射",
+      "file": "31_原05与06运行映射.csv",
+      "fields": [
+        "配置编号",
+        "配置版本",
+        "合同版本",
+        "状态",
+        "来源类别",
+        "来源编号",
+        "源记录JSON",
+        "运行编号",
+        "运行记录JSON",
+        "别名",
+        "映射模式",
+        "源类型",
+        "共享范围原文",
+        "适用产线",
+        "范围模式",
+        "容量单位",
+        "时间单位",
+        "释放策略",
+        "配置依据"
+      ],
+      "uniqueKey": [
+        "配置编号"
+      ],
+      "references": "显式来源类别/来源编号→运行编号；完整源与运行行快照逐字核对；按适用产线核单线范围",
+      "units": "工装套/人员人；固定分钟轴；其他单位NOT_READY_CONFIG",
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "有权配置用户",
+      "direction": "inbound-simulation",
+      "template": "templates/31_原05与06运行映射.csv",
+      "example": "examples/original0506-mapping-draft.csv",
+      "dates": [],
+      "version": "FR013-resource-map-v1；配置版本递增+输入版本+冻结配置SHA256",
+      "validation": [
+        "src/lib/resource-mapping.mjs#validateResourceMappings"
+      ],
+      "limitations": "READY只支持DIRECT_IDENTITY、全工厂/*→当前单产线的全局唯一容量；多别名合并、局部/跨线、多窗口、未知公式/单位拒绝；草稿禁止运行"
     }
   ],
   "outbound": [

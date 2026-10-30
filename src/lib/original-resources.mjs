@@ -5,7 +5,7 @@ export const originalResourceDefs=[
  {key:'originalPersonnel',label:'原06 人员技能资料（待运行映射）',file:'06_人员技能与班次.csv',fields:['人员组编号','技能','可用人数','起始分钟','结束分钟','共享范围']}
 ];
 export const originalResourceKeys=originalResourceDefs.map(d=>d.key);
-export const originalResourceNote='原05/06按原列保存和查询。数量为资源套/件数或人数，时间为分钟 0 = 2026-11-02 08:00（Asia/Shanghai）的偏移，不能填日期或小时单位。共享范围和资源类型按原文本保留；尚未确定的共享池、任务占用、组名与班次映射未接入排程。同编号关联只供核对，不表示已经采用这些容量。';
+export const originalResourceNote='原05/06按原列保存和查询，通过31_原05与06运行映射显式绑定运行配置。未READY来源禁止新运行采用。数量为资源套/件数或人数，时间为分钟 0 = 2026-11-02 08:00（Asia/Shanghai）的偏移，不能填日期或小时单位。共享范围和资源类型按原文本保留；运行映射须显式填写并校验共享池、任务占用、组名与班次；仅支持配置页列出的合同组合。同编号关联只供核对，不表示已经采用这些容量。';
 export function validateOriginalResources(data){
  const issues=[];
  for(const def of originalResourceDefs){

@@ -1,3 +1,4 @@
+import {verifyResourceMappingSnapshot} from './verify-resource-mapping.mjs';
 import {verifyJointConditions} from './verify-joint-conditions.mjs';
 import {hasPhysicalPools,validatePhysicalPools} from './physical-pools.mjs';
 import {resourceConflicts} from './resource-conflicts.mjs';
@@ -14,7 +15,7 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
  if(!['resourceClaims','tools','dependencies','personnelGroups','batchResources','skillSubstitutions'].every(k=>Array.isArray(data[k])))return unchecked('冻结资源配置不完整，无法重建需求；未检查。');
  if(['P10-core-v1','P10-explicit-v2'].includes(conditions?.personnelPoolContract)&&(!Array.isArray(data.personnelPools)||!data.personnelPools.length))return {status:'problem',details:['P10冻结契约缺少物理池表，禁止降级按组容量复核']};
  if(data.personnelPools!==undefined&&!Array.isArray(data.personnelPools))return {status:'problem',details:['冻结物理池表结构无效']};
- const problems=[],reservations=plan.resourceReservations||[],tasks=plan.tasks||[];
+ const problems=verifyResourceMappingSnapshot(data,conditions),reservations=plan.resourceReservations||[],tasks=plan.tasks||[];
  const add=m=>problems.push(m),num=(r,k,fallback=0)=>Number(r[k]??fallback);
  const enabled=id=>(data.rules||[]).some(r=>r['规则编号']===id&&r['是否启用']==='是'&&(!conditions?.enabledRuleIds||conditions.enabledRuleIds.includes(id))&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at)));
  for(const id of ['MOLD','STORAGE'])if(enabled(id)!==(plan.rules||[]).includes(id))add(`${id} 结果采用标志与冻结规则/运行选择/生效时刻不一致`);

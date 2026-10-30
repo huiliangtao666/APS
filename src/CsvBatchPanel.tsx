@@ -6,7 +6,7 @@ import {defs} from './data-defs';
 type CsvFile={name:string;text:string};
 type Issue={file:string;row:number;field:string;reason?:string;message?:string;index?:number;table?:string;inBatch?:boolean};
 type Preview={id?:string;valid:boolean;issues:Issue[];tables:Record<string,Record<string,string>[]>;sources:Record<string,{file:string;lines:number[]}>;beforeTables:Record<string,Record<string,string>[]>;error?:string};
-const keys=['originalTools','originalPersonnel','factoryLines','calendars','downtime','orders','routes','times','machines','dependencies','rules','products','materials'];
+const keys=['resourceMappings','personnelPools','personnelGroups','tools','resourceClaims','skillSubstitutions','originalTools','originalPersonnel','factoryLines','calendars','downtime','orders','routes','times','machines','dependencies','rules','products','materials'];
 const errors:Record<string,string>={stale_preview:'预览后数据、执行事实或方案记录已变化，请重新预览。',stale_input:'输入版本已变化，请刷新数据后重新预览。',preview_expired_or_unowned:'预览已过期或身份已变化，请重新预览。',execution_reconciliation_required:'当前执行事实阻止修改；请检查关联事实，不得覆盖已执行记录。',protected_history_unavailable:'已确认历史缺少原始输入，已阻止导入；请联系维护人员修复历史记录。',forbidden:'当前角色没有导入权限。',reason_required:'请填写操作原因。'};
 export function CsvBatchPanel({revision,canWrite,busy,api,refresh,onLocate}:{revision:number;canWrite:boolean;busy:boolean;api:(path:string,body:object)=>Promise<any>;refresh:()=>Promise<void>;onLocate:(table:string,row:number)=>void}){
  const [files,setFiles]=useState<CsvFile[]>([]),[preview,setPreview]=useState<Preview|null>(null),[pending,setPending]=useState(false),[message,setMessage]=useState(''),[active,setActive]=useState<Issue|null>(null);

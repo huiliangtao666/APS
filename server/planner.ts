@@ -1,4 +1,5 @@
 import {allowedWindows} from '../src/lib/working-windows.mjs';
+import {resourceMappingDef} from '../src/lib/resource-mapping.mjs';
 import {originalResourceDefs} from '../src/lib/original-resources.mjs';
 import {eventSummary,eventAbsences,validateEvents} from '../src/lib/simulation-events.mjs';
 import {factFor,executionSummary,executionAdmission,validateExecution,executionRisks} from '../src/lib/execution-facts.mjs';
@@ -59,8 +60,10 @@ export const defs: TableDef[] = [
   { key: 'personnelGroups', label: '人员组与可用时间', file: '19_人员组与可用时间.csv', fields: ['人员组编号','人员组名称','人员数量','技能','班次','可用起始分钟','可用结束分钟','poolId'] },
   { key: 'rules', label: '排程规则', file: '16_排程规则配置.csv', fields: ['规则编号','中文名称','是否启用','参数JSON','适用对象','生效时间'] },
   ...originalResourceDefs,
+  resourceMappingDef,
 ];
 export const seed: Record<string, Row[]> = {
+  resourceMappings: [],
   originalTools: [], originalPersonnel: [],
   simulationEvents: [], executionFacts: [], executionMaterials: [], executionSources: [],
   products: [

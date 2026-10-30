@@ -1,3 +1,4 @@
+import {resourceMappingTransition} from '../src/lib/resource-mapping.mjs';
 import {verifyResourcePolicies} from '../src/lib/verify-resource-policies.mjs';
 import {poolTransitionIssues} from '../src/lib/physical-pools.mjs';
 import {inspectSingleCsv} from './csv-single.mjs';
@@ -93,7 +94,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(!trialId){const staged=stageEvents(target.data,proposed,Object.keys(tables));if(staged.issues.length)return res.status(409).json({error:'event_reconciliation_required',issues:staged.issues});proposed=staged.data;for(const def of defs.filter(d=>JSON.stringify(proposed[d.key])!==JSON.stringify(target.data[d.key]))){const rows=proposed[def.key]||[];if(rows.some(r=>!r||typeof r!=='object'||Array.isArray(r)||Object.keys(r).some(k=>!def.fields.includes(k))||Object.values(r).some(v=>typeof v!=='string')))return res.status(400).json({error:'invalid_event_effect'});proposed[def.key]=rows.map(r=>Object.fromEntries(def.fields.map(f=>[f,r[f]??''])));}}
     const transition=(trialId?executionTrialIssues(s.data,proposed):executionTransition(target.data,proposed));if(transition.length)return res.status(409).json({error:'execution_reconciliation_required',issues:transition});
     const newlyEnabled=(proposed.rules||[]).some(r=>r['是否启用']==='是'&&!(target.data.rules||[]).some(old=>old['规则编号']===r['规则编号']&&old['是否启用']==='是'));
-    const issues=[...poolTransitionIssues(target.data,proposed,s.records),...validateInputs(defs,proposed),...(newlyEnabled?assessRules(proposed,new Date().toISOString(),true).issues:[])];if(issues.length)return res.status(400).json({error:'invalid_input',issues});
+    const issues=[...resourceMappingTransition(target.data,proposed,s.records),...poolTransitionIssues(target.data,proposed,s.records),...validateInputs(defs,proposed),...(newlyEnabled?assessRules(proposed,new Date().toISOString(),true).issues:[])];if(issues.length)return res.status(400).json({error:'invalid_input',issues});
     if(operation==='restore')return res.status(409).json({error:'restore_blocked',...restoreBlockers(s,null)});
     // A missing original confirmed snapshot cannot be reconstructed from today's data.
     if(s.plans.some(p=>['confirmed','released','archived'].includes(p.status)&&!inputs(s,p)))return res.status(409).json({error:'protected_history_unavailable'});
@@ -147,7 +148,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   // Business dry run only: shares input/history guards, never preserve/write/record.
   router.post('/inputs/resource-policy-preview',permission('calculate'),(req,res)=>{
     const tables=req.body.tables;
-    if(!tables||typeof tables!=='object'||Array.isArray(tables)||Object.keys(tables).some(k=>!['personnelPools','personnelGroups','dependencies','skillSubstitutions'].includes(k)))return res.status(400).json({error:'preview_tables',message:'人员策略预览仅接受物理池、人员组、人员依赖和技能替代草稿'});
+    if(!tables||typeof tables!=='object'||Array.isArray(tables)||Object.keys(tables).some(k=>!['personnelPools','personnelGroups','dependencies','skillSubstitutions','originalTools','originalPersonnel','resourceMappings','tools','resourceClaims','rules'].includes(k)))return res.status(400).json({error:'preview_tables',message:'资源策略预览仅接受来源、映射、工装、声明、规则和人员配置草稿'});
     const check={status:200,body:null},response={status(code){check.status=code;return this;},json(body){check.body=body;return this;}};
     saveInputs(req,response,tables,undefined,true);
     if(!check.body?.valid)return res.status(check.status).json(check.body);
