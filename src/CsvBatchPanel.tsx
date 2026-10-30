@@ -1,3 +1,4 @@
+import type {CsvProblem,CheckedCsvInput,OpenCsvProblem} from './lib/problem-records.mjs';
 import {originalResourceNote} from './lib/original-resources.mjs';
 import {MasterDataContract} from './MasterDataContract';
 import {useEffect,useRef,useState} from 'react';
@@ -5,11 +6,11 @@ import {editCsvDraft} from './lib/csv-draft.mjs';
 import {defs} from './data-defs';
 type Repair={file:string;row:number;field:string;value:string};
 type CsvFile={name:string;text:string};
-type Issue={file:string;row:number;field:string;reason?:string;message?:string;index?:number;table?:string;inBatch?:boolean};
-type Preview={id?:string;valid:boolean;issues:Issue[];tables:Record<string,Record<string,string>[]>;sources:Record<string,{file:string;lines:number[];originalText?:string;mappings?:{sourceField:string;quantityField:string;unitField:string;unit:string}[];records?:{line:number;values:Record<string,string>}[];repairs?:Repair[]}>;beforeTables:Record<string,Record<string,string>[]>;error?:string};
+type Issue=CsvProblem;
+type Preview={checkedInput?:CheckedCsvInput;id?:string;valid:boolean;issues:Issue[];tables:Record<string,Record<string,string>[]>;sources:Record<string,{file:string;lines:number[];originalText?:string;mappings?:{sourceField:string;quantityField:string;unitField:string;unit:string}[];records?:{line:number;values:Record<string,string>}[];repairs?:Repair[]}>;beforeTables:Record<string,Record<string,string>[]>;error?:string};
 const keys=['resourceMappings','personnelPools','personnelGroups','tools','resourceClaims','skillSubstitutions','originalTools','originalPersonnel','factoryLines','calendars','downtime','orders','routes','times','machines','dependencies','rules','products','materials'];
 const errors:Record<string,string>={stale_preview:'预览后数据、执行事实或方案记录已变化，请重新预览。',stale_input:'输入版本已变化，请刷新数据后重新预览。',preview_expired_or_unowned:'预览已过期或身份已变化，请重新预览。',execution_reconciliation_required:'当前执行事实阻止修改；请检查关联事实，不得覆盖已执行记录。',protected_history_unavailable:'已确认历史缺少原始输入，已阻止导入；请联系维护人员修复历史记录。',forbidden:'当前角色没有导入权限。',reason_required:'请填写操作原因。'};
-export function CsvBatchPanel({revision,canWrite,busy,api,refresh,onLocate}:{revision:number;canWrite:boolean;busy:boolean;api:(path:string,body:object)=>Promise<any>;refresh:()=>Promise<void>;onLocate:(table:string,row:number)=>void}){
+export function CsvBatchPanel({revision,canWrite,busy,api,refresh,onProblem}:{revision:number;canWrite:boolean;busy:boolean;api:(path:string,body:object)=>Promise<any>;refresh:()=>Promise<void>;onProblem:OpenCsvProblem}){
  const [repairs,setRepairs]=useState<Repair[]>([]);
  const [files,setFiles]=useState<CsvFile[]>([]),[preview,setPreview]=useState<Preview|null>(null),[pending,setPending]=useState(false),[message,setMessage]=useState(''),[active,setActive]=useState<Issue|null>(null);
  const editor=useRef<HTMLTextAreaElement>(null),generation=useRef(0);
@@ -18,7 +19,7 @@ export function CsvBatchPanel({revision,canWrite,busy,api,refresh,onLocate}:{rev
  function change(next:CsvFile[]){generation.current++;setRepairs([]);setFiles(next);setPreview(null);setMessage('文件已修改，须重新预览。');}
  async function inspect(){const run=++generation.current;setPending(true);setPreview(null);setActive(null);try{const p=await api('/imports/preview',{files,revision,repairs});if(run===generation.current){setPreview(p);setRepairs(current=>{const next=[...current];for(const issue of p.issues||[])if(issue.table==='orders'&&issue.index!==undefined&&['是否允许拆分','需求类型','订单状态'].includes(issue.field)&&!next.some(e=>e.file===issue.file&&e.row===issue.row&&e.field===issue.field))next.push({file:issue.file,row:issue.row,field:issue.field,value:''});return next;});setMessage(p.valid?'检查通过，尚未导入。':'整批未导入，请定位问题并修正。');}}catch(e:any){if(run===generation.current){const detail=e.detail;if(detail?.tables)setPreview({...detail,issues:detail.issues||[],valid:false});setMessage(errors[detail?.error]||e.message);}}finally{setPending(false);}}
  async function commit(){setPending(true);try{const result=await api('/imports/commit',{previewId:preview?.id});setPreview(null);setMessage(result.unchanged?'重复导入内容相同，没有新增数据或操作记录。':'整批导入成功，已保存新输入版本和操作记录。');await refresh();}catch(e:any){setPreview(null);setMessage(errors[e.detail?.error]||e.message);}finally{setPending(false);}}
- function locate(issue:Issue){setActive(issue);const file=files.find(f=>f.name===issue.file);if(!file){if(issue.table)onLocate(issue.table,issue.index??Math.max(0,issue.row-2));return;}requestAnimationFrame(()=>{const el=editor.current;if(!el)return;const text=el.value;const lines=[0];for(let i=0;i<text.length;i++){if(text[i]==='\r'){if(text[i+1]==='\n')i++;lines.push(i+1);}else if(text[i]==='\n')lines.push(i+1);}el.focus();el.setSelectionRange(lines[Math.max(0,issue.row-1)]??0,lines[issue.row]??text.length);});}
+ function locate(issue:Issue){onProblem(issue,preview?.checkedInput);setActive(issue);const file=files.find(f=>f.name===issue.file);if(!file)return;requestAnimationFrame(()=>{const el=editor.current;if(!el)return;const text=el.value;const lines=[0];for(let i=0;i<text.length;i++){if(text[i]==='\r'){if(text[i+1]==='\n')i++;lines.push(i+1);}else if(text[i]==='\n')lines.push(i+1);}el.focus();el.setSelectionRange(lines[Math.max(0,issue.row-1)]??0,lines[issue.row]??text.length);});}
  const disabled=!canWrite||busy||pending;
  return <section className="panel" data-csv-batch><h2>CSV 批量导入 · 预览与问题处理</h2><p>按中文文件名选择多个 CSV。整批替换所选表，引用在批次合并后检查；错误时全部不写入。原17字段“合格需求kg”保真拆为“合格需求”及显式 kg。原文件缺少的“是否允许拆分 / 需求类型 / 订单状态”必须逐行补录，不设默认值；补录后须重新预览。时间字段按分钟，生效时间按现行日期契约。</p><p>支持：{defs.filter(d=>keys.includes(d.key)).map(d=>d.file).join('、')}。其他已支持类别请使用下方单表操作；后续未支持类别不在本次批导范围。</p>
  <p data-original-resource-contract>{originalResourceNote}</p>

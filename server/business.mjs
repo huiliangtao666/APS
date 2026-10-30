@@ -1,3 +1,4 @@
+import {checkedCsvSources,csvProblemEvidence} from './csv-problems.mjs';
 import {resourceMappingTransition,sameResourceMapping} from '../src/lib/resource-mapping.mjs';
 import {verifyResourcePolicies} from '../src/lib/verify-resource-policies.mjs';
 import {poolTransitionIssues} from '../src/lib/physical-pools.mjs';
@@ -7,7 +8,7 @@ import {validateSingleLineScope} from '../src/lib/line-scope.mjs';
 import {attachProblemRecords,bindProblemSource} from '../src/lib/problem-records.mjs';
 import {inspectSingleCsv} from './csv-single.mjs';
 import {migratePolicies} from '../src/lib/resource-policies.mjs';
-import {inspectCsvBatch,physicalIssues,batchKeys} from './csv-batch.mjs';
+import {inspectCsvBatch,batchKeys} from './csv-batch.mjs';
 import {taskPosition,movableTask,positionGuard,positionToken,freezePositions,evaluatePosition} from './trial-positions.mjs';
 import {scopedReport,reportCsv} from './scoped-report.mjs';
 import {resourceLoad,loadCsv} from '../src/lib/resource-load.mjs';
@@ -113,7 +114,8 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const issues=[...resourceMappingTransition(target.data,proposed,s.records),...poolTransitionIssues(target.data,proposed,s.records),...validateInputs(defs,proposed),...(newlyEnabled?assessRules(proposed,new Date().toISOString(),true).issues:[])];if(issues.length){
       // The rejected proposal is an ephemeral check input, never a saved input version.
       const source={domain:'candidate:'+(trialId?'trial:'+trialId:'current'),inputVersionId:inputHash(proposed),revision:target.revision,checkedAt:new Date().toISOString(),scope:'complete proposed input validation'};
-      const findings=issues.map(f=>bindProblemSource({...f,taskIds:[]},source));
+      const csvSources=checkedCsvSources(proposed,target.csvSources,req.csvSources);
+      const findings=issues.map(f=>bindProblemSource({...f,taskIds:[]},source,undefined,undefined,csvSources));
       return res.status(400).json({error:'invalid_input',issues:findings,findings,checkedInput:{data:proposed,...source}});
     }
     if(operation==='restore')return res.status(409).json({error:'restore_blocked',...restoreBlockers(s,null)});
@@ -143,7 +145,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const response={status(code){result.status=code;return this;},json(body){result.body=body;return this;}};
     const csvEvidence=Object.fromEntries(Object.entries(inspection.sources).filter(([key])=>['originalTools','originalPersonnel','resourceMappings'].includes(key)).map(([key,source])=>{const raw=req.body.files?.find(f=>f.name===source.file);return [key,{...source,...(raw?{text:raw.text,sha256:createHash('sha256').update(raw.text).digest('hex')}:{})}];}));
     saveInputs({...req,csvEvidence,csvSources:inspection.sources},response,inspection.tables,undefined,dryRun);
-    if(result.body?.issues)result.body.issues=physicalIssues(result.body.issues,inspection.sources,defs);
+    if(result.body?.issues)result.body=csvProblemEvidence(result.body,inspection,s,defs);
     return result;
   }
   router.post('/imports/preview',permission('edit'),(req,res)=>{
@@ -155,7 +157,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const inspection=def?inspectSingleCsv(files[0],def):inspectCsvBatch(files,defs,repairs);
     if(table==='simulationEvents')inspection.tables.executionFacts=s.data.executionFacts||[];
     const base={tables:inspection.tables,sources:inspection.sources,revision,beforeTables:Object.fromEntries(Object.keys(inspection.tables).map(key=>[key,s.data[key]||[]]))};
-    if(inspection.issues.length)return res.json({...base,valid:false,issues:inspection.issues});
+    if(inspection.issues.length)return res.json({...base,valid:false,...csvProblemEvidence({issues:inspection.issues},inspection,s,defs,{physical:true})});
     const checked=checkCsv({...req,body:{...req.body,operation:'import'}},s,inspection,true);
     if(checked.status!==200)return res.status(checked.status).json({...base,valid:false,...checked.body});
     for(const [id,p] of csvPreviews)if(Date.now()-p.createdAt>15*60*1000)csvPreviews.delete(id);
@@ -170,7 +172,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     // Ignore caller-supplied tables/actor/revision; reparse the server-owned original files.
     const inspection=p.table?inspectSingleCsv(p.files[0],defs.find(d=>d.key===p.table)):inspectCsvBatch(p.files,defs,p.repairs);
     if(p.table==='simulationEvents')inspection.tables.executionFacts=s.data.executionFacts||[];
-    if(inspection.issues.length)return res.status(400).json({error:'invalid_input',issues:inspection.issues});
+    if(inspection.issues.length)return res.status(400).json({error:'invalid_input',...csvProblemEvidence({issues:inspection.issues},inspection,s,defs,{physical:true})});
     const checked=checkCsv({...req,csvSources:inspection.sources,body:{reason:req.body.reason,revision:p.revision,operation:'import',files:p.files}},s,inspection,false);
     if(checked.status===200)csvPreviews.delete(req.body.previewId);
     res.status(checked.status).json(checked.body);
@@ -342,14 +344,14 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
       const selection=req.body.selection??trial?.selection;
       const selected=e.message==='invalid_line_scope'?target.data.orders.filter(o=>o['需求类型']==='正式订单'&&o['订单状态']==='有效'&&(!selection?.orderIds||selection.orderIds.includes(o['订单编号']))):[];
       const findings=e.message==='invalid_line_scope'
-        ?validateSingleLineScope(selected,target.data.machines).map(f=>({...bindProblemSource(f,{...source,scope:selection??null},target.data,{orders:selected.map(o=>target.data.orders.indexOf(o)),machines:target.data.machines.map((_,i)=>i)}),sourceRevision:target.revision})):[...validateOrders(target.data.orders),...validateMasterData(target.data)].map(f=>({...bindProblemSource({...f,taskIds:[]},{...source,scope:'complete saved input validation'}),sourceRevision:target.revision}));
+        ?validateSingleLineScope(selected,target.data.machines).map(f=>({...bindProblemSource(f,{...source,scope:selection??null},target.data,{orders:selected.map(o=>target.data.orders.indexOf(o)),machines:target.data.machines.map((_,i)=>i)},target.csvSources),sourceRevision:target.revision})):[...validateOrders(target.data.orders),...validateMasterData(target.data)].map(f=>({...bindProblemSource({...f,taskIds:[]},{...source,scope:'complete saved input validation'},undefined,undefined,target.csvSources),sourceRevision:target.revision}));
       // Keep the early selection rejection; expose only actually absent mandatory rules.
-      if(e.message==='invalid_rule_selection')findings.push(...assessRules(target.data,calculatedAt,false).issues.filter(i=>i.associationState==='known-absent').map(i=>({...bindProblemSource({...i,code:'RULE / CONFIG',taskIds:[]},{...source,scope:'complete saved input rule presence'}),sourceRevision:target.revision})));
+      if(e.message==='invalid_rule_selection')findings.push(...assessRules(target.data,calculatedAt,false).issues.filter(i=>i.associationState==='known-absent').map(i=>({...bindProblemSource({...i,code:'RULE / CONFIG',taskIds:[]},{...source,scope:'complete saved input rule presence'},undefined,undefined,target.csvSources),sourceRevision:target.revision})));
       res.status(400).json({error:e.message,...(findings?{findings,checkedInput:{data:target.data,inputVersionId:source.inputVersionId}}:{})});return;
     }
     const native=validateInputs(defs,target.data,{at:calculatedAt,checkPolicyExecution:false});
     const scoped=[...executionAdmission(frozen.executionData,frozen.conditions),...assessRules(frozen.executionData,calculatedAt,true,frozen.conditions.mode).issues];
-    const withSource=(i,data,context,map)=>bindProblemSource(attachProblemRecords({...i,code:i.code||'INPUT / CHECK',taskIds:[]},data),context,target.data,map);
+    const withSource=(i,data,context,map)=>bindProblemSource(attachProblemRecords({...i,code:i.code||'INPUT / CHECK',taskIds:[]},data),context,target.data,map,target.csvSources);
     const issues=[...native,...scoped];
     const findings=[...native.map(i=>withSource(i,target.data,{...source,scope:'complete saved input validation'})),...scoped.map(i=>withSource(i,frozen.executionData,{...source,executionVersionId:inputHash(frozen.executionData),scope:frozen.conditions},frozen.sourceMap))];
     if(issues.length){res.status(422).json({error:'rule_configuration_blocked',issues,checkedInput:{data:target.data,inputVersionId:source.inputVersionId},findings:findings.map(f=>({...f,sourceRevision:target.revision}))});return;}
