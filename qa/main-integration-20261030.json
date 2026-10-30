@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "purpose": "Engineering branch integration evidence; requirement and UAT decisions remain in their original records",
+  "recorded_at": "2026-10-30T19:13:00.116721+08:00",
+  "base_main_sha": "82ab48592603508096c3eca5598c493775a57403",
+  "validated_source_parent": "728b5c43cac18ee35062575af406c16619ec806b",
+  "validated_product_source_sha256": "6abfb0d3e342af9493fd2fd6be67042a0485d7c95394a7cf83afc94ff31b3353",
+  "branch_count": 89,
+  "branch_manifest": "qa/main-integration-branches.csv",
+  "unmerged_snapshot_branches": 0,
+  "validation": {
+    "core_and_query": {
+      "tests": 227,
+      "pass": 227,
+      "fail": 0,
+      "skipped": 0
+    },
+    "specialized": {
+      "tests": 542,
+      "pass": 542,
+      "fail": 0,
+      "skipped": 0
+    },
+    "component_ui": {
+      "tests": 56,
+      "pass": 56,
+      "fail": 0,
+      "skipped": 0
+    }
+  },
+  "total_test_executions": 825,
+  "production_smoke": {
+    "health": 200,
+    "page": 200,
+    "assets": [
+      {
+        "path": "/assets/index-C0IJWFtM.js",
+        "status": 200,
+        "contentType": "application/javascript; charset=UTF-8"
+      },
+      {
+        "path": "/assets/index-BeSu4_Ni.css",
+        "status": 200,
+        "contentType": "text/css; charset=UTF-8"
+      }
+    ],
+    "anonymousBusinessSession": 401
+  },
+  "built_artifacts_sha256": {
+    "dist/assets/index-BeSu4_Ni.css": "01a344422463920a76e80c60d9b42f16d4cd1a42c8811d55ea95fb0fead5349e",
+    "dist/assets/index-C0IJWFtM.js": "5eefc8443593531df0d8d5bf8ec7e1b703732fa3cfe59412a8b8f1aaaa8e07a3",
+    "dist/calculation-worker.mjs": "a98cf05c00a2f5cea1208f69b9ea0310f947c65aa7877501d281a7ef5222a00c",
+    "dist/fr036/examples/01_工厂与产线配置.csv": "5bdc7cacc6204809e2cb824a2b40d83eb147bf1fb49bf1c9d2e1d22f35cbe45c",
+    "dist/fr036/examples/09_物料BOM配置.csv": "8e7ba0b451aa8b7415f4a65ef4be2e3b77eeb23dd8a0e9fba15883dd94f121eb",
+    "dist/fr036/examples/bad-date-supplies.csv": "b6af3a8b5a38ba73736987649b543a6c2a25f3fde956f402febd89c7e8b05445",
+    "dist/fr036/examples/bad-reference-supplies.csv": "d547be0b64ad6f33621c3d15d8d9c85a1bdbed521ccf0cc6384431e4d4cf589e",
+    "dist/fr036/examples/bad-unit-orders.csv": "2424f328551f606bca697ecb626010081e8ef93e206ac4fa26222636ae350238",
+    "dist/fr036/examples/duplicate-orders.csv": "788de7d26ffebc138b8e2a58d29b170f787aa415b75b58249bbfe86aedbd0c45",
+    "dist/fr036/examples/orders.csv": "fd8f3a5aa660e633fe64e5a6b2aa8da4d9645fe6239f695dde4d740c9cf6b1f1",
+    "dist/fr036/examples/original05.csv": "b10bd1f4aa7027d5b1708db9184ed8835cfdbfc8d75d2194699a05b6a6c2b75d",
+    "dist/fr036/examples/original0506-mapping-draft.csv": "aa940f4f64b280197e892ed242ecf686103a071ef39c075d52d93622fbd79c58",
+    "dist/fr036/examples/original06.csv": "4adf23981fd716593522b6b86e0d6f976db65fa0c53cb51add89bad2a7b32a5b",
+    "dist/fr036/examples/supplies.csv": "09b9bdfd4e3e51ea5300609cdaeda9e5160ae005f8d2cd2292daeee3652e91fb",
+    "dist/fr036/exports/differences.csv": "75d4f7b076c35dba1016e1e0835c2083ebc37beb0fac1fa2be19a4c1b53f27d3",
+    "dist/fr036/exports/materials.csv": "25b204b77ab5f9b5d40194a26932002b08fd3edebc5a1edba84b25a71b61278d",
+    "dist/fr036/exports/occupation.csv": "5d07e981ebf8c0ece9652cc5ef0bd98fd264d275480b13a083c39d6475217e79",
+    "dist/fr036/exports/orders.csv": "a7c014851b8d597158a7d2e159320408b6d717be4ff55a44992f566c62156676",
+    "dist/fr036/exports/tasks.csv": "c77ea8990a4fad64f50eeedc15c62af2f40a6db9f595c1b2c0cbd091eeda5e1a",
+    "dist/fr036/exports/unplanned.csv": "65a5fcbf993d5aed5a3ddc33c7f5394fd2735fd9397570b3189da7b5170f4d49",
+    "dist/fr036/matrix.json": "7294870de95c3435a4c90681bf98aa1c95679067b7fef210f00145761738da18",
+    "dist/fr036/original-excerpts.txt": "637710a48f75b8b5ee076383b71bb63a8ee137cf5eef112f9436aee578adf398",
+    "dist/fr036/original09-source.json": "6b3f23e5739d893b84ee2d77db03ad53265493cf3b94808b0385deec83d7a8f5",
+    "dist/fr036/prototype-six/03_设备资源配置.csv": "78d7557d0d7e3fe1ab4abe3c0a372c545b8ee3b5b5ff18e0ce0bbc7bb437ad52",
+    "dist/fr036/prototype-six/10_工艺路线配置.csv": "400d01fb11e23784338c9e52f0fb591e8046b8b4f147992fe2e1f2b256ce1af8",
+    "dist/fr036/prototype-six/11_工序工时配置.csv": "4838e7ad58e023be86ba474cdb32f84b73c6cd61863100b042ad7ee1779e43e2",
+    "dist/fr036/prototype-six/12_工序资源与物料依赖.csv": "6a412d4bbe03284995dafc109254825bec81e2a6f487d875cf3e47c0f2b48666",
+    "dist/fr036/prototype-six/16_排程规则配置.csv": "09ab2e334c1d8cc33eb4d903d8c15dd9dc3c08568e7087b5af2eaff48108b518",
+    "dist/fr036/prototype-six/17_生产订单与交期.csv": "3ea103baf777ca5a423329348b474c86a8038b4d9db55b2711fb4963f4424e66",
+    "dist/fr036/samples.json": "1ac219cb0b2293479cf3f4601123533da8e4462fd3689c8ffa4f0784eaf34f6c",
+    "dist/fr036/templates/01_工厂与产线配置.csv": "ba485f65709d09f73523f5cd7577f89fc72a4f23d290314f314c185ca6620b34",
+    "dist/fr036/templates/02_工厂工作日历.csv": "7a8760ef8a3047a1220f3697a7385d0cd7455a8977beb4f93fb8007d0df0e1c0",
+    "dist/fr036/templates/03_设备资源配置.csv": "b3650497f69d21f975c46722d4c83a27f3f4f92a4de9f762d3034b15cb882917",
+    "dist/fr036/templates/04_设备停机与例外日历.csv": "5c3543dc5e6c0a86ad266e150a550b257b6e55b2c3d8bd3caadfcfec5822e974",
+    "dist/fr036/templates/05_模具与工具配置.csv": "9e4ec402983db38ef4eccf4a34ad0dc117898cdf01279d9ae8a9ebc4bacd9ffb",
+    "dist/fr036/templates/06_人员技能与班次.csv": "862b513eb449a97643cb73d9c714031b05d8e275c8b52d13fc0bc9d0a3df5a2c",
+    "dist/fr036/templates/07_产品与包装规格.csv": "5864f6b8b97f9fec07c7261560030d77eb1b8db33ab5b5c9a7ebf6a1905ce56d",
+    "dist/fr036/templates/08_物料主数据.csv": "fb7f7452588d6d87620525ebd20373168e262941267361b3a1f3697b07c0f88c",
+    "dist/fr036/templates/09_BOM与包装用量.csv": "508febd0de352343143ffc6ac8ce2e862a6233ffe69768184b87b80a18edca7b",
+    "dist/fr036/templates/09_库存批次.csv": "0ff7034eaf9a5a3a101331605c7c3ceeeb6f39b18f7e9ab1e361b2211c7e55e6",
+    "dist/fr036/templates/09_物料BOM配置.csv": "c2f6abfab98bf0d5533b0406a1808afe6e9628ebd94e7ff2140725665f255583",
+    "dist/fr036/templates/10_工艺路线配置.csv": "43f5a7a9e98e1e7e8b21e64ec46e70359024ed6f457cbb6f7bb8c2ea415c358e",
+    "dist/fr036/templates/11_工序工时配置.csv": "a4760c08ca864bb5e0b84db7982edf898606695706f6f9adec27efb2a023a62b",
+    "dist/fr036/templates/12_工序资源与物料依赖.csv": "94336b3c3922b467136b07e231bc68d6d354f8de447aecdf0a8356b359646bf0",
+    "dist/fr036/templates/15_空间与组批规则配置.csv": "c03753b5cd8492edb04540fdcb274aa550fe6d84b006a005ef4c9ee66079ef38",
+    "dist/fr036/templates/16_排程规则配置.csv": "0eef9b2801663d95a5e4dd7c08a8537305ce3c22409c9663f292474d95a1e8e8",
+    "dist/fr036/templates/17_生产订单与交期.csv": "8964130e45d276611cb7f39786fdb015f6b7a7647fe6d635b179f47eb57485fc",
+    "dist/fr036/templates/18_工装配置.csv": "3fe183f2b26edfe071fa30a677f192435a0ad0c383828eec38ea37cc089035ca",
+    "dist/fr036/templates/19_人员组与可用时间.csv": "454573c979e7c89aad7eda1b78d6e6845ccdccfc32672a37c5f03408e3b187ce",
+    "dist/fr036/templates/20_预计到料.csv": "9f57e855dd1793d2e27b7953c1fc2147c0df48623494fcb1822b0ab723d9d9b5",
+    "dist/fr036/templates/21_延期模拟记录.csv": "73c2d8f54702efd0c322cc0af955709d42b86a69da11913359ada396ed0f077e",
+    "dist/fr036/templates/22_计划供给引用.csv": "c88356f1537d2ed694f6303969af9055b93647b55565d80a8716ab546b52b62e",
+    "dist/fr036/templates/23_资源占用声明.csv": "16b82208a9e1e0e9e241cf554b607c4737dc2747f58d3b0c05bcf1d09244bffc",
+    "dist/fr036/templates/24_订单模拟交付条件.csv": "7747be92d7c5525777f648003dd2b616a3941cc5a2ee0af54570cff3de1a79e2",
+    "dist/fr036/templates/25_模拟任务执行事实.csv": "2ab033ebecad99f6d4f388b8e930e58fae8925e78cc28a50e8bfdb6ffdce555b",
+    "dist/fr036/templates/26_模拟累计耗料.csv": "ed76e9a5f225023608cbb4854630a94267b67054a9f660078f511d6d618d33cc",
+    "dist/fr036/templates/27_模拟进度来源对账.csv": "ccef70e41a3927672ccdad0c8f928a44c3969dda7ea0a2e9d38c548f8b202207",
+    "dist/fr036/templates/28_模拟异常事件.csv": "50858c831a156cfc5fcd69f384d8bf7f3f34941f5df8d125b78455c42fe4a89f",
+    "dist/fr036/templates/29_有向技能替代.csv": "e00a631daea5c41c1da312f5c048cd7e0e203270dcbcc533aa73e9665cde4655",
+    "dist/fr036/templates/30_物理人员池.csv": "ce391e75a9d298faaa1f5c20bdd7a9ab30117a41a44e09492d64f623b5d06096",
+    "dist/fr036/templates/31_人员与工装停用例外.csv": "d74450f3d872e3edefc97e4248c1e6a16cdad5d7ecbd178745ded2294bbd0399",
+    "dist/fr036/templates/31_原05与06运行映射.csv": "a1f31ec4aacb251a13c67b20acca2ca73f0c41d58e02969fd906f52264c5d769",
+    "dist/fr036/templates/32_原始资源事实账.csv": "961ede4d659a12f6546e8c0630acafff74a71269f5d20f47f37daf22c99e377a",
+    "dist/fr036/使用说明.txt": "80ff782bc1a0d1c50a2521bf3e2351f8f83752472482532170b34ecc62e4e251",
+    "dist/index.html": "e45783fcbc08d9f4f334a7f078f434d2eb1f1ab9c2d6bd78f260d330c6a08d17",
+    "dist/server.mjs": "660f416ebae06b86583f5f9a6d8b89a91087501dd2868e93797f8a380113bb04"
+  },
+  "historical_handoff_events_preserved": 140,
+  "baseline_files_unchanged": true,
+  "integration_repairs": [
+    "Retain calendar, batch weight/wait, source occurrence and joint checks together",
+    "Separate originalLedgerContract from CSV originalResourceContract with legacy compatibility",
+    "Preserve server-owned original CSV text for single and batch import provenance",
+    "Keep explicit tool availability and safe source row/field diagnostics",
+    "Reconcile current registry templates, source-only BOM and explicit resource mappings",
+    "Preserve historical evidence and refresh derived requirement snapshots from live Project2"
+  ],
+  "reproduction": {
+    "core": "npm ci && npm run build && npm test && npm run test:query-ui",
+    "specialized": "PARENT_ROOT=<isolated bd6f9fabe8354432e9c67b52219dc26989c2761d checkout with dependencies> ISSUE6_INPUT_DIR=$PWD/sample-data/UAT-02/baseline-v0.3 node --experimental-strip-types --test --test-concurrency=2 qa/*.test.mjs",
+    "component_ui": "Install react-test-renderer@18.3.1 without changing package files; bundle qa/*.test.tsx with esbuild and run each with node --test"
+  },
+  "evidence_delivery": {
+    "workspace": "APS-QA",
+    "archive": "APS-main-integration-20261030.zip"
+  }
+}
