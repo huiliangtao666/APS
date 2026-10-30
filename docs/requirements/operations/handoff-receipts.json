@@ -4276,6 +4276,38 @@
       "issue_state": "closed",
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "issue4:fr013:0204:independent:1cdf394e:r1",
+      "original_delivery": "dlv_6acba945-35e8-491a-8f76-70008f80b6de",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "received_via": "original completed delivery fallback; no standalone notification observed",
+      "state": "PROCESSED",
+      "code_sha": "1cdf394eb954cd6ff15a48cc052edb64f6f093b4",
+      "result": "02/04 45 PASS/0 FAIL; scoped PASS; full FR013 NOT_READY",
+      "issue_url": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6513061109",
+      "evidence_location": "APS-Test workspace root, Files API accessible",
+      "new_dispatches": [
+        "dlv_96b9043a-6e07-45ab-8c32-5cb045a28357",
+        "dlv_23eee1af-b43d-481f-8f70-01029a7e697d"
+      ]
+    },
+    {
+      "event_key": "issue4:fr013:0708:independent:1cdf394e:r1",
+      "original_delivery": "dlv_22cc0ecd-80fd-464a-b116-f44081fde16f",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test2",
+      "received_via": "original completed delivery fallback; no standalone notification observed",
+      "state": "PROCESSED",
+      "code_sha": "1cdf394eb954cd6ff15a48cc052edb64f6f093b4",
+      "result": "07/08 13 PASS/2 true product FAIL; repair delivered 0/2; full FR013 NOT_READY",
+      "issue_url": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6513061109",
+      "evidence_location": "APS-Test2 workspace root, Files API accessible",
+      "new_dispatches": [
+        "dlv_96b9043a-6e07-45ab-8c32-5cb045a28357",
+        "dlv_23eee1af-b43d-481f-8f70-01029a7e697d"
+      ]
     }
   ]
 }
