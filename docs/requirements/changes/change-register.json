@@ -509,7 +509,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR013受影响需求增量；不等于已实现或UAT通过",
-      "implementation_status": "FR013-NONDEVICE-REF-01 first repair e7881a9 independently PASS 43 scoped cases; original05/06/09/12 positive source mappings and FULL03/16 blocked; full FR013/CR NOT_READY",
+      "implementation_status": "FR013 original05/06 bd6f9fab explicit config delivered; R-C01 multi-source c70d6607 Dev bounded slice delivered, independent Test executing. Original09/B09 and other categories unchanged; full FR013/CR NOT_READY.",
       "primary_requirements": [
         "FR-013"
       ],
@@ -527,13 +527,37 @@
       "acceptance_delta": "CSV模板/预览/导入按批准配置校验：小数袋支拒绝，总收率>100%拒绝；合法配置保存刷新后生效，非法/越权整批零写入；保留旧确认/历史。",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006",
       "related_issue_urls": [],
-      "acceptance_result": "First repair e7881a9 independent 43 PASS/0 FAIL/14 BLOCKED/2 NOT_EXECUTED; defect closed at round1/2; old bd58868 5 FAIL retained at old SHA; full CR NOT_READY",
+      "acceptance_result": "bd6f9fab original05/06 independent 8 PASS/2 PARTIAL/0 product FAIL; Test2 resource-map integration 11/11 PASS; R-C10 native filename PASS; old SHA evidence retained. c70d6607 multi-source Dev selftest only, independent Test pending. R-C03 cross-line positive and other FR013 scope remain; full CR NOT_READY.",
       "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
       "history": [
         {
           "date": "2026-10-29",
           "event_key": "USER-DECISIONS-20261029-R1:fr-013",
           "event": "用户确认本CR增量，原卡仍In progress/NOT_READY；待实现与独立验收"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "dlv_5f136d17-d9da-4670-9f09-6caaa5e3c545:r1",
+          "event": "bd6f9fab original05/06 Test1 R-C01..10 7 PASS/3 PARTIAL/0 product FAIL; old SHA only",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6519250588"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "issue4:fr013-p10:resource-map-integration:test2:bd6f9fabe8354432e9c67b52219dc26989c2761d:r1",
+          "event": "bd6f9fab Test2 original05/06 resource-map integration 11/11 independent PASS, 0 product FAIL",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6519250588"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "issue4:fr013:rc10-native-filename:test2:bd6f9fabe8354432e9c67b52219dc26989c2761d:r1",
+          "event": "bd6f9fab Test2 R-C10 native filename PASS in Chrome156; Chromium141 compatibility observation; old SHA conclusion now 8 PASS/2 PARTIAL",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6519425332"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "dlv_c76969f4-9d99-4082-91fa-4d3efeff98db:r1",
+          "event": "c70d6607 multi-source same-entity Dev bounded selftest PASS; independent Test dlv_fe220c7f SENT/EXECUTING, not a new product PASS; full CR NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6519739923"
         }
       ],
       "dev_delivery": "dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1",
