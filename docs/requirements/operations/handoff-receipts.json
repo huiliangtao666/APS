@@ -4054,6 +4054,107 @@
       "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6511474455",
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_3ab7c510-75f4-46ef-8266-ae182ddfe503:c1",
+      "original_delivery": "dlv_3ab7c510-75f4-46ef-8266-ae182ddfe503",
+      "type": "DEV_DELIVERED",
+      "source": "APS-Dev",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T08:22:12+08:00",
+      "requirement": "FR-022/Issue3",
+      "product_sha": "cd115f077593cb4c1fc991cbaf54053e305e03ee",
+      "result": "Issue3 N06 S06 Dev在固定cd115f0找到自然可达旧确认→后续未知取得→实际归还→新run的MOCK时序，未改产品；另一“旧冻结已含同一未知e1并确认”仍入口422不可达。已派Test2独立核验dlv_2f41b279-f30b-4570-9858-2fb3a92fe240；Dev样本不改签旧Test结论",
+      "external_hashes": {
+        "Issue3-FR022-N06-S06-c1-SHA256.json": "bebd9a4ea89e439855451aabcef8a87b7b19613b214a240f3ac265b088c095c1",
+        "Issue3-FR022-N06-S06-c1-EVIDENCE.zip": "5d85cfc8e79bfe517cfff7c31ff2dec4dc0067feda325f37cb8a605c55510f0f",
+        "Issue3-FR022-N06-S06-c1-HANDOFF.json": "1f0543ca019182e6047a5e6ab4d283be25a98ca3074ef4f9345c5c1608bc98be",
+        "Issue3-FR022-N06-S06-c1-MATRIX.csv": "a3cd8b716b42466939aa5e6a3e55d97a526a12715e9a81f8794aef273016e5a5",
+        "Issue3-FR022-N06-S06-c1-REPORT.md": "57c900ed84af09705208d9d4db9c454418be8d33b3f7c6dfcd198804ae53c77d"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 8,
+      "project_status": {
+        "FR-022": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6511751826",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_cfb00a5c-a5fe-4f18-b336-2334624d49e6:c1",
+      "original_delivery": "dlv_cfb00a5c-a5fe-4f18-b336-2334624d49e6",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test2",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T08:22:12+08:00",
+      "requirement": "FR-022/Issue3",
+      "product_sha": "cd115f077593cb4c1fc991cbaf54053e305e03ee",
+      "result": "N06 S08固定cd115f0独立核查：无实际账旧主管确认可建、确认不制造实际来源；无来源执行事实在输入保存入口400且零写，因而目标新run负例自然不可达。S08仍PARTIAL、0产品FAIL；当时累计12 PASS/4 PARTIAL，整卡NOT_READY",
+      "external_hashes": {
+        "Issue3-FR022-N06-S08-cd115f0-Test2-c1-EVIDENCE.zip": "bfb1afa155e929ff4c26890ac34a639b32226c3d5ce11835cef830a05da91084",
+        "Issue3-FR022-N06-S08-cd115f0-Test2-c1-REPORT.md": "e210a3a5c707719e83202cbf865cea1b2bedf7b2efab6f1f7d5f4372f644b0d5",
+        "Issue3-FR022-N06-S08-cd115f0-Test2-c1-MATRIX.csv": "60186b80beade4c8e6631ad4151295f2ba1a293c956d15c61f7d122970ebeaa5",
+        "Issue3-FR022-N06-S08-cd115f0-Test2-c1-SHA256.json": "0c328364c7d40a33eaeee5eee84b14889a9c52801f6c6a0b676667c2afb8a6bf"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 4,
+      "project_status": {
+        "FR-022": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6511752221",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_b17940ad-c515-426f-a0a1-17e75f915ee5:c1",
+      "original_delivery": "dlv_b17940ad-c515-426f-a0a1-17e75f915ee5",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T08:22:12+08:00",
+      "requirement": "R2.1/Issue6",
+      "product_sha": "4e21ce744f4de70a2ae7d2351e9d1dcb6557aae2",
+      "result": "Issue6历史FR008候选4e21ce74隔离环境已由Test身份独立取得、重建并测9场景/137外部断言；矩阵19 PASS/2 PARTIAL/2未执行。01维护入口、完整阶段导入、产品内CALENDAR独立复核、AC17联动及真实身份仍缺；Issue6 OPEN、R2.1整卡NOT_READY，QA UAT未执行",
+      "external_hashes": {
+        "Issue6-R21-4e21ce74-Test-c1-MATRIX.csv": "3d72c1252623a54b2456af7fa01c204fca3b956be7211d42413e6492c48df192",
+        "Issue6-R21-4e21ce74-Test-c1-EVIDENCE.zip": "e44d662509e2b36feda4169fbefdf0b32535f704f79677a3d864bd064505624e",
+        "Issue6-R21-4e21ce74-Test-c1-REPORT.md": "b083ab53ca330fb2e1c423146c2e209d63ee695c26c8cd7c9818e8c3330682c0",
+        "Issue6-R21-4e21ce74-Test-c1-SHA256.json": "6b18cc5230b7f687809614b631b4d558c0966ac60e86cdbc3070dc4c11f1921e"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 23,
+      "project_status": {
+        "R2.1": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/6#issuecomment-6511752514",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_2f41b279-f30b-4570-9858-2fb3a92fe240:c1",
+      "original_delivery": "dlv_2f41b279-f30b-4570-9858-2fb3a92fe240",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test2",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T08:22:12+08:00",
+      "requirement": "FR-022/Issue3",
+      "product_sha": "cd115f077593cb4c1fc991cbaf54053e305e03ee",
+      "result": "N06 S06固定cd115f0独立真实API/Worker时序及来源/容量oracle PASS；旧plan、确认、冻结不变，未知释放新run422零写，追加全量释放后B从90开始。严格旧冻结含同一未知e1并确认仍自然不可达，单列语义边界；累计13 PASS/3 PARTIAL/0 FAIL，S08/09/14及B01–B05未闭，整卡NOT_READY",
+      "external_hashes": {
+        "Issue3-FR022-N06-S06-cd115f0-Test2-c1-EVIDENCE.zip": "b109f21edfa4910fd7aafa768c567b22bdaa7779d3ef04a33b43466674bd5dda",
+        "Issue3-FR022-N06-S06-cd115f0-Test2-c1-REPORT.md": "e249de72335be56efed2b2b41af82f9528e55a7d2d1cfb62170444dfa265ef61",
+        "Issue3-FR022-N06-S06-cd115f0-Test2-c1-SHA256.json": "32db6ec28db88fd7a09638c1b2732cc0081a111bd3fb3cc11e2172f64201d3c5",
+        "Issue3-FR022-N06-S06-cd115f0-Test2-c1-MATRIX.csv": "905f918fbece9cf2824062c9682679395641bbfb7f417c2078988d28c1187c5b"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 21,
+      "project_status": {
+        "FR-022": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6511752811",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
