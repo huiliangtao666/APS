@@ -509,7 +509,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR013受影响需求增量；不等于已实现或UAT通过",
-      "implementation_status": "FR013 original05/06 a49edb1d legacy v1 no-op repair delivered and independently passed; R-C08/09 same defect closed round1. Other original categories, R-C03 positive, FR016 shared duties and full FR013/CR remain NOT_READY. APS-Test b1a4863c QA-only selftest files added on 116eb5d4; no product source changes; bounded task Done, full scope open.",
+      "implementation_status": "FR013 original05/06 a49edb1d legacy v1 no-op repair delivered and independently passed; R-C08/09 same defect closed round1. Other original categories, R-C03 positive, FR016 shared duties and full FR013/CR remain NOT_READY. APS-Test b1a4863c QA-only selftest files added on 116eb5d4; no product source changes; bounded task Done, full scope open. Integrated cd105607 bounded Dev task PASS; full FR013/effective CR NOT_READY.",
       "primary_requirements": [
         "FR-013"
       ],
@@ -527,7 +527,7 @@
       "acceptance_delta": "CSV模板/预览/导入按批准配置校验：小数袋支拒绝，总收率>100%拒绝；合法配置保存刷新后生效，非法/越权整批零写入；保留旧确认/历史。",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006",
       "related_issue_urls": [],
-      "acceptance_result": "a49edb1d DEF-V1-NOOP-01 round1 independent 25/25 PASS on legacy v1 no-op and impacted regression; R-C08/09 same defect closed. Prior bd6f9fab and c70d6607 conclusions remain on original SHAs; no full CR acceptance, FR013 NOT_READY, UAT01/11 WAITING_DEPENDENCIES. QA a786ee30 v1 migration/no-op/frozen-history bounded slice 18/18 PASS; v1-specific repository 7/7 overlapping; full CR NOT_READY and UAT unsigned. APS-Test b1a4863c bounded v1 migration developer selftest 28/28 PASS and CSV 8/8 PASS on 116eb5d4 base; no product source diff or repair round; full CR/FR013 NOT_READY, UAT unsigned.",
+      "acceptance_result": "a49edb1d DEF-V1-NOOP-01 round1 independent 25/25 PASS on legacy v1 no-op and impacted regression; R-C08/09 same defect closed. Prior bd6f9fab and c70d6607 conclusions remain on original SHAs; no full CR acceptance, FR013 NOT_READY, UAT01/11 WAITING_DEPENDENCIES. QA a786ee30 v1 migration/no-op/frozen-history bounded slice 18/18 PASS; v1-specific repository 7/7 overlapping; full CR NOT_READY and UAT unsigned. APS-Test b1a4863c bounded v1 migration developer selftest 28/28 PASS and CSV 8/8 PASS on 116eb5d4 base; no product source diff or repair round; full CR/FR013 NOT_READY, UAT unsigned. Integrated cd105607 106 matrix PASS/4 BLOCKED/1 NOT_EXECUTED, Dev task Done only; QA overall UAT unsigned; no new product FAIL or repair round.",
       "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
       "history": [
         {
@@ -590,6 +590,13 @@
           "event": "APS-Test fixed b1a4863c from 116eb5d4, legacy v1 migration/no-op/explicit version/Worker/React bounded developer selftest 28/28 PASS plus independent CSV parse 8/8 PASS; no product source diff, no new FAIL or repair round; full FR013/effective CR NOT_READY, UAT unsigned.",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6528710360",
           "evidence": "APS-Test/Issue4-FR013-V1-MIGRATION-116eb5-APS-Test-r1-REPORT.md (SHA256 fe1054346d2c78b9573fa62e6aadacb6763ab7b2fa0abeacc9b115fb1e8d826a)"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_355a9993-27c9-4ec1-aa48-8128aca850b2:r1",
+          "event": "APS-Dev integrated fixed candidate cd105607 FR013 v1 and FR016 physical-row scope: task-level selftest PASS, 106 matrix PASS / 4 BLOCKED / 1 NOT_EXECUTED; no new product FAIL or repair round; full FR013/effective CR NOT_READY and QA overall UAT unsigned.",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6529417989",
+          "evidence": "APS-Dev/Issue4-FR013-FR016-INTEGRATED-20261031-r1-REPORT.md (SHA256 76f109e2229c84fff07ed3813cd86f440678391d8da0444f3dead8d2ed9cdab5)"
         }
       ],
       "dev_delivery": "dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1",

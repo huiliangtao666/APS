@@ -1905,6 +1905,31 @@
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES",
       "next_dispatch": "dlv_2a2832da-d3ff-4d36-9542-f775d303f3ca"
+    },
+    {
+      "event_key": "dlv_355a9993-27c9-4ec1-aa48-8128aca850b2:r1",
+      "type": "DEV_DELIVERED",
+      "state": "PROCESSED",
+      "source": "APS-Dev Inbox dlv_a95f46cd-7a6e-44e3-bb51-aaf056ce8b1e",
+      "processed_on": "2026-10-31",
+      "requirement": "FR-013 v0.3+CR-FR013-VALIDATION-20261029 / FR-016 v0.3 / Issue4",
+      "product_sha": "cd10560774817c67bc0d6f0f7f6c66279941f89c",
+      "result": "Bounded integration developer task Done/PASS; 106 matrix PASS, 4 BLOCKED, 1 NOT_EXECUTED; full cards/CR NOT_READY; QA UAT WAITING_DEPENDENCIES",
+      "external_hashes": {
+        "REPORT.md": "76f109e2229c84fff07ed3813cd86f440678391d8da0444f3dead8d2ed9cdab5",
+        "MATRIX.csv": "5a33b1a20a541ad68e2d4d045f6b148f7711ebd5ddc0f284f918d41d1a606e8c",
+        "EVIDENCE.zip": "1f6822ff0149b83e46f72618d2c4eadd2660023ca526e0d6c976e2de1d1b27cc"
+      },
+      "evidence_note": "Files API report/matrix/check and five parts verified; ZIP CRC, 255 manifest hashes and 111 matrix evidence hashes matched",
+      "matrix_rows_verified": 111,
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6529417989",
+      "project_status": {
+        "FR-013": "In progress",
+        "FR-016": "In progress"
+      },
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES",
+      "next_dispatch": null
     }
   ]
 }
