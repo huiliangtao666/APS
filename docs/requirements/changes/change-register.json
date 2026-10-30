@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "N06 cd115f0 finite ledger Dev delivered; Test2 formal and followup plus Test1 UI: cumulative 11 PASS/5 PARTIAL/0 FAIL; B01–B05 BLOCKED. P10 old scope retained",
+      "implementation_status": "N06 cd115f0 finite ledger Dev delivered; Test2 formal/followup, Test1 UI/S16: cumulative 12 PASS/4 PARTIAL/0 FAIL; O01 nonblocking display observation; B01–B05 BLOCKED. P10 old scope retained",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "N06 fixed cd115f0 11 independent PASS/5 PARTIAL/0 product FAIL; historical confirmation/observation boundary/other joint constraints plus customer facts/rule choices prevent full CR acceptance",
+      "acceptance_result": "N06 fixed cd115f0 12 independent PASS/4 PARTIAL/0 product FAIL; historical confirmation/observation boundary plus customer facts/rule choices prevent full CR acceptance",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
