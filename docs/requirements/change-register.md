@@ -6,7 +6,7 @@
 | --- | --- | --- | --- | --- | --- |
 | CR-DEC02-03-20261029 | 工装、人员、技能业务选择的前台参数化维护及排程生效 | 已批准能力方向并授权开发；具体默认参数值未批准 | FR-006、FR-007、FR-017、FR-022、BR-06、BR-07 | P10 fixed42a35d07 Test1 S-P01..10 PASS; Test2 H first six PASS, R2 H-P06 PASS/H-P04 PARTIAL. H-P08/10 Test1 verdict awaits PM review; H-P04 personnel early/late formula awaits user decision. N06 and other scope open; full CR NOT_READY. | P10 fixed42a35d07 independent S-P01..10 PASS; H-P01/02/03/05/06/07/08/09/10 PASS, H-P04 PARTIAL pending personnel outside-task early/late rule; 0 new product FAIL, +0 repair. Full FR007/022/CR and UAT NOT_READY. |
 | CR-DEC04-05-06-20261029 | DEC-04/05/06数量、质量可用性与工艺参数的需求设计深化及mock | 已批准需求设计深化、参数化及mock准备；应用实现未派发，具体业务值未批准 | FR-002、FR-003、FR-004、FR-005、FR-010、FR-011、FR-017、FR-020、FR-021、FR-022、FR-023、BR-02、BR-04、BR-08、BR-09、BR-10、BR-11、BR-12、BR-13、BR-14、BR-18 | 独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。 |
-| CR-FR013-VALIDATION-20261029 | FR013袋支/收率及字段可配置校验 | 已批准具体校验与可配置方向；具体其他业务默认值未批准 | FR-013 | FR013-NONDEVICE-REF-01 first repair e7881a9 independently PASS 43 scoped cases; original05/06/09/12 positive source mappings and FULL03/16 blocked; full FR013/CR NOT_READY | First repair e7881a9 independent 43 PASS/0 FAIL/14 BLOCKED/2 NOT_EXECUTED; defect closed at round1/2; old bd58868 5 FAIL retained at old SHA; full CR NOT_READY |
+| CR-FR013-VALIDATION-20261029 | FR013袋支/收率及字段可配置校验 | 已批准具体校验与可配置方向；具体其他业务默认值未批准 | FR-013 | FR013 fixed 1cdf394e original02/04 independent 45 PASS; original07/08 13 PASS/2 product FAIL. PM dispatched first Dev validation repair dlv_50c139f5-bc21-4c22-adad-294f147b9055 (SENT, not delivered); full FR013/CR NOT_READY. | Fixed 1cdf394e: original02/04 scoped PASS 45/45; original07/08 13 PASS/2 FAIL. CR integer bag count and total yield <=100% not yet accepted. Prior PASS remains on original SHA; full CR NOT_READY; Dev repair delivered 0/2. |
 | CR-FR038-PERF-20261029 | FR038排程时间暂定目标 | 已批准暂定30秒目标；AC27规模/规则/环境仍待确认 | FR-038 | 8741bf0a exploratory Test2 18 tiers/62 Worker runs and C2 count correction; Test1 React full-chain 8/128 orders <1.3s and 512 cancellation, fixed SHA; formal spec pending | Exploration only: no formal AC27 30s PASS/FAIL; C1 task-count wording corrected by C2, 4096=3993+53+50; formal scale/rules/environment/timing boundary pending |
 
 ## CR-DEC02-03-20261029
@@ -78,11 +78,11 @@
 
 **工作量评估**：未登记工时/成本评估
 
-**交付限制**：无默认值或测试规模推定；无产品FAIL或修复轮次
+**交付限制**：当前两项产品FAIL已由独立Test确认，修复交付0/最多2；未批准其他默认值，旧PASS留原SHA，整卡/UAT未完成。
 
 **主跟踪记录**：https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006
 
-**交付与审查追踪**：Dev dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1；设计/契约审查 未派发；产品Test dlv_b4987c57-516c-4c3a-b0d6-2cab6febb7c9；dlv_1aef3889-5dad-4483-a367-479e14a240dd。代码SHA：fc273441ca93dcc47996bf5a6f7031e73be7f226；设计文档提交：见主Issue及受控目录。
+**交付与审查追踪**：Dev dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1；设计/契约审查 未派发；产品Test dlv_b4987c57-516c-4c3a-b0d6-2cab6febb7c9；dlv_1aef3889-5dad-4483-a367-479e14a240dd; dlv_6acba945-35e8-491a-8f76-70008f80b6de; dlv_22cc0ecd-80fd-464a-b116-f44081fde16f; dlv_6acba945-35e8-491a-8f76-70008f80b6de; dlv_22cc0ecd-80fd-464a-b116-f44081fde16f。代码SHA：1cdf394eb954cd6ff15a48cc052edb64f6f093b4；设计文档提交：见主Issue及受控目录。
 
 ## CR-FR038-PERF-20261029
 

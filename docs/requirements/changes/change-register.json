@@ -521,7 +521,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR013受影响需求增量；不等于已实现或UAT通过",
-      "implementation_status": "FR013-NONDEVICE-REF-01 first repair e7881a9 independently PASS 43 scoped cases; original05/06/09/12 positive source mappings and FULL03/16 blocked; full FR013/CR NOT_READY",
+      "implementation_status": "FR013 fixed 1cdf394e original02/04 independent 45 PASS; original07/08 13 PASS/2 product FAIL. PM dispatched first Dev validation repair dlv_50c139f5-bc21-4c22-adad-294f147b9055 (SENT, not delivered); full FR013/CR NOT_READY.",
       "primary_requirements": [
         "FR-013"
       ],
@@ -539,20 +539,30 @@
       "acceptance_delta": "CSV模板/预览/导入按批准配置校验：小数袋支拒绝，总收率>100%拒绝；合法配置保存刷新后生效，非法/越权整批零写入；保留旧确认/历史。",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006",
       "related_issue_urls": [],
-      "acceptance_result": "First repair e7881a9 independent 43 PASS/0 FAIL/14 BLOCKED/2 NOT_EXECUTED; defect closed at round1/2; old bd58868 5 FAIL retained at old SHA; full CR NOT_READY",
-      "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
+      "acceptance_result": "Fixed 1cdf394e: original02/04 scoped PASS 45/45; original07/08 13 PASS/2 FAIL. CR integer bag count and total yield <=100% not yet accepted. Prior PASS remains on original SHA; full CR NOT_READY; Dev repair delivered 0/2.",
+      "limitations": "当前两项产品FAIL已由独立Test确认，修复交付0/最多2；未批准其他默认值，旧PASS留原SHA，整卡/UAT未完成。",
       "history": [
         {
           "date": "2026-10-29",
           "event_key": "USER-DECISIONS-20261029-R1:fr-013",
           "event": "用户确认本CR增量，原卡仍In progress/NOT_READY；待实现与独立验收"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "issue4:fr013:0204:independent:1cdf394e:r1",
+          "event": "02/04 independent scoped 45 PASS, no product FAIL"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "issue4:fr013:0708:independent:1cdf394e:r1",
+          "event": "07/08 independent 13 PASS/2 product FAIL: 8.5 bag count and 1.01 total yield accepted by preview"
         }
       ],
       "dev_delivery": "dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1",
       "contract_review_delivery": "",
-      "product_test_delivery": "dlv_b4987c57-516c-4c3a-b0d6-2cab6febb7c9；dlv_1aef3889-5dad-4483-a367-479e14a240dd",
-      "code_sha": "fc273441ca93dcc47996bf5a6f7031e73be7f226",
-      "code_branch": "",
+      "product_test_delivery": "dlv_b4987c57-516c-4c3a-b0d6-2cab6febb7c9；dlv_1aef3889-5dad-4483-a367-479e14a240dd; dlv_6acba945-35e8-491a-8f76-70008f80b6de; dlv_22cc0ecd-80fd-464a-b116-f44081fde16f; dlv_6acba945-35e8-491a-8f76-70008f80b6de; dlv_22cc0ecd-80fd-464a-b116-f44081fde16f",
+      "code_sha": "1cdf394eb954cd6ff15a48cc052edb64f6f093b4",
+      "code_branch": "feat/fr-013-016-main-batch (fixed historical SHA; head advanced)",
       "dev_report": "",
       "test_report": "",
       "design_commit": "",
