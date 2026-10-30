@@ -40,10 +40,10 @@ test('numeric/required/duplicate/unit/reference and malformed mixed files report
  const files=filesOf(masterBatch(),allKeys),product=files.find(f=>f.name.startsWith('07_'));
  for(const bad of [[...files,product],files.map(f=>f===product?{...f,text:f.text.replace('总收率','错误字段')}:f),files.map(f=>f===product?{...f,text:f.text+'"未闭合'}:f)]){const r=await f.call('/imports/preview',{revision:0,files:bad});assert.ok(r.status===400||r.body.valid===false);assert.equal(f.bytes(),before);}
 });
-test('current accepted numeric and material unit/category semantics preserved literally, with new product/material references resolving in merged batch',async t=>{
+test('CR-FR013 legal numeric values and configurable material unit/category preserved literally, with new product/material references resolving in merged batch',async t=>{
  const f=await setup(t),d=masterBatch(),before=f.bytes();
- Object.assign(d.products[0],{'单支净重kg':'.0001','每袋支数':'1.5','总收率':'1.01','模拟交付等待分钟':'0'});
- // Current structural validator does not cap yield, require integral packaging, or enumerate master units/categories.
+ Object.assign(d.products[0],{'单支净重kg':'.0001','每袋支数':'15','总收率':'1','模拟交付等待分钟':'0'});
+ // The approved CR adds integer bags and a ratio cap; master units/categories remain explicit free text.
  Object.assign(d.materials.at(-1),{'单位':'合成自定义单位','类别':'合成自定义类别'});
  d.orders[0]['产品编号']='SYN-P07';
  for(const k of ['routes','times'])d[k].push(...d[k].filter(r=>r['产品编号']==='HC40').map(r=>({...r,'产品编号':'SYN-P07'})));
