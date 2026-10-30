@@ -1,3 +1,4 @@
+import {verifyResourcePolicies} from '../src/lib/verify-resource-policies.mjs';
 import {poolTransitionIssues} from '../src/lib/physical-pools.mjs';
 import {inspectSingleCsv} from './csv-single.mjs';
 import {migratePolicies} from '../src/lib/resource-policies.mjs';
@@ -143,6 +144,30 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     res.status(checked.status).json(checked.body);
   });
   router.post('/tables/:table',permission('edit'),(req,res)=>saveInputs(req,res,{[req.params.table]:req.body.rows}));
+  // Business dry run only: shares input/history guards, never preserve/write/record.
+  router.post('/inputs/resource-policy-preview',permission('calculate'),(req,res)=>{
+    const tables=req.body.tables;
+    if(!tables||typeof tables!=='object'||Array.isArray(tables)||Object.keys(tables).some(k=>!['personnelPools','personnelGroups','dependencies','skillSubstitutions'].includes(k)))return res.status(400).json({error:'preview_tables',message:'人员策略预览仅接受物理池、人员组、人员依赖和技能替代草稿'});
+    const check={status:200,body:null},response={status(code){check.status=code;return this;},json(body){check.body=body;return this;}};
+    saveInputs(req,response,tables,undefined,true);
+    if(!check.body?.valid)return res.status(check.status).json(check.body);
+    const state=read();if(req.body.revision!==state.revision)return res.status(409).json({error:'stale_input'});
+    const candidate=structuredClone(state.data);
+    for(const [key,rows] of Object.entries(tables)){const def=defs.find(d=>d.key===key);candidate[key]=(migratePolicies({[key]:rows})[key]||rows).map(row=>Object.fromEntries(def.fields.map(f=>[f,row[f]??''])));}
+    const at=new Date().toISOString();
+    function evaluate(data){
+      const frozen=freezeRunInput(data,req.body.selection,at);
+      const issues=[...validateInputs(defs,data,{at,checkPolicyExecution:false}),...executionAdmission(frozen.executionData,frozen.conditions),...assessRules(frozen.executionData,at,true,frozen.conditions.mode).issues];
+      if(issues.length)return {status:'blocked',issues};
+      const plan=calculate(frozen.executionData,state.revision,at,frozen.conditions);
+      return {status:'preview',snapshotHash:frozen.snapshotHash,conditions:frozen.conditions,tasks:plan.tasks,resourceReservations:plan.resourceReservations,findings:plan.findings,resourceVerification:verifyResourcePolicies(plan,frozen.executionData,frozen.conditions)};
+    }
+    try{
+      const proposed=evaluate(candidate);if(proposed.status==='blocked')return res.status(422).json({error:'preview_blocked',issues:proposed.issues});
+      let before;try{before=evaluate(state.data);}catch(e){before={status:'blocked',message:e.message};}
+      return res.json({valid:true,persisted:false,revision:state.revision,actor:subjectKey(req.praetorActor),role:req.member.role,configurationHash:inputHash(candidate),before,candidate:proposed});
+    }catch(e){return res.status(400).json({error:'preview_blocked',message:e.message});}
+  });
   router.post('/inputs',permission('edit'),(req,res)=>saveInputs(req,res,req.body.tables));
   router.get('/trials',permission('read'),(_req,res)=>res.json(read().trials||[]));
   router.post('/trials/:id/inputs',permission('edit'),(req,res)=>saveInputs(req,res,req.body.tables,req.params.id));

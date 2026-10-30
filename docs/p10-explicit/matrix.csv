@@ -1,0 +1,17 @@
+ID,Dev result,assertion,harness,evidence
+X01,DEV_PASS,shared on vs group/operation mutex changes two-machine Worker-compatible schedule without duplicating capacity,qa/p10-explicit.test.mjs,evidence/targeted.log
+X02,DEV_PASS,"mutex granularity distinguishes two groups in one operation, endpoint reuse remains legal",qa/p10-explicit.test.mjs,evidence/targeted.log
+X03,DEV_PASS,"explicit handover upper bound 0/1/2 and half-open [0,30), no hidden extra demand",qa/p10-explicit.test.mjs,evidence/targeted.log
+X04,DEV_PASS,full occupation vs released declared phases changes capacity feasibility; checker reconstructs independent windows,qa/p10-explicit.test.mjs,evidence/targeted.log
+X05,DEV_PASS,forged simultaneous ledger rejected by independent mutex/cap checker and geometry; cap breakpoint inside claim scanned,qa/p10-explicit.test.mjs,evidence/targeted.log
+X06,DEV_PASS,"absent/unknown/contradictory/out-of-range options location, zero full-store writes including audit",qa/p10-explicit.test.mjs,evidence/targeted.log
+X07,DEV_PASS,"asynchronous run freezes v2; saved/reopened policy updates never rewrite old input/plan/facts, trusted audit role",qa/p10-explicit.test.mjs,evidence/targeted.log
+X08,DEV_PASS,"legacy core immutable snapshot still independently verifies, absent strategy cannot silently start new run or downgrade explicit frozen contract",qa/p10-explicit.test.mjs,evidence/targeted.log
+X09,DEV_PASS,full-operation retry uses real release instead of unretained phase offset; group mutex allows same group concurrency,qa/p10-explicit.test.mjs,evidence/targeted.log
+X10,DEV_PASS,"mixed occupation across candidate pools rejects exact dependency source; original groups, windows and skills still mandatory",qa/p10-explicit.test.mjs,evidence/targeted.log
+X11,DEV_PASS,"full joint before-enabling preview changes cross-task timing, returns claims/config/role and never writes plans, inputs or audit",qa/p10-explicit.test.mjs,evidence/targeted.log
+UI01,DEV_PASS,React save/reopen operation mutex; new Worker serializes,qa/p10-explicit-browser.mjs,evidence/explicit-browser-results.json
+UI02,DEV_PASS,handover cap 0 vs 2 changes real asynchronous Worker; immutable old inputs,qa/p10-explicit-browser.mjs,evidence/explicit-browser-results.json
+UI03,DEV_PASS,over-cap preview rejects zero-write; query role disabled,qa/p10-explicit-browser.mjs,evidence/explicit-browser-results.json
+UP01,DEV_PASS,exact parent confirmed plan/input/confirmation unchanged after policy/stop/new run,qa/p10-explicit-upgrade.mjs,evidence/p10-explicit-upgrade-results.json
+UP02,DEV_PASS,exact parent executed plan/input/facts/material/source unchanged after downtime/new run,qa/p10-explicit-upgrade.mjs,evidence/p10-explicit-upgrade-results.json

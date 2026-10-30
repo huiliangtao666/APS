@@ -1,0 +1,23 @@
+{
+  "qa/p10-core-fixture.mjs": "7d0a93f8843a9a71bc650e7f9d7f4e8342bcd44bda960fb6663300ce094ac25d",
+  "qa/p10-explicit-browser.mjs": "3536868a70f5a577d6ee00a17b50f3f58efab1148ed0528ad815716823a7905c",
+  "qa/p10-explicit-container.sh": "b5623446e61ef8a313614afb16db29aec6db3ea6458265174ced7e0eb80329c7",
+  "qa/p10-explicit-fixture.mjs": "d2e55f8ed2d5633167883791a82442f4ad87a73c1147dcb68279c8a612907fe1",
+  "qa/p10-explicit-upgrade.mjs": "3b7ae41e2fcf05cf58fcc252d229df155874e8279e6b3f02fa0ab02e5daa913a",
+  "qa/p10-explicit.test.mjs": "c8d16715fc87e81cf9185b8dc08dbf92a5a288b2224eb08c2d62be0eeb005b7a",
+  "server/business.mjs": "1a561a0e721d4efb741835bd024eaed5033fa6a687a7f786498f72594dfb853e",
+  "server/planner.ts": "61e13766033a480905cc0113bfaf345c2d9ffed66b9b615af224a14c6e4debdb",
+  "server/run-input.mjs": "46d77698a2078a9a7707a622b60575be6e92a3e59928eae8b859af1d5b125e41",
+  "src/App.tsx": "21cb5b071098f3d1ec57cee22863d4ff48febf2f892af23764d1b7184e73e59b",
+  "src/DataEditor.tsx": "ac2dbb782e04495c6407ead7aebf3ffa99412c5a6f5ad0c5aa477fb813b0e8d7",
+  "src/PersonnelPolicyTrial.tsx": "318a2585e32708c98b5276e52c6102ec22099f125900de263687bb676af48128",
+  "src/PolicyPreview.tsx": "3a2c090d0fc1185c0fd12e832b1b761b9834003a2d8ef95f09694212a5211519",
+  "src/data-defs.ts": "ce3326cf8125320b0772f6a54e9938cd692dd3dbaba973b923aecc39a706cd66",
+  "src/lib/physical-pools.d.mts": "0af04666a26933a2d1ba2714f219deaa2c4f9d8e4bbc4ca6795747c9b969ed55",
+  "src/lib/physical-pools.mjs": "0ba5e026f810a7925daee9cd4fee85c1c052e03d8fab777dc5653cb268a1a8d0",
+  "src/lib/resource-conflicts.mjs": "f88b56cb836417296213b6ddc4e541dbc41a5fad3af3e661eca4999433977160",
+  "src/lib/resource-load.mjs": "2989eb1c74339fa736aa93eb5284502b53baf9a1ce292b05fe33a648516ba8a1",
+  "src/lib/staffing.d.mts": "845be3c3af09c419a8f1e062f7a67472f7de3cea9aa807423b8a05fe0c8814b2",
+  "src/lib/staffing.mjs": "2fa00c8e01093bf62c5b300c1d729bed5f2131c79b6669a4c97f71054b652e52",
+  "src/lib/verify-resource-policies.mjs": "9ece1f57e309dec7da07bbfa1787aaca7cf08344774514825bacc17a0be1b971"
+}

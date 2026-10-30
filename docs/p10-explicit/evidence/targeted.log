@@ -1,0 +1,406 @@
+TAP version 13
+# Subtest: FR022 two sets permit two of three simultaneous machines, release boundary is reusable
+ok 1 - FR022 two sets permit two of three simultaneous machines, release boundary is reusable
+  ---
+  duration_ms: 914.215931
+  type: 'test'
+  ...
+# Subtest: FR022 one set covers before acquisition and 10-minute delayed release with exact touching
+ok 2 - FR022 one set covers before acquisition and 10-minute delayed release with exact touching
+  ---
+  duration_ms: 57.130993
+  type: 'test'
+  ...
+# Subtest: FR022 cooling 600+600 cannot share1000kg; full delayed release shifts the other task
+ok 3 - FR022 cooling 600+600 cannot share1000kg; full delayed release shifts the other task
+  ---
+  duration_ms: 32.369353
+  type: 'test'
+  ...
+# Subtest: FR022 space locations require integers and explicit same units; no kg inference from notes
+ok 4 - FR022 space locations require integers and explicit same units; no kg inference from notes
+  ---
+  duration_ms: 34.015265
+  type: 'test'
+  ...
+# Subtest: FR022 exact decimal capacity never uses epsilon and adjacent disjoint claims use peak
+ok 5 - FR022 exact decimal capacity never uses epsilon and adjacent disjoint claims use peak
+  ---
+  duration_ms: 4.326389
+  type: 'test'
+  ...
+# Subtest: FR022 personnel event sweep uses simultaneous peak rather than summing disjoint intervals
+ok 6 - FR022 personnel event sweep uses simultaneous peak rather than summing disjoint intervals
+  ---
+  duration_ms: 17.819818
+  type: 'test'
+  ...
+# Subtest: FR022 joint retry rechecks machine downtime, personnel arrival/participation and tooling release
+ok 7 - FR022 joint retry rechecks machine downtime, personnel arrival/participation and tooling release
+  ---
+  duration_ms: 19.235682
+  type: 'test'
+  ...
+# Subtest: FR022 missing policy/units/intervals or dependency release declaration blocks actionable findings
+ok 8 - FR022 missing policy/units/intervals or dependency release declaration blocks actionable findings
+  ---
+  duration_ms: 60.138394
+  type: 'test'
+  ...
+# Subtest: FR022 minimal mode and future rules remain truthfully unchecked; max lag refuses activation
+ok 9 - FR022 minimal mode and future rules remain truthfully unchecked; max lag refuses activation
+  ---
+  duration_ms: 36.792161
+  type: 'test'
+  ...
+# Subtest: FR022 resource shortage rolls back whole FR021 member cycle, material ledger and reservations
+ok 10 - FR022 resource shortage rolls back whole FR021 member cycle, material ledger and reservations
+  ---
+  duration_ms: 54.158301
+  type: 'test'
+  ...
+# Subtest: FR022 horizon shortage leaves no ghost reservation and exported saved occupancy is task-linked
+ok 11 - FR022 horizon shortage leaves no ghost reservation and exported saved occupancy is task-linked
+  ---
+  duration_ms: 23.274357
+  type: 'test'
+  ...
+# Subtest: FR022 declared dependency quantity/offset conflicts and dynamic release semantics block instead of picking precedence
+ok 12 - FR022 declared dependency quantity/offset conflicts and dynamic release semantics block instead of picking precedence
+  ---
+  duration_ms: 5.970468
+  type: 'test'
+  ...
+# Subtest: FR022 explicit per-production-batch space quantity repeats without inferred scaling and retains each original member link
+ok 13 - FR022 explicit per-production-batch space quantity repeats without inferred scaling and retains each original member link
+  ---
+  duration_ms: 3.391159
+  type: 'test'
+  ...
+# Subtest: FR022 unsupported machine multiplicity and unsafe tooling capacities fail closed
+ok 14 - FR022 unsupported machine multiplicity and unsafe tooling capacities fail closed
+  ---
+  duration_ms: 16.477287
+  type: 'test'
+  ...
+# Subtest: P06 two shifts: full machine/tool/labor cycle moves to later legal window, frozen checker and export agree
+ok 15 - P06 two shifts: full machine/tool/labor cycle moves to later legal window, frozen checker and export agree
+  ---
+  duration_ms: 214.929499
+  type: 'test'
+  ...
+# Subtest: P06 gaps/short shifts cannot be concatenated; complete occupancy after-release cannot cross gap
+ok 16 - P06 gaps/short shifts cannot be concatenated; complete occupancy after-release cannot cross gap
+  ---
+  duration_ms: 43.560229
+  type: 'test'
+  ...
+# Subtest: P06 explicit factory off, machine stop, personnel stop and tool stop all force fresh same-window candidate
+ok 17 - P06 explicit factory off, machine stop, personnel stop and tool stop all force fresh same-window candidate
+  ---
+  duration_ms: 64.557743
+  type: 'test'
+  ...
+# Subtest: P06 resource-specific stop with no later candidate leaves no commitments and identifies actual resource
+ok 18 - P06 resource-specific stop with no later candidate leaves no commitments and identifies actual resource
+  ---
+  duration_ms: 18.841257
+  type: 'test'
+  ...
+# Subtest: P06 missing qualified people, wrong shift, reverse-only skill relation and pool shortage are unscheduled
+ok 19 - P06 missing qualified people, wrong shift, reverse-only skill relation and pool shortage are unscheduled
+  ---
+  duration_ms: 46.289583
+  type: 'test'
+  ...
+# Subtest: P06 explicit second-shift groups and complete phase windows, no implicit handover
+ok 20 - P06 explicit second-shift groups and complete phase windows, no implicit handover
+  ---
+  duration_ms: 7.606796
+  type: 'test'
+  ...
+# Subtest: P06 half-open stop and adjacent shift boundaries allow reuse without bridging a shift
+ok 21 - P06 half-open stop and adjacent shift boundaries allow reuse without bridging a shift
+  ---
+  duration_ms: 48.895932
+  type: 'test'
+  ...
+# Subtest: P06 independent checker rejects adjacent-row union and stop/phase/contract tampering; old snapshots stay old
+ok 22 - P06 independent checker rejects adjacent-row union and stop/phase/contract tampering; old snapshots stay old
+  ---
+  duration_ms: 30.759484
+  type: 'test'
+  ...
+# Subtest: P06 overlapping role segmentation cannot evade a full phase using different shift groups
+ok 23 - P06 overlapping role segmentation cannot evade a full phase using different shift groups
+  ---
+  duration_ms: 1.991586
+  type: 'test'
+  ...
+# Subtest: P06 input guards reject missing reference, unknown type, fractional/reversed interval, blank reason
+ok 24 - P06 input guards reject missing reference, unknown type, fractional/reversed interval, blank reason
+  ---
+  duration_ms: 12.272026
+  type: 'test'
+  ...
+# Subtest: P06 60 small cases match an independent integer-minute same-window oracle
+ok 25 - P06 60 small cases match an independent integer-minute same-window oracle
+  ---
+  duration_ms: 291.441344
+  type: 'test'
+  ...
+# Subtest: cross-group physical total is unique; independent posts sum and group qualification cap retained
+ok 26 - cross-group physical total is unique; independent posts sum and group qualification cap retained
+  ---
+  duration_ms: 139.712892
+  type: 'test'
+  ...
+# Subtest: same pool across tasks and groups, endpoint release; distinct pools independent; candidate alternatives search without duplicate consumption
+ok 27 - same pool across tasks and groups, endpoint release; distinct pools independent; candidate alternatives search without duplicate consumption
+  ---
+  duration_ms: 1.218152
+  type: 'test'
+  ...
+# Subtest: same-post overlap max and distinct-post adjacent windows, no skill/shift/availability bypass
+ok 28 - same-post overlap max and distinct-post adjacent windows, no skill/shift/availability bypass
+  ---
+  duration_ms: 10.3584
+  type: 'test'
+  ...
+# Subtest: independent checker rebuilds pool identity/total and catches forged labels, quantity, missing coverage and wrong contract
+ok 29 - independent checker rebuilds pool identity/total and catches forged labels, quantity, missing coverage and wrong contract
+  ---
+  duration_ms: 62.892623
+  type: 'test'
+  ...
+# Subtest: no guesses for missing capacity/identity/shared flag or U01/U02; drafts save but cannot run; future effective version deferred
+ok 30 - no guesses for missing capacity/identity/shared flag or U01/U02; drafts save but cannot run; future effective version deferred
+  ---
+  duration_ms: 37.794099
+  type: 'test'
+  ...
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"at":"2026-10-30T08:04:23.828Z","action":"deny","requestId":"fr027-synthetic","actor":"user","reason":"membership_required"}
+# Subtest: Express invalid/unauthorized/stale/deletion/reused identity atomically reject; audit captures new versions; no downgrade
+ok 31 - Express invalid/unauthorized/stale/deletion/reused identity atomically reject; audit captures new versions; no downgrade
+  ---
+  duration_ms: 414.991248
+  type: 'test'
+  ...
+# Subtest: load retains identical same-group independent posts and maps physical identities from frozen data
+ok 32 - load retains identical same-group independent posts and maps physical identities from frozen data
+  ---
+  duration_ms: 3.94838
+  type: 'test'
+  ...
+# Subtest: N06 accepted execution facts still prevent dependency edits; corrupt confirmed history prevents P10 writes
+ok 33 - N06 accepted execution facts still prevent dependency edits; corrupt confirmed history prevents P10 writes
+  ---
+  duration_ms: 54.823566
+  type: 'test'
+  ...
+# Subtest: explicit same-name different pools stay distinct; referenced pool removal requires one complete cross-table remap
+ok 34 - explicit same-name different pools stay distinct; referenced pool removal requires one complete cross-table remap
+  ---
+  duration_ms: 42.219783
+  type: 'test'
+  ...
+# Subtest: design S08/S11/S12/S13 explicit quantities and malformed capacity/map inputs
+ok 35 - design S08/S11/S12/S13 explicit quantities and malformed capacity/map inputs
+  ---
+  duration_ms: 9.627009
+  type: 'test'
+  ...
+# Subtest: Design S01 supplied candidate, Worker and independent frozen reconstruction
+ok 36 - Design S01 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 88.883623
+  type: 'test'
+  ...
+# Subtest: Design S04 supplied candidate, Worker and independent frozen reconstruction
+ok 37 - Design S04 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 24.101208
+  type: 'test'
+  ...
+# Subtest: Design S08 supplied candidate, Worker and independent frozen reconstruction
+ok 38 - Design S08 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 8.238561
+  type: 'test'
+  ...
+# Subtest: Design S09 supplied candidate, Worker and independent frozen reconstruction
+ok 39 - Design S09 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 7.369083
+  type: 'test'
+  ...
+# Subtest: Design S10 supplied candidate, Worker and independent frozen reconstruction
+ok 40 - Design S10 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 5.344454
+  type: 'test'
+  ...
+# Subtest: Design S11 supplied candidate, Worker and independent frozen reconstruction
+ok 41 - Design S11 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 31.283995
+  type: 'test'
+  ...
+# Subtest: Design S12 supplied candidate, Worker and independent frozen reconstruction
+ok 42 - Design S12 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 4.570978
+  type: 'test'
+  ...
+# Subtest: Design S13 supplied candidate, Worker and independent frozen reconstruction
+ok 43 - Design S13 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 6.382435
+  type: 'test'
+  ...
+# Subtest: group bottleneck reports pool, posts, half-open interval, need, qualification and gap
+ok 44 - group bottleneck reports pool, posts, half-open interval, need, qualification and gap
+  ---
+  duration_ms: 1.249903
+  type: 'test'
+  ...
+# Subtest: cross-line full run remains guarded; cross-operation allocator preserves one physical total
+ok 45 - cross-line full run remains guarded; cross-operation allocator preserves one physical total
+  ---
+  duration_ms: 150.132959
+  type: 'test'
+  ...
+# Subtest: missing reason and malformed atomic pool updates preserve complete store
+ok 46 - missing reason and malformed atomic pool updates preserve complete store
+  ---
+  duration_ms: 53.912337
+  type: 'test'
+  ...
+# Subtest: request actor cannot replace trusted membership actor in successful pool audit
+ok 47 - request actor cannot replace trusted membership actor in successful pool audit
+  ---
+  duration_ms: 19.591232
+  type: 'test'
+  ...
+# Subtest: X01 shared on vs group/operation mutex changes two-machine Worker-compatible schedule without duplicating capacity
+ok 48 - X01 shared on vs group/operation mutex changes two-machine Worker-compatible schedule without duplicating capacity
+  ---
+  duration_ms: 91.138174
+  type: 'test'
+  ...
+# Subtest: X02 mutex granularity distinguishes two groups in one operation, endpoint reuse remains legal
+ok 49 - X02 mutex granularity distinguishes two groups in one operation, endpoint reuse remains legal
+  ---
+  duration_ms: 9.13108
+  type: 'test'
+  ...
+# Subtest: X03 explicit handover upper bound 0/1/2 and half-open [0,30), no hidden extra demand
+ok 50 - X03 explicit handover upper bound 0/1/2 and half-open [0,30), no hidden extra demand
+  ---
+  duration_ms: 76.838228
+  type: 'test'
+  ...
+# Subtest: X04 full occupation vs released declared phases changes capacity feasibility; checker reconstructs independent windows
+ok 51 - X04 full occupation vs released declared phases changes capacity feasibility; checker reconstructs independent windows
+  ---
+  duration_ms: 11.708722
+  type: 'test'
+  ...
+# Subtest: X05 forged simultaneous ledger rejected by independent mutex/cap checker and geometry; cap breakpoint inside claim scanned
+ok 52 - X05 forged simultaneous ledger rejected by independent mutex/cap checker and geometry; cap breakpoint inside claim scanned
+  ---
+  duration_ms: 12.53599
+  type: 'test'
+  ...
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"at":"2026-10-30T08:04:24.162Z","action":"deny","requestId":"fr027-synthetic","actor":"user","reason":"membership_required"}
+# Subtest: X06 absent/unknown/contradictory/out-of-range options location, zero full-store writes including audit
+ok 53 - X06 absent/unknown/contradictory/out-of-range options location, zero full-store writes including audit
+  ---
+  duration_ms: 355.545661
+  type: 'test'
+  ...
+# Subtest: X07 asynchronous run freezes v2; saved/reopened policy updates never rewrite old input/plan/facts, trusted audit role
+ok 54 - X07 asynchronous run freezes v2; saved/reopened policy updates never rewrite old input/plan/facts, trusted audit role
+  ---
+  duration_ms: 183.703505
+  type: 'test'
+  ...
+# Subtest: X08 legacy core immutable snapshot still independently verifies, absent strategy cannot silently start new run or downgrade explicit frozen contract
+ok 55 - X08 legacy core immutable snapshot still independently verifies, absent strategy cannot silently start new run or downgrade explicit frozen contract
+  ---
+  duration_ms: 3.721084
+  type: 'test'
+  ...
+# Subtest: X09 full-operation retry uses real release instead of unretained phase offset; group mutex allows same group concurrency
+ok 56 - X09 full-operation retry uses real release instead of unretained phase offset; group mutex allows same group concurrency
+  ---
+  duration_ms: 2.699685
+  type: 'test'
+  ...
+# Subtest: X10 mixed occupation across candidate pools rejects exact dependency source; original groups, windows and skills still mandatory
+ok 57 - X10 mixed occupation across candidate pools rejects exact dependency source; original groups, windows and skills still mandatory
+  ---
+  duration_ms: 1.076858
+  type: 'test'
+  ...
+# {"action":"calculate","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"at":"2026-10-30T08:04:24.407Z","action":"deny","requestId":"fr027-synthetic","actor":"user","reason":"membership_required"}
+# Subtest: X11 full joint before-enabling preview changes cross-task timing, returns claims/config/role and never writes plans, inputs or audit
+ok 58 - X11 full joint before-enabling preview changes cross-task timing, returns claims/config/role and never writes plans, inputs or audit
+  ---
+  duration_ms: 44.008364
+  type: 'test'
+  ...
+# Subtest: R01 multi-member tool+independent personnel posts+physical pool+space+material hold together
+ok 59 - R01 multi-member tool+independent personnel posts+physical pool+space+material hold together
+  ---
+  duration_ms: 146.903345
+  type: 'test'
+  ...
+# Subtest: R02 any single enabled condition failure leaves whole multi-member cycle without ghost commit
+ok 60 - R02 any single enabled condition failure leaves whole multi-member cycle without ghost commit
+  ---
+  duration_ms: 85.271625
+  type: 'test'
+  ...
+# Subtest: R02 material arrival forces personnel, tooling, space, downtime and horizon recheck at new candidate
+ok 61 - R02 material arrival forces personnel, tooling, space, downtime and horizon recheck at new candidate
+  ---
+  duration_ms: 38.832248
+  type: 'test'
+  ...
+# Subtest: independent frozen checker rejects missing member/post/tool, altered material allocation/time/source/capacity and disabled flags
+ok 62 - independent frozen checker rejects missing member/post/tool, altered material allocation/time/source/capacity and disabled flags
+  ---
+  duration_ms: 25.030854
+  type: 'test'
+  ...
+# Subtest: U01/U02 and missing/unsupported inputs fail closed, explicit switched-off tool is truthfully unchecked
+ok 63 - U01/U02 and missing/unsupported inputs fail closed, explicit switched-off tool is truthfully unchecked
+  ---
+  duration_ms: 19.161431
+  type: 'test'
+  ...
+# Subtest: competing resource batches honor delayed tooling/space release and partial material commit isolation
+ok 64 - competing resource batches honor delayed tooling/space release and partial material commit isolation
+  ---
+  duration_ms: 18.329288
+  type: 'test'
+  ...
+# Subtest: candidate search bound leaves all ledgers uncommitted and explicitly reports search-not-found
+ok 65 - candidate search bound leaves all ledgers uncommitted and explicitly reports search-not-found
+  ---
+  duration_ms: 7355.995192
+  type: 'test'
+  ...
+1..65
+# tests 65
+# suites 0
+# pass 65
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9460.830729

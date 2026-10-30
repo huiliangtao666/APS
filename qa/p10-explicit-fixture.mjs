@@ -1,0 +1,2 @@
+import {p10Fixture} from './p10-core-fixture.mjs';
+export function twoTasks(){const d=p10Fixture('2'),req=d.dependencies.filter(r=>r['资源类型']==='人员技能');d.orders.push({...d.orders[0],'订单编号':'B','优先顺序':'2'});d.machines.push({...d.machines[0],'设备编号':'SECOND'});d.dependencies=d.dependencies.filter(r=>r['资源类型']!=='人员技能');d.dependencies.push({...d.dependencies.find(r=>r['资源类型']==='设备'),'订单编号':'B','资源编号':'SECOND'}, {...req[0],'资源编号':'A'},{...req[1],'订单编号':'B','资源编号':'B','人员岗位编号':'P08'});return d;}
