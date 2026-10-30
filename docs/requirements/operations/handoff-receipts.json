@@ -1880,6 +1880,60 @@
       ],
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "issue3:fr006:main-ui-crud:v0.3:3d164d5:r1",
+      "original_delivery": "dlv_ea9e6f4b-890c-4ebc-b1e7-4aca7fb3ad20",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T09:49:53+08:00",
+      "requirement": "FR-006/Issue3 v0.3+CR-DEC02-03-20261029",
+      "product_sha": "3d164d5e3c19ef64c24646bbc978031c054255e4",
+      "result": "main UI entry 1 FAIL/8 NOT_EXECUTED",
+      "external_hashes": {
+        "report": "a9659d4d86d605aed15a160f9202d22e4c113ee81d908fa1fddbf24fcabd362c",
+        "matrix": "f4bb0282e68e9afab4c0774367a915ae68819b25608fb80e621717b4925cba5c",
+        "zip": "4e6807a0eef1e75d8ae97f1e5f13d917fb9196e950b9d632c6cf8de02707816d"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 9,
+      "notification": "MISSING_INBOUND; source result read from completed original delivery after user prompt",
+      "project_status": {
+        "FR-006": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6512915645",
+      "defect": "FR006-MAIN-ENTRY-01",
+      "repair_rounds_added": 0,
+      "dev_fix_delivery": "dlv_b4e06288-1c7e-4fe9-9bff-422e4a913df4",
+      "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "issue3:fr006:main-ui-csv:v0.3:3d164d5:r1",
+      "original_delivery": "dlv_05243bcc-e147-454e-aca6-d47a48513ee0",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test2",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T09:49:53+08:00",
+      "requirement": "FR-006/Issue3 v0.3+CR-DEC02-03-20261029",
+      "product_sha": "3d164d5e3c19ef64c24646bbc978031c054255e4",
+      "result": "prototype CSV 6 PASS, main UI entry 1 FAIL, 1 PARTIAL",
+      "external_hashes": {
+        "report": "06dc0845e7a776c69f4973eb9a581aaff093fe42ea248891d9ea6cadc19a8ddd",
+        "matrix": "ae3d8f48bf06275546f8ab1b80476d3e52451b29df1cf326f6ed2bc76863dcb0",
+        "zip": "c367faff1f729b5a835f3e6bda9c263f890861ad4d422d2a97704771173f5efc"
+      },
+      "zip_crc": "PASS",
+      "matrix_rows_verified": 8,
+      "notification": "MISSING_INBOUND; source result read from completed original delivery after user prompt",
+      "project_status": {
+        "FR-006": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6512915645",
+      "defect": "FR006-MAIN-ENTRY-01",
+      "repair_rounds_added": 0,
+      "dev_fix_delivery": "dlv_b4e06288-1c7e-4fe9-9bff-422e4a913df4",
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }

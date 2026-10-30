@@ -168,6 +168,18 @@
           "event_key": "issue3:p10:h-p08-p10:test1:42a35d07ce29ec073d43bb8adb6083328a9d16dc:r2",
           "event": "Test1 fixed42a35d07 H-P08/H-P10 independent PASS; H-P04 remains PARTIAL pending personnel outside-task early/late rule; 0 product FAIL, +0 repair; full CR NOT_READY",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6518756849"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "issue3:fr006:main-ui-crud:v0.3:3d164d5:r1",
+          "event": "FR006 main UI at 3d164d5: same entry gap independently reproduced by Test1/Test2; prototype CSV 6 PASS does not count as main product PASS; Dev R1 dispatched, full CR NOT_READY; no duplicate defect, repair round increment 0 until repair delivered",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6512915645"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "issue3:fr006:main-ui-csv:v0.3:3d164d5:r1",
+          "event": "FR006 main UI at 3d164d5: same entry gap independently reproduced by Test1/Test2; prototype CSV 6 PASS does not count as main product PASS; Dev R1 dispatched, full CR NOT_READY; no duplicate defect, repair round increment 0 until repair delivered",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6512915645"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
