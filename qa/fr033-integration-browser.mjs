@@ -1,0 +1,66 @@
+// Run only inside an explicitly disposable validation container.
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {chromium} from 'playwright';
+import {startValidation} from './fr033-integration-runner.mjs';
+const run=await startValidation();
+let browser;
+try{
+ browser=await chromium.launch({headless:true,chromiumSandbox:true});
+ const page=await browser.newPage({viewport:{width:1280,height:900}});
+ const errors=[],requests=[],checks=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ page.on('response',r=>{if(r.url().includes('/api/'))requests.push({path:new URL(r.url()).pathname,status:r.status()});});
+ const check=(name)=>checks.push(name);
+ const output=process.env.FR033_EVIDENCE_DIR||'/tmp/fr033-integration-evidence';fs.mkdirSync(output,{recursive:true});
+ const capture=async(name)=>{await page.locator('.fr033').scrollIntoViewIfNeeded();await page.screenshot({path:`${output}/${name}.jpg`,type:'jpeg',quality:25});};
+ await page.goto(run.url);await page.getByLabel('操作原因',{exact:true}).fill('FR033 disposable browser acceptance');
+ await page.getByText('当前权限：planner',{exact:false}).waitFor();check('real App membership/session and six refresh API routes loaded');
+ // Select through the App saved-plan picker, never a synthetic Timeline prop.
+ const picker=page.locator('.plan-list select');
+ await picker.selectOption(run.manifest.jointPlanId);
+ const timeline=page.locator('.fr033');await timeline.locator('.fr033-task').first().waitFor();
+ assert.equal(await timeline.locator('.fr033-task').count(),4);
+ await timeline.getByLabel('缩放',{exact:true}).selectOption('3');
+ await timeline.getByRole('button',{name:'A-FILL',exact:true}).click();
+ await timeline.getByRole('heading',{name:'任务详情：A-FILL',exact:true}).waitFor();
+ await timeline.locator('.fr033-detail').getByRole('button',{name:'A-MIX',exact:true}).click();
+ await timeline.getByRole('heading',{name:'任务详情：A-MIX',exact:true}).waitFor();check('saved plan -> task table -> details -> predecessor selects same chart ID');
+ await timeline.getByLabel('机器筛选',{exact:true}).selectOption('FILL01');
+ await timeline.getByText('选中任务被筛选隐藏：A-MIX',{exact:false}).waitFor();
+ await timeline.getByRole('button',{name:'显示选中任务',exact:true}).click();
+ assert.equal(await timeline.getByLabel('机器筛选',{exact:true}).inputValue(),'');check('machine filter retains hidden selection; reveal restores it');
+ await timeline.getByLabel('搜索任务',{exact:true}).fill('B-FILL');assert.equal(await timeline.locator('.fr033-task').count(),1);
+ await timeline.getByRole('button',{name:'清除筛选与窗口',exact:true}).click();check('search and reset operate on actual saved plan');
+ assert.ok(await timeline.locator('.fr033-downtime').count()>0);
+ assert.ok(await timeline.locator('.fr033-links path[marker-end]').count()>0);
+ const resourceText=await timeline.locator('details').first().innerText();
+ for(const type of ['工装 G40','人员 G','空间 COLD'])assert.ok(resourceText.includes(type),type);
+ check('saved downtime reason, predecessor paths, tooling/personnel/space reservations render');
+ await capture('01-joint-saved-plan');
+ await timeline.locator('.fr033-detail').getByRole('button',{name:/查看方案输入 orders/}).first().click();
+ await page.locator('.query-panel').waitFor();assert.equal(await page.getByLabel('查询数据类别',{exact:true}).inputValue(),'orders');
+ assert.equal(await page.getByLabel('查看所选方案计算时的输入',{exact:true}).isChecked(),true);
+ await page.getByRole('region',{name:'记录详情',exact:true}).waitFor();check('Timeline original-input callback opens real DataQueries historical orders row');
+ await page.getByLabel('查询数据类别',{exact:true}).selectOption('tasks');
+ await page.getByLabel('查看第1条详情',{exact:true}).click();
+ await page.getByRole('button',{name:'定位方案甘特与问题',exact:true}).click();
+ await timeline.locator('.fr033-detail h3').waitFor();check('real query task detail returns to App Timeline selection');
+ await picker.selectOption(run.manifest.historicalPlanId);
+ await timeline.getByRole('button',{name:'A-MIX',exact:true}).first().click();
+ const detail=timeline.locator('.fr033-detail');await detail.getByRole('heading',{name:'任务详情：A-MIX'}).waitFor();
+ assert.ok((await detail.innerText()).includes('工序累计可用产出 40 kg'));
+ await detail.getByText('当前模拟事实对照（独立于历史方案）',{exact:true}).click();
+ assert.ok((await detail.locator('details pre').innerText()).includes('"工序完成数量": "50"'));
+ check('historical saved facts40 versus current authoritative facts50 through real refresh');
+ await capture('02-current-versus-history');
+ await page.reload();await page.getByText('当前权限：planner',{exact:false}).waitFor();
+ const stored=await run.call('/plans');assert.equal(stored.length,2);
+ assert.equal(stored.find(p=>p.id===run.manifest.historicalPlanId).inputSnapshot.executionFacts[0]['工序完成数量'],'40');
+ assert.deepEqual(stored,run.manifest.plans);check('reload reads two server-saved plans; browser navigation leaves complete saved JSON unchanged');
+ assert.deepEqual(errors,[]);assert.ok(requests.every(r=>r.status===200));
+ const report={at:new Date().toISOString(),browser:browser.version(),viewport:{width:1280,height:900},checks,errors,requests,manifest:run.manifest};
+ fs.writeFileSync(`${output}/report.json`,JSON.stringify(report,null,2));
+ console.log('FR033_BROWSER_PASS '+JSON.stringify({checks,errors,requestCount:requests.length,browser:browser.version(),output}));
+}catch(e){console.error('FR033_BROWSER_FAILURE '+e.stack);throw e;}
+finally{await browser?.close();await run.close();}

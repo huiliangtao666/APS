@@ -1,3 +1,8 @@
+import {ruleCatalog} from './business-rules.mjs';
+import {verifyCalendar} from './verify-calendar.mjs';
+import {verifyResourcePolicies} from './verify-resource-policies.mjs';
+import {savedInterval} from './verification-endpoints.mjs';
+
 function result(status, details) {
   return { status, details };
 }
@@ -6,12 +11,13 @@ function result(status, details) {
  * Rechecks only the confirmed R1 result constraints. This intentionally does
  * not call the scheduler's own validation routine.
  */
-export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules = ['MACHINE', 'PRECEDENCE'], checkedAt = new Date().toISOString()) {
+export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules = ['MACHINE', 'PRECEDENCE'], checkedAt = new Date().toISOString(), frozenData = null, frozenConditions = null) {
   const tasks = Array.isArray(plan?.tasks) ? plan.tasks : [];
   const orderRows = Array.isArray(orders) ? orders : [];
   const routeRows = Array.isArray(routes) ? routes : [];
   const orderLines = new Map(orderRows.map((order) => [String(order['订单编号'] ?? '').trim(), String(order['产线编号'] ?? '').trim()]));
   const details = {};
+  const findings = [];
 
   const missingLineOrders = orderRows
     .filter((order) => !String(order['产线编号'] ?? '').trim())
@@ -31,16 +37,17 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
   const machineProblems = [];
   for (const task of tasks) {
     if (!String(task.machine ?? '').trim()) machineProblems.push(`任务 ${task.id} 未指定设备。`);
-    if (!Number.isFinite(Number(task.start)) || !Number.isFinite(Number(task.end)) || Number(task.end) <= Number(task.start)) {
+    if (!savedInterval(task)) {
       machineProblems.push(`任务 ${task.id} 的时间区间无效。`);
     }
   }
   const byMachine = new Map();
   for (const task of tasks) {
     const machine = String(task.machine ?? '').trim();
-    if (!machine) continue;
+    const interval = savedInterval(task);
+    if (!machine || !interval) continue;
     const list = byMachine.get(machine) ?? [];
-    list.push(task);
+    list.push({...task, ...interval});
     byMachine.set(machine, list);
   }
   for (const [machine, list] of byMachine) {
@@ -48,7 +55,11 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
     for (let i = 0; i < list.length; i += 1) {
       for (let j = i + 1; j < list.length && Number(list[j].start) < Number(list[i].end); j += 1) {
         if (Number(list[i].start) < Number(list[j].end)) {
-          machineProblems.push(`${machine} 上 ${list[i].id} 与 ${list[j].id} 时间重叠。`);
+          const a=list[i],b=list[j];
+          if(a.resourceBatchId&&a.resourceBatchId===b.resourceBatchId&&a.start===b.start&&a.end===b.end&&a.machine===b.machine&&a.operation===b.operation&&a.productId===b.productId&&a.productionBatchId&&b.productionBatchId&&a.productionBatchId!==b.productionBatchId)continue;
+          const message=`${machine} 上 ${list[i].id} 与 ${list[j].id} 时间重叠 [${Math.max(Number(list[i].start),Number(list[j].start))},${Math.min(Number(list[i].end),Number(list[j].end))}) 分钟。`;
+          machineProblems.push(message);
+          if(enabledRules.includes('MACHINE'))findings.push({code:'VERIFY / MACHINE_OVERLAP',message,taskIds:[list[i].id,list[j].id],interval:{kind:'machine-overlap',machine,start:Math.max(Number(list[i].start),Number(list[j].start)),end:Math.min(Number(list[i].end),Number(list[j].end))}});
         }
       }
     }
@@ -69,7 +80,7 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
       continue;
     }
     const expectedOperation = String(route['前序工序'] ?? '').trim();
-    const expectedId = expectedOperation ? `${task.orderId}-${expectedOperation}` : '';
+    const expectedId = expectedOperation ? task.productionBatchIndex?JSON.stringify([task.orderId,task.productionBatchIndex,expectedOperation]):`${task.orderId}-${expectedOperation}` : '';
     if (!expectedId && String(task.predecessor ?? '').trim()) {
       precedenceProblems.push(`任务 ${task.id} 的路线未定义前序，但结果引用了 ${task.predecessor}。`);
       continue;
@@ -83,10 +94,12 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
     const predecessor = byId.get(expectedId);
     if (!predecessor) {
       precedenceProblems.push(`任务 ${task.id} 的前序任务 ${expectedId} 不在结果中。`);
-    } else if (![Number(task.start), Number(predecessor.end)].every(Number.isFinite)) {
+    } else if (!savedInterval(task) || !savedInterval(predecessor)) {
       precedenceProblems.push(`任务 ${task.id} 或前序 ${predecessor.id} 的时间无效，无法核对先后关系。`);
     } else if (Number(task.start) < Number(predecessor.end)) {
-      precedenceProblems.push(`任务 ${task.id} 于 ${task.start} 开始，早于前序 ${predecessor.id} 于 ${predecessor.end} 完成。`);
+      const message=`任务 ${task.id} 于 ${task.start} 开始，早于前序 ${predecessor.id} 于 ${predecessor.end} 完成，提前 ${Number(predecessor.end)-Number(task.start)} 分钟。`;
+      precedenceProblems.push(message);
+      if(enabledRules.includes('PRECEDENCE'))findings.push({code:'VERIFY / PRECEDENCE',message,taskIds:[predecessor.id,task.id],interval:{kind:'precedence',start:Number(task.start),end:Number(predecessor.end),priorEnd:Number(predecessor.end),nextStart:Number(task.start),violationDuration:Number(predecessor.end)-Number(task.start)}});
     }
   }
   if (!enabledRules.includes('PRECEDENCE')) details.precedence = result('not_checked', ['规则 PRECEDENCE 当前未启用。']);
@@ -95,5 +108,20 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
   else if (!tasks.length || !precedenceLinks.length) details.precedence = result('not_checked', ['结果中没有可核对的前序任务关系。']);
   else details.precedence = result('pass', [`已核对 ${precedenceLinks.length} 条前序关系；后序均不早于前序完成。`]);
 
-  return { checkedAt, planId: plan?.id ?? '', checks: details };
+  details.resourcePolicies=result('not_checked',['旧方案缺少资源参数契约，未检查资源参数。']);
+  if(frozenData||plan.resourcePolicyContract==='CR-DEC02-03-v1'){
+    details.resourcePolicies=verifyResourcePolicies(plan,frozenData,frozenConditions??plan.conditions);
+    if(details.resourcePolicies.status==='problem'){
+      const structured=details.resourcePolicies.findings||[];findings.push(...structured);
+      findings.push(...(details.resourcePolicies.diagnostics||details.resourcePolicies.details.map(message=>({code:'VERIFY / RESOURCE_POLICY',message,taskIds:[],relatedRecords:[],associationGap:'旧复核没有保存生产端逐条来源；需按原冻结输入重新复核。'}))).filter(diagnostic=>{const message=diagnostic.message;return !structured.some(f=>{const m=message.match(/^(.*) 在分钟 ([\d.]+) 超容量 /);return m&&m[1]===f.interval.resourceId&&Number(m[2])>=f.interval.start&&Number(m[2])<f.interval.end;});}));
+    }
+  }
+  details.calendar=verifyCalendar(plan,frozenData,frozenConditions,enabledRules);
+  findings.push(...details.calendar.findings);
+  const ruleStatuses=(frozenData?.rules||[]).map(row=>{
+    const id=row['规则编号'],catalog=ruleCatalog.find(c=>c.id===id),enabled=row['是否启用']==='是';
+    const check={MACHINE:details.machineOverlap,PRECEDENCE:details.precedence,CALENDAR:details.calendar,MOLD:details.resourcePolicies,STORAGE:details.resourcePolicies,LABOR:details.resourcePolicies}[id];
+    return {id,enabled,supported:!!catalog?.supported,adopted:enabledRules.includes(id),status:enabled&&catalog?.supported&&enabledRules.includes(id)&&check?check.status:'not_checked',reason:!catalog?.supported?'未知或未支持规则；未检查':!enabled?'冻结配置已关闭':!enabledRules.includes(id)?'本次未采用或未生效':check?'见对应独立检查':'未提供该规则的独立复核；不宣称通过'};
+  });
+  return { ruleStatuses, checkedAt, planId: plan?.id ?? '', findings, scopeNote:'独立复核检查单线、机器不重叠、工序先后、冻结日历与停机，以及有完整冻结配置的新契约资源窗口、技能资格与容量；未检查项另列，不代表完整业务可执行。', checks: details };
 }

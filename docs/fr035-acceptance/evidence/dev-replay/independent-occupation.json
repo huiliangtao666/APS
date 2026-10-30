@@ -1,0 +1,105 @@
+{
+  "version": "FR035-v1",
+  "query": {
+    "planId": "P",
+    "kind": "occupation",
+    "text": "",
+    "order": "",
+    "start": 0,
+    "end": 120
+  },
+  "provenance": {
+    "planId": "P",
+    "runId": "R",
+    "inputVersionId": "19aba4909352139c08da838ac0828061ffd3ddba12b4a92152da90811aea0c1e",
+    "snapshotHash": "812624017d3ea6abe3e8166ae94c8bdc741e93faab4fe0403bec410b09cc1a57",
+    "confirmationId": null,
+    "createdAt": "2026-10-29T00:03:14.773Z",
+    "lines": [
+      "L01"
+    ],
+    "executionFactsVersion": "f4c2ab5ea0557c694ffddedf9d1716a8105592015bac93fb6fd9df537190ee24",
+    "checkScope": {
+      "mode": "supported",
+      "label": "已有支持模式",
+      "machineAvailability": "工厂日历及设备停机连续窗口",
+      "checked": [
+        "单产线",
+        "给定机器不重叠",
+        "固定工时",
+        "工序先后",
+        "日历与停机",
+        "已配置人员依赖",
+        "显式预计供给可用时点",
+        "已声明口径的BOM需求、库存FEFO及条件供给分配"
+      ],
+      "unchecked": [
+        "模具与工装",
+        "工序加料、完整BOM/执行耗料与任意单位换算",
+        "设备容量与拆合批",
+        "程序兼容",
+        "最大等待与空间",
+        "换型清洗",
+        "交付与余保",
+        "执行事实与主管确认",
+        "速度换算及完整精度规则"
+      ],
+      "note": "机器与顺序检查通过不代表完整业务可执行；未排任务不代表全局无解。独立复核仅覆盖单线、机器不重叠和工序先后。"
+    },
+    "materialChecked": true,
+    "query": {
+      "planId": "P",
+      "kind": "occupation",
+      "text": "",
+      "order": "",
+      "start": 0,
+      "end": 120
+    },
+    "timeOrigin": "2026-11-02T08:00:00+08:00",
+    "timezone": "UTC+08:00",
+    "interval": "[start,end)",
+    "source": "保存方案及其原始输入；不是当前执行事实",
+    "simulation": "模拟数据；不发送外部系统、不承诺真实交付"
+  },
+  "limits": [
+    "任务和资源使用半开窗口；订单、物料、未排及方案差异保留整份保存方案，窗口不截断其业务数量。",
+    "共享资源按关联订单保留整行总占用，不拆算订单份额；搜索逐行匹配。",
+    "数量、精确分数、单位和日期原样保留；null 表示未知，条件到料不是已到货。",
+    "仅保存方案的计划负荷，不是实时剩余可用量；未分配不代表可排或资源空闲事实",
+    "DEC02 工装阶段/动态归还、DEC03 人员阶段/技能替代、最大等待及完整联合规则仍待确认；仅解释显式保存占用",
+    "候选分配不计入已提交消耗；不跨工序累加订单完成；不把预计到料当真实到货",
+    "确认快照、保存的执行事实与当前事实分别保留；不以当前输入补算历史"
+  ],
+  "comparison": null,
+  "columns": [
+    "类别",
+    "保存记录（数量、单位、日期、输入与判断依据）"
+  ],
+  "rows": [
+    [
+      "设备",
+      "{\"category\":\"设备\",\"record\":{\"id\":\"MIX01\",\"busyMinutes\":30,\"unallocatedMinutes\":90,\"availableNow\":null,\"taskIds\":[\"A-MIX\"],\"inputRefs\":[{\"table\":\"machines\",\"row\":{\"设备编号\":\"MIX01\",\"设备名称\":\"混合设备1\",\"产线编号\":\"L01\",\"工序编号\":\"MIX\",\"日历编号\":\"FC01\",\"最小装载kg\":\"0\",\"最大装载kg\":\"300\",\"装载计量基准\":\"BOM总投入\"}}]}}"
+    ],
+    [
+      "设备",
+      "{\"category\":\"设备\",\"record\":{\"id\":\"MIX02\",\"busyMinutes\":0,\"unallocatedMinutes\":120,\"availableNow\":null,\"taskIds\":[],\"inputRefs\":[{\"table\":\"machines\",\"row\":{\"设备编号\":\"MIX02\",\"设备名称\":\"混合设备2\",\"产线编号\":\"L01\",\"工序编号\":\"MIX\",\"日历编号\":\"FC01\",\"最小装载kg\":\"0\",\"最大装载kg\":\"300\",\"装载计量基准\":\"BOM总投入\"}}]}}"
+    ],
+    [
+      "设备",
+      "{\"category\":\"设备\",\"record\":{\"id\":\"MIX03\",\"busyMinutes\":0,\"unallocatedMinutes\":120,\"availableNow\":null,\"taskIds\":[],\"inputRefs\":[{\"table\":\"machines\",\"row\":{\"设备编号\":\"MIX03\",\"设备名称\":\"混合设备3\",\"产线编号\":\"L01\",\"工序编号\":\"MIX\",\"日历编号\":\"FC01\",\"最小装载kg\":\"0\",\"最大装载kg\":\"300\",\"装载计量基准\":\"BOM总投入\"}}]}}"
+    ],
+    [
+      "设备",
+      "{\"category\":\"设备\",\"record\":{\"id\":\"FILL01\",\"busyMinutes\":30,\"unallocatedMinutes\":90,\"availableNow\":null,\"taskIds\":[\"A-FILL\"],\"inputRefs\":[{\"table\":\"machines\",\"row\":{\"设备编号\":\"FILL01\",\"设备名称\":\"灌装设备1\",\"产线编号\":\"L01\",\"工序编号\":\"FILL\",\"日历编号\":\"FC01\",\"最小装载kg\":\"0\",\"最大装载kg\":\"10000\",\"装载计量基准\":\"BOM总投入\"}}]}}"
+    ],
+    [
+      "设备",
+      "{\"category\":\"设备\",\"record\":{\"id\":\"FILL02\",\"busyMinutes\":0,\"unallocatedMinutes\":120,\"availableNow\":null,\"taskIds\":[],\"inputRefs\":[{\"table\":\"machines\",\"row\":{\"设备编号\":\"FILL02\",\"设备名称\":\"灌装设备2\",\"产线编号\":\"L01\",\"工序编号\":\"FILL\",\"日历编号\":\"FC01\",\"最小装载kg\":\"0\",\"最大装载kg\":\"10000\",\"装载计量基准\":\"BOM总投入\"}}]}}"
+    ],
+    [
+      "设备",
+      "{\"category\":\"设备\",\"record\":{\"id\":\"FILL03\",\"busyMinutes\":0,\"unallocatedMinutes\":120,\"availableNow\":null,\"taskIds\":[],\"inputRefs\":[{\"table\":\"machines\",\"row\":{\"设备编号\":\"FILL03\",\"设备名称\":\"灌装设备3\",\"产线编号\":\"L01\",\"工序编号\":\"FILL\",\"日历编号\":\"FC01\",\"最小装载kg\":\"0\",\"最大装载kg\":\"10000\",\"装载计量基准\":\"BOM总投入\"}}]}}"
+    ]
+  ],
+  "viewId": "da4034d899c190c4d114c8861b7da876743aa72341d18d0689693569b150ccda"
+}

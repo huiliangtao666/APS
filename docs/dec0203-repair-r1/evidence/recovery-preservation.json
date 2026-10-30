@@ -1,0 +1,177 @@
+{
+  "base": "0d2de88b70b15c555f6d005c0e4d94674e160cdf",
+  "count": 34,
+  "allEqual": true,
+  "files": [
+    {
+      "file": "docs/fr016-acceptance/evidence/APS-Test-RAW01-round1-final-report.txt",
+      "equalFailurePin": true,
+      "sha256": "2251c6ee3a072a08769f83be03cf1fc5dc38b9ea745dff941e1217ebd63fb836"
+    },
+    {
+      "file": "docs/fr016-acceptance/evidence/APS-Test-original-report.txt",
+      "equalFailurePin": true,
+      "sha256": "dc60ca159340b3a4fa3d6a4c5fb4482c335141235bb4bcdd94026c09ab67195c"
+    },
+    {
+      "file": "docs/fr016-acceptance/evidence/branches-feat-fr-013-016-main-batch.json",
+      "equalFailurePin": true,
+      "sha256": "44ebe05163b829d04b553017cb8b31fd7d1a394e2329735e394d79b36ffdefca"
+    },
+    {
+      "file": "docs/fr016-acceptance/evidence/build-preservation.log",
+      "equalFailurePin": true,
+      "sha256": "c7e6e516a32f693d003928fef2c9aab66289c6df2ee508bc164f8f5cd1ce3d9a"
+    },
+    {
+      "file": "docs/fr016-acceptance/evidence/final-branches-feat-fr-013-016-main-batch.json",
+      "equalFailurePin": true,
+      "sha256": "44ebe05163b829d04b553017cb8b31fd7d1a394e2329735e394d79b36ffdefca"
+    },
+    {
+      "file": "docs/fr016-acceptance/evidence/final-issues-24-comments.json",
+      "equalFailurePin": true,
+      "sha256": "978a430fe656a72b8acc079054ee62d2f72a20452adbd19a8a343877231e4b9b"
+    },
+    {
+      "file": "docs/fr016-acceptance/evidence/final-issues-24.json",
+      "equalFailurePin": true,
+      "sha256": "7b492a57d437ba072d48df89eb5fe35aa8c467838b97970da8ff1e676701ccd4"
+    },
+    {
+      "file": "docs/fr016-acceptance/evidence/fr016-report.json",
+      "equalFailurePin": true,
+      "sha256": "430ca051f51d2ba4fbd41349fe67db56d5b34d2a905d3f7cec00d5642b950b5d"
+    },
+    {
+      "file": "docs/fr016-acceptance/evidence/issues-24-comments.json",
+      "equalFailurePin": true,
+      "sha256": "e87642ac1861fc32c4e8a4b85d641c1fc89fff0a12dcf3481cb5ca0d0e237479"
+    },
+    {
+      "file": "docs/fr016-acceptance/evidence/issues-24.json",
+      "equalFailurePin": true,
+      "sha256": "050ab56088461b15be3ebfe3b22326c2bcecb5e7a011187d2b908b6ee0ed189e"
+    },
+    {
+      "file": "docs/fr016-acceptance/evidence/live-fr016.json",
+      "equalFailurePin": true,
+      "sha256": "6d641e5a1195ac3cb346a47d49a5222efc7455017ade73d98f928b8aa3dbc999"
+    },
+    {
+      "file": "docs/fr016-acceptance/evidence/original-acceptance-excerpts.txt",
+      "equalFailurePin": true,
+      "sha256": "08778ed9aa1ac4122ae484ec37e9ddbb3fc20378e2f7985c4224b4312ba63ba1"
+    },
+    {
+      "file": "docs/fr016-acceptance/evidence/original-source.json",
+      "equalFailurePin": true,
+      "sha256": "6c963e9010c8735d790729b78aae669092c44a4f2e30cde57259c900b123ee35"
+    },
+    {
+      "file": "docs/fr016-acceptance/evidence/product-preservation.json",
+      "equalFailurePin": true,
+      "sha256": "fd1bee18193d67e436c6ea535abaab4e7b46affe062875183218300da796ead5"
+    },
+    {
+      "file": "docs/fr016-acceptance/evidence/provenance.json",
+      "equalFailurePin": true,
+      "sha256": "88f795a73a271415b82b25f986afc26ab9a38268a86cb115cc236388ee05c537"
+    },
+    {
+      "file": "docs/fr016-acceptance/evidence/validation.log",
+      "equalFailurePin": true,
+      "sha256": "040fc88a9112351924543561f67095c84bb8e44072d4026021b69ee60e814ed1"
+    },
+    {
+      "file": "docs/fr016-acceptance/matrix.json",
+      "equalFailurePin": true,
+      "sha256": "001e432e35ffea8e04818b1aab7f3374ed76b77e10b557d8581f4072b9aa3bd5"
+    },
+    {
+      "file": "docs/fr016-acceptance/source-pins.json",
+      "equalFailurePin": true,
+      "sha256": "002aa9682310e8da7762dd5972d802a065cddf0ce7846e44680c9cdd6a01be8c"
+    },
+    {
+      "file": "docs/fr016-acceptance/summary.json",
+      "equalFailurePin": true,
+      "sha256": "764799a9ee09b5c5590c5df9026a9b2633f70faa7b4b3af7bbeb8225f40ae0bf"
+    },
+    {
+      "file": "qa/fr016-acceptance.mjs",
+      "equalFailurePin": true,
+      "sha256": "0dfe072c2d709574c77f021852b8d83f2819e8a897d38ef5b283c78788482c93"
+    },
+    {
+      "file": "qa/fr016-check.mjs",
+      "equalFailurePin": true,
+      "sha256": "344557ebca7ec64a756344a4a83c7e69a597cd5ebc6546cacb815ef0bcdcb0c5"
+    },
+    {
+      "file": "qa/fr016-contracts.mjs",
+      "equalFailurePin": true,
+      "sha256": "7321aff2b75cc04d52d0bc7dd6bae31a38b993af3259c2978e71385069549b87"
+    },
+    {
+      "file": "qa/raw01-independent/actual-corrected-machines.csv",
+      "equalFailurePin": true,
+      "sha256": "8616617c0811a4354fe026b929a2bc853a0f15d6e1f8ecd429919fd03c7871e0"
+    },
+    {
+      "file": "qa/raw01-independent/baseline-csv-draft.mjs",
+      "equalFailurePin": true,
+      "sha256": "b518ab08d249cfb89b1e2503ec94a31285a2f019fe52eeea2d4f20f15ad08da8"
+    },
+    {
+      "file": "qa/raw01-independent/expected-corrected-machines.csv",
+      "equalFailurePin": true,
+      "sha256": "986cd5aa141bd2fed25913681b7a47b964d60eae8706158589f1639977b7df10"
+    },
+    {
+      "file": "qa/raw01-independent/guards.mjs",
+      "equalFailurePin": true,
+      "sha256": "c3416d5b737724a3c4acda2433b0ce1b03ad7ae3451f88b91209cbd7cc9bb2a9"
+    },
+    {
+      "file": "qa/raw01-independent/independent.mjs",
+      "equalFailurePin": true,
+      "sha256": "1d767eaab09ea68b23ee75dd8128e98d4affb624a58433fcd423e3ceded510dc"
+    },
+    {
+      "file": "qa/raw01-independent/original-machines.csv",
+      "equalFailurePin": true,
+      "sha256": "0475c42a7784863ad58838913a5bc411db2c5027503385afcd350819d11a0827"
+    },
+    {
+      "file": "qa/raw01-independent/provenance.json",
+      "equalFailurePin": true,
+      "sha256": "895c55aac96fb5c9ade3c942a465509aa8bb13de443f9c7b6eaa39795dd4a96c"
+    },
+    {
+      "file": "qa/raw01-independent/raw01-repro.mjs",
+      "equalFailurePin": true,
+      "sha256": "2f416fc5ba1ebd3dda7cfb51b14de14adc7eae219d49b637a29a67e41b711bdc"
+    },
+    {
+      "file": "qa/raw01-independent/reproduce.sh",
+      "equalFailurePin": true,
+      "sha256": "7ca0ae98cb8419e46d46a9e037817d1040289610c32976418f9ce630872bbe01"
+    },
+    {
+      "file": "src/CsvBatchPanel.tsx",
+      "equalFailurePin": true,
+      "sha256": "ce01a3bd0404ae6e7b4aa297ff6a81cf0c0064365b2641c45a455e57ec35440d"
+    },
+    {
+      "file": "src/lib/csv-draft.d.mts",
+      "equalFailurePin": true,
+      "sha256": "0f7d9c1fb3aad92a8f57c2e831b991b1a802268c83ecf867589ccc4b668a4478"
+    },
+    {
+      "file": "src/lib/csv-draft.mjs",
+      "equalFailurePin": true,
+      "sha256": "b73a7f5f4d1e940dda7e9722c1a2b15ee827b2480359819becaacd98c2f0f636"
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+FR034 AC17/31 finite accessibility boundary follow-up
+Delivery dlv_9e63a2af-edbc-4fb4-88d9-25900a0f40d1; original card PVTI_lAHOFM9WU84BpE1czhEHhDI.
+Pinned acceptance baseline: 02a5e307f4b731ebb2b1882ed02e16a7e20c52e3.
+This document does not replace or amend the earlier round1 report.
+
+Finite Test checklist — actual App, 640x900 and 1100x900, no harness banner
+1. Saved-plan picker is a native combobox named 已保存方案 in Chromium's
+   Accessibility.getFullAXTree. Use Tab/Arrow/Enter to select the saved fixture.
+2. Enter a long Chinese operation reason. Delay a real verify request, activate
+   check with Enter, retry Enter/Space while pending, then Tab to 仅显示问题任务.
+   Exactly one POST; button exposes disabled state in AX while pending; focus
+   stays on the checkbox after completion. No artificial delayed focus restore.
+3. Activate MACHINE_OVERLAP three times with keyboard. Preserve saved task IDs,
+   interval [20,30), pressed state and useful visible focused control each time.
+4. Select overlap; search for a nonexistent task. Expect 0 rows/bars, visible
+   selected-hidden text and retained saved task details. Keyboard-activate
+   显示选中任务. Both saved selections reappear and useful visible focus survives.
+5. Synthetic three-task same-machine overlap: activate a QA-THIRD problem.
+   Three distinct lanes, correct pair pressed, matching saved interval and
+   visible focused target. The third task is deliberately corrupt QA data,
+   not generated scheduling behavior or a new product import feature.
+6. A positive saved joint plan has zero findings. Toggle problem-only filter:
+   zero task bars, explicit problem count 0, useful checkbox focus. Toggle off:
+   four task bars return. Empty results do not imply full business feasibility.
+7. Inspect long Chinese task reasons/quantity wording, labels and task text in
+   DOM/native AX and screenshots. Text/pressed semantics must convey identity
+   and selection without relying solely on color. Record horizontal-scroll
+   limits; no screen-reader pronunciation or complete WCAG certification.
+8. At the document/chart scroll boundary, activate the problem with keyboard.
+   Record actual scroll maxima, focused bounding rectangle, clipped viewport,
+   focus-visible style and hit tests. At most 1 CSS px subpixel edge rounding.
+9. Select historical A-MIX. Saved fact remains40kg; open current facts showing50.
+   All three original positive saved-plan objects and current input/revision
+   remain deep-equal before/after these interactions. Saved snapshots remain
+   authoritative; the current facts disclosure is a separate comparison.
+
+Evidence interpretation
+.native-ax.json is the real Chromium CDP accessibility tree. .aria.txt is a
+Playwright DOM-derived semantic snapshot; it is supplementary, not native AX.
+.html captures DOM; .png captures visible viewport. JSON focus records include
+active element, :focus-visible, outline, clipping, hit tests and rectangles.
+Each named assertion group is reported independently; measurements are not
+passes. A failed group remains failed even if later independent groups pass.
+No production identity, external gateway, screen-reader/OS/browser matrix,
+full workflow UAT, all-rule/material feasibility or durability acceptance.
+No publication, new feature/card, issue closure, main merge or full Done.
+
+Dev follow-up execution result (independent Test retest still required)
+Pinned baseline:10/12 assertion groups pass;2/12 fail (KBD04 at both widths).
+The baseline script continued after failures to expose independent boundaries;
+its process exit0 does not override explicit allPassed=false in JSON.
+Final:14/14 assertion groups pass,6 separate measurements. New long-text groups
+are separate; baseline had12 groups and skipped their assertions after KBD04.
+441 existing TAP tests pass,0 failures/skips; production build and CSV check pass.
+Actual final Chromium141.0.7390.37; no page exceptions/warning/error console
+entries;42 API responses, all200. No UNKNOWN01/history-API suite rerun in this
+follow-up; their earlier reports remain historical evidence, not today's result.
+Pending native AX shows check button disabled=true and next checkbox focused
+at both widths. Repeated activation exposes pressed task IDs independently of
+color. Restored focused A-MIX: top858.484/bottom900.484 at640 and
+858.344/bottom900.344 at1100;42px tall,3px focus outline, hit tests unobscured.
+Three overlapping bars occupy separate48px lane offsets; only the first focused
+lane must fit the current viewport. This does not assert every lane is visible
+at once. Other bars remain reachable through the scroll region/task table.
+
+Exact scroll/text limits
+Final document bottom setup is programmatic window.scrollTo, asserted exact:
+640:y10744+900=11644;1100:y9033+900=9933. Problem activation thereafter is
+Tab/Enter. Repeated identical activation can retain useful visible focus on the
+original finding rather than transfer it again; both are permitted by contract.
+This tests document vertical end, not the timeline's horizontal maximum.
+Long Chinese table is6881px wide; viewports557/970px, ArrowRight moves480px.
+The full long text remains in DOM/native AX; the screenshot captures only the
+current clipped segment. Deliberate horizontal panning can move the first-column
+focused cell outside that clipped segment; no all-text-at-once claim is made.
+Original no-problem plan still describes limited-rule evidence; zero findings
+is not full feasibility. KBD04's non-chart/unplanned fallback was not newly
+exercised. Current40/50 facts and saved-source hashes are separately preserved.
+
+Reproduce final boundary acceptance (new EMPTY absolute evidence directory):
+FR034_REPO="$PWD/apps/aps-fr032" FR034_SDK="$PWD/.praetor/sdk" \
+FR034_OUT='<absolute new empty output directory>' \
+FR034_SOURCE_MANIFEST=qa/fr034-boundary-source-sha256.json \
+FR034_PRODUCT_LABEL='FR034 KBD04 boundary repair round1; parent 02a5e307f4b731ebb2b1882ed02e16a7e20c52e3' \
+FR034_PRODUCT_SHA='<exact delivery SHA>' \
+bash apps/aps-fr032/qa/fr034-boundary-docker.sh
+Requires Docker/network and existing SDK archives. Installs/build/browser run
+inside a disposable Node22 container with read-only source/SDK mounts; only
+output is writable. Synthetic state and fixed planner identity, no live inputs.
+For the broader441-test/CSV/build suite, the existing keyboard-r1-docker.sh
+accepts the same manifest/label environment. It additionally runs earlier browser
+regressions. The stored checks log is from441-test/CSV/build execution only.
+Raw snapshots are compressed in qa/evidence/fr034-boundary/baseline.zip and
+final.zip (extract to baseline/ and final/ respectively); their report JSON is
+also available unpacked beside them. Checks logs are in checks.zip.

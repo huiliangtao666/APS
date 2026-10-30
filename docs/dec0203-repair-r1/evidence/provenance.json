@@ -1,0 +1,46 @@
+{
+  "base": "0d2de88b70b15c555f6d005c0e4d94674e160cdf",
+  "branch": "feat/fr-013-016-main-batch",
+  "delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2",
+  "repairRound": 1,
+  "runtimeImage": "sha256:0d45a31aa25c4cca1eaacbfd1ba4ee6d5028d899b329e49a6036a66fd0c35da8",
+  "sourceSHA256": {
+    "server/business.mjs": "d98220f9955cbefd67c06006efc7722fc8a40a13dc14c336bcb32b661b39f9d2",
+    "server/business.test.mjs": "d0ab7e00b632efb5a9a854e138de5bc89e92db807d9764ed6a2555dd87787e2f",
+    "server/confirmation.mjs": "e4414ff9cec0107f5531f7496f893f7fa78afac297896b20edbd6cd9d0b3372d",
+    "server/input-validation.mjs": "cc34d9b2735b366e87d04a142edd8767c956213a06b80b81c081f4bfe1b3b69a",
+    "server/trial-positions.mjs": "14e3549d7c7f6aa634f6001dd0f4d4a4448582b22b4da4f588195d3915bcc94b",
+    "src/PolicyPreview.tsx": "dcff266ac2f882ad17314bf4acaf2b495b82d1cc13d4e1d399517d6bc66c3ba6",
+    "src/lib/business-rules.mjs": "91137aaf701d00bef07a5fea33f7b6a9587183976441160eef47c8ca5c413c29",
+    "src/lib/independent-verification.d.mts": "03f06d5c7cd06e6da0f6044b984ac3746a2751b29d370f961829dbb06f07e0df",
+    "src/lib/independent-verification.mjs": "428de9207126501aa7eb61588f3674a7a0ad2c6e1843a137dff043921ee904d5",
+    "src/lib/independent-verification.test.mjs": "dc783830fe66883a1592d3fa726423fb05aa44c5a8c11de8a689ac9d63a35653",
+    "src/lib/resource-policies.d.mts": "f6e9fe63819665b010a0a649a59609877dc97121c4a5c1f07efccb4fee47a136",
+    "src/lib/resource-policies.mjs": "d53a6287452f7aa214c833bb751429ee004fa95f7a223caa7200cb363a5ec434",
+    "src/lib/staffing.mjs": "9e5edbfaac4a119968be463cf18cad24a5cfe78f5e913e66b06b64bd30f36566",
+    "src/lib/verify-resource-policies.mjs": "d85b695b23495a86fd00d02a606843347be160dcf39f6be5a52d967edb4c8782",
+    "qa/dec0203-repair-r1-browser.mjs": "09fd0fe94abc39e586bcf727904994c931a887fb240a342a99c96f24144581bf",
+    "qa/dec0203-repair-r1-docker.sh": "b0f9529e651902692290a7f34af50a52a90a9b063c289d07105715b1b5ea6de7",
+    "qa/dec0203-repair-r1.test.mjs": "e4634585d5547259fa72468131df681f927bcc0879a73abf9d1e8fa349c18553"
+  },
+  "replayAttribution": "Dev rerun of unchanged Test script; embedded pin identifies original Test source, not repaired source. Final repair revision is enclosing commit; source hashes recorded here.",
+  "finalResults": {
+    "focused": 6,
+    "policy": 8,
+    "related": 140,
+    "npmTest": [
+      90,
+      124
+    ],
+    "editor": 10,
+    "resourcePanel": 1,
+    "originalBrowser": 12,
+    "repairBrowser": 3,
+    "originalTestDevReplay": {
+      "PASS": 20,
+      "FAIL": 1,
+      "remainingFailure": "S06 known feasible candidate assignment"
+    },
+    "protectedFiles": 34
+  }
+}

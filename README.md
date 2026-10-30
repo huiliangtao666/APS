@@ -34,7 +34,7 @@ remote-VM 工作区的依赖安装/构建等有限命令使用 `workspace-app-bu
 
 - 工艺路线、工序工时和工序资源依赖继续由 `10_工艺路线配置.csv`、`11_工序工时配置.csv`、`12_工序资源与物料依赖.csv` 维护。路线编号、工序数、名称和 CSV 行顺序均可配置；顺序由“前序工序”关系决定，合法路线按依赖拓扑排入，独立工序保持输入行顺序。
 - 计算前及数据页检查路线产品/工序/名称、重复工序、前序引用与循环；每个路线工序必须有唯一正数“固定”分钟工时；资源依赖检查订单、工序、支持类型和资源编号，设备及兼容旧类型“物料”检查主数据引用。无效时阻止排程并显示可定位的问题。
-- 设备依赖仍被当前单线排程器使用。模具、工具、人员技能、空间及投料/物料只保存标识并做基础完整性检查；不按其数量/占用/技能推算排程或 BOM，不定义资源容量、技能匹配、投料数量、供应时点等未决语义。速度工时不参与计算。
+- 设备依赖仍被当前单线排程器使用。FR-007 人员技能依赖可配置人数、技能、班次、参与阶段及相对工序起止偏移，并按人员组容量和分钟可用窗口检查；机器自动运行时间不额外占用人员。模具、工具、空间及投料/物料只做基础标识检查。速度工时不参与计算。
 - 可复现用例：`src/lib/process-config.test.mjs` 覆盖可配置编号与路线顺序、路线重复/缺前序/循环、固定工时完整性，以及六类依赖标识和无语义推断。容器验证命令：`$WAB_DIR/scripts/app-exec.sh --validate --app-id aps-r1 'npm ci && npm test && npm run build'`。
 - 容器内可复现用例：`npm test`，新增 `src/lib/master-data.test.mjs` 覆盖有效配置、必填/重复/数值校验、产品/物料引用错误和不执行换算。隔离验证命令：`$WAB_DIR/scripts/app-exec.sh --validate --app-id aps-r1 'npm ci && npm test && npm run build'`。
 
@@ -42,7 +42,7 @@ remote-VM 工作区的依赖安装/构建等有限命令使用 `workspace-app-bu
 
 - 当前是按订单优先顺序的贪心排程参考实现，不保证全局最优。
 - 设备依赖按订单和工序指定单一设备；没有依赖时提示错误，不猜选兼容机。
-- 仅固定分钟工时参与计算；速度换算、日历、工装、人员、BOM/库存、批处理、最大等待、空间和执行事实不参与。
+- 仅固定分钟工时参与计算；速度换算、工装、BOM/库存、批处理、最大等待、空间、考勤和执行事实不参与。人员按 FR-007 配置参与可用性判定。
 - 甘特和排程问题只检查机器重叠、工序先后及核心输入引用完整性。没有独立编辑任务时间/资源的排程操作。
 - 保存快照保存任务与已启用规则，但没有保存完整输入表快照；输入数据不跨用户共享。
 - 交期显示为输入，当前不计算/拦截迟交；不实现主管确认、权限、外部系统集成或真实生产数据。
@@ -50,7 +50,7 @@ remote-VM 工作区的依赖安装/构建等有限命令使用 `workspace-app-bu
 
 ## 示例数据
 
-`sample-data/UAT-01/` 下的 6 份 CSV 取自 APS v0.3 测试包中 `UAT-01_最小排程与可视核对完整流程/本阶段导入数据/`，文件内容未改写。不是完整 19 类配置，也不应将其中产品、工时、设备或数量当成真实工艺标准。页面初始数据依照这 6 份 CSV 内容提供，用户可重新导入。
+`sample-data/UAT-01/` 下的阶段 CSV 以 APS v0.3 测试包的虚构业务值为基础；FR-009 订单 CSV 已映射到当前数量/单位/预测/状态字段契约。不是完整 19 类配置，也不应将其中产品、工时、设备或数量当成真实工艺标准。页面初始数据依照这 6 份 CSV 内容提供，用户可重新导入。
 
 更完整的需求追溯、测试字段契约、UAT 缺口和待决业务语义见 `docs/APS-TEST-HANDOFF.md` 与工作区根目录 `APS-R1-DEV-HANDOFF.md`。
 
@@ -86,3 +86,23 @@ npm run build
 ```
 
 测试覆盖同线多工序/多设备放行、订单跨线阻止、资源跨线及资源-订单产线不一致阻止、设备缺少产线归属阻止、订单缺线阻止。当前不提供独立“产线主数据/工位主数据”表；FR-001 在现有订单与设备资源 CSV 中维护产线归属，并以工序编号表达设备适用工位/工序。多产线 P1 未实现。
+
+## FR-011 预计到料
+
+预计到达、预计可用及延期模拟独立维护；计划可显式引用预计供给并按可用时点等待，方案与 CSV 始终显示使用条件。完整字段、样例、复测步骤及边界见 [FR-011-HANDOFF](docs/FR-011-HANDOFF.md)。不确认真实到货或创建采购单。
+## FR-009 订单与需求数据
+
+订单支持订单号、产品、合格需求数量/单位、分钟轴交期、优先级、可拆分标识、需求类型和状态；旧版浏览器数据迁移为 kg/正式订单/有效。数量、单位和交期编辑追加本地变更记录。预测订单与正式订单分开，预测不进入正式订单排程；已取消订单不进入之后的计算，已有方案快照保留。单线 P0 校验与字段约定见 `docs/APS-TEST-HANDOFF.md`。当前不执行单位换算、订单拆分执行或执行进度/数量核销。
+
+复现：应用容器内运行 `npm test && npm run build`；FR-009 用例在 `src/lib/orders.test.mjs`。
+
+## FR-037 permissions slice
+
+[FR-037 implementation and limits](docs/FR-037.md) supersedes older descriptions
+of localStorage authority and anonymous snapshot APIs. Main application business
+APIs now require verified Managed identity + active planner/supervisor/query
+membership. Data and operation history are stored together server-side; all
+writes/exports require a reason. Existing prototypes remain isolated source.
+Supervisor confirmation/return/release deliberately report unsupported until
+FR-025/030 exist; this is not full R7. Do not activate without the documented
+operator-owned Managed identity and membership provisioning steps.

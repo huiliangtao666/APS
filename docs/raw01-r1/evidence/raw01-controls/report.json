@@ -1,0 +1,135 @@
+{
+  "origin": "APS-Dev positive controls; actual React/Express, synthetic membership actors/runtime alias",
+  "checks": [
+    {
+      "label": "CR",
+      "mode": "selectall",
+      "selected": {
+        "start": 134,
+        "end": 188,
+        "text": "\"MIX02\",\"混合设备2\",\"L01\",\"MIX\",\"FC01\",\"0\",\"bad\",\"BOM总投入\"\n"
+      },
+      "beforeSha256": "9dcdc46cdcb9ba1006a9047cf36232327a2a0d50e9202421aa51cd433970a868",
+      "afterSha256": "c42fc52e6b5d8e108af47914f2dbd1dcc701785aa3181f36283b3eac1320d66a",
+      "expectedSha256": "e7a0b73fec20b36344fb76e8210746dc1639a78e855ac5ace174fcc5fa3410ad",
+      "actualSha256": "e7a0b73fec20b36344fb76e8210746dc1639a78e855ac5ace174fcc5fa3410ad",
+      "savedName": "CHANGED\r同一,\"引号\"\n🧪\rKEEP",
+      "revision": 1,
+      "previewZeroWrites": true,
+      "plansPreserved": true,
+      "factsPreserved": true
+    },
+    {
+      "label": "LF",
+      "mode": "selectall",
+      "selected": {
+        "start": 134,
+        "end": 188,
+        "text": "\"MIX02\",\"混合设备2\",\"L01\",\"MIX\",\"FC01\",\"0\",\"bad\",\"BOM总投入\"\n"
+      },
+      "beforeSha256": "c42fc52e6b5d8e108af47914f2dbd1dcc701785aa3181f36283b3eac1320d66a",
+      "afterSha256": "f4bc8f18a907b1a40d31de8c1c5bee9fb57d9ab609ec8f5f49a1659de78bc21f",
+      "expectedSha256": "5f90123014861216d4011150630e1ba2ff4b806556ddacfc154651531b71cb93",
+      "actualSha256": "5f90123014861216d4011150630e1ba2ff4b806556ddacfc154651531b71cb93",
+      "savedName": "CHANGED\r同一,\"引号\"\n🧪\nKEEP",
+      "revision": 2,
+      "previewZeroWrites": true,
+      "plansPreserved": true,
+      "factsPreserved": true
+    },
+    {
+      "label": "CRLF",
+      "mode": "selectall",
+      "selected": {
+        "start": 134,
+        "end": 188,
+        "text": "\"MIX02\",\"混合设备2\",\"L01\",\"MIX\",\"FC01\",\"0\",\"bad\",\"BOM总投入\"\n"
+      },
+      "beforeSha256": "f4bc8f18a907b1a40d31de8c1c5bee9fb57d9ab609ec8f5f49a1659de78bc21f",
+      "afterSha256": "532223beed3545a8b0568b5b742a9161464a0ecab4287d8ecb29ba75502269db",
+      "expectedSha256": "3605f02a8b97dd2f4c63b606a41716d7265b90f63bf74b408ecf7706618746f4",
+      "actualSha256": "3605f02a8b97dd2f4c63b606a41716d7265b90f63bf74b408ecf7706618746f4",
+      "savedName": "CHANGED\r同一,\"引号\"\n🧪\r\nKEEP",
+      "revision": 3,
+      "previewZeroWrites": true,
+      "plansPreserved": true,
+      "factsPreserved": true
+    },
+    {
+      "label": "mixed",
+      "mode": "selectall",
+      "selected": {
+        "start": 134,
+        "end": 188,
+        "text": "\"MIX02\",\"混合设备2\",\"L01\",\"MIX\",\"FC01\",\"0\",\"bad\",\"BOM总投入\"\n"
+      },
+      "beforeSha256": "532223beed3545a8b0568b5b742a9161464a0ecab4287d8ecb29ba75502269db",
+      "afterSha256": "5f180e9402d52be4d958012f14a53840ae927fb899820321063913dcf5b8c09d",
+      "expectedSha256": "3605f02a8b97dd2f4c63b606a41716d7265b90f63bf74b408ecf7706618746f4",
+      "actualSha256": "3605f02a8b97dd2f4c63b606a41716d7265b90f63bf74b408ecf7706618746f4",
+      "savedName": "CHANGED\r同一,\"引号\"\n🧪\r\nKEEP",
+      "revision": 4,
+      "previewZeroWrites": true,
+      "plansPreserved": true,
+      "factsPreserved": true
+    },
+    {
+      "label": "repeat",
+      "mode": "selectall",
+      "selected": {
+        "start": 146,
+        "end": 200,
+        "text": "\"MIX02\",\"混合设备2\",\"L01\",\"MIX\",\"FC01\",\"0\",\"bad\",\"BOM总投入\"\n"
+      },
+      "beforeSha256": "5f180e9402d52be4d958012f14a53840ae927fb899820321063913dcf5b8c09d",
+      "afterSha256": "671f9ab228c1e2307b867c88b10160275c97b82a85d9e2863ff2ada37338a4bc",
+      "expectedSha256": "d53ddda3f2caf3e3386d83ee65c48d047cc980f09a86ccfbba7c98ca6cde48df",
+      "actualSha256": "d53ddda3f2caf3e3386d83ee65c48d047cc980f09a86ccfbba7c98ca6cde48df",
+      "savedName": "CHANGED\rKEEP\nKEEP\r\nKEEP\rKEEP\nKEEP\r\nKEEP",
+      "revision": 5,
+      "previewZeroWrites": true,
+      "plansPreserved": true,
+      "factsPreserved": true
+    },
+    {
+      "label": "range",
+      "mode": "range",
+      "selected": {
+        "start": 134,
+        "end": 188,
+        "text": "\"MIX02\",\"混合设备2\",\"L01\",\"MIX\",\"FC01\",\"0\",\"bad\",\"BOM总投入\"\n"
+      },
+      "beforeSha256": "671f9ab228c1e2307b867c88b10160275c97b82a85d9e2863ff2ada37338a4bc",
+      "afterSha256": "7df1a586558d9cbbe14a15b04ec1d3224777d7ac0c0ceac80fa4310139888556",
+      "expectedSha256": "3605f02a8b97dd2f4c63b606a41716d7265b90f63bf74b408ecf7706618746f4",
+      "actualSha256": "3605f02a8b97dd2f4c63b606a41716d7265b90f63bf74b408ecf7706618746f4",
+      "savedName": "CHANGED\r同一,\"引号\"\n🧪\r\nKEEP",
+      "revision": 6,
+      "previewZeroWrites": true,
+      "plansPreserved": true,
+      "factsPreserved": true
+    },
+    {
+      "label": "paste",
+      "mode": "paste",
+      "selected": {
+        "start": 134,
+        "end": 188,
+        "text": "\"MIX02\",\"混合设备2\",\"L01\",\"MIX\",\"FC01\",\"0\",\"bad\",\"BOM总投入\"\n"
+      },
+      "beforeSha256": "7df1a586558d9cbbe14a15b04ec1d3224777d7ac0c0ceac80fa4310139888556",
+      "afterSha256": "503e2166dadd0f198f14a2e5b5f36ac51d23d6d2527b03d817f5cf484481a566",
+      "expectedSha256": "3906ffec6114696ec5a21d72fa69b321a067f90779c887745a525d29a4d54c76",
+      "actualSha256": "3906ffec6114696ec5a21d72fa69b321a067f90779c887745a525d29a4d54c76",
+      "savedName": "CHANGED\nNEW,\"quoted\"\n文本\r同一,\"引号\"\n🧪\r\nKEEP",
+      "revision": 7,
+      "previewZeroWrites": true,
+      "plansPreserved": true,
+      "factsPreserved": true
+    }
+  ],
+  "errors": [],
+  "browserVersion": "141.0.7390.37",
+  "repeatNoOp": true,
+  "complete": true
+}

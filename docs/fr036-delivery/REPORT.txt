@@ -1,0 +1,38 @@
+FR036 finite delivery — original Project2 FR-036, AC02/23
+Branch: feat/fr-036-exchange-contracts
+Base: 9082e3d82a11f00947d82f1f672c51fb08f3536a (feat/fr-038-run-guidance)
+Product modules for FR038 and issue23 cf6e76e preserved byte-for-byte.
+Delivery full Git SHA is returned in final reply and attached root FR036-report.txt.
+
+Implemented:
+- Reread original v0.3 DOCX (hash + exact sections in public/fr036/original-excerpts.txt): data D1/D2/D3 classification, ch9, original FR036, AC02/23.
+- public/fr036/matrix.json: five named possible external systems ERP/OMS/WMS/PLM/MES plus APS-owned simulation configuration; 19 original chapter categories mapped honestly to24 current supported table contracts. Concrete Chinese fields, actual recordKeys, references, source ownership, direction, units/date/minute origin, simulation/version metadata, validation source and CSV templates. No invented connector or PLM output contract.
+- 24 UTF8 BOM header templates; six main-app positive/negative CSVs; six FR013 isolated prototype files; six actual historical FR035 exports with immutable sourceSHA/provenance and byte hashes. Total42 listed CSV samples; samples.json is the sidecar, unknown metadata columns are not added to contracts.
+- Existing PG01 “数据与 CSV” gets native keyboard-operable details, Chinese responsibility/category table, operation steps and46 working download links (including current template and all tables, samples, six reports and prototype files). Static public examples contain only synthetic data; business-data export still uses original permission/reason/audit flow. All static URLs honor Vite BASE_URL.
+- No new backend, real connector, subscription, production dispatch, real account, Portal binding/publication, FR027 change, new card, self-dispatch, or full Done.
+
+Validation (observed, not a fixed expected448):
+466 TAP passed = existing458 + new8. Exact suite totals in validation-summary.json.
+Build, prototype CSV regression, bundle gates passed separately.
+FR035 actual App browser13 groups; confirmed history API5 groups; FR038 browser6 groups.
+FR036 actual App/Express/membership browser3 groups: native keyboard guidance,46 HTTP link-byte matches,8 real downloaded-file comparisons, atomic API rejection and corrected repeat replacement. Synthetic fixed actor/runtime alias only, no real SSO/gateway identity claim.
+FR035 includes six report page/CSV parity; filtered task export and bidirectional DIFF-ORDER01 six linked resources retained. Browser downloads[]8 plus filtered-tasks.csv=9 retained report CSVs; FR036 has8 additional example/template download captures. Do not combine these with466 TAP as additional tests.
+First cached-image attempt lacked headless shell: fixed only inside disposable runtime by Playwright install. Run2 all suites/old browsers passed but FR036 test expected400 for protected order-unit rebase; real existing execution protection correctly returned409. QA expectation corrected; final FR036 browser rerun passed at identical product and example hashes. Evidence retains run2 attempt log and final run3 log transparently. No product fix arose from these QA setup/expectation corrections.
+Actual source hashes embedded in all three browser reports match qa/fr036-source-sha256.json. Host only wrote/checked files and git; tests/build/browser ran in disposable Docker. No production source/dependencies/dist were built in place.
+
+Reproduce:
+1. Offline delivery checker (no installs/network/live writes):
+   python3 qa/fr036-check.py
+   Checks delivery/source/sample hashes, template fields, categories, references, source preservation, browser manifest parity and actual TAP summaries.
+2. Full runtime replay from checkout:
+   mkdir <new-empty-absolute-output>
+   FR036_REPO="$PWD" FR036_OUT=<absolute-output> bash qa/fr036-docker.sh
+   Requires authorized existing aps-fr038-qa-runtime:latest image and Playwright headless-shell download network. Exact image ID, Node and browser version in validation-summary.json; this is a local QA cache, not a published registry image. The existing image is based on qa/fr038-docker.sh with its Node22, authorized SDK tarballs, npm ci, Playwright1.56.1 and react-test-renderer18.3.1 dependencies. To reconstruct elsewhere use that existing disposable setup and invoke qa/fr036-checks.sh instead of qa/fr038-checks.sh, with source mounted/copied into isolated /workspace/apps/aps-fr032 and /evidence writable. SDK tarballs are workspace-provided; repository alone does not supply them. Never host npm install/dev or publish for QA.
+3. FR013 isolated inspector tests cover preview duplicate/reference/unit rejection, no mutation of current tables, correction/repeated replacement. Prototype browser UAT is not newly claimed. Main PG01 still single-table replace with server complete-state validation, no multi-file preview/transaction UI. API atomicity is tested separately using actual business router.
+
+Limitations and acceptance accounting:
+- This supplies the finite FR036 mapping/documentation/UI scope, not full upstream AC02/UAT completion. Header-only templates require filling and valid referenced context; unsupported independent factory/line01,箱换算,complex routes and all-rule checks are called out explicitly. 24 columns/table templates do not make every rule supported. Date validation differs across current validators; main row+2 is record numbering, not full physical multiline CSV diagnostics.
+- Main input malformed duplicate/unit/reference/date samples are tested using seed validator; actual business API rejects whole request and preserves state/plans/audit. In existing execution context, unit edits hit stronger execution-reconciliation409 before ordinary field400. Repeat valid replace is not external-message idempotency (revision/audit can advance).
+- FR014/024/026/032, DEC02/03, full joint/all-rule/R7, real signed gateway/SSO/person permissions, agreed scale/performance, complete accessibility and five-stage business UAT remain separate known upstream gaps. No new defect inferred from missing coverage.
+- Issue23 independently passed Test dlv_e953f391-fe29-4150-b0bb-108466d83f60 and closed per incoming delivery. Prior docs/fr035-acceptance pending wording is an immutable historical report, not current reopen instruction. Old FR035 source-pinned checker targets its historical product; use new FR036 checker for this changed App.
+- Browser verification is actual React/Express through loopback in disposable container; no live Portal/publication or real identity acceptance is claimed.

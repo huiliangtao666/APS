@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: 24 actual contracts, key parity, 19 chapter categories, five systems and all hashed sample bytes
+ok 1 - 24 actual contracts, key parity, 19 chapter categories, five systems and all hashed sample bytes
+  ---
+  duration_ms: 9.246923
+  type: 'test'
+  ...
+# Subtest: main validator accept examples/orders.csv
+ok 2 - main validator accept examples/orders.csv
+  ---
+  duration_ms: 3.641428
+  type: 'test'
+  ...
+# Subtest: main validator reject-duplicate examples/duplicate-orders.csv
+ok 3 - main validator reject-duplicate examples/duplicate-orders.csv
+  ---
+  duration_ms: 0.917325
+  type: 'test'
+  ...
+# Subtest: main validator reject-unit examples/bad-unit-orders.csv
+ok 4 - main validator reject-unit examples/bad-unit-orders.csv
+  ---
+  duration_ms: 0.866826
+  type: 'test'
+  ...
+# Subtest: main validator accept examples/supplies.csv
+ok 5 - main validator accept examples/supplies.csv
+  ---
+  duration_ms: 0.84016
+  type: 'test'
+  ...
+# Subtest: main validator reject-reference examples/bad-reference-supplies.csv
+ok 6 - main validator reject-reference examples/bad-reference-supplies.csv
+  ---
+  duration_ms: 0.655827
+  type: 'test'
+  ...
+# Subtest: main validator reject-date examples/bad-date-supplies.csv
+ok 7 - main validator reject-date examples/bad-date-supplies.csv
+  ---
+  duration_ms: 0.440371
+  type: 'test'
+  ...
+# Subtest: FR013 actual inspector: whole six batch duplicate/reference/unit reject, correction and replacement
+ok 8 - FR013 actual inspector: whole six batch duplicate/reference/unit reject, correction and replacement
+  ---
+  duration_ms: 3.361972
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 99.114558

@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: tool whole, phase, capacity, acquire/return boundaries, availability and immutable run input
+ok 1 - tool whole, phase, capacity, acquire/return boundaries, availability and immutable run input
+  ---
+  duration_ms: 30.323349
+  type: 'test'
+  ...
+# Subtest: personnel phase vs retained full interval, shared skill capacity, directional disabled override and no transitivity
+ok 2 - personnel phase vs retained full interval, shared skill capacity, directional disabled override and no transitivity
+  ---
+  duration_ms: 6.943853
+  type: 'test'
+  ...
+# Subtest: multiple personnel windows release gap, overlapping named windows not double-counted and shift boundary
+ok 3 - multiple personnel windows release gap, overlapping named windows not double-counted and shift boundary
+  ---
+  duration_ms: 4.46683
+  type: 'test'
+  ...
+# Subtest: invalid and contradictory resource policy configurations cannot be enabled/saved
+ok 4 - invalid and contradictory resource policy configurations cannot be enabled/saved
+  ---
+  duration_ms: 1.997434
+  type: 'test'
+  ...
+# Subtest: batch members keep separate personnel role sources while sharing the same physical pool
+ok 5 - batch members keep separate personnel role sources while sharing the same physical pool
+  ---
+  duration_ms: 4.877584
+  type: 'test'
+  ...
+# Subtest: unsupported multi-window tooling and execution/resource mixes reject explicitly instead of ignoring saved data
+ok 6 - unsupported multi-window tooling and execution/resource mixes reject explicitly instead of ignoring saved data
+  ---
+  duration_ms: 1.432263
+  type: 'test'
+  ...
+# Subtest: fixed-output independent checker detects forged direction, count, coverage and shift
+ok 7 - fixed-output independent checker detects forged direction, count, coverage and shift
+  ---
+  duration_ms: 1.864767
+  type: 'test'
+  ...
+# Subtest: old rule protocol remains accepted while new effective snapshot declares per-claim configurable policy
+ok 8 - old rule protocol remains accepted while new effective snapshot declares per-claim configurable policy
+  ---
+  duration_ms: 1.0168
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 139.492264

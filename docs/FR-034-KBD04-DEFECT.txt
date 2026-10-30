@@ -1,0 +1,42 @@
+FR034 new confirmed boundary defect — KBD04 (P2)
+Original card PVTI_lAHOFM9WU84BpE1czhEHhDI, AC17/31; follow-up delivery
+dlv_9e63a2af-edbc-4fb4-88d9-25900a0f40d1. No new issue/card created.
+
+Affected baseline: 02a5e307f4b731ebb2b1882ed02e16a7e20c52e3.
+Independent Dev reproduction: actual App, no QA banner, disposable synthetic
+planner identity, Chromium141, 640x900 AND1100x900. Not a Test verdict.
+
+Reproduce
+1. Select saved FR034-SYNTHETIC-CORRUPT; run independent check with reason.
+2. Keyboard activate MACHINE_OVERLAP. A-MIX and A-FILL are selected.
+3. Tab to 搜索任务 and enter FR034-NO-SUCH-TASK. Task rows/bars disappear;
+   selected-hidden status and saved details remain.
+4. Tab to 显示选中任务 and Enter.
+Actual: both task bars return, but the activating button is removed and no
+control retains focus. Native Accessibility.getFullAXTree marks RootWebArea
+focused; the next :focus lookup times out. Scrolling details does not transfer
+keyboard focus. This was reproduced at both widths before product editing.
+Expected: revealing the saved selected task leaves a useful visible focused
+target, retaining task IDs, saved interval and source/current-fact separation.
+Impact/severity: P2; keyboard continuity is lost during a supported linkage
+recovery action. Pointer/task geometry works; no persisted-data damage found.
+
+Evidence
+qa/evidence/fr034-boundary/baseline/boundary-report.json:
+selected-task-disappears-and-reappears fails at640 AND1100. Native AX files:
+640-FAIL-selected-task-disappears-and-reappears.native-ax.json and
+1100-FAIL-selected-task-disappears-and-reappears.native-ax.json.
+Corresponding DOM, ARIA and PNG retained. Failure arose before the subsequent
+long-text assertions, so those assertions are not claimed as baseline passes.
+The baseline end-scroll measurement did not reach document end; it is retained
+as a measurement and superseded by an explicit maximum-scroll setup in final
+acceptance. It is not evidence for a scroll-boundary pass.
+
+Repair accounting
+KBD04 product repair round1: change only TimelinePanel.reveal. After resetting
+filters, scroll the restored selected chart button into view and focus it with
+preventScroll. Existing detail target remains a fallback when no chart bar
+exists. No unconditional async-check focus change. No modification/amendment
+of KBD01/02/03 round1, no round2 attempt, no Test acceptance of new bytes.
+Fallback for unplanned/non-chart selected tasks is not independently exercised
+by this new KBD04 scenario; do not extend its positive verdict to that case.

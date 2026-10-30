@@ -1,0 +1,10 @@
+export type Row=Record<string,string>;
+export type Def={key:string;label:string;file:string;fields:string[]};
+export type Filters={text?:string;product?:string;order?:string;status?:string;statusField?:string;dateField?:string;from?:string;to?:string};
+export const taskDef:Def;
+export function queryData(data:Record<string,Row[]>,plans:any[],planId?:string):Record<string,Row[]>;
+export function related(data:Record<string,Row[]>,table:string,index:number):{table:string;index:number;label?:string}[];
+export function filterOptions(fields:string[]):{dateFields:string[];statusFields:string[]};
+export function filterRows(data:Record<string,Row[]>,table:string,filters?:Filters):{row:Row;index:number}[];
+export function displayValue(field:string,value?:string):string;
+export function queryCsv(defs:Def[],data:Record<string,Row[]>,plans:any[],revision:number,query:{table:string;planId?:string;sourcePlanId?:string;filters?:Filters}):string;

@@ -1,0 +1,3 @@
+/usr/bin/dpkg-deb
+
+[validation] disposable source/dependencies/output; no publish or restart

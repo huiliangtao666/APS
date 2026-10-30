@@ -1,0 +1,60 @@
+{
+  "openIssues": [
+    {
+      "number": 16,
+      "title": "[FR-021] Complete batching and AC14 acceptance evidence"
+    },
+    {
+      "number": 15,
+      "title": "[FR-019] Complete integrated minimal-scheduling acceptance evidence"
+    },
+    {
+      "number": 14,
+      "title": "[FR-018] Complete R5 and real workflow acceptance evidence"
+    },
+    {
+      "number": 13,
+      "title": "[FR-017] Complete integrated rule and run acceptance evidence"
+    },
+    {
+      "number": 12,
+      "title": "[FR-014/015] Remaining integrated query/edit acceptance evidence"
+    },
+    {
+      "number": 10,
+      "title": "[FR-037] Complete workflow and real managed identity acceptance gaps"
+    },
+    {
+      "number": 9,
+      "title": "[FR-010] Remaining acceptance gaps: inventory allocation and role evidence"
+    },
+    {
+      "number": 6,
+      "title": "[R2.1] \u5b8c\u6210 UAT-02 / AC-05 \u4ea7\u54c1\u9a8c\u6536"
+    },
+    {
+      "number": 4,
+      "title": "[FR-013/016] \u5408\u5165 CSV \u6279\u5bfc\u4fee\u590d\u5e76\u5b8c\u6210 UI \u9a8c\u6536"
+    },
+    {
+      "number": 3,
+      "title": "[FR-006] \u5408\u5165\u4e3b\u7ebf\u5e76\u5b8c\u6210\u5de5\u88c5\u914d\u7f6e UI \u9a8c\u6536"
+    },
+    {
+      "number": 2,
+      "title": "[\u8ba1\u5212] R1 \u6700\u5c0f\u8ba1\u7b97\uff0b\u6838\u5bf9"
+    },
+    {
+      "number": 1,
+      "title": "[\u8ba1\u5212] R1 \u6700\u5c0f\u8ba1\u7b97\uff0b\u6838\u5bf9"
+    }
+  ],
+  "confirmedUnresolvedProductDefects": [],
+  "issue19": {
+    "state": "closed",
+    "stateReason": "completed",
+    "independentPass": "Test dlv_5b3b90fc-e1d8-4c72-b8b0-fb5fd614912c; comment read live before implementation; 105 source hashes,28 API,9 navigation,24 rendered axis cases,10 screenshots",
+    "url": "https://github.com/huiliangtao666/APS/issues/19"
+  },
+  "note": "Open acceptance/integration gaps stay separate; no issue or card mutation."
+}

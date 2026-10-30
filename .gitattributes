@@ -1,0 +1,8 @@
+# Retain the exact user-provided UAT15 source bytes, including its CRLF.
+docs/FR-012-original-UAT15-progress.csv -text whitespace=cr-at-eol
+
+# Acceptance artifacts retain exact downloaded CSV and raw log bytes.
+docs/fr014015-acceptance/evidence/**/*.csv -text whitespace=cr-at-eol
+docs/fr014015-acceptance/evidence/*.csv -text whitespace=cr-at-eol
+docs/fr014015-acceptance/evidence/attempts/*.log -text whitespace=-blank-at-eol
+docs/fr014015-acceptance/evidence/*.html -text whitespace=-blank-at-eol

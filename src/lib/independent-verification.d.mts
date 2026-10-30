@@ -1,6 +1,10 @@
 export type VerificationStatus = 'pass' | 'problem' | 'not_checked';
-export type VerificationCheck = { status: VerificationStatus; details: string[] };
+export type VerificationFinding = {code:string;message:string;taskIds:string[];relatedRecords?:import('./problem-records.mjs').RecordRef[];associationGap?:string;interval?:Record<string,any>;evidence?:Record<string,any>};
+export type VerificationCheck = { status: VerificationStatus; details: string[];findings?:VerificationFinding[];diagnostics?:VerificationFinding[] };
 export type VerificationReport = {
+  ruleStatuses?: Array<{id:string;enabled:boolean;supported:boolean;adopted:boolean;status:VerificationStatus;reason:string}>;
+  findings?: VerificationFinding[];
+  scopeNote?:string;
   checkedAt: string;
   planId: string;
   inputVersion?: string;
@@ -8,6 +12,8 @@ export type VerificationReport = {
     lineScope: VerificationCheck;
     machineOverlap: VerificationCheck;
     precedence: VerificationCheck;
+    calendar?: VerificationCheck;
+    resourcePolicies?: VerificationCheck;
   };
 };
 export function independentlyVerifyPlan(
@@ -16,4 +22,6 @@ export function independentlyVerifyPlan(
   routes?: Array<Record<string, string>>,
   enabledRules?: string[],
   checkedAt?: string,
+  frozenData?: any,
+  frozenConditions?: any,
 ): VerificationReport;

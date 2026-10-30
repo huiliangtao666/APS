@@ -1,0 +1,8 @@
+{
+  "id": "PVTI_lAHOFM9WU84BpE1czhEHhAY",
+  "content": {
+    "id": "DI_lAHOFM9WU84BpE1czgLhAjE",
+    "title": "[FR] FR-032 资源负荷、物料缺口与提醒",
+    "body": "## 需求\n范围：P0；关联流程：BP-05/07；页面：PG-07；开始提供：R2；完整提供：R7。\n前置功能：FR-020/022/024。\n• 按当前已支持范围显示设备忙闲、模具占用、人员需求、空间占用和物料缺口；从汇总转到任务和原始数据。\n• 显示订单延后、模拟到料未满足、输入缺失等提醒。优先实现具体数量和原因，不以复杂经营指标看板作为排程前置。\n\n## 验收追踪\n验收用例：AC-06/07/10/14/26。\n\n来源：需求分析与设计说明书 v0.3，第 6 章；状态：基线需求，具体实现状态待跟踪。\n\n\n## Patrol delivery and immediate continuation\nOwner APS-Dev delivery dlv_8810cfa4-eeb4-416f-978a-2c62c9a25ab3. Immediate continuation after FR034 completed/Dev idle/no queuedduplicate. Openissue scan no confirmed unresolved productdefect; no three exhausted-round blocked tasks. FR020/022/024 supportedsource prerequisites available in72276614c0de122a6c45688e4f7b3cd7fbb129ed. Original AC06/07/10/14/26 resourcebusy/idle/occupation/demand/space/materialshortage/lateorder/conditionalarrival/missinginput alerts and summary->task->originalinput assigned; concrete quantities/units/reasons and truthful unknowns. Preserve frozen/currentfacts distinction/no doublecounts and unresolved policy boundaries. Container tests/build/CSV/browser wherepossible/ordinarypush/fullSHA/report required, no parallelcard/publication.\n"
+  }
+}

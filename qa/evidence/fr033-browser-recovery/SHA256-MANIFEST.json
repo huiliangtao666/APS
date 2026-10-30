@@ -1,0 +1,21 @@
+{
+  "qa/evidence/fr033-browser-recovery/README.txt": "5ad7e24c929f3085d71aa6b13375f7ad82ae039cf60ceea3d56464986807d2af",
+  "qa/evidence/fr033-browser-recovery/browser-final.log": "33aa9de3112e5b49138fb09971191291d26620aa284024ea68bedb9a71930ac9",
+  "qa/evidence/fr033-browser-recovery/browser.log": "3f0b3318907cf72379bb4854aa65ffec21f4e18a6a05ed1d15b3f55e122a65e5",
+  "qa/evidence/fr033-browser-recovery/checks-final.log": "e73d799d6535a8a0558d6fe8e62ea32aa75e901ae3dc16a907d5aeb3ddd5d501",
+  "qa/evidence/fr033-browser-recovery/commands.txt": "8ef728b2ec702d65818656dd37ebda89c0e27acc63cca1029894fde0227d087c",
+  "qa/evidence/fr033-browser-recovery/network-probe.log": "6b2b9e5c9025fc490415f1f749b51c8879db8dae713e3935317585b437648b7e",
+  "qa/evidence/fr033-browser-recovery/prepare-complete.log": "9cce2a8d4dc52cec95082270af588ac54bf70814a970f9d53dbc4701a82dcb7c",
+  "qa/evidence/fr033-browser-recovery/prepare.log": "cb8c8f784b51443ded3387c0978a5353651290e95bba0fe81493645a141dd80b",
+  "qa/evidence/fr033-browser-recovery/probe.log": "2bca020763f57b2a3d007f5f5051217805aaf0e35f26e27953a4d5e7be8837f6",
+  "qa/evidence/fr033-browser-recovery/result.json": "8b5971a6b86aab9d067d1a9d5ec07e7e1413068b23121335f7926e11a044dfee",
+  "qa/fr033-browser-dependencies.json": "f39650d2e46d491118f6c8d1cb488add43f11c9b788d1307f76e2c54ad986867",
+  "qa/fr033-browser-launch.mjs": "e47713d68f91a2525e228de5f64221bbeea1ebcb9e2bb06f01574270510ddbe9",
+  "qa/fr033-browser-packages.mjs": "63230a503f03892c9d3b77261d4abebbabee64c982f112499ee5568e00346866",
+  "qa/fr033-browser-recovery.sh": "f7b92283205e486dff91594190c7436f734f29742e882ed427aaf0e00b70c1d3",
+  "qa/fr033-browser-runtime.sh": "35d6438d626a1b3eda805d6d98dd5b0e3cac8395b7a818a0046d7d2a65d84aa9",
+  "qa/fr033-component-browser.mjs": "851ec091d3405da0c02772995d15fb5b420805cd056427cf1558d63fa753ca6d",
+  "qa/fr033-integration-browser.mjs": "d17996b62f8a795587bf8fac77b4d527c934f9707df0836db75df35e5d9b9dd1",
+  "qa/fr033-integration-container.sh": "a8548a448746a6f60bf32809f46ee08efaf93c3c4856f2537e81395fa0f2d347",
+  "qa/fr033-recovery-checks.sh": "035229077b21515d4996ef2e6a11d8d9c3b1bcff9606a6a41ee0166b7c9926d5"
+}

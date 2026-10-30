@@ -1,0 +1,51 @@
+FR035-DIFF-ORDER-01 repair round 1
+Original Project2 card: PVTI_lAHOFM9WU84BpE1czhEHhEU
+Issue: https://github.com/huiliangtao666/APS/issues/23
+Integrated parent: 8741bf0a597fa11838a514259d8ffe7980382ee2
+Branch: feat/fr-038-run-guidance (preserves FR038)
+
+Problem: a genuine saved joint-plan/execution-plan comparison had 46 complete
+rows but order A retained only two of its six linked resource differences.
+The personnel G and machine FILL01/MIX01/MIX02 records reference tasks inside
+before/after arrays, without direct orderId fields.
+
+Repair: resolve taskId/taskIds inside each before record using the left saved
+plan and each after record using the right saved plan, including saved unplanned
+task assessments. Top-level occupation links retain their saved-plan behavior.
+A reference on either side retains the entire original difference record.
+No shared-row quantity is split or attributed as an order-specific fraction.
+Current inputs are never used to decide ownership. Reused task IDs cannot make
+an unrelated before row match an order found only on the after side.
+Query normalization, half-open/whole-plan scope, snapshot/view hashing, export
+permissions/audit and historical validation retain the existing contracts.
+
+Reproduction from this checkout, Docker required:
+  mkdir -p <new-empty-output>
+  FR038_REPO=<absolute-checkout> FR038_SDK=<two-authorized-SDK-tgz-directory> \
+    FR038_OUT=<new-empty-output> bash qa/fr038-docker.sh
+The existing complete FR038 entrypoint includes the repaired FR035 regression.
+It installs dependencies/browser in a disposable node:22-slim container only.
+No production app, Portal binding or publication is changed.
+
+Added checks:
+- scoped-report unit control: before-only taskId, after-only taskIds, shared
+  A/B row with unchanged whole quantities, unrelated rows, missing order,
+  reused task ID ownership and reversed comparison; state remains unchanged.
+- real browser regression: validated imports and calculate/save routes generate
+  joint and historical execution plans. Independently select all A-linked
+  resource rows from the complete comparison using actual saved tasks; require
+  exactly six, then compare the filtered API, actual DOM cells, view identity,
+  downloaded CSV bytes and parsed rows. Repeat reversed and reject absent order.
+- existing full tests/build/CSV, FR038 browser, FR035 history/permissions remain.
+
+Evidence also replays the original APS-Test failing resource probe unchanged
+except absolute checkout paths, and the separate 12-group independent probe.
+These are Dev replays, not a replacement for a new independent APS-Test retest.
+The source manifest keeps the established FR038-working-source runner label;
+exact Git identity and source-byte checks are supplied in the delivery evidence.
+
+Limits: fixed synthetic actors with genuine membership middleware, no signed
+gateway/SSO or real-person identity UAT. Finite rule fixtures do not certify all
+joint rules, full R7 workflow, production scale, complete accessibility or
+business-owner UAT. Existing FR038 durability/replay limits remain in force.
+Do not close issue/card or claim full Done before independent acceptance.

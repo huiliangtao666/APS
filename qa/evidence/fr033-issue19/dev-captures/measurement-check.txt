@@ -1,0 +1,1 @@
+PASS: 24 browser records; no label rectangle overlap, label ink overflow or axis-edge clipping; frozen JSON unchanged; runtime errors empty.

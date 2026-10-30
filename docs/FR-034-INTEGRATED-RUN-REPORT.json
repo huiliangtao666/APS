@@ -1,0 +1,291 @@
+{
+  "delivery_id": "dlv_68960084-968b-4dfd-8ee1-10d0f27d830b",
+  "observed_at_utc": "2026-10-28T23:27:26.975959+00:00",
+  "canonical_card_id": "PVTI_lAHOFM9WU84BpE1czhEHhDI",
+  "original_handoff_sha": "e81a05b4d19c86fbcc8afad4ee3b48253ad74604",
+  "product_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+  "product_and_historical_harness_unchanged": true,
+  "status": "PASS corrected finite integrated delivery verification; independent Test verdict pending",
+  "execution": {
+    "finished_at_utc": "2026-10-28T23:27:26.975959+00:00",
+    "original_run1_exit": 1,
+    "original_run1_failure": "QA entrypoint label/manifest mismatch at startValidation, after441 tests/build/CSV; boundary not started",
+    "corrected_run2_exit": 0,
+    "corrected_regression_exit": 0,
+    "corrected_boundary_exit": 0,
+    "result_audit_exit": 0,
+    "parallel_kbd04_exit": 0,
+    "no_product_failure_observed": true,
+    "round_accounting": "delivery verification; no new repair round or round2"
+  },
+  "results": {
+    "observed_at_utc": "2026-10-28T23:26:09.591333+00:00",
+    "product_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+    "tap_total_one_run": 441,
+    "tap_by_log": {
+      "business.log": 164,
+      "canonical.log": 213,
+      "confirmation-panel.log": 4,
+      "delivery-panel.log": 1,
+      "editor-interaction.log": 10,
+      "execution-panel.log": 7,
+      "load-panel.log": 3,
+      "query.log": 5,
+      "resource-panel.log": 1,
+      "result-panel.log": 3,
+      "task-linkage-panel.log": 2,
+      "timeline-panel.log": 13,
+      "trial-panel.log": 6,
+      "worker.log": 9
+    },
+    "keyboard_assertions": 6,
+    "keyboard_functional_groups": 22,
+    "keyboard_measurements": 2,
+    "keyboard_audit_observations": 8,
+    "unknown_groups": 24,
+    "history_groups": 4,
+    "history_response_statuses": [
+      201,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      409,
+      409,
+      403,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200
+    ],
+    "boundary_assertion_groups": 14,
+    "boundary_measurements": 6,
+    "boundary_audit_observations": 24,
+    "source_hashes_per_browser": 110,
+    "browser_versions": {
+      "keyboard": "141.0.7390.37",
+      "unknown": "141.0.7390.37",
+      "boundary": "141.0.7390.37"
+    },
+    "json_files_parsed": 26,
+    "json_paths": [
+      "boundary/1100-completed-tab-away.native-ax.json",
+      "boundary/1100-end-scroll-overlap.native-ax.json",
+      "boundary/1100-history-current.native-ax.json",
+      "boundary/1100-long-Chinese-text.native-ax.json",
+      "boundary/1100-multilane.native-ax.json",
+      "boundary/1100-no-problems-filter.native-ax.json",
+      "boundary/1100-no-results-selected-hidden.native-ax.json",
+      "boundary/1100-pending-tab-away.native-ax.json",
+      "boundary/1100-repeated-overlap.native-ax.json",
+      "boundary/1100-selected-reappeared.native-ax.json",
+      "boundary/640-completed-tab-away.native-ax.json",
+      "boundary/640-end-scroll-overlap.native-ax.json",
+      "boundary/640-history-current.native-ax.json",
+      "boundary/640-long-Chinese-text.native-ax.json",
+      "boundary/640-multilane.native-ax.json",
+      "boundary/640-no-problems-filter.native-ax.json",
+      "boundary/640-no-results-selected-hidden.native-ax.json",
+      "boundary/640-pending-tab-away.native-ax.json",
+      "boundary/640-repeated-overlap.native-ax.json",
+      "boundary/640-selected-reappeared.native-ax.json",
+      "boundary/boundary-report.json",
+      "regression/1100-control-audit.json",
+      "regression/640-control-audit.json",
+      "regression/confirmed-api-report.json",
+      "regression/keyboard-report.json",
+      "regression/unknown-browser-report.json"
+    ],
+    "all_required_gates": true,
+    "counting": "only final complete run; earlier failed run, parallel replay, historical runs and overlapping browser scenarios are not added to 441"
+  },
+  "runtime": {
+    "recorded_at_utc": "2026-10-28T23:23:15.088524+00:00",
+    "image_tag": "node:22-slim",
+    "image_id": "sha256:48e4b67d85f87bd551df43704e24d252f56cc5f8e9718841aace50f19948f0f9",
+    "repo_digests": [
+      "node@sha256:48e4b67d85f87bd551df43704e24d252f56cc5f8e9718841aace50f19948f0f9"
+    ],
+    "architecture": "arm64",
+    "os": "linux",
+    "node": "v22.23.2",
+    "sdk": {
+      "lite-app-runtime.tgz": "32884090246c8a23783425c93b3ae26a1279eace2045aed5dee2e43ac014951f",
+      "lite-app-server.tgz": "bcc66c06dbff896653d54dfc671e547382e367e7239609196a74a87cd379a18a"
+    },
+    "handoff_sha": "e81a05b4d19c86fbcc8afad4ee3b48253ad74604",
+    "source_clean": true
+  },
+  "parallel_kbd04": {
+    "productSHA": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+    "exitCode": 0,
+    "completed": true,
+    "recoveryCases": 12,
+    "recoveryFocusPass": 12,
+    "noLateSteal": 12,
+    "allSavedJSONUnchanged": 12,
+    "emptyTransitions": 2,
+    "emptyPass": 2,
+    "currentInputUnchanged": true,
+    "pageErrors": [],
+    "failedHTTP": [],
+    "sourceHashes": 110,
+    "browser": "141.0.7390.37",
+    "nativeAXFiles": 12,
+    "caseBreakdown": [
+      {
+        "width": 640,
+        "method": "Enter",
+        "transition": "search",
+        "focusPass": true
+      },
+      {
+        "width": 640,
+        "method": "Enter",
+        "transition": "state",
+        "focusPass": true
+      },
+      {
+        "width": 640,
+        "method": "Space",
+        "transition": "search",
+        "focusPass": true
+      },
+      {
+        "width": 640,
+        "method": "Space",
+        "transition": "state",
+        "focusPass": true
+      },
+      {
+        "width": 640,
+        "method": "mouse",
+        "transition": "search",
+        "focusPass": true
+      },
+      {
+        "width": 640,
+        "method": "mouse",
+        "transition": "state",
+        "focusPass": true
+      },
+      {
+        "width": 1100,
+        "method": "Enter",
+        "transition": "search",
+        "focusPass": true
+      },
+      {
+        "width": 1100,
+        "method": "Enter",
+        "transition": "state",
+        "focusPass": true
+      },
+      {
+        "width": 1100,
+        "method": "Space",
+        "transition": "search",
+        "focusPass": true
+      },
+      {
+        "width": 1100,
+        "method": "Space",
+        "transition": "state",
+        "focusPass": true
+      },
+      {
+        "width": 1100,
+        "method": "mouse",
+        "transition": "search",
+        "focusPass": true
+      },
+      {
+        "width": 1100,
+        "method": "mouse",
+        "transition": "state",
+        "focusPass": true
+      }
+    ],
+    "role": "APS-Dev delivery verification replay of Test-authored probe; not independent Test acceptance",
+    "overlapAccounting": "Do not sum these12 recovery cases with integrated boundary selected-task case; report separately as replay"
+  },
+  "reference_audit": {
+    "reports_and_archives_hash_match": 18,
+    "github_http200": 9,
+    "integrated_command_paths_verified": true,
+    "historical_test_archive_path_mapping": "keyboard round1 reproduction/run.sh and reproduction/mouse-run.sh correspond to historical temp/fr034-keyboard-r1-test/ paths; retain README extraction layout"
+  },
+  "known_audit_limits": "8 keyboard observations match prior final report;4 boundary focus observations plus20 audit snapshots. Transferred focus leaves the source finding inactive; horizontally clipped table controls remain observed. Not complete accessibility certification. No new product failure asserted.",
+  "scope_and_gaps": {
+    "supported": "actual App/scheduler/Express API and saved JSON, Chromium synthetic fixed planner/runtime alias; line/machine/precedence independent checks",
+    "all_rule": "not accepted/implemented as full independent recheck; FR017/025 issue13; DEC02/issue3 and full resource/material semantics issue16",
+    "real_identity": "not executed: signed gateway/SSO, bootstrap/membership/role provisioning and durable deployed runtime; issue10",
+    "full_uat": "not executed: complete original ACs, UAT01/02/15 and full five-stage workflow; issues2/4/6/10/12/14/15"
+  },
+  "independent_gate": {
+    "issue22_state": "open",
+    "issue22_comments": 0,
+    "aps_test_report": "pending verdict placeholders; no independent acceptance inferred",
+    "existing_test_delivery": "dlv_c42875ac-c478-4bcc-a9e3-b6bc5656966b"
+  },
+  "next_original_backlog": [
+    {
+      "id": "FR-035",
+      "original_dependencies": [
+        "FR-014",
+        "FR-024",
+        "FR-026",
+        "FR-032"
+      ],
+      "readiness": "supported source dependencies integrated; next executable original feature candidate AFTER issue22 independent result is triaged; no need for complete global all-rule/DEC02/identity acceptance to implement supported export scope",
+      "remaining": "query/export breadth, source/unit/date/simulation metadata, permission/current-range and page/export parity acceptance; real identity UAT later",
+      "canonical_card_id": "PVTI_lAHOFM9WU84BpE1czhEHhEU",
+      "source_commits": {
+        "FR-014": "db090453482261c386a6492e2106323e2100c20c",
+        "FR-024": "2375487b3d630190434fd4be4e3313de18d8df7a",
+        "FR-026": "e93fadce55d3f1deef0a602d3a01ebfe561a01b4",
+        "FR-032": "28ed8f8e422173f9b83d8a974e26ea9af6f09c8e"
+      }
+    },
+    {
+      "id": "FR-038",
+      "original_dependencies": [
+        "FR-018",
+        "FR-024"
+      ],
+      "readiness": "supported source available; executable original backlog candidate after defect priority gate; independent of FR034 full Done",
+      "remaining": "run record/cancel/failure UX and reproducible provenance; use original card only",
+      "canonical_card_id": "PVTI_lAHOFM9WU84BpE1czhEHhHk",
+      "source_commits": {
+        "FR-024": "2375487b3d630190434fd4be4e3313de18d8df7a",
+        "FR-018": "a9eb8f6d60e8adc523217c117e6152c96d7924c2"
+      }
+    }
+  ],
+  "reproduction": "bash qa/fr034-integrated-validation.sh --run; see docs/FR-034-INTEGRATED-CHECKLIST.txt",
+  "code_change": "only QA entrypoint reads FR034_PRODUCT_LABEL from pinned manifest; all product/old harness bytes stay at pin",
+  "entrypoint_sha256": "5e4eda2513b63944f89837aac84ae1ff83dcbba60f11331670fae193c010520c",
+  "no_actions": [
+    "no publication",
+    "no new card",
+    "no full Done",
+    "no issue closure",
+    "no source repair",
+    "no replacement independent Test",
+    "no round2",
+    "no self-dispatch"
+  ],
+  "evidence": {
+    "repo_path": "docs/evidence/fr034-integrated-run/evidence.zip",
+    "sha256": "814e5a0bb31ef37b1ff886c7f6796e7af5ba7e68963caeccb3ad550d190693f1",
+    "bytes": 12571648,
+    "source_snapshot_note": "parallel probe source snapshot excludes only old qa/evidence archives; exact110 manifest files retained. Fresh evidence and failed run preserved."
+  }
+}

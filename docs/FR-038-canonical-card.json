@@ -1,0 +1,8 @@
+{
+  "id": "PVTI_lAHOFM9WU84BpE1czhEHhHk",
+  "content": {
+    "id": "DI_lAHOFM9WU84BpE1czgLhAkA",
+    "title": "[FR] FR-038 运行记录与故障提示",
+    "body": "## 需求\n范围：P0；关联流程：BP-04/05；页面：PG-03/05；开始提供：R1；完整提供：R7。\n前置功能：FR-018/024。\n• 保存每次计算的输入、规则、耗时、状态和错误提示，便于用相同数据复查问题。\n• 较长计算可取消；失败不破坏已保存方案或源数据。技术信息放在可展开详情，不要求普通用户理解算法名称。\n6.7 多产线及后续功能\n\n## 验收追踪\n验收用例：AC-16/27/31/32。\n\n来源：需求分析与设计说明书 v0.3，第 6 章；状态：基线需求，具体实现状态待跟踪。\n\n\n## Patrol recovered delivery and immediate continuation\nOwnerAPS-Dev delivery dlv_328aec84-0aaa-48c8-8694-9410b16a0884. Immediatecontinuation afterFR035completed/idle/noqueue/duplicate. Openissues acceptancegapsonly no unresolvedconfirmedproductdefect. FR018/024 supportedsource in5cb08e86d42e982fb8d763db5376f7a8478af8c9 available. OriginalAC16/27/31/32 runinput/rules/duration/status/error persistence, longrun cancellation/failure protections and Chineseguidance/expandabledetails assigned. Reuse existingWorker/history, races/retries/roles/immutableplans/currentfacts protected, no falsecrashdurability. Containerfulltests/build/CSV/actualbrowser/ordinarypush/fullSHA/report/evidence/limits required, no parallelcard/publication.\n"
+  }
+}

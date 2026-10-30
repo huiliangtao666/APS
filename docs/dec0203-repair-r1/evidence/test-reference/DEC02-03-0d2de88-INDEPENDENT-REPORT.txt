@@ -1,0 +1,92 @@
+CR-DEC02-03-20261029 独立产品验收结果（APS-Test → APS-Design）
+日期：2026-10-29，Asia/Singapore
+Delivery：dlv_fdad89b2-cb94-49fb-bb7c-8cd83b653e97
+固定SHA：0d2de88b70b15c555f6d005c0e4d94674e160cdf
+父SHA：500bdad0d70ba5f5cc2a9817b9d649a553e438e5
+分支：feat/fr-013-016-main-batch
+
+结论：本轮不通过完整CR验收，不建议据此将Issue3或FR006/007/017/022标为本次变更完成。
+真实主前台、Express持久化、新Worker及主要资源账链路已有独立正向证据，但存在3项实际验收失败（检查器范围绕过、人员空偏移保存、待生效规则误拦执行事实），另有候选联合分配及独立同技能岗位两项范围缺口。48项逐项结果在随附CSV：23 PASS、18 PARTIAL、3 FAIL、2 FAIL_SCOPE、2 NOT_EXECUTABLE。PASS只覆盖该行具体证据；PARTIAL/不可执行均不是通过。CSV保留原48项条件、判据与本轮未执行原因，不能以脚本统计替代产品结论。
+
+本报告由交付hook返回APS-Design；未另发消息、修改GitHub、Issue/Project、创建平行卡、发布、合并main或恢复backlog。3项实际失败是本轮发现，不自动计作已启动缺陷修复轮次。未完成基线全验或现场业务UAT。
+
+一、来源、契约与独立性
+从GitHub新clone、fetch指定40位SHA、detached checkout；HEAD和远端分支均为上述SHA，最终git status --porcelain为空。最新Issue3及100条上限评论接口已只读GET，当前评论数量在快照中完整，Issue updated_at=2026-10-29T02:38:49Z；当前CR、Dev设计评论6486124568、Design派发评论均已读。原DEC02-03-ISSUE3-CONTRACT-REVIEW.txt及48行矩阵与APS-Dev/DEC02-03-Delivery-2026-10-29.md及源码内交付报告、参数/保护清单、Dev浏览器原始JSON等交叉审查。固定源码、交付证据不被当作独立测试结果。
+代码：https://github.com/huiliangtao666/APS/commit/0d2de88b70b15c555f6d005c0e4d94674e160cdf
+主契约：https://github.com/huiliangtao666/APS/issues/3
+设计评论：https://github.com/huiliangtao666/APS/issues/3#issuecomment-6486124568
+Design最后状态仍是尚未完整验收；没有查到用户对这些新增限制或具体数字默认值的另行批准。
+
+生产构建独立使用平台app-exec --validate：在应用容器一次性副本中npm ci，再tsc/Vite/server/Worker bundle，全通过。fresh npm ci只证明这次构建环境；下面浏览器/测试使用已缓存Docker QA运行镜像和依赖，不称为第二次干净依赖安装。镜像sha256:0d45a31aa25c4cca1eaacbfd1ba4ee6d5028d899b329e49a6036a66fd0c35da8，Node22.23.2。宿主无npm/pip安装或应用启动，无在线业务库写入。
+
+独立新增两个脚本independent.mjs、supplement.mjs，运行在只读挂载pin源码的独立一次性容器，使用临时业务目录、实际权限/业务中间件和真实计算Worker。复用了QA服务器/成员夹具及批处理造数辅助，没有复用Dev浏览器断言作为独立oracle。工具窗口自行按冻结配置计算，独立以半开端点求同资源/人员池峰值；检查器负例由Test修改离线计划副本。浏览器真实点击React表单、POST保存、reload与新context读回，无改DOM/伪响应。
+身份是test#planner / test#supervisor / test#query及合成非成员，前台runtime alias，实际成员/角色中间件；没有Portal签名身份/SSO认证证据。无身份请求在此QA seam会默认planner，因此未执行真正缺签名身份测试，不把合成权限通过包装成生产登录验收。
+
+二、独立前台与Worker关键结果（均为仿真，不是业务默认）
+1. 表18容量1、表23逐项需求1、提前5后延10：真实Worker两任务加工开始5、50，实际工装账[0,45)、[45,90)，端点复用；独立峰值<=1。
+2. 真实前台容量改2、保存、刷新确认仍2，新Worker开始5、5。
+3. 前台改回1套，并在表23将整段切明确窗口，结束偏移20、后延20；保存刷新后新Worker开始5、40，冻结版本/参数散列/实际账一致。工装窗口从实际工序边界重建，未叠加旧整段账。
+4. 表12阶段参与前10分钟，QA-G容量2、每任务2人，提供A通过显式A→B：新Worker开始0、10。前台窗口外释放改否、保存刷新，新Worker开始0、30。
+5. 前台将A→B改否，新Worker两个任务未排；恢复关系后，跨表前台改组提供B,C而需求A，A→B没有反向作用，新Worker未排。
+6. 独立多窗口造数准备[0,5)需2、结束[25,30)需1，两个任务开始0、5；切全程保留为0、30。前台增改删阶段、刷新其余记录不丢；真实CSV preview→commit→GET保留多窗口，坏组引用原子拒绝。多窗口造数与UI CRUD未再接成一条独立Worker场景，矩阵保留PARTIAL。
+7. 池2人两个不同所需技能：2+1需求未排；1+1允许，独立峰值未乘技能数。班次/可用期由实际占用检查，独立错误可用期负例报problem。
+8. 旧草稿计划及输入全量相等。另经verify→计划员submit→主管confirm后，改当前工具并新Worker，旧计划、确认对象、plan inputVersion和run冻结输入全量不变；ID/四类散列均记录于independent-results.json及history-results.json（全量确认/方案/输入及四类散列）。
+9. 保存V1后发起run，立即保存容量2的V2，旧run仍冻结容量1、新run容量2。未故意放慢Worker或记录保存时的中间phase，所以这里只证明提交冻结与后续隔离，不能证明真正计算中途竞态全部通过。
+
+三、实际问题及复现边界
+D01（高影响）独立资源检查器使用结果自报规则决定是否检查冻结需求。
+位置：src/lib/verify-resource-policies.mjs:7，:43以后工装声明循环；不是调用调度器重排的问题，而是检查范围本身可被被检结果缩小。
+复现：构造冻结MOLD启用且有人员依赖的合法计划；离线副本删除plan.rules中的MOLD并删除全部工装占用账，冻结executionData与声明不改。调用independentlyVerifyPlan(..., frozenData)，checks.resourcePolicies.status实际为pass。正常仅删工装账会problem，但删规则标志可绕过；人员依赖让hasPolicy仍为真，故不是单纯not_checked。
+预期：从冻结规则、运行选择和冻结生效时刻推导MOLD实际采用范围，核对结果标志与范围一致，工装缺账必须报问题。影响：独立复核可在应有工装全部漏记的情况下称资源通过，阻断“独立检查器实际使用冻结配置”的验收。这里篡改的是离线副本，没有证明API允许修改历史/攻击者能写结果，不能升级描述成越权漏洞。
+证据：independent-results.json的scopeTamper（完整冻结规则、篡改结果、verification）及案例“V01 frozen enabled rule cannot be removed from result”。
+补充检查缺口：不传frozenData时，resourcePolicies键直接消失而非显式not_checked。没有资源PASS，但与C08缺输入要明确标范围的契约不完整；单列为诊断，不另算一项高影响产品缺陷。
+
+D02（中影响；原有宽松行为在CR下仍未关闭）人员明确偏移空值可保存并暗按0采用。
+位置：src/lib/process-config.mjs:98、src/lib/staffing.mjs:7；新resource-policies校验没有补齐显式必填偏移校验。
+复现：启用人员依赖，合法保存后，在真实React“数据与CSV”表12将第3行“人员开始偏移”清空，点保存；实际POST /api/inputs返回200，revision/完整business字节发生改变。独立直接API清空同字段也200。后续人员Windows使用Number(value||0)。本次没有单独执行结束偏移空值，不能据源码把它写成已经跑过的第二例。
+预期：启用明确窗口缺关键边界，应保留草稿可修正并在保存/启用前原子阻断，不能隐式0。显式输入0仍应允许。影响：用户清空参与起点会被当作从工序开始参加，可能增加占用或改变可行性，而界面声称保存成功；不满足Issue3§5/§9及N03。人数/所需技能/释放的部分空值确有400保护，不能概括成所有缺值都失效。
+证据：emptyOffset含200响应及前后hash；independent-empty-offset.png；API和前台两项N03断言。不是声称这一宽松行为全由本提交首次引入。
+
+D03（中影响；本提交新增守卫过宽）未到生效时间仍拒绝合法执行事实。
+位置：src/lib/resource-policies.mjs:21。guard只看规则是否启用，不判断生效时间/实际采用。
+复现：合法工具/声明、MOLD=是且生效时间2099-01-01T00:00:00Z（可成功保存）；直接真实POST /api/inputs新增A/MIX已开始事实（开始0/观测0/完成数量0/剩余30/当前MIX01）。返回400，原因“原始工装/人员占用事实未建模”。独立validateInputs只有这一项错误；完整business文件原字节保留。该待生效规则的独立计算确不产生工装账。
+预期：未采用资源约束时不得仅因配置存在而误拦合法事实；实际采用资源且缺原始账时应明示阻断及精确补数要求。影响：待生效配置会阻止原本可用的执行录入/新试算准备，是基线执行事实路径的额外限制。
+证据：supplement-results.json.futureExecution含实际400和原子性hash，independent-results.json.executionGuard包含活动/2099两种校验对照。
+
+四、批准范围与Dev有限模型的判断
+A. 单连续工装窗口：已实现整工序和由真实工序边界偏移定义的一个明确窗口，两者互斥；这满足了核心“整段 vs 明确窗口”的已测切片。Issue3没有一句明确要求同工装不连续多段，所以不能仅据这一限制杜撰已批准多段功能的实现缺陷。另一方面，原矩阵要求重叠/独立需求有身份和清晰处理；当前同订单/工序/资源直接禁止第二条，不支持多个不连续窗口。该限制已在界面/API和Issue留痕，不是可保存假生效；但只能据此接受单窗口切片，不能把全部阶段组合标完成。T09在公开拒绝契约内PASS，不等于多段能力PASS。STORAGE与MOLD共用新增窗口策略，本次未独立覆盖空间所有旧规则组合，空间全验不在结论内。
+B. 已执行任务缺原始资源账：不把窗口锚点套到剩余工时、不猜现场事实是正确防错方向；但“禁止整个组合”不是用户对带执行事实的新运行参数能力已验收。CR未批准将核心应用范围统一缩到未开始任务，原基线已有执行事实/剩余工时。Dev评论可以提交设计限制，不能单方面等同范围变更批准。应由Design在原Issue记录未完成范围及待确定的原始资源账契约；不得自行开平行卡或以限制文字关闭本CR。D03是即使在其限制内也额外误拦待生效规则的实际问题。
+C. 候选竞争S06：独立底层allocatePersonnel的已知可行例，组A=1人技能A、组B=1人技能B、显式A→B；同时R1需B、R2需A。B后A的输入先把A给R1，随后R2返回“无足够人员”；反序返回A供A、B供B成功。证据candidate.x/y完整保留。没有要求全局最优，这个两需求小例已有可行解。
+但当前业务表/API要求依赖显式绑定单组，不能表达候选{A,B}，空组会被拒绝。故本结果是底层算法失败加本矩阵要求的产品能力/兼容设计缺口；未复现“前台合法候选输入导致Worker假缺员”，不能如此宣传。保留原显式组行为本身不是回归；Dev“不自动跨组优化”不能直接消除先前C06和本次明确要求的小规模可行性案例。Design需在原Issue处理这一未满足条件。
+D. 同池独立同技能岗位P08：同组同技能同订单不同阶段都被合并max。独立测试两个同时各2人的不同阶段，池2仍排1个任务。按Dev明确“阶段=同角色”这一限定，max是其自洽行为，因此不把“改阶段名”冒称已配置独立岗位后发生扣账Bug。真正缺口是没有角色/需求身份可区分独立同技能岗位，且不能表达后原子拒绝这一业务意图；让用户改成不同物理池会改变容量事实，不能作为解决方法。独立需求应加、重复覆盖应去重或拒绝这一原矩阵契约未闭合。
+E. 跨组池和多班：UI声明每个组编号就是一个真实池，组只有单可用期/班次。同组多技能统一扣人数已通过；但G1/G2如果现实同池或相邻班交接，无规范身份可配置，也未做不支持别名组合的独立服务端证据。P06/P10不可执行，不作为PASS；名字相同也不等于已经证明同物理池，不据此制造容量翻倍的实现缺陷。
+
+五、原基线参数与CR增量
+父pin已有：tools可用数量/每任务需求/提前后延及适用任务；表23逐生产批资源声明、固定整段占用和数量/偏移；人员组人数/技能/单班次可用区间；单人员连续窗口偏移；权限、revision、审计、CSV原子保存、Worker冻结及历史保护。基线很多数据字段已存在，本轮不能将它们全部计为CR新功能。
+本提交新增或改变：声明参数来源互斥继承、明确窗口与工具可用期；人员多阶段稳定行身份、窗口外释放及同角色max合并；有向替代表29与精确工序禁止覆盖；规则参数版本CR-DEC02-03-v1、政策版本散列；新资源检查器、中文预览与当前CSV契约；执行事实guard。
+Dev迁移为旧声明逐项、偏移0，旧人员释放是，工装可用期[0,525600)，无替代关系。独立迁移幂等且源不改；中文可见“仿真初始值/待确认”，所以没有发现UI把它们冒充用户签字。但这些仍是Dev兼容建议，不是批准的现场数值；未验证全部迁移故障/重启回滚，不对其全量验收背书。旧LABOR关闭时的内在依赖保护保留，不能把关规则误写为所有人员约束解除。
+
+六、受影响回归与证据边界
+1. 从pin源码在独立容器复跑选定Dev/既有测试65/65通过：qa/dec0203.test.mjs、raw01.test.mjs、fr014015.test.mjs、confirmation.test.mjs、fr036-contract.test.mjs、condition-trials.test.mjs、resource-load.test.mjs。这是辅助相关回归，不是独立前台48项通过数，不把Dev脚本8项结果变成本轮独立验收的替代。
+2. 新独立脚本21组：15个满足断言、6个失败；补充8组：6个满足、2个失败。这些失败中包含相同D02的API/UI两次观测、无冻结输入诊断与范围能力问题；不当作8个新缺陷，也不直接映射成48项统计。
+3. Test自行从git父树取字节，复核Dev保护清单的34个文件：FR016有限QA/docs、RAW01原始/更正样例与保护逻辑、CsvBatchPanel与csv-draft相关文件均等同父pin且散列匹配，independent-preservation.json逐件列出。没有重跑旧FR016大套、追写旧pin通过或重累计RAW01修复次数。
+4. 额外调用旧qa/fr016-check.mjs与qa/raw01-check.mjs，均停在public/fr036/matrix.json旧全树hash：原612e9b…，现166d71…；该文件本次因新列/关系表有意变化，当前FR036实际契约测试通过。旧文件/证书本身完整保存；不能把旧pin全树保护脚本拿到新功能提交必过作为前提，也不能把这两次退出1写为产品构建失败或34文件保护失败。日志原样保留。
+5. 第一版独立夹具遗漏MOLD要求的参数JSON，被真实服务端400拒绝；已补成明确CR-v1而非修改产品。diagnostic-*单列，不纳入最终缺陷或通过数。确认历史全量证据补录首次遗漏install辅助函数（diagnostic-history-*），修正仅测试脚本后单项复跑通过，history-results.json保留全量对象和四类hash；不算产品缺陷或新业务覆盖。最终脚本故意收集每项失败后继续，退出0仅表示采集完成，真实结论必须读results.json的PASS/FAIL，绝不称全绿。
+6. 仍未执行：完整Portal SSO/签名身份、业务UAT、全体基线验收；P06/P10无法表达；其他18项PARTIAL中的字段/组合/UI/Worker/迁移/竞态限制逐行可见。不以剩余限制静默缩小用户批准范围。
+
+七、复现命令与交付索引
+在APS-Test工作区根目录执行（无GitHub写入）：
+git clone --no-checkout https://github.com/huiliangtao666/APS.git temp/dec0203-independent
+git -C temp/dec0203-independent fetch origin 0d2de88b70b15c555f6d005c0e4d94674e160cdf
+git -C temp/dec0203-independent checkout --detach 0d2de88b70b15c555f6d005c0e4d94674e160cdf
+git -C temp/dec0203-independent ls-remote origin refs/heads/feat/fr-013-016-main-batch
+.codex/skills/workspace-app-builder/scripts/app-exec.sh --validate --mode standalone --cwd /workspace/temp/dec0203-independent --timeout-ms 240000 'npm ci && npm run build'
+bash temp/dec0203-evidence/run-independent.sh
+bash temp/dec0203-evidence/run-supplement.sh
+bash temp/dec0203-evidence/run-history.sh
+复跑目录须在temp/隔离使用；脚本只写/evidence与一次性容器，镜像需已备。ZIP内含三份launcher和独立脚本、provenance、完整API/Worker冻结原始结果/检查器负例、4张独立截图、构建/测试日志、保护清单、Issue最新快照、契约/原矩阵副本和本轮逐项结果。解压后路径按上述temp/dec0203-evidence放置；不要覆盖产品源码。
+
+独立报告：DEC02-03-0d2de88-INDEPENDENT-REPORT.txt
+48项结果：DEC02-03-0d2de88-INDEPENDENT-48-RESULTS.csv
+证据包：DEC02-03-0d2de88-INDEPENDENT-EVIDENCE.zip
+散列：DEC02-03-0d2de88-INDEPENDENT-SHA256.json

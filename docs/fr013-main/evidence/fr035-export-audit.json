@@ -1,0 +1,236 @@
+[
+  {
+    "id": "5b3df712-241b-4de0-9752-f0c43061a099",
+    "action": "export",
+    "target": "c76a0336-1185-4547-ac4e-05e4f6ad1308",
+    "actor": "fr033-test#synthetic-planner",
+    "role": "planner",
+    "at": "2026-10-29T00:55:59.296Z",
+    "reason": "FR035 真实应用下载比对",
+    "requestId": "fr033-disposable",
+    "query": {
+      "planId": "c76a0336-1185-4547-ac4e-05e4f6ad1308",
+      "kind": "orders",
+      "text": "",
+      "order": "",
+      "start": 0,
+      "end": 120
+    },
+    "viewId": "775db04818c521bcdc0527daab42c53e73cda953068a5193cfa0bc78c514683b",
+    "inputVersionId": "54089689bd73f85237d1d045b632b15f84ed2669f839f33aaaeb25454668cba6",
+    "snapshotHash": "04e4b062aa0eff6af4349cba8bacfc179a500919eb6327678b61b8ee7e6bdf4a"
+  },
+  {
+    "id": "a2cc6889-699f-4059-b74e-c3bb14bd5a52",
+    "action": "export",
+    "target": "c76a0336-1185-4547-ac4e-05e4f6ad1308",
+    "actor": "fr033-test#synthetic-planner",
+    "role": "planner",
+    "at": "2026-10-29T00:55:59.445Z",
+    "reason": "FR035 真实应用下载比对",
+    "requestId": "fr033-disposable",
+    "query": {
+      "planId": "c76a0336-1185-4547-ac4e-05e4f6ad1308",
+      "kind": "tasks",
+      "text": "",
+      "order": "",
+      "start": 0,
+      "end": 120
+    },
+    "viewId": "05e7b9dc33f5a03f625a5a926fd813b13cf700eacf04db2b27d7e02189fcdc64",
+    "inputVersionId": "54089689bd73f85237d1d045b632b15f84ed2669f839f33aaaeb25454668cba6",
+    "snapshotHash": "04e4b062aa0eff6af4349cba8bacfc179a500919eb6327678b61b8ee7e6bdf4a"
+  },
+  {
+    "id": "f1f33409-8a9c-4003-a048-7107c116c611",
+    "action": "export",
+    "target": "c76a0336-1185-4547-ac4e-05e4f6ad1308",
+    "actor": "fr033-test#synthetic-planner",
+    "role": "planner",
+    "at": "2026-10-29T00:55:59.593Z",
+    "reason": "FR035 真实应用下载比对",
+    "requestId": "fr033-disposable",
+    "query": {
+      "planId": "c76a0336-1185-4547-ac4e-05e4f6ad1308",
+      "kind": "occupation",
+      "text": "",
+      "order": "",
+      "start": 0,
+      "end": 120
+    },
+    "viewId": "b318342846689797d606ee958748a49d4aa9e82fe85aa17ff62d185ac7bf9805",
+    "inputVersionId": "54089689bd73f85237d1d045b632b15f84ed2669f839f33aaaeb25454668cba6",
+    "snapshotHash": "04e4b062aa0eff6af4349cba8bacfc179a500919eb6327678b61b8ee7e6bdf4a"
+  },
+  {
+    "id": "41fb03c4-8ebc-44c6-bb0d-ba52ae6befab",
+    "action": "export",
+    "target": "0f26ba3a-78e4-4a78-8978-c741bae5770a",
+    "actor": "fr033-test#synthetic-planner",
+    "role": "planner",
+    "at": "2026-10-29T00:55:59.744Z",
+    "reason": "FR035 真实应用下载比对",
+    "requestId": "fr033-disposable",
+    "query": {
+      "planId": "0f26ba3a-78e4-4a78-8978-c741bae5770a",
+      "kind": "materials",
+      "text": "",
+      "order": "",
+      "start": 0,
+      "end": 120
+    },
+    "viewId": "4940202d976ee79992c3bf5575aec5ba0557f74a05186f10f098df0b24e6db8a",
+    "inputVersionId": "299677bf822fe470484031edd7dde71007594866976112d0aa8b95d104928fe6",
+    "snapshotHash": "251b8f8d31472251442f02a429f78bea2c434413387c57e0bc25ce0013460edc"
+  },
+  {
+    "id": "85b0d4f6-4fca-494b-8588-552b27ef33ec",
+    "action": "export",
+    "target": "0f26ba3a-78e4-4a78-8978-c741bae5770a",
+    "actor": "fr033-test#synthetic-planner",
+    "role": "planner",
+    "at": "2026-10-29T00:55:59.876Z",
+    "reason": "FR035 真实应用下载比对",
+    "requestId": "fr033-disposable",
+    "query": {
+      "planId": "0f26ba3a-78e4-4a78-8978-c741bae5770a",
+      "kind": "unplanned",
+      "text": "",
+      "order": "",
+      "start": 0,
+      "end": 120
+    },
+    "viewId": "579e965edf856dc2133f21bba4240cce912e74ae0ad7316b1de2da7c9a9dbaef",
+    "inputVersionId": "299677bf822fe470484031edd7dde71007594866976112d0aa8b95d104928fe6",
+    "snapshotHash": "251b8f8d31472251442f02a429f78bea2c434413387c57e0bc25ce0013460edc"
+  },
+  {
+    "id": "57b52724-b3d4-47f4-8768-60b0d46169bb",
+    "action": "export",
+    "target": "c76a0336-1185-4547-ac4e-05e4f6ad1308",
+    "actor": "fr033-test#synthetic-planner",
+    "role": "planner",
+    "at": "2026-10-29T00:56:00.027Z",
+    "reason": "FR035 真实应用下载比对",
+    "requestId": "fr033-disposable",
+    "query": {
+      "planId": "c76a0336-1185-4547-ac4e-05e4f6ad1308",
+      "kind": "differences",
+      "otherPlanId": "663f889f-0a2a-44f7-aaf6-5fa9348131b3",
+      "text": "",
+      "order": "",
+      "start": 0,
+      "end": 120
+    },
+    "viewId": "e9bc697ccf13f881b7a87d9d4b8cf075c4f7d6fac71e34580f83b67d8e5fdc4a",
+    "inputVersionId": "54089689bd73f85237d1d045b632b15f84ed2669f839f33aaaeb25454668cba6",
+    "snapshotHash": "04e4b062aa0eff6af4349cba8bacfc179a500919eb6327678b61b8ee7e6bdf4a"
+  },
+  {
+    "id": "008451e0-2ff4-49b2-a32d-47db8fd6a13c",
+    "action": "export",
+    "target": "c76a0336-1185-4547-ac4e-05e4f6ad1308",
+    "actor": "fr033-test#synthetic-planner",
+    "role": "planner",
+    "at": "2026-10-29T00:56:00.224Z",
+    "reason": "FR035 真实应用下载比对",
+    "requestId": "fr033-disposable",
+    "query": {
+      "planId": "c76a0336-1185-4547-ac4e-05e4f6ad1308",
+      "kind": "tasks",
+      "text": "",
+      "order": "A",
+      "start": 0,
+      "end": 30
+    },
+    "viewId": "9e347f9d9789ab035500b965b7a26b0109b99748e7953896c942be2971c8371e",
+    "inputVersionId": "54089689bd73f85237d1d045b632b15f84ed2669f839f33aaaeb25454668cba6",
+    "snapshotHash": "04e4b062aa0eff6af4349cba8bacfc179a500919eb6327678b61b8ee7e6bdf4a"
+  },
+  {
+    "id": "a363d09b-b6c3-41ed-b240-7bcbfaafa786",
+    "action": "export",
+    "target": "c76a0336-1185-4547-ac4e-05e4f6ad1308",
+    "actor": "fr033-test#synthetic-planner",
+    "role": "planner",
+    "at": "2026-10-29T00:56:00.411Z",
+    "reason": "FR035 真实应用下载比对",
+    "requestId": "fr033-disposable",
+    "query": {
+      "planId": "c76a0336-1185-4547-ac4e-05e4f6ad1308",
+      "kind": "differences",
+      "otherPlanId": "663f889f-0a2a-44f7-aaf6-5fa9348131b3",
+      "text": "",
+      "order": "A",
+      "start": 0,
+      "end": 120
+    },
+    "viewId": "ab01f4063e81934917968d81f0c27f2a1ecccaf6683987a98ed7fb638263bf03",
+    "inputVersionId": "54089689bd73f85237d1d045b632b15f84ed2669f839f33aaaeb25454668cba6",
+    "snapshotHash": "04e4b062aa0eff6af4349cba8bacfc179a500919eb6327678b61b8ee7e6bdf4a"
+  },
+  {
+    "id": "73462d2a-7d1b-4f5b-a4f6-bf78b9dc3301",
+    "action": "export",
+    "target": "663f889f-0a2a-44f7-aaf6-5fa9348131b3",
+    "actor": "fr033-test#synthetic-planner",
+    "role": "planner",
+    "at": "2026-10-29T00:56:00.696Z",
+    "reason": "FR035 真实应用下载比对",
+    "requestId": "fr033-disposable",
+    "query": {
+      "planId": "663f889f-0a2a-44f7-aaf6-5fa9348131b3",
+      "kind": "differences",
+      "otherPlanId": "c76a0336-1185-4547-ac4e-05e4f6ad1308",
+      "text": "",
+      "order": "A",
+      "start": 0,
+      "end": 120
+    },
+    "viewId": "79f1808d554319b0ef684957d2ecb757a8c2b0f582be7a0df668a4fd531b72d6",
+    "inputVersionId": "f7b272f12522a970868173e7ed4042244ff44475aff097f25dda15752c880dcc",
+    "snapshotHash": "d34ab9de05e4a6a9ef46c8ae4e431704013642e08cef23d57e3d68f0b54c737a"
+  },
+  {
+    "id": "4df3b615-b754-4f80-97cd-d92ca4dadae5",
+    "action": "export",
+    "target": "663f889f-0a2a-44f7-aaf6-5fa9348131b3",
+    "actor": "fr033-test#synthetic-planner",
+    "role": "planner",
+    "at": "2026-10-29T00:56:01.098Z",
+    "reason": "FR035 browser/API scope acceptance",
+    "requestId": "fr033-disposable",
+    "query": {
+      "planId": "663f889f-0a2a-44f7-aaf6-5fa9348131b3",
+      "kind": "tasks",
+      "text": "",
+      "order": "",
+      "start": 0,
+      "end": 120
+    },
+    "viewId": "22745c23d5fe8750dc7e03d439310d241dd178d9a5c809bc814609ca078d53c5",
+    "inputVersionId": "f7b272f12522a970868173e7ed4042244ff44475aff097f25dda15752c880dcc",
+    "snapshotHash": "d34ab9de05e4a6a9ef46c8ae4e431704013642e08cef23d57e3d68f0b54c737a"
+  },
+  {
+    "id": "fe391109-e6f3-4c7a-b22f-95b961b06d03",
+    "action": "export",
+    "target": "c76a0336-1185-4547-ac4e-05e4f6ad1308",
+    "actor": "fr033-test#synthetic-planner",
+    "role": "query",
+    "at": "2026-10-29T00:56:01.170Z",
+    "reason": "FR035 browser/API scope acceptance",
+    "requestId": "fr033-disposable",
+    "query": {
+      "planId": "c76a0336-1185-4547-ac4e-05e4f6ad1308",
+      "kind": "orders",
+      "text": "",
+      "order": "",
+      "start": 0,
+      "end": 120
+    },
+    "viewId": "775db04818c521bcdc0527daab42c53e73cda953068a5193cfa0bc78c514683b",
+    "inputVersionId": "54089689bd73f85237d1d045b632b15f84ed2669f839f33aaaeb25454668cba6",
+    "snapshotHash": "04e4b062aa0eff6af4349cba8bacfc179a500919eb6327678b61b8ee7e6bdf4a"
+  }
+]

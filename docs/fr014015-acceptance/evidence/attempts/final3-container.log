@@ -1,0 +1,485 @@
+FR014015_SOURCE_PASS 239
+FR014015_PRESERVED_PASS 231
+PASS canonical
+1..88
+# tests 124
+# suites 7
+# pass 124
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6720.87931
+PASS business
+1..164
+# tests 164
+# suites 0
+# pass 164
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2616.242933
+PASS query
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 58.55124
+PASS csv
+CSV validation regression checks passed: valid six-table batch + CSV-DEF-01..04.
+PASS build
+✓ built in 1.25s
+
+  dist/server.mjs  412.2kb
+
+⚡ Done in 13ms
+
+  dist/calculation-worker.mjs  214.7kb
+
+⚡ Done in 6ms
+PASS worker
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 385.713981
+PASS bundle-run-panel
+
+  .qa-run-panel.cjs  21.8kb
+
+⚡ Done in 2ms
+PASS run-panel
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 63.195706
+PASS bundle-editor-interaction
+
+  .qa-editor-interaction.cjs  351.1kb
+
+⚡ Done in 11ms
+PASS editor-interaction
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 134.290521
+PASS bundle-resource-panel
+
+  .qa-resource-panel.cjs  6.2kb
+
+⚡ Done in 2ms
+PASS resource-panel
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 47.241989
+PASS bundle-delivery-panel
+
+  .qa-delivery-panel.cjs  230.2kb
+
+⚡ Done in 7ms
+PASS delivery-panel
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 76.093654
+PASS bundle-result-panel
+
+  .qa-result-panel.cjs  62.0kb
+
+⚡ Done in 4ms
+PASS result-panel
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 53.29432
+PASS bundle-trial-panel
+
+  .qa-trial-panel.cjs  82.3kb
+
+⚡ Done in 3ms
+PASS trial-panel
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 91.782165
+PASS bundle-confirmation-panel
+
+  .qa-confirmation-panel.cjs  16.9kb
+
+⚡ Done in 1ms
+PASS confirmation-panel
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 68.061837
+PASS bundle-execution-panel
+
+  .qa-execution-panel.cjs  68.9kb
+
+⚡ Done in 5ms
+PASS execution-panel
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 73.240133
+PASS bundle-timeline-panel
+
+  .qa-timeline-panel.cjs  59.2kb
+
+⚡ Done in 4ms
+PASS timeline-panel
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 163.476517
+PASS bundle-task-linkage-panel
+
+  .qa-task-linkage-panel.cjs  21.1kb
+
+⚡ Done in 2ms
+PASS task-linkage-panel
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 51.576833
+PASS bundle-load-panel
+
+  .qa-load-panel.cjs  43.4kb
+
+⚡ Done in 6ms
+PASS load-panel
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 67.040261
+PASS run-history
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1210.506262
+PASS scoped-report
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 146.681472
+vite v5.4.21 building for production...
+transforming...
+✓ 79 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../tmp/fr033-real-app-K96G7i/dist/index.html                   0.71 kB │ gzip:   0.51 kB
+../../../tmp/fr033-real-app-K96G7i/dist/assets/index-BoO1gSfU.css   20.30 kB │ gzip:   5.51 kB
+../../../tmp/fr033-real-app-K96G7i/dist/assets/index-BToCnjgv.js   336.43 kB │ gzip: 124.70 kB
+✓ built in 1.26s
+{"action":"export","decision":"deny","requestId":"fr033-disposable","actor":"fr033-test#synthetic-planner"}
+{"action":"export","decision":"deny","requestId":"fr033-disposable","actor":"fr033-test#synthetic-planner"}
+{"at":"2026-10-29T01:15:24.932Z","action":"deny","requestId":"fr033-disposable","actor":"user","reason":"membership_required"}
+{"at":"2026-10-29T01:15:24.939Z","action":"deny","requestId":"fr033-disposable","actor":"user","reason":"membership_required"}
+FR035_BROWSER_PASS 13 groups / 8 downloadable byte comparisons
+{"action":"edit","decision":"deny","requestId":"independent-FR034","actor":"test#query"}
+FR035_CONFIRMED_HISTORY_PASS 5 groups; includes preserved original19 responses plus report requests
+vite v5.4.21 building for production...
+transforming...
+✓ 79 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../tmp/fr033-real-app-LdEuT9/dist/index.html                   0.71 kB │ gzip:   0.51 kB
+../../../tmp/fr033-real-app-LdEuT9/dist/assets/index-BoO1gSfU.css   20.30 kB │ gzip:   5.51 kB
+../../../tmp/fr033-real-app-LdEuT9/dist/assets/index-BToCnjgv.js   336.43 kB │ gzip: 124.70 kB
+✓ built in 1.17s
+FR038_BROWSER_PASS 6 groups
+vite v5.4.21 building for production...
+transforming...
+✓ 79 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../tmp/fr033-real-app-BNFeNZ/dist/index.html                   0.71 kB │ gzip:   0.51 kB
+../../../tmp/fr033-real-app-BNFeNZ/dist/assets/index-BoO1gSfU.css   20.30 kB │ gzip:   5.51 kB
+../../../tmp/fr033-real-app-BNFeNZ/dist/assets/index-BToCnjgv.js   336.43 kB │ gzip: 124.70 kB
+✓ built in 1.31s
+vite v5.4.21 building for production...
+transforming...
+✓ 79 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../tmp/fr027-FYXfAf/dist/index.html                   0.45 kB │ gzip:   0.30 kB
+../../../tmp/fr027-FYXfAf/dist/assets/index-BoO1gSfU.css   20.30 kB │ gzip:   5.51 kB
+../../../tmp/fr027-FYXfAf/dist/assets/index-BToCnjgv.js   336.43 kB │ gzip: 124.70 kB
+✓ built in 1.32s
+{"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test#query"}
+FR027_BROWSER_PASS 7 groups
+vite v5.4.21 building for production...
+transforming...
+✓ 79 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../tmp/fr027-yxdto7/dist/index.html                   0.45 kB │ gzip:   0.30 kB
+../../../tmp/fr027-yxdto7/dist/assets/index-BoO1gSfU.css   20.30 kB │ gzip:   5.51 kB
+../../../tmp/fr027-yxdto7/dist/assets/index-BToCnjgv.js   336.43 kB │ gzip: 124.70 kB
+✓ built in 1.28s
+FR013_MAIN_BROWSER_PASS 9 groups
+FR013_MAIN_ATOMIC_PASS 13 byte proofs
+vite v5.4.21 building for production...
+transforming...
+✓ 79 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../tmp/fr027-pHFZph/dist/index.html                   0.45 kB │ gzip:   0.30 kB
+../../../tmp/fr027-pHFZph/dist/assets/index-BoO1gSfU.css   20.30 kB │ gzip:   5.51 kB
+../../../tmp/fr027-pHFZph/dist/assets/index-BToCnjgv.js   336.43 kB │ gzip: 124.70 kB
+✓ built in 1.20s
+PASS actual UI calculate, independent verify, planner submit and supervisor confirm (no confirmed fixtures)
+PASS 20 configuration categories: real edit/save and duplicate-copy rejection preserve confirmed plan/input/confirmation bytes
+PASS material master, tool and inventory positive add/copy/allowed delete use actual main editor
+PASS allowed current deletion of an original confirmed-plan machine creates a new revision, preserving the original machine and task
+PASS cross-category invalid save is atomic; keyboard error link switches table and focuses exact source field
+PASS browser reference, unit, impossible-date guards reject all writes; no-op saves keep persisted bytes unchanged
+PASS browser referenced deletion is rejected; stale draft cannot overwrite a concurrent saved revision
+PASS nontrivial cumulative execution updates and immutable sources/events: actual edit/delete guards and historical bytes
+PASS execution references cannot be rebased by changing machine/master data; structured source mapping visible without raw JSON
+PASS all24 populated categories: list, positive/negative applicable filters, keyboard detail/related navigation and actual CSV downloads
+PASS material allocation navigation keeps saved plan provenance; genuine confirmed snapshot retains original inputs after edits
+{"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test#query"}
+{"action":"export","decision":"deny","requestId":"fr027-synthetic","actor":"test#query"}
+{"at":"2026-10-29T01:16:06.678Z","action":"member.export","requestId":"fr027-synthetic","actor":"user","target":"test#query","canExport":true}
+{"at":"2026-10-29T01:16:06.876Z","action":"member.export","requestId":"fr027-synthetic","actor":"user","target":"test#query","canExport":false}
+{"action":"export","decision":"deny","requestId":"fr027-synthetic","actor":"test#query"}
+{"at":"2026-10-29T01:16:06.886Z","action":"member.remove","requestId":"fr027-synthetic","actor":"user","target":"test#query"}
+{"at":"2026-10-29T01:16:06.889Z","action":"deny","requestId":"fr027-synthetic","actor":"user","reason":"membership_required"}
+PASS query role read-only; explicit export grant/revoke, role spoof, member removal and audit trusted actor
+FR014015_BROWSER_PASS 13 groups, 24 category entries
+FR014015_SOURCE_PASS 239
+FR014015_PRESERVED_PASS 231
+{
+  "base": "c8aeb9283776207853efbdb0c5ea8b3eb09ab039",
+  "node": "v22.23.2",
+  "tap": [
+    {
+      "file": "business.log",
+      "passed": 164,
+      "failed": 0
+    },
+    {
+      "file": "canonical.log",
+      "passed": 214,
+      "failed": 0
+    },
+    {
+      "file": "confirmation-panel.log",
+      "passed": 4,
+      "failed": 0
+    },
+    {
+      "file": "delivery-panel.log",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "file": "editor-interaction.log",
+      "passed": 10,
+      "failed": 0
+    },
+    {
+      "file": "execution-panel.log",
+      "passed": 7,
+      "failed": 0
+    },
+    {
+      "file": "fr013-main.log",
+      "passed": 10,
+      "failed": 0
+    },
+    {
+      "file": "fr014015-panel.log",
+      "passed": 2,
+      "failed": 0
+    },
+    {
+      "file": "fr014015.log",
+      "passed": 4,
+      "failed": 0
+    },
+    {
+      "file": "fr027.log",
+      "passed": 17,
+      "failed": 0
+    },
+    {
+      "file": "fr036-contract.log",
+      "passed": 8,
+      "failed": 0
+    },
+    {
+      "file": "load-panel.log",
+      "passed": 3,
+      "failed": 0
+    },
+    {
+      "file": "query.log",
+      "passed": 5,
+      "failed": 0
+    },
+    {
+      "file": "resource-panel.log",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "file": "result-panel.log",
+      "passed": 3,
+      "failed": 0
+    },
+    {
+      "file": "run-history.log",
+      "passed": 8,
+      "failed": 0
+    },
+    {
+      "file": "run-panel.log",
+      "passed": 2,
+      "failed": 0
+    },
+    {
+      "file": "scoped-report.log",
+      "passed": 7,
+      "failed": 0
+    },
+    {
+      "file": "task-linkage-panel.log",
+      "passed": 2,
+      "failed": 0
+    },
+    {
+      "file": "timeline-panel.log",
+      "passed": 13,
+      "failed": 0
+    },
+    {
+      "file": "trial-panel.log",
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "file": "worker.log",
+      "passed": 9,
+      "failed": 0
+    }
+  ],
+  "totalPassed": 500,
+  "totalFailed": 0,
+  "browsers": [
+    {
+      "file": "fr035-browser-report.json",
+      "groups": 13,
+      "sha256": "4f818553a2ecef837d2f227e709163de174a3cb27343b27344b22caf61d4c8c9"
+    },
+    {
+      "file": "fr035-confirmed-api-report.json",
+      "groups": 5,
+      "sha256": "0023dba0b02f682076b53a3202e485f0627802468f26a67248486c53b31b6df3"
+    },
+    {
+      "file": "fr038-browser-report.json",
+      "groups": 6,
+      "sha256": "7d9f995c1216b25403aaa67ed364f99c4c9ceae27994728d4e65ca5a4563943a"
+    },
+    {
+      "file": "fr036-browser-report.json",
+      "groups": 3,
+      "sha256": "a17651061e26ef45b547c9fcdd024350de9c901532f53d2085fbcc4286aa7c4c"
+    },
+    {
+      "file": "fr027-browser-report.json",
+      "groups": 7,
+      "sha256": "ed2da9e7cf85c5cbbd4faf085420f572ef10f1dc80c043909a21c9ba2ea0ce90"
+    },
+    {
+      "file": "fr013-main-browser-report.json",
+      "groups": 9,
+      "sha256": "eb278cc08b28141cec3e4c717fd5dbe69b0210f8117f253912544338d3bfbb9d"
+    },
+    {
+      "file": "fr014015-browser-report.json",
+      "groups": 13,
+      "sha256": "e41805622e639cfbc70871cb267ff2584fbffa67c829dec7d2b7daea97693a05"
+    }
+  ],
+  "build": "tests/build.log",
+  "csv": "tests/csv.log",
+  "sourceManifest": "qa/fr014015-source-sha256.json"
+}

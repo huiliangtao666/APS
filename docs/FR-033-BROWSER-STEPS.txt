@@ -1,0 +1,70 @@
+FR033 browser acceptance reproduction (same canonical card, no publication)
+
+Product source under test: 50a32ef716f4bcd3f72993a2f0125afac9fabce2.
+qa/browser-acceptance.tsx imports exact TimelinePanel, timetable, index.css.
+All fixture values are synthetic. This is a component browser harness, not a
+second app, integrated business run, signed identity test, or UAT replacement.
+It performs no business API request or persisted mutation. The problem button
+is an explicitly synthetic callback, not the actual integrated problem panel.
+
+From workspace root:
+  python3 apps/aps-fr033/scripts/fr033-browser-harness.py
+Build/install runs only via app-exec --validate; source/dependencies/output
+remain disposable. The script rejects product-source differences from pinned
+SHA. It emits three compressed chunks to avoid the exec output tail limit.
+Final output is FR-033-BROWSER-HARNESS.html (opens directly in a local browser).
+
+Authorized existing preview used for this delivery:
+  app id aps-r1; existing cwd /workspace/apps/aps-r1; service port 20820.
+  Copy only generated HTML to apps/aps-r1/public/fr033-acceptance/index.html.
+  bash .codex/skills/workspace-app-builder/scripts/app-restart.sh --dev
+  browser_navigate to the returned Agent Browser URL plus
+    fr033-acceptance/index.html
+Always take the origin/base from current helper output. Never construct the
+internal preview hostname, add credentials, change identity, or publish.
+This runtime required a dev restart to see new static files: before refresh,
+HTTP200 returned old aps-r1 SPA fallback, NOT the harness. Require harness title
+"FR033 browser acceptance 50a32ef" and visible full source SHA before testing.
+No production restart, binding change, dist change, or daemon action is needed.
+
+Browser sequence (1920x937, DPR1 in recorded run):
+1. Select zoom 0.25,1,3,8 in [aria-label="缩放"]. After EACH click #measure
+   and screenshot. SHORT[0,30) widths 7.5/30/90/240px; TINY[90,90.5)
+   widths 0.125/0.5/1.5/4px; axes30/120/360/960px. Compare getBoundingClientRect.
+2. Press Enter on .fr033-task[aria-label^="SHORT "]. Set end90; measure.
+   Set end1000000000000; measure, snapshot, screenshot. Alert in Chinese;
+   axis720px at zoom8, same two bars/table/details as accepted90. Enter120 to
+   recover; clear filters/window resets extent120 while keeping zoom8.
+3. Set end300; focus .fr033-scroll, ArrowRight then PageDown. Screenshot focus
+   ring; measure after motion settles. Recorded left40/top279. Click 向后滚动;
+   settle and measure left540/top279. Machine label x448 remains fixed.
+   The date axis scrolls vertically out of view; it is not a sticky header.
+4. Reset; machineN hides selectedSHORT with explicit message. Press Enter on
+   显示选中任务. SearchTINY/orderB gives TINY only; stateunplanned gives zero bars.
+   Reset. #problem Enter selects NEXT; this is a synthetic problem callback.
+5. From NEXT .fr033-detail > p:nth-of-type(2) button Enter selects SHORT.
+   .fr033-detail > button Enter reports exact saved orders/A/10 in #callback.
+   .fr033-detail summary Enter opens current-facts comparison. #change-facts
+   toggles9/999; measure before/after. Saved output4kg and all geometry and
+   frozen JSON remain unchanged. Screenshot details.
+6. Scroll .fr033 > details[open] for tooling/personnel/space layout. Table
+   keyboard selection: .fr033 > .table-wrap tbody tr:first-child button Enter.
+   Tab from search reaches zoom; Tab from zoom reaches window start. Screenshot
+   focus region and inspect focusTrace. Simulation30 shows non-factual labels.
+7. End240000 caps axis60000 and labels actual0.25/selected8. Native options
+   1/3/8 disabled. Reset restores axis960 at zoom8; cursor is separately set.
+
+Evidence:
+  #measure emits FR033-MEASUREMENT JSON to browser console and on-page log.
+  Read measurements.json, browser-actions.json, snapshots, console/network,
+  labelled actual browser screenshots and manifest from the evidence ZIP.
+  The measurement field "table" selects the resource table; task table
+  evidence is in DOM/accessibility snapshots and resource-timetable screenshot.
+  Two ambiguous locator attempts failed before input; corrected unique
+  selectors succeeded. Their failures remain in browser-actions.json.
+
+Observed low-zoom layout gap: full date labels overlap at1px/min and clip at
+0.25px/min, while task text intentionally clips on short bars. Table/date text
+is available separately. Do not call complete AC31/layout acceptance passed.
+Do not claim AC04/05/06/07 solver/integrated-UAT pass from synthetic display.
+Existing full validation: bash apps/aps-fr033/docs/FR-033-REPAIR-R1-validation-command.sh

@@ -1,0 +1,149 @@
+RUNTIME_PREFIX=/tmp/fr033-browser-runtime-6B1vhz uid=503 OS=Debian GNU/Linux 12 (bookworm) arch=aarch64
+Runtime prepared; task-scoped library/font/cache paths only.
+Downloading Chromium 141.0.7390.37 (playwright build v1194) from https://cdn.playwright.dev/dbazure/download/playwright/builds/chromium/1194/chromium-linux-arm64.zip
+|                                                                                |   0% of 175.9 MiB
+|■■■■■■■■                                                                        |  10% of 175.9 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 175.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 175.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 175.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 175.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 175.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 175.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 175.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 175.9 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 175.9 MiB
+Chromium 141.0.7390.37 (playwright build v1194) downloaded to /tmp/fr033-browser-runtime-6B1vhz/browsers/chromium-1194
+Downloading FFMPEG playwright build v1011 from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1011/ffmpeg-linux-arm64.zip
+|                                                                                |   0% of 1.6 MiB
+|■■■■■■■■                                                                        |  10% of 1.6 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 1.6 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 1.6 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 1.6 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 1.6 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 1.6 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 1.6 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 1.6 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 1.6 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 1.6 MiB
+FFMPEG playwright build v1011 downloaded to /tmp/fr033-browser-runtime-6B1vhz/browsers/ffmpeg-1011
+Downloading Chromium Headless Shell 141.0.7390.37 (playwright build v1194) from https://cdn.playwright.dev/dbazure/download/playwright/builds/chromium/1194/chromium-headless-shell-linux-arm64.zip
+|                                                                                |   0% of 106.1 MiB
+|■■■■■■■■                                                                        |  10% of 106.1 MiB
+|■■■■■■■■■■■■■■■■                                                                |  20% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 106.1 MiB
+|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 106.1 MiB
+Chromium Headless Shell 141.0.7390.37 (playwright build v1194) downloaded to /tmp/fr033-browser-runtime-6B1vhz/browsers/chromium_headless_shell-1194
+BROWSER_EXECUTABLE /tmp/fr033-browser-runtime-6B1vhz/browsers/chromium-1194/chrome-linux/chrome
+	linux-vdso.so.1 (0x0000ffff9779b000)
+	libdl.so.2 => /lib/aarch64-linux-gnu/libdl.so.2 (0x0000ffff88700000)
+	libpthread.so.0 => /lib/aarch64-linux-gnu/libpthread.so.0 (0x0000ffff886d0000)
+	libglib-2.0.so.0 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libglib-2.0.so.0 (0x0000ffff88570000)
+	libgobject-2.0.so.0 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libgobject-2.0.so.0 (0x0000ffff884f0000)
+	libnspr4.so => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libnspr4.so (0x0000ffff88490000)
+	libnss3.so => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libnss3.so (0x0000ffff88330000)
+	libnssutil3.so => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libnssutil3.so (0x0000ffff882e0000)
+	libsmime3.so => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libsmime3.so (0x0000ffff88290000)
+	libgio-2.0.so.0 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libgio-2.0.so.0 (0x0000ffff88080000)
+	libdbus-1.so.3 => /tmp/fr033-browser-runtime-6B1vhz/root/lib/aarch64-linux-gnu/libdbus-1.so.3 (0x0000ffff88000000)
+	libatk-1.0.so.0 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libatk-1.0.so.0 (0x0000ffff87fb0000)
+	libatk-bridge-2.0.so.0 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libatk-bridge-2.0.so.0 (0x0000ffff87f50000)
+	libcups.so.2 => not found
+	libexpat.so.1 => /tmp/fr033-browser-runtime-6B1vhz/root/lib/aarch64-linux-gnu/libexpat.so.1 (0x0000ffff87f00000)
+	libxcb.so.1 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libxcb.so.1 (0x0000ffff87eb0000)
+	libxkbcommon.so.0 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libxkbcommon.so.0 (0x0000ffff87e40000)
+	libatspi.so.0 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libatspi.so.0 (0x0000ffff87de0000)
+	libX11.so.6 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libX11.so.6 (0x0000ffff87c80000)
+	libXcomposite.so.1 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libXcomposite.so.1 (0x0000ffff87c60000)
+	libXdamage.so.1 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libXdamage.so.1 (0x0000ffff87c30000)
+	libXext.so.6 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libXext.so.6 (0x0000ffff87bf0000)
+	libXfixes.so.3 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libXfixes.so.3 (0x0000ffff87bc0000)
+	libXrandr.so.2 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libXrandr.so.2 (0x0000ffff87ba0000)
+	libgbm.so.1 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libgbm.so.1 (0x0000ffff87b70000)
+	libcairo.so.2 => not found
+	libpango-1.0.so.0 => not found
+	libudev.so.1 => /lib/aarch64-linux-gnu/libudev.so.1 (0x0000ffff87b20000)
+	libasound.so.2 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libasound.so.2 (0x0000ffff87a00000)
+	libm.so.6 => /lib/aarch64-linux-gnu/libm.so.6 (0x0000ffff87950000)
+	libgcc_s.so.1 => /lib/aarch64-linux-gnu/libgcc_s.so.1 (0x0000ffff87910000)
+	libc.so.6 => /lib/aarch64-linux-gnu/libc.so.6 (0x0000ffff87760000)
+	/lib/ld-linux-aarch64.so.1 (0x0000ffff97750000)
+	libpcre2-8.so.0 => /lib/aarch64-linux-gnu/libpcre2-8.so.0 (0x0000ffff876b0000)
+	libffi.so.8 => /lib/aarch64-linux-gnu/libffi.so.8 (0x0000ffff87680000)
+	libplc4.so => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libplc4.so (0x0000ffff87650000)
+	libplds4.so => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libplds4.so (0x0000ffff87620000)
+	libgmodule-2.0.so.0 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libgmodule-2.0.so.0 (0x0000ffff875f0000)
+	libz.so.1 => /lib/aarch64-linux-gnu/libz.so.1 (0x0000ffff875b0000)
+	libmount.so.1 => /lib/aarch64-linux-gnu/libmount.so.1 (0x0000ffff87520000)
+	libselinux.so.1 => /lib/aarch64-linux-gnu/libselinux.so.1 (0x0000ffff874d0000)
+	libsystemd.so.0 => /lib/aarch64-linux-gnu/libsystemd.so.0 (0x0000ffff873e0000)
+	libXau.so.6 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libXau.so.6 (0x0000ffff873c0000)
+	libXdmcp.so.6 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libXdmcp.so.6 (0x0000ffff873a0000)
+	libXi.so.6 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libXi.so.6 (0x0000ffff87370000)
+	libXrender.so.1 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libXrender.so.1 (0x0000ffff87350000)
+	libdrm.so.2 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libdrm.so.2 (0x0000ffff87310000)
+	libwayland-server.so.0 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libwayland-server.so.0 (0x0000ffff872d0000)
+	libblkid.so.1 => /lib/aarch64-linux-gnu/libblkid.so.1 (0x0000ffff87250000)
+	libcap.so.2 => /lib/aarch64-linux-gnu/libcap.so.2 (0x0000ffff87220000)
+	libgcrypt.so.20 => /lib/aarch64-linux-gnu/libgcrypt.so.20 (0x0000ffff87120000)
+	liblzma.so.5 => /lib/aarch64-linux-gnu/liblzma.so.5 (0x0000ffff870d0000)
+	libzstd.so.1 => /lib/aarch64-linux-gnu/libzstd.so.1 (0x0000ffff87010000)
+	liblz4.so.1 => /lib/aarch64-linux-gnu/liblz4.so.1 (0x0000ffff86fc0000)
+	libbsd.so.0 => /tmp/fr033-browser-runtime-6B1vhz/root/usr/lib/aarch64-linux-gnu/libbsd.so.0 (0x0000ffff86f80000)
+	libgpg-error.so.0 => /lib/aarch64-linux-gnu/libgpg-error.so.0 (0x0000ffff86f30000)
+	libmd.so.0 => /lib/aarch64-linux-gnu/libmd.so.0 (0x0000ffff86f00000)
+
+
+[validation] disposable source/dependencies/output; no publish or restart
+Playwright Host validation warning: 
+╔══════════════════════════════════════════════════════╗
+║ Host system is missing dependencies to run browsers. ║
+║ Please install them with the following command:      ║
+║                                                      ║
+║     sudo npx playwright install-deps                 ║
+║                                                      ║
+║ Alternatively, use apt:                              ║
+║     sudo apt-get install libcups2\                   ║
+║         libcairo2\                                   ║
+║         libpango-1.0-0                               ║
+║                                                      ║
+║ <3 Playwright Team                                   ║
+╚══════════════════════════════════════════════════════╝
+    at validateDependenciesLinux (/tmp/praetor-app-validate-PXvUbY/project/node_modules/playwright-core/lib/server/registry/dependencies.js:269:9)
+    at async Registry._validateHostRequirements (/tmp/praetor-app-validate-PXvUbY/project/node_modules/playwright-core/lib/server/registry/index.js:961:14)
+    at async Registry._validateHostRequirementsForExecutableIfNeeded (/tmp/praetor-app-validate-PXvUbY/project/node_modules/playwright-core/lib/server/registry/index.js:1083:7)
+    at async Registry.validateHostRequirementsForExecutablesIfNeeded (/tmp/praetor-app-validate-PXvUbY/project/node_modules/playwright-core/lib/server/registry/index.js:1072:7)
+    at async i.<anonymous> (/tmp/praetor-app-validate-PXvUbY/project/node_modules/playwright-core/lib/cli/program.js:217:7)
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+browserType.launch: Target page, context or browser has been closed
+Browser logs:
+Chromium sandboxing failed!
+================================
+To avoid the sandboxing issue, do either of the following:
+  - (preferred): Configure your environment to support sandboxing
+  - (alternative): Launch Chromium without sandbox using 'chromiumSandbox: false' option
+================================
+
+Call log:
+  - <launching> /tmp/fr033-browser-runtime-6B1vhz/browsers/chromium_headless_shell-1194/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --user-data-dir=/tmp/playwright_chromiumdev_profile-VRYibe --remote-debugging-pipe --no-startup-window
+  - <launched> pid=428
+  - [pid=428][err] [1028/220006.592857:FATAL:content/browser/zygote_host/zygote_host_impl_linux.cc:128] No usable sandbox! If you are running on Ubuntu 23.10+ or another Linux distro that has disabled unprivileged user namespaces with AppArmor, see https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md. Otherwise see https://chromium.googlesource.com/chromium/src/+/main/docs/linux/suid_sandbox_development.md for more information on developing with the (older) SUID sandbox. If you want to live dangerously and need an immediate workaround, you can try using --no-sandbox.
+  - [pid=428] <gracefully close start>
+  - [pid=428] <kill>
+  - [pid=428] <will force kill>
+  - [pid=428] <process did exit: exitCode=null, signal=SIGTRAP>
+  - [pid=428] starting temporary directories cleanup
+  - [pid=428] finished temporary directories cleanup
+  - [pid=428] <gracefully close end>
+
+    at /tmp/praetor-app-validate-PXvUbY/project/qa/fr033-browser-launch.mjs:7:30
+
+Node.js v22.23.2

@@ -5,3 +5,12 @@ dist/
 !.env.example
 .DS_Store
 .logs/
+
+# Managed-identity membership and FR-037 runtime records are never source.
+/server/data/auth/
+/server/data/business.json
+/server/data/business.json.*
+
+.qa-query-ui.cjs
+
+.qa-editor-ui.cjs

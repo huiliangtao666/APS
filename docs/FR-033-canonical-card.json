@@ -1,0 +1,8 @@
+{
+  "id": "PVTI_lAHOFM9WU84BpE1czhEHhB4",
+  "content": {
+    "id": "DI_lAHOFM9WU84BpE1czgLhAjM",
+    "title": "[FR] FR-033 机器甘特图与任务时间表",
+    "body": "## 需求\n范围：P0优先；关联流程：BP-05；页面：PG-04；开始提供：R1；完整提供：R5。\n前置功能：FR-018/019/024。\n• 机器为行、时间为轴展示任务，支持基本缩放、滚动、筛选和任务详情；显示订单/工序、计划时间及状态。\n• 逐阶段加入停机背景、前后工序连线、模具/人员/空间占用和模拟进度。颜色附文字说明，不能仅靠颜色理解问题。\n\n## 验收追踪\n验收用例：AC-04/05/06/07/17/31。\n\n来源：需求分析与设计说明书 v0.3，第 6 章；状态：基线需求，具体实现状态待跟踪。\n\n\n## Patrol delivery and immediate continuation\nOwner APS-Dev; delivery dlv_ad326f87-322e-4d0f-89cd-8ea519007666. Immediately assigned after FR030 completion; Dev idle no active/queued duplicate; open issues checked no confirmed unresolved product defect. FR018/019/024 supported source available in b09b3e2f50996aa01b6ec48f915c5f4e7d8f90e8. Original AC04/05/06/07/17/31 machine Gantt/timetable, zoom/scroll/filter/details, downtime/precedence/supported resource and simulated-progress labels assigned. Preserve currentfacts, immutable historical/confirmed snapshots and textual accessibility. Unsupported semantics unknown; no silent certification. Ordinary push/fullSHA/container tests/build/report/limits required; no parallel card.\n"
+  }
+}

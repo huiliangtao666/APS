@@ -1,0 +1,59 @@
+{
+  "name": "feat/fr-013-016-main-batch",
+  "commit": {
+    "sha": "0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+    "node_id": "C_kwDOVaKehNoAKDBhYWEwMDNkYzg1ZmY0NTNiYWQzYzk1OGIxNGE5NGM0NGRhZGIwY2Y",
+    "commit": {
+      "author": {
+        "name": "SG-CBB-MAC-1",
+        "email": "sg_cbb_mac_1@L-SGP010216.local",
+        "date": "2026-10-29T01:34:44Z"
+      },
+      "committer": {
+        "name": "SG-CBB-MAC-1",
+        "email": "sg_cbb_mac_1@L-SGP010216.local",
+        "date": "2026-10-29T01:34:44Z"
+      },
+      "message": "fix(FR-013): preserve raw newline spans across separated CSV corrections",
+      "tree": {
+        "sha": "72d0f351b05490bc77793fc5d1b46cdb5241ab0a",
+        "url": "https://api.github.com/repos/huiliangtao666/APS/git/trees/72d0f351b05490bc77793fc5d1b46cdb5241ab0a"
+      },
+      "url": "https://api.github.com/repos/huiliangtao666/APS/git/commits/0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/huiliangtao666/APS/commits/0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+    "html_url": "https://github.com/huiliangtao666/APS/commit/0aaa003dc85ff453bad3c958b14a94c44dadb0cf",
+    "comments_url": "https://api.github.com/repos/huiliangtao666/APS/commits/0aaa003dc85ff453bad3c958b14a94c44dadb0cf/comments",
+    "author": null,
+    "committer": null,
+    "parents": [
+      {
+        "sha": "f00e705572c6f034f3982ca236060fae2750b801",
+        "url": "https://api.github.com/repos/huiliangtao666/APS/commits/f00e705572c6f034f3982ca236060fae2750b801",
+        "html_url": "https://github.com/huiliangtao666/APS/commit/f00e705572c6f034f3982ca236060fae2750b801"
+      }
+    ]
+  },
+  "_links": {
+    "self": "https://api.github.com/repos/huiliangtao666/APS/branches/feat/fr-013-016-main-batch",
+    "html": "https://github.com/huiliangtao666/APS/tree/feat/fr-013-016-main-batch"
+  },
+  "protected": false,
+  "protection": {
+    "enabled": false,
+    "required_status_checks": {
+      "enforcement_level": "off",
+      "contexts": [],
+      "checks": []
+    }
+  },
+  "protection_url": "https://api.github.com/repos/huiliangtao666/APS/branches/feat/fr-013-016-main-batch/protection"
+}

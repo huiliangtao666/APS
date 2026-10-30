@@ -1,0 +1,21 @@
+
+> aps-r1@0.1.0 build
+> tsc --noEmit && vite build && npx esbuild server/index.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs && npx esbuild server/calculation-worker.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/calculation-worker.mjs
+
+vite v5.4.21 building for production...
+transforming...
+✓ 77 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.45 kB │ gzip:   0.30 kB
+dist/assets/index-CPKwIIVN.css   20.25 kB │ gzip:   5.50 kB
+dist/assets/index-1X8Q7ba2.js   318.73 kB │ gzip: 117.58 kB
+✓ built in 1.24s
+
+  dist/server.mjs  376.6kb
+
+⚡ Done in 14ms
+
+  dist/calculation-worker.mjs  209.8kb
+
+⚡ Done in 7ms

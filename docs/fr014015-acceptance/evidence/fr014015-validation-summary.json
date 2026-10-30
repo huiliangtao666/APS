@@ -1,0 +1,158 @@
+{
+  "base": "c8aeb9283776207853efbdb0c5ea8b3eb09ab039",
+  "node": "v22.23.2",
+  "tap": [
+    {
+      "file": "business.log",
+      "passed": 164,
+      "failed": 0
+    },
+    {
+      "file": "canonical.log",
+      "passed": 214,
+      "failed": 0
+    },
+    {
+      "file": "confirmation-panel.log",
+      "passed": 4,
+      "failed": 0
+    },
+    {
+      "file": "delivery-panel.log",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "file": "editor-interaction.log",
+      "passed": 10,
+      "failed": 0
+    },
+    {
+      "file": "execution-panel.log",
+      "passed": 7,
+      "failed": 0
+    },
+    {
+      "file": "fr013-main.log",
+      "passed": 10,
+      "failed": 0
+    },
+    {
+      "file": "fr014015-panel.log",
+      "passed": 3,
+      "failed": 0
+    },
+    {
+      "file": "fr014015.log",
+      "passed": 4,
+      "failed": 0
+    },
+    {
+      "file": "fr027.log",
+      "passed": 17,
+      "failed": 0
+    },
+    {
+      "file": "fr036-contract.log",
+      "passed": 8,
+      "failed": 0
+    },
+    {
+      "file": "load-panel.log",
+      "passed": 3,
+      "failed": 0
+    },
+    {
+      "file": "query.log",
+      "passed": 5,
+      "failed": 0
+    },
+    {
+      "file": "resource-panel.log",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "file": "result-panel.log",
+      "passed": 3,
+      "failed": 0
+    },
+    {
+      "file": "run-history.log",
+      "passed": 8,
+      "failed": 0
+    },
+    {
+      "file": "run-panel.log",
+      "passed": 2,
+      "failed": 0
+    },
+    {
+      "file": "scoped-report.log",
+      "passed": 7,
+      "failed": 0
+    },
+    {
+      "file": "task-linkage-panel.log",
+      "passed": 2,
+      "failed": 0
+    },
+    {
+      "file": "timeline-panel.log",
+      "passed": 13,
+      "failed": 0
+    },
+    {
+      "file": "trial-panel.log",
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "file": "worker.log",
+      "passed": 9,
+      "failed": 0
+    }
+  ],
+  "totalPassed": 501,
+  "totalFailed": 0,
+  "browsers": [
+    {
+      "file": "fr035-browser-report.json",
+      "groups": 13,
+      "sha256": "0fa3138974d8b5673ecd8cce016f152ff134c58a9fb995d27cb5c3de6d12b238"
+    },
+    {
+      "file": "fr035-confirmed-api-report.json",
+      "groups": 5,
+      "sha256": "49ef96c5f9975984b769c7f7894f8b15df90216791cf8ba525df4647b561cb62"
+    },
+    {
+      "file": "fr038-browser-report.json",
+      "groups": 6,
+      "sha256": "2d62dc3a0dfca09d5d816a9adfa120c75c8b40d5d43e850bfe95a695ddda1f5d"
+    },
+    {
+      "file": "fr036-browser-report.json",
+      "groups": 3,
+      "sha256": "9214b2b7249e4d23b2b4ea0c4035789f52fc2a8dbe89f7daeb78ab1ad13e4a85"
+    },
+    {
+      "file": "fr027-browser-report.json",
+      "groups": 7,
+      "sha256": "d1facc2d3aa2a4aced2a0af5904dffaa3fcc374848f4f2f7af29da1211038113"
+    },
+    {
+      "file": "fr013-main-browser-report.json",
+      "groups": 9,
+      "sha256": "eb278cc08b28141cec3e4c717fd5dbe69b0210f8117f253912544338d3bfbb9d"
+    },
+    {
+      "file": "fr014015-browser-report.json",
+      "groups": 13,
+      "sha256": "8f4debff094a7dc02e4a8efff06a68de365155f276b14d5c1d03e51415705ced"
+    }
+  ],
+  "build": "tests/build.log",
+  "csv": "tests/csv.log",
+  "sourceManifest": "qa/fr014015-source-sha256.json"
+}

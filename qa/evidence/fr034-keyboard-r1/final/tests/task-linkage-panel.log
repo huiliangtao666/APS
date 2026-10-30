@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: problem click, active check, filter and missing evidence controls remain explicit
+ok 1 - problem click, active check, filter and missing evidence controls remain explicit
+  ---
+  duration_ms: 7.979455
+  type: 'test'
+  ...
+# Subtest: stale structured evidence over raw null cannot render a numeric problem interval
+ok 2 - stale structured evidence over raw null cannot render a numeric problem interval
+  ---
+  duration_ms: 0.424162
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 50.51216

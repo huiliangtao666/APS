@@ -1,0 +1,155 @@
+FR-034 independent keyboard findings confirmation — APS-Test
+2026-10-29 | Delivery dlv_97e341cf-a71a-41f3-9c51-1aafe9be43a5
+
+VERDICT
+FR034-KBD-01 CONFIRMED; FR034-KBD-02 CONFIRMED; FR034-KBD-03 CONFIRMED.
+All three reproduce independently in actual App at640x900 and1100x900,
+with and without the QA banner. Proposed medium/P2 is reasonable for each.
+These confirm the three existing issue21 items, not three additional defects.
+Keyboard/focus/name acceptance FAIL; functional linkage16/16 PASS in scope.
+No product repair, GitHub mutation, closure, duplicate issue/card or full Done.
+
+PIN AND SOURCES
+Evidence branch test/fr-034-keyboard-narrow, exact detached checkout:
+910fdbcf8fb6dd312cac4cf31c2b1a7a1950b75f
+Final remote branch equals that pin. Unchanged product:
+21ff4dd72d9583ec591436b160a0b79931d81900
+110/110 FR034 manifest files match working bytes and product Git objects.
+Git diff for src/server/package.json/package-lock.json between pins is empty;
+independent checkout remains clean. Inherited FR033 banner is harness lineage,
+not the exact tested commit. See provenance.json for per-file comparisons.
+Read committed keyboard handoff, QA source, raw focus/DOM/ARIA/control audit,
+review.json, original FR034/UNKNOWN01 handoffs and prior independent verdict.
+Read live https://github.com/huiliangtao666/APS/issues/21 and its empty comments
+read-only. Its body explicitly labels observations as Dev and Test pending;
+this report is independent confirmation and does not update GitHub.
+
+Original v0.3 DOCX independently opened as ZIP/XML; SHA256:
+4eb29f7cfaf4fe30f76329775d32930b806da941282098b7de163591807bc7d4
+AC17 requires task/problem/input consistency, concrete times, demand/availability
+and explanation without exporting first. AC31 requires understandable Chinese
+workflow/status/errors and locatable tasks/problems. Neither literally names
+focus restoration, keyboard-only use or accessible-name algorithms. The finite
+keyboard contract in the dispatched handoff is evaluated explicitly below;
+these findings do not imply failure of every original AC17/31 requirement.
+
+INDEPENDENT METHOD AND STEPS
+New APS-Test-authored qa/independent-keyboard.mjs runs actual App, not a
+component mock or supplied report parser. Eight independent scenarios:
+2 widths x banner present/removed x normal/delayed real network requests.
+Delay350ms is applied separately to real verify POST and plans-refresh GET;
+responses are never fabricated. Product interactions use only Tab, native
+ArrowUp/Down, Enter and typed reason. No locator.focus/click/selectOption,
+scripted scrolling or DOM focus assignment drives these scenarios.
+DOM reads, CDP accessibility reads, MutationObserver, network delay and removal
+of the QA-only aside are instrumentation, not user actions.
+1. Open actual App; wait for fixed planner membership to resolve.
+2. Tab to operation reason and type the disposable test reason.
+3. Tab to native saved-plan select; choose FR034-SYNTHETIC-CORRUPT using arrows
+   from its current index, then Enter. Capture native DOM and accessibility tree.
+4. Tab to 主动运行独立检查. Capture active focus before Enter, after Enter,
+   during delayed request, after verify response, after refresh/button enabled,
+   and150ms after completion. Capture focus/disabled mutation chronology.
+5. Tab to VERIFY / MACHINE_OVERLAP and Enter. After200ms capture active element,
+   :focus-visible, viewport/rectangle/scroll coordinates, selected IDs and interval.
+6. Compare all three positive complete saved plan objects and current input/
+   revision with the pre-interaction snapshots. Close page; repeat fresh page.
+
+KBD01 — CONFIRMED IN ALL8 SCENARIOS
+Expected contract: keyboard problem activation leaves visible useful focus at
+its control, or moves focus to an appropriate visible task/detail target.
+Actual: correct A-MIX/A-FILL tasks and exact overlap[20,30) are selected, but
+activeElement remains the original problem BUTTON with :focus-visible=true,
+while the whole button is outside the900px viewport. At640 its top/bottom are
+-854.172/-775.172px; at1100 -618.531/-539.531px. Same values with/no banner and
+normal/delayed requests. It is visible and focused before Enter. Screenshot
+640-no-banner-0ms-problem.png shows the scrolled timeline while the focus
+rectangle belongs to the absent problem button; DOM/rectangles prove position.
+Source support: TimelinePanel.tsx selected-task scrollIntoView effect at33
+explains the scroll without corresponding focus transfer. No patch attempted.
+This is a focus presentation failure; selection/geometry remain correct.
+
+KBD02 — CONFIRMED IN ALL8 SCENARIOS, INCLUDING NO-BANNER CONTROLS
+Expected contract: after the asynchronous check completes, retain/restore
+useful visible keyboard focus, or deliberately focus an appropriate result.
+Temporary busy disabling is legitimate; persistent BODY focus is the failure.
+Before Enter: target BUTTON active and :focus-visible=true. Mutation trace
+shows BODY as soon as that button becomes disabled. Delayed cases confirm
+BODY during the real verify request; focus is not restored after verify and
+plans refresh. Completion and150ms settled samples both show BODY, target
+inactive/:focus-visible=false, and disabled=false. No intervening user key,
+mouse or artificial focus action accounts for the change. Normal fast cases
+can finish before the immediate sample; the mutation trace still records the
+busy disabled state. This is why a single after-Enter screenshot is insufficient.
+The completion screenshot1100-no-banner-350ms-check-completed.png shows the
+re-enabled check control in view without its prior focus indicator.
+App.tsx perform sets busy before work and clears it in finally; verifyPlan awaits
+verify and refresh. TaskLinkage disables the check control while busy; no
+restoration is present. BODY during disabling is browser behavior, not by
+itself a new browser defect. The confirmed product gap is lack of a useful
+post-completion focus destination under the dispatched keyboard contract.
+
+KBD03 — CONFIRMED IN ALL8 SCENARIOS USING NATIVE ACCESSIBILITY TREE
+Expected contract: saved-plan combobox has an associated meaningful Chinese
+name identifying the control; current option value is separate from its name.
+Actual DOM: labels.length0, no aria-label, aria-labelledby or title; no wrapping
+or for-associated label. Actual Playwright ARIA snapshot: bare combobox.
+Chromium CDP Accessibility.getPartialAXTree reports role=combobox,
+name.value="", while value.value="当前计算" before choosing a saved plan.
+This directly distinguishes the native computed accessible name from option
+text and surrounding section heading. The nativeAX object with name sources,
+pickerDOM and pickerARIA is retained per scenario in independent/report.json.
+App.tsx139 renders the unnamed select. Do not treat its concatenated option
+innerText as a name. No broad whole-app accessibility audit is claimed.
+
+PRESERVATION AND COUNTS — SEPARATE EXECUTIONS, DO NOT SUM
+* Independent confirmation:8 complete matrix scenarios, all three findings
+  observed in each; current input/revision and three complete positive saved
+  plan JSON objects remain unchanged. Zero page exceptions; API statuses200.
+* Unchanged delivered keyboard browser independently executed by APS-Test:
+  16/16 positive functional groups pass (8 per width). These cover long Chinese
+  reason, native plan selection/check/tasks unchanged, overlap IDs/interval,
+  precedence30/20/10/filter/search, saved successor/predecessor, actual original
+  snapshot query/source hashes, unknown material/no overlay/text/pressed state,
+  and saved40/current50 plus three complete immutable positive plan objects.
+  Its20 records include2 horizontal-scroll measurements and2 no-banner controls;
+  do not call those20 positive functional groups or focus acceptance passes.
+* Targeted task-linkage/unknown-endpoint TAP8/8; TS/Vite/Express/Worker build PASS.
+* UNKNOWN01 actual-App/browser/API24/24 groups PASS:20 invalid endpoint cases,
+  stale structured finding defense and3 valid numeric/string-zero controls.
+  Raw unknown endpoints remain unchanged; no fabricated interval/overlay;
+  all positive saved plans remain deep-equal. Prior independent UNKNOWN01
+  round1 PASS at21ff4dd and440 baseline remain intact;440 is NOT rerun here.
+
+RUNTIME, FIXTURE AND ACCEPTANCE GAPS
+Disposable node:22-slim image
+sha256:48e4b67d85f87bd551df43704e24d252f56cc5f8e9718841aace50f19948f0f9
+Node22.23.2 / Playwright1.56.1 / Chromium141.0.7390.37 / Linux ARM64.
+All installs/builds/App servers/browsers run inside the disposable container;
+source/SDK/scripts mounted read-only, evidence alone writable to host. Browser
+runs as nobody; --no-sandbox restricted to this disposable QA container. No
+host npm/server, exposed ports, app binding/restart/publication or daemon action.
+Actual App, scheduler, real Express membership/business routes, fixed synthetic
+planner actor and runtime alias; this does not test signed gateway/SSO, real
+role provisioning or real-user permissions. Membership/auth responses200 are
+not evidence of a real gateway identity. Other-role UAT is not rerun here.
+The deliberately corrupt saved-output plan exists only in temporary QA file
+storage; no claim normal scheduler or supported import created bad tasks.
+Positive material/joint/history plans are generated by actual API calls. The
+no-banner controls remove only the QA aside, retaining the identical product.
+Full role/UAT workflow, real assistive technology and browser matrix, production
+durability, all-rule/business/material feasibility, DEC02/dynamic release and
+main integration remain gaps. No new coverage-gap issue or duplicate defect.
+
+REPRODUCIBILITY AND FILES
+Executed from workspace root: bash temp/fr034-keyboard-test/run.sh
+Single final container exits0; no failed/retried product execution in this run.
+Only local document-read setup selected a .docx directory first; corrected to
+select the nested file before reading; no test run or product was affected.
+Archive includes independent source, exact container/run commands, logs,
+110-file provenance, original DOCX extracted text, issue21 read-only JSON,
+source references, per-case raw DOM/ARIA/focus/native AX, and screenshots.
+16 independent screenshots +14 replay +2 UNKNOWN01 =32 screenshots.
+Visually inspected own640 no-banner problem and1100 no-banner delayed check.
+Evidence checksums cover delivered evidence and reproduction scripts. Product
+source itself remains at the pinned Git commit and is not bundled redundantly.

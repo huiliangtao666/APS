@@ -1,0 +1,42 @@
+[
+  {
+    id: 'T05 exact adjacent vs overlap oracle',
+    status: 'PASS',
+    error: undefined
+  },
+  {
+    id: 'P08-P09 identical skill independent demand unsupported',
+    status: 'FAIL',
+    error: 'AssertionError [ERR_ASSERTION]: two independent simultaneous requirements 2+2 cannot fit pool2; schema cannot distinguish these from one role windows'
+  },
+  {
+    id: 'R01 batch split independent identity and pool sum',
+    status: 'PASS',
+    error: undefined
+  },
+  {
+    id: 'R02 repeat retry no ghost or double count',
+    status: 'PASS',
+    error: undefined
+  },
+  {
+    id: 'U05 disabled future minimal statuses',
+    status: 'PASS',
+    error: undefined
+  },
+  {
+    id: 'H03 CSV multi-window actual preview commit refresh atomic',
+    status: 'PASS',
+    error: undefined
+  },
+  {
+    id: 'U06 spoofed actor remains server identity audit',
+    status: 'PASS',
+    error: undefined
+  },
+  {
+    id: 'N06 future MOLD blocks execution API atomic reproduction',
+    status: 'FAIL',
+    error: 'AssertionError [ERR_ASSERTION]: not-yet-active tooling must not reject an otherwise valid fact'
+  }
+]

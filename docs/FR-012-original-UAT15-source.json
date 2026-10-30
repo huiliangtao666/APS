@@ -1,0 +1,6 @@
+{
+  "zipSha256": "01aa86f90d257e3e6c948531f1010d0a0fdf502a68266176991dc0fb8f107759",
+  "member": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/18_模拟执行进度.csv",
+  "memberSha256": "b7354be8eb2dfdb2ea2b54582434b5b0c561057d4aa4746c227def78a5ab5f50",
+  "mapping": "UNDECIDED: aggregate 已用投入kg has no material/lot distribution, completed output/current-machine/observation mapping; raw CSV is not normalized cumulative consumption. Import is rejected without explicit mapping."
+}

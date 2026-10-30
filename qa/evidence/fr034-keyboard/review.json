@@ -1,0 +1,132 @@
+{
+  "productSHA": "21ff4dd72d9583ec591436b160a0b79931d81900",
+  "functionalGroups": 16,
+  "functionalFailures": 0,
+  "noBannerControlExecutions": 2,
+  "horizontalScrollMeasurements": 2,
+  "focusSamples": 66,
+  "sourceHashCount": 110,
+  "sourceMatchesWorkingAndPinnedGit": true,
+  "harnessHashesMatch": true,
+  "pageErrors": [],
+  "browserWarningErrorLogs": [],
+  "networkStatuses": [
+    200
+  ],
+  "focusAcceptance": "FAIL: Dev reproduction round1; pending independent Test",
+  "independentUnknown01": "APS-Test report read: PASS round1 at21ff4dd; no issue closure",
+  "observations": [
+    {
+      "width": 640,
+      "name": "active check completed",
+      "active": false,
+      "activeElement": {
+        "tag": "BODY",
+        "text": "FR033 DISPOSABLE VALIDATION · SYNTHETIC DATA / TEST IDENTITY · NO GATEWAY AUTHENTICATIONProduct source FR034 working sou"
+      },
+      "rect": {
+        "x": 41.59375,
+        "y": 798.640625,
+        "width": 128,
+        "height": 24,
+        "top": 798.640625,
+        "right": 169.59375,
+        "bottom": 822.640625,
+        "left": 41.59375
+      },
+      "unobscured": true
+    },
+    {
+      "width": 640,
+      "name": "no-banner overlap problem after activation",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "rect": {
+        "x": 41.59375,
+        "y": -853.984375,
+        "width": 556.8125,
+        "height": 79,
+        "top": -853.984375,
+        "right": 598.40625,
+        "bottom": -774.984375,
+        "left": 41.59375
+      },
+      "unobscured": false
+    },
+    {
+      "width": 640,
+      "name": "unnamed saved-plan picker",
+      "control": {
+        "tag": "SELECT",
+        "type": "select-one",
+        "text": "当前计算\n单线计算 2026/10/28 22:41:31\n单线计算 2026/10/28 22:41:31\n单线计算 2026/10/28 22:41:31\nFR034 synthetic deliberately invalid saved output",
+        "labels": [],
+        "labelledby": null,
+        "title": "",
+        "outer": "<select><option value=\"\">当前计算</option><option value=\"80401987-23df-4568-afe6-fa73e3ef8e39\">单线计算 2026/10/28 22:41:31</option><option value=\"673b411b-1756-4115-bf4a-965e316ca2fa\">单线计算 2026/10/28 22:41:31</option><option value=\"62065241-8eb2-4d55-9c91-93d045543354\">单线计算 2026/10/28 22:41:31</option><option value=\"FR034-SYNTHETIC-CORRUPT\">FR034 synthetic deliberately invalid saved output</option></select>"
+      },
+      "note": "Native option text is not the combobox accessible name. Initial raw audit heuristic counted innerText; manual DOM+ARIA review corrects that omission."
+    },
+    {
+      "width": 1100,
+      "name": "active check completed",
+      "active": false,
+      "activeElement": {
+        "tag": "BODY",
+        "text": "FR033 DISPOSABLE VALIDATION · SYNTHETIC DATA / TEST IDENTITY · NO GATEWAY AUTHENTICATIONProduct source FR034 working sou"
+      },
+      "rect": {
+        "x": 65,
+        "y": 775.46875,
+        "width": 128,
+        "height": 24,
+        "top": 775.46875,
+        "right": 193,
+        "bottom": 799.46875,
+        "left": 65
+      },
+      "unobscured": true
+    },
+    {
+      "width": 1100,
+      "name": "no-banner overlap problem after activation",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "rect": {
+        "x": 65,
+        "y": -618.34375,
+        "width": 970,
+        "height": 79,
+        "top": -618.34375,
+        "right": 1035,
+        "bottom": -539.34375,
+        "left": 65
+      },
+      "unobscured": false
+    },
+    {
+      "width": 1100,
+      "name": "unnamed saved-plan picker",
+      "control": {
+        "tag": "SELECT",
+        "type": "select-one",
+        "text": "当前计算\n单线计算 2026/10/28 22:41:31\n单线计算 2026/10/28 22:41:31\n单线计算 2026/10/28 22:41:31\nFR034 synthetic deliberately invalid saved output",
+        "labels": [],
+        "labelledby": null,
+        "title": "",
+        "outer": "<select><option value=\"\">当前计算</option><option value=\"80401987-23df-4568-afe6-fa73e3ef8e39\">单线计算 2026/10/28 22:41:31</option><option value=\"673b411b-1756-4115-bf4a-965e316ca2fa\">单线计算 2026/10/28 22:41:31</option><option value=\"62065241-8eb2-4d55-9c91-93d045543354\">单线计算 2026/10/28 22:41:31</option><option value=\"FR034-SYNTHETIC-CORRUPT\">FR034 synthetic deliberately invalid saved output</option></select>"
+      },
+      "note": "Native option text is not the combobox accessible name. Initial raw audit heuristic counted innerText; manual DOM+ARIA review corrects that omission."
+    }
+  ],
+  "excludedAuditObservations": [
+    "Four top-navigation samples obscured by sticky QA banner; no product defect attributed.",
+    "Four task-row samples intentionally outside table viewport after keyboard horizontal scrolling; no product defect attributed."
+  ]
+}

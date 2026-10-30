@@ -1,0 +1,32 @@
+FR-028 conditions trial and impact comparison
+Canonical Project2 item PVTI_lAHOFM9WU84BpE1czhEHg8s / draft DI_lAHOFM9WU84BpE1czgLhAis
+Delivery dlv_0f041b91-4598-48ce-a15e-7f7f85f70b43
+Exact integrated parent e93fadce55d3f1deef0a602d3a01ebfe561a01b4 (FR017/025/026 dependencies)
+Branch feat/fr-028-condition-trials
+
+Read live original Project2 FR028 and supplied baseline FR028/AC20/AC32 before coding. No duplicate card or status write.
+
+Implemented
+- Existing immutable server copy/edit/recalculate paths are surfaced as 条件试算 (What-if). Orders, calendars, downtime, tooling, personnel, inventory, expected supply and rules are editable in isolated trial data with the existing server validation, supported-rule admission and revision checks.
+- Business-key field diffs describe added/removed/edited input records; duplicate keys remain grouped and cannot silently overwrite evidence. Reordering records does not create field changes. Exact stored records are retained, including blank normalization by canonical input saving.
+- Compare immutable saved inputs/results, separately expose original/trial identity, copied-result status, run settings, effective checked/unchecked scope and rule-evaluation timestamps. Timestamps remain provenance and do not falsely make identical user selections incomparable.
+- Impact table includes before/after required and conditional deliverable times, delta minutes, order causes, lot/expected-supply/quality conditions, changed task identities, and full task/resource/material/unplanned evidence. Changed demand, selection or check scope prevents classifying a result as resource improvement. Earlier/later means found conditional time only. Unknown stays unknown; unchanged results and capacity additions do not automatically claim improvement. Differences do not prove per-condition causal attribution.
+- GET /trials/:id/changes exposes input differences before recalculation, anchored to immutable original plan/run/input/hash. It explicitly does not describe a new calculated result.
+- POST /trials/:id/retain requires planner/supervisor, same-origin/CSRF, reason, exact trial revision, own latest recalculated plan with matching current input version and valid original/run provenance. Copied/stale/foreign/discarded results fail closed. Stores independently identified immutable retained comparison/result references and trusted audit identity/time/request/reason. Retain does not adopt, confirm or execute a plan. Later edits/discard preserve retained snapshots and historical result inputs. Discard remains independent and terminates pending Workers.
+- UI supports explicit retain, review current input changes, baseline-to-latest comparison and retained result navigation. Generic left/right plan comparison avoids pretending an arbitrary selected plan is the original.
+
+Reproduce from workspace root
+bash apps/aps-fr028/docs/FR-028-validation-command.sh
+Uses workspace-app-builder app-exec --validate --mode standalone --cwd /workspace/apps/aps-fr028. Installs/builds only in disposable application-container source/dependency/output copy. SDK manifest rewrite is confined to copied manifests. No host install/start, live restart, binding or publish.
+Final log: docs/FR-028-validation.log
+
+Test scope
+280 TAP cases in final log (15 additions over265 parent):89 library,100 auth/API including nested cases,59 scheduler/batch/joint/delivery/result/condition trial,5 query UI,6 actual built production Worker,10 editor/material/batch UI,1 resource UI,1 delivery UI,3 result/history-input UI,6 trial UI. Scenario assertions are not counted separately. Original FR013 batch CSV harness, TypeScript/Vite/server bundle/production Worker builds and git diff --check also run.
+New tests include actual120-minute machine downtime bottleneck removed with earlier conditional deliverability; tool capacity2-to3 changing checked task/reservation timing; material shortage unchanged by100 personnel; conditional expected supply delayed60 minutes retaining lot/quality conditions; API recalculation across distinct timestamps; exact source/current facts and stock preservation; stale/foreign/copied/corrupt/discarded retain denial; role/CSRF/reason; trusted audit; retain then edit/discard history; UI actions and honest outcomes.
+
+Limits / remaining acceptance
+Full AC20/AC32/UAT acceptance not claimed. Independent APS-Test source regression, browser/gateway real managed-identity provision, manual UI/UAT01/02 and full five-stage UAT are not executed here. Dependency acceptance issues remain separate from development regression.
+No real confirmation/execution/progress/consumption/remaining-work contract exists. Restoration stays409 with current-progress/confirmation/stale-stock blockers; confirm/return/release stay501. Stored execution/confirmed fixtures in inherited tests demonstrate non-mutation only.
+Independent verifier remains limited to its declared machine/precedence/line scope. DEC02 and undeclared release semantics, maximum-wait/dynamic downstream release, scheduling completeness/global earliest proof, real delivery promises and trial adoption remain unsupported. Changes to demand/route/BOM/product/delivery inputs conservatively mark all order comparisons not comparable; there is no proof of individual-condition causality. Missing fields vs explicit blanks appear in exact diffs. Duplicate identities display grouped before/after evidence rather than fabricated field pairing.
+Retention is one-process JSON atomic persistence and stored full comparisons, without scale/retention benchmarks, distributed transactions, resumable lost Workers or automatic deduplication. Retained partial/unknown results stay partial/unknown and may be kept for review; keeping them is not approval or feasibility certification. Copied results clearly remain un-recalculated.
+No publication, new cards/issues, main merge, secret output, or external messaging; delivery hook handles this reply.

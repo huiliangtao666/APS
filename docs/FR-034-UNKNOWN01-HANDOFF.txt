@@ -1,0 +1,108 @@
+FR034-UNKNOWN-01 — repair round 1, APS-Dev
+Delivery dlv_18c6dafb-c6ad-4ea9-91ed-e6ff5b5729d8, APS-Design -> APS-Dev
+Original Project2 item PVTI_lAHOFM9WU84BpE1czhEHhDI; issue20
+https://github.com/huiliangtao666/APS/issues/20
+Branch fix/fr-034-unknown-01
+Base 28ed8f8e422173f9b83d8a974e26ea9af6f09c8e (integrated FR032).
+Full resulting delivery SHA is in the workspace root delivery report.
+
+READ / SCOPE
+Read the live unique original Project2 card, live issue20, original FR034
+handoff/model/runner/browser sources, APS-Test/FR-034-INDEPENDENT-REGRESSION.txt
+and its exact model/API reproduction sources. Files API read returned403;
+read the authorized sibling workspace's local report and scripts instead.
+The six failed Test invariants are one defect, UNKNOWN01, medium/P2.
+This is repair round1 of max2, subject to independent APS-Test validation.
+Only deliberately corrupted disposable saved-output fixtures reproduce the
+bug; no claim normal scheduler output or supported imports generated it.
+
+FIX
+Saved endpoints accept finite numbers and nonblank numeric strings (including
+0, signed/decimal/exponential numeric formats). Missing, null, blank,
+nonfinite and nonnumeric/object/boolean values are rejected before conversion.
+Both endpoints must form a complete positive interval. Machine validation
+reports invalid intervals as problem and excludes them from comparisons,
+without hiding overlaps among other valid tasks. Precedence refuses to certify
+or derive geometry when either related task interval is invalid.
+
+Task linkage derives supported geometry from exactly two matching saved tasks.
+It checks both complete raw intervals, same machine for overlap or predecessor
+identity for precedence. Persisted structured findings must agree with all
+derived fields, including kind/machine, priorEnd/nextStart/violationDuration.
+Unknown or contradictory evidence returns no interval. Legacy findings without
+structured geometry retain the guarded derivation. Inputs, findings and saved
+snapshots are read-only; prior false findings are not silently rewritten.
+No planner, history/confirmation/auth guard or FR032 feature code was changed.
+
+VALIDATION
+Container --validate standalone command:
+bash apps/aps-fr032/docs/FR-034-UNKNOWN01-validation-command.sh
+440 TAP tests pass;0 fail/skipped/cancelled/todo. One final command, no cumulative
+count. Breakdown89+124+142+22+5+9+10+1+1+3+6+4+7+12+2+3.
+This preserves FR032434 baseline tests plus5 new model groups and1 component.
+Model matrix includes12 invalid forms x2 tasks x2 endpoints, false-pass
+regressions, numeric-zero/string controls, remaining valid-task overlap,
+forged/stale structured evidence and immutable inputs. These internal cases
+are not added to the named TAP count.
+CSV valid six-table / CSV-DEF-01..04 and TS/Vite/API/Worker production build pass.
+APS-Dev also replays APS-Test's original model oracle:15/15 groups pass,
+including all six formerly failing invariants and300 independent interval pairs.
+This replay is Dev evidence; independent acceptance is still required.
+
+ACTUAL APP / API / BROWSER — PASS
+Final disposable Docker runner exit0, Node22.23.2 / Playwright1.56.1 /
+Chromium141.0.7390.37 / Linux ARM64 / viewport1280x900. Image ID
+sha256:48e4b67d85f87bd551df43704e24d252f56cc5f8e9718841aace50f19948f0f9.
+Separate executions, do not sum into TAP or independent acceptance totals:
+* Original FR034 actual-App six grouped checks pass (exact overlap20..30,
+  precedence30/20/10, selection/filter, saved original input/resource/material
+  evidence and saved40/current50 immutable history).
+* New UNKNOWN01 browser/API24 groups pass:20 endpoint cases (5 forms x2 tasks
+  x2 endpoints), stale fabricated structured evidence before rechecking and
+  3 valid numeric/string zero controls. All20 active checks use the UI and
+  actual verify route, preserve raw tasks, report machine/precedence problem,
+  produce zero structured findings and draw zero interval overlays. All3
+  positive saved plans remain deep-equal throughout the negative matrix.
+* FR032 actual-App six grouped checks pass, including exact CSV download bytes,
+  resource/material/late-delivery alerts and all4 saved JSON snapshots intact.
+* APS-Dev replay of Test confirmation/history API4 groups/19 responses passes:
+  calculate/verify/submit/confirm, protected409/403 responses, current input
+  changes, archive/disk exact saved plan and confirmation JSON preservation.
+All browser scripts assert zero page exceptions. Six new screenshots captured;
+03/04 visually inspected for explicit unknown/no fabricated interval.
+Final log retains all three browser PASS records. The inherited FR032 runner
+writes browser-report.json over the original FR034 report; this JSON is FR032,
+while final FR034 checks are retained in the verbatim log. UNKNOWN01 has its
+own unknown-browser-report.json with per-case raw tasks/verification.
+
+ATTEMPTS
+First browser run passed original FR034 six groups then timed out because
+Dev's new stale-report fixture supplied empty checks, which cannot render the
+existing verification panel. Filled the fixture's three check records and
+armed response waiting before the click. No product change resulted. Final
+runner completed all browser/API sections once. No partial counts added.
+
+REPRODUCE ACTUAL APP / API / BROWSER
+Requires Docker, existing authorized SDK tgz files, and network access.
+Create a NEW EMPTY evidence directory and run from the workspace root:
+FR034_REPO="$PWD/apps/aps-fr032" FR034_SDK="$PWD/.praetor/sdk" \
+ FR034_OUT="<absolute new empty directory>" \
+ bash apps/aps-fr032/qa/fr034-unknown-docker-browser.sh
+All installs, builds, servers and browsers run inside disposable node:22-slim;
+source/SDK mounts are read-only, output directory is the only writable host
+mount. No host ports, app binding, preview, restart or publication. Actual App,
+real scheduler, Express membership/business routes and local file storage;
+fixed synthetic actors/runtime alias, not real signed gateway identity/SSO.
+Chromium --no-sandbox is restricted to this disposable test container.
+FR033/FR034 banner source labels identify harness lineage/older base; exact
+product bytes are identified by the two refreshed SHA256 manifests and final
+Git commit, not the inherited banner text.
+
+LIMITS
+No new card/issue, issue closure, main merge, app publication or full Done.
+Supported independent verifier scope remains line/machine/precedence.
+All-rule/business/material feasibility, DEC02/dynamic release, real gateway
+identity/roles, durable production persistence and full original AC/UAT remain
+separate acceptance gaps. Inherited npm audit3moderate/1high and React key
+warning remain unchanged. This result must return for independent APS-Test
+review, without treating Dev tests as independent acceptance.

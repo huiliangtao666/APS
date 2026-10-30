@@ -1,0 +1,109 @@
+FR033-AXIS-LABEL-03 — defect repair round 1 (issue #19, P3)
+Delivery dlv_f2a458df-2032-4672-8c2f-a4b4022dfa76 / APS-Design -> APS-Dev
+Canonical FR033 card retained; no new Project item. This is new defect round1,
+not issue18 round2. Base 8b91a49a9e94290127a264748b0036c50396454f.
+Issue: https://github.com/huiliangtao666/APS/issues/19 (OPEN at intake).
+Branch feat/fr-033-machine-timetable. Ordinary push verification appended to
+root delivery report and included in evidence ZIP after commit.
+
+Result
+Date/time ticks now reserve 152 CSS pixels each, with full date and time on
+two separate lines. Tick density uses actual scale (including canvas cap).
+A tick is omitted when its entire label would cross the right axis edge.
+No forced minimum tick count. Axes below 152px instead show complete start/end
+labels above the scroll region, with Shanghai timezone, minutes and exclusive
+end semantics. These wrap at narrow widths and remain visible without hover.
+The message explicitly explains why a narrow axis has no inline date ticks.
+Tick title and accessible name retain full timeLabel including minute value.
+
+Only presentation changes: TimelinePanel, axis CSS, read-only axisTicks helper
+and declaration. No scheduler, server, persistence, input/fact/confirmation or
+history code changes. Existing zoom geometry, clipping, selection, filtering,
+last accepted window and saved-plan provenance logic remain intact.
+
+Container verification (disposable app-exec --validate, no host npm install)
+431 tests passed, zero failed/skipped/cancelled/todo, across 13 TAP summaries.
+429 previous tests retained plus two AXIS-LABEL-03 regression cases.
+Complete inherited round1 command rerun, including HISTORY01 confirmation
+history, ZOOM01 truthful geometry and WINDOW02 invalid-date/window regressions.
+TypeScript, Vite, Express and production Worker builds, built Worker regression,
+query/UI regressions and batch CSV verification passed. Exact command/log in docs.
+New cases cover four scales, subminute/negative/multiday/large valid dates,
+60000px cap, label pixel budgets, narrow-axis visible alternatives, accessible
+full labels and immutable saved data. DOM checks below are separate from these
+React/helper assertions. No additional packages or lockfile edits in product.
+Inherited npm audit: 3 moderate, 1 high. Existing test-renderer missing-key warning
+remains in TimelinePanel fixture tests; it did not fail tests or browser runtime.
+
+Actual browser evidence, 2026-10-28 UTC / 2026-10-29 Asia/Singapore
+Connected Chrome outer viewport 1920x937 DPR1. Comparison wrapper embeds REAL
+1100x820 and 640x820 iframe browsing contexts; innerWidth is recorded per case.
+These are iframe viewport tests, not a claim that the OS/browser window resized.
+Exact original standalone pinned-product 50a32ef harness reproduced before;
+repaired production TimelinePanel + timetable + full index.css bundled into an
+isolated static harness after. Both use same frozen labelled synthetic saved
+plan: SHORT[0,30), NEXT[60,90), TINY[90,90.5), extent[0,120).
+No backend/auth calls, identity bypass, actual scheduling or production data.
+Working-source build marker in harness is not a Git hash; actual source byte
+SHA256 values are in source-sha256.json, tied to final commit via patch/source.
+
+Before: 8 actual date-label measurements (four zooms x two viewports).
+Zoom0.25 axis30px, label124px, minimum gap -109px; right-edge overflow true.
+Zoom1 axis120px, label124px, minimum gap -64px; right-edge overflow true.
+Zoom3 minimum gap11px, final label exceeds axis; zoom8 gap116px, end tick label
+exceeds axis. Before screenshots confirm original overlap and clipping.
+
+After: 24 matrix measurements = two viewports x three windows x four scales.
+Each records getBoundingClientRect, Range ink bounding boxes, axis edges,
+label minimum gap, full accessible names, window summary, bars, immutable JSON
+and runtime errors. Full source/manifests and standalone HTML included.
+SHORT / axis widths, identically at both viewports:
+0.25 -> 7.5 / 30; 1 -> 30 / 120; 3 -> 90 / 360; 8 -> 240 / 960 CSS px.
+Tiny task widths 0.125,0.5,1.5,4px; no invented minimum task width.
+Short window labels: 0,0,2,4; wide zoom3/8 label gaps28/88px.
+Short low zooms show full readable start08:00/end10:00 in external summary.
+Negative/multiday window[-1500,3000): inline label gaps1.75,13,28,88px.
+Large window[0,240000): axis60000px, actual0.25, 390 labels, minimum gap1.75px.
+All24: no label-box overlap, no ink overflow, no label beyond axis edge,
+frozen JSON unchanged and captured runtime errors[]. At cap, harness deliberately
+sets otherwise-disabled1/3/8 programmatically to stress actual-scale rendering;
+this is NOT a claim those disabled options were human-selectable. Normal short
+window screenshots use structured browser selection for each supported zoom.
+All labels on the entire axis measured, including horizontally offscreen ones.
+Minimum-gap checks concern date-label rectangles, not truncated task-bar text.
+17 distinct labelled before/after screenshots (including640px date-axis detail).
+Browser shot filenames copied immediately to avoid same-second overwrites.
+
+Additional real browser regression: selectSHORT at zoom8, enter invalid end1e12.
+Chinese alert appears, axis960, SHORT240 remains selected and details usable.
+End120 recovers with no alert. Current comparison facts9 ->999 retains original
+saved4kg and immutable plan. Console records/snapshot preserve observations.
+
+Browser/process limits and instrumentation notes
+Component display validation only; independent Test/Design acceptance of this
+repair remains required. No full FR033/AC31/UAT, real identity/roles/gateway,
+screen reader, browser zoom/mobile device or production persistence signoff.
+Date bounds also covered by regression tests; extreme Date-limit viewports were
+not independently exercised in Chrome. No scheduler feasibility inference.
+Outer preview is older existing aps-r1; static harness isolates exact FR033
+component. Preview refreshed via workspace-app-builder app-restart --dev only.
+No app publication/new binding or production restart. QA public files removed
+after capture; standalone HTML remains reviewable offline.
+First large matrix console entry was truncated by browser console limits; revised
+instrumentation emits each reduced record separately (all24 successfully parsed).
+First baseline-only instrumentation attached before React mounted and threw;
+corrected with delegated listener and recaptured all8 baseline records. Those
+instrumentation errors/earlier SPA fallback and tool invalid-options attempt are
+not hidden or attributed to product. Raw retained logs include earlier browser
+session activity; final repair records have errors[]. Network log includes static
+harness responses and older session activity. No new product API errors claimed.
+
+Reproduce from workspace root
+1. Run docs/FR-033-AXIS-LABEL-03-R1-validation-command.sh via bash.
+2. python3 apps/aps-fr033/scripts/fr033-axis-harness.py builds standalone repaired
+   HTML in disposable container copies (3 bounded compressed chunks).
+3. Open supplied comparison index.html beside before.html and after.html.
+   Choose1100/640 and before/after; choose0.25,1,3,8. Repaired matrix button runs
+   short, negative/multiday and capped windows; click measure to log manual state.
+4. Inspect before/after-measurements.json and screenshots in evidence ZIP.
+No issue closure, card closure, main merge, publication or full Done claim.

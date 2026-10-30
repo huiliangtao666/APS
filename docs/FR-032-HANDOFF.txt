@@ -1,0 +1,113 @@
+FR032 resource load, material gaps and alerts — APS-Design delivery
+Delivery dlv_8810cfa4-eeb4-416f-978a-2c62c9a25ab3
+Branch feat/fr-032-resource-load-alerts
+Parent 72276614c0de122a6c45688e4f7b3cd7fbb129ed (pushed FR034).
+Canonical original Project2 item PVTI_lAHOFM9WU84BpE1czhEHhAY,
+draft DI_lAHOFM9WU84BpE1czgLhAjE. Read live original card/open issues and original
+v0.3 AC06/07/10/14/26 plus DEC02/03 before implementation. No new card or issue.
+
+IMPLEMENTED SUPPORTED SLICE
+A read-only resourceLoad projection and LoadPanel inside the existing real App.
+FR033 timeline and FR034 task/resource/original-input linkage reused; no duplicate
+Gantt, dashboard prerequisite, new scheduler or dynamic capacity policy.
+Machine busy minutes use the union of saved task intervals within a requested
+half-open window; unallocated minutes explicitly do not establish real idle or
+available capacity. Invalid historical intervals are unknown, not zero.
+Saved tooling occupation, personnel participation and space reservations use an
+exact rational event sweep, clipped to the selected window. Peak and quantity x
+minutes count each physical reservation once rather than once per linked task.
+Identical copies deduplicate by physical identity including declaration/batch/task;
+different declarations remain separate. Release extensions and half-open endpoints
+are preserved. Config-only/unchecked occupancy stays unknown. Explicit declared
+resource demand remains visible even when its task has no saved reservation.
+Configured capacity is total configuration; dynamic remaining is always unknown.
+
+Material rows preserve original BOM formula, candidate feed time, allocations,
+quality/expiry/source evidence, exact shortage and commitment state. A candidate
+allocation never becomes committed consumption; absent allocation evidence stays
+unknown. No inventory write or cross-plan/double deduction is introduced.
+Alerts show exact material shortage, saved conditional order lateness, unresolved
+order delivery, conditional/missing/late simulated supply and task/global input
+reasons. Quantity/unit/time/reasons and original rows remain accessible. A saved
+supply-delay record proves the original simulated condition changed; wall-clock
+passage never proves a physical nonarrival. Conditional supply is never converted
+to on-hand stock. Unplanned candidate times are labelled and never become bars.
+Order lateness comes directly from saved FR023 assessment, never from summing
+operation quantities. Unknown delivery is never presented as zero lateness.
+
+Summary task buttons select the existing FR034 evidence and FR033 timeline;
+original-data buttons open existing query UI with the selected plan's saved input.
+No current input is substituted for missing historical data. Saved execution facts,
+current facts and confirmation snapshots remain distinct and immutable. No business
+write action is introduced by projection or navigation.
+
+CSV uses the existing permission/reason/CSRF/audit-protected server /export route.
+The server resolves the saved plan and historical input itself; supplied frontend
+row data is never trusted. The same projection, window and category filter drive
+UI and CSV. Export includes line IDs, plan/run/input/hash provenance, simulation
+labels, limits and original input refs/quantity/unit/time/task evidence. Missing
+history remains unknown. Export audit records the exact window/category.
+
+AC MAPPING AND LIMITS
+AC06: saved tooling full windows, return extension, peak1/2 and task provenance.
+AC07: saved personnel counts/participation windows; skills/shift/source accessible;
+configuration is not dynamic available count or proof of full-rule feasibility.
+AC10: real scheduler325 demand,400 stock,100 occupied =>300 allocation/25kg gap;
+blocked quality lots excluded, candidate committed consumption0; exact0.1kg tested.
+AC14: saved600+600kg against1000 space, actual scheduler serializes occupancy;
+window/weight/causes visible. Maximum wait/upstream adjustment, dynamic downstream
+release and full joint policies are still unresolved, explicitly listed.
+AC26: same saved source/window/category export, authorized export and audit,
+immutable history and real browser CSV byte comparison. Full all-category/R7/UAT
+and real gateway role acceptance are separate.
+DEC02 tooling stage/return policy and DEC03 personnel participation/substitution
+remain pending. Explicit inherited supported declarations do not approve them.
+
+VALIDATION
+Final container command docs/FR-032-validation-command.sh passes434 TAP tests with
+zero failures/skips/cancellations/todo; CSV prototype verifier and TypeScript,
+Vite, Express and production Worker builds pass. Source installed/built only in
+platform app-exec --validate standalone disposable runtime. No host npm install,
+server, application rebind/restart or publication. Inherited npm audit findings
+3 moderate/1 high and inherited React key warning remain recorded.
+New coverage includes exact machine union, tooling copy/declaration identity,
+release/half-open boundaries,2-person participation,0.1+0.2 exact space peak,
+unknown/invalid legacy data, real material25/0.1 shortages, actual600kg spatial
+peak, actual96kg/60min lateness, conditional/missing/delayed supplies, unplanned
+input reasons, declared but unplanned demand, deep-frozen confirmed projection,
+CSV filter/source consistency and permission/reason/CSRF/audit/history API tests.
+One initial test assertion addressed audit.after instead of the actual flat audit
+schema; corrected test only. Dev review strengthened unknown historical intervals,
+missing allocations, declaration demand and original-input resolution for export.
+These are development review corrections, not independent Test defect repair rounds.
+
+Six actual isolated real-App browser groups passed, Chromium141.0.7390.37,1280x900,
+zero page exceptions. Real scheduler material325/300/25kg and conditional65kg supply
+delay; tool1/personnel2/space600 peaks;96kg/60min lateness; summary -> FR034 task
+-> saved original input query; selected180..240 alerts CSV downloaded byte-identical
+to server projection; invalid export window disabled; all four saved plan JSONs
+unchanged and saved40/current50 fact separation verified.
+Actual isolated real-App browser evidence and reproduction details are recorded
+in qa/evidence/fr032/browser-report.json and the root delivery report. All installs,
+Vite build, actual API server and Chromium run inside disposable Docker; read-only
+source and SDK mounts, fresh writable evidence only, no published ports/app binding.
+Synthetic fixed actor/runtime alias are declared; this is not real gateway/SSO or
+production persistence evidence. Chromium uses --no-sandbox only in the disposable
+container.115 source/config/test hashes identify the exact tested bytes.
+First browser attempt omitted expanding the original-input details disclosure;
+resource/task checks passed then locator timed out. Corrected QA interaction only.
+No product protection was weakened.
+
+REPRODUCE
+From workspace root with Docker/network and existing authorized SDK tgz directory:
+FR032_REPO="$PWD/apps/aps-fr032" FR032_SDK="$PWD/.praetor/sdk" \
+ FR032_OUT="<absolute existing NEW EMPTY evidence directory>" \
+ bash apps/aps-fr032/qa/fr032-docker-browser.sh
+Run the platform validation command from workspace root:
+bash apps/aps-fr032/docs/FR-032-validation-command.sh
+
+APS-Dev evidence only; independent APS-Test and complete original-card acceptance
+remain separate. No full Done claim, main merge, new parallel card, deployment or
+publication. Final ordinary push full SHA and GitHub/ls-remote verification appear
+in the root delivery report. At intake twelve open issues were acceptance/integration
+tracking, with no confirmed unresolved defect; final live rescan accompanies delivery.

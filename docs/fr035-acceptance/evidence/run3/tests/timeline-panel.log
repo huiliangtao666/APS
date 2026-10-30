@@ -1,0 +1,92 @@
+TAP version 13
+# Warning: Each child in a list should have a unique "key" prop.
+# Check the render method of `TimelinePanel`. See https://reactjs.org/link/warning-keys for more information.
+#     at option
+#     at TimelinePanel (/workspace/apps/aps-fr032/.qa-timeline-panel.cjs:135:26)
+# Subtest: FR033 machine rows, full dates, frozen provenance, exact bar width and textual alternatives
+ok 1 - FR033 machine rows, full dates, frozen provenance, exact bar width and textual alternatives
+  ---
+  duration_ms: 10.84695
+  type: 'test'
+  ...
+# Subtest: FR033 task buttons, predecessor and saved input callbacks use exact saved IDs and rows
+ok 2 - FR033 task buttons, predecessor and saved input callbacks use exact saved IDs and rows
+  ---
+  duration_ms: 5.115874
+  type: 'test'
+  ...
+# Subtest: FR033 machine/status/search filters act on timetable and bars and expose hidden selection
+ok 3 - FR033 machine/status/search filters act on timetable and bars and expose hidden selection
+  ---
+  duration_ms: 15.387995
+  type: 'test'
+  ...
+# Subtest: FR033 zoom changes geometry without duration edits, invalid window warns and cursor remains simulated
+ok 4 - FR033 zoom changes geometry without duration edits, invalid window warns and cursor remains simulated
+  ---
+  duration_ms: 9.701293
+  type: 'test'
+  ...
+# Subtest: FR033 legacy plan missing input is unknown and never replaced by current facts
+ok 5 - FR033 legacy plan missing input is unknown and never replaced by current facts
+  ---
+  duration_ms: 1.93465
+  type: 'test'
+  ...
+# Subtest: FR033 unplanned and missing selected task have explicit text without invented bars
+ok 6 - FR033 unplanned and missing selected task have explicit text without invented bars
+  ---
+  duration_ms: 2.245731
+  type: 'test'
+  ...
+# Subtest: ZOOM01 round1: four advertised scales produce exact short-plan geometry, offsets and clipped widths
+ok 7 - ZOOM01 round1: four advertised scales produce exact short-plan geometry, offsets and clipped widths
+  ---
+  duration_ms: 11.857192
+  type: 'test'
+  ...
+# Subtest: ZOOM01 round1: upper canvas bound labels actual scale and disables ineffective choices, then recovers
+ok 8 - ZOOM01 round1: upper canvas bound labels actual scale and disables ineffective choices, then recovers
+  ---
+  duration_ms: 26.846731
+  type: 'test'
+  ...
+# Subtest: WINDOW02 round1: huge, negative, non-finite, reversed and malformed edits retain last usable geometry/table
+ok 9 - WINDOW02 round1: huge, negative, non-finite, reversed and malformed edits retain last usable geometry/table
+  ---
+  duration_ms: 11.298363
+  type: 'test'
+  ...
+# Subtest: WINDOW02 round1: mixed malformed saved times across tasks, downtime, resources and facts cannot poison valid view
+ok 10 - WINDOW02 round1: mixed malformed saved times across tasks, downtime, resources and facts cannot poison valid view
+  ---
+  duration_ms: 6.453487
+  type: 'test'
+  ...
+# Subtest: AXIS-LABEL-03 narrow axis has readable external dates and wider ticks carry full time names
+ok 11 - AXIS-LABEL-03 narrow axis has readable external dates and wider ticks carry full time names
+  ---
+  duration_ms: 3.935883
+  type: 'test'
+  ...
+# Subtest: FR034 focus resets obstructing filters and shows exact overlap while problem-only hides unrelated tasks
+ok 12 - FR034 focus resets obstructing filters and shows exact overlap while problem-only hides unrelated tasks
+  ---
+  duration_ms: 4.217089
+  type: 'test'
+  ...
+# Subtest: KBD01 round1: keyboard finding scrolls then focuses the exact selected bar; pointer activation retains focus
+ok 13 - KBD01 round1: keyboard finding scrolls then focuses the exact selected bar; pointer activation retains focus
+  ---
+  duration_ms: 1.57682
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 166.429885

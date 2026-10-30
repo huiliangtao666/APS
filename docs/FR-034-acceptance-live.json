@@ -1,0 +1,129 @@
+{
+  "observed_at_utc": "2026-10-28T23:14:14.887851+00:00",
+  "source": "GitHub REST issues+comments and ProjectV2 GraphQL read-only",
+  "card": {
+    "id": "PVTI_lAHOFM9WU84BpE1czhEHhDI",
+    "status": "In progress",
+    "url": "https://github.com/users/huiliangtao666/projects/2",
+    "original_requirement": "## 需求\n范围：P0优先；关联流程：BP-05；页面：PG-04/05；开始提供：R1；完整提供：R4。\n前置功能：FR-014/024/025/033。\n• 点击任务可查原始输入、前后工序和资源需求；点击问题同时定位相关任务及区间。机器问题显示交叠，顺序问题显示前序结束、后序开始及违反时长。\n• 可主动运行检查并筛选问题任务。新增模具、人员、物料等规则时，对应显示需求/可用值及判断依据，不要求用户先导出再核对。\n\n## 验收追踪\n验收用例：AC-04/15/17/31。\n\n来源：需求分析与设计说明书 v0.3，第 6 章；状态：基线需求，具体实现状态待跟踪。"
+  },
+  "issues": [
+    {
+      "number": 22,
+      "state": "open",
+      "title": "[FR-034] Preserve focus when restoring filtered selected task",
+      "url": "https://github.com/huiliangtao666/APS/issues/22",
+      "updated_at": "2026-10-28T23:11:32Z"
+    },
+    {
+      "number": 21,
+      "state": "closed",
+      "title": "[FR-034] Verify and fix keyboard focus and saved-plan accessible name",
+      "url": "https://github.com/huiliangtao666/APS/issues/21",
+      "updated_at": "2026-10-28T23:11:31Z"
+    },
+    {
+      "number": 20,
+      "state": "closed",
+      "title": "[FR-034] Preserve unknown task times in active verification",
+      "url": "https://github.com/huiliangtao666/APS/issues/20",
+      "updated_at": "2026-10-28T22:46:14Z"
+    },
+    {
+      "number": 19,
+      "state": "closed",
+      "title": "[FR-033] Prevent low-zoom date-axis label overlap and clipping",
+      "url": "https://github.com/huiliangtao666/APS/issues/19",
+      "updated_at": "2026-10-28T22:06:24Z"
+    },
+    {
+      "number": 16,
+      "state": "open",
+      "title": "[FR-021] Complete batching and AC14 acceptance evidence",
+      "url": "https://github.com/huiliangtao666/APS/issues/16",
+      "updated_at": "2026-10-28T19:11:22Z"
+    },
+    {
+      "number": 15,
+      "state": "open",
+      "title": "[FR-019] Complete integrated minimal-scheduling acceptance evidence",
+      "url": "https://github.com/huiliangtao666/APS/issues/15",
+      "updated_at": "2026-10-28T18:11:13Z"
+    },
+    {
+      "number": 14,
+      "state": "open",
+      "title": "[FR-018] Complete R5 and real workflow acceptance evidence",
+      "url": "https://github.com/huiliangtao666/APS/issues/14",
+      "updated_at": "2026-10-28T20:41:18Z"
+    },
+    {
+      "number": 13,
+      "state": "open",
+      "title": "[FR-017] Complete integrated rule and run acceptance evidence",
+      "url": "https://github.com/huiliangtao666/APS/issues/13",
+      "updated_at": "2026-10-28T17:46:18Z"
+    },
+    {
+      "number": 12,
+      "state": "open",
+      "title": "[FR-014/015] Remaining integrated query/edit acceptance evidence",
+      "url": "https://github.com/huiliangtao666/APS/issues/12",
+      "updated_at": "2026-10-28T17:26:33Z"
+    },
+    {
+      "number": 10,
+      "state": "open",
+      "title": "[FR-037] Complete workflow and real managed identity acceptance gaps",
+      "url": "https://github.com/huiliangtao666/APS/issues/10",
+      "updated_at": "2026-10-28T16:56:21Z"
+    },
+    {
+      "number": 9,
+      "state": "open",
+      "title": "[FR-010] Remaining acceptance gaps: inventory allocation and role evidence",
+      "url": "https://github.com/huiliangtao666/APS/issues/9",
+      "updated_at": "2026-10-28T18:26:21Z"
+    },
+    {
+      "number": 6,
+      "state": "open",
+      "title": "[R2.1] 完成 UAT-02 / AC-05 产品验收",
+      "url": "https://github.com/huiliangtao666/APS/issues/6",
+      "updated_at": "2026-10-28T15:38:44Z"
+    },
+    {
+      "number": 4,
+      "state": "open",
+      "title": "[FR-013/016] 合入 CSV 批导修复并完成 UI 验收",
+      "url": "https://github.com/huiliangtao666/APS/issues/4",
+      "updated_at": "2026-10-28T15:51:32Z"
+    },
+    {
+      "number": 3,
+      "state": "open",
+      "title": "[FR-006] 合入主线并完成工装配置 UI 验收",
+      "url": "https://github.com/huiliangtao666/APS/issues/3",
+      "updated_at": "2026-10-28T15:51:31Z"
+    },
+    {
+      "number": 2,
+      "state": "open",
+      "title": "[计划] R1 最小计算＋核对",
+      "url": "https://github.com/huiliangtao666/APS/issues/2",
+      "updated_at": "2026-10-28T15:13:50Z"
+    },
+    {
+      "number": 1,
+      "state": "open",
+      "title": "[计划] R1 最小计算＋核对",
+      "url": "https://github.com/huiliangtao666/APS/issues/1",
+      "updated_at": "2026-10-28T07:54:52Z"
+    }
+  ],
+  "defects": {
+    "20": "UNKNOWN01 closed after independent round1 PASS at 21ff4dd72d9583ec591436b160a0b79931d81900",
+    "21": "KBD01/02/03 closed after independent round1 PASS at 02a5e307f4b731ebb2b1882ed02e16a7e20c52e3",
+    "22": "KBD04 open; Dev round1 at 4e11da6c768e6eeb026f38e1d247191cbe3c2cf8; independent APS-Test dlv_c42875ac-c478-4bcc-a9e3-b6bc5656966b pending; no round2 unless new Test failure"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "tapBySuite": {
+    "query": 5,
+    "trial-panel": 6,
+    "delivery-panel": 1,
+    "timeline-panel": 13,
+    "editor-interaction": 10,
+    "worker": 9,
+    "confirmation-panel": 4,
+    "resource-panel": 1,
+    "business": 164,
+    "canonical": 213,
+    "run-history": 8,
+    "run-panel": 2,
+    "scoped-report": 7,
+    "result-panel": 3,
+    "fr036-contract": 8,
+    "execution-panel": 7,
+    "load-panel": 3,
+    "task-linkage-panel": 2
+  },
+  "actualTAPTotal": 466,
+  "browser": {
+    "fr035": 13,
+    "confirmedHistory": 5,
+    "fr038": 6,
+    "fr036": 3,
+    "fr036Links": 46,
+    "fr036Downloads": 8
+  },
+  "build": "PASS",
+  "csvPrototypeRegression": "PASS separate non-TAP gate",
+  "runs": {
+    "fullSuite": "run2",
+    "FR036Final": "run3; copied successful run2 upstream evidence; only QA expected status corrected from400 to409 for protected existing execution unit rebase; no product changes"
+  },
+  "runtime": {
+    "image": "sha256:0d45a31aa25c4cca1eaacbfd1ba4ee6d5028d899b329e49a6036a66fd0c35da8",
+    "node": "22.23.2",
+    "playwright": "1.56.1",
+    "chromium": "141.0.7390.37; build1194",
+    "identity": "synthetic test actor; real App/Express/membership; no gateway/SSO"
+  },
+  "sourceManifest": "qa/fr036-source-sha256.json"
+}

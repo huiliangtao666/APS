@@ -1,0 +1,1668 @@
+{
+  "identity": "Genuine React/Express/real Worker; synthetic membership actors + QA runtime alias; isolated container browser, no SSO/gateway claim.",
+  "checks": [
+    "React edit/save/refresh tool capacity changes schedule [5,50] -> [5,5]",
+    "browser inherited return20 takes effect; adjacent tool release at55 then next acquired55",
+    "React whole->explicit window changes schedule [5,60] -> [5,40]",
+    "React phase release vs full retention [0,10] -> [0,30], refresh persistent",
+    "React disable A->B produces no personnel match; saved refresh readback",
+    "React copy/create exact MIX prohibition overrides wildcard allow; delete restores wildcard; all saved through atomic API",
+    "actual UI B provider / A requirement cannot reverse the saved A->B relation",
+    "two skills each need1 and pool2: second task waits to30, never capacity4",
+    "explicit shift60-80 allows windows [60,70),[70,80) while operations continue; full30min retention not scheduled",
+    "query role server403 leaves complete business/audit bytes unchanged",
+    "query actual React form read-only",
+    "audit records actor/time/reason/fromVersion/toVersion; confirmed plan, confirmation, input and run snapshots remain unchanged"
+  ],
+  "requests": [
+    {
+      "path": "/api/inputs",
+      "status": 200
+    },
+    {
+      "path": "/api/calculate",
+      "status": 201
+    },
+    {
+      "path": "/api/inputs",
+      "status": 200
+    },
+    {
+      "path": "/api/calculate",
+      "status": 201
+    },
+    {
+      "path": "/api/inputs",
+      "status": 200
+    },
+    {
+      "path": "/api/calculate",
+      "status": 201
+    },
+    {
+      "path": "/api/inputs",
+      "status": 400
+    },
+    {
+      "path": "/api/calculate",
+      "status": 201
+    },
+    {
+      "path": "/api/inputs",
+      "status": 200
+    },
+    {
+      "path": "/api/calculate",
+      "status": 201
+    },
+    {
+      "path": "/api/inputs",
+      "status": 200
+    },
+    {
+      "path": "/api/calculate",
+      "status": 201
+    },
+    {
+      "path": "/api/inputs",
+      "status": 200
+    },
+    {
+      "path": "/api/calculate",
+      "status": 201
+    },
+    {
+      "path": "/api/inputs",
+      "status": 200
+    },
+    {
+      "path": "/api/calculate",
+      "status": 201
+    },
+    {
+      "path": "/api/inputs",
+      "status": 200
+    },
+    {
+      "path": "/api/calculate",
+      "status": 201
+    },
+    {
+      "path": "/api/inputs",
+      "status": 200
+    },
+    {
+      "path": "/api/calculate",
+      "status": 201
+    }
+  ],
+  "errors": [],
+  "results": [
+    {
+      "label": "baseline whole tool actual Worker",
+      "runId": "2e43bb2f-a045-4128-bf62-78fef11f447f",
+      "status": "completed",
+      "policyVersion": "3924601e8ba1e4ec6f5181d2ba32410d2185e2bcb4d4e8491dd7d23f04694f74",
+      "taskStarts": [
+        5,
+        50
+      ],
+      "reservations": [
+        {
+          "offsetStart": 0,
+          "offsetEnd": 0,
+          "availableFrom": 0,
+          "availableUntil": 600,
+          "reason": "显式逐生产批完整区间；工装配置；提前 5 / 后延 10 分钟",
+          "declarationId": "C-A",
+          "orderId": "A",
+          "productionBatchId": "",
+          "type": "工装",
+          "resourceId": "G40",
+          "unit": "套",
+          "quantity": "1",
+          "capacity": "1",
+          "before": 5,
+          "after": 10,
+          "operation": "MIX",
+          "start": 0,
+          "end": 45,
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX01",
+          "quantity": "1",
+          "unit": "台",
+          "start": 5,
+          "end": 35,
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "offsetStart": 0,
+          "offsetEnd": 0,
+          "availableFrom": 0,
+          "availableUntil": 600,
+          "reason": "显式逐生产批完整区间；工装配置；提前 5 / 后延 10 分钟",
+          "declarationId": "C-B",
+          "orderId": "B",
+          "productionBatchId": "",
+          "type": "工装",
+          "resourceId": "G40",
+          "unit": "套",
+          "quantity": "1",
+          "capacity": "1",
+          "before": 5,
+          "after": 10,
+          "operation": "MIX",
+          "start": 45,
+          "end": 90,
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX02",
+          "quantity": "1",
+          "unit": "台",
+          "start": 50,
+          "end": 80,
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        }
+      ],
+      "independent": {
+        "checkedAt": "2026-10-29T03:18:33.710Z",
+        "planId": "2ae13ad7-768e-415b-a168-994b28668ef5",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；资源参数复核仅适用于携带冻结配置的新契约；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 2 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "pass",
+            "details": [
+              "已检查 2 个任务在 2 台设备上的区间；相邻端点按 [开始,结束) 处理。"
+            ]
+          },
+          "precedence": {
+            "status": "not_checked",
+            "details": [
+              "结果中没有可核对的前序任务关系。"
+            ]
+          },
+          "resourcePolicies": {
+            "status": "pass",
+            "details": [
+              "工装 已启用；空间 未检查（未启用）；人员按已配置依赖检查。",
+              "按冻结配置重建已采用的工装/人员窗口、覆盖人数、单向替代、可用期与同池总容量；相邻释放合法。"
+            ]
+          }
+        },
+        "contentHash": "8f539568bf8753d3352ca924e6fd80d6957c010d273cd5bb4c5a121335ccbee8"
+      }
+    },
+    {
+      "label": "browser changes tool capacity 1->2",
+      "taskStarts": [
+        5,
+        5
+      ],
+      "reservations": [
+        {
+          "offsetStart": 0,
+          "offsetEnd": 0,
+          "availableFrom": 0,
+          "availableUntil": 600,
+          "reason": "显式逐生产批完整区间；工装配置；提前 5 / 后延 10 分钟",
+          "declarationId": "C-A",
+          "orderId": "A",
+          "productionBatchId": "",
+          "type": "工装",
+          "resourceId": "G40",
+          "unit": "套",
+          "quantity": "1",
+          "capacity": "2",
+          "before": 5,
+          "after": 10,
+          "operation": "MIX",
+          "start": 0,
+          "end": 45,
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX01",
+          "quantity": "1",
+          "unit": "台",
+          "start": 5,
+          "end": 35,
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "offsetStart": 0,
+          "offsetEnd": 0,
+          "availableFrom": 0,
+          "availableUntil": 600,
+          "reason": "显式逐生产批完整区间；工装配置；提前 5 / 后延 10 分钟",
+          "declarationId": "C-B",
+          "orderId": "B",
+          "productionBatchId": "",
+          "type": "工装",
+          "resourceId": "G40",
+          "unit": "套",
+          "quantity": "1",
+          "capacity": "2",
+          "before": 5,
+          "after": 10,
+          "operation": "MIX",
+          "start": 0,
+          "end": 45,
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX02",
+          "quantity": "1",
+          "unit": "台",
+          "start": 5,
+          "end": 35,
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        }
+      ],
+      "findings": []
+    },
+    {
+      "label": "browser extended return20",
+      "taskStarts": [
+        5,
+        60
+      ],
+      "reservations": [
+        {
+          "offsetStart": 0,
+          "offsetEnd": 0,
+          "availableFrom": 0,
+          "availableUntil": 600,
+          "reason": "显式逐生产批完整区间；工装配置；提前 5 / 后延 20 分钟",
+          "declarationId": "C-A",
+          "orderId": "A",
+          "productionBatchId": "",
+          "type": "工装",
+          "resourceId": "G40",
+          "unit": "套",
+          "quantity": "1",
+          "capacity": "1",
+          "before": 5,
+          "after": 20,
+          "operation": "MIX",
+          "start": 0,
+          "end": 55,
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX01",
+          "quantity": "1",
+          "unit": "台",
+          "start": 5,
+          "end": 35,
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "offsetStart": 0,
+          "offsetEnd": 0,
+          "availableFrom": 0,
+          "availableUntil": 600,
+          "reason": "显式逐生产批完整区间；工装配置；提前 5 / 后延 20 分钟",
+          "declarationId": "C-B",
+          "orderId": "B",
+          "productionBatchId": "",
+          "type": "工装",
+          "resourceId": "G40",
+          "unit": "套",
+          "quantity": "1",
+          "capacity": "1",
+          "before": 5,
+          "after": 20,
+          "operation": "MIX",
+          "start": 55,
+          "end": 110,
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX02",
+          "quantity": "1",
+          "unit": "台",
+          "start": 60,
+          "end": 90,
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        }
+      ],
+      "findings": []
+    },
+    {
+      "label": "browser phase tool return20",
+      "taskStarts": [
+        5,
+        40
+      ],
+      "reservations": [
+        {
+          "offsetStart": 0,
+          "offsetEnd": 20,
+          "availableFrom": 0,
+          "availableUntil": 600,
+          "reason": "明确窗口；工装配置；提前 5 / 后延 20 分钟",
+          "declarationId": "C-A",
+          "orderId": "A",
+          "productionBatchId": "",
+          "type": "工装",
+          "resourceId": "G40",
+          "unit": "套",
+          "quantity": "1",
+          "capacity": "1",
+          "before": 5,
+          "after": 20,
+          "operation": "MIX",
+          "start": 0,
+          "end": 35,
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX01",
+          "quantity": "1",
+          "unit": "台",
+          "start": 5,
+          "end": 35,
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "offsetStart": 0,
+          "offsetEnd": 20,
+          "availableFrom": 0,
+          "availableUntil": 600,
+          "reason": "明确窗口；工装配置；提前 5 / 后延 20 分钟",
+          "declarationId": "C-B",
+          "orderId": "B",
+          "productionBatchId": "",
+          "type": "工装",
+          "resourceId": "G40",
+          "unit": "套",
+          "quantity": "1",
+          "capacity": "1",
+          "before": 5,
+          "after": 20,
+          "operation": "MIX",
+          "start": 35,
+          "end": 70,
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX02",
+          "quantity": "1",
+          "unit": "台",
+          "start": 40,
+          "end": 70,
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        }
+      ],
+      "findings": []
+    },
+    {
+      "label": "phase tool actual Worker",
+      "runId": "d7c21faf-535c-4178-9ec5-8760911da330",
+      "status": "completed",
+      "policyVersion": "f4a6f39e34f17af6d4c3d9d1dd646bd3f25d5ae359de9b45e616b08c6ae75fea",
+      "taskStarts": [
+        5,
+        40
+      ],
+      "reservations": [
+        {
+          "offsetStart": 0,
+          "offsetEnd": 20,
+          "availableFrom": 0,
+          "availableUntil": 600,
+          "reason": "明确窗口；工装配置；提前 5 / 后延 20 分钟",
+          "declarationId": "C-A",
+          "orderId": "A",
+          "productionBatchId": "",
+          "type": "工装",
+          "resourceId": "G40",
+          "unit": "套",
+          "quantity": "1",
+          "capacity": "1",
+          "before": 5,
+          "after": 20,
+          "operation": "MIX",
+          "start": 0,
+          "end": 35,
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX01",
+          "quantity": "1",
+          "unit": "台",
+          "start": 5,
+          "end": 35,
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "offsetStart": 0,
+          "offsetEnd": 20,
+          "availableFrom": 0,
+          "availableUntil": 600,
+          "reason": "明确窗口；工装配置；提前 5 / 后延 20 分钟",
+          "declarationId": "C-B",
+          "orderId": "B",
+          "productionBatchId": "",
+          "type": "工装",
+          "resourceId": "G40",
+          "unit": "套",
+          "quantity": "1",
+          "capacity": "1",
+          "before": 5,
+          "after": 20,
+          "operation": "MIX",
+          "start": 35,
+          "end": 70,
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX02",
+          "quantity": "1",
+          "unit": "台",
+          "start": 40,
+          "end": 70,
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        }
+      ],
+      "independent": {
+        "checkedAt": "2026-10-29T03:18:35.387Z",
+        "planId": "8073f9a1-49cf-4b3a-b893-f027fa073cea",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；资源参数复核仅适用于携带冻结配置的新契约；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 2 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "pass",
+            "details": [
+              "已检查 2 个任务在 2 台设备上的区间；相邻端点按 [开始,结束) 处理。"
+            ]
+          },
+          "precedence": {
+            "status": "not_checked",
+            "details": [
+              "结果中没有可核对的前序任务关系。"
+            ]
+          },
+          "resourcePolicies": {
+            "status": "pass",
+            "details": [
+              "工装 已启用；空间 未检查（未启用）；人员按已配置依赖检查。",
+              "按冻结配置重建已采用的工装/人员窗口、覆盖人数、单向替代、可用期与同池总容量；相邻释放合法。"
+            ]
+          }
+        },
+        "contentHash": "ebd8052d26780f3eac219540de8748b9440afe18099653b27e61f1385a215186"
+      }
+    },
+    {
+      "label": "personnel window release",
+      "taskStarts": [
+        0,
+        10
+      ],
+      "reservations": [
+        {
+          "roleSource": "A",
+          "groupId": "G1",
+          "count": 1,
+          "start": 0,
+          "end": 10,
+          "providedSkill": "A",
+          "requiredSkill": "B",
+          "relationId": "AB",
+          "reason": "有向替代 A → B（AB，*）；窗口外释放；同池统一扣人数",
+          "type": "人员",
+          "resourceId": "G1",
+          "quantity": "1",
+          "unit": "人",
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX01",
+          "quantity": "1",
+          "unit": "台",
+          "start": 0,
+          "end": 30,
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "roleSource": "B",
+          "groupId": "G1",
+          "count": 1,
+          "start": 10,
+          "end": 20,
+          "providedSkill": "A",
+          "requiredSkill": "B",
+          "relationId": "AB",
+          "reason": "有向替代 A → B（AB，*）；窗口外释放；同池统一扣人数",
+          "type": "人员",
+          "resourceId": "G1",
+          "quantity": "1",
+          "unit": "人",
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX02",
+          "quantity": "1",
+          "unit": "台",
+          "start": 10,
+          "end": 40,
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        }
+      ],
+      "findings": []
+    },
+    {
+      "label": "personnel full retention browser",
+      "taskStarts": [
+        0,
+        30
+      ],
+      "reservations": [
+        {
+          "roleSource": "A",
+          "groupId": "G1",
+          "count": 1,
+          "start": 0,
+          "end": 30,
+          "providedSkill": "A",
+          "requiredSkill": "B",
+          "relationId": "AB",
+          "reason": "有向替代 A → B（AB，*）；窗口外保留，全工序占用；同池统一扣人数",
+          "type": "人员",
+          "resourceId": "G1",
+          "quantity": "1",
+          "unit": "人",
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX01",
+          "quantity": "1",
+          "unit": "台",
+          "start": 0,
+          "end": 30,
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "roleSource": "B",
+          "groupId": "G1",
+          "count": 1,
+          "start": 30,
+          "end": 60,
+          "providedSkill": "A",
+          "requiredSkill": "B",
+          "relationId": "AB",
+          "reason": "有向替代 A → B（AB，*）；窗口外保留，全工序占用；同池统一扣人数",
+          "type": "人员",
+          "resourceId": "G1",
+          "quantity": "1",
+          "unit": "人",
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX02",
+          "quantity": "1",
+          "unit": "台",
+          "start": 30,
+          "end": 60,
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        }
+      ],
+      "findings": []
+    },
+    {
+      "label": "retained personnel actual Worker",
+      "runId": "741719f5-9cf2-47b7-a3f2-69dc5babfa25",
+      "status": "completed",
+      "policyVersion": "119502a5f57bb1634ee312cc6024daf3a9001ce491aa952581dd19d7687236ed",
+      "taskStarts": [
+        0,
+        30
+      ],
+      "reservations": [
+        {
+          "roleSource": "A",
+          "groupId": "G1",
+          "count": 1,
+          "start": 0,
+          "end": 30,
+          "providedSkill": "A",
+          "requiredSkill": "B",
+          "relationId": "AB",
+          "reason": "有向替代 A → B（AB，*）；窗口外保留，全工序占用；同池统一扣人数",
+          "type": "人员",
+          "resourceId": "G1",
+          "quantity": "1",
+          "unit": "人",
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX01",
+          "quantity": "1",
+          "unit": "台",
+          "start": 0,
+          "end": 30,
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "roleSource": "B",
+          "groupId": "G1",
+          "count": 1,
+          "start": 30,
+          "end": 60,
+          "providedSkill": "A",
+          "requiredSkill": "B",
+          "relationId": "AB",
+          "reason": "有向替代 A → B（AB，*）；窗口外保留，全工序占用；同池统一扣人数",
+          "type": "人员",
+          "resourceId": "G1",
+          "quantity": "1",
+          "unit": "人",
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX02",
+          "quantity": "1",
+          "unit": "台",
+          "start": 30,
+          "end": 60,
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        }
+      ],
+      "independent": {
+        "checkedAt": "2026-10-29T03:18:36.501Z",
+        "planId": "91c75093-bc97-45a7-8da9-53c4110e2dbc",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；资源参数复核仅适用于携带冻结配置的新契约；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 2 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "pass",
+            "details": [
+              "已检查 2 个任务在 2 台设备上的区间；相邻端点按 [开始,结束) 处理。"
+            ]
+          },
+          "precedence": {
+            "status": "not_checked",
+            "details": [
+              "结果中没有可核对的前序任务关系。"
+            ]
+          },
+          "resourcePolicies": {
+            "status": "pass",
+            "details": [
+              "工装 未检查（未启用）；空间 未检查（未启用）；人员按已配置依赖检查。",
+              "按冻结配置重建已采用的工装/人员窗口、覆盖人数、单向替代、可用期与同池总容量；相邻释放合法。"
+            ]
+          }
+        },
+        "contentHash": "57a7678ad524e6f2b211e7f1e5216fd8946275f70f85e99e08a50adea1c06e7a"
+      }
+    },
+    {
+      "label": "browser disable A->B",
+      "taskStarts": [],
+      "reservations": [],
+      "findings": [
+        {
+          "code": "UNPLANNED / PERSONNEL",
+          "message": "订单 A / 工序 MIX 未排：工序 MIX 需要 1 人、技能“B”、班次“早班”，参与时段 0–30 无足够可用人员或无启用的有向替代。全部候选资源/物料未提交；请调整显式数量、参与/释放窗口或计划范围。",
+          "taskIds": [
+            "A-MIX"
+          ],
+          "context": {
+            "orderId": "A",
+            "operation": "MIX",
+            "machineId": "MIX01",
+            "requiredDuration": 30,
+            "candidateMinute": 0,
+            "horizonEnd": null,
+            "dependencies": [
+              {
+                "订单编号": "A",
+                "工序编号": "MIX",
+                "资源类型": "设备",
+                "资源编号": "MIX01",
+                "需求数量": "1",
+                "提前占用分钟": "0",
+                "后延占用分钟": "0",
+                "所需技能": "",
+                "所需班次": "",
+                "人员参与阶段": "",
+                "人员开始偏移": "",
+                "人员结束偏移": "",
+                "窗口外释放": ""
+              },
+              {
+                "订单编号": "A",
+                "工序编号": "MIX",
+                "资源类型": "人员技能",
+                "资源编号": "G1",
+                "需求数量": "1",
+                "提前占用分钟": "",
+                "后延占用分钟": "",
+                "所需技能": "B",
+                "所需班次": "早班",
+                "人员参与阶段": "明确准备窗口",
+                "人员开始偏移": "0",
+                "人员结束偏移": "20",
+                "窗口外释放": "否"
+              }
+            ]
+          }
+        },
+        {
+          "code": "UNPLANNED / PERSONNEL",
+          "message": "订单 B / 工序 MIX 未排：工序 MIX 需要 1 人、技能“B”、班次“早班”，参与时段 0–30 无足够可用人员或无启用的有向替代。全部候选资源/物料未提交；请调整显式数量、参与/释放窗口或计划范围。",
+          "taskIds": [
+            "B-MIX"
+          ],
+          "context": {
+            "orderId": "B",
+            "operation": "MIX",
+            "machineId": "MIX02",
+            "requiredDuration": 30,
+            "candidateMinute": 0,
+            "horizonEnd": null,
+            "dependencies": [
+              {
+                "订单编号": "B",
+                "工序编号": "MIX",
+                "资源类型": "设备",
+                "资源编号": "MIX02",
+                "需求数量": "1",
+                "提前占用分钟": "0",
+                "后延占用分钟": "0",
+                "所需技能": "",
+                "所需班次": "",
+                "人员参与阶段": "",
+                "人员开始偏移": "",
+                "人员结束偏移": "",
+                "窗口外释放": ""
+              },
+              {
+                "订单编号": "B",
+                "工序编号": "MIX",
+                "资源类型": "人员技能",
+                "资源编号": "G1",
+                "需求数量": "1",
+                "提前占用分钟": "",
+                "后延占用分钟": "",
+                "所需技能": "B",
+                "所需班次": "早班",
+                "人员参与阶段": "明确准备窗口",
+                "人员开始偏移": "0",
+                "人员结束偏移": "20",
+                "窗口外释放": "否"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "browser enable A->B",
+      "taskStarts": [
+        0,
+        30
+      ],
+      "reservations": [
+        {
+          "roleSource": "A",
+          "groupId": "G1",
+          "count": 1,
+          "start": 0,
+          "end": 30,
+          "providedSkill": "A",
+          "requiredSkill": "B",
+          "relationId": "AB",
+          "reason": "有向替代 A → B（AB，*）；窗口外保留，全工序占用；同池统一扣人数",
+          "type": "人员",
+          "resourceId": "G1",
+          "quantity": "1",
+          "unit": "人",
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX01",
+          "quantity": "1",
+          "unit": "台",
+          "start": 0,
+          "end": 30,
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "roleSource": "B",
+          "groupId": "G1",
+          "count": 1,
+          "start": 30,
+          "end": 60,
+          "providedSkill": "A",
+          "requiredSkill": "B",
+          "relationId": "AB",
+          "reason": "有向替代 A → B（AB，*）；窗口外保留，全工序占用；同池统一扣人数",
+          "type": "人员",
+          "resourceId": "G1",
+          "quantity": "1",
+          "unit": "人",
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX02",
+          "quantity": "1",
+          "unit": "台",
+          "start": 30,
+          "end": 60,
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        }
+      ],
+      "findings": []
+    },
+    {
+      "label": "browser exact operation deny overrides wildcard allow",
+      "taskStarts": [],
+      "reservations": [],
+      "findings": [
+        {
+          "code": "UNPLANNED / PERSONNEL",
+          "message": "订单 A / 工序 MIX 未排：工序 MIX 需要 1 人、技能“B”、班次“早班”，参与时段 0–30 无足够可用人员或无启用的有向替代。全部候选资源/物料未提交；请调整显式数量、参与/释放窗口或计划范围。",
+          "taskIds": [
+            "A-MIX"
+          ],
+          "context": {
+            "orderId": "A",
+            "operation": "MIX",
+            "machineId": "MIX01",
+            "requiredDuration": 30,
+            "candidateMinute": 0,
+            "horizonEnd": null,
+            "dependencies": [
+              {
+                "订单编号": "A",
+                "工序编号": "MIX",
+                "资源类型": "设备",
+                "资源编号": "MIX01",
+                "需求数量": "1",
+                "提前占用分钟": "0",
+                "后延占用分钟": "0",
+                "所需技能": "",
+                "所需班次": "",
+                "人员参与阶段": "",
+                "人员开始偏移": "",
+                "人员结束偏移": "",
+                "窗口外释放": ""
+              },
+              {
+                "订单编号": "A",
+                "工序编号": "MIX",
+                "资源类型": "人员技能",
+                "资源编号": "G1",
+                "需求数量": "1",
+                "提前占用分钟": "",
+                "后延占用分钟": "",
+                "所需技能": "B",
+                "所需班次": "早班",
+                "人员参与阶段": "明确准备窗口",
+                "人员开始偏移": "0",
+                "人员结束偏移": "20",
+                "窗口外释放": "否"
+              }
+            ]
+          }
+        },
+        {
+          "code": "UNPLANNED / PERSONNEL",
+          "message": "订单 B / 工序 MIX 未排：工序 MIX 需要 1 人、技能“B”、班次“早班”，参与时段 0–30 无足够可用人员或无启用的有向替代。全部候选资源/物料未提交；请调整显式数量、参与/释放窗口或计划范围。",
+          "taskIds": [
+            "B-MIX"
+          ],
+          "context": {
+            "orderId": "B",
+            "operation": "MIX",
+            "machineId": "MIX02",
+            "requiredDuration": 30,
+            "candidateMinute": 0,
+            "horizonEnd": null,
+            "dependencies": [
+              {
+                "订单编号": "B",
+                "工序编号": "MIX",
+                "资源类型": "设备",
+                "资源编号": "MIX02",
+                "需求数量": "1",
+                "提前占用分钟": "0",
+                "后延占用分钟": "0",
+                "所需技能": "",
+                "所需班次": "",
+                "人员参与阶段": "",
+                "人员开始偏移": "",
+                "人员结束偏移": "",
+                "窗口外释放": ""
+              },
+              {
+                "订单编号": "B",
+                "工序编号": "MIX",
+                "资源类型": "人员技能",
+                "资源编号": "G1",
+                "需求数量": "1",
+                "提前占用分钟": "",
+                "后延占用分钟": "",
+                "所需技能": "B",
+                "所需班次": "早班",
+                "人员参与阶段": "明确准备窗口",
+                "人员开始偏移": "0",
+                "人员结束偏移": "20",
+                "窗口外释放": "否"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "browser deletes exact deny and wildcard A->B works",
+      "taskStarts": [
+        0,
+        30
+      ],
+      "reservations": [
+        {
+          "roleSource": "A",
+          "groupId": "G1",
+          "count": 1,
+          "start": 0,
+          "end": 30,
+          "providedSkill": "A",
+          "requiredSkill": "B",
+          "relationId": "AB",
+          "reason": "有向替代 A → B（AB，*）；窗口外保留，全工序占用；同池统一扣人数",
+          "type": "人员",
+          "resourceId": "G1",
+          "quantity": "1",
+          "unit": "人",
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX01",
+          "quantity": "1",
+          "unit": "台",
+          "start": 0,
+          "end": 30,
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "roleSource": "B",
+          "groupId": "G1",
+          "count": 1,
+          "start": 30,
+          "end": 60,
+          "providedSkill": "A",
+          "requiredSkill": "B",
+          "relationId": "AB",
+          "reason": "有向替代 A → B（AB，*）；窗口外保留，全工序占用；同池统一扣人数",
+          "type": "人员",
+          "resourceId": "G1",
+          "quantity": "1",
+          "unit": "人",
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX02",
+          "quantity": "1",
+          "unit": "台",
+          "start": 30,
+          "end": 60,
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        }
+      ],
+      "findings": []
+    },
+    {
+      "label": "browser reverse requirement B cannot provide A",
+      "taskStarts": [],
+      "reservations": [],
+      "findings": [
+        {
+          "code": "UNPLANNED / PERSONNEL",
+          "message": "订单 A / 工序 MIX 未排：工序 MIX 需要 1 人、技能“A”、班次“早班”，参与时段 0–30 无足够可用人员或无启用的有向替代。全部候选资源/物料未提交；请调整显式数量、参与/释放窗口或计划范围。",
+          "taskIds": [
+            "A-MIX"
+          ],
+          "context": {
+            "orderId": "A",
+            "operation": "MIX",
+            "machineId": "MIX01",
+            "requiredDuration": 30,
+            "candidateMinute": 0,
+            "horizonEnd": null,
+            "dependencies": [
+              {
+                "订单编号": "A",
+                "工序编号": "MIX",
+                "资源类型": "设备",
+                "资源编号": "MIX01",
+                "需求数量": "1",
+                "提前占用分钟": "0",
+                "后延占用分钟": "0",
+                "所需技能": "",
+                "所需班次": "",
+                "人员参与阶段": "",
+                "人员开始偏移": "",
+                "人员结束偏移": "",
+                "窗口外释放": ""
+              },
+              {
+                "订单编号": "A",
+                "工序编号": "MIX",
+                "资源类型": "人员技能",
+                "资源编号": "G1",
+                "需求数量": "1",
+                "提前占用分钟": "",
+                "后延占用分钟": "",
+                "所需技能": "A",
+                "所需班次": "早班",
+                "人员参与阶段": "明确准备窗口",
+                "人员开始偏移": "0",
+                "人员结束偏移": "20",
+                "窗口外释放": "否"
+              }
+            ]
+          }
+        },
+        {
+          "code": "UNPLANNED / PERSONNEL",
+          "message": "订单 B / 工序 MIX 未排：工序 MIX 需要 1 人、技能“A”、班次“早班”，参与时段 0–30 无足够可用人员或无启用的有向替代。全部候选资源/物料未提交；请调整显式数量、参与/释放窗口或计划范围。",
+          "taskIds": [
+            "B-MIX"
+          ],
+          "context": {
+            "orderId": "B",
+            "operation": "MIX",
+            "machineId": "MIX02",
+            "requiredDuration": 30,
+            "candidateMinute": 0,
+            "horizonEnd": null,
+            "dependencies": [
+              {
+                "订单编号": "B",
+                "工序编号": "MIX",
+                "资源类型": "设备",
+                "资源编号": "MIX02",
+                "需求数量": "1",
+                "提前占用分钟": "0",
+                "后延占用分钟": "0",
+                "所需技能": "",
+                "所需班次": "",
+                "人员参与阶段": "",
+                "人员开始偏移": "",
+                "人员结束偏移": "",
+                "窗口外释放": ""
+              },
+              {
+                "订单编号": "B",
+                "工序编号": "MIX",
+                "资源类型": "人员技能",
+                "资源编号": "G1",
+                "需求数量": "1",
+                "提前占用分钟": "",
+                "后延占用分钟": "",
+                "所需技能": "A",
+                "所需班次": "早班",
+                "人员参与阶段": "明确准备窗口",
+                "人员开始偏移": "0",
+                "人员结束偏移": "20",
+                "窗口外释放": "否"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "two skills share one pool actual Worker",
+      "runId": "2c5a39d1-55fe-4235-b817-c71e6d1a67d8",
+      "status": "completed",
+      "policyVersion": "60c1eccb43ccf40f3e84f0dc65a44bc7a89b76432441a95936a7194a81a3e8ca",
+      "taskStarts": [
+        0,
+        30
+      ],
+      "reservations": [
+        {
+          "roleSource": "A",
+          "groupId": "G1",
+          "count": 1,
+          "start": 0,
+          "end": 30,
+          "providedSkill": "A",
+          "requiredSkill": "B",
+          "relationId": "AB",
+          "reason": "有向替代 A → B（AB，*）；窗口外保留，全工序占用；同池统一扣人数",
+          "type": "人员",
+          "resourceId": "G1",
+          "quantity": "1",
+          "unit": "人",
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "roleSource": "A",
+          "groupId": "G1",
+          "count": 1,
+          "start": 0,
+          "end": 30,
+          "providedSkill": "C",
+          "requiredSkill": "C",
+          "relationId": "",
+          "reason": "同技能匹配；窗口外保留，全工序占用；同池统一扣人数",
+          "type": "人员",
+          "resourceId": "G1",
+          "quantity": "1",
+          "unit": "人",
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX01",
+          "quantity": "1",
+          "unit": "台",
+          "start": 0,
+          "end": 30,
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "roleSource": "B",
+          "groupId": "G1",
+          "count": 1,
+          "start": 30,
+          "end": 60,
+          "providedSkill": "A",
+          "requiredSkill": "B",
+          "relationId": "AB",
+          "reason": "有向替代 A → B（AB，*）；窗口外保留，全工序占用；同池统一扣人数",
+          "type": "人员",
+          "resourceId": "G1",
+          "quantity": "1",
+          "unit": "人",
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        },
+        {
+          "roleSource": "B",
+          "groupId": "G1",
+          "count": 1,
+          "start": 30,
+          "end": 60,
+          "providedSkill": "C",
+          "requiredSkill": "C",
+          "relationId": "",
+          "reason": "同技能匹配；窗口外保留，全工序占用；同池统一扣人数",
+          "type": "人员",
+          "resourceId": "G1",
+          "quantity": "1",
+          "unit": "人",
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX02",
+          "quantity": "1",
+          "unit": "台",
+          "start": 30,
+          "end": 60,
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        }
+      ],
+      "independent": {
+        "checkedAt": "2026-10-29T03:18:40.849Z",
+        "planId": "e8cdc927-7c79-4e8f-8e59-f11882e116ac",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；资源参数复核仅适用于携带冻结配置的新契约；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 2 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "pass",
+            "details": [
+              "已检查 2 个任务在 2 台设备上的区间；相邻端点按 [开始,结束) 处理。"
+            ]
+          },
+          "precedence": {
+            "status": "not_checked",
+            "details": [
+              "结果中没有可核对的前序任务关系。"
+            ]
+          },
+          "resourcePolicies": {
+            "status": "pass",
+            "details": [
+              "工装 未检查（未启用）；空间 未检查（未启用）；人员按已配置依赖检查。",
+              "按冻结配置重建已采用的工装/人员窗口、覆盖人数、单向替代、可用期与同池总容量；相邻释放合法。"
+            ]
+          }
+        },
+        "contentHash": "11e60383366ea97518dab05d88b461a9e4a6661c1aebdec2d6fb1c255906d1ce"
+      }
+    },
+    {
+      "label": "personnel shift60-80 released windows",
+      "runId": "3d7d29a6-d5fa-4835-af93-de1ad28b08a9",
+      "status": "completed",
+      "policyVersion": "604384dca9de859c040411a1603af2b87812b7f30b2df32a64adbacff20465e9",
+      "taskStarts": [
+        60,
+        70
+      ],
+      "reservations": [
+        {
+          "roleSource": "A",
+          "groupId": "G1",
+          "count": 1,
+          "start": 60,
+          "end": 70,
+          "providedSkill": "A",
+          "requiredSkill": "B",
+          "relationId": "AB",
+          "reason": "有向替代 A → B（AB，*）；窗口外释放；同池统一扣人数",
+          "type": "人员",
+          "resourceId": "G1",
+          "quantity": "1",
+          "unit": "人",
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX01",
+          "quantity": "1",
+          "unit": "台",
+          "start": 60,
+          "end": 90,
+          "taskId": "A-MIX",
+          "taskIds": [
+            "A-MIX"
+          ]
+        },
+        {
+          "roleSource": "B",
+          "groupId": "G1",
+          "count": 1,
+          "start": 70,
+          "end": 80,
+          "providedSkill": "A",
+          "requiredSkill": "B",
+          "relationId": "AB",
+          "reason": "有向替代 A → B（AB，*）；窗口外释放；同池统一扣人数",
+          "type": "人员",
+          "resourceId": "G1",
+          "quantity": "1",
+          "unit": "人",
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        },
+        {
+          "type": "设备",
+          "resourceId": "MIX02",
+          "quantity": "1",
+          "unit": "台",
+          "start": 70,
+          "end": 100,
+          "taskId": "B-MIX",
+          "taskIds": [
+            "B-MIX"
+          ]
+        }
+      ],
+      "independent": {
+        "checkedAt": "2026-10-29T03:18:41.246Z",
+        "planId": "739b7557-0f74-46a0-8f11-3016f5aa6b41",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；资源参数复核仅适用于携带冻结配置的新契约；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "pass",
+            "details": [
+              "已核对 2 个输入订单、2 个结果任务；产线为 L01。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "pass",
+            "details": [
+              "已检查 2 个任务在 2 台设备上的区间；相邻端点按 [开始,结束) 处理。"
+            ]
+          },
+          "precedence": {
+            "status": "not_checked",
+            "details": [
+              "结果中没有可核对的前序任务关系。"
+            ]
+          },
+          "resourcePolicies": {
+            "status": "pass",
+            "details": [
+              "工装 未检查（未启用）；空间 未检查（未启用）；人员按已配置依赖检查。",
+              "按冻结配置重建已采用的工装/人员窗口、覆盖人数、单向替代、可用期与同池总容量；相邻释放合法。"
+            ]
+          }
+        },
+        "contentHash": "01ad8dfadfc0c00a58e7607593f425ce20398dcf93fae6e0afb1e98ca60ce400"
+      }
+    },
+    {
+      "label": "personnel shift60-80 full retention blocked",
+      "runId": "1a9769b5-f724-4c3f-a4cf-1c3c821e369d",
+      "status": "partial",
+      "policyVersion": "6dfcf95201c9a7000e951de43e1acc87bab6520a1c53c54e7841f26de2a9ec84",
+      "taskStarts": [],
+      "reservations": [],
+      "independent": {
+        "checkedAt": "2026-10-29T03:18:41.448Z",
+        "planId": "3b00503d-645c-4d26-841d-d858b803e1b6",
+        "findings": [],
+        "scopeNote": "独立复核仅检查单线、机器不重叠、工序先后；资源参数复核仅适用于携带冻结配置的新契约；不代表完整业务可执行。",
+        "checks": {
+          "lineScope": {
+            "status": "not_checked",
+            "details": [
+              "没有可核对的订单或已排任务。"
+            ]
+          },
+          "machineOverlap": {
+            "status": "not_checked",
+            "details": [
+              "没有已排任务可供检查。"
+            ]
+          },
+          "precedence": {
+            "status": "not_checked",
+            "details": [
+              "结果中没有可核对的前序任务关系。"
+            ]
+          },
+          "resourcePolicies": {
+            "status": "not_checked",
+            "details": [
+              "工装 未检查（未启用）；空间 未检查（未启用）；人员按已配置依赖检查。",
+              "没有已排任务或已采用的资源配置可复核。"
+            ]
+          }
+        },
+        "contentHash": "5a93dfa2fbdf7673fadad8205858e2642faac479a0dcdcf1e47025bee2fd715f"
+      }
+    }
+  ],
+  "rejections": [
+    {
+      "kind": "browser invalid atomic rejection",
+      "sha256": "dba32be25a5846a9bd2512d071bf686fbd1801f76a34386c3239f6517720a85f",
+      "issues": [
+        {
+          "code": "INPUT / RESOURCE_POLICY",
+          "table": "resourceClaims",
+          "row": 2,
+          "field": "窗口结束偏移分钟",
+          "message": "明确窗口须短于已配置固定工时；从开始+偏移到结束−偏移，不猜阶段时长"
+        }
+      ]
+    },
+    {
+      "kind": "negative count",
+      "status": 400,
+      "unchangedSHA256": "b76933a8336fdaa8fb6764387cc8ffb9c73820f76e602e629c5296b65ccf1a9e",
+      "issues": [
+        {
+          "table": "personnelGroups",
+          "file": "19_人员组与可用时间.csv",
+          "row": 2,
+          "field": "人员数量",
+          "message": "须为非负十进制数值，单位按字段名"
+        },
+        {
+          "table": "personnelGroups",
+          "file": "19_人员组与可用时间.csv",
+          "row": 2,
+          "field": "人员数量",
+          "message": "人员组须有名称及正整数人数"
+        },
+        {
+          "code": "INPUT / RESOURCE_POLICY",
+          "table": "personnelGroups",
+          "row": 2,
+          "field": "人员数量",
+          "message": "人数须为安全正整数；所有技能共用该人数池"
+        }
+      ]
+    },
+    {
+      "kind": "invalid skill reference",
+      "status": 400,
+      "unchangedSHA256": "b76933a8336fdaa8fb6764387cc8ffb9c73820f76e602e629c5296b65ccf1a9e",
+      "issues": [
+        {
+          "code": "INPUT / RESOURCE_POLICY",
+          "table": "skillSubstitutions",
+          "row": 2,
+          "field": "可提供技能",
+          "message": "须引用人员组已声明技能或现有需求技能"
+        }
+      ]
+    },
+    {
+      "kind": "empty release",
+      "status": 400,
+      "unchangedSHA256": "b76933a8336fdaa8fb6764387cc8ffb9c73820f76e602e629c5296b65ccf1a9e",
+      "issues": [
+        {
+          "code": "INPUT / RESOURCE_POLICY",
+          "table": "dependencies",
+          "row": 4,
+          "field": "窗口外释放",
+          "message": "仅接受是或否；否表示全工序保留人数",
+          "file": "12_工序资源与物料依赖.csv"
+        },
+        {
+          "code": "INPUT / RESOURCE_POLICY",
+          "table": "dependencies",
+          "row": 5,
+          "field": "窗口外释放",
+          "message": "仅接受是或否；否表示全工序保留人数",
+          "file": "12_工序资源与物料依赖.csv"
+        }
+      ]
+    }
+  ],
+  "browser": "141.0.7390.37",
+  "history": {
+    "confirmation": "bc5ce8b6-bd79-4722-bede-e41a02a6b0d5",
+    "plan": "2ae13ad7-768e-415b-a168-994b28668ef5",
+    "planSHA256": "14d9f446d1ecb665cc8d5e19edcb5efc41979374a700e92ef1543d481d566215",
+    "inputSHA256": "8c5956e5a21f36c0724f72fcf33fd2136815c571f05be8ed4d15fa7380478165",
+    "runSHA256": "9d71ab60e1e2c1d12dae63effd2ad75ed8fbdf8b27307259fa1f8c5b7ea2af34"
+  },
+  "complete": true
+}

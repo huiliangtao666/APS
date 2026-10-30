@@ -1,0 +1,146 @@
+{
+  "summedTestExecutions": 514,
+  "notUniqueCaseCount": true,
+  "zeroFailedCancelledSkippedTodo": true,
+  "footers": [
+    {
+      "file": "business.log",
+      "passFooters": [
+        164
+      ]
+    },
+    {
+      "file": "canonical.log",
+      "passFooters": [
+        90,
+        124
+      ]
+    },
+    {
+      "file": "confirmation-panel.log",
+      "passFooters": [
+        4
+      ]
+    },
+    {
+      "file": "delivery-panel.log",
+      "passFooters": [
+        1
+      ]
+    },
+    {
+      "file": "editor-interaction.log",
+      "passFooters": [
+        10
+      ]
+    },
+    {
+      "file": "execution-panel.log",
+      "passFooters": [
+        7
+      ]
+    },
+    {
+      "file": "fr013-main.log",
+      "passFooters": [
+        10
+      ]
+    },
+    {
+      "file": "fr014015-panel.log",
+      "passFooters": [
+        3
+      ]
+    },
+    {
+      "file": "fr014015.log",
+      "passFooters": [
+        4
+      ]
+    },
+    {
+      "file": "fr027.log",
+      "passFooters": [
+        17
+      ]
+    },
+    {
+      "file": "fr036-contract.log",
+      "passFooters": [
+        8
+      ]
+    },
+    {
+      "file": "load-panel.log",
+      "passFooters": [
+        3
+      ]
+    },
+    {
+      "file": "query.log",
+      "passFooters": [
+        5
+      ]
+    },
+    {
+      "file": "raw01.log",
+      "passFooters": [
+        13
+      ]
+    },
+    {
+      "file": "resource-panel.log",
+      "passFooters": [
+        1
+      ]
+    },
+    {
+      "file": "result-panel.log",
+      "passFooters": [
+        3
+      ]
+    },
+    {
+      "file": "run-history.log",
+      "passFooters": [
+        8
+      ]
+    },
+    {
+      "file": "run-panel.log",
+      "passFooters": [
+        2
+      ]
+    },
+    {
+      "file": "scoped-report.log",
+      "passFooters": [
+        7
+      ]
+    },
+    {
+      "file": "task-linkage-panel.log",
+      "passFooters": [
+        2
+      ]
+    },
+    {
+      "file": "timeline-panel.log",
+      "passFooters": [
+        13
+      ]
+    },
+    {
+      "file": "trial-panel.log",
+      "passFooters": [
+        6
+      ]
+    },
+    {
+      "file": "worker.log",
+      "passFooters": [
+        9
+      ]
+    }
+  ]
+}

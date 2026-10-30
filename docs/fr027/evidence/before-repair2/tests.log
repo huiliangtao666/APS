@@ -1,0 +1,168 @@
+TAP version 13
+# Subtest: AC19 actual allowed time move requires preview then independent recheck and explicit immutable commit, save/reload/compare/CSV
+ok 1 - AC19 actual allowed time move requires preview then independent recheck and explicit immutable commit, save/reload/compare/CSV
+  ---
+  duration_ms: 151.944459
+  type: 'test'
+  ...
+# Subtest: AC19 forbidden machine and invalid precedence/calendar drops remain invalid with specific identity/conflicts; cancel never mutates
+ok 2 - AC19 forbidden machine and invalid precedence/calendar drops remain invalid with specific identity/conflicts; cancel never mutates
+  ---
+  duration_ms: 116.185995
+  type: 'test'
+  ...
+# Subtest: AC19 persisted unstarted locks survive Worker and synchronous recompute; lock-vs-calendar conflicts never silently move/unlock
+ok 3 - AC19 persisted unstarted locks survive Worker and synchronous recompute; lock-vs-calendar conflicts never silently move/unlock
+  ---
+  duration_ms: 199.449176
+  type: 'test'
+  ...
+# Subtest: AC19 lock cannot silently disappear on duration/rule change or missing task selection; explicit unlock preserves history
+ok 4 - AC19 lock cannot silently disappear on duration/rule change or missing task selection; explicit unlock preserves history
+  ---
+  duration_ms: 77.313512
+  type: 'test'
+  ...
+# Subtest: AC21 current started/partial/completed and historical executed tasks reject forged drag and lock APIs with no mutation
+ok 5 - AC21 current started/partial/completed and historical executed tasks reject forged drag and lock APIs with no mutation
+  ---
+  duration_ms: 116.635784
+  type: 'test'
+  ...
+# Subtest: AC21 changed current facts invalidate preview recheck/commit, trial verify and replay; consumed/remaining facts never change
+ok 6 - AC21 changed current facts invalidate preview recheck/commit, trial verify and replay; consumed/remaining facts never change
+  ---
+  duration_ms: 73.667079
+  type: 'test'
+  ...
+# Subtest: moving downstream of actual remaining work preserves exact material quantity and no double consumption
+ok 7 - moving downstream of actual remaining work preserves exact material quantity and no double consumption
+  ---
+  duration_ms: 57.671438
+  type: 'test'
+  ...
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# Subtest: stale plan hash, input revision, preview ownership/roles and malformed/forged quantity/status fail atomically
+ok 8 - stale plan hash, input revision, preview ownership/roles and malformed/forged quantity/status fail atomically
+  ---
+  duration_ms: 183.468577
+  type: 'test'
+  ...
+# Subtest: missing/corrupted historical snapshot blocks previews and preserves original bytes
+ok 9 - missing/corrupted historical snapshot blocks previews and preserves original bytes
+  ---
+  duration_ms: 26.383903
+  type: 'test'
+  ...
+# Subtest: independent preview reports personnel and joint tool conflicts without silently shifting task
+ok 10 - independent preview reports personnel and joint tool conflicts without silently shifting task
+  ---
+  duration_ms: 37.727242
+  type: 'test'
+  ...
+# Subtest: actual submit/confirm of moved supported trial preserves confirmation after later copies and moves
+ok 11 - actual submit/confirm of moved supported trial preserves confirmation after later copies and moves
+  ---
+  duration_ms: 132.604925
+  type: 'test'
+  ...
+# Subtest: unsupported active batch semantics and max-wait remain explicit rather than valid feasibility
+ok 12 - unsupported active batch semantics and max-wait remain explicit rather than valid feasibility
+  ---
+  duration_ms: 37.73895
+  type: 'test'
+  ...
+# Subtest: independent checker inspects the actual invalid candidate even when engine refuses to schedule it
+not ok 13 - independent checker inspects the actual invalid candidate even when engine refuses to schedule it
+  ---
+  duration_ms: 22.021557
+  type: 'test'
+  location: '/workspace/apps/aps-fr032/qa/fr027.test.mjs:74:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'pass' !== 'problem'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'problem'
+  actual: 'pass'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/apps/aps-fr032/qa/fr027.test.mjs:75:197)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: specific machine-overlap candidate names both tasks instead of silently shifting or hiding rejected task
+not ok 14 - specific machine-overlap candidate names both tasks instead of silently shifting or hiding rejected task
+  ---
+  duration_ms: 36.714665
+  type: 'test'
+  location: '/workspace/apps/aps-fr032/qa/fr027.test.mjs:77:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'pass' !== 'problem'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'problem'
+  actual: 'pass'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/apps/aps-fr032/qa/fr027.test.mjs:78:307)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: independent candidate calendar check names downtime source; personnel capacity conflict is explicit
+not ok 15 - independent candidate calendar check names downtime source; personnel capacity conflict is explicit
+  ---
+  duration_ms: 36.19871
+  type: 'test'
+  location: '/workspace/apps/aps-fr032/qa/fr027.test.mjs:80:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /FR027例外窗口/. Input:
+    
+    '[{"code":"UNPLANNED / CALENDAR","message":"订单 A / 工序 FILL 未排：设备 FILL01 不可用。固定位置与日历/停机冲突，候选分钟 150；禁止顺延。任务要求连续 30 分钟；跨班或中断规则尚未配置。","taskIds":["A-FILL"],"context":{"orderId":"A","operation":"FILL","machineId":"FILL01","requiredDuration":30,"candidateMinute":100,"horizonEnd":null,"dependencies":[{"订单编号":"A","工序编号":"FILL","资源类型":"设备","资源编号":"FILL01","需求数量":"1","提前占用分钟":"0","后延占用分钟":"0","所需技能":"","所需班次":"","人员参与阶段":"","人员开始偏移":"","人员结束偏移":""}]}},{"code":"POSITION / CONFLICT","message":"任务 A-FILL 固定于 FILL01 [100,130) 与当前规则冲突，锁定保留，须处理","taskIds":["A-FILL"]},{"code":"POSITION / IDENTITY_DURATION","message":"任务身份、数量范围或工时不一致；不接纳部分移动结果","taskIds":["A-MIX","A-FILL","B-MIX","B-FILL"]}]'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: '[{"code":"UNPLANNED / CALENDAR","message":"订单 A / 工序 FILL 未排：设备 FILL01 不可用。固定位置与日历/停机冲突，候选分钟 150；禁止顺延。任务要求连续 30 分钟；跨班或中断规则尚未配置。","taskIds":["A-FILL"],"context":{"orderId":"A","operation":"FILL","machineId":"FILL01","requiredDuration":30,"candidateMinute":100,"horizonEnd":null,"dependencies":[{"订单编号":"A","工序编号":"FILL","资源类型":"设备","资源编号":"FILL01","需求数量":"1","提前占用分钟":"0","后延占用分钟":"0","所需技能":"","所需班次":"","人员参与阶段":"","人员开始偏移":"","人员结束偏移":""}]}},{"code":"POSITION / CONFLICT","message":"任务 A-FILL 固定于 FILL01 [100,130) 与当前规则冲突，锁定保留，须处理","taskIds":["A-FILL"]},{"code":"POSITION / IDENTITY_DURATION","message":"任务身份、数量范围或工时不一致；不接纳部分移动结果","taskIds":["A-MIX","A-FILL","B-MIX","B-FILL"]}]'
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/apps/aps-fr032/qa/fr027.test.mjs:81:305)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: explicit lock cancellation and successful unlock never alter earlier locked snapshot; stale locked retry is denied
+ok 16 - explicit lock cancellation and successful unlock never alter earlier locked snapshot; stale locked retry is denied
+  ---
+  duration_ms: 83.317221
+  type: 'test'
+  ...
+# Subtest: locks stay recorded when rule modes become unsupported or selected task scope excludes locked task
+ok 17 - locks stay recorded when rule modes become unsupported or selected task scope excludes locked task
+  ---
+  duration_ms: 71.946216
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 14
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1579.027224

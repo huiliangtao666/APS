@@ -1,0 +1,108 @@
+{
+  "attribution": "APS-Dev replay of Test-authored API test, not independent acceptance",
+  "checks": [
+    "real calculate/verify/submit/supervisor-confirm with explicit synthetic actors",
+    "confirmed verify/save409 and query role spoof403 preserve guards",
+    "complete confirmed JSON and complete saved plan unchanged after current input edit",
+    "archive and persisted JSON retain exact confirmation and plan bytes"
+  ],
+  "responses": [
+    {
+      "endpoint": "/calculate",
+      "subject": "planner",
+      "status": 201
+    },
+    {
+      "endpoint": "/plans/c0f77ff9-4c26-4cad-9f2a-7f05fb82429e/verify",
+      "subject": "planner",
+      "status": 200
+    },
+    {
+      "endpoint": "/plans/c0f77ff9-4c26-4cad-9f2a-7f05fb82429e/review",
+      "subject": "planner",
+      "status": 200
+    },
+    {
+      "endpoint": "/plans/c0f77ff9-4c26-4cad-9f2a-7f05fb82429e/submit",
+      "subject": "planner",
+      "status": 200
+    },
+    {
+      "endpoint": "/plans/c0f77ff9-4c26-4cad-9f2a-7f05fb82429e/review",
+      "subject": "supervisor",
+      "status": 200
+    },
+    {
+      "endpoint": "/plans/c0f77ff9-4c26-4cad-9f2a-7f05fb82429e/confirm",
+      "subject": "supervisor",
+      "status": 200
+    },
+    {
+      "endpoint": "/plans",
+      "subject": "supervisor",
+      "status": 200
+    },
+    {
+      "endpoint": "/plans/c0f77ff9-4c26-4cad-9f2a-7f05fb82429e/review",
+      "subject": "supervisor",
+      "status": 200
+    },
+    {
+      "endpoint": "/plans/c0f77ff9-4c26-4cad-9f2a-7f05fb82429e/verify",
+      "subject": "planner",
+      "status": 409
+    },
+    {
+      "endpoint": "/plans",
+      "subject": "planner",
+      "status": 409
+    },
+    {
+      "endpoint": "/plans/c0f77ff9-4c26-4cad-9f2a-7f05fb82429e/verify",
+      "subject": "query",
+      "status": 403
+    },
+    {
+      "endpoint": "/state",
+      "subject": "supervisor",
+      "status": 200
+    },
+    {
+      "endpoint": "/inputs",
+      "subject": "supervisor",
+      "status": 200
+    },
+    {
+      "endpoint": "/confirmations/7158885a-638b-4cf3-8928-b51e320a276e",
+      "subject": "supervisor",
+      "status": 200
+    },
+    {
+      "endpoint": "/plans",
+      "subject": "supervisor",
+      "status": 200
+    },
+    {
+      "endpoint": "/plans/c0f77ff9-4c26-4cad-9f2a-7f05fb82429e/review",
+      "subject": "supervisor",
+      "status": 200
+    },
+    {
+      "endpoint": "/plans/c0f77ff9-4c26-4cad-9f2a-7f05fb82429e/archive",
+      "subject": "supervisor",
+      "status": 200
+    },
+    {
+      "endpoint": "/confirmations/7158885a-638b-4cf3-8928-b51e320a276e",
+      "subject": "supervisor",
+      "status": 200
+    },
+    {
+      "endpoint": "/plans",
+      "subject": "supervisor",
+      "status": 200
+    }
+  ],
+  "fullReportSHA256": "4fb62e21ca5ca11d6b674180042c3b2de482f2dcd1cdd744b748bb1bdde3919d",
+  "fullReport": "browser-final/confirmed-api-report.json in root delivery evidence ZIP"
+}

@@ -1,0 +1,117 @@
+{
+  "delivery": "dlv_3a81309f-b7a0-4904-8e55-ee69573c255a",
+  "parent": "910fdbcf8fb6dd312cac4cf31c2b1a7a1950b75f",
+  "branch": "fix/fr-034-keyboard-round1",
+  "rounds": {
+    "KBD01": "product repair round1; one product revision",
+    "KBD02": "product repair round1; one product revision",
+    "KBD03": "product repair round1; one product revision"
+  },
+  "baselineDefectsConfirmedByDevAndTest": true,
+  "independentRepairedRetest": "pending",
+  "counts": {
+    "query": {
+      "tests": 5,
+      "pass": 5,
+      "fail": 0,
+      "skipped": 0
+    },
+    "trial-panel": {
+      "tests": 6,
+      "pass": 6,
+      "fail": 0,
+      "skipped": 0
+    },
+    "delivery-panel": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "skipped": 0
+    },
+    "timeline-panel": {
+      "tests": 13,
+      "pass": 13,
+      "fail": 0,
+      "skipped": 0
+    },
+    "editor-interaction": {
+      "tests": 10,
+      "pass": 10,
+      "fail": 0,
+      "skipped": 0
+    },
+    "worker": {
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "skipped": 0
+    },
+    "confirmation-panel": {
+      "tests": 4,
+      "pass": 4,
+      "fail": 0,
+      "skipped": 0
+    },
+    "resource-panel": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "skipped": 0
+    },
+    "business": {
+      "tests": 164,
+      "pass": 164,
+      "fail": 0,
+      "skipped": 0
+    },
+    "canonical": {
+      "tests": 213,
+      "pass": 213,
+      "fail": 0,
+      "skipped": 0
+    },
+    "result-panel": {
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "skipped": 0
+    },
+    "execution-panel": {
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "skipped": 0
+    },
+    "load-panel": {
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "skipped": 0
+    },
+    "task-linkage-panel": {
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "skipped": 0
+    }
+  },
+  "totalTests": 441,
+  "keyboardDefectAssertions": 6,
+  "keyboardFunctionalGroups": 20,
+  "measurements": 2,
+  "additionalNoBannerControls": 2,
+  "unknownEndpointBrowserGroups": 24,
+  "historyApiGroups": 4,
+  "csvByteEqualFiles": 2,
+  "pageErrors": 0,
+  "consoleWarningsAndErrors": 0,
+  "sourceHashesVerified": 110,
+  "finalHarnessHashesVerified": 4,
+  "productChanges": [
+    "src/App.tsx",
+    "src/TaskLinkage.tsx",
+    "src/TimelinePanel.tsx"
+  ],
+  "attempts": "First fixed attempt passed441 tests and KBD02/03 at640 but strict r.bottom<=900 assertion failed. Same product bytes used in final attempt; exact rectangle now recorded, focused selected task bottom900.484/900.344, hit-test unobscured. Final assertion allows<=1CSSpx rounding. No second product revision. Full final run exits0.",
+  "limits": "Synthetic fixed planner actor and runtime alias; real App/API/scheduler with disposable JSON. Not signed gateway/SSO, full role UAT, assistive technology/browser matrix, all-rule acceptance, publication, closure or full Done."
+}

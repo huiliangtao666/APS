@@ -1,0 +1,67 @@
+{
+  "initialNumbers": [
+    16,
+    15,
+    14,
+    13,
+    12,
+    10,
+    9,
+    6,
+    4,
+    3,
+    2,
+    1
+  ],
+  "final": [
+    {
+      "number": 16,
+      "title": "[FR-021] Complete batching and AC14 acceptance evidence"
+    },
+    {
+      "number": 15,
+      "title": "[FR-019] Complete integrated minimal-scheduling acceptance evidence"
+    },
+    {
+      "number": 14,
+      "title": "[FR-018] Complete R5 and real workflow acceptance evidence"
+    },
+    {
+      "number": 13,
+      "title": "[FR-017] Complete integrated rule and run acceptance evidence"
+    },
+    {
+      "number": 12,
+      "title": "[FR-014/015] Remaining integrated query/edit acceptance evidence"
+    },
+    {
+      "number": 10,
+      "title": "[FR-037] Complete workflow and real managed identity acceptance gaps"
+    },
+    {
+      "number": 9,
+      "title": "[FR-010] Remaining acceptance gaps: inventory allocation and role evidence"
+    },
+    {
+      "number": 6,
+      "title": "[R2.1] 完成 UAT-02 / AC-05 产品验收"
+    },
+    {
+      "number": 4,
+      "title": "[FR-013/016] 合入 CSV 批导修复并完成 UI 验收"
+    },
+    {
+      "number": 3,
+      "title": "[FR-006] 合入主线并完成工装配置 UI 验收"
+    },
+    {
+      "number": 2,
+      "title": "[计划] R1 最小计算＋核对"
+    },
+    {
+      "number": 1,
+      "title": "[计划] R1 最小计算＋核对"
+    }
+  ],
+  "newNumbers": []
+}

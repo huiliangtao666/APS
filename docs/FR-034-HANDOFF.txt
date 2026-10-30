@@ -1,0 +1,125 @@
+FR034 task input and problem interval linkage — APS-Design delivery
+Delivery dlv_86769ae9-c432-4d50-8611-8730654fbbed
+Branch feat/fr-034-task-problem-linkage
+Parent 9783e9de6e500f895dbe6084bcfda2690dcbad7d (latest integrated FR033).
+Canonical Project2 item PVTI_lAHOFM9WU84BpE1czhEHhDI / draft DI_lAHOFM9WU84BpE1czgLhAjc.
+Read live original card and v0.3 DOCX before implementing. Baseline extracts,
+original card, SHA256 and sanitized issue scan accompany this file.
+Issue19 independent PASS/closed was read live including the Test verdict comment;
+12 remaining open issues are acceptance/integration/decision tracking, with no
+confirmed unresolved product defect. No issue/card was created or changed.
+
+DELIVERED
+Existing TimelinePanel and independent verification API are extended rather
+than adding another timeline or drag editor. Independent MACHINE_OVERLAP and
+PRECEDENCE findings carry structured interval endpoints. Exact machine
+intersection uses [start,end); precedence carries priorEnd, nextStart and
+violationDuration. Legacy two-task findings derive intervals only from actual
+saved task endpoints; missing/unsupported/unplanned intervals stay unknown.
+
+Existing problem buttons and the new linkage panel select the same saved task
+IDs. Problem focus clears obstructing chart filters and reveals the interval,
+with dashed/hatched labelled regions in existing machine tracks. The problem
+filter applies equally to timeline and task table. Selected-task details retain
+original saved-input query callbacks, predecessors and successors. Missing
+historical inputs are never replaced with current data.
+
+Task evidence shows saved machine/personnel/tool/space declarations, demand,
+configuration capacity, skill/shift/participation/release windows and committed
+reservations. Capacity is explicitly total configuration, never a claim about
+remaining available capacity. Material evidence shows saved demand, allocated
+amount, shortage, feed time, formula, lots/quality/expiry/conditional supply
+and commitment status without requiring export. Absence is unknown, not pass.
+Source plan/run/input version/snapshot hash are visible; current-vs-saved facts
+remain separate. New model and presentation functions do not mutate snapshots.
+
+The active-check control uses the existing authorized /plans/:id/verify route
+and its stale-input, historical-input/hash, role, reason, discarded-trial and
+immutable-status protections. It does not implement a new verifier endpoint or
+broaden independent verification beyond line/machine/precedence. Existing
+confirmation/release/historical protection tests remain passing.
+
+VALIDATION
+Final supported app-exec --validate standalone command: docs/FR-034-validation-command.sh.
+416 TAP tests pass, zero failures/skips/cancellations/todo. This is one final
+command count, not cumulative with prior deliveries. Includes model/API/auth,
+confirmation/history, current/saved execution facts, built Worker, query/editor,
+resource/result/trial/execution/timeline and FR034 component tests. FR013 CSV
+prototype verifier and TypeScript/Vite/Express/Worker production build pass.
+No host dependency install, dev server, restart, publish or production write.
+Inherited npm audit: 3 moderate + 1 high; inherited React key warning retained.
+
+First broad command invoked built-Worker tests before build: 9 missing-dist
+failures. Corrected command order passes all 9 after build. This was a command
+error, not nine product defects. An intermediate added material QA fixture was
+correctly rejected409 because it tried to replace protected execution history.
+The final runner creates material inputs before execution history; no product
+protection was weakened. No confirmed product repair round was consumed.
+
+ACTUAL ISOLATED BROWSER — PASS
+qa/fr034-docker-browser.sh executed successfully using Docker29.4.0 and
+node22-slim image sha256:48e4b67d85f87bd551df43704e24d252f56cc5f8e9718841aace50f19948f0f9.
+Playwright1.56.1 / Chromium141.0.7390.37, viewport1280x900, headless.
+All npm, Debian dependency install, Vite build, API server and Chromium work
+occurred inside one disposable --rm container. Read-only checkout/SDK mounts;
+only a fresh evidence directory writable to host. No published ports or app
+binding. The test browser explicitly uses --no-sandbox inside that disposable
+container; this is not a production browser isolation configuration.
+
+The runner builds the REAL App entry and 108 source/config/test files are
+byte-verified against qa/fr034-source-sha256.json. It serves actual auth,
+validated inputs, planner, saved plan, verify and query routes with fresh local
+JSON data. A fixed synthetic actor and QA-only runtime alias are declared;
+there is no real gateway identity, SSO or production persistence evidence.
+The reused runner's visible FR033 DISPOSABLE banner identifies its harness
+lineage; the second banner line explicitly identifies FR034 working source
+and the parent SHA. Source hashes plus this delivery's full commit pin bytes.
+
+Six browser assertions/groups passed with no page exceptions:
+1. Real verification API reports two structured findings; tasks unchanged.
+2. Machine problem selects both saved tasks and reveals exact20..30 overlap.
+3. Precedence30/20/10 evidence and problem-task filter.
+4. Saved task resource evidence and real historical input query navigation.
+5. Actual scheduler material-shortage plan selects unplanned task, saved
+   demand/allocation/shortage and explicit absence of scheduled interval.
+6. Saved fact40/current50 remain separate and all three normally generated
+   saved plan JSON objects remain unchanged after navigation (the retained
+   browser check text says 'original two', but its loop checks all three).
+
+The two invalid overlapping/precedence tasks are deliberately corrupted in a
+FOURTH, clearly named disposable saved-output fixture. This is a negative-case
+API/browser test, not a claim the scheduler generated an invalid normal result.
+The three positive/material/history plans are generated by actual API calls.
+Two screenshots and the verbatim browser report/log are committed under
+qa/evidence/fr034/. Browser attribution is APS-Dev, not independent APS-Test.
+
+REPRODUCE
+Checkout the full delivery SHA in the root report; supply existing authorized
+SDK tgz directory, Docker and internet access. From the workspace root:
+FR034_REPO="$PWD/apps/aps-fr034" FR034_SDK="$PWD/.praetor/sdk" \
+ FR034_OUT="<absolute NEW EMPTY evidence directory>" \
+ bash apps/aps-fr034/qa/fr034-docker-browser.sh
+This executes finite validation only; no Portal deployment or true identity.
+The validation command uses the platform workspace-app-builder skill's
+app-exec --validate route; its existing local SDK artifacts are prerequisites.
+
+ACCEPTANCE BOUNDARIES
+AC04/17: model/API/component plus actual isolated real-App task/problem/input
+and interval evidence now present. AC15: existing supported check scope and
+resource evidence are explicit; all-rule joint independent verification is
+not implemented or claimed. AC31: Chinese interaction labels and problem
+navigation exercised; full workflow/UAT/browser matrix and real signed gateway
+roles are not accepted here. Complete FR014/024/025/033 and other issue gaps,
+undecided DEC02/dynamic release/full material/business feasibility, durable
+production storage, full five-stage UAT and main integration remain separate.
+No new application/card, FR027 drag feature, publication or main merge.
+No request to mark the full original card Done; independent Test review needed.
+
+FINAL DEV REVIEW
+A nullable legacy machine endpoint could otherwise be normalized to zero by
+Math.max/Math.min. The legacy interval adapter now validates both complete
+source intervals before deriving their intersection. The existing unknowns
+test includes that regression. One Dev review correction, no independent Test
+confirmed defect, no second repair round. Final 416-test command and browser
+were rerun against the guarded source; final evidence replaces earlier logs.
+The final issue rescan has the same12 open acceptance items and no new issue.

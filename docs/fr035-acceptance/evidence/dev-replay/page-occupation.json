@@ -1,0 +1,119 @@
+{
+  "version": "FR035-v1",
+  "query": {
+    "planId": "a7534e4f-142e-4a4e-abb4-39feeccdc0f1",
+    "kind": "occupation",
+    "text": "",
+    "order": "",
+    "start": 0,
+    "end": 120
+  },
+  "provenance": {
+    "planId": "a7534e4f-142e-4a4e-abb4-39feeccdc0f1",
+    "runId": "28174572-ccbe-491b-beee-8b8a711759ac",
+    "inputVersionId": "54089689bd73f85237d1d045b632b15f84ed2669f839f33aaaeb25454668cba6",
+    "snapshotHash": "53f9c8b11ecb42248019585659574a049640fc71764ea5427d94035d466f9421",
+    "confirmationId": null,
+    "status": "draft",
+    "createdAt": "2026-10-29T00:03:16.727Z",
+    "lines": [
+      "L01"
+    ],
+    "executionFactsVersion": "f4c2ab5ea0557c694ffddedf9d1716a8105592015bac93fb6fd9df537190ee24",
+    "checkScope": {
+      "mode": "supported",
+      "label": "已有支持模式",
+      "machineAvailability": "工厂日历及设备停机连续窗口",
+      "checked": [
+        "单产线",
+        "给定机器不重叠",
+        "固定工时",
+        "工序先后",
+        "日历与停机",
+        "已配置人员依赖",
+        "显式预计供给可用时点",
+        "显式逐生产批工装数量与完整占用/释放区间",
+        "显式逐生产批空间kg/位置容量与完整占用/释放区间"
+      ],
+      "unchecked": [
+        "DEC02未批准/未声明工装阶段及跨任务释放",
+        "完整物料/BOM/库存分配",
+        "设备容量与拆合批",
+        "程序兼容",
+        "最大等待、动态下游释放与其他空间单位",
+        "换型清洗",
+        "交付与余保",
+        "执行事实与主管确认",
+        "速度换算及完整精度规则"
+      ],
+      "note": "机器与顺序检查通过不代表完整业务可执行；未排任务不代表全局无解。独立复核仅覆盖单线、机器不重叠和工序先后。"
+    },
+    "materialChecked": false,
+    "query": {
+      "planId": "a7534e4f-142e-4a4e-abb4-39feeccdc0f1",
+      "kind": "occupation",
+      "text": "",
+      "order": "",
+      "start": 0,
+      "end": 120
+    },
+    "timeOrigin": "2026-11-02T08:00:00+08:00",
+    "timezone": "UTC+08:00",
+    "interval": "[start,end)",
+    "source": "保存方案及其原始输入；不是当前执行事实",
+    "simulation": "模拟数据；不发送外部系统、不承诺真实交付"
+  },
+  "limits": [
+    "任务和资源使用半开窗口；订单、物料、未排及方案差异保留整份保存方案，窗口不截断其业务数量。",
+    "共享资源按关联订单保留整行总占用，不拆算订单份额；搜索逐行匹配。",
+    "数量、精确分数、单位和日期原样保留；null 表示未知，条件到料不是已到货。",
+    "仅保存方案的计划负荷，不是实时剩余可用量；未分配不代表可排或资源空闲事实",
+    "DEC02 工装阶段/动态归还、DEC03 人员阶段/技能替代、最大等待及完整联合规则仍待确认；仅解释显式保存占用",
+    "候选分配不计入已提交消耗；不跨工序累加订单完成；不把预计到料当真实到货",
+    "确认快照、保存的执行事实与当前事实分别保留；不以当前输入补算历史"
+  ],
+  "comparison": null,
+  "columns": [
+    "类别",
+    "保存记录（数量、单位、日期、输入与判断依据）"
+  ],
+  "rows": [
+    [
+      "设备",
+      "{\"category\":\"设备\",\"record\":{\"id\":\"MIX01\",\"busyMinutes\":0,\"unallocatedMinutes\":120,\"availableNow\":null,\"taskIds\":[],\"inputRefs\":[{\"table\":\"machines\",\"row\":{\"设备编号\":\"MIX01\",\"设备名称\":\"混合设备1\",\"产线编号\":\"L01\",\"工序编号\":\"MIX\",\"日历编号\":\"FC01\",\"最小装载kg\":\"0\",\"最大装载kg\":\"300\",\"装载计量基准\":\"BOM总投入\"}}]}}"
+    ],
+    [
+      "设备",
+      "{\"category\":\"设备\",\"record\":{\"id\":\"MIX02\",\"busyMinutes\":60,\"unallocatedMinutes\":60,\"availableNow\":null,\"taskIds\":[\"A-MIX\",\"B-MIX\"],\"inputRefs\":[{\"table\":\"machines\",\"row\":{\"设备编号\":\"MIX02\",\"设备名称\":\"混合设备2\",\"产线编号\":\"L01\",\"工序编号\":\"MIX\",\"日历编号\":\"FC01\",\"最小装载kg\":\"0\",\"最大装载kg\":\"300\",\"装载计量基准\":\"BOM总投入\"}}]}}"
+    ],
+    [
+      "设备",
+      "{\"category\":\"设备\",\"record\":{\"id\":\"MIX03\",\"busyMinutes\":0,\"unallocatedMinutes\":120,\"availableNow\":null,\"taskIds\":[],\"inputRefs\":[{\"table\":\"machines\",\"row\":{\"设备编号\":\"MIX03\",\"设备名称\":\"混合设备3\",\"产线编号\":\"L01\",\"工序编号\":\"MIX\",\"日历编号\":\"FC01\",\"最小装载kg\":\"0\",\"最大装载kg\":\"300\",\"装载计量基准\":\"BOM总投入\"}}]}}"
+    ],
+    [
+      "设备",
+      "{\"category\":\"设备\",\"record\":{\"id\":\"FILL01\",\"busyMinutes\":30,\"unallocatedMinutes\":90,\"availableNow\":null,\"taskIds\":[\"A-FILL\"],\"inputRefs\":[{\"table\":\"machines\",\"row\":{\"设备编号\":\"FILL01\",\"设备名称\":\"灌装设备1\",\"产线编号\":\"L01\",\"工序编号\":\"FILL\",\"日历编号\":\"FC01\",\"最小装载kg\":\"0\",\"最大装载kg\":\"10000\",\"装载计量基准\":\"BOM总投入\"}}]}}"
+    ],
+    [
+      "设备",
+      "{\"category\":\"设备\",\"record\":{\"id\":\"FILL02\",\"busyMinutes\":30,\"unallocatedMinutes\":90,\"availableNow\":null,\"taskIds\":[\"B-FILL\"],\"inputRefs\":[{\"table\":\"machines\",\"row\":{\"设备编号\":\"FILL02\",\"设备名称\":\"灌装设备2\",\"产线编号\":\"L01\",\"工序编号\":\"FILL\",\"日历编号\":\"FC01\",\"最小装载kg\":\"0\",\"最大装载kg\":\"10000\",\"装载计量基准\":\"BOM总投入\"}}]}}"
+    ],
+    [
+      "设备",
+      "{\"category\":\"设备\",\"record\":{\"id\":\"FILL03\",\"busyMinutes\":0,\"unallocatedMinutes\":120,\"availableNow\":null,\"taskIds\":[],\"inputRefs\":[{\"table\":\"machines\",\"row\":{\"设备编号\":\"FILL03\",\"设备名称\":\"灌装设备3\",\"产线编号\":\"L01\",\"工序编号\":\"FILL\",\"日历编号\":\"FC01\",\"最小装载kg\":\"0\",\"最大装载kg\":\"10000\",\"装载计量基准\":\"BOM总投入\"}}]}}"
+    ],
+    [
+      "资源",
+      "{\"category\":\"资源\",\"record\":{\"type\":\"工装\",\"id\":\"G40\",\"unit\":\"套\",\"capacity\":1,\"availableNow\":null,\"status\":\"saved-reservations\",\"peak\":{\"value\":1,\"exact\":{\"numerator\":\"1\",\"denominator\":\"1\"}},\"quantityMinutes\":{\"value\":80,\"exact\":{\"numerator\":\"80\",\"denominator\":\"1\"}},\"reservations\":[{\"declarationId\":\"TOOL-A\",\"orderId\":\"A\",\"productionBatchId\":\"\",\"type\":\"工装\",\"resourceId\":\"G40\",\"unit\":\"套\",\"quantity\":\"1\",\"capacity\":\"1\",\"before\":0,\"after\":10,\"operation\":\"MIX\",\"start\":0,\"end\":40,\"taskId\":\"A-MIX\",\"taskIds\":[\"A-MIX\"]},{\"declarationId\":\"TOOL-B\",\"orderId\":\"B\",\"productionBatchId\":\"\",\"type\":\"工装\",\"resourceId\":\"G40\",\"unit\":\"套\",\"quantity\":\"1\",\"capacity\":\"1\",\"before\":0,\"after\":10,\"operation\":\"MIX\",\"start\":60,\"end\":100,\"taskId\":\"B-MIX\",\"taskIds\":[\"B-MIX\"]}],\"demands\":[{\"quantity\":\"1\",\"unit\":\"套\",\"orderId\":\"A\",\"operation\":\"MIX\",\"taskIds\":[\"A-MIX\"]},{\"quantity\":\"1\",\"unit\":\"套\",\"orderId\":\"B\",\"operation\":\"MIX\",\"taskIds\":[\"B-MIX\"]}],\"taskIds\":[\"A-MIX\",\"B-MIX\"],\"inputRefs\":[{\"table\":\"tools\",\"row\":{\"工装编码\":\"G40\",\"工装名称\":\"模拟工装\",\"适用任务\":\"MIX|FILL\",\"可用数量\":\"1\",\"每任务需求数量\":\"1\",\"提前占用分钟\":\"0\",\"后延占用分钟\":\"0\",\"是否启用\":\"是\",\"说明\":\"仅配置，不推断占用\"}},{\"table\":\"resourceClaims\",\"row\":{\"声明编号\":\"TOOL-A\",\"订单编号\":\"A\",\"工序编号\":\"MIX\",\"资源类型\":\"工装\",\"资源编号\":\"G40\",\"需求数量\":\"1\",\"单位\":\"套\",\"提前占用分钟\":\"0\",\"后延占用分钟\":\"10\",\"占用口径\":\"显式逐生产批完整区间\"}},{\"table\":\"resourceClaims\",\"row\":{\"声明编号\":\"TOOL-B\",\"订单编号\":\"B\",\"工序编号\":\"MIX\",\"资源类型\":\"工装\",\"资源编号\":\"G40\",\"需求数量\":\"1\",\"单位\":\"套\",\"提前占用分钟\":\"0\",\"后延占用分钟\":\"10\",\"占用口径\":\"显式逐生产批完整区间\"}}]}}"
+    ],
+    [
+      "资源",
+      "{\"category\":\"资源\",\"record\":{\"type\":\"人员\",\"id\":\"G\",\"unit\":\"人\",\"capacity\":2,\"availableNow\":null,\"status\":\"saved-reservations\",\"peak\":{\"value\":2,\"exact\":{\"numerator\":\"2\",\"denominator\":\"1\"}},\"quantityMinutes\":{\"value\":20,\"exact\":{\"numerator\":\"20\",\"denominator\":\"1\"}},\"reservations\":[{\"type\":\"人员\",\"resourceId\":\"G\",\"quantity\":\"2\",\"unit\":\"人\",\"start\":5,\"end\":10,\"taskId\":\"A-MIX\",\"taskIds\":[\"A-MIX\"]},{\"type\":\"人员\",\"resourceId\":\"G\",\"quantity\":\"2\",\"unit\":\"人\",\"start\":65,\"end\":70,\"taskId\":\"B-MIX\",\"taskIds\":[\"B-MIX\"]}],\"demands\":[{\"quantity\":\"2\",\"unit\":\"人\",\"orderId\":\"A\",\"operation\":\"MIX\",\"taskIds\":[\"A-MIX\"]},{\"quantity\":\"2\",\"unit\":\"人\",\"orderId\":\"B\",\"operation\":\"MIX\",\"taskIds\":[\"B-MIX\"]}],\"taskIds\":[\"A-MIX\",\"B-MIX\"],\"inputRefs\":[{\"table\":\"personnelGroups\",\"row\":{\"人员组编号\":\"G\",\"人员组名称\":\"FR033 synthetic staff\",\"人员数量\":\"2\",\"技能\":\"mix\",\"班次\":\"D\",\"可用起始分钟\":\"0\",\"可用结束分钟\":\"600\"}},{\"table\":\"dependencies\",\"row\":{\"订单编号\":\"A\",\"工序编号\":\"MIX\",\"资源类型\":\"人员技能\",\"资源编号\":\"G\",\"需求数量\":\"2\",\"提前占用分钟\":\"\",\"后延占用分钟\":\"\",\"所需技能\":\"mix\",\"所需班次\":\"D\",\"人员参与阶段\":\"\",\"人员开始偏移\":\"5\",\"人员结束偏移\":\"20\"}},{\"table\":\"dependencies\",\"row\":{\"订单编号\":\"B\",\"工序编号\":\"MIX\",\"资源类型\":\"人员技能\",\"资源编号\":\"G\",\"需求数量\":\"2\",\"提前占用分钟\":\"\",\"后延占用分钟\":\"\",\"所需技能\":\"mix\",\"所需班次\":\"D\",\"人员参与阶段\":\"\",\"人员开始偏移\":\"5\",\"人员结束偏移\":\"20\"}}]}}"
+    ],
+    [
+      "资源",
+      "{\"category\":\"资源\",\"record\":{\"type\":\"空间\",\"id\":\"COLD\",\"unit\":\"kg\",\"capacity\":1000,\"availableNow\":null,\"status\":\"saved-reservations\",\"peak\":{\"value\":600,\"exact\":{\"numerator\":\"600\",\"denominator\":\"1\"}},\"quantityMinutes\":{\"value\":72000,\"exact\":{\"numerator\":\"72000\",\"denominator\":\"1\"}},\"reservations\":[{\"declarationId\":\"SA\",\"orderId\":\"A\",\"productionBatchId\":\"\",\"type\":\"空间\",\"resourceId\":\"COLD\",\"unit\":\"kg\",\"quantity\":\"600\",\"capacity\":\"1000\",\"before\":0,\"after\":30,\"operation\":\"MIX\",\"start\":0,\"end\":60,\"taskId\":\"A-MIX\",\"taskIds\":[\"A-MIX\"]},{\"declarationId\":\"SB\",\"orderId\":\"B\",\"productionBatchId\":\"\",\"type\":\"空间\",\"resourceId\":\"COLD\",\"unit\":\"kg\",\"quantity\":\"600\",\"capacity\":\"1000\",\"before\":0,\"after\":30,\"operation\":\"MIX\",\"start\":60,\"end\":120,\"taskId\":\"B-MIX\",\"taskIds\":[\"B-MIX\"]}],\"demands\":[{\"quantity\":\"600\",\"unit\":\"kg\",\"orderId\":\"A\",\"operation\":\"MIX\",\"taskIds\":[\"A-MIX\"]},{\"quantity\":\"600\",\"unit\":\"kg\",\"orderId\":\"B\",\"operation\":\"MIX\",\"taskIds\":[\"B-MIX\"]}],\"taskIds\":[\"A-MIX\",\"B-MIX\"],\"inputRefs\":[{\"table\":\"batchResources\",\"row\":{\"资源编号\":\"COLD\",\"资源类型\":\"共享冷却空间\",\"容量\":\"1000\",\"单位\":\"kg\",\"允许程序\":\"\",\"说明\":\"\"}},{\"table\":\"resourceClaims\",\"row\":{\"声明编号\":\"SA\",\"订单编号\":\"A\",\"工序编号\":\"MIX\",\"资源类型\":\"空间\",\"资源编号\":\"COLD\",\"需求数量\":\"600\",\"单位\":\"kg\",\"提前占用分钟\":\"0\",\"后延占用分钟\":\"30\",\"占用口径\":\"显式逐生产批完整区间\"}},{\"table\":\"resourceClaims\",\"row\":{\"声明编号\":\"SB\",\"订单编号\":\"B\",\"工序编号\":\"MIX\",\"资源类型\":\"空间\",\"资源编号\":\"COLD\",\"需求数量\":\"600\",\"单位\":\"kg\",\"提前占用分钟\":\"0\",\"后延占用分钟\":\"30\",\"占用口径\":\"显式逐生产批完整区间\"}}]}}"
+    ]
+  ],
+  "viewId": "b76cad9762c27a30c6c35ce66e1d603239d5e56774af9a4151b7fa7361252268"
+}

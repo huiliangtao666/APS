@@ -1,0 +1,49 @@
+[
+  {
+    "url": "https://api.github.com/repos/huiliangtao666/APS/issues/comments/6482931139",
+    "html_url": "https://github.com/huiliangtao666/APS/issues/21#issuecomment-6482931139",
+    "issue_url": "https://api.github.com/repos/huiliangtao666/APS/issues/21",
+    "id": 6482931139,
+    "node_id": "IC_kwDOVaKehM8AAAABgmmtww",
+    "user": {
+      "login": "huiliangtao666",
+      "id": 349132371,
+      "node_id": "U_kgDOFM9WUw",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349132371?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/huiliangtao666",
+      "html_url": "https://github.com/huiliangtao666",
+      "followers_url": "https://api.github.com/users/huiliangtao666/followers",
+      "following_url": "https://api.github.com/users/huiliangtao666/following{/other_user}",
+      "gists_url": "https://api.github.com/users/huiliangtao666/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/huiliangtao666/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/huiliangtao666/subscriptions",
+      "organizations_url": "https://api.github.com/users/huiliangtao666/orgs",
+      "repos_url": "https://api.github.com/users/huiliangtao666/repos",
+      "events_url": "https://api.github.com/users/huiliangtao666/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/huiliangtao666/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "created_at": "2026-10-28T23:01:43Z",
+    "updated_at": "2026-10-28T23:01:43Z",
+    "body": "## Keyboard baseline independently confirmed; round1 delivered\nTest dlv_97e341cf-a71a-41f3-9c51-1aafe9be43a5 completed: KBD01/02/03 independently CONFIRMED P2 each at640/1100 with/nobanner and normal/delayedrequest. Read APS-Test/FR-034-KEYBOARD-INDEPENDENT-CONFIRMATION.txt/EVIDENCE.zip;16positivegroups/8targeted/build/24UNKNOWN01 pass and savedJSONunchanged. Issue21 now confirmed (not merely Devobservation). Dev dlv_3a81309f-b7a0-4904-8e55-ee69573c255a completed repairround1 each, verifiedGitHub02a5e307f4b731ebb2b1882ed02e16a7e20c52e3 https://github.com/huiliangtao666/APS/commit/02a5e307f4b731ebb2b1882ed02e16a7e20c52e3 . Read APS-Dev/FR-034-KEYBOARD-R1-REPORT.txt/EVIDENCE.zip. Dev441tests/build/640+1100 defectchecks/20functionalgroups/CSV2/UNKNOWN01browser24/historyAPI4 pass; KBD01target visible with fractional0.34-0.48px bottomoverflow, originalstrictassertionfailure retained for Testreview.\nIndependent repairTest dlv_3471158a-3ad6-44e7-96df-b5ed65be7a29 dispatched pinnedSHA, report/evidencepending. Dev idle noqueue immediately continued sameoriginalFR034 finite accessibilityboundary acceptance under dlv_9e63a2af-edbc-4fb4-88d9-25900a0f40d1; actualAXtree/emptyfiltered/repeatedselection/longlabels/focuswhileasync evidence, no newfeature/publication/duplicatecard/round2. Issue21 https://github.com/huiliangtao666/APS/issues/21 remainsopen round1pendingTest; fullrule/identity/UAT gaps unchanged. Keep In progress as activeDevacceptance continues, no prematureDone.",
+    "author_association": "OWNER",
+    "pin": null,
+    "reactions": {
+      "url": "https://api.github.com/repos/huiliangtao666/APS/issues/comments/6482931139/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "performed_via_github_app": null,
+    "minimized": null
+  }
+]

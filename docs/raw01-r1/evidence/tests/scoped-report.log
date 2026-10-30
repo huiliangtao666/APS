@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: FR035 six views reuse exact saved input, FR032 load and trial comparison
+ok 1 - FR035 six views reuse exact saved input, FR032 load and trial comparison
+  ---
+  duration_ms: 29.439484
+  type: 'test'
+  ...
+# Subtest: FR035 full-record decimal quantities and half-open task scope remain identical; no order summing
+ok 2 - FR035 full-record decimal quantities and half-open task scope remain identical; no order summing
+  ---
+  duration_ms: 3.989294
+  type: 'test'
+  ...
+# Subtest: FR035 rejects malformed query, scope injection and missing/corrupt history
+ok 3 - FR035 rejects malformed query, scope injection and missing/corrupt history
+  ---
+  duration_ms: 12.012051
+  type: 'test'
+  ...
+# Subtest: FR035 frozen history survives current input changes; CSV guards formulas, quotes and newlines
+ok 4 - FR035 frozen history survives current input changes; CSV guards formulas, quotes and newlines
+  ---
+  duration_ms: 1.401753
+  type: 'test'
+  ...
+# Subtest: FR035 semantically identical query key order retains identity and cannot widen saved run orders
+ok 5 - FR035 semantically identical query key order retains identity and cannot widen saved run orders
+  ---
+  duration_ms: 1.495131
+  type: 'test'
+  ...
+# Subtest: FR035 order filter handles both grouped diff arrays and per-order delivery objects
+ok 6 - FR035 order filter handles both grouped diff arrays and per-order delivery objects
+  ---
+  duration_ms: 3.527988
+  type: 'test'
+  ...
+# Subtest: FR035 DIFF-ORDER01 before/after-only task references, shared rows and reused IDs resolve against saved sides
+ok 7 - FR035 DIFF-ORDER01 before/after-only task references, shared rows and reused IDs resolve against saved sides
+  ---
+  duration_ms: 14.395377
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 154.145311

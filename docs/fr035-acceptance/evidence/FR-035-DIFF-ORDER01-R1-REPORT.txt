@@ -1,0 +1,89 @@
+FR035-DIFF-ORDER-01 — repair round 1 Dev delivery
+Delivery: dlv_a9504b4f-0fd5-4233-aee2-7448051b459c
+Original Project2 card: PVTI_lAHOFM9WU84BpE1czhEHhEU
+Issue: https://github.com/huiliangtao666/APS/issues/23
+
+Result: repaired and ordinarily pushed; independent APS-Test retest required.
+Branch: feat/fr-038-run-guidance
+Full SHA: cf6e76e23722f142a08c552aacb43c924fc62f19
+Commit: https://github.com/huiliangtao666/APS/commit/cf6e76e23722f142a08c552aacb43c924fc62f19
+Direct parent: 8741bf0a597fa11838a514259d8ffe7980382ee2 (FR038 preserved).
+Local HEAD = fresh ls-remote = GitHub branch API 200 SHA. Working tree clean.
+No new card, publication, issue closure, main merge or full Done claim.
+
+Evidence read
+Read APS-Test/FR-035-INDEPENDENT-REGRESSION.txt and actual resource-defect.mjs,
+plus independent.mjs; preserved originals and path-adapted replays in evidence.
+Cross-workspace Files API returned 403; existing local APS-Test files were
+readable and supplied the exact probe. Read live issue23 and original FR035
+Project2 card; the same card records repair round 1 and independent retest gate.
+
+Repair
+The previous filter missed taskId/taskIds in before/after arrays and resolved
+references only against the left saved plan. It now uses left saved task and
+unplanned-assessment ownership for before records and right ownership for after
+records. Direct/nested order references remain supported. Task IDs reused by a
+different order on the other side do not introduce false before-side matches.
+A match preserves the entire shared physical difference row and its quantities;
+no fabricated per-order fractions, output mutation or current-input lookup.
+Query scope/window contract, normalized viewId hashing, export permissions,
+audit and immutable saved-input/confirmation checks retain existing behavior.
+
+Verification
+Final run3 exited 0. Linux arm64 Node22.23.2, Chromium141.0.7390.37, disposable
+Docker with read-only source mount and writable evidence; no host dependency
+install/server, live app restart, binding change or publication.
+458/458 TAP assertions: canonical213, additional business164, query5, Worker9,
+components52, run-history8, scoped-report7. Build and six-table CSV/CSV-DEF01..04
+passed. All 113 product source hashes match manifest, working files and exact
+final Git objects. Added test/doc files are in the same final commit.
+FR035 browser13 groups pass, nine actual downloads (eight in downloads array
+plus the separately checked filtered-task download). Six standard categories
+and both forward/reverse A-filtered differences compare actual DOM raw cells,
+view identity, downloaded bytes and parsed CSV records against saved reports.
+Both directions: complete46 rows; order A17 rows including all six expected
+resources, restoring personnel G and machines FILL01/MIX01/MIX02.
+FR035 confirmed-history5 groups pass, including real calculate/verify/submit/
+supervisor-confirm, persisted confirmation, archive, damage rejection and
+immutable export. Membership grants/revocation/removal, spoofing/CSRF/reason,
+stale or widened view and historical-input rejection remain covered.
+FR038 browser6 groups pass, preserving cancellation, replay and run guidance.
+Original Test defect probe: baseline1 pass/1 FAIL; repaired2/2 pass. Original
+12-group independent probe replay12/12 pass plus six additional actual browser
+downloads. These are Dev-run replays, not independent retest approval.
+New structural control covers before-only/after-only refs, shared rows with
+whole quantities, unrelated/missing orders, task-ID reuse and reversed order.
+Real saved-plan regression uses validated import/calculate/save joint and
+execution fixtures; no hand-edited scheduler output to reproduce the defect.
+
+Retained failures
+run1 stopped at an obsolete cached editor test expecting English error text;
+loaded the entire current checkout, including already-fixed FR038 QA, for run2.
+run2 passed458 tests/build/CSV but the added browser check inherited end=0 from
+the preceding deliberate invalid-window check, leaving query disabled. Added
+explicit end=120 setup, then run3 passed the complete suite and browser flows.
+All failed raw logs are retained. These harness errors are not additional
+product repair rounds and no product assertion was weakened to obtain a pass.
+
+Reproduce
+From final checkout, with Docker, authorized SDK tgz directory and new empty
+output directory:
+ FR038_REPO=<absolute-checkout> FR038_SDK=<SDK-directory> \
+ FR038_OUT=<new-empty-output> bash qa/fr038-docker.sh
+qa/fr038-checks.sh includes the new seven-group scoped suite and full browser
+completeness checks. docs/FR-035-DIFF-ORDER01-R1-HANDOFF.txt gives semantics,
+controls and limits. Evidence contains exact original Test probes and replays
+(only absolute import checkout paths changed), logs, API/HTML/CSV/screenshots,
+source hashes, patch, push and three-way SHA verification. Final execution used
+cached container dependencies with full source overlay and installed browser
+shell; the portable checked-in recipe installs dependencies afresh.
+
+Limits and next gate
+Fixed synthetic actors with real membership middleware, not gateway-signed
+identity/SSO or real-person UAT. Finite joint-rule fixtures do not certify all
+rules, full R7 workflow, production-scale performance, all spreadsheets or full
+accessibility. Existing FR038 replay/durability limits remain. Full identity,
+all-rule acceptance and five-stage business UAT remain separate gaps.
+Independent APS-Test retest must assess this pushed SHA. Max two repair rounds;
+this is round1 only. Issue/card not closed; no full Done claim. Result returns
+through the Inbox hook, with no separate sender notification.

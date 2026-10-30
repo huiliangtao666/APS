@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import React from 'react';
+import Renderer,{act} from 'react-test-renderer';
+import {LoadPanel} from '../src/LoadPanel';
+const p={id:'P',runId:'RUN',snapshotHash:'HASH',inputVersionId:'V1',inputSnapshot:{machines:[{'设备编号':'M','产线编号':'L01'}],tools:[{'工装编码':'G','可用数量':'2'}]},tasks:[{id:'A-MIX',orderId:'A',operation:'MIX',machine:'M',start:0,end:30}],materialDemands:[{taskId:'A-MIX',materialId:'LEAN',quantity:325,unit:'kg',feedMinute:0,allocations:[{quantity:300}],shortage:25,committed:false}]};
+const text=(ui:any)=>JSON.stringify(ui.toJSON());
+function setup(onExport?:any){let ui:any,ids:any,ref:any;act(()=>{ui=Renderer.create(<LoadPanel plan={p} onTask={v=>ids=v} onInput={(table,row)=>ref={table,row}} onExport={onExport}/>);});return {ui,ids:()=>ids,ref:()=>ref};}
+const field=(ui:any,s:string)=>ui.root.findByProps({'aria-label':s});
+test('FR032 component renders saved provenance,25kg shortage and unknown dynamic availability',()=>{const {ui}=setup();for(const s of ['HASH','RUN','V1','325','25','候选 / 未提交','动态剩余未知','DEC02','DEC03'])assert.ok(text(ui).includes(s),s);assert.equal(ui.root.findAllByType('button').find((b:any)=>b.children.join('')==='导出当前负荷视图 CSV').props.disabled,true);});
+test('FR032 summary links call existing task and exact saved-input callbacks',()=>{const x=setup();const b=x.ui.root.findAllByType('button').find((n:any)=>n.children.join('')==='定位任务 A-MIX');act(()=>b.props.onClick());assert.deepEqual(x.ids(),['A-MIX']);const ref=x.ui.root.findAllByType('button').find((n:any)=>n.children.join('').startsWith('查看保存输入 machines'));act(()=>ref.props.onClick());assert.deepEqual(x.ref(),{table:'machines',row:p.inputSnapshot.machines[0]});});
+test('FR032 window/category export options match UI; invalid blanks forbid export',()=>{let options:any;const {ui}=setup((v:any)=>options=v);act(()=>field(ui,'负荷窗口开始分钟').props.onChange({target:{value:'10'}}));act(()=>field(ui,'负荷窗口结束分钟').props.onChange({target:{value:'40'}}));act(()=>field(ui,'负荷类别').props.onChange({target:{value:'materials'}}));const button=()=>ui.root.findAllByType('button').find((b:any)=>b.children.join('')==='导出当前负荷视图 CSV');act(()=>button().props.onClick());assert.deepEqual(options,{start:10,end:40,kind:'materials'});assert.equal(ui.root.findAllByType('table').length,1);act(()=>field(ui,'负荷窗口开始分钟').props.onChange({target:{value:''}}));assert.equal(button().props.disabled,true);assert.ok(text(ui).includes('请修正后核对或导出'));});

@@ -1,0 +1,16 @@
+https://github.com/huiliangtao666/APS/issues/24
+Confirmed FR013-MAIN-RAW01, medium/P2, persistent raw-content corruption. Unique canonical Project2 FR013/FR016 originals; related acceptance issue #4 remainsopen. No new parallel Project card. Initial detection, zero repair attempts before this dispatch; repair round1 required, maximum2 per defect. Full coverage gaps are separate.
+
+Source: https://github.com/huiliangtao666/APS/commit/c8aeb9283776207853efbdb0c5ea8b3eb09ab039 branch feat/fr-013-016-main-batch. Independent APS-Test dlv_2bf68719-7bdd-44e0-87c2-7a2a8f3293d5 FAIL. Report APS-Test/FR-013-016-MAIN-INDEPENDENT-REPORT.txt; evidence FR-013-016-MAIN-INDEPENDENT-EVIDENCE.zip. Location src/lib/csv-draft.mjs editCsvDraft(): prefix/suffix first-to-last replacement span then inserted.replace(/\n/g,newline) normalizes untouched intermediate quoted contents.
+
+Repro using attached raw01-repro.mjs in real React/Express membership fixture:
+1. Six files generated from seed, machines record separators CRLF. MIX01 name is START\rKEEP_CR\nKEEP_LF\r\nKEEP_CRLF; MIX02 maximum load bad.
+2. Preview; keyboardEnter locates maxload issue at exact physicalrow6.
+3. Editor selectall then paste visible corrected CSV changing only START->CHANGED and bad->1200.
+4. Re-preview succeeds but actualraw is CHANGED\r\nKEEP_CR\r\nKEEP_LF\r\nKEEP_CRLF. Expected CHANGED\rKEEP_CR\nKEEP_LF\r\nKEEP_CRLF.
+5. Keyboardconfirm succeeds, revision1 persists altered name. Independently reproduced twice, second with real selectall/insertText/commit, not just textarea.fill. Before/after raw bytes and persisted-business.json/screenshots retained.
+
+Expected all untouched raw spans/newlines exact across separate corrections; no silent normalization of quoted data. Singlelocaledit/nochange and physicalselection tests pass, so do not claim all edits fail. Consider normalized-to-source offsets or actual separate edit ranges, preserving original substrings; add multi-edit/paste/replace mixednewline/quotes/comma coverage and actual browser commit.
+
+Retain independent successful494/494/build/CSV/main9browser/13atomic proofs, six positive probes+2guardgroups, currentfacts/history/token protections and FR027/035/036/038. No mutation of confirmedsource/executionfacts; atomic errors unchanged. Close only with pushedfix/fullSHA/independentTest of exactraw/persistedbytes. Two failed repair rounds require exhausted-round Issue Log/evidence before newfeatures; current count0, no exhaustedstreak.
+This is NOT fixed by this FR014/015 checkpoint. Existing main batch importer is preserved. Separate unique repair-round1 delivery dlv_4a00521a-2d82-4823-81a5-7f48242dc073 is queued NEXT per live Design issue4 comment. No full Done or independent acceptance is claimed.

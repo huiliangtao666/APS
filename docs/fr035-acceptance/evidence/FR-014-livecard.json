@@ -1,0 +1,25 @@
+{
+  "id": "PVTI_lAHOFM9WU84BpE1czhEHgs4",
+  "content": {
+    "id": "DI_lAHOFM9WU84BpE1czgLhAgs",
+    "title": "[FR] FR-014 各类模拟数据查询",
+    "body": "## 需求\n范围：P0；关联流程：BP-01/02/05；页面：PG-01/02/08；开始提供：R1；完整提供：R6。\n前置功能：FR-013。\n• 每类已支持数据均提供列表、筛选、详情及关联查询，例如订单查任务、工序查机器、物料查批次及占用。\n• 支持按产品、订单、日期、状态等适用条件筛选；不能要求查询用户通过查看原始JSON文件理解数据。\n\n## 验收追踪\n验收用例：AC-02/17/26/31。\n\n来源：需求分析与设计说明书 v0.3，第 6 章；状态：基线需求，具体实现状态待跟踪。\n\n\n## Patrol delivery and assignment (2026-10-29)\nOwner APS-Dev, delivery dlv_6191a4a4-a200-4877-be47-9899d1aa10cf. Dependency FR013 implementation integrated at main f83cebeb2bc30e7cc0dce495aa17625908412312 with six-table and DEF01-04 source regression evidence. FR013 UI acceptance issue4 remains open; dependency code is available for development. Assigned original supported-data lists/filters/detail/related-query scope AC02/17/26/31, from integrated FR037 baseline51e1e7ed1c7fe6c658e16337da97979fad344a30. Preserve server identity/roles; require container meaningful tests/build and ordinary GitHub push, fullSHA/report/limits. No parallel backlog. Status In progress.\n\n\n## Patrol handoff (2026-10-29)\nDev delivery dlv_6191a4a4-a200-4877-be47-9899d1aa10cf completed. GitHub feat/fr-014-data-queries SHAa4601ef19d9d4e950481475ea753d9e2b508d81a verified: https://github.com/huiliangtao666/APS/commit/a4601ef19d9d4e950481475ea753d9e2b508d81a . Report APS-Dev/FR-014-DELIVERY-REPORT.txt and commit docs/FR-014.txt. Container85 business/API +3 query UI tests pass, FR013 six-table/DEF01-04 and build pass. Supported16 inputs/plan-task query, filtering/details/related queries and authorized export; automatic allocation/actual occupancy details unsupported, real identity/browser/fullAC/UAT not accepted. Owner APS-Test, independent delivery dlv_317a5b7a-1440-496f-82cd-49ce7b8d1b42. Report pending. In review, no Test pass claimed.\n\n\n## Issue Log: independent Test failure / repair round1 (2026-10-29)\nTest delivery dlv_317a5b7a-1440-496f-82cd-49ce7b8d1b42 completed at verified GitHub SHAa4601ef19d9d4e950481475ea753d9e2b508d81a. Canonical85+3, FR013 harness and build pass; independent12pass2fail. Report APS-Test/FR-014-INDEPENDENT-REGRESSION.md; evidence FR-014-INDEPENDENT-EVIDENCE.zip. Confirmed D1: impossible date2026-02-30 matches normalized March2 in queries/exports. D2: authorized export query filters:null returns404/internal exception instead of400 invalid_query. Linked [issue11](https://github.com/huiliangtao666/APS/issues/11). Owner APS-Dev, repair round1 delivery dlv_635d2a6c-a7e4-4aa5-b531-5008c5ae8d38 queued after safe checkpoint in current FR015; preserve ongoing FR015 status/work. Max2 rounds; none completed. Status In progress. FullAC02/17/26/31/browser/real identity acceptance remains incomplete separately; no new defect inferred from coverage gaps, UAT01/02 not executed. No three consecutive tasks stalled after two failed repair rounds established.\n\n\n## Delivered repair and Test handoff (2026-10-29)\nRound1 repair included in completed FR015 delivery dlv_9a902f6b-d1a9-4af7-9a36-3431b1a8054c: fix commit4dea41d34f2e4eee15b95a093c346fc483f04bfa, delivered branch feat/fr-015-data-editing SHA f27394bbd411fe79006543af906d5dcacf3c86e1 verified on GitHub. Dev reports both D1/D2 repaired with4 regressions;135/135 combined checks and build pass. Existing repair delivery dlv_635d2a6c-a7e4-4aa5-b531-5008c5ae8d38 still executing verification, not duplicated. Issue11 remains open until independent Test. Original fullAC/browser gaps and active work retain In progress. Independent Test owner APS-Test, delivery dlv_e193424a-7b65-42fb-912d-2e699e1c12a5; report paths pending. Defect round1 retest first, editing regression second; no Test pass claimed.\n\n\n## Patrol evidence and action (2026-10-29)\nRound1 Dev repair delivery dlv_635d2a6c-a7e4-4aa5-b531-5008c5ae8d38 completed. Remote query branchdb090453482261c386a6492e2106323e2100c20c and FR015 tip542721102782852a3c549aace0c0d1754f916af0 verified. Independent Test dlv_e193424a-7b65-42fb-912d-2e699e1c12a5 passed D1/D2 on exact f27394bbd411fe79006543af906d5dcacf3c86e1; newer tip net product source identical, evidence docs only. Issue11 closed after round1. FullAC/browser/real identity gaps remain, link acceptance issue https://github.com/huiliangtao666/APS/issues/12. Keep In progress.\n"
+  },
+  "fieldValues": {
+    "nodes": [
+      {},
+      {
+        "name": "In progress",
+        "field": {
+          "name": "Status"
+        }
+      },
+      {
+        "name": "P0",
+        "field": {
+          "name": "Priority"
+        }
+      }
+    ]
+  }
+}

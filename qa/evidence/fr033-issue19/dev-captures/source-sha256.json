@@ -1,0 +1,7 @@
+{
+  "src/TimelinePanel.tsx": "f8af2a43c7bfaaf509aedbd8d5644bdb2f683dcb31ba7458ef24556db7531c3a",
+  "src/index.css": "526affa3862fa7f17e04753ea2f0e1908175d7aa13a3f4f5731a016775e57a56",
+  "src/lib/timetable.mjs": "c5acd1812fb8bff29621b3a826d026969163f499ebdc0ceab7ccaccff1813a8b",
+  "src/lib/timetable.d.mts": "e0aecd28264d0445ab73a408662724acd87395153d2b71099ad0af642280a22f",
+  "qa/axis-browser.tsx": "2516eaab01b899f1a1373771b2b5e5727fba49d59e3b19622e82a400686c5dc9"
+}

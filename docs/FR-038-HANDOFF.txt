@@ -1,0 +1,24 @@
+FR-038 Run records and failure guidance — Dev scope
+Canonical Project2 card PVTI_lAHOFM9WU84BpE1czhEHhHk, base 5cb08e86d42e982fb8d763db5376f7a8478af8c9.
+Live card + original v0.3 AC16/27/31/32 + open issues read before implementation. No new card/publication/main merge.
+
+Compatibility and states
+Existing stored status completed/partial mean calculation finished with saved output, not full feasibility. Public outcome=succeeded; partial and supported-check limits remain distinct. queued/running remain active. cancel_requested and stopping (timeout shutdown) are active; terminal cancelled/timed_out only follow termination acknowledgement. Cancellation after a terminal result returns409; repeated in-flight cancellation joins the original stop request. Whichever stop intent is persisted first owns the terminal outcome, including timeout/cancel competition. Late result/progress/error/exit cannot reopen a stopping or terminal run. Duplicate progress does not reset startedAt. Local restart turns nonterminal runs into failed + outcome orphaned with process_interrupted; does not resume them.
+
+History and retry
+DurationMs is persisted from run creation to completion, includes queue/stop time. Public active elapsed is server calculated; old terminal duration can be derived from timestamps. Existing frozen executionData.rules, original input version, selection/scope, ruleEvaluationAt and snapshot hash preserve inputs and applicable rule evaluation. Inputs are integrity checked before viewing and retrying.
+POST /runs/:id/retry uses existing calculate membership/CSRF/reason/audit. New server UUID, retryOf, trusted actor/request/reason; copies exact frozen input/conditions/revision and reuses original ruleEvaluationAt in Worker. Never adopts request-supplied data/identity/rules. Source run remains unchanged. Active source409; corrupt history409; discarded trial409; changed current execution-facts hash409. Other current input edits do not change a same-input diagnostic replay. Replay creates a draft only; no automatic confirm/release or current-source replacement. Identical data does not promise every future engine build has identical output. Engine executable archival/cross-version execution not implemented.
+
+Chinese UI
+Nontechnical status/guidance, elapsed seconds and next action visible; run/input/snapshot/error code/phase, frozen input and detailed check scope in native collapsed details. No invented progress percentage; timeout does not imply infeasibility. Keyboard-expandable details, retry and result links; role/reason guards maintained. Existing broader application copy/other workflow screens were not audited as part of FR038.
+
+Validation
+qa/fr038-docker.sh installs/builds/tests only in disposable Docker; source mount read-only. Existing SDK tgz needed in FR038_SDK; npm/Playwright download network required. Empty output directory mandatory.
+FR038_REPO=<absolute-checkout> FR038_SDK=<directory-containing-two-SDK-tgz> FR038_OUT=<empty-directory> bash qa/fr038-docker.sh
+qa/fr038-checks.sh covers canonical tests, business suites, UI components including RunPanel, real bundled Workers, CSV harness, FR035 report browser/history regressions and FR038 real React/Express/Chromium flow. Browser fixture has fixed synthetic actor/QA runtime alias, real stored membership. Busy/crashing Workers and delayed termination acknowledgements explicitly injected in isolated QA, never production routes.
+
+Acceptance limits
+AC16: supported normal/partial/cancel/failure/timeout and history protections covered. AC27: cancellation/status timing only; no agreed production task scale/equipment/all-rule benchmark or percentile SLA established. AC31: focused Chinese run flow and native keyboard details, 640/1100 screenshots, not blanket accessibility/whole-flow UAT certification. AC32: frozen retry/history/current-input edits, real confirmation protection and integrity refusal covered; no production disk-loss recovery/backup certification.
+Single local business.json atomic rename, one app process. No fsync durability guarantee, distributed workers/multiprocess locking, crash-resume, engine-version archival, production failover/load/stress claims. Restart/orphan test reconstructs router with saved local records; is not power-loss evidence. Legacy /calculate remains synchronous and cannot be cancelled. Full FR018/024, all-rule business acceptance, real signed gateway/SSO and five-stage UAT remain separate.
+
+Dev validation result: 457/457 tests (213 canonical +164 business +5 query +9 real bundled Worker +52 components +8 run-history +6 scoped-report), build/CSV pass; FR035 browser13 groups and confirmation history5 groups; FR038 browser6 groups Chromium141.0.7390.37. Earlier helper terminal-state and translated-error assertions updated; original failed logs retained in external evidence, not concealed. Full signed gateway/production scale/UAT acceptance remains open.

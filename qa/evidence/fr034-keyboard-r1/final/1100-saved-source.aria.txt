@@ -1,0 +1,163 @@
+- banner:
+  - text: APS APS · 单线最小排程 R1 原型 / v0.3 需求基线
+  - navigation:
+    - button "排程工作台"
+    - button "模拟数据查询"
+    - button "数据与 CSV"
+    - button "范围与待决"
+  - text: 预览环境
+- main:
+  - heading "权限与操作记录" [level=2]
+  - paragraph: 当前权限：planner · 所有质量状态均为模拟数据，无 QA 在线审批。主管确认、退回与发布流程尚未提供。
+  - text: 操作原因（必填）
+  - textbox "操作原因": 键盘验收：仅用于一次性容器，核对任务来源、前后序与数量口径；键盘验收：仅用于一次性容器，核对任务来源、前后序与数量口径；键盘验收：仅用于一次性容器，核对任务来源、前后序与数量口径；键盘验收：仅用于一次性容器，核对任务来源、前后序与数量口径；键盘验收：仅用于一次性容器，核对任务来源、前后序与数量口径；键盘验收：仅用于一次性容器，核对任务来源、前后序与数量口径；键盘验收：仅用于一次性容器，核对任务来源、前后序与数量口径；键盘验收：仅用于一次性容器，核对任务来源、前后序与数量口径；
+  - button "退出登录"
+  - button "刷新数据与记录"
+  - group: 操作记录（40）
+  - paragraph: 单线排程 · R1 最小模式 / 已有支持模式
+  - heading "模拟数据与关联查询" [level=1]
+  - paragraph: 基于 v0.3 UAT-02 / 2026-11-02 08:00（Asia/Shanghai）；样例业务值均为虚构，仅用于软件验证。
+  - text: 追溯基线 FR-008 · UAT-02 · AC-05 工厂窗口继承 · 设备停机例外 · 连续工作窗口
+  - region "模拟数据查询":
+    - heading "模拟数据查询 · FR-014" [level=2]
+    - paragraph: 导入 → 查询 → 计算 → 核对。共 16 类当前输入及方案任务；所有数据均为模拟数据。分钟 0 = 2026-11-02 08:00（Asia/Shanghai），时间区间 [开始,结束)。
+    - text: 数据类别
+    - combobox "查询数据类别":
+      - option "模拟异常事件（先更新时点事实）（0）"
+      - option "模拟进度来源对账（显式映射）（0）"
+      - option "模拟任务执行事实（累计）（1）"
+      - option "模拟累计耗料（账面扣前口径）（1）"
+      - option "产品与包装规格（2）"
+      - option "物料主数据（5）"
+      - option "预计到料（0）"
+      - option "延期模拟记录（0）"
+      - option "计划供给引用（0）"
+      - option "库存批次（1）"
+      - option "订单与交期（1）" [selected]
+      - option "BOM 与包装用量（1）"
+      - option "工艺路线（4）"
+      - option "工序工时（4）"
+      - option "设备资源（6）"
+      - option "工装配置（不自动参与排程）（0）"
+      - option "订单模拟交付条件（0）"
+      - option "显式逐生产批占用声明（0）"
+      - option "空间与组批配置（存储不代表检查）（0）"
+      - option "工厂工作日历（1）"
+      - option "设备停机例外（0）"
+      - option "工序资源依赖（2）"
+      - option "人员组与可用时间（0）"
+      - option "排程规则（13）"
+      - option "方案任务（2）"
+    - text: 关联方案
+    - combobox "查询方案":
+      - option "未选择方案"
+      - option "单线计算 2026/10/28 22:57:09 · 草稿 · 023e6e23-944c-4a62-bb52-2dda5fdead69"
+      - option "单线计算 2026/10/28 22:57:09 · 草稿 · d61572dc-122b-4477-9ca9-fa463a4fa61b"
+      - option "单线计算 2026/10/28 22:57:09 · 草稿 · 6e5b83b6-6ed6-4ddd-bf85-1bb90e401dc6"
+      - option "FR034 synthetic deliberately invalid saved output · 草稿 · FR034-SYNTHETIC-CORRUPT" [selected]
+    - paragraph: 当前输入版本：4。所选方案输入版本：4。关联输入来自方案原始快照。
+    - checkbox "查看所选方案计算时的输入" [checked]
+    - text: 查看所选方案计算时的输入
+    - button "恢复该方案输入为新版本"
+    - paragraph: 原始输入版本：f7b272f12522a970868173e7ed4042244ff44475aff097f25dda15752c880dcc。本视图只读，重算须使用当前输入。
+    - text: 关键词
+    - textbox "查询关键词"
+    - text: 产品
+    - combobox "查询产品":
+      - option "全部产品" [selected]
+      - option "HC40"
+      - option "HC60"
+    - text: 订单
+    - combobox "查询订单":
+      - option "全部订单" [selected]
+      - option "A"
+    - text: 状态字段
+    - combobox "查询状态字段":
+      - option "请选择" [selected]
+      - option "订单状态"
+    - text: 状态
+    - combobox "查询状态" [disabled]:
+      - option "全部状态" [selected]
+    - text: 日期 / 分钟字段
+    - combobox "查询日期字段":
+      - option "请选择" [selected]
+      - option "要求可交付分钟"
+    - text: 起值（含）
+    - textbox "查询起值" [disabled]:
+      - /placeholder: 分钟数或含时区 ISO 日期时间
+    - text: 止值（含）
+    - textbox "查询止值" [disabled]
+    - button "清除筛选"
+    - button "导出筛选结果（1）"
+    - paragraph: 条件同时满足才显示；产品/订单按明确引用匹配。日期字段用 YYYY-MM-DD，时间字段用含时区 ISO 时间，分钟字段用数值；无效范围或缺失日期不匹配。详情保留全部字段。
+    - status: 1 / 1 条 · 第 1 页
+    - table:
+      - rowgroup:
+        - row "详情 订单编号 产品编号 产线编号 合格需求 数量单位 要求可交付分钟 优先顺序 是否允许拆分 需求类型 订单状态 已完成合格数量":
+          - cell "详情"
+          - cell "订单编号"
+          - cell "产品编号"
+          - cell "产线编号"
+          - cell "合格需求"
+          - cell "数量单位"
+          - cell "要求可交付分钟"
+          - cell "优先顺序"
+          - cell "是否允许拆分"
+          - cell "需求类型"
+          - cell "订单状态"
+          - cell "已完成合格数量"
+      - rowgroup:
+        - row "查看第1条详情 A HC40 L01 100 kg 480 1 否 正式订单 有效 —":
+          - cell "查看第1条详情":
+            - button "查看第1条详情": 查看
+          - cell "A"
+          - cell "HC40"
+          - cell "L01"
+          - cell "100"
+          - cell "kg"
+          - cell "480"
+          - cell "1"
+          - cell "否"
+          - cell "正式订单"
+          - cell "有效"
+          - cell "—"
+    - button "上一页" [disabled]
+    - button "下一页" [disabled]
+    - region "记录详情":
+      - heading "订单与交期 · 第 1 条详情" [level=3]
+      - term: 订单编号
+      - definition: A
+      - term: 产品编号
+      - definition: HC40
+      - term: 产线编号
+      - definition: L01
+      - term: 合格需求
+      - definition: "100"
+      - term: 数量单位
+      - definition: kg
+      - term: 要求可交付分钟
+      - definition: "480"
+      - term: 优先顺序
+      - definition: "1"
+      - term: 是否允许拆分
+      - definition: 否
+      - term: 需求类型
+      - definition: 正式订单
+      - term: 订单状态
+      - definition: 有效
+      - term: 已完成合格数量
+      - definition: 未填写
+      - heading "关联查询（11）" [level=3]
+      - paragraph: 设备是工序候选资源，资源依赖是模拟需求，均不等于实际分配或占用。规则关联表示方案记录了启用该规则，不表示逐任务已检查通过。
+      - button "模拟任务执行事实（累计） · F-A-MIX / A / MIX"
+      - button "产品与包装规格 · HC40 / 模拟火腿肠40g / 0.04"
+      - button "工序资源依赖 · A / MIX / 设备"
+      - button "工序资源依赖 · A / FILL / 设备"
+      - button "方案任务 · A-MIX / A / HC40"
+      - button "方案任务 · A-FILL / A / HC40"
+      - button "工艺路线 · HC40 / MIX / 混合"
+      - button "工艺路线 · HC40 / FILL / 灌装"
+      - button "工序工时 · HC40 / MIX / 固定"
+      - button "工序工时 · HC40 / FILL / 固定"
+      - button "BOM 与包装用量 · EX-B1 / HC40 / 2026-01-01"
+  - text: APS-Dev 原型 · R2.1 阶段预览 · 未发布上线 · v0.3 UAT-02 虚构数据

@@ -1,0 +1,469 @@
+{
+  "schemaVersion": 1,
+  "deliveryId": "dlv_b958a95c-c084-4784-9671-629b773de88b",
+  "canonicalCard": "PVTI_lAHOFM9WU84BpE1czhEHhEU",
+  "productSourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+  "branch": "feat/fr-038-run-guidance",
+  "commitURL": "https://github.com/huiliangtao666/APS/commit/cf6e76e23722f142a08c552aacb43c924fc62f19",
+  "issueURL": "https://github.com/huiliangtao666/APS/issues/23",
+  "issue23": {
+    "status": "round1 sourcefixed pending independent Test",
+    "state": "open",
+    "independentRetestDelivery": "dlv_e953f391-fe29-4150-b0bb-108466d83f60",
+    "maxRepairRounds": 2
+  },
+  "scope": "finite original-card acceptance/delivery reconciliation; no new feature or product edit",
+  "rows": [
+    {
+      "id": "kind-orders",
+      "acceptance": [
+        "AC-23",
+        "AC-26"
+      ],
+      "requirement": "one saved demand per order; no operation-quantity sum",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "commands": [
+        "python3 qa/fr035-acceptance.py --check",
+        "FR038_REPO=\"$PWD\" FR038_SDK=<absolute-sdk-directory> FR038_OUT=<new-empty-absolute-directory> bash qa/fr038-docker.sh"
+      ],
+      "source": [
+        "server/scoped-report.mjs",
+        "qa/fr035-browser.mjs"
+      ],
+      "evidence": [
+        "evidence/run3/fr035-browser-report.json",
+        "evidence/dev-replay/page-orders.json",
+        "evidence/dev-replay/page-orders.csv",
+        "evidence/Test-original-report.txt"
+      ],
+      "result": "supported Dev pass; original Test verifies baseline slice",
+      "gap": "Full R7/all-rule combinations unaccepted"
+    },
+    {
+      "id": "kind-tasks",
+      "acceptance": [
+        "AC-23",
+        "AC-26"
+      ],
+      "requirement": "saved task records with exact input and assessment",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "commands": [
+        "python3 qa/fr035-acceptance.py --check",
+        "FR038_REPO=\"$PWD\" FR038_SDK=<absolute-sdk-directory> FR038_OUT=<new-empty-absolute-directory> bash qa/fr038-docker.sh"
+      ],
+      "source": [
+        "server/scoped-report.mjs",
+        "qa/fr035-browser.mjs"
+      ],
+      "evidence": [
+        "evidence/run3/fr035-browser-report.json",
+        "evidence/dev-replay/page-tasks.json",
+        "evidence/dev-replay/page-tasks.csv",
+        "evidence/Test-original-report.txt"
+      ],
+      "result": "supported Dev pass; original Test verifies baseline slice",
+      "gap": "Full R7/all-rule combinations unaccepted"
+    },
+    {
+      "id": "kind-occupation",
+      "acceptance": [
+        "AC-23",
+        "AC-26"
+      ],
+      "requirement": "physical machine/resource rows; shared rows retained whole",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "commands": [
+        "python3 qa/fr035-acceptance.py --check",
+        "FR038_REPO=\"$PWD\" FR038_SDK=<absolute-sdk-directory> FR038_OUT=<new-empty-absolute-directory> bash qa/fr038-docker.sh"
+      ],
+      "source": [
+        "server/scoped-report.mjs",
+        "qa/fr035-browser.mjs"
+      ],
+      "evidence": [
+        "evidence/run3/fr035-browser-report.json",
+        "evidence/dev-replay/page-occupation.json",
+        "evidence/dev-replay/page-occupation.csv",
+        "evidence/Test-original-report.txt"
+      ],
+      "result": "supported Dev pass; original Test verifies baseline slice",
+      "gap": "Full R7/all-rule combinations unaccepted"
+    },
+    {
+      "id": "kind-materials",
+      "acceptance": [
+        "AC-23",
+        "AC-26"
+      ],
+      "requirement": "saved allocations/shortages; conditional arrival is not receipt",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "commands": [
+        "python3 qa/fr035-acceptance.py --check",
+        "FR038_REPO=\"$PWD\" FR038_SDK=<absolute-sdk-directory> FR038_OUT=<new-empty-absolute-directory> bash qa/fr038-docker.sh"
+      ],
+      "source": [
+        "server/scoped-report.mjs",
+        "qa/fr035-browser.mjs"
+      ],
+      "evidence": [
+        "evidence/run3/fr035-browser-report.json",
+        "evidence/dev-replay/page-materials.json",
+        "evidence/dev-replay/page-materials.csv",
+        "evidence/Test-original-report.txt"
+      ],
+      "result": "supported Dev pass; original Test verifies baseline slice",
+      "gap": "Full R7/all-rule combinations unaccepted"
+    },
+    {
+      "id": "kind-unplanned",
+      "acceptance": [
+        "AC-23",
+        "AC-26"
+      ],
+      "requirement": "saved unplanned task reasons; unknown remains unknown",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "commands": [
+        "python3 qa/fr035-acceptance.py --check",
+        "FR038_REPO=\"$PWD\" FR038_SDK=<absolute-sdk-directory> FR038_OUT=<new-empty-absolute-directory> bash qa/fr038-docker.sh"
+      ],
+      "source": [
+        "server/scoped-report.mjs",
+        "qa/fr035-browser.mjs"
+      ],
+      "evidence": [
+        "evidence/run3/fr035-browser-report.json",
+        "evidence/dev-replay/page-unplanned.json",
+        "evidence/dev-replay/page-unplanned.csv",
+        "evidence/Test-original-report.txt"
+      ],
+      "result": "supported Dev pass; original Test verifies baseline slice",
+      "gap": "Full R7/all-rule combinations unaccepted"
+    },
+    {
+      "id": "kind-differences",
+      "acceptance": [
+        "AC-23",
+        "AC-26"
+      ],
+      "requirement": "tasks/resources/materials/order dates/unplanned plus input and impact changes from both saved plans",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "commands": [
+        "python3 qa/fr035-acceptance.py --check",
+        "FR038_REPO=\"$PWD\" FR038_SDK=<absolute-sdk-directory> FR038_OUT=<new-empty-absolute-directory> bash qa/fr038-docker.sh"
+      ],
+      "source": [
+        "server/scoped-report.mjs",
+        "qa/fr035-browser.mjs"
+      ],
+      "evidence": [
+        "evidence/run3/fr035-browser-report.json",
+        "evidence/dev-replay/page-differences.json",
+        "evidence/dev-replay/page-differences.csv",
+        "evidence/Test-original-report.txt"
+      ],
+      "result": "supported Dev pass; original Test verifies baseline slice; issue23 round1 sourcefixed pending independent Test",
+      "gap": "Full R7/all-rule combinations unaccepted; completeness retest pending"
+    },
+    {
+      "id": "filters-order",
+      "acceptance": [
+        "AC-26"
+      ],
+      "requirement": "Page text/exact order/plan selection; canonical query-key order viewId; query invalidation/empty states; reject extra/malformed keys",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "commands": [
+        "python3 qa/fr035-acceptance.py --check",
+        "FR038_REPO=\"$PWD\" FR038_SDK=<absolute-sdk-directory> FR038_OUT=<new-empty-absolute-directory> bash qa/fr038-docker.sh"
+      ],
+      "source": [
+        "server/scoped-report.mjs",
+        "src/ReportPanel.tsx"
+      ],
+      "evidence": [
+        "evidence/run3/fr035-browser-report.json",
+        "evidence/Test-original-report.txt"
+      ],
+      "result": "Dev pass; original Test baseline pass except issue23",
+      "gap": "Query completeness independent repaired-SHA retest pending"
+    },
+    {
+      "id": "window",
+      "acceptance": [
+        "AC-26"
+      ],
+      "requirement": "Task overlap and resource clipped occupancy use [start,end); orders/materials/unplanned/differences keep whole saved-plan quantities, explicitly declared",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "commands": [
+        "python3 qa/fr035-acceptance.py --check",
+        "FR038_REPO=\"$PWD\" FR038_SDK=<absolute-sdk-directory> FR038_OUT=<new-empty-absolute-directory> bash qa/fr038-docker.sh"
+      ],
+      "source": [
+        "server/scoped-report.mjs",
+        "src/lib/resource-load.mjs"
+      ],
+      "evidence": [
+        "evidence/run3/fr035-browser-report.json",
+        "evidence/Test-original-report.txt"
+      ],
+      "result": "Dev pass; original Test baseline pass",
+      "gap": "Not arbitrary business quantity proration or all temporal combinations"
+    },
+    {
+      "id": "metadata",
+      "acceptance": [
+        "AC-26"
+      ],
+      "requirement": "Line/plan/run/inputVersion/snapshot/confirmation/unit/date/time origin UTC+08:00/status/simulation and non-current-fact scope in saved records/CSV",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "commands": [
+        "python3 qa/fr035-acceptance.py --check",
+        "FR038_REPO=\"$PWD\" FR038_SDK=<absolute-sdk-directory> FR038_OUT=<new-empty-absolute-directory> bash qa/fr038-docker.sh"
+      ],
+      "source": [
+        "server/scoped-report.mjs"
+      ],
+      "evidence": [
+        "evidence/dev-replay/page-orders.csv",
+        "evidence/run3/fr035-browser-report.json",
+        "evidence/Test-original-report.txt"
+      ],
+      "result": "Dev pass; original Test baseline pass",
+      "gap": "Synthetic fixtures; broader supported-data/R7 acceptance remains"
+    },
+    {
+      "id": "permissions",
+      "acceptance": [
+        "AC-26"
+      ],
+      "requirement": "Stored membership read/export grants, revoke/remove, CSRF/origin, reason, stale/widened view rejection and trusted audit",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "commands": [
+        "python3 qa/fr035-acceptance.py --check",
+        "FR038_REPO=\"$PWD\" FR038_SDK=<absolute-sdk-directory> FR038_OUT=<new-empty-absolute-directory> bash qa/fr038-docker.sh"
+      ],
+      "source": [
+        "server/business.mjs",
+        "server/auth/store.mjs"
+      ],
+      "evidence": [
+        "evidence/run3/fr035-export-audit.json",
+        "evidence/run3/fr035-browser-report.json",
+        "evidence/Test-original-report.txt"
+      ],
+      "result": "Dev pass; original Test baseline pass",
+      "gap": "No signed gateway/SSO or real-person permission journey"
+    },
+    {
+      "id": "quantity-time",
+      "acceptance": [
+        "AC-26"
+      ],
+      "requirement": "Exact source decimals/fractions/unit/time retained; no fake totals or shared resource fractions; unknown null unchanged",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "commands": [
+        "python3 qa/fr035-acceptance.py --check",
+        "FR038_REPO=\"$PWD\" FR038_SDK=<absolute-sdk-directory> FR038_OUT=<new-empty-absolute-directory> bash qa/fr038-docker.sh"
+      ],
+      "source": [
+        "server/scoped-report.mjs",
+        "qa/scoped-report.test.mjs"
+      ],
+      "evidence": [
+        "evidence/dev-replay/independent-probe.json",
+        "evidence/Test-original-report.txt",
+        "evidence/run3/tests/scoped-report.log"
+      ],
+      "result": "Dev pass; original Test independent exact-decimal/formula/CSV checks baseline pass",
+      "gap": "Serialization fidelity does not certify unchecked business rules"
+    },
+    {
+      "id": "CSV",
+      "acceptance": [
+        "AC-23",
+        "AC-26"
+      ],
+      "requirement": "UTF-8 BOM CRLF quoting/formula guard; actual DOM raw cells/API/downloaded bytes and parsed records agree for six kinds and filtered cases; CSV satisfies CSV-or-Excel",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "commands": [
+        "python3 qa/fr035-acceptance.py --check",
+        "FR038_REPO=\"$PWD\" FR038_SDK=<absolute-sdk-directory> FR038_OUT=<new-empty-absolute-directory> bash qa/fr038-docker.sh"
+      ],
+      "source": [
+        "server/scoped-report.mjs",
+        "qa/fr035-browser.mjs"
+      ],
+      "evidence": [
+        "evidence/run3/fr035-browser-report.json",
+        "evidence/run3/tests/csv.log",
+        "evidence/Test-original-report.txt"
+      ],
+      "result": "Dev pass; original Test baseline pass",
+      "gap": "No native Excel required; not every spreadsheet application certified; shared projection parity alone misses incompleteness"
+    },
+    {
+      "id": "comparison-completeness",
+      "acceptance": [
+        "AC-26"
+      ],
+      "requirement": "Resolve before taskIds on left and after taskIds on right; task-ID reuse isolation; retain complete shared row; forward/reverse A all46 filtered17 resource6",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "commands": [
+        "python3 qa/fr035-acceptance.py --check",
+        "FR038_REPO=\"$PWD\" FR038_SDK=<absolute-sdk-directory> FR038_OUT=<new-empty-absolute-directory> bash qa/fr038-docker.sh"
+      ],
+      "source": [
+        "server/scoped-report.mjs",
+        "qa/scoped-report.test.mjs"
+      ],
+      "evidence": [
+        "evidence/run3/fr035-browser-report.json",
+        "evidence/run3/tests/scoped-report.log",
+        "evidence/issue23-live.json",
+        "evidence/Test-original-report.txt",
+        "evidence/validation-summary.json"
+      ],
+      "result": "issue23 round1 sourcefixed pending independent Test",
+      "gap": "Original Test baseline FAIL: filtered13 resource2; Dev probe2/2 and structural7 pass do not close issue"
+    },
+    {
+      "id": "history",
+      "acceptance": [
+        "AC-26"
+      ],
+      "requirement": "Saved original inputs/run/confirmation validated; current40/50 edits and archive preserve confirmed CSV; damaged history/confirmation reject409",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "commands": [
+        "python3 qa/fr035-acceptance.py --check",
+        "FR038_REPO=\"$PWD\" FR038_SDK=<absolute-sdk-directory> FR038_OUT=<new-empty-absolute-directory> bash qa/fr038-docker.sh"
+      ],
+      "source": [
+        "server/scoped-report.mjs",
+        "qa/fr035-history-api.mjs"
+      ],
+      "evidence": [
+        "evidence/run3/fr035-confirmed-api-report.json",
+        "evidence/Test-original-report.txt"
+      ],
+      "result": "Dev5 history groups pass; original Test baseline pass",
+      "gap": "Finite synthetic confirmed workflow; not full R5/R7 acceptance"
+    },
+    {
+      "id": "Chinese-flow",
+      "acceptance": [
+        "AC-31"
+      ],
+      "requirement": "Chinese summary/state/errors with expandable exact records, native keyboard query/export and 640px scroll",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "commands": [
+        "python3 qa/fr035-acceptance.py --check",
+        "FR038_REPO=\"$PWD\" FR038_SDK=<absolute-sdk-directory> FR038_OUT=<new-empty-absolute-directory> bash qa/fr038-docker.sh"
+      ],
+      "source": [
+        "src/ReportPanel.tsx"
+      ],
+      "evidence": [
+        "evidence/run3/fr035-browser-report.json",
+        "evidence/run3/fr035-narrow.aria.txt",
+        "evidence/Test-original-report.txt"
+      ],
+      "result": "Dev pass; original Test baseline pass",
+      "gap": "Not full accessibility, every Chinese flow or business-owner UAT signoff"
+    },
+    {
+      "id": "external",
+      "acceptance": [
+        "AC-23"
+      ],
+      "requirement": "Local simulation/query/export without ERP/OMS/WMS/PLM/MES credentials or automatic dispatch",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "commands": [
+        "python3 qa/fr035-acceptance.py --check",
+        "FR038_REPO=\"$PWD\" FR038_SDK=<absolute-sdk-directory> FR038_OUT=<new-empty-absolute-directory> bash qa/fr038-docker.sh"
+      ],
+      "source": [
+        "server/scoped-report.mjs"
+      ],
+      "evidence": [
+        "evidence/FR-035-livecard.json",
+        "evidence/original-AC-excerpts.txt",
+        "evidence/Test-original-report.txt"
+      ],
+      "result": "Supported slice delivered",
+      "gap": "Full P0 workflow/R7 and FR036 interface documentation separate; live integration not required"
+    },
+    {
+      "id": "FR038-retained",
+      "acceptance": [
+        "AC-31"
+      ],
+      "requirement": "Preserve parent8741bf0 run guidance/cancel/retry/diagnostics",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "commands": [
+        "python3 qa/fr035-acceptance.py --check",
+        "FR038_REPO=\"$PWD\" FR038_SDK=<absolute-sdk-directory> FR038_OUT=<new-empty-absolute-directory> bash qa/fr038-docker.sh"
+      ],
+      "source": [
+        "qa/fr038-checks.sh",
+        "src/RunPanel.tsx"
+      ],
+      "evidence": [
+        "evidence/run3/fr038-browser-report.json",
+        "evidence/run3/tests/run-history.log"
+      ],
+      "result": "Dev6 browser groups and run-history8 pass",
+      "gap": "FR038 independent Test separate; replay durability/identity/UAT limits retained"
+    }
+  ],
+  "counts": {
+    "originalTestBaselineSHA": "5cb08e86d42e982fb8d763db5376f7a8478af8c9",
+    "originalObservedTAP": 447,
+    "repairObservedTAP": 458,
+    "repairLog": "evidence/run3/tests",
+    "legacyCurrentScriptTAPSubtotal": 448,
+    "legacy448Status": "derived from exact script selection and repaired logs, NOT a fresh executed pass; stale qa/fr035-source-sha256.json means legacy browser gate cannot certify this pin",
+    "integrated458": "qa/fr038-docker.sh -> qa/fr038-checks.sh uses current qa/fr038-source-sha256.json; preferred exact-pin full replay",
+    "browserGroups": 13,
+    "historyGroups": 5,
+    "FR038BrowserGroups": 6,
+    "downloadsArray": 8,
+    "additionalFilteredTaskDownload": 1,
+    "devReplayedIndependentGroups": 12,
+    "devReplayedOriginalDefectProbe": "2/2 pass; not independent approval"
+  },
+  "limits": [
+    "FR014/024/026/032 supported source available, original full acceptance remains incomplete; see live snapshots",
+    "DEC02/03 dynamic tooling/staffing, full joint rules and R7 workflow remain unaccepted",
+    "Signed gateway/SSO, real-person permissions, production-scale performance, all spreadsheets, full accessibility and five-stage UAT unaccepted",
+    "Coverage/acceptance gaps are not new defects or repair rounds"
+  ],
+  "nextCanonical": [
+    {
+      "feature": "FR-036",
+      "card": "PVTI_lAHOFM9WU84BpE1czhEHhFg",
+      "status": "Backlog",
+      "depends": [
+        "data classification",
+        "FR-013",
+        "FR-035"
+      ],
+      "suggestion": "Next bounded candidate: interface categories/fields/unique IDs/source/direction and CSV simulation contract, AC02/23; honor FR035 retest gate"
+    },
+    {
+      "feature": "FR-027",
+      "card": "PVTI_lAHOFM9WU84BpE1czhEHg7Y",
+      "status": "Backlog",
+      "depends": [
+        "FR-025",
+        "FR-026",
+        "FR-033",
+        "FR-034"
+      ],
+      "suggestion": "Later candidate: drag/allowed-machine preview/recheck/lock with execution-state constraints, AC19/21; first assess dependencies and current-fact safety"
+    }
+  ],
+  "dispatch": "Suggestions only; no self-dispatch, new card, publication, issue closure, main merge or full Done",
+  "validationEntrypoint": {
+    "path": "qa/fr035-acceptance.py",
+    "sha256": "4830e4018bdf0e8d3866f2a15d106164957f82faefb47dfb0e2e4c742ad270f3"
+  }
+}

@@ -1,0 +1,73 @@
+FR034 keyboard repair round1 — original AC17/31 card / issue21
+Delivery dlv_3a81309f-b7a0-4904-8e55-ee69573c255a from APS-Design.
+Canonical card PVTI_lAHOFM9WU84BpE1czhEHhDI. Parent evidence910fdbcf8fb6dd312cac4cf31c2b1a7a1950b75f;
+parent product21ff4dd72d9583ec591436b160a0b79931d81900.
+Branch fix/fr-034-keyboard-round1. No new Project item or issue.
+
+Keyboard contract and triage
+KBD01: keyboard problem activation must leave a visible focused control or a
+suitable visible target while selecting the correct saved tasks/interval.
+KBD02: the initiating check button must retain useful visible focus across its
+busy state; deliberate Tab navigation must be respected; busy activation must
+not repeat the request. No unconditional delayed focus restoration.
+KBD03: the saved-plan selector must expose a Chinese accessible name; option
+content alone is not a name.
+All three independently reproduced by Dev without a QA banner at640x900 and
+1100x900 on the pinned baseline. KBD02 BODY reproduced in both widths; KBD03
+bare combobox confirmed by actual accessibility snapshot. APS-Test independently confirmed all three on the pinned parent in eight
+scenarios (two widths, banner/no-banner, normal/delayed real requests). Its
+FR-034-KEYBOARD-INDEPENDENT-CONFIRMATION.txt is included in evidence. That
+confirmation is for the baseline, not independent acceptance of this repair.
+Each confirmed item counts as product repair round1, one product revision each.
+UNKNOWN01 / issue20 prior rounds and independent verdict remain unchanged.
+
+Implementation
+TimelinePanel preserves selected-task scrolling and geometry. When the active
+control is a keyboard-focused finding, it passes focus to the selected saved
+chart button after scrolling. Pointer activation does not trigger focus transfer.
+TaskLinkage retains the check button through busy state with aria-disabled and
+an explicit handler guard. A missing plan still uses native disabled. Existing
+busy/permission/reason predicates and backend validation remain in force.
+App adds the Chinese accessible name 已保存方案 to the existing native select.
+No server, scheduler, business rules, task-linkage model or history changes.
+
+Validation and reproducibility
+qa/fr034-keyboard-r1-docker.sh copies source into a disposable Node22 container;
+source/SDK are read-only mounts and only evidence output is writable. It runs
+all canonical/model/API/component tests, CSV verification, production build,
+worker tests, actual-App keyboard640/1100, UNKNOWN01 browser and confirmed
+history/API regression. Synthetic fixed identity and disposable JSON state;
+no gateway identity, production durability or full UAT certification.
+
+From workspace root, create a NEW EMPTY absolute evidence directory, then:
+FR034_SOURCE_MANIFEST=qa/fr034-keyboard-r1-source-sha256.json \
+FR034_PRODUCT_LABEL='FR034 keyboard repair round1; parent 910fdbcf8fb6dd312cac4cf31c2b1a7a1950b75f' \
+FR034_KBD_MODE=fixed FR034_PRODUCT_SHA='<exact delivery SHA>' \
+FR034_REPO="$PWD/apps/aps-fr032" FR034_SDK="$PWD/.praetor/sdk" \
+FR034_OUT='<absolute new empty evidence directory>' \
+bash apps/aps-fr032/qa/fr034-keyboard-r1-docker.sh
+
+Raw focus audits include observation-only samples of the original finding after
+focus has transferred, and intentionally horizontally scrolled task-table cells.
+These observations are not assertions that those unfocused controls are visible.
+Dedicated KBD assertions check the actual active control and its hit-test region.
+At most1CSSpx edge rounding is allowed; no visible focus failure is waived.
+
+See committed qa/evidence/fr034-keyboard-r1 and root delivery report/archive for
+final results, exact SHA, remote verification and detailed attempt accounting.
+No application publication, main merge, issue closure, full Done or all-rule
+business/material acceptance. Remaining signed identity, full workflow/UAT,
+assistive-tech/browser matrix and production durability acceptance are separate.
+
+Final Dev result:441/441 TAP tests, zero failures/skips; build and CSV fixture
+verification pass. No-banner640/1100:6/6 KBD assertions and20 functional groups
+pass;2 measurements and2 additional no-banner controls are separate records.
+Two keyboard-downloaded CSV files byte-match their saved-plan projection.
+UNKNOWN01 actual-App24 groups and confirmed-history API4 groups pass. Zero
+page exceptions/warning/error console entries in keyboard execution; API200.
+First fixed execution passed441 tests but failed a strict bottom<=900px
+assertion after transferring focus to the selected bar. Same product bytes in
+final execution measured bottom900.484/900.344px, visible and hit-test clear.
+Final harness permits<=1CSSpx rounding and records full rectangles/hit tests.
+This is a QA assertion adjustment, not a second product repair revision.
+Raw first attempt and baseline evidence are retained, not counted as final.

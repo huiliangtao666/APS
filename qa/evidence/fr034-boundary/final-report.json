@@ -1,0 +1,3482 @@
+{
+  "productSHA": "working-source; verify against final Git objects",
+  "mode": "observe",
+  "keyboard": [],
+  "sourceHashes": {
+    "index.html": "de7c0a69bb3cabc4c7eefa2dd7f7409a7dbbcec2cfa654da4209433b25ad2396",
+    "postcss.config.js": "e32657baf631d7c5f4dc67b4b2ee0ec8e7d5b3c41860e09cddce7c0377cd80bc",
+    "server/auth/auth.test.mjs": "3a3bfe0cb0d4462c4827d60e198e3f85c08935d18af2d885342fcf0ad5bbaf50",
+    "server/auth/init-admin.mjs": "7c835f1f844296d6e213ddf4c1a5c48488a228e1607276a81980e4e6430b401c",
+    "server/auth/routes.mjs": "f419f40e60655053c93e898ab2e71d045174dfc2a4f3549888a5e27f67de5513",
+    "server/auth/store.mjs": "eb40f08954d49b3ea7cea78e65aad33d64cec003218ff1c4770d3db51daa3258",
+    "server/auth/ws-guard.mjs": "5f831e0f2df3d32bf1f6372af300a8e033bbf793451963c7a7ef38388c897fd6",
+    "server/business.mjs": "8a29748e63ed0a3295927a20bff1b34c52fe150c8748e90b2b3143866bcd31a9",
+    "server/business.test.mjs": "7bdd9a23fbc10bbce2eacf5b7aeb0669ce81a4a04f7daaa5685a0b1f82db81ad",
+    "server/calculation-worker.mjs": "25619d27957b1f6074b03282b2da38e4bfed0e7f1b0327b46b8dff994907cf21",
+    "server/confirmation.mjs": "2d7ed2758dc9765964a32d94731157cbd0393198b62f9a1c89a88b94698d8165",
+    "server/index.mjs": "b726235232876ae7528880e55249023d47c0018c5dd3360f6dd57acc742186d5",
+    "server/input-validation.mjs": "1915f59a4952c47850a17e033a5c0d360b22b6b0310ef398114867f3d94a4dba",
+    "server/planner.ts": "8cf7289d10bdc929b382f99a2639e170b3e492f98a3111a1d3a8d806e0d99cd8",
+    "server/run-input.mjs": "091c3b64c3a6d672e4722921de84e726605aede43545aef7e719a013c9155f2a",
+    "src/App.tsx": "4cfefbeea91eaf397ad6c21f949a3ec6ceabef657c35cde22f846004ccf30b46",
+    "src/BatchPanel.tsx": "f65bd61ca187abaafeb63ae1a32ab4331123a194edb8cd1061190a4e1c8fae61",
+    "src/ConfirmationPanel.tsx": "998e7bce904b9ad04e278462e127e3e21ceb5b7b25996dfd14d9cbec9b3a5b3d",
+    "src/DataEditor.tsx": "7f4990004f6a940e468c1d2d9765bc46984088e39e3bdde227172fd977374a9e",
+    "src/DataQueries.tsx": "5aafda603f6a7a2baa8f285a1efd1506a872d4c853f54bb88e58551d87e05e97",
+    "src/DeliveryPanel.tsx": "aedb190ebf7c96cbc759e8435b1e5ea2c15ebd9d422af92054c95db3959dd08c",
+    "src/ExecutionPanel.tsx": "67eb73fedc8512d4725c66f55af30ad5262d10813827dfaf3eca0c2be167c35f",
+    "src/MaterialPanel.tsx": "87a6b5ee0f8dc24dda191bda7d71350e3e9af91b72dadf0203394ead13f3c4d3",
+    "src/ResourcePanel.tsx": "869bb547bfcc6e11eb6256c0506127b246b5a5ea1fbabc4b8af03c81475b69eb",
+    "src/ResultPanel.tsx": "d027d81e3ab8abff90c9a6472406db80d5f4dc642af465d5843d9ca679f869c9",
+    "src/RulePanel.tsx": "79e08c855ea83fbed72ab55339a3cbb625f59ab3b73acfa8ed88f63f9b169c8a",
+    "src/RunPanel.tsx": "46fe0a5418507450326ac448a8c1a817eeeda9546d14d429447df849eee454e7",
+    "src/TimelinePanel.tsx": "c2f83d300db4156f390c75c27f173cf3daa07c69fd05fe4f274b2cf801b3c45c",
+    "src/TrialPanel.tsx": "87670277b0c1d105ca188f20e2f921479a2513f1b3258976c3e5099014265111",
+    "src/auth/useAppMembership.ts": "2af87bf231b39703b16eb5fd60e1a41b579ed30dd5d2198c9b77475f318854ce",
+    "src/data-defs.ts": "f228c438ab0f3c2fad9539308a8704a613107eb21bd6ef80170ec33d467a07b0",
+    "src/index.css": "21e15e93f12accef8c86837831a32cbf6fdff7f4f54f2805b0cdf462ab0c0aa5",
+    "src/lib/batch-policy.mjs": "0433b4ec3f9545173001eb7069b70f42ae901dece6dfa16ef9f09db3e6c5c4ba",
+    "src/lib/bom-config.d.mts": "1fc6c33eabaaa89bde69d65e7a901d5b2910aa0f9bfca7bbb5f38e1a4c9c3ae1",
+    "src/lib/bom-config.mjs": "5130489c7874c150c31f6227daf94cb1a4ab03ca0ff85028db290dda259688f6",
+    "src/lib/bom-config.test.mjs": "7159e93367c7cc3de6acc56b33e07d5f1e056233cc1c53a7c66835d174a6bf0f",
+    "src/lib/business-rules.d.mts": "74222b9546c8bdbd0346a19248b8d9e84a59922521a2de0d355295ea2c9f88d9",
+    "src/lib/business-rules.mjs": "39bfaf9f80a8cab6dde0b4f8f3233f8753102ece7aa72b534b0251560d298883",
+    "src/lib/business-rules.test.mjs": "2f69b978276b3ec8fe12796facfe2eadbce298780040189f7ce01ff23a2f5f8f",
+    "src/lib/data-query.d.mts": "4811fddf3e3c60e18f6b1811f8ed5fcccb7312651e124c26ff14990ef24b5890",
+    "src/lib/data-query.mjs": "81853699f4e182a5eaaaafe4b235ab1a2a77f0f2f11761e1483b19395e643aa1",
+    "src/lib/data-query.test.mjs": "f01ee1d6aca60439d58ed1eee31b91e2f0ab870d2ce15e6b27d0b09b72eaaca5",
+    "src/lib/delivery-assessment.d.mts": "74f5195d0874a6bd3df72c4eefa77829b6166c42ea63aae3f3ee4f5ed801e5c8",
+    "src/lib/delivery-assessment.mjs": "976eb7fc517fc637d01b2d93b7b18d4fe4de11bd350464dc259fdc1c0db36b99",
+    "src/lib/delivery-policy.d.mts": "132152611d3c67381e89c8121f016a7f883ca2645b8dc095bda4e7f4a81a6ddf",
+    "src/lib/delivery-policy.mjs": "4bb35d25f43554e2f10fec124286e48997acc0f151bbba389020d01ef14b0108",
+    "src/lib/downtime-shift-reason.d.mts": "9a0b00bfb3a33339e60a3245c6be0624b84d3876f8e7621cffa2a4998be71903",
+    "src/lib/downtime-shift-reason.mjs": "be359d0f2ef402b8fa60c1ee4a69f7c7a5e2af0524c89cbe5768c777fea49da0",
+    "src/lib/downtime-shift-reason.test.mjs": "e18c4801db83e49eca4af5e5b0da5e7112c5fcf16d4dfb9a0f02dd148c6b5331",
+    "src/lib/execution-facts.d.mts": "7fc5447533141944c7c57cc63617a77d5b10abf18f5a20278af8a18c3ea4fc6b",
+    "src/lib/execution-facts.mjs": "efde051decbe60e3ac45e75639dca44f56eadcede62bb60e240cd768d0970d71",
+    "src/lib/expected-supply.d.mts": "b900aed36c50988f48a5821ff1872a654f83c1e5fa2c218ca828fa29dd5e5139",
+    "src/lib/expected-supply.mjs": "4832a7aff7ac2f2cc6c597d20c7fe11054670c6905c3cf6e85b27714eaa4a6a4",
+    "src/lib/expected-supply.test.mjs": "826de3ad32133a12db7c5c1325e6beda541c5e46609d4f99a1fa8aedca61ba19",
+    "src/lib/independent-verification.d.mts": "70af0a7c27747d196c0e872176c52e1f9863224c16f0986d2fcaa094d0d7e854",
+    "src/lib/independent-verification.mjs": "3d53e8c89a5ff12fb438ee2e977207980c07fddbf59ec7bd387b0e90df7e6b71",
+    "src/lib/independent-verification.test.mjs": "b5ac7ef28e6c7cd398b3220c65462cc1c14c2e0133017a0ac0aab1da1b73dda0",
+    "src/lib/input-csv.d.mts": "475509b2722167f86b8fb4ee6f14dac6e3e38f940d04a6c508392232b7a3b923",
+    "src/lib/input-csv.mjs": "17796a6f0c4d1716f2f4f7dda9c9dfc510e46f531a7a86d0011ff15a95dac03a",
+    "src/lib/input-csv.test.mjs": "f13455cb72ad3c9f5b64b0a9acad18ce1ef14906ac420100b16ac34696067045",
+    "src/lib/inventory.d.mts": "729b4c0c3e0885e57c264b9f2b6cf16da46d1c2f376d384cca91a71bbb19208b",
+    "src/lib/inventory.mjs": "12c177718c3a1cfa6ea967faca35a462f8e0b0794f32f27009f776a26587c03d",
+    "src/lib/inventory.test.mjs": "e8a0843049836cf811e6c5b8785a67ef09bb859b589ba810611af819c4bab5da",
+    "src/lib/joint-policy.mjs": "04383b89643e2b12f52d0a16d31b15dbf7f277fa095f5d2f3cf52b09b038654c",
+    "src/lib/joint-resources.d.mts": "976dc69e33d06ccbdb1b82328fe57d6b07834a6d2a470f9cea391e04744f2e77",
+    "src/lib/joint-resources.mjs": "52bb49fa0207d8cb9e28a37aa74656451851ff08d96b6e6acfcaa30c1323dba2",
+    "src/lib/line-scope.d.mts": "57420aa71a518b2557cd007b13476490d1efa886d5c36904cbc90040a62c18b1",
+    "src/lib/line-scope.mjs": "c144492fe24ca75574d06c385872da81b95b2a04489589143eb87f2360d2d7d5",
+    "src/lib/line-scope.test.mjs": "6eda6c7474c4ba7f280c17022404af9530c2b9dd815a015f4f5ddd34c2648c01",
+    "src/lib/master-data.d.mts": "f42f36bd311dae326939cca17abf1bd8b3af4b02a4e5f803a43787278bbf0d75",
+    "src/lib/master-data.mjs": "3f553c6cf0f970768774f4551f4eb2451918ca26fb3291e6fbefed3ed2480b4c",
+    "src/lib/master-data.test.mjs": "8d7a81072d02aaa46cf0cf7a11985822799478f0deee81ea31047dac950293ad",
+    "src/lib/material-allocation.d.mts": "bff1c351e56fa5594e07e5d5baf4396c013282df6bcd214f59a2de7b17f38f4c",
+    "src/lib/material-allocation.mjs": "a144238497857c5af45028fc670328767017c98de9b56db4ef7cd686d8b41d18",
+    "src/lib/material-allocation.test.mjs": "0c28647babaa45427f036413962ab2d32f90a0a97d07f88c5891b4c8eb8d3c3a",
+    "src/lib/orders.d.mts": "b6ada4ba2fe03b88a7676036310c9478ec772fc5c959cbdad614da9742b4f685",
+    "src/lib/orders.mjs": "333bed9cdc094137736ef71f156dcc5f7f6576237c173608e0d293cc30f6b55a",
+    "src/lib/orders.test.mjs": "6ad98ef7140b7a6e12bcbbda120795f690ab5abec73fe7633c71f9bc7f29b268",
+    "src/lib/plan-comparison.mjs": "552f3e48248ac782009640d546cf60b239e2c30e9abe29e8e8b71052f41caca3",
+    "src/lib/plan-comparison.test.mjs": "71e67605b1411760d97d6ad56f57a37dfa50103e0e910b6d14697a8ddb175056",
+    "src/lib/praetor/praetor.d.ts": "fee19a0b1785db7cff9cbc8fefab28c16ecd122bda0a5f9729ff751bd0615e26",
+    "src/lib/praetor/praetor.js": "94632c7a93dcfcadff1bb0bf5c07abd6e93625be50465f70ac1478c8af443e69",
+    "src/lib/process-config.d.mts": "e3232717dfe69d033f5c101c6f023ac88d2afb9b8dacbd5ffe460cde0efd25a5",
+    "src/lib/process-config.mjs": "942daa735ef686a932bc6d777b40847e21966079e4059f47f8475d5daffad9e2",
+    "src/lib/process-config.test.mjs": "39e4a901e467ea326196469263588b92da812d326bfc2566eb192c99e7a70266",
+    "src/lib/production-batches.d.mts": "47f2a9c60ebace553634fb4a5ec115aff93b227174872222ac72889efc5f3ada",
+    "src/lib/production-batches.mjs": "0fa912081863e308ccab2c4b82cb6626f67c7467c90a5bafd1cc52a7a810cacd",
+    "src/lib/result-assessment.d.mts": "c7c710910566a5776b14f5e338e3f2fd02edecab38e3036c6b7deac33aace7bf",
+    "src/lib/result-assessment.mjs": "e699e58c71dd30a63c86eddb857fd3e03ed8f9c674c17cbb8ebb6b9e7308d79c",
+    "src/lib/scheduling-scope.d.mts": "5e1156c4814fcfa146d3ab86601a7cea826e28a65d517922f7bef7119f94b6d0",
+    "src/lib/scheduling-scope.mjs": "85197c4103150170a83b8965ac3d258a6bb6d861e71555c6cda62401fe04d266",
+    "src/lib/simulation-events.mjs": "904634e80394729d783e40a581e2cb3d54e84a14f0c7d8ebcf69af1d903de364",
+    "src/lib/staffing.d.mts": "eef2c73d1bd0fedda27fbd382ee32268bc3de6820410e031c731ced7aec717a7",
+    "src/lib/staffing.mjs": "604bfa837eff51e2753c5c35aaa1feedaea86c47c1099e0ab0f9a65602321130",
+    "src/lib/staffing.test.mjs": "51eeaa3062e101167f64b88e715b92507fa622499716016bfdd4da65922eb5b7",
+    "src/lib/timetable.d.mts": "e0aecd28264d0445ab73a408662724acd87395153d2b71099ad0af642280a22f",
+    "src/lib/timetable.mjs": "c5acd1812fb8bff29621b3a826d026969163f499ebdc0ceab7ccaccff1813a8b",
+    "src/main.tsx": "e190eb4a820c29ada0d0f8c29380b17bbe8c67de6dd5307fe3a36f5e51a3a37c",
+    "src/praetor-bridge.ts": "b1f5148f7bb2e6f44d05f3916fc197bf03d0af0a136a5c68b78109a5373e9f05",
+    "src/praetor-embedded.ts": "fb8e41589f0d7bd06c6e8c275a4345e132002b0980806606a19453d497fab25f",
+    "src/query-ui.test.tsx": "0b89ea65abec2884e9b9b9637197aa7c2e92dc17ce5118deb67ff49e1c302290",
+    "src/vite-env.d.ts": "87a86cf372206e045c90d3469fafed94e5d4d970f68e8e0b50bec9382021f898",
+    "tailwind.config.js": "2602482ccb36064bc55ccfd0b12486eddc74213fc945694210fdef0a66f9c00e",
+    "tsconfig.json": "f155a425b85481a7c3e14ab208b06063f3b94d38a409b681b37b110dbd223124",
+    "vite.config.ts": "5781f968c075230c4c6ce93c493489c792a16820d0cfab9c5d2add30990c1946",
+    "src/TaskLinkage.tsx": "a2aec89a550e7d201f595af5959e901511902b86bf5b99509daec45f19ad2002",
+    "src/lib/task-linkage.mjs": "67927a67e08f5ea8b5a5a80df697cd097a881f038236072ee46d0f96ddfdd664",
+    "src/lib/task-linkage.d.mts": "fdf4735e8b226d8644934f3f10d0d498a4d60ca9cc400cdce72f27bca6a4aed7",
+    "src/lib/verification-endpoints.mjs": "b148a4660529a225e6ef2ec436a82828765afbf2f4eb3ddea7768cbe44c392c2",
+    "qa/unknown-endpoints.test.mjs": "50a01123b941d3b4b1edac6e73ce4ad81843cc18921816c873da8b2daf336797"
+  },
+  "results": [
+    {
+      "width": 640,
+      "name": "native-AX-name-and-busy-Tab-away",
+      "pass": true
+    },
+    {
+      "width": 640,
+      "name": "end-scroll-position",
+      "measurement": {
+        "y": 10744,
+        "height": 900,
+        "documentHeight": 11644
+      }
+    },
+    {
+      "width": 640,
+      "name": "repeated-overlap-activation-and-end-scroll",
+      "pass": true
+    },
+    {
+      "width": 640,
+      "name": "selected-task-disappears-and-reappears",
+      "pass": true
+    },
+    {
+      "width": 640,
+      "name": "long-Chinese-table-scroll",
+      "measurement": {
+        "left": 480,
+        "client": 557,
+        "width": 6881
+      }
+    },
+    {
+      "width": 640,
+      "name": "long-Chinese-text-native-AX-and-horizontal-scroll",
+      "pass": true
+    },
+    {
+      "width": 640,
+      "name": "multilane-geometry",
+      "measurement": [
+        {
+          "id": "A-MIX",
+          "top": 858.4375,
+          "rect": {
+            "x": 202.59375,
+            "y": 858.4375,
+            "width": 30,
+            "height": 42,
+            "top": 858.4375,
+            "right": 232.59375,
+            "bottom": 900.4375,
+            "left": 202.59375
+          },
+          "pressed": "true"
+        },
+        {
+          "id": "QA-THIRD",
+          "top": 906.4375,
+          "rect": {
+            "x": 212.59375,
+            "y": 906.4375,
+            "width": 30,
+            "height": 42,
+            "top": 906.4375,
+            "right": 242.59375,
+            "bottom": 948.4375,
+            "left": 212.59375
+          },
+          "pressed": "true"
+        },
+        {
+          "id": "A-FILL",
+          "top": 954.4375,
+          "rect": {
+            "x": 222.59375,
+            "y": 954.4375,
+            "width": 20,
+            "height": 42,
+            "top": 954.4375,
+            "right": 242.59375,
+            "bottom": 996.4375,
+            "left": 222.59375
+          },
+          "pressed": "false"
+        }
+      ]
+    },
+    {
+      "width": 640,
+      "name": "multiple-overlapping-lanes",
+      "pass": true
+    },
+    {
+      "width": 640,
+      "name": "no-problems-filter-empty-then-restore",
+      "pass": true
+    },
+    {
+      "width": 640,
+      "name": "saved-source-current-facts-unchanged",
+      "pass": true
+    },
+    {
+      "width": 1100,
+      "name": "native-AX-name-and-busy-Tab-away",
+      "pass": true
+    },
+    {
+      "width": 1100,
+      "name": "end-scroll-position",
+      "measurement": {
+        "y": 9033,
+        "height": 900,
+        "documentHeight": 9933
+      }
+    },
+    {
+      "width": 1100,
+      "name": "repeated-overlap-activation-and-end-scroll",
+      "pass": true
+    },
+    {
+      "width": 1100,
+      "name": "selected-task-disappears-and-reappears",
+      "pass": true
+    },
+    {
+      "width": 1100,
+      "name": "long-Chinese-table-scroll",
+      "measurement": {
+        "left": 480,
+        "client": 970,
+        "width": 6881
+      }
+    },
+    {
+      "width": 1100,
+      "name": "long-Chinese-text-native-AX-and-horizontal-scroll",
+      "pass": true
+    },
+    {
+      "width": 1100,
+      "name": "multilane-geometry",
+      "measurement": [
+        {
+          "id": "A-MIX",
+          "top": 858.09375,
+          "rect": {
+            "x": 226,
+            "y": 858.09375,
+            "width": 30,
+            "height": 42,
+            "top": 858.09375,
+            "right": 256,
+            "bottom": 900.09375,
+            "left": 226
+          },
+          "pressed": "true"
+        },
+        {
+          "id": "QA-THIRD",
+          "top": 906.09375,
+          "rect": {
+            "x": 236,
+            "y": 906.09375,
+            "width": 30,
+            "height": 42,
+            "top": 906.09375,
+            "right": 266,
+            "bottom": 948.09375,
+            "left": 236
+          },
+          "pressed": "true"
+        },
+        {
+          "id": "A-FILL",
+          "top": 954.09375,
+          "rect": {
+            "x": 246,
+            "y": 954.09375,
+            "width": 20,
+            "height": 42,
+            "top": 954.09375,
+            "right": 266,
+            "bottom": 996.09375,
+            "left": 246
+          },
+          "pressed": "false"
+        }
+      ]
+    },
+    {
+      "width": 1100,
+      "name": "multiple-overlapping-lanes",
+      "pass": true
+    },
+    {
+      "width": 1100,
+      "name": "no-problems-filter-empty-then-restore",
+      "pass": true
+    },
+    {
+      "width": 1100,
+      "name": "saved-source-current-facts-unchanged",
+      "pass": true
+    }
+  ],
+  "focus": [
+    {
+      "width": 640,
+      "name": "long Chinese operation reason",
+      "tabs": 5,
+      "tag": "INPUT",
+      "text": "操作原因",
+      "active": true,
+      "activeElement": {
+        "tag": "INPUT",
+        "text": "操作原因"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 169.59375,
+        "y": 221.875,
+        "width": 200,
+        "height": 24,
+        "top": 221.875,
+        "right": 369.59375,
+        "bottom": 245.875,
+        "left": 169.59375
+      },
+      "clip": {
+        "left": 169.59375,
+        "top": 221.875,
+        "right": 369.59375,
+        "bottom": 245.875
+      },
+      "unobscured": true,
+      "labels": [
+        "操作原因（必填）"
+      ],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "saved picker",
+      "tabs": 57,
+      "tag": "SELECT",
+      "text": "已保存方案",
+      "active": true,
+      "activeElement": {
+        "tag": "SELECT",
+        "text": "已保存方案"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 168,
+        "y": 754.609375,
+        "width": 304,
+        "height": 34,
+        "top": 754.609375,
+        "right": 472,
+        "bottom": 788.609375,
+        "left": 168
+      },
+      "clip": {
+        "left": 168,
+        "top": 754.609375,
+        "right": 472,
+        "bottom": 788.609375
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "pending check",
+      "tabs": 88,
+      "tag": "BUTTON",
+      "text": "主动运行独立检查",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "主动运行独立检查"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 41.59375,
+        "y": 798.640625,
+        "width": 128,
+        "height": 24,
+        "top": 798.640625,
+        "right": 169.59375,
+        "bottom": 822.640625,
+        "left": 41.59375
+      },
+      "clip": {
+        "left": 41.59375,
+        "top": 798.640625,
+        "right": 169.59375,
+        "bottom": 822.640625
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "repeat overlap 0",
+      "tabs": 1,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 41.59375,
+        "y": 821.015625,
+        "width": 556.8125,
+        "height": 79,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900.015625,
+        "left": 41.59375
+      },
+      "clip": {
+        "left": 41.59375,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "repeat overlap 0 after activation",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": false,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知"
+      },
+      "focusVisible": false,
+      "outline": "rgb(116, 78, 71) none 0px",
+      "rect": {
+        "x": 41.59375,
+        "y": -853.984375,
+        "width": 556.8125,
+        "height": 79,
+        "top": -853.984375,
+        "right": 598.40625,
+        "bottom": -774.984375,
+        "left": 41.59375
+      },
+      "clip": {
+        "left": 41.59375,
+        "top": 0,
+        "right": 598.40625,
+        "bottom": -774.984375
+      },
+      "unobscured": false,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "repeat destination 0",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知"
+      },
+      "focusVisible": true,
+      "outline": "rgb(124, 58, 237) solid 3px",
+      "rect": {
+        "x": 202.59375,
+        "y": 858.484375,
+        "width": 20,
+        "height": 42,
+        "top": 858.484375,
+        "right": 222.59375,
+        "bottom": 900.484375,
+        "left": 202.59375
+      },
+      "clip": {
+        "left": 202.59375,
+        "top": 858.484375,
+        "right": 222.59375,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "repeat overlap 1",
+      "tabs": 118,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 41.59375,
+        "y": 821.015625,
+        "width": 556.8125,
+        "height": 79,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900.015625,
+        "left": 41.59375
+      },
+      "clip": {
+        "left": 41.59375,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "repeat overlap 1 after activation",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 41.59375,
+        "y": 821.015625,
+        "width": 556.8125,
+        "height": 79,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900.015625,
+        "left": 41.59375
+      },
+      "clip": {
+        "left": 41.59375,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "repeat destination 1",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 41.59375,
+        "y": 821.015625,
+        "width": 556.8125,
+        "height": 79,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900.015625,
+        "left": 41.59375
+      },
+      "clip": {
+        "left": 41.59375,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "repeat overlap 2",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 41.59375,
+        "y": 821.015625,
+        "width": 556.8125,
+        "height": 79,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900.015625,
+        "left": 41.59375
+      },
+      "clip": {
+        "left": 41.59375,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "repeat overlap 2 after activation",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 41.59375,
+        "y": 821.015625,
+        "width": 556.8125,
+        "height": 79,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900.015625,
+        "left": 41.59375
+      },
+      "clip": {
+        "left": 41.59375,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "repeat destination 2",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 41.59375,
+        "y": 821.015625,
+        "width": 556.8125,
+        "height": 79,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900.015625,
+        "left": 41.59375
+      },
+      "clip": {
+        "left": 41.59375,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "scroll region",
+      "tabs": 20,
+      "tag": "DIV",
+      "text": "可滚动机器时间轴，任务同下方时间表",
+      "active": true,
+      "activeElement": {
+        "tag": "DIV",
+        "text": "可滚动机器时间轴，任务同下方时间表"
+      },
+      "focusVisible": true,
+      "outline": "rgb(124, 58, 237) solid 3px",
+      "rect": {
+        "x": 41.59375,
+        "y": 341.484375,
+        "width": 556.8125,
+        "height": 560,
+        "top": 341.484375,
+        "right": 598.40625,
+        "bottom": 901.484375,
+        "left": 41.59375
+      },
+      "clip": {
+        "left": 41.59375,
+        "top": 341.484375,
+        "right": 598.40625,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "from document end overlap",
+      "tabs": 119,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 41.59375,
+        "y": 821.015625,
+        "width": 556.8125,
+        "height": 79,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900.015625,
+        "left": 41.59375
+      },
+      "clip": {
+        "left": 41.59375,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "from document end overlap after activation",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 41.59375,
+        "y": 821.015625,
+        "width": 556.8125,
+        "height": 79,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900.015625,
+        "left": 41.59375
+      },
+      "clip": {
+        "left": 41.59375,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "end-scroll destination",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 41.59375,
+        "y": 821.015625,
+        "width": 556.8125,
+        "height": 79,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900.015625,
+        "left": 41.59375
+      },
+      "clip": {
+        "left": 41.59375,
+        "top": 821.015625,
+        "right": 598.40625,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "empty-result search",
+      "tabs": 10,
+      "tag": "INPUT",
+      "text": "搜索任务",
+      "active": true,
+      "activeElement": {
+        "tag": "INPUT",
+        "text": "搜索任务"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 335.59375,
+        "y": 792.40625,
+        "width": 182,
+        "height": 33.5,
+        "top": 792.40625,
+        "right": 517.59375,
+        "bottom": 825.90625,
+        "left": 335.59375
+      },
+      "clip": {
+        "left": 335.59375,
+        "top": 792.40625,
+        "right": 517.59375,
+        "bottom": 825.90625
+      },
+      "unobscured": true,
+      "labels": [
+        "搜索任务"
+      ],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "reveal selected",
+      "tabs": 10,
+      "tag": "BUTTON",
+      "text": "显示选中任务",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "显示选中任务"
+      },
+      "focusVisible": true,
+      "outline": "rgb(124, 58, 237) solid 3px",
+      "rect": {
+        "x": 262.875,
+        "y": 614.09375,
+        "width": 78,
+        "height": 20.796875,
+        "top": 614.09375,
+        "right": 340.875,
+        "bottom": 634.890625,
+        "left": 262.875
+      },
+      "clip": {
+        "left": 262.875,
+        "top": 614.09375,
+        "right": 340.875,
+        "bottom": 634.890625
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "reveal control focus",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知"
+      },
+      "focusVisible": true,
+      "outline": "rgb(124, 58, 237) solid 3px",
+      "rect": {
+        "x": 202.59375,
+        "y": 858.484375,
+        "width": 30,
+        "height": 42,
+        "top": 858.484375,
+        "right": 232.59375,
+        "bottom": 900.484375,
+        "left": 202.59375
+      },
+      "clip": {
+        "left": 202.59375,
+        "top": 858.484375,
+        "right": 232.59375,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "long text table",
+      "tabs": 3,
+      "tag": "BUTTON",
+      "text": "A-MIX",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "A-MIX"
+      },
+      "focusVisible": true,
+      "outline": "rgb(124, 58, 237) solid 3px",
+      "rect": {
+        "x": 50.59375,
+        "y": 880.46875,
+        "width": 36.125,
+        "height": 19.5,
+        "top": 880.46875,
+        "right": 86.71875,
+        "bottom": 899.96875,
+        "left": 50.59375
+      },
+      "clip": {
+        "left": 50.59375,
+        "top": 880.46875,
+        "right": 86.71875,
+        "bottom": 899.96875
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "synthetic multilane saved plan",
+      "tabs": 26,
+      "tag": "SELECT",
+      "text": "已保存方案",
+      "active": true,
+      "activeElement": {
+        "tag": "SELECT",
+        "text": "已保存方案"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 168,
+        "y": 809.90625,
+        "width": 304,
+        "height": 34,
+        "top": 809.90625,
+        "right": 472,
+        "bottom": 843.90625,
+        "left": 168
+      },
+      "clip": {
+        "left": 168,
+        "top": 809.90625,
+        "right": 472,
+        "bottom": 843.90625
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "multilane check",
+      "tabs": 100,
+      "tag": "BUTTON",
+      "text": "主动运行独立检查",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "主动运行独立检查"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 41.59375,
+        "y": 853.390625,
+        "width": 128,
+        "height": 24,
+        "top": 853.390625,
+        "right": 169.59375,
+        "bottom": 877.390625,
+        "left": 41.59375
+      },
+      "clip": {
+        "left": 41.59375,
+        "top": 853.390625,
+        "right": 169.59375,
+        "bottom": 877.390625
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "multilane check after activation",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "主动运行独立检查",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "主动运行独立检查"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 41.59375,
+        "y": 853.390625,
+        "width": 128,
+        "height": 24,
+        "top": 853.390625,
+        "right": 169.59375,
+        "bottom": 877.390625,
+        "left": 41.59375
+      },
+      "clip": {
+        "left": 41.59375,
+        "top": 853.390625,
+        "right": 169.59375,
+        "bottom": 877.390625
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "multilane problem",
+      "tabs": 2,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 QA-THIRD 时间重叠 [10,30) 分钟。\n关联任务 A-MIX / QA-THIRD",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 QA-THIRD 时间重叠 [10,30) 分钟。关联任务 A-MIX / QA-THIRD"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 41.59375,
+        "y": 410.765625,
+        "width": 556.8125,
+        "height": 79,
+        "top": 410.765625,
+        "right": 598.40625,
+        "bottom": 489.765625,
+        "left": 41.59375
+      },
+      "clip": {
+        "left": 41.59375,
+        "top": 410.765625,
+        "right": 598.40625,
+        "bottom": 489.765625
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "multilane problem after activation",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 QA-THIRD 时间重叠 [10,30) 分钟。\n关联任务 A-MIX / QA-THIRD",
+      "active": false,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知"
+      },
+      "focusVisible": false,
+      "outline": "rgb(116, 78, 71) none 0px",
+      "rect": {
+        "x": 41.59375,
+        "y": -979.234375,
+        "width": 556.8125,
+        "height": 79,
+        "top": -979.234375,
+        "right": 598.40625,
+        "bottom": -900.234375,
+        "left": 41.59375
+      },
+      "clip": {
+        "left": 41.59375,
+        "top": 0,
+        "right": 598.40625,
+        "bottom": -900.234375
+      },
+      "unobscured": false,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "multilane destination",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知"
+      },
+      "focusVisible": true,
+      "outline": "rgb(124, 58, 237) solid 3px",
+      "rect": {
+        "x": 202.59375,
+        "y": 858.4375,
+        "width": 30,
+        "height": 42,
+        "top": 858.4375,
+        "right": 232.59375,
+        "bottom": 900.4375,
+        "left": 202.59375
+      },
+      "clip": {
+        "left": 202.59375,
+        "top": 858.4375,
+        "right": 232.59375,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "positive saved plan",
+      "tabs": 34,
+      "tag": "SELECT",
+      "text": "已保存方案",
+      "active": true,
+      "activeElement": {
+        "tag": "SELECT",
+        "text": "已保存方案"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 168,
+        "y": 754.75,
+        "width": 304,
+        "height": 34,
+        "top": 754.75,
+        "right": 472,
+        "bottom": 788.75,
+        "left": 168
+      },
+      "clip": {
+        "left": 168,
+        "top": 754.75,
+        "right": 472,
+        "bottom": 788.75
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "no problems filter",
+      "tabs": 125,
+      "tag": "INPUT",
+      "text": "仅显示问题任务",
+      "active": true,
+      "activeElement": {
+        "tag": "INPUT",
+        "text": "仅显示问题任务"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 169.59375,
+        "y": 441.640625,
+        "width": 13,
+        "height": 13,
+        "top": 441.640625,
+        "right": 182.59375,
+        "bottom": 454.640625,
+        "left": 169.59375
+      },
+      "clip": {
+        "left": 169.59375,
+        "top": 441.640625,
+        "right": 182.59375,
+        "bottom": 454.640625
+      },
+      "unobscured": true,
+      "labels": [
+        "仅显示问题任务"
+      ],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "no problems filter after activation",
+      "tabs": 0,
+      "tag": "INPUT",
+      "text": "仅显示问题任务",
+      "active": true,
+      "activeElement": {
+        "tag": "INPUT",
+        "text": "仅显示问题任务"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 169.59375,
+        "y": 441.640625,
+        "width": 13,
+        "height": 13,
+        "top": 441.640625,
+        "right": 182.59375,
+        "bottom": 454.640625,
+        "left": 169.59375
+      },
+      "clip": {
+        "left": 169.59375,
+        "top": 441.640625,
+        "right": 182.59375,
+        "bottom": 454.640625
+      },
+      "unobscured": true,
+      "labels": [
+        "仅显示问题任务"
+      ],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "restore all tasks",
+      "tabs": 0,
+      "tag": "INPUT",
+      "text": "仅显示问题任务",
+      "active": true,
+      "activeElement": {
+        "tag": "INPUT",
+        "text": "仅显示问题任务"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 169.59375,
+        "y": 441.640625,
+        "width": 13,
+        "height": 13,
+        "top": 441.640625,
+        "right": 182.59375,
+        "bottom": 454.640625,
+        "left": 169.59375
+      },
+      "clip": {
+        "left": 169.59375,
+        "top": 441.640625,
+        "right": 182.59375,
+        "bottom": 454.640625
+      },
+      "unobscured": true,
+      "labels": [
+        "仅显示问题任务"
+      ],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "restore all tasks after activation",
+      "tabs": 0,
+      "tag": "INPUT",
+      "text": "仅显示问题任务",
+      "active": true,
+      "activeElement": {
+        "tag": "INPUT",
+        "text": "仅显示问题任务"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 169.59375,
+        "y": 441.640625,
+        "width": 13,
+        "height": 13,
+        "top": 441.640625,
+        "right": 182.59375,
+        "bottom": 454.640625,
+        "left": 169.59375
+      },
+      "clip": {
+        "left": 169.59375,
+        "top": 441.640625,
+        "right": 182.59375,
+        "bottom": 454.640625
+      },
+      "unobscured": true,
+      "labels": [
+        "仅显示问题任务"
+      ],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "restored checkbox",
+      "tabs": 0,
+      "tag": "INPUT",
+      "text": "仅显示问题任务",
+      "active": true,
+      "activeElement": {
+        "tag": "INPUT",
+        "text": "仅显示问题任务"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 169.59375,
+        "y": 441.640625,
+        "width": 13,
+        "height": 13,
+        "top": 441.640625,
+        "right": 182.59375,
+        "bottom": 454.640625,
+        "left": 169.59375
+      },
+      "clip": {
+        "left": 169.59375,
+        "top": 441.640625,
+        "right": 182.59375,
+        "bottom": 454.640625
+      },
+      "unobscured": true,
+      "labels": [
+        "仅显示问题任务"
+      ],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "historical saved plan",
+      "tabs": 51,
+      "tag": "SELECT",
+      "text": "已保存方案",
+      "active": true,
+      "activeElement": {
+        "tag": "SELECT",
+        "text": "已保存方案"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 168,
+        "y": 754.671875,
+        "width": 304,
+        "height": 34,
+        "top": 754.671875,
+        "right": 472,
+        "bottom": 788.671875,
+        "left": 168
+      },
+      "clip": {
+        "left": 168,
+        "top": 754.671875,
+        "right": 472,
+        "bottom": 788.671875
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "saved history task",
+      "tabs": 107,
+      "tag": "BUTTON",
+      "text": "A-MIX",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "A-MIX"
+      },
+      "focusVisible": true,
+      "outline": "rgb(124, 58, 237) solid 3px",
+      "rect": {
+        "x": 50.59375,
+        "y": 701.734375,
+        "width": 36.125,
+        "height": 19.5,
+        "top": 701.734375,
+        "right": 86.71875,
+        "bottom": 721.234375,
+        "left": 50.59375
+      },
+      "clip": {
+        "left": 50.59375,
+        "top": 701.734375,
+        "right": 86.71875,
+        "bottom": 721.234375
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "saved history task after activation",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "A-MIX",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "A-MIX"
+      },
+      "focusVisible": true,
+      "outline": "rgb(124, 58, 237) solid 3px",
+      "rect": {
+        "x": 50.59375,
+        "y": 731.546875,
+        "width": 36.125,
+        "height": 19.5,
+        "top": 731.546875,
+        "right": 86.71875,
+        "bottom": 751.046875,
+        "left": 50.59375
+      },
+      "clip": {
+        "left": 50.59375,
+        "top": 731.546875,
+        "right": 86.71875,
+        "bottom": 751.046875
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "current facts",
+      "tabs": 11,
+      "tag": "SUMMARY",
+      "text": "当前模拟事实对照（独立于历史方案）",
+      "active": true,
+      "activeElement": {
+        "tag": "SUMMARY",
+        "text": "当前模拟事实对照（独立于历史方案）"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 54.59375,
+        "y": 437.71875,
+        "width": 530.8125,
+        "height": 24,
+        "top": 437.71875,
+        "right": 585.40625,
+        "bottom": 461.71875,
+        "left": 54.59375
+      },
+      "clip": {
+        "left": 54.59375,
+        "top": 437.71875,
+        "right": 585.40625,
+        "bottom": 461.71875
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 640,
+      "name": "current facts after activation",
+      "tabs": 0,
+      "tag": "SUMMARY",
+      "text": "当前模拟事实对照（独立于历史方案）",
+      "active": true,
+      "activeElement": {
+        "tag": "SUMMARY",
+        "text": "当前模拟事实对照（独立于历史方案）"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 54.59375,
+        "y": 437.71875,
+        "width": 530.8125,
+        "height": 24,
+        "top": 437.71875,
+        "right": 585.40625,
+        "bottom": 461.71875,
+        "left": 54.59375
+      },
+      "clip": {
+        "left": 54.59375,
+        "top": 437.71875,
+        "right": 585.40625,
+        "bottom": 461.71875
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 652,
+      "viewport": 640
+    },
+    {
+      "width": 1100,
+      "name": "long Chinese operation reason",
+      "tabs": 5,
+      "tag": "INPUT",
+      "text": "操作原因",
+      "active": true,
+      "activeElement": {
+        "tag": "INPUT",
+        "text": "操作原因"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 193,
+        "y": 175.1875,
+        "width": 200,
+        "height": 24,
+        "top": 175.1875,
+        "right": 393,
+        "bottom": 199.1875,
+        "left": 193
+      },
+      "clip": {
+        "left": 193,
+        "top": 175.1875,
+        "right": 393,
+        "bottom": 199.1875
+      },
+      "unobscured": true,
+      "labels": [
+        "操作原因（必填）"
+      ],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "saved picker",
+      "tabs": 57,
+      "tag": "SELECT",
+      "text": "已保存方案",
+      "active": true,
+      "activeElement": {
+        "tag": "SELECT",
+        "text": "已保存方案"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 731,
+        "y": 865.46875,
+        "width": 304,
+        "height": 34,
+        "top": 865.46875,
+        "right": 1035,
+        "bottom": 899.46875,
+        "left": 731
+      },
+      "clip": {
+        "left": 731,
+        "top": 865.46875,
+        "right": 1035,
+        "bottom": 899.46875
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "pending check",
+      "tabs": 86,
+      "tag": "BUTTON",
+      "text": "主动运行独立检查",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "主动运行独立检查"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 65,
+        "y": 666.46875,
+        "width": 128,
+        "height": 24,
+        "top": 666.46875,
+        "right": 193,
+        "bottom": 690.46875,
+        "left": 65
+      },
+      "clip": {
+        "left": 65,
+        "top": 666.46875,
+        "right": 193,
+        "bottom": 690.46875
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "repeat overlap 0",
+      "tabs": 1,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 65,
+        "y": 818.65625,
+        "width": 970,
+        "height": 79,
+        "top": 818.65625,
+        "right": 1035,
+        "bottom": 897.65625,
+        "left": 65
+      },
+      "clip": {
+        "left": 65,
+        "top": 818.65625,
+        "right": 1035,
+        "bottom": 897.65625
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "repeat overlap 0 after activation",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": false,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知"
+      },
+      "focusVisible": false,
+      "outline": "rgb(116, 78, 71) none 0px",
+      "rect": {
+        "x": 65,
+        "y": -618.34375,
+        "width": 970,
+        "height": 79,
+        "top": -618.34375,
+        "right": 1035,
+        "bottom": -539.34375,
+        "left": 65
+      },
+      "clip": {
+        "left": 65,
+        "top": 0,
+        "right": 1035,
+        "bottom": -539.34375
+      },
+      "unobscured": false,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "repeat destination 0",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知"
+      },
+      "focusVisible": true,
+      "outline": "rgb(124, 58, 237) solid 3px",
+      "rect": {
+        "x": 226,
+        "y": 858.34375,
+        "width": 20,
+        "height": 42,
+        "top": 858.34375,
+        "right": 246,
+        "bottom": 900.34375,
+        "left": 226
+      },
+      "clip": {
+        "left": 226,
+        "top": 858.34375,
+        "right": 246,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "repeat overlap 1",
+      "tabs": 117,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 65,
+        "y": 709.65625,
+        "width": 970,
+        "height": 79,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625,
+        "left": 65
+      },
+      "clip": {
+        "left": 65,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "repeat overlap 1 after activation",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 65,
+        "y": 709.65625,
+        "width": 970,
+        "height": 79,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625,
+        "left": 65
+      },
+      "clip": {
+        "left": 65,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "repeat destination 1",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 65,
+        "y": 709.65625,
+        "width": 970,
+        "height": 79,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625,
+        "left": 65
+      },
+      "clip": {
+        "left": 65,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "repeat overlap 2",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 65,
+        "y": 709.65625,
+        "width": 970,
+        "height": 79,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625,
+        "left": 65
+      },
+      "clip": {
+        "left": 65,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "repeat overlap 2 after activation",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 65,
+        "y": 709.65625,
+        "width": 970,
+        "height": 79,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625,
+        "left": 65
+      },
+      "clip": {
+        "left": 65,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "repeat destination 2",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 65,
+        "y": 709.65625,
+        "width": 970,
+        "height": 79,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625,
+        "left": 65
+      },
+      "clip": {
+        "left": 65,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "scroll region",
+      "tabs": 20,
+      "tag": "DIV",
+      "text": "可滚动机器时间轴，任务同下方时间表",
+      "active": true,
+      "activeElement": {
+        "tag": "DIV",
+        "text": "可滚动机器时间轴，任务同下方时间表"
+      },
+      "focusVisible": true,
+      "outline": "rgb(124, 58, 237) solid 3px",
+      "rect": {
+        "x": 65,
+        "y": 341.34375,
+        "width": 970,
+        "height": 560,
+        "top": 341.34375,
+        "right": 1035,
+        "bottom": 901.34375,
+        "left": 65
+      },
+      "clip": {
+        "left": 65,
+        "top": 341.34375,
+        "right": 1035,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "from document end overlap",
+      "tabs": 118,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 65,
+        "y": 709.65625,
+        "width": 970,
+        "height": 79,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625,
+        "left": 65
+      },
+      "clip": {
+        "left": 65,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "from document end overlap after activation",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 65,
+        "y": 709.65625,
+        "width": 970,
+        "height": 79,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625,
+        "left": 65
+      },
+      "clip": {
+        "left": 65,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "end-scroll destination",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 65,
+        "y": 709.65625,
+        "width": 970,
+        "height": 79,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625,
+        "left": 65
+      },
+      "clip": {
+        "left": 65,
+        "top": 709.65625,
+        "right": 1035,
+        "bottom": 788.65625
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "empty-result search",
+      "tabs": 10,
+      "tag": "INPUT",
+      "text": "搜索任务",
+      "active": true,
+      "activeElement": {
+        "tag": "INPUT",
+        "text": "搜索任务"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 359,
+        "y": 431.65625,
+        "width": 182,
+        "height": 33.5,
+        "top": 431.65625,
+        "right": 541,
+        "bottom": 465.15625,
+        "left": 359
+      },
+      "clip": {
+        "left": 359,
+        "top": 431.65625,
+        "right": 541,
+        "bottom": 465.15625
+      },
+      "unobscured": true,
+      "labels": [
+        "搜索任务"
+      ],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "reveal selected",
+      "tabs": 10,
+      "tag": "BUTTON",
+      "text": "显示选中任务",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "显示选中任务"
+      },
+      "focusVisible": true,
+      "outline": "rgb(124, 58, 237) solid 3px",
+      "rect": {
+        "x": 286.28125,
+        "y": 624.546875,
+        "width": 78,
+        "height": 20.796875,
+        "top": 624.546875,
+        "right": 364.28125,
+        "bottom": 645.34375,
+        "left": 286.28125
+      },
+      "clip": {
+        "left": 286.28125,
+        "top": 624.546875,
+        "right": 364.28125,
+        "bottom": 645.34375
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "reveal control focus",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知"
+      },
+      "focusVisible": true,
+      "outline": "rgb(124, 58, 237) solid 3px",
+      "rect": {
+        "x": 226,
+        "y": 858.34375,
+        "width": 30,
+        "height": 42,
+        "top": 858.34375,
+        "right": 256,
+        "bottom": 900.34375,
+        "left": 226
+      },
+      "clip": {
+        "left": 226,
+        "top": 858.34375,
+        "right": 256,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "long text table",
+      "tabs": 3,
+      "tag": "BUTTON",
+      "text": "A-MIX",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "A-MIX"
+      },
+      "focusVisible": true,
+      "outline": "rgb(124, 58, 237) solid 3px",
+      "rect": {
+        "x": 74,
+        "y": 862.53125,
+        "width": 36.125,
+        "height": 19.5,
+        "top": 862.53125,
+        "right": 110.125,
+        "bottom": 882.03125,
+        "left": 74
+      },
+      "clip": {
+        "left": 74,
+        "top": 862.53125,
+        "right": 110.125,
+        "bottom": 882.03125
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "synthetic multilane saved plan",
+      "tabs": 26,
+      "tag": "SELECT",
+      "text": "已保存方案",
+      "active": true,
+      "activeElement": {
+        "tag": "SELECT",
+        "text": "已保存方案"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 731,
+        "y": 740.1875,
+        "width": 304,
+        "height": 34,
+        "top": 740.1875,
+        "right": 1035,
+        "bottom": 774.1875,
+        "left": 731
+      },
+      "clip": {
+        "left": 731,
+        "top": 740.1875,
+        "right": 1035,
+        "bottom": 774.1875
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "multilane check",
+      "tabs": 99,
+      "tag": "BUTTON",
+      "text": "主动运行独立检查",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "主动运行独立检查"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 65,
+        "y": 721.21875,
+        "width": 128,
+        "height": 24,
+        "top": 721.21875,
+        "right": 193,
+        "bottom": 745.21875,
+        "left": 65
+      },
+      "clip": {
+        "left": 65,
+        "top": 721.21875,
+        "right": 193,
+        "bottom": 745.21875
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "multilane check after activation",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "主动运行独立检查",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "主动运行独立检查"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 65,
+        "y": 828.21875,
+        "width": 128,
+        "height": 24,
+        "top": 828.21875,
+        "right": 193,
+        "bottom": 852.21875,
+        "left": 65
+      },
+      "clip": {
+        "left": 65,
+        "top": 828.21875,
+        "right": 193,
+        "bottom": 852.21875
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "multilane problem",
+      "tabs": 2,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 QA-THIRD 时间重叠 [10,30) 分钟。\n关联任务 A-MIX / QA-THIRD",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 QA-THIRD 时间重叠 [10,30) 分钟。关联任务 A-MIX / QA-THIRD"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 65,
+        "y": 821.40625,
+        "width": 970,
+        "height": 79,
+        "top": 821.40625,
+        "right": 1035,
+        "bottom": 900.40625,
+        "left": 65
+      },
+      "clip": {
+        "left": 65,
+        "top": 821.40625,
+        "right": 1035,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "multilane problem after activation",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 QA-THIRD 时间重叠 [10,30) 分钟。\n关联任务 A-MIX / QA-THIRD",
+      "active": false,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知"
+      },
+      "focusVisible": false,
+      "outline": "rgb(116, 78, 71) none 0px",
+      "rect": {
+        "x": 65,
+        "y": -764.59375,
+        "width": 970,
+        "height": 79,
+        "top": -764.59375,
+        "right": 1035,
+        "bottom": -685.59375,
+        "left": 65
+      },
+      "clip": {
+        "left": 65,
+        "top": 0,
+        "right": 1035,
+        "bottom": -685.59375
+      },
+      "unobscured": false,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "multilane destination",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知"
+      },
+      "focusVisible": true,
+      "outline": "rgb(124, 58, 237) solid 3px",
+      "rect": {
+        "x": 226,
+        "y": 858.09375,
+        "width": 30,
+        "height": 42,
+        "top": 858.09375,
+        "right": 256,
+        "bottom": 900.09375,
+        "left": 226
+      },
+      "clip": {
+        "left": 226,
+        "top": 858.09375,
+        "right": 256,
+        "bottom": 900
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "positive saved plan",
+      "tabs": 34,
+      "tag": "SELECT",
+      "text": "已保存方案",
+      "active": true,
+      "activeElement": {
+        "tag": "SELECT",
+        "text": "已保存方案"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 731,
+        "y": 740.03125,
+        "width": 304,
+        "height": 34,
+        "top": 740.03125,
+        "right": 1035,
+        "bottom": 774.03125,
+        "left": 731
+      },
+      "clip": {
+        "left": 731,
+        "top": 740.03125,
+        "right": 1035,
+        "bottom": 774.03125
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "no problems filter",
+      "tabs": 124,
+      "tag": "INPUT",
+      "text": "仅显示问题任务",
+      "active": true,
+      "activeElement": {
+        "tag": "INPUT",
+        "text": "仅显示问题任务"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 193,
+        "y": 865.65625,
+        "width": 13,
+        "height": 13,
+        "top": 865.65625,
+        "right": 206,
+        "bottom": 878.65625,
+        "left": 193
+      },
+      "clip": {
+        "left": 193,
+        "top": 865.65625,
+        "right": 206,
+        "bottom": 878.65625
+      },
+      "unobscured": true,
+      "labels": [
+        "仅显示问题任务"
+      ],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "no problems filter after activation",
+      "tabs": 0,
+      "tag": "INPUT",
+      "text": "仅显示问题任务",
+      "active": true,
+      "activeElement": {
+        "tag": "INPUT",
+        "text": "仅显示问题任务"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 193,
+        "y": 865.65625,
+        "width": 13,
+        "height": 13,
+        "top": 865.65625,
+        "right": 206,
+        "bottom": 878.65625,
+        "left": 193
+      },
+      "clip": {
+        "left": 193,
+        "top": 865.65625,
+        "right": 206,
+        "bottom": 878.65625
+      },
+      "unobscured": true,
+      "labels": [
+        "仅显示问题任务"
+      ],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "restore all tasks",
+      "tabs": 0,
+      "tag": "INPUT",
+      "text": "仅显示问题任务",
+      "active": true,
+      "activeElement": {
+        "tag": "INPUT",
+        "text": "仅显示问题任务"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 193,
+        "y": 865.65625,
+        "width": 13,
+        "height": 13,
+        "top": 865.65625,
+        "right": 206,
+        "bottom": 878.65625,
+        "left": 193
+      },
+      "clip": {
+        "left": 193,
+        "top": 865.65625,
+        "right": 206,
+        "bottom": 878.65625
+      },
+      "unobscured": true,
+      "labels": [
+        "仅显示问题任务"
+      ],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "restore all tasks after activation",
+      "tabs": 0,
+      "tag": "INPUT",
+      "text": "仅显示问题任务",
+      "active": true,
+      "activeElement": {
+        "tag": "INPUT",
+        "text": "仅显示问题任务"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 193,
+        "y": 865.65625,
+        "width": 13,
+        "height": 13,
+        "top": 865.65625,
+        "right": 206,
+        "bottom": 878.65625,
+        "left": 193
+      },
+      "clip": {
+        "left": 193,
+        "top": 865.65625,
+        "right": 206,
+        "bottom": 878.65625
+      },
+      "unobscured": true,
+      "labels": [
+        "仅显示问题任务"
+      ],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "restored checkbox",
+      "tabs": 0,
+      "tag": "INPUT",
+      "text": "仅显示问题任务",
+      "active": true,
+      "activeElement": {
+        "tag": "INPUT",
+        "text": "仅显示问题任务"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 193,
+        "y": 865.65625,
+        "width": 13,
+        "height": 13,
+        "top": 865.65625,
+        "right": 206,
+        "bottom": 878.65625,
+        "left": 193
+      },
+      "clip": {
+        "left": 193,
+        "top": 865.65625,
+        "right": 206,
+        "bottom": 878.65625
+      },
+      "unobscured": true,
+      "labels": [
+        "仅显示问题任务"
+      ],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "historical saved plan",
+      "tabs": 51,
+      "tag": "SELECT",
+      "text": "已保存方案",
+      "active": true,
+      "activeElement": {
+        "tag": "SELECT",
+        "text": "已保存方案"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 731,
+        "y": 865.328125,
+        "width": 304,
+        "height": 34,
+        "top": 865.328125,
+        "right": 1035,
+        "bottom": 899.328125,
+        "left": 731
+      },
+      "clip": {
+        "left": 731,
+        "top": 865.328125,
+        "right": 1035,
+        "bottom": 899.328125
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "saved history task",
+      "tabs": 106,
+      "tag": "BUTTON",
+      "text": "A-MIX",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "A-MIX"
+      },
+      "focusVisible": true,
+      "outline": "rgb(124, 58, 237) solid 3px",
+      "rect": {
+        "x": 74,
+        "y": 681.59375,
+        "width": 36.125,
+        "height": 19.5,
+        "top": 681.59375,
+        "right": 110.125,
+        "bottom": 701.09375,
+        "left": 74
+      },
+      "clip": {
+        "left": 74,
+        "top": 681.59375,
+        "right": 110.125,
+        "bottom": 701.09375
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "saved history task after activation",
+      "tabs": 0,
+      "tag": "BUTTON",
+      "text": "A-MIX",
+      "active": true,
+      "activeElement": {
+        "tag": "BUTTON",
+        "text": "A-MIX"
+      },
+      "focusVisible": true,
+      "outline": "rgb(124, 58, 237) solid 3px",
+      "rect": {
+        "x": 74,
+        "y": 711.40625,
+        "width": 36.125,
+        "height": 19.5,
+        "top": 711.40625,
+        "right": 110.125,
+        "bottom": 730.90625,
+        "left": 74
+      },
+      "clip": {
+        "left": 74,
+        "top": 711.40625,
+        "right": 110.125,
+        "bottom": 730.90625
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "current facts",
+      "tabs": 11,
+      "tag": "SUMMARY",
+      "text": "当前模拟事实对照（独立于历史方案）",
+      "active": true,
+      "activeElement": {
+        "tag": "SUMMARY",
+        "text": "当前模拟事实对照（独立于历史方案）"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 78,
+        "y": 865.1875,
+        "width": 944,
+        "height": 24,
+        "top": 865.1875,
+        "right": 1022,
+        "bottom": 889.1875,
+        "left": 78
+      },
+      "clip": {
+        "left": 78,
+        "top": 865.1875,
+        "right": 1022,
+        "bottom": 889.1875
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    },
+    {
+      "width": 1100,
+      "name": "current facts after activation",
+      "tabs": 0,
+      "tag": "SUMMARY",
+      "text": "当前模拟事实对照（独立于历史方案）",
+      "active": true,
+      "activeElement": {
+        "tag": "SUMMARY",
+        "text": "当前模拟事实对照（独立于历史方案）"
+      },
+      "focusVisible": true,
+      "outline": "rgb(16, 16, 16) auto 1px",
+      "rect": {
+        "x": 78,
+        "y": 865.1875,
+        "width": 944,
+        "height": 24,
+        "top": 865.1875,
+        "right": 1022,
+        "bottom": 889.1875,
+        "left": 78
+      },
+      "clip": {
+        "left": 78,
+        "top": 865.1875,
+        "right": 1022,
+        "bottom": 889.1875
+      },
+      "unobscured": true,
+      "labels": [],
+      "documentWidth": 1100,
+      "viewport": 1100
+    }
+  ],
+  "audit": [
+    {
+      "width": 640,
+      "name": "pending-tab-away",
+      "documentFocus": {
+        "tag": "INPUT",
+        "name": "仅显示问题任务",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 640,
+      "name": "completed-tab-away",
+      "documentFocus": {
+        "tag": "INPUT",
+        "name": "仅显示问题任务",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 640,
+      "kind": "focus",
+      "name": "repeat overlap 0 after activation",
+      "entry": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+        "active": false,
+        "activeElement": {
+          "tag": "BUTTON",
+          "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知"
+        },
+        "focusVisible": false,
+        "outline": "rgb(116, 78, 71) none 0px",
+        "rect": {
+          "x": 41.59375,
+          "y": -853.984375,
+          "width": 556.8125,
+          "height": 79,
+          "top": -853.984375,
+          "right": 598.40625,
+          "bottom": -774.984375,
+          "left": 41.59375
+        },
+        "clip": {
+          "left": 41.59375,
+          "top": 0,
+          "right": 598.40625,
+          "bottom": -774.984375
+        },
+        "unobscured": false,
+        "labels": [],
+        "documentWidth": 652,
+        "viewport": 640
+      }
+    },
+    {
+      "width": 640,
+      "name": "repeated-overlap",
+      "documentFocus": {
+        "tag": "BUTTON",
+        "name": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 640,
+      "name": "end-scroll-overlap",
+      "documentFocus": {
+        "tag": "BUTTON",
+        "name": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 640,
+      "name": "no-results-selected-hidden",
+      "documentFocus": {
+        "tag": "INPUT",
+        "name": "搜索任务",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 640,
+      "name": "selected-reappeared",
+      "documentFocus": {
+        "tag": "BUTTON",
+        "name": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 640,
+      "name": "long-Chinese-text",
+      "documentFocus": {
+        "tag": "BUTTON",
+        "name": "A-MIX",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 640,
+      "kind": "focus",
+      "name": "multilane problem after activation",
+      "entry": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 QA-THIRD 时间重叠 [10,30) 分钟。\n关联任务 A-MIX / QA-THIRD",
+        "active": false,
+        "activeElement": {
+          "tag": "BUTTON",
+          "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知"
+        },
+        "focusVisible": false,
+        "outline": "rgb(116, 78, 71) none 0px",
+        "rect": {
+          "x": 41.59375,
+          "y": -979.234375,
+          "width": 556.8125,
+          "height": 79,
+          "top": -979.234375,
+          "right": 598.40625,
+          "bottom": -900.234375,
+          "left": 41.59375
+        },
+        "clip": {
+          "left": 41.59375,
+          "top": 0,
+          "right": 598.40625,
+          "bottom": -900.234375
+        },
+        "unobscured": false,
+        "labels": [],
+        "documentWidth": 652,
+        "viewport": 640
+      }
+    },
+    {
+      "width": 640,
+      "name": "multilane",
+      "documentFocus": {
+        "tag": "BUTTON",
+        "name": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 640,
+      "name": "no-problems-filter",
+      "documentFocus": {
+        "tag": "INPUT",
+        "name": "仅显示问题任务",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 640,
+      "name": "history-current",
+      "documentFocus": {
+        "tag": "SUMMARY",
+        "name": "当前模拟事实对照（独立于历史方案）",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 1100,
+      "name": "pending-tab-away",
+      "documentFocus": {
+        "tag": "INPUT",
+        "name": "仅显示问题任务",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 1100,
+      "name": "completed-tab-away",
+      "documentFocus": {
+        "tag": "INPUT",
+        "name": "仅显示问题任务",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 1100,
+      "kind": "focus",
+      "name": "repeat overlap 0 after activation",
+      "entry": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。\n关联任务 A-MIX / A-FILL",
+        "active": false,
+        "activeElement": {
+          "tag": "BUTTON",
+          "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知"
+        },
+        "focusVisible": false,
+        "outline": "rgb(116, 78, 71) none 0px",
+        "rect": {
+          "x": 65,
+          "y": -618.34375,
+          "width": 970,
+          "height": 79,
+          "top": -618.34375,
+          "right": 1035,
+          "bottom": -539.34375,
+          "left": 65
+        },
+        "clip": {
+          "left": 65,
+          "top": 0,
+          "right": 1035,
+          "bottom": -539.34375
+        },
+        "unobscured": false,
+        "labels": [],
+        "documentWidth": 1100,
+        "viewport": 1100
+      }
+    },
+    {
+      "width": 1100,
+      "name": "repeated-overlap",
+      "documentFocus": {
+        "tag": "BUTTON",
+        "name": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 1100,
+      "name": "end-scroll-overlap",
+      "documentFocus": {
+        "tag": "BUTTON",
+        "name": "VERIFY / MACHINE_OVERLAPFILL01 上 A-MIX 与 A-FILL 时间重叠 [20,30) 分钟。关联任务 A-MIX / A-FILL",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 1100,
+      "name": "no-results-selected-hidden",
+      "documentFocus": {
+        "tag": "INPUT",
+        "name": "搜索任务",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 1100,
+      "name": "selected-reappeared",
+      "documentFocus": {
+        "tag": "BUTTON",
+        "name": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 1100,
+      "name": "long-Chinese-text",
+      "documentFocus": {
+        "tag": "BUTTON",
+        "name": "A-MIX",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 1100,
+      "kind": "focus",
+      "name": "multilane problem after activation",
+      "entry": {
+        "tag": "BUTTON",
+        "text": "VERIFY / MACHINE_OVERLAP\nFILL01 上 A-MIX 与 QA-THIRD 时间重叠 [10,30) 分钟。\n关联任务 A-MIX / QA-THIRD",
+        "active": false,
+        "activeElement": {
+          "tag": "BUTTON",
+          "text": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知"
+        },
+        "focusVisible": false,
+        "outline": "rgb(116, 78, 71) none 0px",
+        "rect": {
+          "x": 65,
+          "y": -764.59375,
+          "width": 970,
+          "height": 79,
+          "top": -764.59375,
+          "right": 1035,
+          "bottom": -685.59375,
+          "left": 65
+        },
+        "clip": {
+          "left": 65,
+          "top": 0,
+          "right": 1035,
+          "bottom": -685.59375
+        },
+        "unobscured": false,
+        "labels": [],
+        "documentWidth": 1100,
+        "viewport": 1100
+      }
+    },
+    {
+      "width": 1100,
+      "name": "multilane",
+      "documentFocus": {
+        "tag": "BUTTON",
+        "name": "A-MIX A MIX 2026-11-02 08:00:00（分钟 0） 至 2026-11-02 08:30:00（分钟 30） 已排计划 · 执行未知",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 1100,
+      "name": "no-problems-filter",
+      "documentFocus": {
+        "tag": "INPUT",
+        "name": "仅显示问题任务",
+        "focusVisible": true
+      }
+    },
+    {
+      "width": 1100,
+      "name": "history-current",
+      "documentFocus": {
+        "tag": "SUMMARY",
+        "name": "当前模拟事实对照（独立于历史方案）",
+        "focusVisible": true
+      }
+    }
+  ],
+  "errors": [],
+  "console": [],
+  "network": [
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/auth/me",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/state",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/plans",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/session",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/operations",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/runs",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/trials",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "POST",
+      "url": "http://127.0.0.1:36495/api/plans/FR034-SYNTHETIC-CORRUPT/verify",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/state",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/plans",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/runs",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/session",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/operations",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/trials",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "POST",
+      "url": "http://127.0.0.1:36495/api/plans/FR034-SYNTHETIC-MULTILANE/verify",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/state",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/plans",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/session",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/operations",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/runs",
+      "status": 200
+    },
+    {
+      "width": 640,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/trials",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/auth/me",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/state",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/plans",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/session",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/operations",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/runs",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/trials",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "POST",
+      "url": "http://127.0.0.1:36495/api/plans/FR034-SYNTHETIC-CORRUPT/verify",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/state",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/plans",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/session",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/operations",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/runs",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/trials",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "POST",
+      "url": "http://127.0.0.1:36495/api/plans/FR034-SYNTHETIC-MULTILANE/verify",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/state",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/plans",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/session",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/operations",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/runs",
+      "status": 200
+    },
+    {
+      "width": 1100,
+      "method": "GET",
+      "url": "http://127.0.0.1:36495/api/trials",
+      "status": 200
+    }
+  ],
+  "harnessHashes": {
+    "qa/fr034-boundary-browser.mjs": "3a34c2a07e6eba24ca2e0b3f1636001d83cd0fd7346360346754845fd4c1cb83",
+    "qa/fr034-boundary-docker.sh": "27bf47f0498a8bad83d8951ef1cd6989529cf21fa77780b386e04b1ff8b092a6",
+    "qa/fr034-integration-runner.mjs": "53d2516e8dd8a022f6a3aacbcb630aafb402e892c475f4c38ae08f6ae9cdfdc1"
+  },
+  "fixture": {
+    "longReason": "键盘验收：仅用于一次性容器，核对任务来源、前后序与数量口径；键盘验收：仅用于一次性容器，核对任务来源、前后序与数量口径；键盘验收：仅用于一次性容器，核对任务来源、前后序与数量口径；键盘验收：仅用于一次性容器，核对任务来源、前后序与数量口径；键盘验收：仅用于一次性容器，核对任务来源、前后序与数量口径；键盘验收：仅用于一次性容器，核对任务来源、前后序与数量口径；键盘验收：仅用于一次性容器，核对任务来源、前后序与数量口径；键盘验收：仅用于一次性容器，核对任务来源、前后序与数量口径；",
+    "longQuantity": "原任务数量口径：保存的工序累计可用产出，不跨工序累加，不推断合格入库；原任务数量口径：保存的工序累计可用产出，不跨工序累加，不推断合格入库；原任务数量口径：保存的工序累计可用产出，不跨工序累加，不推断合格入库；原任务数量口径：保存的工序累计可用产出，不跨工序累加，不推断合格入库；原任务数量口径：保存的工序累计可用产出，不跨工序累加，不推断合格入库；原任务数量口径：保存的工序累计可用产出，不跨工序累加，不推断合格入库；",
+    "corruptPlanId": "FR034-SYNTHETIC-CORRUPT",
+    "positivePlans": [
+      {
+        "id": "5a567203-d942-400f-9a4c-337af773923c",
+        "sha256": "59c80d5ff48a74d89fdd2843defa3e4735befe938a1f3b349b609c0c81ed85ac"
+      },
+      {
+        "id": "b8d58716-ea3e-49c3-a937-4eb9c5f2a285",
+        "sha256": "1a88b3c6e04ceec03b1413a9128ffe38859f8165a384cb41ee1578eb3d25dc20"
+      },
+      {
+        "id": "f8377637-95f4-47b2-a2a2-35ac0c60be00",
+        "sha256": "88065dac2a69fd522b8164210f76e288be61b75827f2798ad6dc60b29dfdefb8"
+      }
+    ]
+  },
+  "browser": "141.0.7390.37",
+  "completed": true,
+  "allPassed": true
+}

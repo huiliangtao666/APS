@@ -1,0 +1,25 @@
+{
+  "id": "PVTI_lAHOFM9WU84BpE1czhEHg3Q",
+  "content": {
+    "id": "DI_lAHOFM9WU84BpE1czgLhAiM",
+    "title": "[FR] FR-024 结果状态、未排任务与原因",
+    "body": "## 需求\n范围：P0；关联流程：BP-04/05；页面：PG-04/05；开始提供：R1；完整提供：R6。\n前置功能：FR-018/019。\n• 区分已经得到安排、部分任务未排、规定时间内未找到可用结果、计算失败和用户取消。不得把超时直接解释为业务不可能。\n• 未排或冲突原因指出具体任务、资源/物料、日期和数量，并提供适用建议，例如补数据、推迟、增加模拟资源或修改需求。\n6.5 结果核对、方案调整与模拟执行\n\n## 验收追踪\n验收用例：AC-10/16/17/18/21。\n\n来源：需求分析与设计说明书 v0.3，第 6 章；状态：基线需求，具体实现状态待跟踪。\n\n\n## Patrol delivery and assignment (2026-10-29)\nOwner APS-Dev delivery dlv_c7603f6c-0c30-44c7-8e11-1087ae49e85c. Dev idle no queue/duplicate. FR018/019 code available in integrated675f6fd81555230260d2245aabed6dbb7e3f20d2. Original AC10/16/17/18/21 result statuses, lifecycle distinctions and concrete task/resource/material/date/quantity reasons/suggestions assigned. Timeout must not imply business impossibility; preserve unknown/unsupported scope and authoritative immutable history/roles/audit. Meaningful container tests/build and ordinary GitHub push/fullSHA/report/limits required. In progress; no parallel backlog.\n\n\n## Patrol evidence and assignment (2026-10-29)\nDev dlv_c7603f6c-0c30-44c7-8e11-1087ae49e85c completed; remote feat/fr-024-result-reasons SHA2375487b3d630190434fd4be4e3313de18d8df7a verified https://github.com/huiliangtao666/APS/commit/2375487b3d630190434fd4be4e3313de18d8df7a . Report APS-Dev/FR-024-DELIVERY-REPORT.txt, docs/FR-024-HANDOFF.txt. Container252/252, FR013 harness/build pass; status/reasons/history navigation/exports implemented. FullAC21/realidentity/browser/UAT gaps retained. Owner APS-Test delivery dlv_2c5a9891-2cc0-420f-8782-6dcefdec02b5; report pending. In review.\n\n\n## Independent Test / In-review exit (2026-10-29)\nFR024 related run/result acceptance evidence: Test dlv_2c5a9891-2cc0-420f-8782-6dcefdec02b5 at2375487b3d630190434fd4be4e3313de18d8df7a passed252 canonical+17 independent, FR013 harness/build. Report APS-Test/FR-024-independent-regression-report.txt and FR-024-independent-evidence.zip. No reproducible defect. Exact25kg shortage, lifecycle distinctions, frozen history/navigation and authorized export verified. FullFR024/AC10/16/17/18/21, R5 execution facts/protected-period rescheduling/current progress, real identity/browser/UAT01/02 remain unaccepted. Link originalFR024 to existing issue14 run/R5 evidence tracking, exit In review to In progress; not new defect or repair round, no parallel gap item. Preserve accepted supported slice and active FR026 work.\nLive feature SHA reverified. Linked [issue14](https://github.com/huiliangtao666/APS/issues/14); status In progress.\n"
+  },
+  "fieldValues": {
+    "nodes": [
+      {},
+      {
+        "name": "In progress",
+        "field": {
+          "name": "Status"
+        }
+      },
+      {
+        "name": "P0",
+        "field": {
+          "name": "Priority"
+        }
+      }
+    ]
+  }
+}

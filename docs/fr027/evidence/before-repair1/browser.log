@@ -1,0 +1,24 @@
+vite v5.4.21 building for production...
+transforming...
+✓ 75 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../tmp/fr027-b4Vjoi/dist/index.html                   0.45 kB │ gzip:   0.30 kB
+../../../tmp/fr027-b4Vjoi/dist/assets/index-BoO1gSfU.css   20.30 kB │ gzip:   5.51 kB
+../../../tmp/fr027-b4Vjoi/dist/assets/index-C2Qkg4eA.js   320.74 kB │ gzip: 118.26 kB
+✓ built in 1.22s
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for getByRole('region', { name: '试算任务移动与锁定' }).getByRole('status', { name: '位置预览' }).getByText(/存在冲突，不能提交/) to be visible
+
+    at /workspace/apps/aps-fr032/qa/fr027-browser.mjs:16:167
+    at async check (/workspace/apps/aps-fr032/qa/fr027-browser.mjs:5:31)
+    at async file:///workspace/apps/aps-fr032/qa/fr027-browser.mjs:15:2 {
+  name: 'TimeoutError'
+}
+
+Node.js v22.23.2

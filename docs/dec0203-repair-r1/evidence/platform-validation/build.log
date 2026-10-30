@@ -1,0 +1,35 @@
+
+added 246 packages, and audited 247 packages in 3s
+
+47 packages are looking for funding
+  run `npm fund` for details
+
+4 vulnerabilities (3 moderate, 1 high)
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+> aps-r1@0.1.0 build
+> tsc --noEmit && vite build && npx esbuild server/index.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs && npx esbuild server/calculation-worker.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/calculation-worker.mjs
+
+vite v5.4.21 building for production...
+transforming...
+✓ 84 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.45 kB │ gzip:   0.30 kB
+dist/assets/index-BoO1gSfU.css   20.30 kB │ gzip:   5.51 kB
+dist/assets/index-D-4MyLUv.js   349.43 kB │ gzip: 131.12 kB
+✓ built in 1.38s
+
+[validation] disposable source/dependencies/output; no publish or restart
+
+  dist/server.mjs  443.1kb
+
+⚡ Done in 19ms
+
+  dist/calculation-worker.mjs  231.0kb
+
+⚡ Done in 15ms

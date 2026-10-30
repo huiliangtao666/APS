@@ -1,0 +1,71 @@
+- complementary: FR033 DISPOSABLE VALIDATION · SYNTHETIC DATA / TEST IDENTITY · NO GATEWAY AUTHENTICATION Product source FR014015-working-source
+- banner:
+  - text: APS APS · 单线最小排程 R1 原型 / v0.3 需求基线
+  - navigation:
+    - button "排程工作台"
+    - button "模拟数据查询"
+    - button "数据与 CSV"
+    - button "查询报表与导出"
+    - button "范围与待决"
+  - text: 预览环境
+- main:
+  - heading "权限与操作记录" [level=2]
+  - paragraph: 当前权限：query · 所有质量状态均为模拟数据，无 QA 在线审批。计划员可核对及提交，主管可确认或退回；确认仅在本系统支持范围内生效。
+  - text: 操作原因（必填）
+  - textbox "操作原因"
+  - button "退出登录"
+  - button "刷新数据与记录"
+  - group: 操作记录（47）
+  - paragraph: 单线排程 · R1 最小模式 / 已有支持模式
+  - heading "查询报表与文件导出" [level=1]
+  - paragraph: 基于 v0.3 UAT-02 / 2026-11-02 08:00（Asia/Shanghai）；样例业务值均为虚构，仅用于软件验证。
+  - text: 追溯基线 FR-008 · UAT-02 · AC-05 工厂窗口继承 · 设备停机例外 · 连续工作窗口
+  - region "查询报表与文件导出":
+    - heading "查询报表与文件导出 · FR035" [level=2]
+    - paragraph: 选择保存方案和当前筛选后查询。导出只包含当前显示的记录和同一视图标识；需具备权限并填写上方操作原因。当前执行事实请到执行事实页核对。物料、订单、未排和差异为整份方案，任务和资源按窗口。
+    - text: 报表方案
+    - combobox "报表方案":
+      - option "请选择"
+      - option "单线计算 2026/10/29 01:17:07 · ecc39814-0b55-4ea7-b8fc-58e2587156d4"
+      - option "单线计算 2026/10/29 01:17:07 · fb0429c6-f6c6-4fa6-9f85-c915ae6f3638" [selected]
+      - option "单线计算 2026/10/29 01:17:06 · 4c320a21-3c88-4f80-8c1c-4dcc47cbdb0a"
+      - option "FR034 synthetic deliberately invalid saved output · FR034-SYNTHETIC-CORRUPT"
+    - text: 报表类别
+    - combobox "报表类别":
+      - option "订单计划" [selected]
+      - option "任务计划"
+      - option "资源占用"
+      - option "物料需求"
+      - option "未排原因"
+      - option "方案差异"
+    - text: 报表订单
+    - textbox "报表订单"
+    - text: 报表搜索
+    - textbox "报表搜索"
+    - text: 报表开始分钟
+    - spinbutton "报表开始分钟": "0"
+    - text: 报表结束分钟
+    - spinbutton "报表结束分钟": "120"
+    - button "查询当前报表"
+    - button "导出当前报表 CSV" [disabled]
+    - status: 当前报表 2 行 · 视图 9f44b2f919fd431e303b02c5cc26e509fe758d0f7bb88e51c8e1b486188ec8a1
+    - paragraph: 产线 L01 · 方案 fb0429c6-f6c6-4fa6-9f85-c915ae6f3638 · 保存日期 2026-10-29T01:17:07.018Z · UTC+08:00 · 模拟数据，非当前执行事实。
+    - group: 产线、方案、输入版本、日期和模拟说明
+    - paragraph: 任务和资源使用半开窗口；订单、物料、未排及方案差异保留整份保存方案，窗口不截断其业务数量。；共享资源按关联订单保留整行总占用，不拆算订单份额；搜索逐行匹配。；数量、精确分数、单位和日期原样保留；null 表示未知，条件到料不是已到货。；仅保存方案的计划负荷，不是实时剩余可用量；未分配不代表可排或资源空闲事实；DEC02 工装阶段/动态归还、DEC03 人员阶段/技能替代、最大等待及完整联合规则仍待确认；仅解释显式保存占用；候选分配不计入已提交消耗；不跨工序累加订单完成；不把预计到料当真实到货；确认快照、保存的执行事实与当前事实分别保留；不以当前输入补算历史
+    - table:
+      - rowgroup:
+        - row "类别 保存记录（数量、单位、日期、输入与判断依据）":
+          - cell "类别"
+          - cell "保存记录（数量、单位、日期、输入与判断依据）"
+      - rowgroup:
+        - row "订单计划 订单 A · 需求 240 kg · 要求可交付分钟 480 · 有效；交付评估 未知":
+          - cell "订单计划"
+          - cell "订单 A · 需求 240 kg · 要求可交付分钟 480 · 有效；交付评估 未知":
+            - paragraph: 订单 A · 需求 240 kg · 要求可交付分钟 480 · 有效；交付评估 未知
+            - group: 查看保存记录、精确数量与溯源
+        - row "订单计划 订单 B · 需求 240 kg · 要求可交付分钟 480 · 有效；交付评估 未知":
+          - cell "订单计划"
+          - cell "订单 B · 需求 240 kg · 要求可交付分钟 480 · 有效；交付评估 未知":
+            - paragraph: 订单 B · 需求 240 kg · 要求可交付分钟 480 · 有效；交付评估 未知
+            - group: 查看保存记录、精确数量与溯源
+  - text: APS-Dev 原型 · R2.1 阶段预览 · 未发布上线 · v0.3 UAT-02 虚构数据

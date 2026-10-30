@@ -1,0 +1,11 @@
+v22.23.2
+
+added 7 packages in 324ms
+
+> build
+> node build.mjs
+
+before byte-identical to original e18321472f73fe2961de3723ece117bd835d2084f8c60538968360054278a4b8
+after byte-identical to original a6e9608573ac85c323e0c8284b2cad98af36d9cad2a00b8c4190752b92dc4e42
+
+[validation] disposable source/dependencies/output; no publish or restart

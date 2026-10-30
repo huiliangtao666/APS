@@ -1,0 +1,23 @@
+FR-030 HISTORY-01 repair round 1 — Dev handoff
+Delivery: dlv_b3c9acba-ff13-4842-806f-daed9e4bfdad
+Defect: APS-DEF-FR030-HISTORY-01, P2; issue https://github.com/huiliangtao666/APS/issues/17
+Canonical Project2 item: PVTI_lAHOFM9WU84BpE1czhEHg-Y / DI_lAHOFM9WU84BpE1czgLhAi4
+Branch: feat/fr-033-machine-timetable
+Direct parent: e5cc7c7ddcbf18c6caaaa2d8b4c0dcce932c3024
+
+Read the live original canonical FR030 card, issue17, APS-Test/FR-030-INDEPENDENT-REGRESSION.txt and its evidence archive including the executable I14 reproducer and original v0.3 AC22/23/24/32/FR030 excerpts. Preserve the delivered integrated FR033 Gantt source. No parallel card/feature or publication.
+
+Cause and change
+List and review returned persisted confirmation snapshots without checking their stored digest, while detail/export/archive checked it separately. validConfirmation in server/confirmation.mjs now supplies the common digest check for list, review, detail, confirmation export and release/archive. Missing/null snapshot or missing/changed digest also fails closed. Existing valid response shapes and lifecycle rules are retained.
+GET /api/confirmations fails the entire list with HTTP409 {error:"protected_history_unavailable"} if any confirmation is invalid, rather than returning a partial success that could conceal history. GET /api/plans/:id/review checks the confirmation it would present before generating the response and returns the same409 on corruption. Individually valid records remain readable and usable even when another record is corrupt. Read/rejected export/lifecycle requests do not change store bytes/audit. No automatic data repair is performed.
+
+Verification
+Full container validation exit0, 424/424 tests, no failures/skips/cancellations/todo. This is the prior integrated404 plus20 Dev replay/regression cases. CSV valid six-table batch and CSV-DEF01..04 pass. TypeScript/Vite, bundled Express and separate production Worker builds pass, including Worker regression and FR033 timetable/model/component interactions.
+Reproduce from workspace root:
+ bash apps/aps-fr033/docs/FR-030-HISTORY-01-validation-command.sh
+Execution uses workspace-app-builder app-exec.sh --validate --mode standalone, disposable source/dependencies/output, Node22.23.2. SDK archive paths are rewritten only inside that copy. No host npm install/dev/start or live runtime mutation.
+Targeted confirmation + independent-probe replay:34/34, with I14 detail/export/archive/list/review all409 and store bytes unchanged. qa/fr030-independent.test.mjs retains APS-Test I01-I17, plus mixed valid/corrupt records at each list position for planner/supervisor/query, valid detail/review/export/release/archive, and missing snapshot/hash cases. The I14 archive token is captured before corruption because review now rejects corrupted history; assertions are retained. Existing canonical corrupt-Worker test uses the same pre-corruption token approach and now checks list/review too.
+An initial targeted harness omitted npm ci in the disposable copy and failed to import express; the harness was corrected to install in that copy. No product test failed after setup. Successful targeted/full logs are included in the evidence archive. Dependencies/lockfiles are unchanged; inherited audit reports3 moderate/1 high advisory.
+
+Limits and acceptance
+These are Dev-run tests, including replay of Test-authored probes, NOT an independent APS-Test pass. Repair round1 of maximum2 is implemented; independent Test is still required before closure. Issue17 remains open. Issues10/13 and existing full-rule independent verification, restore/current-fact reconciliation, real signed identity/gateway/browser/UAT and full business acceptance gaps remain open. This protects the stored-digest consistency contract; it does not repair persisted corruption or certify global scheduling correctness. Browser/live gateway acceptance was not run. No force push, main merge, new card, deployment or publication.

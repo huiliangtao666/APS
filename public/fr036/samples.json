@@ -1,0 +1,373 @@
+{
+  "version": "FR036-v1",
+  "fixtureSource": "server/planner.ts#seed",
+  "metadataPolicy": "sidecar-only; do not append unsupported CSV columns",
+  "samples": [
+    {
+      "file": "examples/01_工厂与产线配置.csv",
+      "contract": "main-single-table",
+      "table": "factoryLines",
+      "expected": "accept",
+      "context": "现有seed的F01/L01引用；名称/时区为虚构测试值，非业务默认；不自动写入seed",
+      "simulation": true,
+      "sha256": "5bdc7cacc6204809e2cb824a2b40d83eb147bf1fb49bf1c9d2e1d22f35cbe45c"
+    },
+    {
+      "file": "examples/orders.csv",
+      "contract": "main-single-table",
+      "table": "orders",
+      "expected": "accept",
+      "context": "完整seed上下文；整表替换两订单",
+      "simulation": true,
+      "sha256": "fd8f3a5aa660e633fe64e5a6b2aa8da4d9645fe6239f695dde4d740c9cf6b1f1"
+    },
+    {
+      "file": "examples/duplicate-orders.csv",
+      "contract": "main-single-table",
+      "table": "orders",
+      "expected": "reject-duplicate",
+      "context": "完整seed；错误前后不写入",
+      "simulation": true,
+      "sha256": "788de7d26ffebc138b8e2a58d29b170f787aa415b75b58249bbfe86aedbd0c45"
+    },
+    {
+      "file": "examples/bad-unit-orders.csv",
+      "contract": "main-single-table",
+      "table": "orders",
+      "expected": "reject-unit",
+      "context": "完整seed；改回kg",
+      "simulation": true,
+      "sha256": "2424f328551f606bca697ecb626010081e8ef93e206ac4fa26222636ae350238"
+    },
+    {
+      "file": "examples/supplies.csv",
+      "contract": "main-single-table",
+      "table": "supplies",
+      "expected": "accept",
+      "context": "完整seed；LEAN单位kg；不是库存到货",
+      "simulation": true,
+      "sha256": "09b9bdfd4e3e51ea5300609cdaeda9e5160ae005f8d2cd2292daeee3652e91fb"
+    },
+    {
+      "file": "examples/bad-reference-supplies.csv",
+      "contract": "main-single-table",
+      "table": "supplies",
+      "expected": "reject-reference",
+      "context": "完整seed；修正LEAN",
+      "simulation": true,
+      "sha256": "d547be0b64ad6f33621c3d15d8d9c85a1bdbed521ccf0cc6384431e4d4cf589e"
+    },
+    {
+      "file": "examples/bad-date-supplies.csv",
+      "contract": "main-single-table",
+      "table": "supplies",
+      "expected": "reject-date",
+      "context": "完整seed；不存在日期且缺时区",
+      "simulation": true,
+      "sha256": "b6af3a8b5a38ba73736987649b543a6c2a25f3fde956f402febd89c7e8b05445"
+    },
+    {
+      "file": "templates/28_模拟异常事件.csv",
+      "table": "simulationEvents",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "50858c831a156cfc5fcd69f384d8bf7f3f34941f5df8d125b78455c42fe4a89f"
+    },
+    {
+      "file": "templates/27_模拟进度来源对账.csv",
+      "table": "executionSources",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "ccef70e41a3927672ccdad0c8f928a44c3969dda7ea0a2e9d38c548f8b202207"
+    },
+    {
+      "file": "templates/25_模拟任务执行事实.csv",
+      "table": "executionFacts",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "2ab033ebecad99f6d4f388b8e930e58fae8925e78cc28a50e8bfdb6ffdce555b"
+    },
+    {
+      "file": "templates/26_模拟累计耗料.csv",
+      "table": "executionMaterials",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "ed76e9a5f225023608cbb4854630a94267b67054a9f660078f511d6d618d33cc"
+    },
+    {
+      "file": "templates/07_产品与包装规格.csv",
+      "table": "products",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "5864f6b8b97f9fec07c7261560030d77eb1b8db33ab5b5c9a7ebf6a1905ce56d"
+    },
+    {
+      "file": "templates/08_物料主数据.csv",
+      "table": "materials",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "fb7f7452588d6d87620525ebd20373168e262941267361b3a1f3697b07c0f88c"
+    },
+    {
+      "file": "templates/20_预计到料.csv",
+      "table": "supplies",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "9f57e855dd1793d2e27b7953c1fc2147c0df48623494fcb1822b0ab723d9d9b5"
+    },
+    {
+      "file": "templates/21_延期模拟记录.csv",
+      "table": "supplyDelays",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "73c2d8f54702efd0c322cc0af955709d42b86a69da11913359ada396ed0f077e"
+    },
+    {
+      "file": "templates/22_计划供给引用.csv",
+      "table": "supplyUses",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "c88356f1537d2ed694f6303969af9055b93647b55565d80a8716ab546b52b62e"
+    },
+    {
+      "file": "templates/09_库存批次.csv",
+      "table": "inventory",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "0ff7034eaf9a5a3a101331605c7c3ceeeb6f39b18f7e9ab1e361b2211c7e55e6"
+    },
+    {
+      "file": "templates/17_生产订单与交期.csv",
+      "table": "orders",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "8964130e45d276611cb7f39786fdb015f6b7a7647fe6d635b179f47eb57485fc"
+    },
+    {
+      "file": "templates/09_BOM与包装用量.csv",
+      "table": "bom",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "508febd0de352343143ffc6ac8ce2e862a6233ffe69768184b87b80a18edca7b"
+    },
+    {
+      "file": "templates/10_工艺路线配置.csv",
+      "table": "routes",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "43f5a7a9e98e1e7e8b21e64ec46e70359024ed6f457cbb6f7bb8c2ea415c358e"
+    },
+    {
+      "file": "templates/11_工序工时配置.csv",
+      "table": "times",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "a4760c08ca864bb5e0b84db7982edf898606695706f6f9adec27efb2a023a62b"
+    },
+    {
+      "file": "templates/03_设备资源配置.csv",
+      "table": "machines",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "b3650497f69d21f975c46722d4c83a27f3f4f92a4de9f762d3034b15cb882917"
+    },
+    {
+      "file": "templates/18_工装配置.csv",
+      "table": "tools",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "3fe183f2b26edfe071fa30a677f192435a0ad0c383828eec38ea37cc089035ca"
+    },
+    {
+      "file": "templates/24_订单模拟交付条件.csv",
+      "table": "deliveryConditions",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "7747be92d7c5525777f648003dd2b616a3941cc5a2ee0af54570cff3de1a79e2"
+    },
+    {
+      "file": "templates/23_资源占用声明.csv",
+      "table": "resourceClaims",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "16b82208a9e1e0e9e241cf554b607c4737dc2747f58d3b0c05bcf1d09244bffc"
+    },
+    {
+      "file": "templates/15_空间与组批规则配置.csv",
+      "table": "batchResources",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "c03753b5cd8492edb04540fdcb274aa550fe6d84b006a005ef4c9ee66079ef38"
+    },
+    {
+      "file": "templates/02_工厂工作日历.csv",
+      "table": "calendars",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "7a8760ef8a3047a1220f3697a7385d0cd7455a8977beb4f93fb8007d0df0e1c0"
+    },
+    {
+      "file": "templates/04_设备停机与例外日历.csv",
+      "table": "downtime",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "5c3543dc5e6c0a86ad266e150a550b257b6e55b2c3d8bd3caadfcfec5822e974"
+    },
+    {
+      "file": "templates/12_工序资源与物料依赖.csv",
+      "table": "dependencies",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "5fbf747c7e4bbc78e6663098c51f932a3b2c48894545a057f35cf56c308b6c1b"
+    },
+    {
+      "file": "templates/19_人员组与可用时间.csv",
+      "table": "personnelGroups",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "3ccceb48330619d9685d290332f03ae8ef5589490f554d3fa747b79fccfad4d2"
+    },
+    {
+      "file": "templates/16_排程规则配置.csv",
+      "table": "rules",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "0eef9b2801663d95a5e4dd7c08a8537305ce3c22409c9663f292474d95a1e8e8"
+    },
+    {
+      "file": "prototype-six/03_设备资源配置.csv",
+      "contract": "prototype-six-atomic",
+      "expected": "accept-six-together",
+      "context": "仅独立原型；旧合格需求kg字段",
+      "simulation": true,
+      "sha256": "78d7557d0d7e3fe1ab4abe3c0a372c545b8ee3b5b5ff18e0ce0bbc7bb437ad52"
+    },
+    {
+      "file": "prototype-six/10_工艺路线配置.csv",
+      "contract": "prototype-six-atomic",
+      "expected": "accept-six-together",
+      "context": "仅独立原型；旧合格需求kg字段",
+      "simulation": true,
+      "sha256": "400d01fb11e23784338c9e52f0fb591e8046b8b4f147992fe2e1f2b256ce1af8"
+    },
+    {
+      "file": "prototype-six/11_工序工时配置.csv",
+      "contract": "prototype-six-atomic",
+      "expected": "accept-six-together",
+      "context": "仅独立原型；旧合格需求kg字段",
+      "simulation": true,
+      "sha256": "4838e7ad58e023be86ba474cdb32f84b73c6cd61863100b042ad7ee1779e43e2"
+    },
+    {
+      "file": "prototype-six/12_工序资源与物料依赖.csv",
+      "contract": "prototype-six-atomic",
+      "expected": "accept-six-together",
+      "context": "仅独立原型；旧合格需求kg字段",
+      "simulation": true,
+      "sha256": "6a412d4bbe03284995dafc109254825bec81e2a6f487d875cf3e47c0f2b48666"
+    },
+    {
+      "file": "prototype-six/16_排程规则配置.csv",
+      "contract": "prototype-six-atomic",
+      "expected": "accept-six-together",
+      "context": "仅独立原型；旧合格需求kg字段",
+      "simulation": true,
+      "sha256": "09ab2e334c1d8cc33eb4d903d8c15dd9dc3c08568e7087b5af2eaff48108b518"
+    },
+    {
+      "file": "prototype-six/17_生产订单与交期.csv",
+      "contract": "prototype-six-atomic",
+      "expected": "accept-six-together",
+      "context": "仅独立原型；旧合格需求kg字段",
+      "simulation": true,
+      "sha256": "3ea103baf777ca5a423329348b474c86a8038b4d9db55b2711fb4963f4424e66"
+    },
+    {
+      "file": "exports/orders.csv",
+      "contract": "FR035-v1",
+      "expected": "export-only-not-importable",
+      "origin": "docs/fr035-acceptance/evidence/run3/orders.csv",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "simulation": true,
+      "sha256": "a7c014851b8d597158a7d2e159320408b6d717be4ff55a44992f566c62156676"
+    },
+    {
+      "file": "exports/tasks.csv",
+      "contract": "FR035-v1",
+      "expected": "export-only-not-importable",
+      "origin": "docs/fr035-acceptance/evidence/run3/tasks.csv",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "simulation": true,
+      "sha256": "c77ea8990a4fad64f50eeedc15c62af2f40a6db9f595c1b2c0cbd091eeda5e1a"
+    },
+    {
+      "file": "exports/occupation.csv",
+      "contract": "FR035-v1",
+      "expected": "export-only-not-importable",
+      "origin": "docs/fr035-acceptance/evidence/run3/occupation.csv",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "simulation": true,
+      "sha256": "5d07e981ebf8c0ece9652cc5ef0bd98fd264d275480b13a083c39d6475217e79"
+    },
+    {
+      "file": "exports/materials.csv",
+      "contract": "FR035-v1",
+      "expected": "export-only-not-importable",
+      "origin": "docs/fr035-acceptance/evidence/run3/materials.csv",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "simulation": true,
+      "sha256": "25b204b77ab5f9b5d40194a26932002b08fd3edebc5a1edba84b25a71b61278d"
+    },
+    {
+      "file": "exports/unplanned.csv",
+      "contract": "FR035-v1",
+      "expected": "export-only-not-importable",
+      "origin": "docs/fr035-acceptance/evidence/run3/unplanned.csv",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "simulation": true,
+      "sha256": "65a5fcbf993d5aed5a3ddc33c7f5394fd2735fd9397570b3189da7b5170f4d49"
+    },
+    {
+      "file": "exports/differences.csv",
+      "contract": "FR035-v1",
+      "expected": "export-only-not-importable",
+      "origin": "docs/fr035-acceptance/evidence/run3/differences.csv",
+      "sourceSHA": "cf6e76e23722f142a08c552aacb43c924fc62f19",
+      "simulation": true,
+      "sha256": "75d4f7b076c35dba1016e1e0835c2083ebc37beb0fac1fa2be19a4c1b53f27d3"
+    },
+    {
+      "file": "templates/29_有向技能替代.csv",
+      "contract": "header-only",
+      "table": "skillSubstitutions",
+      "expected": "template",
+      "context": "CR-DEC02-03-v1；技能关系由中文表单维护；此文件仅表头",
+      "simulation": true,
+      "sha256": "e00a631daea5c41c1da312f5c048cd7e0e203270dcbcc533aa73e9665cde4655"
+    }
+  ]
+}

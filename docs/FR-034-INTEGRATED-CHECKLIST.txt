@@ -1,0 +1,94 @@
+FR034 finite integrated delivery verification — one executable checklist
+Delivery dlv_68960084-968b-4dfd-8ee1-10d0f27d830b
+Canonical card PVTI_lAHOFM9WU84BpE1czhEHhDI; FR034 v0.3 AC04/15/17/31
+Original handoff e81a05b4d19c86fbcc8afad4ee3b48253ad74604
+Exact integrated product 4e11da6c768e6eeb026f38e1d247191cbe3c2cf8
+
+1. SOURCE / FIXTURE
+Use an authorized clean checkout of the delivery commit containing this file.
+The entrypoint permits docs and its own QA orchestration change; all historical
+product/harness paths retain exact integrated bytes. It verifies110 manifest
+files against disk AND Git objects before running. Keep authorized SDK archives;
+never install packages or start an application on the VM host. Require host
+git/python3/bash/Docker and network. Source/SDK mounts read-only, evidence only
+writable; app builds/servers/browsers run inside disposable Docker, no host ports.
+This uses real App/Express/scheduler and saved JSON, synthetic planner runtime
+alias and deliberately corrupted negative saved outputs. Invalid fixture output
+is not claimed to be scheduler-generated. API role tests use genuine membership
+and business middleware with explicitly synthetic actors.
+
+2. EXECUTE THE SINGLE ENTRYPOINT
+Create a NEW EMPTY ABSOLUTE evidence directory OUTSIDE the checkout, then:
+  FR034_SDK='<absolute authorized SDK archive directory>' \
+  FR034_OUT='<absolute new empty output directory>' \
+    bash qa/fr034-integrated-validation.sh --run
+--check runs provenance only and is not product acceptance. --run executes the
+existing keyboard-r1 Docker recipe, then existing boundary Docker recipe, then
+JSON gates; process exits and JSON outcomes both matter. Existing441 TAP,
+CSV-DEF01..04/import checks and TypeScript/Vite/server/worker build precede browser
+execution. Retain regression.log, boundary.log and tests/*.log on any failure.
+Require exit0; do not silently retry/overwrite output or skip Docker setup errors.
+The manifest display label is read from the manifest itself; exact identity is
+FR034_PRODUCT_SHA, NOT the display label (it describes the KBD04 parent).
+
+3. INSPECT NEW OUTPUTS
+- regression/keyboard-report.json: completed=true, errors=[],6/6 dedicated KBD
+  assertions,22/22 named functional groups across640/1100,2 separate scroll
+  measurements. CSV projection equals exact saved load model (BOM included).
+- regression/unknown-browser-report.json: errors=[],24/24 groups:20 endpoint
+  variants + stale-structured defense +3 valid zero controls;110 source hashes.
+- regression/confirmed-api-report.json:4 groups/19 responses. Exact status order:
+  201,200,200,200,200,200,200,200,409,409,403,200,200,200,200,200,200,200,200.
+  Confirm/submit/archive immutability, query spoof403 and confirmed edits409.
+- boundary/boundary-report.json: completed=true,allPassed=true,errors=[],14/14
+  named assertion groups;6 measurements separate. Review native AX snapshots,
+  DOM/ARIA/PNG, focus rectangles/hit tests, non-color identity and saved/current
+  invariance. All three browser hash maps must match the exact110-file manifest.
+- TAP per-log count totals441 in ONE completed regression execution. No failed,
+  cancelled, skipped or todo tests. Build/bundle/CSV outcomes are separate gates.
+Do not add earlier441 runs, historical416/440, browser overlaps, measurements,
+raw screenshot/AX counts or independent probe cases to441. Keep actual run UTC,
+image digest, Node/Playwright/Chromium versions and SDK hashes with evidence.
+Node:22-slim is mutable; this delivery records the resolved digest, not a claim
+that future pulls are byte-identical.
+
+4. DELIVERY / INDEPENDENT ACCEPTANCE
+Original e81a05b --run failed exit1 BEFORE browser setup because the entrypoint
+invented a label rejected by the unchanged runner.441 tests/build had passed;
+no product failure or repair round. Only QA label propagation was corrected;
+the failed attempt remains in evidence. The final run is counted separately.
+Parallel KBD04 Test-authored probe replay is a separate Dev check:12 recovery
+cases +2 empty-filter transitions; not extra integrated cases or a replacement
+APS-Test verdict. Its reproduction script and exact probe are in the evidence.
+Issue22 remains open at fresh read, with no final Test verdict yet observed.
+Existing Test archive command paths are historical workspace paths. In the
+keyboard round1 archive, reproduction/run.sh and reproduction/mouse-run.sh map
+to the reported temp/fr034-keyboard-r1-test/ paths; follow archive README layout.
+The matrix preserves original failure/recovery history and ancestor SHAs; the
+single entrypoint above is the current exact integrated replay recipe.
+
+5. GAPS — RETAIN AS GATES ON BROADER CLAIMS
+Supported independent verifier covers line/machine/precedence only. Full enabled
+resource/material/calendar rule recheck remains FR017/025 issue13. DEC02/resource
+semantics remain issues3/16. Signed gateway/SSO/bootstrap/member roles and deployed
+durable identity remain issue10; synthetic roles are not real-identity UAT.
+Complete original import/calculate/check/submit Chinese workflow, AC15 cross-rule
+matrix and UAT01/02/15 remain open (issues2/4/6/10/12/14/15). Native AX evidence
+is not full screen-reader/browser certification; KBD01 allows<=1px edge rounding,
+lower-outline clipping remains. KBD04 non-chart fallback is not newly accepted.
+Original card remains In progress. No new card, publication, full Done, issue
+closure, source repair, replacement Test, round2 or open-ended boundary hunt.
+
+6. NEXT DISPATCH READINESS — DESIGN DECIDES, NO SELF-DISPATCH
+FR035 card PVTI_lAHOFM9WU84BpE1czhEHhEU (AC23/26/31): canonical dependencies
+FR014/024/026/032 have supported integrated source.
+Implement original query/report/export breadth and source/unit/date/simulation
+metadata, permissions/current-range and page/export parity after pending KBD04
+Test triage. Full all-rule/DEC02 approval is not a blanket prerequisite for
+truthful supported export implementation; full identity UAT stays separate.
+FR038 card PVTI_lAHOFM9WU84BpE1czhEHhHk (AC16/27/31/32): canonical dependencies
+FR018/024 have supported source; original run/error/
+cancel/history UX and reproducible provenance are executable after defect
+priority, independent of full FR034 Done. FR027 depends FR025/026/033/034 and
+requires pending KBD04 triage plus truthful verifier scope; FR036 follows FR013/
+FR035 contracts. No assignment or feature implementation is made here.

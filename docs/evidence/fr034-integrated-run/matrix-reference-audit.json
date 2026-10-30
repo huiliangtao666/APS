@@ -1,0 +1,460 @@
+{
+  "observed_at": "2026-10-28T23:22:33.058116+00:00",
+  "product_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+  "rows": [
+    {
+      "id": "dev_initial",
+      "executed_product_sha": "72276614c0de122a6c45688e4f7b3cd7fbb129ed",
+      "url": "https://github.com/huiliangtao666/APS/blob/72276614c0de122a6c45688e4f7b3cd7fbb129ed/docs/FR-034-HANDOFF.txt",
+      "artifacts": [
+        {
+          "workspace": "APS-Dev",
+          "path": "FR-034-DELIVERY-REPORT.txt",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "3b15b5c98225d22d68fbdb8536113b18fdc074f30e015c10d0977b0fe9550e2f"
+        },
+        {
+          "workspace": "APS-Dev",
+          "path": "FR-034-DEV-EVIDENCE.zip",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "0c5a47aa79439bdf3a5dea9d1ab959d4b8d23a6e4d66a921e429d1dbf0bfd023"
+        }
+      ],
+      "command_references": [
+        {
+          "command": "bash apps/aps-fr034/docs/FR-034-validation-command.sh (historical APS-Dev workspace root)",
+          "product_paths": [
+            {
+              "path": "docs/FR-034-validation-command.sh",
+              "exists_at_integrated_pin": true
+            }
+          ],
+          "external_archive_command": false
+        },
+        {
+          "command": "FR034_REPO=<checkout> FR034_SDK=<sdk> FR034_OUT=<empty-dir> bash qa/fr034-docker-browser.sh",
+          "product_paths": [
+            {
+              "path": "qa/fr034-docker-browser.sh",
+              "exists_at_integrated_pin": true
+            }
+          ],
+          "external_archive_command": false
+        }
+      ],
+      "link_git_object_exists": true,
+      "github_reference": {
+        "api_status": 200,
+        "api_url": "https://api.github.com/repos/huiliangtao666/APS/contents/docs/FR-034-HANDOFF.txt?ref=72276614c0de122a6c45688e4f7b3cd7fbb129ed",
+        "resolved_path": "docs/FR-034-HANDOFF.txt",
+        "resolved_html_url": "https://github.com/huiliangtao666/APS/blob/72276614c0de122a6c45688e4f7b3cd7fbb129ed/docs/FR-034-HANDOFF.txt",
+        "linked_comment_id": null
+      }
+    },
+    {
+      "id": "test_initial",
+      "executed_product_sha": "72276614c0de122a6c45688e4f7b3cd7fbb129ed",
+      "url": "https://github.com/huiliangtao666/APS/issues/20",
+      "artifacts": [
+        {
+          "workspace": "APS-Test",
+          "path": "FR-034-INDEPENDENT-REGRESSION.txt",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "8733f36e01c793dc79622cde3e137d94fa987e8ba5adec9afdb8673ee24c1097"
+        },
+        {
+          "workspace": "APS-Test",
+          "path": "FR-034-INDEPENDENT-EVIDENCE.zip",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "ec9fa18cad33ea6eb69c39051a75a445bac53bbefcfbe1318eae76b4746c439b"
+        }
+      ],
+      "command_references": [
+        {
+          "command": "bash temp/fr034-evidence/reproduce.sh (from APS-Test workspace root after extracting FR-034-INDEPENDENT-EVIDENCE.zip)",
+          "product_paths": [],
+          "external_archive_command": true,
+          "archive_scripts": [
+            {
+              "path": "temp/fr034-evidence/reproduce.sh",
+              "matches": [
+                "temp/fr034-evidence/reproduce.sh"
+              ]
+            }
+          ]
+        }
+      ],
+      "github_reference": {
+        "api_status": 200,
+        "api_url": "https://api.github.com/repos/huiliangtao666/APS/issues/20",
+        "resolved_path": null,
+        "resolved_html_url": "https://github.com/huiliangtao666/APS/issues/20",
+        "linked_comment_id": null
+      }
+    },
+    {
+      "id": "dev_unknown",
+      "executed_product_sha": "21ff4dd72d9583ec591436b160a0b79931d81900",
+      "url": "https://github.com/huiliangtao666/APS/blob/21ff4dd72d9583ec591436b160a0b79931d81900/docs/FR-034-UNKNOWN01-HANDOFF.txt",
+      "artifacts": [
+        {
+          "workspace": "APS-Dev",
+          "path": "FR-034-UNKNOWN01-REPAIR-REPORT.txt",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "7e71f4c8969cb8c8bfff8125d309b93f27b0a2e643023bc1dcb51364259b2ac5"
+        },
+        {
+          "workspace": "APS-Dev",
+          "path": "FR-034-UNKNOWN01-DEV-EVIDENCE.zip",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "23e412cb31c10c58a5f3b07af3ef83fb29d257b7ee724856422450012aa0b9ea"
+        }
+      ],
+      "command_references": [
+        {
+          "command": "bash apps/aps-fr032/docs/FR-034-UNKNOWN01-validation-command.sh (historical APS-Dev workspace root)",
+          "product_paths": [
+            {
+              "path": "docs/FR-034-UNKNOWN01-validation-command.sh",
+              "exists_at_integrated_pin": true
+            }
+          ],
+          "external_archive_command": false
+        },
+        {
+          "command": "FR034_REPO=<checkout> FR034_SDK=<sdk> FR034_OUT=<empty-dir> bash qa/fr034-unknown-docker-browser.sh",
+          "product_paths": [
+            {
+              "path": "qa/fr034-unknown-docker-browser.sh",
+              "exists_at_integrated_pin": true
+            }
+          ],
+          "external_archive_command": false
+        }
+      ],
+      "link_git_object_exists": true,
+      "github_reference": {
+        "api_status": 200,
+        "api_url": "https://api.github.com/repos/huiliangtao666/APS/contents/docs/FR-034-UNKNOWN01-HANDOFF.txt?ref=21ff4dd72d9583ec591436b160a0b79931d81900",
+        "resolved_path": "docs/FR-034-UNKNOWN01-HANDOFF.txt",
+        "resolved_html_url": "https://github.com/huiliangtao666/APS/blob/21ff4dd72d9583ec591436b160a0b79931d81900/docs/FR-034-UNKNOWN01-HANDOFF.txt",
+        "linked_comment_id": null
+      }
+    },
+    {
+      "id": "test_unknown",
+      "executed_product_sha": "21ff4dd72d9583ec591436b160a0b79931d81900",
+      "url": "https://github.com/huiliangtao666/APS/issues/20",
+      "artifacts": [
+        {
+          "workspace": "APS-Test",
+          "path": "FR-034-UNKNOWN01-ROUND1-INDEPENDENT-RETEST.txt",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "a592eba97e3704b0e6b194fd36024a158808fc0dd30ffc512415f27e85b9a16e"
+        },
+        {
+          "workspace": "APS-Test",
+          "path": "FR-034-UNKNOWN01-ROUND1-INDEPENDENT-EVIDENCE.zip",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "726a3277cacba553748e6229cc67900c95eff3446b45fa0fed263dc04480b98d"
+        }
+      ],
+      "command_references": [
+        {
+          "command": "bash temp/fr034-unknown01-test/run.sh",
+          "product_paths": [],
+          "external_archive_command": true,
+          "archive_scripts": [
+            {
+              "path": "temp/fr034-unknown01-test/run.sh",
+              "matches": [
+                "temp/fr034-unknown01-test/run.sh"
+              ]
+            }
+          ]
+        },
+        {
+          "command": "bash temp/fr034-unknown01-test/run-recovery.sh",
+          "product_paths": [],
+          "external_archive_command": true,
+          "archive_scripts": [
+            {
+              "path": "temp/fr034-unknown01-test/run-recovery.sh",
+              "matches": [
+                "temp/fr034-unknown01-test/run-recovery.sh"
+              ]
+            }
+          ]
+        },
+        {
+          "command": "bash temp/fr034-unknown01-test/reproduce.sh (clean reproduction)",
+          "product_paths": [],
+          "external_archive_command": true,
+          "archive_scripts": [
+            {
+              "path": "temp/fr034-unknown01-test/reproduce.sh",
+              "matches": [
+                "temp/fr034-unknown01-test/reproduce.sh"
+              ]
+            }
+          ]
+        }
+      ],
+      "github_reference": {
+        "api_status": 200,
+        "api_url": "https://api.github.com/repos/huiliangtao666/APS/issues/20",
+        "resolved_path": null,
+        "resolved_html_url": "https://github.com/huiliangtao666/APS/issues/20",
+        "linked_comment_id": null
+      }
+    },
+    {
+      "id": "dev_keyboard_evidence",
+      "executed_product_sha": "910fdbcf8fb6dd312cac4cf31c2b1a7a1950b75f",
+      "url": "https://github.com/huiliangtao666/APS/blob/910fdbcf8fb6dd312cac4cf31c2b1a7a1950b75f/docs/FR-034-KEYBOARD-NARROW-ACCEPTANCE.txt",
+      "artifacts": [
+        {
+          "workspace": "APS-Dev",
+          "path": "FR-034-KEYBOARD-NARROW-REPORT.txt",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "2fcab790c008a59b299958aaa481e7bc08eb1ac05a24dd0fa0c7bbe2711e849f"
+        },
+        {
+          "workspace": "APS-Dev",
+          "path": "FR-034-KEYBOARD-NARROW-EVIDENCE.zip",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "ad5448cf8f7d50ef1d0e7608030ad695a0502a85da8774f92ec74cf07ce39f8d"
+        }
+      ],
+      "command_references": [
+        {
+          "command": "FR034_REPO=<checkout> FR034_SDK=<sdk> FR034_OUT=<empty-dir> bash qa/fr034-keyboard-docker-browser.sh",
+          "product_paths": [
+            {
+              "path": "qa/fr034-keyboard-docker-browser.sh",
+              "exists_at_integrated_pin": true
+            }
+          ],
+          "external_archive_command": false
+        }
+      ],
+      "link_git_object_exists": true,
+      "github_reference": {
+        "api_status": 200,
+        "api_url": "https://api.github.com/repos/huiliangtao666/APS/contents/docs/FR-034-KEYBOARD-NARROW-ACCEPTANCE.txt?ref=910fdbcf8fb6dd312cac4cf31c2b1a7a1950b75f",
+        "resolved_path": "docs/FR-034-KEYBOARD-NARROW-ACCEPTANCE.txt",
+        "resolved_html_url": "https://github.com/huiliangtao666/APS/blob/910fdbcf8fb6dd312cac4cf31c2b1a7a1950b75f/docs/FR-034-KEYBOARD-NARROW-ACCEPTANCE.txt",
+        "linked_comment_id": null
+      }
+    },
+    {
+      "id": "test_keyboard_confirmation",
+      "executed_product_sha": "910fdbcf8fb6dd312cac4cf31c2b1a7a1950b75f",
+      "url": "https://github.com/huiliangtao666/APS/issues/21",
+      "artifacts": [
+        {
+          "workspace": "APS-Test",
+          "path": "FR-034-KEYBOARD-INDEPENDENT-CONFIRMATION.txt",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "48813d942880e01d9aaccf9b83d779c9beecc8554aafb6ff1d8ec5bb6408ee28"
+        },
+        {
+          "workspace": "APS-Test",
+          "path": "FR-034-KEYBOARD-INDEPENDENT-EVIDENCE.zip",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "090bb34a762d1de626642203a4cb959d166c7a55a4b1c894d787882ba128fff4"
+        }
+      ],
+      "command_references": [
+        {
+          "command": "bash temp/fr034-keyboard-test/run.sh",
+          "product_paths": [],
+          "external_archive_command": true,
+          "archive_scripts": [
+            {
+              "path": "temp/fr034-keyboard-test/run.sh",
+              "matches": [
+                "temp/fr034-keyboard-test/run.sh"
+              ]
+            }
+          ]
+        }
+      ],
+      "github_reference": {
+        "api_status": 200,
+        "api_url": "https://api.github.com/repos/huiliangtao666/APS/issues/21",
+        "resolved_path": null,
+        "resolved_html_url": "https://github.com/huiliangtao666/APS/issues/21",
+        "linked_comment_id": null
+      }
+    },
+    {
+      "id": "dev_keyboard",
+      "executed_product_sha": "02a5e307f4b731ebb2b1882ed02e16a7e20c52e3",
+      "url": "https://github.com/huiliangtao666/APS/blob/02a5e307f4b731ebb2b1882ed02e16a7e20c52e3/docs/FR-034-KEYBOARD-R1-HANDOFF.txt",
+      "artifacts": [
+        {
+          "workspace": "APS-Dev",
+          "path": "FR-034-KEYBOARD-R1-REPORT.txt",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "b5f32903fd6f145d0567bfd00fc2dfaf56a659eb6a3596256d3d8f447b3be34e"
+        },
+        {
+          "workspace": "APS-Dev",
+          "path": "FR-034-KEYBOARD-R1-EVIDENCE.zip",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "624b469374ee3807a0eb4d63542f6da00c04b80b483311fca4c8df49f328ef7d"
+        }
+      ],
+      "command_references": [
+        {
+          "command": "FR034_SOURCE_MANIFEST=qa/fr034-keyboard-r1-source-sha256.json FR034_KBD_MODE=fixed FR034_REPO=<checkout> FR034_SDK=<sdk> FR034_OUT=<empty-dir> bash qa/fr034-keyboard-r1-docker.sh",
+          "product_paths": [
+            {
+              "path": "qa/fr034-keyboard-r1-source-sha256.json",
+              "exists_at_integrated_pin": true
+            },
+            {
+              "path": "qa/fr034-keyboard-r1-docker.sh",
+              "exists_at_integrated_pin": true
+            }
+          ],
+          "external_archive_command": false
+        }
+      ],
+      "link_git_object_exists": true,
+      "github_reference": {
+        "api_status": 200,
+        "api_url": "https://api.github.com/repos/huiliangtao666/APS/contents/docs/FR-034-KEYBOARD-R1-HANDOFF.txt?ref=02a5e307f4b731ebb2b1882ed02e16a7e20c52e3",
+        "resolved_path": "docs/FR-034-KEYBOARD-R1-HANDOFF.txt",
+        "resolved_html_url": "https://github.com/huiliangtao666/APS/blob/02a5e307f4b731ebb2b1882ed02e16a7e20c52e3/docs/FR-034-KEYBOARD-R1-HANDOFF.txt",
+        "linked_comment_id": null
+      }
+    },
+    {
+      "id": "test_keyboard",
+      "executed_product_sha": "02a5e307f4b731ebb2b1882ed02e16a7e20c52e3",
+      "url": "https://github.com/huiliangtao666/APS/issues/21#issuecomment-6483110200",
+      "artifacts": [
+        {
+          "workspace": "APS-Test",
+          "path": "FR-034-KEYBOARD-ROUND1-INDEPENDENT-RETEST.txt",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "78e4a4724e66c7bec7ffdc548fdfe5f1d1fc5045e495fe1cb39bf056500cc434"
+        },
+        {
+          "workspace": "APS-Test",
+          "path": "FR-034-KEYBOARD-ROUND1-INDEPENDENT-EVIDENCE.zip",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "8915ffe18ede026f4801722d64c503f39a89296c44dfbf818af70a71b8b8facf"
+        }
+      ],
+      "command_references": [
+        {
+          "command": "bash temp/fr034-keyboard-r1-test/run.sh",
+          "product_paths": [],
+          "external_archive_command": true,
+          "archive_scripts": [
+            {
+              "path": "temp/fr034-keyboard-r1-test/run.sh",
+              "matches": [
+                "reproduction/run.sh"
+              ]
+            }
+          ]
+        },
+        {
+          "command": "bash temp/fr034-keyboard-r1-test/mouse-run.sh",
+          "product_paths": [],
+          "external_archive_command": true,
+          "archive_scripts": [
+            {
+              "path": "temp/fr034-keyboard-r1-test/mouse-run.sh",
+              "matches": [
+                "reproduction/mouse-run.sh"
+              ]
+            }
+          ]
+        }
+      ],
+      "github_reference": {
+        "api_status": 200,
+        "api_url": "https://api.github.com/repos/huiliangtao666/APS/issues/comments/6483110200",
+        "resolved_path": null,
+        "resolved_html_url": "https://github.com/huiliangtao666/APS/issues/21#issuecomment-6483110200",
+        "linked_comment_id": 6483110200
+      }
+    },
+    {
+      "id": "dev_boundary",
+      "executed_product_sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+      "url": "https://github.com/huiliangtao666/APS/blob/4e11da6c768e6eeb026f38e1d247191cbe3c2cf8/docs/FR-034-BOUNDARY-ACCEPTANCE.txt",
+      "artifacts": [
+        {
+          "workspace": "APS-Dev",
+          "path": "FR-034-BOUNDARY-REPORT.txt",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "e989062cf235b2a556b7802261a4bc9527c45b758b9a1f7d38ee5be3a5d055ad"
+        },
+        {
+          "workspace": "APS-Dev",
+          "path": "FR-034-BOUNDARY-EVIDENCE.zip",
+          "exists": true,
+          "matches": true,
+          "actual_sha256": "78bf711fb4c5fd6d9cc66c1672e821d47f8d069386fdd465cccbaeece6dceae0"
+        }
+      ],
+      "command_references": [
+        {
+          "command": "FR034_SOURCE_MANIFEST=qa/fr034-boundary-source-sha256.json FR034_REPO=<checkout> FR034_SDK=<sdk> FR034_OUT=<empty-dir> FR034_PRODUCT_SHA=4e11da6c768e6eeb026f38e1d247191cbe3c2cf8 bash qa/fr034-boundary-docker.sh",
+          "product_paths": [
+            {
+              "path": "qa/fr034-boundary-source-sha256.json",
+              "exists_at_integrated_pin": true
+            },
+            {
+              "path": "qa/fr034-boundary-docker.sh",
+              "exists_at_integrated_pin": true
+            }
+          ],
+          "external_archive_command": false
+        },
+        {
+          "command": "check-only payload from qa/fr034-keyboard-r1-checks.sh, stopped before browser commands; exact recorded execution qa/evidence/fr034-boundary/checks-execution.log and checks.zip",
+          "product_paths": [
+            {
+              "path": "qa/fr034-keyboard-r1-checks.sh",
+              "exists_at_integrated_pin": true
+            }
+          ],
+          "external_archive_command": false
+        }
+      ],
+      "link_git_object_exists": true,
+      "github_reference": {
+        "api_status": 200,
+        "api_url": "https://api.github.com/repos/huiliangtao666/APS/contents/docs/FR-034-BOUNDARY-ACCEPTANCE.txt?ref=4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+        "resolved_path": "docs/FR-034-BOUNDARY-ACCEPTANCE.txt",
+        "resolved_html_url": "https://github.com/huiliangtao666/APS/blob/4e11da6c768e6eeb026f38e1d247191cbe3c2cf8/docs/FR-034-BOUNDARY-ACCEPTANCE.txt",
+        "linked_comment_id": null
+      }
+    }
+  ]
+}

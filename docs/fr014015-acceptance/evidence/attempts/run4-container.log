@@ -1,0 +1,43 @@
+vite v5.4.21 building for production...
+transforming...
+✓ 79 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../tmp/fr027-dkSeCG/dist/index.html                   0.45 kB │ gzip:   0.30 kB
+../../../tmp/fr027-dkSeCG/dist/assets/index-BoO1gSfU.css   20.30 kB │ gzip:   5.51 kB
+../../../tmp/fr027-dkSeCG/dist/assets/index-DU-bwlEj.js   336.38 kB │ gzip: 124.69 kB
+✓ built in 1.46s
+PASS actual UI calculate, independent verify, planner submit and supervisor confirm (no confirmed fixtures)
+PASS 20 configuration categories: real edit/save and duplicate-copy rejection preserve confirmed plan/input/confirmation bytes
+PASS material master, tool and inventory positive add/copy/allowed delete use actual main editor
+PASS cross-category invalid save is atomic; keyboard error link switches table and focuses exact source field
+PASS browser reference, unit, impossible-date guards reject all writes; no-op saves keep persisted bytes unchanged
+PASS browser referenced deletion is rejected; stale draft cannot overwrite a concurrent saved revision
+PASS nontrivial cumulative execution updates and immutable sources/events: actual edit/delete guards and historical bytes
+PASS execution references cannot be rebased by changing machine/master data; structured source mapping visible without raw JSON
+PASS all24 populated categories: list, positive/negative applicable filters, keyboard detail/related navigation and actual CSV downloads
+PASS material allocation navigation keeps saved plan provenance; genuine confirmed snapshot retains original inputs after edits
+{"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test#query"}
+{"action":"export","decision":"deny","requestId":"fr027-synthetic","actor":"test#query"}
+{"at":"2026-10-29T01:12:34.829Z","action":"member.export","requestId":"fr027-synthetic","actor":"user","target":"test#query","canExport":true}
+{"at":"2026-10-29T01:12:35.024Z","action":"member.export","requestId":"fr027-synthetic","actor":"user","target":"test#query","canExport":false}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+200 !== 403
+
+    at file:///workspace/apps/aps-fr032/qa/fr014015-browser.mjs:96:192
+    at async check (file:///workspace/apps/aps-fr032/qa/fr014015-browser.mjs:6:30)
+    at async file:///workspace/apps/aps-fr032/qa/fr014015-browser.mjs:92:2 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 200,
+  expected: 403,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.23.2

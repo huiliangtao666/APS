@@ -1,0 +1,44 @@
+[
+  {
+    "kind": "orders",
+    "rows": 2,
+    "bytes": 8063,
+    "sha256": "0e1e7ad3fa3fdf6d5e0b1eb6e01ba7dd8bcd25d2987a728a111a934bbc7f503f",
+    "viewId": "ac76359b8fd67c9400a64a1293a9844b325b90d456113cef69cb1bacb6520cf1"
+  },
+  {
+    "kind": "tasks",
+    "rows": 4,
+    "bytes": 40469,
+    "sha256": "79cd16a37016249b2c963d6bee2c65b9ec269caeb093866b4299192e276a0fc8",
+    "viewId": "46c42b69456f5c1f7835db09b6781b9d77adafa2de88c7cf0e0897fa3919e65e"
+  },
+  {
+    "kind": "occupation",
+    "rows": 9,
+    "bytes": 11642,
+    "sha256": "8b211348c8876b8f5f841c9a0d03fa3600071ad97c614af13d5fda9cf613505f",
+    "viewId": "b76cad9762c27a30c6c35ce66e1d603239d5e56774af9a4151b7fa7361252268"
+  },
+  {
+    "kind": "materials",
+    "rows": 5,
+    "bytes": 12673,
+    "sha256": "71a48aace90e060ec928ed35565ab8de6509eb2da0fd6d303d569f6e562fedb6",
+    "viewId": "934c8e0ee5323240f35e83eefdd318e91b0f36bb68a9ede4700b062ef804f39c"
+  },
+  {
+    "kind": "unplanned",
+    "rows": 2,
+    "bytes": 30977,
+    "sha256": "c18a8025b9d78c20454770256add1e4cbd53a75c86c4abfd10e0b7ef531cb55a",
+    "viewId": "1eba4cc5e13da23dcaf2136a85749d5b1e86b9ed050081ce887cfe86ed7d20e5"
+  },
+  {
+    "kind": "differences",
+    "rows": 46,
+    "bytes": 34746,
+    "sha256": "47726eefe6315edf8a8c53fe0556ceb46116da574eefeb8b32bcf04caca73864",
+    "viewId": "51be17ee8df6ed7f8db29896a1f59105b70791fddc6c312ae080ad682e6622cd"
+  }
+]
