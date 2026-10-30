@@ -4276,6 +4276,31 @@
       "issue_state": "closed",
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "issue9:fr010:browser-maintain:e0be9b6:r1",
+      "original_delivery": "dlv_96b9043a-6e07-45ab-8c32-5cb045a28357",
+      "result_delivery": "dlv_8271d929-af9a-4173-b1c1-350a186b7b45",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T10:07:40+08:00",
+      "product_sha": "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc",
+      "result": "B01-B20 20 PASS/0 FAIL; B21 real signed identity NOT_EXECUTED; task PARTIAL; FR010 NOT_READY",
+      "external_hashes": {
+        "Issue9-FR010-e0be9b6-BROWSER-R1-REPORT.md": "79be8fb36b66df6fe6659d5eb992b31ffad220d03b0b6cc43584774d3d15b6ce",
+        "Issue9-FR010-e0be9b6-BROWSER-R1-ASSERTIONS.csv": "1fd9be84f06f18a843cbf7848fe3fd5a29ac87ef966f00a647961fece5f3d5bb",
+        "Issue9-FR010-e0be9b6-BROWSER-R1-EVIDENCE.zip": "eedf11a70ad0b7957d66a8e7791e925b064dbec78953ad557a9ccadb56ab392f"
+      },
+      "zip_crc": "PASS",
+      "internal_hashes": "69/69 PASS",
+      "project_status": {
+        "FR-010": "In review"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/9#issuecomment-6513142979",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES",
+      "remaining": "B21 real signed three-role sessions; B01 default quality mapping approval; B02 global reservation new CR; QA UAT09/10 after dependencies"
     }
   ]
 }
