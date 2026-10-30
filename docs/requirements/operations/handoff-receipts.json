@@ -4304,6 +4304,37 @@
       "issue_state": "open",
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_b70f99dd-fcc5-4739-9fde-e5cdde948b77:r1",
+      "original_delivery": "dlv_b70f99dd-fcc5-4739-9fde-e5cdde948b77",
+      "notification_delivery": "dlv_76373b02-d444-4975-97bd-1750088d28d8",
+      "type": "DEV_DELIVERED",
+      "source": "APS-Dev",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T12:27:56+08:00",
+      "requirement": "FR-013/Issue4",
+      "product_sha": "c742cc635f34e47fc5207c3cee6a83be9675e24d",
+      "parent_sha": "31904e1d628a33240aa645e128dba35bf041e5ca",
+      "result": "Dev self-check PASS for two locator repairs; independent Test pending; whole FR013 NOT_READY",
+      "external_hashes": {
+        "Issue4-FR013-INVENTORY-FIELD-R1-REPORT.md": "9802f9c725214826df4e830c98ffacf375d57f7094f038d51836795beaa910cc",
+        "Issue4-FR013-INVENTORY-FIELD-R1-MATRIX.csv": "ac71151f8204211744ead0a463ba4fe787f607b3722bc7d2ee24f8856488e854",
+        "Issue4-FR013-INVENTORY-FIELD-R1-EVIDENCE.zip": "4ab2a268fb843462b9a232fc4f7a49dbd5ef91c3929c864832bbaf8f1e8e03f9",
+        "Issue4-FR013-INVENTORY-FIELD-R1-SHA256.json": "73474622fd2cf24d804bf768910c31e241b6324bac3f09452ff0e96f0bf2eb87"
+      },
+      "zip_crc": "PASS",
+      "manifest_hashes_verified": 36,
+      "prior_test2_hashes_verified": 3,
+      "test_dispatch": "dlv_6d862a7c-0452-4f45-87d3-6c58ab8516fc",
+      "dispatch_status": "queued/SENT",
+      "project_status": {
+        "FR-013": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6514966820",
+      "issue_state": "open",
+      "repair_round": "r1 for two locator defects; no r2",
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
