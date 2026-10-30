@@ -1,0 +1,24 @@
+ID,result,scope,assertion,actual_or_blocker,evidence
+A01,PASS,就绪证据,原卡Issue及生效CR核对,实时GraphQL及Issue API；FR022 In progress,authority/fr022-live-card.json
+A02,PASS,就绪证据,原DOCX及UAT15原件字段核对,原18仅任务时间和汇总耗料；配置不作实际资源事实,authority/uat15-resource-and-progress.json
+A03,PASS,就绪证据,现有schema缺资源事实表及字段,无executionResources；未知表404未知字段400且零写入,runtime/n06-probe-results.json
+A04,PASS,既有保护回归,四种事实状态且采用工装人员空间,逐状态缺账拒绝并列资源；不是已执行资源可排PASS,runtime/n06-probe-results.json
+A05,PASS,既有保护回归,启用工装与混合修改原子阻断,事实A/MIX及C-A缺账400；完整business字节同前,runtime/n06-probe-results.json
+A06,PASS,既有路径回归,未来生效或未采用工装真实Worker,完成或部分完成；无工装账；checker not_checked,runtime/n06-probe-results.json
+A07,PASS,既有路径回归,新事实保存后旧方案及输入保留,同GET表示深度相等；新运行冻结当时事实,runtime/n06-probe-results.json
+A08,PASS,既有保护回归,角色非法过期及删除改锚拒绝,query/outsider403 stale409 删除改锚409 全库零写,runtime/n06-probe-results.json
+A09,PASS,既有UI路径回归,React事实编辑保存刷新及资源启用拒绝,原浏览器D02两组及D03一组通过；模拟身份非SSO,runtime/repair-browser-results.json
+A10,PASS,既有构建,TypeScript Vite server Worker,隔离Docker Node22构建成功,runtime/build.log
+A11,PASS,既有回归,D01-D03 progress R01R02 P06,44/44通过；不累加独立N06业务覆盖,runtime/regression.log
+N01,BLOCKED,N06核心,资源事实schema及真实UI/API保存读取,F02-F09字段来源契约待细化；未建空壳表,FIELD-BLOCKERS.csv
+N02,BLOCKED,N06核心,实际资源完整窗口及数量来源,任务起止和当前需求不能反推；F03-F07,FIELD-BLOCKERS.csv
+N03,BLOCKED,N06核心,原人员组池及技能岗位冻结,实际采用和原池映射未记录；F04/F08,FIELD-BLOCKERS.csv
+N04,BLOCKED,N06核心,已执行且采用资源Worker新试算保护,现产品仍守卫阻断；未实现正向能力,FIELD-BLOCKERS.csv
+N05,BLOCKED,N06核心,独立检查器重建原资源占用,未定义原资源事实协议；未执行N06一致性,FIELD-BLOCKERS.csv
+N06,BLOCKED,N06核心,确认链原始资源事实保护,原计划预留不等于执行事实；F10/F11,FIELD-BLOCKERS.csv
+N07,BLOCKED,N06核心,来源原件及原账冻结纠正追加,只验证已有任务历史；新原资源账未实现,FIELD-BLOCKERS.csv
+N08,BLOCKED,N06核心,未选订单已有执行资源仍保护,F12依赖原占用账及采用集合,FIELD-BLOCKERS.csv
+N09,BLOCKED,N06核心,暂停未释放资源未来保护,结束未知不可默认0或无限；F07,FIELD-BLOCKERS.csv
+U01,BLOCKED,既有业务决定,共享关闭粒度,现有决定未选定组岗位任务整池,FIELD-BLOCKERS.csv
+U02,BLOCKED,既有业务决定,非空交接数量及窗口,数量含义及叠加方式未定,FIELD-BLOCKERS.csv
+M01,NOT_EXECUTED,单列原卡剩余,同工装多不连续窗口,现守卫单连续窗口；额外业务值不混入N06,FIELD-BLOCKERS.csv

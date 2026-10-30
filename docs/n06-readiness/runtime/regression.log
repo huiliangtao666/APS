@@ -1,0 +1,274 @@
+TAP version 13
+# Subtest: D01 frozen enabled MOLD cannot be removed alongside all tool ledger, with or without personnel
+ok 1 - D01 frozen enabled MOLD cannot be removed alongside all tool ledger, with or without personnel
+  ---
+  duration_ms: 29.665969
+  type: 'test'
+  ...
+# Subtest: D01 frozen selection/time and minimal scope, explicit missing-input diagnostics
+ok 2 - D01 frozen selection/time and minimal scope, explicit missing-input diagnostics
+  ---
+  duration_ms: 12.623828
+  type: 'test'
+  ...
+# Subtest: D02 named personnel windows reject each missing/bad endpoint but accept explicit zero; legacy unnamed preserved
+ok 3 - D02 named personnel windows reject each missing/bad endpoint but accept explicit zero; legacy unnamed preserved
+  ---
+  duration_ms: 13.574814
+  type: 'test'
+  ...
+# Subtest: D02 API and CSV reject endpoints atomically, including entire mixed batch; repair with explicit zero
+ok 4 - D02 API and CSV reject endpoints atomically, including entire mixed batch; repair with explicit zero
+  ---
+  duration_ms: 87.904712
+  type: 'test'
+  ...
+# Subtest: D03 adopted execution guard uses instant, selected rule, exact operation and intrinsic personnel
+ok 5 - D03 adopted execution guard uses instant, selected rule, exact operation and intrinsic personnel
+  ---
+  duration_ms: 1.435064
+  type: 'test'
+  ...
+# Subtest: D03 API future/disabled facts accepted, actual Worker/verify; enable-with-missing-ledger atomically blocked
+ok 6 - D03 API future/disabled facts accepted, actual Worker/verify; enable-with-missing-ledger atomically blocked
+  ---
+  duration_ms: 146.447744
+  type: 'test'
+  ...
+# Subtest: P06 two shifts: full machine/tool/labor cycle moves to later legal window, frozen checker and export agree
+ok 7 - P06 two shifts: full machine/tool/labor cycle moves to later legal window, frozen checker and export agree
+  ---
+  duration_ms: 36.342877
+  type: 'test'
+  ...
+# Subtest: P06 gaps/short shifts cannot be concatenated; complete occupancy after-release cannot cross gap
+ok 8 - P06 gaps/short shifts cannot be concatenated; complete occupancy after-release cannot cross gap
+  ---
+  duration_ms: 8.580882
+  type: 'test'
+  ...
+# Subtest: P06 explicit factory off, machine stop, personnel stop and tool stop all force fresh same-window candidate
+ok 9 - P06 explicit factory off, machine stop, personnel stop and tool stop all force fresh same-window candidate
+  ---
+  duration_ms: 18.198709
+  type: 'test'
+  ...
+# Subtest: P06 resource-specific stop with no later candidate leaves no commitments and identifies actual resource
+ok 10 - P06 resource-specific stop with no later candidate leaves no commitments and identifies actual resource
+  ---
+  duration_ms: 5.823545
+  type: 'test'
+  ...
+# Subtest: P06 missing qualified people, wrong shift, reverse-only skill relation and pool shortage are unscheduled
+ok 11 - P06 missing qualified people, wrong shift, reverse-only skill relation and pool shortage are unscheduled
+  ---
+  duration_ms: 11.30897
+  type: 'test'
+  ...
+# Subtest: P06 explicit second-shift groups and complete phase windows, no implicit handover
+ok 12 - P06 explicit second-shift groups and complete phase windows, no implicit handover
+  ---
+  duration_ms: 3.819989
+  type: 'test'
+  ...
+# Subtest: P06 half-open stop and adjacent shift boundaries allow reuse without bridging a shift
+ok 13 - P06 half-open stop and adjacent shift boundaries allow reuse without bridging a shift
+  ---
+  duration_ms: 5.789545
+  type: 'test'
+  ...
+# Subtest: P06 independent checker rejects adjacent-row union and stop/phase/contract tampering; old snapshots stay old
+ok 14 - P06 independent checker rejects adjacent-row union and stop/phase/contract tampering; old snapshots stay old
+  ---
+  duration_ms: 6.390663
+  type: 'test'
+  ...
+# Subtest: P06 overlapping role segmentation cannot evade a full phase using different shift groups
+ok 15 - P06 overlapping role segmentation cannot evade a full phase using different shift groups
+  ---
+  duration_ms: 0.777656
+  type: 'test'
+  ...
+# Subtest: P06 input guards reject missing reference, unknown type, fractional/reversed interval, blank reason
+ok 16 - P06 input guards reject missing reference, unknown type, fractional/reversed interval, blank reason
+  ---
+  duration_ms: 4.155818
+  type: 'test'
+  ...
+# Subtest: P06 60 small cases match an independent integer-minute same-window oracle
+ok 17 - P06 60 small cases match an independent integer-minute same-window oracle
+  ---
+  duration_ms: 145.930751
+  type: 'test'
+  ...
+# Subtest: FR031 scrap is separate from usable output; replacement demand is explicit and material conserved
+ok 18 - FR031 scrap is separate from usable output; replacement demand is explicit and material conserved
+  ---
+  duration_ms: 25.637815
+  type: 'test'
+  ...
+# Subtest: FR031 repeated scrap calculations do not add outputs or deduct source inventory
+ok 19 - FR031 repeated scrap calculations do not add outputs or deduct source inventory
+  ---
+  duration_ms: 13.127987
+  type: 'test'
+  ...
+# Subtest: FR031 pending scrap is recorded but blocks automatic remaining scheduling with order cause
+ok 20 - FR031 pending scrap is recorded but blocks automatic remaining scheduling with order cause
+  ---
+  duration_ms: 1.992723
+  type: 'test'
+  ...
+# Subtest: FR031 missing policy cannot invent replacement stock even when MATERIAL is disabled
+ok 21 - FR031 missing policy cannot invent replacement stock even when MATERIAL is disabled
+  ---
+  duration_ms: 1.055861
+  type: 'test'
+  ...
+# Subtest: FR031 scrap and supplementary consumption forward correction changes remainder without erasing original start
+ok 22 - FR031 scrap and supplementary consumption forward correction changes remainder without erasing original start
+  ---
+  duration_ms: 1.377981
+  type: 'test'
+  ...
+# Subtest: FR031 scrap rollback, invalid values and unrecognized replacement policy require reconciliation
+ok 23 - FR031 scrap rollback, invalid values and unrecognized replacement policy require reconciliation
+  ---
+  duration_ms: 1.13236
+  type: 'test'
+  ...
+# Subtest: FR031 overorder usable output is blocked while scrap never gives order qualified completion
+ok 24 - FR031 overorder usable output is blocked while scrap never gives order qualified completion
+  ---
+  duration_ms: 0.388661
+  type: 'test'
+  ...
+# Subtest: FR031 completed with scrap retains original actual interval and requires full replacement consumption
+ok 25 - FR031 completed with scrap retains original actual interval and requires full replacement consumption
+  ---
+  duration_ms: 2.193095
+  type: 'test'
+  ...
+# Subtest: FR031 replacement is same-operation only and does not silently change downstream time
+ok 26 - FR031 replacement is same-operation only and does not silently change downstream time
+  ---
+  duration_ms: 1.341981
+  type: 'test'
+  ...
+# Subtest: FR031 exact fractional scrap adds replacement material without float drift
+ok 27 - FR031 exact fractional scrap adds replacement material without float drift
+  ---
+  duration_ms: 1.527604
+  type: 'test'
+  ...
+# Subtest: FR031 source aggregate with explicit conserved mapping is accepted and frozen in summary
+ok 28 - FR031 source aggregate with explicit conserved mapping is accepted and frozen in summary
+  ---
+  duration_ms: 2.066889
+  type: 'test'
+  ...
+# Subtest: FR031 aggregate without explicit mapping is blocked instead of fabricating batch allocation
+ok 29 - FR031 aggregate without explicit mapping is blocked instead of fabricating batch allocation
+  ---
+  duration_ms: 0.750115
+  type: 'test'
+  ...
+# Subtest: FR031 aggregate mapping rejects mismatched sum, unit, lot, material, reference and duplicate records
+ok 30 - FR031 aggregate mapping rejects mismatched sum, unit, lot, material, reference and duplicate records
+  ---
+  duration_ms: 1.352773
+  type: 'test'
+  ...
+# Subtest: FR031 original multi-lot mapping is explicit, sums exactly and later cumulative correction preserves source
+ok 31 - FR031 original multi-lot mapping is explicit, sums exactly and later cumulative correction preserves source
+  ---
+  duration_ms: 1.870808
+  type: 'test'
+  ...
+# Subtest: FR031 source originals cannot be deleted or rewritten and duplicate task sources fail closed
+ok 32 - FR031 source originals cannot be deleted or rewritten and duplicate task sources fail closed
+  ---
+  duration_ms: 0.668783
+  type: 'test'
+  ...
+# Subtest: FR031 run snapshot freezes scrap, source and policy across newer corrections
+ok 33 - FR031 run snapshot freezes scrap, source and policy across newer corrections
+  ---
+  duration_ms: 0.905946
+  type: 'test'
+  ...
+# Subtest: FR031 query follows explicit fact/source/consumption links and exports matching order only
+ok 34 - FR031 query follows explicit fact/source/consumption links and exports matching order only
+  ---
+  duration_ms: 1.152442
+  type: 'test'
+  ...
+# Subtest: FR031 explicit scrap replacement re-evaluates original BOM packaging rounding rather than scaling rounded quantities
+ok 35 - FR031 explicit scrap replacement re-evaluates original BOM packaging rounding rather than scaling rounded quantities
+  ---
+  duration_ms: 0.23708
+  type: 'test'
+  ...
+# Subtest: FR031 scrap units follow order piece conversion exactly without converting cumulative stock units
+ok 36 - FR031 scrap units follow order piece conversion exactly without converting cumulative stock units
+  ---
+  duration_ms: 0.946195
+  type: 'test'
+  ...
+# Subtest: FR031 delivered quoted-JSON CSV samples roundtrip to explicitly mapped, conserved simulated execution
+ok 37 - FR031 delivered quoted-JSON CSV samples roundtrip to explicitly mapped, conserved simulated execution
+  ---
+  duration_ms: 3.15004
+  type: 'test'
+  ...
+# Subtest: R01 multi-member tool+independent personnel posts+physical pool+space+material hold together
+ok 38 - R01 multi-member tool+independent personnel posts+physical pool+space+material hold together
+  ---
+  duration_ms: 36.191921
+  type: 'test'
+  ...
+# Subtest: R02 any single enabled condition failure leaves whole multi-member cycle without ghost commit
+ok 39 - R02 any single enabled condition failure leaves whole multi-member cycle without ghost commit
+  ---
+  duration_ms: 19.628606
+  type: 'test'
+  ...
+# Subtest: R02 material arrival forces personnel, tooling, space, downtime and horizon recheck at new candidate
+ok 40 - R02 material arrival forces personnel, tooling, space, downtime and horizon recheck at new candidate
+  ---
+  duration_ms: 14.219056
+  type: 'test'
+  ...
+# Subtest: independent frozen checker rejects missing member/post/tool, altered material allocation/time/source/capacity and disabled flags
+ok 41 - independent frozen checker rejects missing member/post/tool, altered material allocation/time/source/capacity and disabled flags
+  ---
+  duration_ms: 14.001225
+  type: 'test'
+  ...
+# Subtest: U01/U02 and missing/unsupported inputs fail closed, explicit switched-off tool is truthfully unchecked
+ok 42 - U01/U02 and missing/unsupported inputs fail closed, explicit switched-off tool is truthfully unchecked
+  ---
+  duration_ms: 7.151527
+  type: 'test'
+  ...
+# Subtest: competing resource batches honor delayed tooling/space release and partial material commit isolation
+ok 43 - competing resource batches honor delayed tooling/space release and partial material commit isolation
+  ---
+  duration_ms: 7.206026
+  type: 'test'
+  ...
+# Subtest: candidate search bound leaves all ledgers uncommitted and explicitly reports search-not-found
+ok 44 - candidate search bound leaves all ledgers uncommitted and explicitly reports search-not-found
+  ---
+  duration_ms: 5839.95688
+  type: 'test'
+  ...
+1..44
+# tests 44
+# suites 0
+# pass 44
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6066.315904

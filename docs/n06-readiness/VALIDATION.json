@@ -1,0 +1,25 @@
+{
+  "result": "BLOCKED",
+  "product_implemented": false,
+  "new_product_sha": null,
+  "inspected_product_sha": "7a26732efc0fb440ca6f8ac7aa6261e33757eb81",
+  "build": "PASS",
+  "baseline_regression": {
+    "pass": 44,
+    "fail": 0
+  },
+  "readiness_probe_cases": 13,
+  "baseline_browser_cases": 3,
+  "browser_errors": [],
+  "source_file_sha256_matches": 137,
+  "matrix": {
+    "PASS_readiness_or_existing_regression": 11,
+    "BLOCKED": 11,
+    "NOT_EXECUTED": 1
+  },
+  "execution_role": "APS-Dev self check; not independent APS-Test or QA UAT",
+  "harness_correction": "Initial probe compared /calculate response with /plans enriched response (inputSnapshot). Fixed by comparing two /plans responses. Initial assertion log preserved; no product defect. A shell quote assembly error was corrected before final run.",
+  "scope": "Only evidence and probes under docs/n06-readiness; no src/server/qa/package runtime changes",
+  "runtime_image": "sha256:0d45a31aa25c4cca1eaacbfd1ba4ee6d5028d899b329e49a6036a66fd0c35da8",
+  "node": "v22.23.2"
+}
