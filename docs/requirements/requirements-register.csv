@@ -50,7 +50,7 @@ FR-006,模具及工装配置,v0.3,v0.3+CR-DEC02-03-20261029,CR-DEC02-03-20261029
 
 [CR-DEC02-03-20261029 批准增量]
 将DEC02/03涉及的业务选择统一明确为前台可维护、可保存并实际作用于新试算的参数：工装占用/归还策略，人员参与阶段/窗口、人数与释放，显式技能替代关系及禁止替代；保留基线既有权限、历史输入/方案保护和结果可追溯要求。
-用户补充：相关资源可共用；是否共用、交接容量和占用方式均应为可维护配置，实际共享仍受实体身份、容量、时间窗口与历史保护约束。",In review,"CR-DEC02-03-20261029：N06 cd115f0 finite ledger Dev delivered; Test2 formal/followup/S06, Test1 UI/S16: cumulative 13 PASS/3 PARTIAL/0 FAIL; S08/09/14 plus B01–B05 unresolved. P10 old scope retained","CR-DEC02-03-20261029：N06 fixed cd115f0 13 independent PASS/3 PARTIAL/0 product FAIL; S08 natural-path prerequisite, S09/14 observation boundary, customer facts/rule choices prevent full CR acceptance",基线原范围历史记录保留；FR017当前适用实现责任独立PASS；FR007/022及完整CR和业务UAT未通过；原S06/S07与D01-D03有限结果保留,未统一登记版本签收；原卡通过范围及历史证据保留,12eed5514c702f730aae65a39a08747c532f8536,"https://github.com/huiliangtao666/APS/issues/3
+用户补充：相关资源可共用；是否共用、交接容量和占用方式均应为可维护配置，实际共享仍受实体身份、容量、时间窗口与历史保护约束。",In progress,FR006主产品入口固定3d164d5独立Test双证据FAIL；同源缺口Issue3；Dev首轮修复dlv_b4e06288已派，待新SHA与定向复测；CR其他范围仍未闭,主产品无工装配置入口，CRUD/持久化未执行；原型CSV 6 PASS仅属原型；Dev修复与新SHA Test待完成；完整CR/UAT未闭,主产品入口FAIL（同一FR006-MAIN-ENTRY-01）；Test1 1 FAIL/8未执行，Test2原型6 PASS/主入口1 FAIL/1 PARTIAL；整卡NOT_READY；旧PASS保留原SHA,未统一登记版本签收；原卡通过范围及历史证据保留,12eed5514c702f730aae65a39a08747c532f8536,"https://github.com/huiliangtao666/APS/issues/3
 https://github.com/huiliangtao666/APS/issues/13
 https://github.com/huiliangtao666/APS/issues/16",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgjI,2026-10-30T09:41:19+08:00
 FR-007,人员数量与技能配置,v0.3,v0.3+CR-DEC02-03-20261029,CR-DEC02-03-20261029,"范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R2.3；完整提供：R2.4。
@@ -101,7 +101,7 @@ FR-013,各类CSV模拟数据导入,v0.3,v0.3+CR-FR013-VALIDATION-20261029,CR-FR0
 • 导入前预览并检查字段、引用、单位和日期，报告文件/行号/字段及原因；同一批次发现影响使用的错误时不导入。支持修正后重新导入，避免重复数据。
 
 [CR-FR013-VALIDATION-20261029 批准增量]
-每袋支数只允许整数；总收率取值不得超过100%，具体值可由授权配置维护；其他有效范围沿原已批准校验或另行明确；物料单位/类别及唯一需求未确定的业务值设计为显式可配置项，不暗设默认，配置须有类型、单位、范围、版本、权限及新运行生效边界。",In progress,FR013-NONDEVICE-REF-01首轮修复e7881a9独立43 PASS/0 FAIL，缺陷关闭；完整原输入及其余映射仍待契约与实现,原05/06/09/12完整正向映射、FULL03/16及现场来源未闭；14 BLOCKED/2未执行,首轮修复e7881a9独立43 PASS，缺陷关闭1/最多2；FR013整卡NOT_READY,未统一登记版本签收；原卡通过范围及历史证据保留,e7881a9725f59a2f74a517ddfe3c79e6d814460f,"https://github.com/huiliangtao666/APS/issues/4
+每袋支数只允许整数；总收率取值不得超过100%，具体值可由授权配置维护；其他有效范围沿原已批准校验或另行明确；物料单位/类别及唯一需求未确定的业务值设计为显式可配置项，不暗设默认，配置须有类型、单位、范围、版本、权限及新运行生效边界。",In review,固定1cdf394e原02/04 Test1与原07/08 Test2独立限域验收已派；两delivery仅SENT，结果待核；其他原类映射未闭,02/04及07/08独立Test在途；05/06/09/12/13/14/18/19字段业务映射及完整原批次仍未闭，UAT未就绪,首轮修复e7881a9独立43 PASS，缺陷关闭1/最多2；FR013整卡NOT_READY,未统一登记版本签收；原卡通过范围及历史证据保留,e7881a9725f59a2f74a517ddfe3c79e6d814460f,"https://github.com/huiliangtao666/APS/issues/4
 https://github.com/huiliangtao666/APS/issues/13",APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgrg,2026-10-30T09:41:19+08:00
 FR-014,各类模拟数据查询,v0.3,v0.3,,"范围：P0；关联流程：BP-01/02/05；页面：PG-01/02/08；开始提供：R1；完整提供：R6。
 前置功能：FR-013。
@@ -246,7 +246,7 @@ FR-038,运行记录与故障提示,v0.3,v0.3+CR-FR038-PERF-20261029,CR-FR038-PER
 • 较长计算可取消；失败不破坏已保存方案或源数据。技术信息放在可展开详情，不要求普通用户理解算法名称。
 
 [CR-FR038-PERF-20261029 批准增量]
-在AC27事先约定的单线数据规模、设备、启用规则组合及测量环境下，暂定排程计算30秒内完成；规模与环境未约定前不能判性能PASS/FAIL。",In progress,8741bf0a Test1真实页面全链探索8单0.923/0.901秒、128单1.266秒，512单取消保护通过,正式规模/规则/环境/计时边界未确认；C2数量口径更正保留；AC27正式测试未执行,探索5 PASS/2未执行，0产品FAIL；不判AC27正式PASS/FAIL；FR038整卡NOT_READY,未统一登记版本签收；原卡通过范围及历史证据保留,8741bf0a597fa11838a514259d8ffe7980382ee2,https://github.com/huiliangtao666/APS/issues/13,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhHk,2026-10-30T09:41:19+08:00
+在AC27事先约定的单线数据规模、设备、启用规则组合及测量环境下，暂定排程计算30秒内完成；规模与环境未约定前不能判性能PASS/FAIL。",In progress,e21bf52 A05首轮修复独立Test2 PASS；Issue26缺陷解决；正式AC27规格待确认,正式AC27单线规模/设备/规则组合、环境及查询/计算计时边界待批准；正式量测与QA UAT未执行,e21bf52 A05-R1-01～06及共享toast CSV PASS；旧功能PASS保留8741bf0a；FR038整卡NOT_READY；UAT WAITING_DEPENDENCIES,未统一登记版本签收；原卡通过范围及历史证据保留,e21bf52e1e20c1d6ebdc658e06338afe5b9c3e4e,https://github.com/huiliangtao666/APS/issues/13,APS-PM维护与调度；APS-Design业务设计/变更提出；APS-Dev实施；APS-Test任务级测试；APS-QA主责UAT；UAT业务验收：QA,QA,https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhHk,2026-10-30T09:41:19+08:00
 FR-039,多条产线及适用范围,v0.3,v0.3,,"范围：P1；关联流程：BP-01/02/03；页面：PG-01/03；开始提供：R8；完整提供：R8。
 前置功能：P0数据及排程功能。
 • 维护多条产线、各线机器/人员/工装和产品适用范围。查询时明确当前产线及是否显示多线汇总。

@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "N06 cd115f0 finite ledger Dev delivered; Test2 formal/followup/S06, Test1 UI/S16: cumulative 13 PASS/3 PARTIAL/0 FAIL; S08/09/14 plus B01–B05 unresolved. P10 old scope retained",
+      "implementation_status": "N06 cd115f0 finite ledger Dev delivered; Test2 formal/followup/S06, Test1 UI/S16: cumulative 13 PASS/3 PARTIAL/0 FAIL; S08/09/14 plus B01–B05 unresolved. P10 old scope retained; FR006 main UI at 3d164d5: same entry gap independently reproduced by Test1/Test2; prototype CSV 6 PASS does not count as main product PASS; Dev R1 dispatched, full CR NOT_READY",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "N06 fixed cd115f0 13 independent PASS/3 PARTIAL/0 product FAIL; S08 natural-path prerequisite, S09/14 observation boundary, customer facts/rule choices prevent full CR acceptance",
+      "acceptance_result": "N06 fixed cd115f0 13 independent PASS/3 PARTIAL/0 product FAIL; S08 natural-path prerequisite, S09/14 observation boundary, customer facts/rule choices prevent full CR acceptance; FR006 main UI at 3d164d5: same entry gap independently reproduced by Test1/Test2; prototype CSV 6 PASS does not count as main product PASS; Dev R1 dispatched, full CR NOT_READY",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -144,6 +144,18 @@
           "event_key": "dlv_d6eeeda3-f729-4fef-9c40-bf0767387b7a:r1",
           "event": "R01/R02共享开启且无交接的联合资源路径独立23 PASS/2 U01-U02 BLOCKED/6未执行；0产品FAIL; no new product FAIL or repair round",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6505345043"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "issue3:fr006:main-ui-crud:v0.3:3d164d5:r1",
+          "event": "FR006 main UI at 3d164d5: same entry gap independently reproduced by Test1/Test2; prototype CSV 6 PASS does not count as main product PASS; Dev R1 dispatched, full CR NOT_READY; no duplicate defect, repair round increment 0 until repair delivered",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6512915645"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "issue3:fr006:main-ui-csv:v0.3:3d164d5:r1",
+          "event": "FR006 main UI at 3d164d5: same entry gap independently reproduced by Test1/Test2; prototype CSV 6 PASS does not count as main product PASS; Dev R1 dispatched, full CR NOT_READY; no duplicate defect, repair round increment 0 until repair delivered",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6512915645"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
