@@ -591,6 +591,18 @@
           "event_key": "dlv_ef297db0-49eb-450a-b7f7-4b26b4ffec52:r1",
           "event": "a49edb1d independent Test 25/25 PASS; same DEF-V1-NOOP-01 round1 closed for R-C08/09 legacy v1 no-op compatibility; full FR013/CR NOT_READY, UAT01/11 WAITING_DEPENDENCIES",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6520196323"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "dlv_fe220c7f-00a0-4f81-86f3-ba53282c4652:r1",
+          "event": "c70d6607 independent Test1: 71 PASS/1 genuine product FAIL T061, one DEF-V1-NOOP-01 in R-C08/09 old v1 exact 19-column re-import; round1 repair dispatched; earlier PASS retained on original SHA",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6520895402"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "dlv_d108b114-edb2-4041-a2e9-4ab6765b976b:r1",
+          "event": "a49edb1d round1 repair delivered, Dev bounded 27/27 PASS only; independent Test pending at delivery; later Test1 result separately recorded as 25/25 PASS",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6520895678"
         }
       ],
       "dev_delivery": "dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1",
