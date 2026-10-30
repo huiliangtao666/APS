@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "P10 fixed42a35d07 Test1 S-P01..10 PASS; Test2 H first six PASS, R2 H-P06 PASS/H-P04 PARTIAL. H-P08/10 Test1 verdict awaits PM review; H-P04 personnel early/late formula awaits user decision. N06 and other scope open; full CR NOT_READY.",
+      "implementation_status": "116eb5d4 FR006/FR013/R2.1 three-slice candidate Dev self-test limited PASS; P10 fixed42a35d07 H-P08/10 and H-P06 independent PASS, H-P04 personnel outside-window PARTIAL; N06/customer facts and full CR/UAT NOT_READY",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "P10 fixed42a35d07 independent S-P01..10 PASS; H-P01/02/03/05/06/07/08/09/10 PASS, H-P04 PARTIAL pending personnel outside-task early/late rule; 0 new product FAIL, +0 repair. Full FR007/022/CR and UAT NOT_READY.",
+      "acceptance_result": "Dev 116eb5d4 task-level integration PASS within assigned approved slice; QA a786ee30 capacity1/2 API chains PASS only on older SHA; H-P04 personnel early/late business rule and N06 source ledger remain open. Full CR/UAT NOT_READY; 0 new product FAIL, +0 repair round.",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -168,6 +168,18 @@
           "event_key": "issue3:p10:h-p08-p10:test1:42a35d07ce29ec073d43bb8adb6083328a9d16dc:r2",
           "event": "Test1 fixed42a35d07 H-P08/H-P10 independent PASS; H-P04 remains PARTIAL pending personnel outside-task early/late rule; 0 product FAIL, +0 repair; full CR NOT_READY",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6518756849"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_519f6044-dc0f-4ff9-aebf-2204c6cd3ca0:r1",
+          "event": "116eb5d4 three-slice FR006/FR013/R2.1 integration Dev self-test 18 assigned PASS, 2 customer-fact BLOCKED, 1 QA UAT NOT_EXECUTED; full CR NOT_READY; no new product FAIL/repair round",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6528284974"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_4e34a1db-92f3-49a8-a454-53921a860c2e:r1",
+          "event": "a786ee30 QA historical software-only slice: repository regression 27/27 and independent capacity1/2 API chains 2/2 PASS; no UAT signoff; older SHA retained",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6528288315"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
@@ -509,7 +521,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR013受影响需求增量；不等于已实现或UAT通过",
-      "implementation_status": "FR013 original05/06 a49edb1d legacy v1 no-op repair delivered and independently passed; R-C08/09 same defect closed round1. Other original categories, R-C03 positive, FR016 shared duties and full FR013/CR remain NOT_READY.",
+      "implementation_status": "116eb5d4 FR013 integrated candidate Dev task-level self-test limited PASS; QA a786ee30 v1 legacy migration/frozen history 18 groups PASS at older SHA; APS-Test v1 development/self-test on 116eb5d4 in progress; original09/B09/R-C03 and full FR013/CR NOT_READY",
       "primary_requirements": [
         "FR-013"
       ],
@@ -527,7 +539,7 @@
       "acceptance_delta": "CSV模板/预览/导入按批准配置校验：小数袋支拒绝，总收率>100%拒绝；合法配置保存刷新后生效，非法/越权整批零写入；保留旧确认/历史。",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006",
       "related_issue_urls": [],
-      "acceptance_result": "a49edb1d DEF-V1-NOOP-01 round1 independent 25/25 PASS on legacy v1 no-op and impacted regression; R-C08/09 same defect closed. Prior bd6f9fab and c70d6607 conclusions remain on original SHAs; no full CR acceptance, FR013 NOT_READY, UAT01/11 WAITING_DEPENDENCIES.",
+      "acceptance_result": "a49edb1d DEF-V1-NOOP-01 round1 independent PASS remains at old SHA; QA a786ee30 v1 migration/frozen history 18 independent groups PASS plus 7 overlapping repo tests, not full UAT; Dev 116eb5d4 limited integrated self-test PASS; full FR013/CR/UAT NOT_READY. 0 new product FAIL, +0 repair round.",
       "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
       "history": [
         {
@@ -576,6 +588,24 @@
           "event_key": "dlv_d108b114-edb2-4041-a2e9-4ab6765b976b:r1",
           "event": "a49edb1d round1 repair delivered, Dev bounded 27/27 PASS only; independent Test pending at delivery; later Test1 result separately recorded as 25/25 PASS",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6520895678"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_519f6044-dc0f-4ff9-aebf-2204c6cd3ca0:r1",
+          "event": "116eb5d4 FR013 integration Dev self-test limited PASS on approved three-slice candidate; original09/B09/R-C03 and full CR/UAT remain open; no new product FAIL/repair round",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6528285870"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_4e34a1db-92f3-49a8-a454-53921a860c2e:r1",
+          "event": "a786ee30 QA historical software-only slice: repository regression 27/27 and capacity API chains 2/2 PASS; v1 migration then NOT_EXECUTED; no UAT signoff",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6528288946"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_3ce06cd4-8d72-4980-b830-c9eb0f53f808:r1",
+          "event": "a786ee30 QA v1 migration/frozen-history limited 18 independent groups PASS plus 7 overlapping repository tests PASS; task interrupted but accessible result/hash verified; old SHA only; full CR/UAT NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6528290528"
         }
       ],
       "dev_delivery": "dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1",
