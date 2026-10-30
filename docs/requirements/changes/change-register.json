@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "N06 cd115f0 finite ledger Dev delivered; Test2 formal/followup/S06, Test1 UI/S16: cumulative 13 PASS/3 PARTIAL/0 FAIL; S08/09/14 plus B01–B05 unresolved. P10 old scope retained",
+      "implementation_status": "P10 explicit strategy 42a35d07 Dev delivered; Test1 S-P01..10 PASS; Test2 H six PASS/four PARTIAL. Earlier N06 and other scope retained; full CR NOT_READY.",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "N06 fixed cd115f0 13 independent PASS/3 PARTIAL/0 product FAIL; S08 natural-path prerequisite, S09/14 observation boundary, customer facts/rule choices prevent full CR acceptance",
+      "acceptance_result": "P10 fixed42a35d07 independent S 10 PASS; H 6 PASS/4 PARTIAL (H-P04/06/08/10), 0 product FAIL; older SHA results retained; full CR and UAT NOT_READY.",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -144,6 +144,18 @@
           "event_key": "dlv_d6eeeda3-f729-4fef-9c40-bf0767387b7a:r1",
           "event": "R01/R02共享开启且无交接的联合资源路径独立23 PASS/2 U01-U02 BLOCKED/6未执行；0产品FAIL; no new product FAIL or repair round",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6505345043"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "issue3:p10:explicit-shared-pool:test1:42a35d07ce29ec073d43bb8adb6083328a9d16dc:r1",
+          "event": "P10 fixed42a35d07 Test1 S-P01..10 independent 10/10 PASS; 0 product FAIL, +0 repair; full CR NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6518508867"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "issue3:p10:explicit-handoff-occupation:test2:42a35d07ce29ec073d43bb8adb6083328a9d16dc:r1",
+          "event": "P10 fixed42a35d07 Test2 H-P01/02/03/05/07/09 PASS, H-P04/06/08/10 PARTIAL evidence gaps; 0 product FAIL, +0 repair; full CR NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6518508867"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
