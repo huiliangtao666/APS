@@ -1,6 +1,6 @@
 # 当前需求跟踪表
 
-快照：2026-10-30T18:11:41+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
+快照：2026-10-30T18:52:11+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
 
 | 编号 | 名称 | 要求版本 | 生效CR | 原卡状态 | 当前环节 | 验收结论 | 原卡 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -9,7 +9,7 @@
 | FR-003 | BOM、收率与包装用量配置 | v0.3+CR-DEC04-05-06-20261029 | CR-DEC04-05-06-20261029 | Done | CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHggI) |
 | FR-004 | 工序与工艺路线配置 | v0.3+CR-DEC04-05-06-20261029 | CR-DEC04-05-06-20261029 | Done | CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHghY) |
 | FR-005 | 机器能力及适用范围 | v0.3+CR-DEC04-05-06-20261029 | CR-DEC04-05-06-20261029 | Done | CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgiI) |
-| FR-006 | 模具及工装配置 | v0.3+CR-DEC02-03-20261029 | CR-DEC02-03-20261029 | In review | 765433c产品联合资源门禁：3727eaa测试oracle独立14/14 PASS；其他CR范围未闭；整卡NOT_READY | 3727eaa Test2联合资源门禁14/14 PASS、0产品FAIL，产品仍765433c；旧PASS保留原SHA；FR006 NOT_READY；无第三修复轮次 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgjI) |
+| FR-006 | 模具及工装配置 | v0.3+CR-DEC02-03-20261029 | CR-DEC02-03-20261029 | In progress | 7e4d4d0 Test1配置/CSV 27行为PASS/1产品FAIL；CSV9首轮修复Dev dlv_3d270f56-7d14-4918-b492-cf08626fd386 已SENT；Test2窗口/joint PASS；FR006 NOT_READY | 7e4d4d0 Test1独立27 PASS/1 FAIL（FR006-CSV9-EXPLICIT-AVAIL-01）；派工矩阵26 PASS/3 PARTIAL/1 FAIL/1 BLOCKED；Test2同SHA窗口/joint子项PASS；旧SHA PASS保留；整卡NOT_READY；CSV9首轮修复已派，旧缺陷轮次不变 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgjI) |
 | FR-007 | 人员数量与技能配置 | v0.3+CR-DEC02-03-20261029 | CR-DEC02-03-20261029 | In progress | P10固定42a35d07：S 10 PASS、H 9 PASS/1 PARTIAL；Test1 H-P08/10已核，Test2 H-P04待用户裁决 | 固定42a35d07：S-P01..10 PASS；H-P01/02/03/05/06/07/08/09/10 PASS，H-P04 PARTIAL；0新产品FAIL，整卡NOT_READY | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgjs) |
 | FR-008 | 工作日历与停机配置 | v0.3 |  | Done | 原卡已完成；按历史验收范围 | 原卡Done，保留原通过记录；不推定完整业务UAT通过 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgk0) |
 | FR-009 | 订单与需求数据 | v0.3 |  | Done | 原卡已完成；按历史验收范围 | 原卡Done，保留原通过记录；不推定完整业务UAT通过 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHglg) |
