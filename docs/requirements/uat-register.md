@@ -1,6 +1,6 @@
 # UAT场景及负责人清单
 
-全部UAT准备、测试和确认主责：**QA**。APS-QA主责UAT准备、测试、确认；用户配合。APS-PM在相应UAT依赖任务完成后调度QA并维护记录；APS-Dev承担开发和任务级自测，APS-Test/APS-Test2暂停新任务。职责调整不等于UAT已执行或通过。
+全部UAT准备、测试和确认主责：**QA**。APS-QA主责UAT准备、测试、确认；用户配合。APS-PM在相应UAT依赖任务完成后调度QA并维护记录；APS-Dev承担开发和任务级自测，APS-Test同担开发与任务级自测；APS-Test2暂停新任务。职责调整不等于UAT已执行或通过。
 
 授权原话：“UAT准备、测试、确认都是QA作为主责，UAT确认用户作为配合角色；QA在相应UAT依赖的任务完成后，由PM发起调度。”。责任分工源：[uat-ownership.json](uat-ownership.json)；原始场景仍以v0.3基线为准。
 
