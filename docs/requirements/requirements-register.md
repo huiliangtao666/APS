@@ -1,6 +1,6 @@
 # 当前需求跟踪表
 
-快照：2026-10-30T10:42:10+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
+快照：2026-10-30T11:01:45+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
 
 | 编号 | 名称 | 要求版本 | 生效CR | 原卡状态 | 当前环节 | 验收结论 | 原卡 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -16,7 +16,7 @@
 | FR-010 | 库存批次与模拟质量状态 | v0.3+CR-DEC04-05-06-20261029 | CR-DEC04-05-06-20261029 | In review | B01质量默认映射待批准，B02全局预占扣减需新CR；既有数量守恒义务保留 | B01质量默认映射待批准，B02全局预占扣减需新CR；既有数量守恒义务保留；旧PASS留原SHA；整卡NOT_READY | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgm8) |
 | FR-011 | 预计到料与可用时间 | v0.3+CR-DEC04-05-06-20261029 | CR-DEC04-05-06-20261029 | Done | CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgn8) |
 | FR-012 | 在制品与模拟进度 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | FR012本卡两原条款及AC12/21/32责任18/18 PASS；旧PASS按原SHA证据经影响分析承接，新三状态页面/API/Worker补证；产品修复轮次0。FR026恢复、原UAT15业务批准、真实平台及QA UAT单列未完成 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgp0) |
-| FR-013 | 各类CSV模拟数据导入 | v0.3+CR-FR013-VALIDATION-20261029 | CR-FR013-VALIDATION-20261029 | In progress | FR013-NONDEVICE-REF-01首轮修复e7881a9独立43 PASS/0 FAIL，缺陷关闭；完整原输入及其余映射仍待契约与实现 | 首轮修复e7881a9独立43 PASS，缺陷关闭1/最多2；FR013整卡NOT_READY | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgrg) |
+| FR-013 | 各类CSV模拟数据导入 | v0.3+CR-FR013-VALIDATION-20261029 | CR-FR013-VALIDATION-20261029 | In progress | 原07/08两项校验缺陷首轮修复独立PASS并关闭；FR013其余范围继续 | 本轮38独立组+21回归PASS；原两项缺陷修复1/2关闭；FR013整卡NOT_READY | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgrg) |
 | FR-014 | 各类模拟数据查询 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | FR-014当前适用责任51/51PASS；原01唯一PARTIAL在新SHA独立PASS，其他旧PASS留原SHA；后续未提供类别/QA UAT另列 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgs4) |
 | FR-015 | 各类模拟数据编辑 | v0.3 |  | Done | 本卡适用需求已独立验收；历史复核与证据见原卡 | FR-015当前适用责任109/109PASS；原01唯一PARTIAL在新SHA独立PASS，其他旧PASS留原SHA；后续未提供类别/QA UAT另列 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgto) |
 | FR-016 | 数据检查与问题处理 | v0.3 |  | In progress | 新c952768早期SOURCE E01–E14独立14 PASS/0 FAIL；U2固定723fea51失败预检独立核查无可重开目标 | 早期SOURCE本切片独立PASS，旧P29首轮PASS留原SHA；整卡NOT_READY | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgu4) |
