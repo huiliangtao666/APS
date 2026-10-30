@@ -1,28 +1,30 @@
 import {originalResourceDefs} from './original-resources.mjs';
-export const resourceMappingDef={key:'resourceMappings',label:'原05/06 显式运行映射',file:'31_原05与06运行映射.csv',fields:['配置编号','配置版本','合同版本','状态','来源类别','来源编号','源记录JSON','运行编号','运行记录JSON','别名','映射模式','源类型','共享范围原文','适用产线','范围模式','容量单位','时间单位','释放策略','配置依据']};
-export const mappingOptions={'合同版本':['FR013-resource-map-v1'],'状态':['NOT_READY_CONFIG','READY'],'来源类别':['originalTools','originalPersonnel'],'映射模式':['DIRECT_IDENTITY'],'范围模式':['全局唯一池'],'容量单位':['套','人'],'时间单位':['分钟'],'释放策略':['半开端点释放']};
+export const resourceMappingDef={key:'resourceMappings',label:'原05/06 显式运行映射',file:'31_原05与06运行映射.csv',fields:['配置编号','配置版本','合同版本','状态','来源类别','来源编号','源记录JSON','运行编号','运行记录JSON','别名','映射模式','源类型','共享范围原文','适用产线','范围模式','容量单位','时间单位','释放策略','配置依据','字段权威JSON']};
+export const mappingOptions={'合同版本':['FR013-resource-map-v1','FR013-resource-map-v2'],'状态':['NOT_READY_CONFIG','READY'],'来源类别':['originalTools','originalPersonnel'],'映射模式':['DIRECT_IDENTITY','EXPLICIT_SAME_ENTITY'],'范围模式':['全局唯一池'],'容量单位':['套','人'],'时间单位':['分钟'],'释放策略':['半开端点释放']};
 const positive=v=>typeof v==='string'&&/^[1-9]\d*$/.test(v)&&Number.isSafeInteger(Number(v));
 const minute=v=>typeof v==='string'&&/^\d+$/.test(v.trim())&&Number.isSafeInteger(Number(v))&&Number(v)<=525600;
 export const sameRecord=(a,b)=>!!a&&!!b&&typeof a==='object'&&typeof b==='object'&&!Array.isArray(a)&&!Array.isArray(b)&&Object.keys(a).length===Object.keys(b).length&&Object.keys(a).every(k=>typeof a[k]==='string'&&a[k]===b[k]);
 const json=v=>{try{return JSON.parse(v);}catch{return null;}};
 export function mappingFingerprintInput(d){return Object.fromEntries(['originalTools','originalPersonnel','resourceMappings','tools','personnelGroups','personnelPools','resourceClaims','dependencies','skillSubstitutions','rules'].map(k=>[k,d[k]||[]]));}
 export function validateResourceMappings(d,{forRun=false}={}){
- const issues=[],seenSource=new Set(),seenTarget=new Set();
+ const issues=[],seenSource=new Set(),seenTarget=new Map();
  const add=(i,field,message)=>issues.push({code:'NOT_READY_CONFIG',table:'resourceMappings',file:resourceMappingDef.file,row:i+2,field,message});
  for(const [i,m] of (d.resourceMappings||[]).entries()){
   const fail=(f,t)=>add(i,f,t),ready=m['状态']==='READY';
   if(!['READY','NOT_READY_CONFIG'].includes(m['状态']))fail('状态','显式选择READY或NOT_READY_CONFIG');
   if(!positive(m['配置版本']))fail('配置版本','显式填写安全正整数版本；变更映射须递增');
   if(!m['配置编号']?.trim())fail('配置编号','稳定配置身份必填');
-  if(!ready){if(forRun)fail('状态','本映射待配置，禁止新运行；完成来源及运行配置后启用');continue;}
-  for(const f of resourceMappingDef.fields.filter(f=>f!=='别名'))if(!m[f]?.trim())fail(f,'启用映射须显式填写；不推定业务值');
+  if(!ready){if(m['映射模式']==='EXPLICIT_SAME_ENTITY')fail('状态','同实体配置须完整预览为READY；缺权威或冲突不能保存为启用映射');if(forRun)fail('状态','本映射待配置，禁止新运行；完成来源及运行配置后启用');continue;}
+  for(const f of resourceMappingDef.fields.filter(f=>f!=='别名'&&f!=='字段权威JSON'))if(!m[f]?.trim())fail(f,'启用映射须显式填写；不推定业务值');
   for(const [f,options] of Object.entries(mappingOptions))if(!options.includes(m[f]))fail(f,`当前仅支持 ${options.join(' / ')}；未知组合未启用`);
   const def=originalResourceDefs.find(s=>s.key===m['来源类别']);if(!def){fail('来源类别','仅支持原05/06');continue;}
   const tool=def.key==='originalTools',id=tool?'资源编号':'人员组编号',targetKey=tool?'tools':'personnelGroups',targetId=tool?'工装编码':'人员组编号';
   const sources=(d[def.key]||[]).filter(s=>s[id]===m['来源编号']),s=sources[0],targets=(d[targetKey]||[]).filter(t=>t[targetId]===m['运行编号']),t=targets[0];
   const sk=JSON.stringify([def.key,m['来源编号']]),tk=JSON.stringify([targetKey,m['运行编号']]);
   if(seenSource.has(sk))fail('来源编号','一个来源只支持一条映射；多窗口/重复身份未启用');seenSource.add(sk);
-  if(seenTarget.has(tk))fail('运行编号','多来源合并/别名共池容量公式未启用；不能重复或累加容量');seenTarget.add(tk);
+  const group=seenTarget.get(tk)||[];group.push({m,i});seenTarget.set(tk,group);
+  if(m['映射模式']==='EXPLICIT_SAME_ENTITY'&&m['合同版本']!=='FR013-resource-map-v2')fail('合同版本','多来源显式同实体须使用v2合同');
+  if(m['映射模式']==='DIRECT_IDENTITY'&&m['字段权威JSON']?.trim())fail('字段权威JSON','DIRECT_IDENTITY不采用字段权威；请显式选择同实体模式');
   if(sources.length!==1){fail('来源编号','须精确引用唯一原字段记录；不按名称匹配');continue;}
   if(!sameRecord(s,json(m['源记录JSON'])))fail('源记录JSON','原记录已变化或缺快照；重新核原文、更新映射版本，不自动采纳');
   if(targets.length!==1){fail('运行编号',`须显式配置唯一${targetKey}运行记录；不自动创建实体`);continue;}
@@ -51,6 +53,26 @@ export function validateResourceMappings(d,{forRun=false}={}){
    if(!(d.dependencies||[]).some(c=>c['资源类型']==='人员技能'&&(c['资源编号']===m['运行编号']||(c['候选人员组']||'').split(/[,，]/).map(x=>x.trim()).includes(m['运行编号']))))fail('运行编号','须配置表12显式技能/班次/人数/占用窗口；不自动生成需求');
   }
  }
+ for(const group of seenTarget.values()){
+  const multi=group.length>1;
+  for(const {m,i} of group){
+   if(multi&&m['映射模式']!=='EXPLICIT_SAME_ENTITY')add(i,'运行编号','多来源必须全部显式选择EXPLICIT_SAME_ENTITY，不自动去重或累加容量');
+   if(m['映射模式']!=='EXPLICIT_SAME_ENTITY')continue;
+   const def=originalResourceDefs.find(s=>s.key===m['来源类别']);
+   const fields=def.fields.slice(1),authority=json(m['字段权威JSON']);
+   if(!authority||typeof authority!=='object'||Array.isArray(authority)||Object.keys(authority).length!==fields.length||fields.some(f=>!Object.hasOwn(authority,f))){add(i,'字段权威JSON','须为每个原字段（来源编号除外）显式选择唯一来源配置编号及配置版本');continue;}
+   for(const field of fields){
+    const choice=authority[field];
+    const selected=choice&&typeof choice==='object'&&!Array.isArray(choice)&&Object.keys(choice).sort().join(',')==='配置版本,配置编号'&&group.filter(x=>x.m['配置编号']===choice['配置编号']&&x.m['配置版本']===choice['配置版本']);
+    if(!selected||selected.length!==1){add(i,'字段权威JSON',`${field} 权威必须引用同实体组内唯一配置及其当前版本`);continue;}
+    if(group.some(x=>{const a=json(x.m['字段权威JSON']);return !a||a[field]?.['配置编号']!==choice['配置编号']||a[field]?.['配置版本']!==choice['配置版本'];}))add(i,'字段权威JSON',`${field} 同实体全部来源必须选择相同权威及版本，无默认优先级`);
+   }
+   const sourceRows=group.map(x=>(d[def.key]||[]).find(r=>r[def.fields[0]]===x.m['来源编号'])).filter(Boolean);
+   // Distinct source identifiers/names are aliases. Operational fields must agree.
+   for(const field of fields.filter(f=>f!=='资源名称'))if(sourceRows.some(r=>r[field]!==sourceRows[0]?.[field]))add(i,'字段权威JSON',`${field} 来源冲突；权威选择不允许覆盖类型、单位、窗口、容量、人数或资格冲突`);
+   for(const field of ['来源类别','源类型','共享范围原文','适用产线','范围模式','容量单位','时间单位','释放策略','运行记录JSON'])if(group.some(x=>field==='运行记录JSON'?!sameRecord(json(x.m[field]),json(m[field])):x.m[field]!==m[field]))add(i,field,'同实体运行合同不一致；不生成第二个身份或容量');
+  }
+ }
  if(forRun)for(const def of originalResourceDefs)for(const s of d[def.key]||[]){const field=def.key==='originalTools'?'资源编号':'人员组编号';if(!(d.resourceMappings||[]).some(m=>m['状态']==='READY'&&m['来源类别']===def.key&&m['来源编号']===s[field]))add(-2,'来源编号',`${def.file} ${s[field]} 缺READY显式映射；资料不能冒充运行资源`);}
  return issues;
 }
@@ -60,5 +82,17 @@ export function resourceMappingTransition(before,after,records=[]){
   if(!(before.resourceMappings||[]).some(p=>p['配置编号']===m['配置编号'])&&historical.some(p=>Number(p['配置版本'])>=Number(m['配置版本'])))return [{code:'NOT_READY_CONFIG',table:'resourceMappings',file:resourceMappingDef.file,row:i+2,field:'配置版本',message:'重新引入配置身份须高于历史最高版本，禁止版本复用'}];
   const old=(before.resourceMappings||[]).find(p=>p['配置编号']===m['配置编号']);
   return old&&!sameRecord(old,m)&&Number(m['配置版本'])<=Number(old['配置版本'])?[{code:'NOT_READY_CONFIG',table:'resourceMappings',file:resourceMappingDef.file,row:i+2,field:'配置版本',message:'相同配置身份修改须递增版本；旧输入快照不变'}]:[];
+ });
+}
+
+// Validated identities carry the selected literal and record position into each new run.
+// Runtime capacities remain the single explicitly configured target record.
+export function freezeResourceEntities(d){
+ const groups=new Map();
+ for(const m of d.resourceMappings||[]){const key=JSON.stringify([m['来源类别'],m['运行编号']]);groups.set(key,[...(groups.get(key)||[]),m]);}
+ return [...groups.values()].map(group=>{
+  const m=group[0],def=originalResourceDefs.find(x=>x.key===m['来源类别']);
+  const authorities=m['映射模式']==='EXPLICIT_SAME_ENTITY'?json(m['字段权威JSON']):null;
+  return {sourceType:m['来源类别'],runtimeId:m['运行编号'],runtimeRecord:json(m['运行记录JSON']),sources:group.map(g=>({configurationId:g['配置编号'],version:g['配置版本'],sourceId:g['来源编号'],recordRow:(d[def.key]||[]).findIndex(r=>r[def.fields[0]]===g['来源编号'])+2})),fields:authorities?Object.fromEntries(def.fields.slice(1).map(field=>{const c=authorities[field],selected=group.find(g=>g['配置编号']===c['配置编号']);return [field,{configurationId:c['配置编号'],version:c['配置版本'],value:json(selected['源记录JSON'])[field]}];})):null};
  });
 }

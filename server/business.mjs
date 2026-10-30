@@ -104,14 +104,15 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const before=target.data;const fromVersion=preserve(s,target);
     target.data=proposed;target.revision++;const toVersion=preserve(s,target);
     const batchId=randomUUID();
-    for(const key of changes)record(s,req,operation||'edit',key,{before:before[key],after:proposed[key],fromVersion,toVersion,batchId,trialId:trialId||null});
+    for(const key of changes)record(s,req,operation||'edit',key,{before:before[key],after:proposed[key],fromVersion,toVersion,batchId,trialId:trialId||null,...(req.csvEvidence?.[key]?{csvSource:req.csvEvidence[key]}:{})});
     write(s);res.json({data:target.data,revision:target.revision,inputVersionId:toVersion});
   }
   // Preview and commit pass through exactly the same transition/history/validation gates.
   function checkCsv(req,s,inspection,dryRun){
     const result={status:200,body:null};
     const response={status(code){result.status=code;return this;},json(body){result.body=body;return this;}};
-    saveInputs(req,response,inspection.tables,undefined,dryRun);
+    const csvEvidence=Object.fromEntries(Object.entries(inspection.sources).filter(([key])=>['originalTools','originalPersonnel','resourceMappings'].includes(key)).map(([key,source])=>{const raw=req.body.files?.find(f=>f.name===source.file);return [key,{...source,...(raw?{text:raw.text,sha256:createHash('sha256').update(raw.text).digest('hex')}:{})}];}));
+    saveInputs({...req,csvEvidence},response,inspection.tables,undefined,dryRun);
     if(result.body?.issues)result.body.issues=physicalIssues(result.body.issues,inspection.sources,defs);
     return result;
   }
@@ -140,7 +141,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const inspection=p.table?inspectSingleCsv(p.files[0],defs.find(d=>d.key===p.table)):inspectCsvBatch(p.files,defs);
     if(p.table==='simulationEvents')inspection.tables.executionFacts=s.data.executionFacts||[];
     if(inspection.issues.length)return res.status(400).json({error:'invalid_input',issues:inspection.issues});
-    const checked=checkCsv({...req,body:{reason:req.body.reason,revision:p.revision,operation:'import'}},s,inspection,false);
+    const checked=checkCsv({...req,body:{reason:req.body.reason,revision:p.revision,operation:'import',files:p.files}},s,inspection,false);
     if(checked.status===200)csvPreviews.delete(req.body.previewId);
     res.status(checked.status).json(checked.body);
   });
