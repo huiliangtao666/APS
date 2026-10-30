@@ -44,3 +44,9 @@ test('FR028 UI exposes changed conditions and honest unknown/improved order outc
  const ui=Renderer.create(<TrialPanel {...base} api={withPositions(async()=>report)}/>);act(()=>ui.root.findByProps({'aria-label':'比较对象'}).props.onChange({target:{value:'new'}}));await act(async()=>button(ui,'比较当前方案与所选方案').props.onClick());const text=JSON.stringify(ui.toJSON());for(const x of ['T1','找到的附条件可交付时间提前','可交付未知，无法判断改善','可用数量','-120'])assert.ok(text.includes(x));
  act(()=>ui.update(<TrialPanel {...base} canWrite={false}/>));act(()=>ui.root.findByProps({'aria-label':'独立试算'}).props.onChange({target:{value:'trial'}}));assert.equal(button(ui,'保留最近重算结果（独立快照）').props.disabled,true);
 });
+test('FR026 restore UI requires preview then saves new draft and refreshes persisted result',async()=>{
+ const calls:any[]=[],results:string[]=[];let refreshed=0;
+ const ui=Renderer.create(<TrialPanel {...base} api={withPositions(async(path,body)=>{calls.push([path,body]);return path.endsWith('/check')?{id:'preview',message:'当前累计耗料已核对',provenance:{currentProgressVersion:'facts'},comparison:{tasks:[]}}:{plan:{id:'restored'},message:'已保存新草稿，确认保留'};})} refresh={async()=>{refreshed++;}} onResult={id=>results.push(id)}/>);
+ await act(async()=>button(ui,'检查能否恢复当前历史方案').props.onClick());assert.equal(calls.length,1);assert.ok(JSON.stringify(ui.toJSON()).includes('当前累计耗料已核对'));
+ await act(async()=>button(ui,'保存恢复结果为新草稿').props.onClick());assert.deepEqual(calls,[['/plans/original/restore/check',{revision:7}],['/plans/original/restore',{revision:7,previewId:'preview'}]]);assert.equal(refreshed,1);assert.deepEqual(results,['restored']);assert.ok(JSON.stringify(ui.toJSON()).includes('已保存新草稿'));
+});
