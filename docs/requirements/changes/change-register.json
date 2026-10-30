@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "P10 fixed42a35d07 independent S 10 PASS; H-P01/02/03/05/06/07/09 PASS, H-P04/08/10 PARTIAL pending closure; this R2 zero product FAIL, +0 repair. Full FR007/022/CR and UAT NOT_READY.",
+      "acceptance_result": "P10 fixed42a35d07 independent S-P01..10 PASS; H-P01/02/03/05/06/07/08/09/10 PASS, H-P04 PARTIAL pending personnel outside-task early/late rule; 0 new product FAIL, +0 repair. Full FR007/022/CR and UAT NOT_READY.",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -162,6 +162,12 @@
           "event_key": "issue3:p10:h-p04-p06:test2:42a35d07ce29ec073d43bb8adb6083328a9d16dc:r2",
           "event": "Test2 fixed42a35d07 H-P06 independent PASS, H-P04 PARTIAL; personnel outside-task early/late formula referred to user; 0 established product FAIL, +0 repair; full CR NOT_READY",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6518692456"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "issue3:p10:h-p08-p10:test1:42a35d07ce29ec073d43bb8adb6083328a9d16dc:r2",
+          "event": "Test1 fixed42a35d07 H-P08/H-P10 independent PASS; H-P04 remains PARTIAL pending personnel outside-task early/late rule; 0 product FAIL, +0 repair; full CR NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6518756849"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
