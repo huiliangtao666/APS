@@ -4,6 +4,15 @@ export const mappingOptions={'合同版本':['FR013-resource-map-v1','FR013-reso
 const positive=v=>typeof v==='string'&&/^[1-9]\d*$/.test(v)&&Number.isSafeInteger(Number(v));
 const minute=v=>typeof v==='string'&&/^\d+$/.test(v.trim())&&Number.isSafeInteger(Number(v))&&Number(v)<=525600;
 export const sameRecord=(a,b)=>!!a&&!!b&&typeof a==='object'&&typeof b==='object'&&!Array.isArray(a)&&!Array.isArray(b)&&Object.keys(a).length===Object.keys(b).length&&Object.keys(a).every(k=>typeof a[k]==='string'&&a[k]===b[k]);
+// The optional v2 authority column was absent from persisted v1 records.
+// Only its absence and the CSV parser's empty string are equivalent; keep all
+// other fields, nonempty authority and non-v1 contracts strictly compared.
+export function sameResourceMapping(a,b){
+ if(sameRecord(a,b))return true;
+ if(a?.['合同版本']!=='FR013-resource-map-v1'||b?.['合同版本']!=='FR013-resource-map-v1'||a?.['映射模式']!=='DIRECT_IDENTITY'||b?.['映射模式']!=='DIRECT_IDENTITY')return false;
+ const withOptional=r=>Object.hasOwn(r,'字段权威JSON')?r:{...r,'字段权威JSON':''};
+ return sameRecord(withOptional(a),withOptional(b));
+}
 const json=v=>{try{return JSON.parse(v);}catch{return null;}};
 export function mappingFingerprintInput(d){return Object.fromEntries(['originalTools','originalPersonnel','resourceMappings','tools','personnelGroups','personnelPools','resourceClaims','dependencies','skillSubstitutions','rules'].map(k=>[k,d[k]||[]]));}
 export function validateResourceMappings(d,{forRun=false}={}){
@@ -81,7 +90,7 @@ export function resourceMappingTransition(before,after,records=[]){
   const historical=records.filter(r=>r.target==='resourceMappings').flatMap(r=>[...(r.before||[]),...(r.after||[])]).filter(p=>p['配置编号']===m['配置编号']);
   if(!(before.resourceMappings||[]).some(p=>p['配置编号']===m['配置编号'])&&historical.some(p=>Number(p['配置版本'])>=Number(m['配置版本'])))return [{code:'NOT_READY_CONFIG',table:'resourceMappings',file:resourceMappingDef.file,row:i+2,field:'配置版本',message:'重新引入配置身份须高于历史最高版本，禁止版本复用'}];
   const old=(before.resourceMappings||[]).find(p=>p['配置编号']===m['配置编号']);
-  return old&&!sameRecord(old,m)&&Number(m['配置版本'])<=Number(old['配置版本'])?[{code:'NOT_READY_CONFIG',table:'resourceMappings',file:resourceMappingDef.file,row:i+2,field:'配置版本',message:'相同配置身份修改须递增版本；旧输入快照不变'}]:[];
+  return old&&!sameResourceMapping(old,m)&&Number(m['配置版本'])<=Number(old['配置版本'])?[{code:'NOT_READY_CONFIG',table:'resourceMappings',file:resourceMappingDef.file,row:i+2,field:'配置版本',message:'相同配置身份修改须递增版本；旧输入快照不变'}]:[];
  });
 }
 

@@ -1,4 +1,4 @@
-import {resourceMappingTransition} from '../src/lib/resource-mapping.mjs';
+import {resourceMappingTransition,sameResourceMapping} from '../src/lib/resource-mapping.mjs';
 import {verifyResourcePolicies} from '../src/lib/verify-resource-policies.mjs';
 import {poolTransitionIssues} from '../src/lib/physical-pools.mjs';
 import {inspectSingleCsv} from './csv-single.mjs';
@@ -98,6 +98,12 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(operation==='restore')return res.status(409).json({error:'restore_blocked',...restoreBlockers(s,null)});
     // A missing original confirmed snapshot cannot be reconstructed from today's data.
     if(s.plans.some(p=>['confirmed','released','archived'].includes(p.status)&&!inputs(s,p)))return res.status(409).json({error:'protected_history_unavailable'});
+    // Preserve the persisted representation of unchanged mapping rows. Adding
+    // an empty optional column to old v1 data must not create a write/version.
+    if(Array.isArray(proposed.resourceMappings))proposed.resourceMappings=proposed.resourceMappings.map(m=>{
+      const old=(target.data.resourceMappings||[]).find(r=>r['配置编号']===m['配置编号']);
+      return sameResourceMapping(old,m)?old:m;
+    });
     if(dryRun)return res.json({valid:true,revision:target.revision});
     const changes=defs.map(d=>d.key).filter(key=>JSON.stringify(target.data[key])!==JSON.stringify(proposed[key]));
     if(!changes.length)return res.json({data:target.data,revision:target.revision,unchanged:true});
