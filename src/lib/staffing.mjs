@@ -1,3 +1,4 @@
+import {poolCapacityAt,poolPolicyPoints,validatePhysicalPools} from './physical-pools.mjs';
 import {allowedWindows} from './working-windows.mjs';
 import {skillMatch,personnelCandidates} from './resource-policies.mjs';
 // Merge repeated/overlapping windows of the same role by maximum headcount.
@@ -25,6 +26,8 @@ export function personnelWindows(requirements,start,end){
 // Bounded integer distribution search over complete participation windows. No
 // mutation of caller reservations; rejected branches never become resource use.
 export function allocatePersonnel(requirements,groups,start,end,reservations=[],substitutions=[],pools=[],windowContext){
+ if(pools.length){const issues=validatePhysicalPools({personnelPools:pools,personnelGroups:groups,dependencies:requirements},{forRun:false});if(issues.length)return {ok:false,reason:issues.map(i=>`${i.file}:${i.row}:${i.field} ${i.message}`).join('；')};}
+ requirements=effectivePersonnelRequirements(requirements,groups,pools);
  let windows;try{windows=personnelWindows(requirements,start,end);}catch(e){return {ok:false,reason:e.message};}
  const allocations=[];let steps=0,limited=false;
  const limit=50000;
@@ -32,7 +35,7 @@ export function allocatePersonnel(requirements,groups,start,end,reservations=[],
  const jobs=windows.map(w=>({...w,candidates:groups.filter(g=>personnelCandidates(w.r).includes(g['人员组编号'])&&Number.isSafeInteger(Number(g['人员数量']))&&Number(g['人员数量'])>0&&(!w.r['所需班次']||g['班次']===w.r['所需班次'])&&Number(g['可用起始分钟'])<=w.start&&Number(g['可用结束分钟'])>=w.end&&(!windowContext||allowedWindows(windowContext.data,windowContext.calendarId,'人员',g['人员组编号'],Number(g['可用起始分钟']),Number(g['可用结束分钟'])).some(([a,b])=>a<=w.start&&w.end<=b))&&skillMatch(g,w.r['所需技能'],w.r['工序编号'],substitutions)).sort((a,b)=>a['人员组编号'].localeCompare(b['人员组编号']))})).sort((a,b)=>a.candidates.length-b.candidates.length||a.demandKey.localeCompare(b.demandKey)||a.start-b.start);
  if(jobs.length>256)return {ok:false,reason:'人员候选搜索边界：超过256个参与窗口；本次未找到分配，不代表数学不可行',searchStatus:'limit'};
  const poolMode=pools.length>0||groups.some(g=>g.poolId?.trim());
- if(poolMode&&groups.some(g=>!g.poolId||!pools.some(p=>p.poolId===g.poolId&&p['是否启用']==='是'&&p['允许共用']==='是'&&Number.isSafeInteger(Number(p['总人数']))&&Number(p['总人数'])>0)))return {ok:false,reason:'P10待配置：显式poolId、已启用共享池与有限总人数缺失；不采用关闭或交接候选语义'};
+ if(poolMode&&groups.some(g=>!g.poolId||!pools.some(p=>p.poolId===g.poolId&&p['是否启用']==='是'&&['是','否'].includes(p['允许共用'])&&Number.isSafeInteger(Number(p['总人数']))&&Number(p['总人数'])>0)))return {ok:false,reason:'P10待配置：显式poolId、已启用策略池与有限总人数缺失'};
  function available(g,w){
   const used=[...reservations,...allocations].filter(r=>r.groupId===g['人员组编号']&&r.start<w.end&&r.end>w.start);
   const points=[w.start,...used.map(r=>r.start).filter(t=>t>=w.start&&t<w.end)];
@@ -41,9 +44,13 @@ export function allocatePersonnel(requirements,groups,start,end,reservations=[],
   const pool=pools.find(p=>p.poolId===g.poolId);
   // Derive identity from the frozen group table, never from reservation labels.
   const same=[...reservations,...allocations].filter(r=>groups.find(x=>x['人员组编号']===r.groupId)?.poolId===g.poolId&&r.start<w.end&&r.end>w.start);
-  const boundaries=[w.start,...same.map(r=>r.start).filter(t=>t>=w.start&&t<w.end)];
-  const peak=Math.max(0,...boundaries.map(t=>same.filter(r=>r.start<=t&&r.end>t).reduce((s,r)=>s+r.count,0)));
-  return Math.max(0,Math.min(groupFree,Number(pool['总人数'])-peak));
+  if(pool['允许共用']==='否'){
+   if(pool['互斥粒度']==='人员组互斥'&&same.some(r=>r.groupId!==g['人员组编号']))return 0;
+   if(pool['互斥粒度']==='工序互斥'&&reservations.some(r=>groups.find(x=>x['人员组编号']===r.groupId)?.poolId===g.poolId&&r.start<w.end&&r.end>w.start))return 0;
+  }
+  const boundaries=[w.start,...same.map(r=>r.start),...poolPolicyPoints(pool)].filter(t=>t>=w.start&&t<w.end);
+  const free=Math.min(...boundaries.map(t=>poolCapacityAt(pool,t)-same.filter(r=>r.start<=t&&r.end>t).reduce((s,r)=>s+r.count,0)));
+  return Math.max(0,Math.min(groupFree,free));
  }
  function search(index){
   if(++steps>limit){limited=true;return false;}if(index===jobs.length){
@@ -67,7 +74,7 @@ export function allocatePersonnel(requirements,groups,start,end,reservations=[],
    const g=w.candidates[c],max=Math.min(remaining,available(g,w));
    const rest=w.candidates.slice(c+1).reduce((sum,g)=>sum+available(g,w),0),min=Math.max(0,remaining-rest);
    for(let n=max;n>=min;n--){
-    if(n){const match=skillMatch(g,w.r['所需技能'],w.r['工序编号'],substitutions);allocations.push({demandKey:w.demandKey,postId:w.r['人员岗位编号']?.trim()||'',roleSource:w.r['__policyRoleSource']||w.r['订单编号'],groupId:g['人员组编号'],...(poolMode?{poolId:g.poolId}:{}),count:n,start:w.start,end:w.end,...match,reason:`${match.reason}；岗位 ${w.r['人员岗位编号']?.trim()||'旧配置未编号'}；显式候选 ${personnelCandidates(w.r).join('、')}；${w.r['窗口外释放']==='否'?'窗口外保留，全工序占用':'窗口外释放'}；同池统一扣人数`});}
+    if(n){const match=skillMatch(g,w.r['所需技能'],w.r['工序编号'],substitutions);allocations.push({demandKey:w.demandKey,postId:w.r['人员岗位编号']?.trim()||'',roleSource:w.r['__policyRoleSource']||w.r['订单编号'],groupId:g['人员组编号'],...(poolMode?{poolId:g.poolId}:{}),count:n,start:w.start,end:w.end,...match,reason:`${match.reason}；岗位 ${w.r['人员岗位编号']?.trim()||'旧配置未编号'}；显式候选 ${personnelCandidates(w.r).join('、')}；${w.r['窗口外释放']==='否'?'窗口外保留，全工序占用':'窗口外释放'}；同池统一扣人数；${pools.find(p=>p.poolId===g.poolId)?.['互斥粒度']||'旧组契约'}；${pools.find(p=>p.poolId===g.poolId)?.['交接模式']||'旧组契约'}`});}
     if(distribute(c+1,remaining-n))return true;
     if(n)allocations.pop();if(limited)return false;
    }
@@ -78,6 +85,7 @@ export function allocatePersonnel(requirements,groups,start,end,reservations=[],
  let found;try{found=search(0);}catch(e){if(!(e instanceof RangeError))throw e;limited=true;}
  const shortage=[];
  const future=windowContext?windows.flatMap(w=>groups.filter(g=>personnelCandidates(w.r).includes(g['人员组编号'])).flatMap(g=>allowedWindows(windowContext.data,windowContext.calendarId,'人员',g['人员组编号'],Number(g['可用起始分钟']),Number(g['可用结束分钟'])).filter(([a,b])=>b-a>=w.end-w.start).map(([a])=>a-(w.start-start)))).filter(t=>t>start):[];
+ future.push(...windows.flatMap(w=>pools.flatMap(poolPolicyPoints).map(t=>t-(w.start-start))).filter(t=>t>start));
  const nextStart=future.length?Math.min(...future):undefined;
  for(const p of pools){
   const fixed=jobs.filter(w=>w.candidates.length&&w.candidates.every(g=>g.poolId===p.poolId));
@@ -98,5 +106,7 @@ export function allocatePersonnel(requirements,groups,start,end,reservations=[],
  }
  const availability=windowContext?jobs.filter(w=>!w.candidates.length).slice(0,8).map(w=>`岗位 ${w.r['人员岗位编号']||'未编号'} 要求 ${w.r['所需技能']||'未填技能'}/${w.r['所需班次']||'未限定班次'} [${w.start},${w.end})；`+groups.filter(g=>personnelCandidates(w.r).includes(g['人员组编号'])).map(g=>`${g['人员组编号']} 技能 ${g['技能']} 班次 ${g['班次']||'未填'} 可用整窗 ${JSON.stringify(allowedWindows(windowContext.data,windowContext.calendarId,'人员',g['人员组编号'],Number(g['可用起始分钟']),Number(g['可用结束分钟'])))} 停用 ${JSON.stringify((windowContext.data.resourceStops||[]).filter(r=>r['资源类型']==='人员'&&r['资源编号']===g['人员组编号']))}`).join('；')).join('；'):'';
  if(found)return {ok:true,allocations,searchStatus:'found',searchSteps:steps};
- return {ok:false,nextStart,searchStatus:limited?'limit':'exhausted',searchSteps:steps,reason:limited?'人员候选搜索边界：达到50000步或运行时递归边界；本次未找到分配，不代表数学不可行':`人员显式候选在单个继承工厂工作窗口（扣除人员停用例外）及当前参与窗口、班次、技能和已有占用下无足够可用人数；组资格上限与物理池唯一总人数同时限制；${pools.map(p=>`池 ${p.poolId} 总人数 ${p['总人数']}`).join('、')}；${shortage.join('；')}；${availability}；有限整窗分配未找到解，不代表其他排程时点不可行`};
+ return {ok:false,nextStart,searchStatus:limited?'limit':'exhausted',searchSteps:steps,reason:limited?'人员候选搜索边界：达到50000步或运行时递归边界；本次未找到分配，不代表数学不可行':`人员显式候选在单个继承工厂工作窗口（扣除人员停用例外）及当前参与窗口、班次、技能和已有占用下无足够可用人数；组资格上限与物理池唯一总人数同时限制；${pools.map(p=>`池 ${p.poolId} 总人数 ${p['总人数']}；${p['互斥粒度']||'旧契约'}；${p['交接模式']||'旧契约'} [${p['交接起始分钟']||'-'},${p['交接结束分钟']||'-'}) 上限 ${p['交接容量人数']||'-'} 人；${p['占用策略']||'依赖声明'}`).join('、')}；${shortage.join('；')}；${availability}；有限整窗分配未找到解，不代表其他排程时点不可行`};
 }
+
+export function effectivePersonnelRequirements(requirements,groups,pools){return requirements.map(r=>{const ids=personnelCandidates(r),p=pools.find(p=>groups.some(g=>ids.includes(g['人员组编号'])&&g.poolId===p.poolId));return p?.['占用策略']==='全工序保留'?{...r,'窗口外释放':'否'}:r;});}

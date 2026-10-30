@@ -5,3 +5,7 @@ export function originalIssues(data:any,options?:{forRun?:boolean}):any[];
 export function originalTransition(before:any,after:any):any[];
 export function originalProtection(data:any):any[];
 export function originalSchedulingReservations(data:any):{resources:any[];people:any[]};
+export const originalResourceDefs:{key:string;label:string;file:string;fields:string[]}[];
+export const originalResourceKeys:string[];
+export const originalResourceNote:string;
+export function validateOriginalResources(data:Record<string,Record<string,string>[]>):{table:string;file:string;row:number;field:string;message:string}[];

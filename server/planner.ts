@@ -2,6 +2,8 @@ import {inheritedCalendarId} from '../src/lib/factory-lines.mjs';
 import {attachProblemRecords,sourceRefs} from '../src/lib/problem-records.mjs';
 import {originalProtection,originalSchedulingReservations} from '../src/lib/original-resources.mjs';
 import {allowedWindows} from '../src/lib/working-windows.mjs';
+import {resourceMappingDef} from '../src/lib/resource-mapping.mjs';
+import {originalResourceDefs} from '../src/lib/original-resources.mjs';
 import {eventSummary,eventAbsences,validateEvents} from '../src/lib/simulation-events.mjs';
 import {factFor,executionSummary,executionAdmission,validateExecution,executionRisks} from '../src/lib/execution-facts.mjs';
 import {remainingExecutionDemand} from '../src/lib/material-allocation.mjs';
@@ -20,7 +22,7 @@ import { validateExpectedSupply, resolveExpectedSupply, supplyEarliestMinute, bu
 import { queryInventoryAvailability, validateInventoryBatches } from '../src/lib/inventory.mjs';
 import { findDowntimeShiftReason } from '../src/lib/downtime-shift-reason.mjs';
 import { appendOrderChange, isOrderSchedulable, validateOrders, type OrderChange } from '../src/lib/orders.mjs';
-import { allocatePersonnel, type PersonnelReservation } from '../src/lib/staffing.mjs';
+import { effectivePersonnelRequirements, allocatePersonnel, type PersonnelReservation } from '../src/lib/staffing.mjs';
 import { validateBomConfig } from '../src/lib/bom-config.mjs';
 
 type Row = Record<string, string>;
@@ -58,12 +60,16 @@ export const defs: TableDef[] = [
   { key: 'downtime', label: '设备停机例外', file: '04_设备停机与例外日历.csv', fields: ['设备编号','起始分钟','结束分钟','原因'] },
   { key: 'dependencies', label: '工序资源依赖', file: '12_工序资源与物料依赖.csv', fields: ['订单编号','工序编号','资源类型','资源编号','需求数量','提前占用分钟','后延占用分钟','所需技能','所需班次','候选人员组','人员岗位编号','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'] },
   { key: 'skillSubstitutions', label: '有向技能替代', file: '29_有向技能替代.csv', fields: ['关系编号','可提供技能','所需技能','是否启用','适用工序','说明'] },
-  { key: 'personnelPools', label: '物理人员池（P10核心）', file: '30_物理人员池.csv', fields: ['poolId','池名称','总人数','是否启用','允许共用','容量来源','适用范围','生效时间','交接设置'] },
+  { key: 'personnelPools', label: '物理人员池（P10核心）', file: '30_物理人员池.csv', fields: ['poolId','池名称','总人数','是否启用','允许共用','容量来源','适用范围','生效时间','交接设置','策略版本','策略来源','互斥粒度','交接模式','交接起始分钟','交接结束分钟','交接容量人数','占用策略','释放策略'] },
   { key: 'personnelGroups', label: '人员组与可用时间', file: '19_人员组与可用时间.csv', fields: ['人员组编号','人员组名称','人员数量','技能','班次','可用起始分钟','可用结束分钟','poolId'] },
   { key: 'rules', label: '排程规则', file: '16_排程规则配置.csv', fields: ['规则编号','中文名称','是否启用','参数JSON','适用对象','生效时间'] },
+  ...originalResourceDefs,
+  resourceMappingDef,
 ];
 export const seed: Record<string, Row[]> = {
-  originalResourceEvents: [], simulationEvents: [], executionFacts: [], executionMaterials: [], executionSources: [],
+  resourceMappings: [], originalResourceEvents: [],
+  originalTools: [], originalPersonnel: [],
+  simulationEvents: [], executionFacts: [], executionMaterials: [], executionSources: [],
   products: [
     {'产品编号':'HC40','产品名称':'模拟火腿肠40g','单支净重kg':'0.04','每袋支数':'10','总收率':'0.96','模拟交付等待分钟':'0'},
     {'产品编号':'HC60','产品名称':'模拟火腿肠60g','单支净重kg':'0.06','每袋支数':'10','总收率':'0.96','模拟交付等待分钟':'0'},
@@ -247,7 +253,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
         const members=batches?batches.byId.get(oid).members:[{orderId:oid}];
         const windowContext=(conditions as any).workingWindowsContract==='P06-windows-v1'?{data:sourceData,calendarId}:undefined;
         const claims=minimal?[]:claimsFor(sourceData,members,operation,flags).map(c=>windowContext&&c.type==='工装'?{...c,allowedWindows:allowedWindows(sourceData,calendarId,c.type,c.resourceId,c.availableFrom,c.availableUntil)}:c);
-        const personnelRequirements=minimal?[]:(data.dependencies||[]).filter(d=>d['订单编号']===oid&&d['工序编号']===operation&&d['资源类型']==='人员技能');
+        const personnelRequirements=minimal?[]:effectivePersonnelRequirements((data.dependencies||[]).filter(d=>d['订单编号']===oid&&d['工序编号']===operation&&d['资源类型']==='人员技能'),data.personnelGroups||[],sourceData.personnelPools||[]);
         let jointPreview:ReturnType<typeof previewResources>={ok:true,allocations:[]};
         let personnel:ReturnType<typeof allocatePersonnel>={ok:true,allocations:[]};
         let readyMinute:number|null=null;let attemptCount=0;const attemptOffset=jointAttempts.length;
@@ -305,7 +311,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
         const taskId=`${oid}-${operation}`;
         resourceReservations.push(...(jointPreview.allocations||[]).map(r=>({...r,taskId})),...(personnel.allocations||[]).map(r=>({...r,type:'人员',resourceId:r.groupId,quantity:String(r.count),unit:'人',start:r.start,end:r.end,taskId})),{type:'设备',resourceId:machineId,quantity:'1',unit:'台',start,end:start+duration,taskId});
         personnelReservations.push(...(personnel.allocations||[]));
-        const participation=personnelRequirements.filter(r=>Number(r['需求数量']||0)>0).map(r=>`岗位 ${r['人员岗位编号']||'旧配置未编号'} · ${r['人员参与阶段']||'全工序'} ${r['人员开始偏移']||0}–${duration-Number(r['人员结束偏移']||0)} 分钟`).join('、');
+        const participation=personnelRequirements.filter(r=>Number(r['需求数量']||0)>0).map(r=>`岗位 ${r['人员岗位编号']||'旧配置未编号'} · ${r['人员参与阶段']||'全工序'} ${r['窗口外释放']==='否'?`全工序保留 0–${duration}`:`${r['人员开始偏移']||0}–${duration-Number(r['人员结束偏移']||0)}`} 分钟`).join('、');
         const task:Task={timingReasons,id:`${oid}-${operation}`,orderId:oid,productId:product,operation,label:op['工序名称']||operation,machine:machineId,start,end:start+duration,duration,predecessor:predecessor?.id||'',source:minimal?'R1 最小模式 · 订单17 · 路线10 · 固定工时11 · 给定机器12 · 机器连续可用；日历/人员/工装/物料未检查':`${fact?'模拟剩余工作 '+fact['事实编号']+'（非合格入库） · ':''}订单17 · 路线10 · 工时11 · 设备依赖12 · 工厂日历02 · 设备停机04${personnelRequirements.length?` · 人员阶段：${participation}`:''}${calendarShift?` · ${calendarShift}`:''}${start>initialEarliest&&resourceError?` · 联合资源顺延：${resourceError}`:''}${start>initialEarliest&&personnelError?` · 人员顺延：${personnelError}`:''}`};built.push(task);done.set(operation,task);busy.push(task);machineBusy.set(machineId,busy);
       }
     }

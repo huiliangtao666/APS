@@ -1,0 +1,22 @@
+import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {pathToFileURL} from 'node:url';
+import {fixture} from './fr027-fixture.mjs';
+import {calculate} from '../server/planner.ts';import {freezeRunInput} from '../server/run-input.mjs';import {verifyResourcePolicies} from '../src/lib/verify-resource-policies.mjs';
+const root=process.env.P10_PARENT_ROOT;if(!root)throw Error('exact 7ae4ca827276c66b276c4cc32a4593825ee2623f required');
+const oldFixture=(await import(pathToFileURL(path.join(root,'qa/fr027-fixture.mjs')))).fixture;
+const oldPoolFixture=(await import(pathToFileURL(path.join(root,'qa/p10-core-fixture.mjs')))).p10Fixture;
+const oldSeed=(await import(pathToFileURL(path.join(root,'server/planner.ts')))).seed;
+const executionFixture=(await import(pathToFileURL(path.join(root,'qa/execution-fixture.mjs')))).executionFixture;
+const report={parent:'7ae4ca827276c66b276c4cc32a4593825ee2623f',cases:[]},old=await oldFixture(),next=await fixture(),oldExec=await oldFixture(),nextExec=await fixture();
+const decision=r=>({revision:r.revision,workflowRevision:r.workflowRevision,reviewHash:r.reviewHash,submissionId:r.submissionId,unplannedIds:r.unplanned.map(t=>t.id),acceptPartial:true,acceptConditionalSupply:true,acknowledgeScope:true});
+try{
+ const d=oldPoolFixture();await old.ok('/inputs',{revision:0,tables:d});const p=await old.ok('/calculate',{revision:(await old.ok('/state')).revision});await old.ok('/plans/'+p.id+'/verify',{});let review=await old.ok('/plans/'+p.id+'/review');assert.deepEqual(review.blockers,[]);await old.ok('/plans/'+p.id+'/submit',decision(review));review=await old.ok('/plans/'+p.id+'/review');await old.ok('/plans/'+p.id+'/confirm',decision(review),'supervisor');const conf=(await old.ok('/plans/'+p.id+'/review')).confirmation;
+ const history=async f=>({plan:(await f.ok('/plans')).find(x=>x.id===p.id),input:await f.ok('/plans/'+p.id+'/inputs'),confirmation:await f.ok('/confirmations/'+conf.id),facts:(await f.ok('/state')).data.executionFacts});
+ const before=await history(old),raw=old.bytes();fs.writeFileSync(path.join(next.dir,'business.json'),raw);assert.deepEqual(await history(next),before);assert.equal(next.bytes(),raw);
+ const beforeReject=next.bytes();assert.equal((await next.call('/calculate',{revision:(await next.ok('/state')).revision})).status,400);assert.equal(next.bytes(),beforeReject);
+ const {pool}=await import('./p10-core-fixture.mjs');await next.ok('/inputs',{revision:(await next.ok('/state')).revision,tables:{personnelPools:[pool('P','2')]}});
+ await next.ok('/inputs',{revision:(await next.ok('/state')).revision,tables:{resourceStops:[{'例外编号':'OLD-PROTECT','资源类型':'人员','资源编号':'A','起始分钟':'0','结束分钟':'80','原因':'新配置不改旧事实'}]}});await next.ok('/calculate',{revision:(await next.ok('/state')).revision});assert.deepEqual(await history(next),before);report.cases.push({label:'exact-parent confirmed P10 core plan/input/confirmation remain equal after new stop+new calculation',before,after:await history(next)});
+ const e=executionFixture(oldSeed,'已完成');await oldExec.ok('/inputs',{revision:0,tables:e});const ep=await oldExec.ok('/calculate',{revision:(await oldExec.ok('/state')).revision});
+ const executionHistory=async f=>({plan:(await f.ok('/plans')).find(x=>x.id===ep.id),input:await f.ok('/plans/'+ep.id+'/inputs'),facts:(await f.ok('/state')).data.executionFacts,materials:(await f.ok('/state')).data.executionMaterials,sources:(await f.ok('/state')).data.executionSources});
+ const eb=await executionHistory(oldExec),eraw=oldExec.bytes();fs.writeFileSync(path.join(nextExec.dir,'business.json'),eraw);assert.deepEqual(await executionHistory(nextExec),eb);assert.equal(nextExec.bytes(),eraw);
+ await nextExec.ok('/inputs',{revision:(await nextExec.ok('/state')).revision,tables:{downtime:[{'设备编号':'FILL01','起始分钟':'30','结束分钟':'90','原因':'新停机不回写旧执行方案'}]}});await nextExec.ok('/calculate',{revision:(await nextExec.ok('/state')).revision});assert.deepEqual(await executionHistory(nextExec),eb);report.cases.push({label:'exact-parent executed plan/input/cumulative facts/materials/sources unchanged after new downtime+calculation',before:eb,after:await executionHistory(nextExec)});report.complete=true;
+}finally{fs.writeFileSync('/evidence/p10-explicit-upgrade-results.json',JSON.stringify(report,null,2));await Promise.all([old.close(),next.close(),oldExec.close(),nextExec.close()]);}

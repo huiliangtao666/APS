@@ -3,10 +3,11 @@ import {quantityMath as Q} from './material-allocation.mjs';
 // originalProtection(). This checker does not allocate or move any task.
 export function verifyOriginalResources(plan,data,conditions={}){
  const events=data?.originalResourceEvents||[];
- if(!events.length&&!conditions.originalResourceContract)return null;
+ const contract=conditions.originalLedgerContract??(conditions.originalResourceContract==='N06-finite-v1'?conditions.originalResourceContract:null);
+ if(!events.length&&!contract)return null;
  const errors=[],bad=m=>errors.push(m),views=new Map(),ids=new Set();
  try{
-  if(conditions.originalResourceContract!=='N06-finite-v1'||!events.length)throw Error('缺冻结原账或契约');
+  if(contract!=='N06-finite-v1'||!events.length)throw Error('缺冻结原账或契约');
   for(const r of events){
    if(ids.has(r['事件编号']))throw Error('重复事件');ids.add(r['事件编号']);
    const prior=views.get(r['原账编号']);

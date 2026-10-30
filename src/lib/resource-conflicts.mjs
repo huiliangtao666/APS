@@ -1,3 +1,4 @@
+import {poolCapacityAt,poolPolicyPoints} from './physical-pools.mjs';
 import {quantityMath as Q} from './material-allocation.mjs';
 // Fixed saved-result projection; never searches or invokes an allocator. Every
 // interval is an actual ledger window, including acquisition/return extensions.
@@ -38,13 +39,15 @@ export function resourceConflicts(plan,data,conditions=plan.conditions){
  }
  for(const pool of data.personnelPools||[]){
   const members=(data.personnelGroups||[]).filter(g=>g.poolId===pool.poolId),rows=all.filter(r=>r.type==='人员'&&members.some(g=>g['人员组编号']===r.resourceId));
-  const points=[...new Set(rows.flatMap(r=>[r.start,r.end]))].filter(Number.isFinite).sort((a,b)=>a-b);
+  const points=[...new Set([...rows.flatMap(r=>[r.start,r.end]),...poolPolicyPoints(pool)])].filter(Number.isFinite).sort((a,b)=>a-b);
   for(let i=0;i<points.length-1;i++){
-   const start=points[i],end=points[i+1],active=rows.filter(r=>r.start<=start&&r.end>start),demand=active.reduce((s,r)=>s+Number(r.quantity),0),capacity=Number(pool['总人数']);
-   if(!(capacity>0)||!(demand>capacity))continue;
+   const start=points[i],end=points[i+1],active=rows.filter(r=>r.start<=start&&r.end>start),demand=active.reduce((s,r)=>s+Number(r.quantity),0),capacity=poolCapacityAt(pool,start);
+   const owners=new Set(active.flatMap(r=>(r.taskIds||[r.taskId]).map(id=>tasks.find(t=>t.id===id)?.resourceBatchId||id)));
+   const mutex=pool['允许共用']==='否'&&(pool['互斥粒度']==='人员组互斥'?new Set(active.map(r=>r.resourceId)).size>1:owners.size>1);
+   if(!(demand>capacity)&&!mutex)continue;
    const taskIds=[...new Set(active.flatMap(r=>r.taskIds||[r.taskId]))].sort();
-   result.push({code:'VERIFY / PHYSICAL_POOL',message:`物理池 ${pool.poolId} [${start},${end}) 需求 ${demand} 人 / 唯一容量 ${capacity} 人 / 差额 ${demand-capacity}`,taskIds,
-    interval:{kind:'resource-capacity',type:'物理人员池',resourceId:pool.poolId,start,end,demand,effectiveCapacity:capacity,baseCapacity:capacity,unit:'人',taskIds},
+   result.push({code:'VERIFY / PHYSICAL_POOL',message:`物理池 ${pool.poolId} [${start},${end}) 需求 ${demand} 人 / 窗口有效容量 ${capacity} 人 / 差额 ${Math.max(0,demand-capacity)}；互斥 ${pool['互斥粒度']||'旧核心无互斥'} ${mutex?'违反':'未违反'}`,taskIds,
+    interval:{kind:'resource-capacity',type:'物理人员池',resourceId:pool.poolId,start,end,demand,effectiveCapacity:capacity,baseCapacity:Number(pool['总人数']),unit:'人',taskIds},
     evidence:{configuration:{table:'personnelPools',row:pool},members,ledger:active,ruleEvaluationAt:conditions.ruleEvaluationAt,resourcePolicyVersion:conditions.resourcePolicyVersion,inputVersionId:plan.inputVersionId,snapshotHash:plan.snapshotHash,basis:'从冻结组映射重建同池成员，半开区间全组累计；组资格上限仍分别保留'}});
   }
  }

@@ -1,6 +1,8 @@
 import {sourceRefs} from '../src/lib/problem-records.mjs';
 import {inheritedCalendarId,validateFactoryLines} from '../src/lib/factory-lines.mjs';
 import {originalIssues} from '../src/lib/original-resources.mjs';
+import {validateResourceMappings} from '../src/lib/resource-mapping.mjs';
+import {validateOriginalResources} from '../src/lib/original-resources.mjs';
 import {validateBatchResources} from '../src/lib/batch-policy.mjs';
 import { assessRules } from '../src/lib/business-rules.mjs';
 import { validateMasterData } from '../src/lib/master-data.mjs';
@@ -17,7 +19,7 @@ import {recordKeys as keys} from '../src/lib/record-identity.mjs';
 export {recordKeys} from '../src/lib/record-identity.mjs';
 // Both imports and edits validate the complete proposed state, before any write.
 export function validateInputs(defs,data,{at=new Date().toISOString(),checkPolicyExecution=true}={}){
- const issues=[...originalIssues(data),...validateEvents(data),...validateFactoryLines(data)];
+ const issues=[...originalIssues(data),...validateOriginalResources(data),...validateResourceMappings(data),...validateEvents(data),...validateFactoryLines(data)];
  const add=(table,index,field,message,rows=[data[table][index]])=>issues.push({relatedRecords:sourceRefs(table,rows,data[table]),table,file:defs.find(d=>d.key===table).file,row:index+2,field,message});
  for(const def of defs){
   const seen=new Set();

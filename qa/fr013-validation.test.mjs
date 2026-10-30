@@ -16,7 +16,7 @@ const preview=(f,d,keys=allKeys,revision=0,table)=>f.call('/imports/preview',{fi
 test('V01 exact bag integer and yield ratio boundaries, no inference/default/rounding',()=>{
  const checks=[];
  for(const [field,values,valid] of [
- ['每袋支数',['1','12','12.0','00012'],true],['每袋支数',['1.5','.5','1.0000000000000000001','0','-1','','1e2','Infinity'],false],
+ ['每袋支数',['1','12','12.0','00012'],true],['每袋支数',['8.5','1.5','.5','1.0000000000000000001','0','-1','','1e2','Infinity'],false],
  ['总收率',['1','1.000','0.96','.01','0.0000000000000000001'],true],['总收率',['1.01','1.0000000000000000001','100','100%','0','-1','','NaN'],false]]){
   for(const value of values){const d=structuredClone(seed);d.products[0][field]=value;const issues=validateMasterData(d);assert.equal(issues.length===0,valid,JSON.stringify({field,value,issues}));checks.push({field,value,valid,issues});}
  }
@@ -25,7 +25,7 @@ test('V01 exact bag integer and yield ratio boundaries, no inference/default/rou
 
 test('V02 CSV single/mixed, table, input and trial routes atomically reject invalid values with physical line4 and field',async t=>{
  const f=await fixture(t);const base=await f.ok('/calculate',{revision:0});const trial=await f.ok('/plans/'+base.id+'/copy',{});const before=f.bytes(),checks=[];
- for(const [field,value] of [['每袋支数','1.5'],['每袋支数','1.0000000000000000001'],['总收率','1.01'],['总收率','1.0000000000000000001'],['总收率',''],['模拟交付等待分钟','']]){
+ for(const [field,value] of [['每袋支数','1.5'],['每袋支数','8.5'],['每袋支数','1.0000000000000000001'],['总收率','1.01'],['总收率','1.0000000000000000001'],['总收率',''],['模拟交付等待分钟','']]){
   const d=masterBatch();d.products[1][field]=value;
   for(const single of [false,true]){const r=await preview(f,d,single?['products']:allKeys,0,single?'products':undefined);assert.equal(r.body.valid,false);assert.equal(r.body.id,undefined);assert.ok(r.body.issues.some(i=>i.table==='products'&&i.file==='07_产品与包装规格.csv'&&i.row===4&&i.field===field),JSON.stringify(r));checks.push({single,field,value,...r});assert.equal(f.bytes(),before);}
   for(const [path,body] of [['/tables/products',{rows:d.products}],['/inputs',{tables:{products:d.products,materials:d.materials}}],['/trials/'+trial.id+'/inputs',{tables:{products:d.products}}]]){const r=await f.call(path,{revision:0,...body});assert.equal(r.status,400);assert.equal(f.bytes(),before);checks.push({path,field,value,...r});}
@@ -75,4 +75,19 @@ test('V06 genuine verified/submitted/supervisor-confirmed snapshots survive auth
  const after=JSON.parse(f.bytes());for(const k of ['plans','runs','confirmations'])assert.deepEqual(after[k],before[k],k);for(const k of ['executionFacts','executionMaterials','executionSources'])assert.deepEqual(after.data[k],before.data[k],k);assert.deepEqual((await f.ok('/plans/'+p.id+'/inputs')).data.products,before.data.products);assert.deepEqual(await f.ok('/confirmations/'+c.id),c);
  // Recreate the business router against the same persisted data, no in-memory fixture state.
  const {createBusinessRouter}=await import('../server/business.mjs');const express=(await import('express')).default;const app=express();app.use((req,_res,next)=>{req.praetorActor={kind:'user',issuer:'test',sub:'planner'};next();});app.use('/api',createBusinessRouter({dataDir:f.dir,actorMiddleware:(_q,_s,n)=>n(),requireMember:()=> (req,_res,next)=>{req.member={role:'planner'};next();}}));const server=app.listen(0,'127.0.0.1');await new Promise(r=>server.once('listening',r));t.after(()=>server.close());const reloaded=await (await fetch('http://127.0.0.1:'+server.address().port+'/api/state')).json();assert.equal(reloaded.data.products[0]['总收率'],'.8');assert.equal(reloaded.revision,1);assert.deepEqual(JSON.parse(f.bytes()).confirmations,before.confirmations);dump('V06-confirmed-history.json',{before,after,reloaded});
+});
+
+test('V07 dispatched 07+08 failures: 8.5 and 1.01 reject on physical line4, forged confirmation zero write; 8 and 1.00 persist',async t=>{
+ const f=await fixture(t),checks=[];await f.ok('/calculate',{revision:0});const before=f.bytes();
+ for(const [field,value] of [['每袋支数','8.5'],['总收率','1.01']]){
+  const d=masterBatch();d.products[1][field]=value;const files=filesOf(d,['products','materials']);
+  const p=await f.call('/imports/preview',{revision:0,files});assert.equal(p.status,400);assert.equal(p.body.valid,false);assert.equal(p.body.id,undefined);
+  assert.ok(p.body.issues.some(i=>i.file==='07_产品与包装规格.csv'&&i.row===4&&i.field===field&&i.reason));assert.equal(f.bytes(),before);
+  const c=await f.call('/imports/commit',{previewId:p.body.id,files,tables:d});assert.equal(c.status,409);assert.equal(f.bytes(),before);
+  checks.push({field,value,files,preview:p,commit:c,zeroWrite:true});
+ }
+ const d=masterBatch();d.products[1]['每袋支数']='8';d.products[1]['总收率']='1.00';
+ const files=filesOf(d,['products','materials']);const p=await f.ok('/imports/preview',{revision:0,files});assert.equal(p.valid,true);
+ await f.ok('/imports/commit',{previewId:p.id});const state=await f.ok('/state');assert.equal(state.data.products[1]['总收率'],'1.00');assert.equal(state.data.products[1]['每袋支数'],'8');
+ assert.deepEqual(JSON.parse(f.bytes()).plans,JSON.parse(before).plans);checks.push({legal:{files,state},historyUnchanged:true});dump('V07-dispatched.json',checks);
 });

@@ -1,0 +1,23 @@
+[
+  "qa/p10-core-fixture.mjs",
+  "qa/p10-explicit-browser.mjs",
+  "qa/p10-explicit-container.sh",
+  "qa/p10-explicit-fixture.mjs",
+  "qa/p10-explicit-upgrade.mjs",
+  "qa/p10-explicit.test.mjs",
+  "server/business.mjs",
+  "server/planner.ts",
+  "server/run-input.mjs",
+  "src/App.tsx",
+  "src/DataEditor.tsx",
+  "src/PersonnelPolicyTrial.tsx",
+  "src/PolicyPreview.tsx",
+  "src/data-defs.ts",
+  "src/lib/physical-pools.d.mts",
+  "src/lib/physical-pools.mjs",
+  "src/lib/resource-conflicts.mjs",
+  "src/lib/resource-load.mjs",
+  "src/lib/staffing.d.mts",
+  "src/lib/staffing.mjs",
+  "src/lib/verify-resource-policies.mjs"
+]

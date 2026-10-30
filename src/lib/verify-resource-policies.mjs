@@ -1,4 +1,5 @@
 import {sourceRefs} from './problem-records.mjs';
+import {verifyResourceMappingSnapshot} from './verify-resource-mapping.mjs';
 import {verifyJointConditions} from './verify-joint-conditions.mjs';
 import {hasPhysicalPools,validatePhysicalPools} from './physical-pools.mjs';
 import {resourceConflicts} from './resource-conflicts.mjs';
@@ -13,9 +14,9 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
  const at=conditions?.ruleEvaluationAt??plan.ruleSnapshot?.at;
  if(!at||!Number.isFinite(Date.parse(at)))return unchecked('缺少冻结规则生效判定时刻，无法确定资源采用范围；未检查。');
  if(!['resourceClaims','tools','dependencies','personnelGroups','batchResources','skillSubstitutions'].every(k=>Array.isArray(data[k])))return unchecked('冻结资源配置不完整，无法重建需求；未检查。');
- if(conditions?.personnelPoolContract==='P10-core-v1'&&(!Array.isArray(data.personnelPools)||!data.personnelPools.length))return {status:'problem',details:['P10冻结契约缺少物理池表，禁止降级按组容量复核']};
+ if(['P10-core-v1','P10-explicit-v2'].includes(conditions?.personnelPoolContract)&&(!Array.isArray(data.personnelPools)||!data.personnelPools.length))return {status:'problem',details:['P10冻结契约缺少物理池表，禁止降级按组容量复核']};
  if(data.personnelPools!==undefined&&!Array.isArray(data.personnelPools))return {status:'problem',details:['冻结物理池表结构无效']};
- const problems=[],reservations=plan.resourceReservations||[],tasks=plan.tasks||[];
+ const problems=verifyResourceMappingSnapshot(data,conditions),reservations=plan.resourceReservations||[],tasks=plan.tasks||[];
  let context=[];const diagnostics=[];const refs=(table,rows)=>sourceRefs(table,rows,data[table]||[]);
  const add=(m,relatedRecords=context)=>{problems.push(m);diagnostics.push({code:'VERIFY / RESOURCE_POLICY',message:m,taskIds:[],relatedRecords,sourceRead:'frozen resource policy checker',...(!relatedRecords.length?{associationGap:'复核实际结果未提供可定位的输入记录；保留结果诊断，不从任务或文本推断来源。'}:{})});},num=(r,k,fallback=0)=>Number(r[k]??fallback);
  const enabled=id=>(data.rules||[]).some(r=>r['规则编号']===id&&r['是否启用']==='是'&&(!conditions?.enabledRuleIds||conditions.enabledRuleIds.includes(id))&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at)));
@@ -47,7 +48,9 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
     const ids=d['候选人员组']?.trim()?String(d['候选人员组']).split(/[,，]/).map(s=>s.trim()):d['资源编号']?.trim()?[d['资源编号'].trim()]:[];
     if(!ids.length||ids.some(id=>!id)||new Set(ids).size!==ids.length||ids.length>32||d['候选人员组']?.trim()&&d['资源编号']?.trim())add(`${task.id} 冻结人员候选配置无效`);
     const key=JSON.stringify([[...ids].sort(),d['所需技能']||'',d['所需班次']||'',d.__policyRoleSource,...(d['人员岗位编号']?.trim()?['岗位',d['人员岗位编号'].trim()]:[d['人员参与阶段']?'窗口集合':index])]);
-    const start=d['窗口外释放']==='否'?task.start:task.start+num(d,'人员开始偏移'),end=d['窗口外释放']==='否'?task.end:task.end-num(d,'人员结束偏移');
+    const pool=(data.personnelPools||[]).find(p=>data.personnelGroups.some(g=>ids.includes(g['人员组编号'])&&g.poolId===p.poolId));
+    const retain=d['窗口外释放']==='否'||pool?.['占用策略']==='全工序保留';
+    const start=retain?task.start:task.start+num(d,'人员开始偏移'),end=retain?task.end:task.end-num(d,'人员结束偏移');
     if(!(end>start))add(`${task.id} 人员窗口超出实际工序`);
     return {d,ids,key,start,end,count:num(d,'需求数量')};
    });
@@ -104,15 +107,22 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
  // Independent sweep of frozen group->pool identity; allocator and ledger labels
  // are never the authority for physical membership or capacity.
  if(hasPhysicalPools(data)){
-  for(const i of validatePhysicalPools(data,{at,forRun:true}))add(i.message);
-  if(conditions?.personnelPoolContract!=='P10-core-v1')add('P10冻结契约版本缺失/不符');
+  for(const i of validatePhysicalPools(data,{at,forRun:true,allowLegacy:conditions?.personnelPoolContract==='P10-core-v1'}))add(i.message);
+  if(!['P10-core-v1','P10-explicit-v2'].includes(conditions?.personnelPoolContract))add('P10冻结契约版本缺失/不符');
+  if(data.personnelPools.some(p=>p['策略版本']==='P10-explicit-v2')&&conditions?.personnelPoolContract!=='P10-explicit-v2')add('P10显式策略禁止降级为旧冻结契约');
   const labor=reservations.filter(r=>r.type==='人员');
   for(const r of labor){const g=data.personnelGroups.find(g=>g['人员组编号']===r.resourceId);if(!g?.poolId||r.poolId!==g.poolId)add(`${r.resourceId} 账本poolId与冻结组映射不一致`);}
   for(const p of data.personnelPools||[]){
    const rows=labor.filter(r=>data.personnelGroups.find(g=>g['人员组编号']===r.resourceId)?.poolId===p.poolId);
-   for(const t of [...new Set(rows.flatMap(r=>[r.start,r.end]))]){
+   for(const t of [...new Set([...rows.flatMap(r=>[r.start,r.end]),...(p['交接模式']==='窗口容量上限'?[Number(p['交接起始分钟']),Number(p['交接结束分钟'])]:[])])]){
     const active=rows.filter(r=>r.start<=t&&r.end>t),total=active.reduce((s,r)=>s+Number(r.quantity),0);
-    if(total>Number(p['总人数']))add(`物理池 ${p.poolId} 在分钟 ${t} 需求 ${total} 人 / 可用 ${p['总人数']} 人 / 差额 ${total-Number(p['总人数'])}，跨组统一扣算`);
+    const cap=p['交接模式']==='窗口容量上限'&&t>=Number(p['交接起始分钟'])&&t<Number(p['交接结束分钟'])?Number(p['交接容量人数']):Number(p['总人数']);
+    if(total>cap)add(`物理池 ${p.poolId} 在分钟 ${t} 需求 ${total} 人 / 可用 ${cap} 人 / 差额 ${total-cap}，冻结交接窗口容量上限`);
+    if(p['允许共用']==='否'&&active.length){
+     if(p['互斥粒度']==='人员组互斥'&&new Set(active.map(r=>r.resourceId)).size>1)add(`物理池 ${p.poolId} 分钟 ${t} 违反人员组互斥`);
+     const owners=new Set(active.flatMap(r=>(r.taskIds||[r.taskId]).map(id=>{const task=tasks.find(t=>t.id===id);return task?.resourceBatchId||id;})));
+     if(p['互斥粒度']==='工序互斥'&&owners.size>1)add(`物理池 ${p.poolId} 分钟 ${t} 违反工序互斥`);
+    }
    }
   }
  }

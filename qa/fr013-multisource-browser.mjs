@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';import fs from 'node:fs';
+import {fixture} from './fr027-fixture.mjs';import {multiFixture} from './fr013-multisource-fixture.mjs';import {verifyResourcePolicies} from '../src/lib/verify-resource-policies.mjs';
+import {defs} from '../server/planner.ts';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
+const out=process.env.EVIDENCE_DIR;fs.mkdirSync(out,{recursive:true});const report={scope:'synthetic actors; real React, Express persistence and Worker; no production SSO/UAT',cases:[],errors:[]};
+const f=await fixture(null,{browser:true});let browser,page;
+const editor=()=>page.getByRole('region',{name:'模拟记录编辑',exact:true});const field=(i,k)=>editor().getByLabel(`${defs.find(d=>d.key==='resourceMappings').label} ${i} ${k}`,{exact:true});
+async function load(){await page.goto(f.url);await page.getByLabel('操作原因',{exact:true}).fill('多来源同实体Dev定向检查');await page.getByRole('button',{name:'数据与 CSV',exact:true}).click();await page.locator('.data-tabs').getByRole('button',{name:defs.find(d=>d.key==='resourceMappings').label,exact:false}).click();}
+try{
+ browser=await chromium.launch({headless:true,args:['--disable-gpu','--disable-software-rasterizer']});page=await browser.newPage({viewport:{width:1500,height:1000},extraHTTPHeaders:{'test-sub':'planner'}});page.setDefaultTimeout(20000);page.on('pageerror',e=>report.errors.push(e.message));
+ for(const kind of ['tool','personnel']){
+  const d=multiFixture(kind);await f.ok('/inputs',{revision:(await f.ok('/state')).revision,tables:d});await load();
+  const last=d.resourceMappings.length;await field(1,'配置版本').fill('2');await field(last,'配置版本').fill('2');
+  const target=d.resourceMappings[0]['运行编号'],group=editor().getByRole('group',{name:`同实体字段权威 ${target}`,exact:true});
+  const selectors=group.locator('select');const n=await selectors.count();assert.ok(n>=5);
+  for(let i=0;i<n;i++)await selectors.nth(i).selectOption(String((i+1)%2));
+  assert.match(await group.innerText(),/原表记录行/);let response=page.waitForResponse(r=>r.url().endsWith('/api/inputs/resource-policy-preview'));const before=f.bytes();await editor().getByRole('button',{name:'预览来源映射与联合运行',exact:true}).click();assert.equal((await response).status(),200);assert.equal(f.bytes(),before);assert.match(await editor().innerText(),/独立复核 pass/);await page.screenshot({path:out+`/${kind}-authority-preview.png`,fullPage:true});
+  response=page.waitForResponse(r=>r.url().endsWith('/api/inputs')&&r.request().method()==='POST');await editor().getByRole('button',{name:'保存修改',exact:true}).click();assert.equal((await response).status(),200);await editor().getByRole('status').filter({hasText:'保存完成'}).waitFor();await load();assert.equal(await field(1,'配置版本').inputValue(),'2');const state=await f.ok('/state');assert.ok(state.data.resourceMappings.every(m=>m['映射模式']!=='EXPLICIT_SAME_ENTITY'||m['字段权威JSON'].includes('"2"')));
+  const run=await f.ok('/runs',{revision:state.revision});let status;for(let i=0;i<300;i++){status=await f.ok('/runs/'+run.id);if(['completed','partial','failed'].includes(status.status))break;await new Promise(r=>setTimeout(r,10));}assert.ok(['completed','partial'].includes(status.status));const plan=(await f.ok('/plans')).find(p=>p.runId===run.id);const frozen=await f.ok('/runs/'+run.id+'/inputs');assert.equal(verifyResourcePolicies(plan,frozen.executionData,frozen.conditions).status,'pass');report[kind]={state,run:status,plan,input:await f.ok('/runs/'+run.id+'/inputs')};report.cases.push(kind+' real field authority select, zero-write preview, save/reopen and Worker/checker');
+  await page.screenshot({path:out+`/${kind}-authority-reopened.png`,fullPage:true});
+  await field(1,'字段权威JSON').locator('..').locator('summary').click();await field(1,'字段权威JSON').fill('{}');const bad=f.bytes();response=page.waitForResponse(r=>r.url().endsWith('/api/inputs/resource-policy-preview'));await editor().getByRole('button',{name:'预览来源映射与联合运行',exact:true}).click();assert.equal((await response).status(),400);assert.equal(f.bytes(),bad);assert.equal(await editor().getByRole('button',{name:'保存修改',exact:true}).isEnabled(),false);await page.screenshot({path:out+`/${kind}-missing-authority-rejected.png`,fullPage:true});report.cases.push(kind+' missing authority shown NOT_READY_CONFIG, preview refuses and save disabled');
+ }
+ await page.setExtraHTTPHeaders({'test-sub':'query'});await load();assert.equal(await field(1,'字段权威JSON').isEnabled(),false);assert.ok(await editor().locator('fieldset[disabled]').count());report.cases.push('query role authority/editor read-only');assert.deepEqual(report.errors,[]);report.result='PASS';
+}catch(e){report.failure=e.stack;if(page){try{report.visible=await page.locator('body').innerText({timeout:1000});await page.screenshot({path:out+'/browser-failure.png',fullPage:true,timeout:1000});}catch{}}throw e;}finally{fs.writeFileSync(out+'/multisource-browser.json',JSON.stringify(report,null,2));await browser?.close();await f.close();}
+console.log('MULTISOURCE_BROWSER_PASS '+report.cases.length);

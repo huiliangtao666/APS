@@ -63,19 +63,21 @@
       "number": 5,
       "category": "模具与工具配置",
       "tables": [
+        "originalTools",
         "tools",
         "resourceClaims"
       ],
-      "limitation": "配置与显式占用分表，非自动推导"
+      "limitation": "原05七列按原字段导入查询；到18工装/23占用声明的任务、类型及共享池映射未确定，不自动推导"
     },
     {
       "number": 6,
       "category": "人员技能与班次",
       "tables": [
+        "originalPersonnel",
         "personnelGroups",
         "dependencies"
       ],
-      "limitation": ""
+      "limitation": "原06六列按原字段导入查询；原件无组名与班次，多窗口身份与共享池未确定，不自动生成19/12数据"
     },
     {
       "number": 7,
@@ -1091,6 +1093,115 @@
         "server/input-validation.mjs#validateInputs"
       ],
       "template": "templates/29_有向技能替代.csv"
+    },
+    {
+      "key": "originalTools",
+      "label": "05_模具与工具配置（原字段资料，待运行映射）",
+      "file": "05_模具与工具配置.csv",
+      "fields": [
+        "资源编号",
+        "资源名称",
+        "资源类型",
+        "可用数量",
+        "最早可用分钟",
+        "最晚可用分钟",
+        "共享范围"
+      ],
+      "uniqueKey": [
+        "资源编号"
+      ],
+      "references": "原编号/类型可查询；运行采用另经表31显式绑定，不按同名自动匹配",
+      "units": "数量为非负安全整数；时间为分钟偏移；其他原字段为必填文本",
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "原CSV提供方",
+      "direction": "inbound-simulation",
+      "template": "templates/05_模具与工具配置.csv",
+      "dates": [],
+      "version": "revision、输入版本冻结；不迁移旧快照",
+      "validation": [
+        "src/lib/original-resources.mjs#validateOriginalResources",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "limitations": "保留原字段；新运行必须显式READY绑定表31及完整运行资源/需求合同；未配置或不支持组合安全拒绝，不改旧方案",
+      "example": "examples/original05.csv"
+    },
+    {
+      "key": "originalPersonnel",
+      "label": "06_人员技能与班次（原字段资料，待运行映射）",
+      "file": "06_人员技能与班次.csv",
+      "fields": [
+        "人员组编号",
+        "技能",
+        "可用人数",
+        "起始分钟",
+        "结束分钟",
+        "共享范围"
+      ],
+      "uniqueKey": [
+        "人员组编号"
+      ],
+      "references": "原编号/类型可查询；运行采用另经表31显式绑定，不按同名自动匹配",
+      "units": "数量为非负安全整数；时间为分钟偏移；其他原字段为必填文本",
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "原CSV提供方",
+      "direction": "inbound-simulation",
+      "template": "templates/06_人员技能与班次.csv",
+      "dates": [],
+      "version": "revision、输入版本冻结；不迁移旧快照",
+      "validation": [
+        "src/lib/original-resources.mjs#validateOriginalResources",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "limitations": "保留原字段；新运行必须显式READY绑定表31及完整运行资源/需求合同；未配置或不支持组合安全拒绝，不改旧方案",
+      "example": "examples/original06.csv"
+    },
+    {
+      "key": "resourceMappings",
+      "label": "31_原05与06显式运行映射",
+      "file": "31_原05与06运行映射.csv",
+      "fields": [
+        "配置编号",
+        "配置版本",
+        "合同版本",
+        "状态",
+        "来源类别",
+        "来源编号",
+        "源记录JSON",
+        "运行编号",
+        "运行记录JSON",
+        "别名",
+        "映射模式",
+        "源类型",
+        "共享范围原文",
+        "适用产线",
+        "范围模式",
+        "容量单位",
+        "时间单位",
+        "释放策略",
+        "配置依据"
+      ],
+      "uniqueKey": [
+        "配置编号"
+      ],
+      "references": "显式来源类别/来源编号→运行编号；完整源与运行行快照逐字核对；按适用产线核单线范围",
+      "units": "工装套/人员人；固定分钟轴；其他单位NOT_READY_CONFIG",
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "有权配置用户",
+      "direction": "inbound-simulation",
+      "template": "templates/31_原05与06运行映射.csv",
+      "example": "examples/original0506-mapping-draft.csv",
+      "dates": [],
+      "version": "FR013-resource-map-v1；配置版本递增+输入版本+冻结配置SHA256",
+      "validation": [
+        "src/lib/resource-mapping.mjs#validateResourceMappings"
+      ],
+      "limitations": "READY只支持DIRECT_IDENTITY、全工厂/*→当前单产线的全局唯一容量；多别名合并、局部/跨线、多窗口、未知公式/单位拒绝；草稿禁止运行"
     }
   ],
   "outbound": [

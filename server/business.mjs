@@ -2,6 +2,8 @@ import {validateMasterData} from '../src/lib/master-data.mjs';
 import {validateOrders} from '../src/lib/orders.mjs';
 import {validateSingleLineScope} from '../src/lib/line-scope.mjs';
 import {attachProblemRecords,bindProblemSource} from '../src/lib/problem-records.mjs';
+import {resourceMappingTransition,sameResourceMapping} from '../src/lib/resource-mapping.mjs';
+import {verifyResourcePolicies} from '../src/lib/verify-resource-policies.mjs';
 import {poolTransitionIssues} from '../src/lib/physical-pools.mjs';
 import {inspectSingleCsv} from './csv-single.mjs';
 import {configurationPreview} from '../src/lib/configuration-preview.mjs';
@@ -112,7 +114,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(!trialId){const staged=stageEvents(target.data,proposed,Object.keys(tables));if(staged.issues.length)return res.status(409).json({error:'event_reconciliation_required',issues:staged.issues});proposed=staged.data;for(const def of defs.filter(d=>JSON.stringify(proposed[d.key])!==JSON.stringify(target.data[d.key]))){const rows=proposed[def.key]||[];if(rows.some(r=>!r||typeof r!=='object'||Array.isArray(r)||Object.keys(r).some(k=>!def.fields.includes(k))||Object.values(r).some(v=>typeof v!=='string')))return res.status(400).json({error:'invalid_event_effect'});proposed[def.key]=rows.map(r=>Object.fromEntries(def.fields.map(f=>[f,r[f]??''])));}}
     const transition=(trialId?executionTrialIssues(s.data,proposed):executionTransition(target.data,proposed));if(transition.length)return res.status(409).json({error:'execution_reconciliation_required',...transitionEvidence(transition,trialId?s.data:target.data,proposed,trialId?s.revision:target.revision)});
     const newlyEnabled=(proposed.rules||[]).some(r=>r['是否启用']==='是'&&!(target.data.rules||[]).some(old=>old['规则编号']===r['规则编号']&&old['是否启用']==='是'));
-    const issues=[...poolTransitionIssues(target.data,proposed,s.records),...validateInputs(defs,proposed),...(newlyEnabled?assessRules(proposed,new Date().toISOString(),true).issues:[])];if(issues.length){
+    const issues=[...resourceMappingTransition(target.data,proposed,s.records),...poolTransitionIssues(target.data,proposed,s.records),...validateInputs(defs,proposed),...(newlyEnabled?assessRules(proposed,new Date().toISOString(),true).issues:[])];if(issues.length){
       // The rejected proposal is an ephemeral check input, never a saved input version.
       const source={domain:'candidate:'+(trialId?'trial:'+trialId:'current'),inputVersionId:inputHash(proposed),revision:target.revision,checkedAt:new Date().toISOString(),scope:'complete proposed input validation'};
       const findings=issues.map(f=>bindProblemSource({...f,taskIds:[]},source));
@@ -121,6 +123,12 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(operation==='restore')return res.status(409).json({error:'restore_blocked',...restoreBlockers(s,null)});
     // A missing original confirmed snapshot cannot be reconstructed from today's data.
     if(s.plans.some(p=>['confirmed','released','archived'].includes(p.status)&&!inputs(s,p)))return res.status(409).json({error:'protected_history_unavailable'});
+    // Preserve the persisted representation of unchanged mapping rows. Adding
+    // an empty optional column to old v1 data must not create a write/version.
+    if(Array.isArray(proposed.resourceMappings))proposed.resourceMappings=proposed.resourceMappings.map(m=>{
+      const old=(target.data.resourceMappings||[]).find(r=>r['配置编号']===m['配置编号']);
+      return sameResourceMapping(old,m)?old:m;
+    });
     if(dryRun)return res.json({valid:true,revision:target.revision});
     const changes=defs.map(d=>d.key).filter(key=>JSON.stringify(target.data[key])!==JSON.stringify(proposed[key]));
     if(!changes.length)return res.json({data:target.data,revision:target.revision,unchanged:true});
@@ -130,14 +138,15 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     for(const key of new Set([...changes,...Object.keys(req.csvSources||{})])){delete target.csvSources[key];if(req.csvSources?.[key])target.csvSources[key]={...structuredClone(req.csvSources[key]),sha256:createHash('sha256').update(req.csvSources[key].originalText).digest('hex'),canonicalRows:structuredClone(proposed[key])};}
     const toVersion=preserve(s,target);
     const batchId=randomUUID();
-    for(const key of changes)record(s,req,operation||'edit',key,{before:before[key],after:proposed[key],fromVersion,toVersion,fromRevision:target.revision-1,toRevision:target.revision,batchId,trialId:trialId||null,...(req.csvSources?{csvSources:{[key]:req.csvSources[key]}}:{})});
+    for(const key of changes)record(s,req,operation||'edit',key,{before:before[key],after:proposed[key],fromVersion,toVersion,fromRevision:target.revision-1,toRevision:target.revision,batchId,trialId:trialId||null,...(req.csvEvidence?.[key]?{csvSource:req.csvEvidence[key]}:{}),...(req.csvSources?{csvSources:{[key]:req.csvSources[key]}}:{})});
     write(s);res.json({data:target.data,revision:target.revision,inputVersionId:toVersion});
   }
   // Preview and commit pass through exactly the same transition/history/validation gates.
   function checkCsv(req,s,inspection,dryRun){
     const result={status:200,body:null};
     const response={status(code){result.status=code;return this;},json(body){result.body=body;return this;}};
-    saveInputs(req,response,inspection.tables,undefined,dryRun);
+    const csvEvidence=Object.fromEntries(Object.entries(inspection.sources).filter(([key])=>['originalTools','originalPersonnel','resourceMappings'].includes(key)).map(([key,source])=>{const raw=req.body.files?.find(f=>f.name===source.file);return [key,{...source,...(raw?{text:raw.text,sha256:createHash('sha256').update(raw.text).digest('hex')}:{})}];}));
+    saveInputs({...req,csvEvidence},response,inspection.tables,undefined,dryRun);
     if(result.body?.issues)result.body.issues=physicalIssues(result.body.issues,inspection.sources,defs);
     return result;
   }
@@ -166,11 +175,35 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const inspection=p.table?inspectSingleCsv(p.files[0],defs.find(d=>d.key===p.table)):inspectCsvBatch(p.files,defs,p.repairs);
     if(p.table==='simulationEvents')inspection.tables.executionFacts=s.data.executionFacts||[];
     if(inspection.issues.length)return res.status(400).json({error:'invalid_input',issues:inspection.issues});
-    const checked=checkCsv({...req,csvSources:inspection.sources,body:{reason:req.body.reason,revision:p.revision,operation:'import'}},s,inspection,false);
+    const checked=checkCsv({...req,csvSources:inspection.sources,body:{reason:req.body.reason,revision:p.revision,operation:'import',files:p.files}},s,inspection,false);
     if(checked.status===200)csvPreviews.delete(req.body.previewId);
     res.status(checked.status).json(checked.body);
   });
   router.post('/tables/:table',permission('edit'),(req,res)=>saveInputs(req,res,{[req.params.table]:req.body.rows}));
+  // Business dry run only: shares input/history guards, never preserve/write/record.
+  router.post('/inputs/resource-policy-preview',permission('calculate'),(req,res)=>{
+    const tables=req.body.tables;
+    if(!tables||typeof tables!=='object'||Array.isArray(tables)||Object.keys(tables).some(k=>!['personnelPools','personnelGroups','dependencies','skillSubstitutions','originalTools','originalPersonnel','resourceMappings','tools','resourceClaims','rules'].includes(k)))return res.status(400).json({error:'preview_tables',message:'资源策略预览仅接受来源、映射、工装、声明、规则和人员配置草稿'});
+    const check={status:200,body:null},response={status(code){check.status=code;return this;},json(body){check.body=body;return this;}};
+    saveInputs(req,response,tables,undefined,true);
+    if(!check.body?.valid)return res.status(check.status).json(check.body);
+    const state=read();if(req.body.revision!==state.revision)return res.status(409).json({error:'stale_input'});
+    const candidate=structuredClone(state.data);
+    for(const [key,rows] of Object.entries(tables)){const def=defs.find(d=>d.key===key);candidate[key]=(migratePolicies({[key]:rows})[key]||rows).map(row=>Object.fromEntries(def.fields.map(f=>[f,row[f]??''])));}
+    const at=new Date().toISOString();
+    function evaluate(data){
+      const frozen=freezeRunInput(data,req.body.selection,at);
+      const issues=[...validateInputs(defs,data,{at,checkPolicyExecution:false}),...executionAdmission(frozen.executionData,frozen.conditions),...assessRules(frozen.executionData,at,true,frozen.conditions.mode).issues];
+      if(issues.length)return {status:'blocked',issues};
+      const plan=calculate(frozen.executionData,state.revision,at,frozen.conditions);
+      return {status:'preview',snapshotHash:frozen.snapshotHash,conditions:frozen.conditions,tasks:plan.tasks,resourceReservations:plan.resourceReservations,findings:plan.findings,resourceVerification:verifyResourcePolicies(plan,frozen.executionData,frozen.conditions)};
+    }
+    try{
+      const proposed=evaluate(candidate);if(proposed.status==='blocked')return res.status(422).json({error:'preview_blocked',issues:proposed.issues});
+      let before;try{before=evaluate(state.data);}catch(e){before={status:'blocked',message:e.message};}
+      return res.json({valid:true,persisted:false,revision:state.revision,actor:subjectKey(req.praetorActor),role:req.member.role,configurationHash:inputHash(candidate),before,candidate:proposed});
+    }catch(e){return res.status(400).json({error:'preview_blocked',message:e.message});}
+  });
   router.post('/inputs',permission('edit'),(req,res)=>saveInputs(req,res,req.body.tables));
   router.get('/trials',permission('read'),(_req,res)=>res.json(read().trials||[]));
   router.post('/trials/:id/inputs',permission('edit'),(req,res)=>saveInputs(req,res,req.body.tables,req.params.id));

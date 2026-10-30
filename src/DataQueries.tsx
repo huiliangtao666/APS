@@ -1,3 +1,4 @@
+import {MasterDataContract} from './MasterDataContract';
 import {useEffect,useMemo,useRef,useState} from 'react';
 import {recordIdentity} from './lib/record-identity.mjs';
 import {fieldLabel} from './StructuredValue';
@@ -32,6 +33,7 @@ export function DataQueries({data,plans,revision,canExport,reason,onExport,onTas
  function navigate(target:string,index?:number){setTable(target);setFilters({});setFocus(index??null);setPage(index===undefined?0:Math.floor(index/50));}
  return <section className="panel query-panel" aria-label="模拟数据查询">
   <h2>模拟数据查询 · FR-014</h2>{initialTask&&initialPlan&&<button onClick={()=>onTask(initialPlan,initialTask)}>返回同任务 {initialTask}</button>}<p>导入 → 查询 → 计算 → 核对。共 {defs.length} 类当前输入及方案任务；所有数据均为模拟数据。分钟 0 = 2026-11-02 08:00（Asia/Shanghai），时间区间 [开始,结束)。</p>
+  <MasterDataContract table={table}/>
   <div className="query-controls"><label>数据类别<select aria-label="查询数据类别" value={table} onChange={e=>navigate(e.target.value)}>{categories.map(d=><option key={d.key} value={d.key}>{d.label}（{all[d.key]?.length||0}）</option>)}</select></label>
   <label>关联方案<select aria-label="查询方案" value={planId} onChange={e=>{setPlan(e.target.value);setSnapshot(undefined);setHistorical(false);setFocus(null);setPage(0);}}><option value="">未选择方案</option>{plans.map(p=><option key={p.id} value={p.id}>{p.name||p.id} · {p.status==='draft'?'草稿':p.status==='legacy'?'历史快照':p.status} · {p.id}</option>)}</select></label></div>
   <p>当前输入版本：{revision}。{selectedPlan?`所选方案输入版本：${selectedPlan.revision??selectedPlan.inputVersion??'旧版未记录'}。`:'尚无所选方案任务。'}{historical?(snapshot?'关联输入来自该次检查封存输入。':'关联输入来自方案原始快照。'):'关联输入显示当前数据，不代表方案计算时的历史输入。'}</p>
