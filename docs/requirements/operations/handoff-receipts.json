@@ -4252,6 +4252,30 @@
       "issue_comment": "https://github.com/huiliangtao666/APS/issues/6#issuecomment-6512510646",
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_1f00077b-4e53-4df9-ae90-453a214eed9d:c1",
+      "original_delivery": "dlv_1f00077b-4e53-4df9-ae90-453a214eed9d",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test2",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T09:41:22+08:00",
+      "product_sha": "e21bf52e1e20c1d6ebdc658e06338afe5b9c3e4e",
+      "result": "A05-R1-01～06及共享toast CSV PASS；无新产品FAIL；FR038整卡NOT_READY",
+      "external_hashes": {
+        "FR038-A05-e21bf52-Test2-r1-report.md": "84e99689ed2c79bf8a7b77e69d3a027884664268062739ca69c3c6ec496b5965",
+        "FR038-A05-e21bf52-Test2-r1-matrix.csv": "603fd1b8dbe6f95712e9293a057576b57931253550867dd7151d48080ecf4047",
+        "FR038-A05-e21bf52-Test2-r1-evidence.zip": "8d132c8461ca61dd147adcbf5227b4e146da94d42833569873ba555f0dfdcb15",
+        "FR038-A05-e21bf52-Test2-r1-sha256.txt": "f8345599fb690936d126a2dfeaf5b976dabdc02c908599b06abd9faa8ba13e50"
+      },
+      "zip_crc": "PASS",
+      "project_status": {
+        "FR-038": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/26#issuecomment-6512840236",
+      "issue_state": "closed",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
