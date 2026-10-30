@@ -1,0 +1,89 @@
+{
+  "data": {
+    "node": {
+      "id": "PVTI_lAHOFM9WU84BpE1czhEHgv4",
+      "fieldValues": {
+        "nodes": [
+          {
+            "text": "[FR] FR-017 业务规则配置与启用",
+            "field": {
+              "name": "Title"
+            }
+          },
+          {
+            "name": "In progress",
+            "field": {
+              "name": "Status"
+            }
+          },
+          {
+            "name": "P0",
+            "field": {
+              "name": "Priority"
+            }
+          },
+          {
+            "text": "FR-017",
+            "field": {
+              "name": "需求编号"
+            }
+          },
+          {
+            "text": "v0.3",
+            "field": {
+              "name": "基线版本"
+            }
+          },
+          {
+            "text": "v0.3+CR-DEC02-03-20261029+CR-DEC04-05-06-20261029",
+            "field": {
+              "name": "当前要求版本"
+            }
+          },
+          {
+            "text": "CR-DEC02-03-20261029、CR-DEC04-05-06-20261029",
+            "field": {
+              "name": "生效CR"
+            }
+          },
+          {
+            "text": "S06/S07独立验收PASS；本卡剩余条件归集待闭环；CR-DEC04-05-06仍仅设计/mock，未派实现",
+            "field": {
+              "name": "当前环节"
+            }
+          },
+          {
+            "text": "T08/T10/U01：全参数适用范围/继承及中文预览；U05：未启用、待生效、未支持与缺项状态；H02：升级/回滚/缺旧snapshot迁移保留。岗位/物理池/多班未支持组合须前台说明并守卫，不以字段可保存声称采用。",
+            "field": {
+              "name": "阻塞原因"
+            }
+          },
+          {
+            "text": "S06/S07有限PASS；整卡NOT_READY。FR007原范围Done、D01-D03 round1 PASS及原48历史保留；非完整CR/UAT",
+            "field": {
+              "name": "验收结论"
+            }
+          },
+          {
+            "text": "12eed5514c702f730aae65a39a08747c532f8536",
+            "field": {
+              "name": "交付代码SHA"
+            }
+          },
+          {
+            "text": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/requirements-register.md",
+            "field": {
+              "name": "跟踪记录"
+            }
+          },
+          {
+            "text": "QA",
+            "field": {
+              "name": "UAT负责人"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "server/business.mjs": "65c04fee3a2f91723e905a525d2b159ce7c5237d889ff52bcdea6850d6a4dcc3",
+  "src/PolicyPreview.tsx": "b7a83b354310b6fc11fad844be8a4f79733f358d4accc29fd931b5c877547777",
+  "src/RulePanel.tsx": "bc4e6cbf2b410d352eadccbada070fe8e19b8c05d9f7059b4215e46054ceebdd",
+  "src/lib/configuration-preview.mjs": "46d7ec4b12e78f355a722cf6593b2068f10ba7408d4a4e5383c20e70248876a6",
+  "src/lib/configuration-preview.d.mts": "35cde6d1c78da83c98f987202877a32f40207b3174e96d61e7c15978327bc69f",
+  "qa/fr017-scope.test.mjs": "82d231884c02bc5531f1418863b0e635a9183d9cf8d5af6e9bbcfee22353815b",
+  "qa/fr017-scope-browser.mjs": "b80173ec9d5dfae5e57079effd08606b78271c8adb1701e33e9acd140bd6d304",
+  "qa/fr017-migration.mjs": "6962b0bb8c008f38cb9f70e99bba355fc16ca423ed0f2499bf25432bb4e75bc4",
+  "qa/fr017-scope-docker.sh": "92ee55ba9c1e8fd64fa8bf16295d4682c19b39d010c41432fd25bcca21b48a75"
+}
