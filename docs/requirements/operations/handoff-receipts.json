@@ -4276,6 +4276,34 @@
       "issue_state": "closed",
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "issue4:fr013:0103:extra-op-ruling:1cdf394e:r1",
+      "original_delivery": "dlv_67fc7ade-baa9-4ba3-a3e8-6d0453b81629",
+      "continuation_delivery": "dlv_ae369cf2-0575-4add-934b-93767fcba25c",
+      "result_delivery": "dlv_152a2348-b253-4843-a4a2-30ed853733d4",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T10:42:02+08:00",
+      "requirement": "FR-013/Issue4",
+      "product_sha": "1cdf394eb954cd6ff15a48cc052edb64f6f093b4",
+      "result": "原01/03单一EXTRA-M/EXTRA-OP BLOCKED转PASS；切片20 PASS/0 BLOCKED；整卡NOT_READY",
+      "external_hashes": {
+        "Issue4-FR013-EXTRA-OP-1cdf394e-Test1-r1-report.md": "c35b4cab347bad0beb1fdb36b33bb9f50a9df5581e41a59d0eedcae6f861bab1",
+        "Issue4-FR013-EXTRA-OP-1cdf394e-Test1-r1-matrix.csv": "55fa2b927b582c0602024801600ebb6a0eec239b6842ad81bdb15f8c55f308bc",
+        "Issue4-FR013-EXTRA-OP-1cdf394e-Test1-r1-evidence.zip": "417e359a5b247fd201479eff98f7deb75cf900b9a4ba21bb2538e7f3cdef5eca",
+        "Issue4-FR013-EXTRA-OP-1cdf394e-Test1-r1-sha256.txt": "21e5ade70d10704be68e51f3f4d417c031da452eb0bfed7a4df021e7300275f1"
+      },
+      "zip_crc": "PASS",
+      "manifest_hashes_verified": 47,
+      "project_status": {
+        "FR-013": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6513635042",
+      "issue_state": "open",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
