@@ -128,9 +128,9 @@ test('I11 failed/running/corrupt/unchecked/conflicting saved plans fail closed a
  for(const [kind,mutate] of Object.entries(mutations)){const f=await setup(t),id=await f.plan();ok(await f.act(id,'submit'));f.mutate(s=>{const p=s.plans.find(x=>x.id===id);mutate(s,p,s.runs.find(x=>x.id===p.runId));});const bytes=f.bytes(),r=await f.act(id,'confirm');assert.equal(r.status,409,kind+JSON.stringify(r));assert.equal(f.bytes(),bytes,kind);console.log('I11 blocked',kind,JSON.stringify(r.data.blockers?.map(x=>x.code)||r.data));}
 });
 
-test('I12 fresh R1 verification can pass after allocation tamper; supported scheduler replay still rejects it',async t=>{
+test('I12 independent joint verification and scheduler replay both reject allocation tampering',async t=>{
  const f=await setup(t);await f.input(deliveryFixture(seed));const id=await f.plan();f.mutate(s=>{const p=s.plans.find(x=>x.id===id);assert.ok(p.materialDemands.length);p.materialDemands[0].quantity+=100000;});
- const checked=await f.call('/plans/'+id+'/verify',{});ok(checked);assert.ok(Object.values(checked.data.verification.checks).every(x=>x.status!=='problem'));assert.equal(checked.data.verification.findings.length,0);
+ const checked=await f.call('/plans/'+id+'/verify',{});ok(checked);assert.equal(checked.data.verification.checks.jointConditions.status,'problem');assert.ok(checked.data.verification.findings.some(finding=>finding.code==='VERIFY / JOINT_CONDITIONS'));
  const r=await f.review(id);assert.ok(r.blockers.some(x=>x.code==='result_mismatch'));assert.equal((await f.act(id,'submit')).status,409);
  console.log('I12 verification scope',JSON.stringify({independent:Object.keys(checked.data.verification.checks),replayBlockers:r.blockers,scope:r.scope}));
 });

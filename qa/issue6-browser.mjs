@@ -4,7 +4,7 @@ const E=process.env.ISSUE6_EVIDENCE_DIR||'/evidence';fs.mkdirSync(E,{recursive:t
 const f=await fixture(null,{browser:true}),browser=await chromium.launch({headless:true,args:['--no-sandbox']}),page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[],results=[];
 page.on('pageerror',e=>errors.push(String(e)));page.setDefaultTimeout(15000);
 try{
- const {files,repairs,originals}=stageInput(process.env.ISSUE6_INPUT_DIR||'/inputs',{selectApplicableMachines:true});dump('input.json',{files,repairs,originals});
+ const {files,repairs,originals}=stageInput(process.env.ISSUE6_INPUT_DIR||'/inputs',{selectApplicableMachines:true,calendarOnlyDependencies:true});dump('input.json',{files,repairs,originals});
  await page.goto(f.url);await page.getByLabel('操作原因',{exact:true}).fill('Issue6 Dev synthetic operator');await page.getByRole('button',{name:'数据与 CSV',exact:true}).click();
  await page.locator('[data-csv-batch]').getByLabel('选择批量 CSV',{exact:true}).setInputFiles(files.map(x=>({name:x.name,mimeType:'text/csv',buffer:Buffer.from(x.text)})));
  await page.getByRole('status').filter({hasText:'已读取文件'}).waitFor();

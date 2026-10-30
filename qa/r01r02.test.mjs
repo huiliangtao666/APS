@@ -12,7 +12,7 @@ test('R01 multi-member tool+independent personnel posts+physical pool+space+mate
  assert.equal(verifyResourcePolicies(p,f.executionData,f.conditions).status,'pass');assert.match(exportSupplyPlanCsv(p),/联合候选与保守回退/);
 });
 test('R02 any single enabled condition failure leaves whole multi-member cycle without ghost commit',()=>{
- for(const [label,mutate] of [['tool',d=>d.tools[0]['可用数量']='1'],['pool',d=>d.personnelPools[0]['总人数']='2'],['space',d=>d.batchResources.at(-1)['容量']='1000'],['material',d=>d.inventory[0]['账面数量']='1'],['skill',d=>d.personnelGroups.forEach(g=>g['技能']='WRONG')],['calendar',d=>d.calendars[0]['结束分钟']='20']]){
+ for(const [label,mutate] of [['tool',d=>d.tools[0]['可用数量']='1'],['pool',d=>d.personnelPools[0]['总人数']='2'],['space',d=>d.batchResources.at(-1)['容量']='500'],['material',d=>d.inventory[0]['账面数量']='1'],['skill',d=>d.personnelGroups.forEach(g=>g['技能']='WRONG')],['calendar',d=>d.calendars[0]['结束分钟']='20']]){
   const d=jointEnabledFixture();mutate(d);const {p}=solve(d);assert.equal(p.tasks.length,0,label+JSON.stringify(p.findings));assert.equal(p.resourceReservations.length,0,label);assert.ok(p.materialDemands.every(r=>!r.committed),label);assert.ok(p.findings.length,label);assert.ok(p.jointAttempts.length,label);
  }
 });

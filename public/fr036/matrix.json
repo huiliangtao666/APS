@@ -965,6 +965,7 @@
         "所需技能",
         "所需班次",
         "候选人员组",
+        "人员岗位编号",
         "人员参与阶段",
         "人员开始偏移",
         "人员结束偏移",
@@ -981,6 +982,7 @@
         "工序编号",
         "资源类型",
         "资源编号",
+        "人员岗位编号",
         "人员参与阶段"
       ],
       "references": "订单→orders→产品工序；设备→machines同工序；人员技能→personnelGroups；按资源类型解释引用",
@@ -1007,7 +1009,8 @@
         "技能",
         "班次",
         "可用起始分钟",
-        "可用结束分钟"
+        "可用结束分钟",
+        "poolId"
       ],
       "systems": [
         "APS"
@@ -1183,7 +1186,8 @@
         "容量单位",
         "时间单位",
         "释放策略",
-        "配置依据"
+        "配置依据",
+        "字段权威JSON"
       ],
       "uniqueKey": [
         "配置编号"
@@ -1198,11 +1202,11 @@
       "template": "templates/31_原05与06运行映射.csv",
       "example": "examples/original0506-mapping-draft.csv",
       "dates": [],
-      "version": "FR013-resource-map-v1；配置版本递增+输入版本+冻结配置SHA256",
+      "version": "FR013-resource-map-v1 / FR013-resource-map-v2；配置版本递增与冻结输入",
       "validation": [
         "src/lib/resource-mapping.mjs#validateResourceMappings"
       ],
-      "limitations": "READY只支持DIRECT_IDENTITY、全工厂/*→当前单产线的全局唯一容量；多别名合并、局部/跨线、多窗口、未知公式/单位拒绝；草稿禁止运行"
+      "limitations": "READY显式绑定原资料与运行资源；v2同实体多来源须逐字段指定权威，不重复增加容量；草稿或未支持组合阻断"
     },
     {
       "key": "originalBom",
@@ -1237,6 +1241,107 @@
         "server/input-validation.mjs#validateInputs"
       ],
       "limitations": "source persistence does not approve calculation basis/unit/yield/loss/rounding combinations"
+    },
+    {
+      "key": "originalResourceEvents",
+      "label": "原始资源事实账（追加事件）",
+      "file": "32_原始资源事实账.csv",
+      "fields": [
+        "事件编号",
+        "原账编号",
+        "前事件编号",
+        "事件类型",
+        "原账JSON"
+      ],
+      "uniqueKey": [
+        "事件编号"
+      ],
+      "references": "只追加的历史资源账事件；保留来源hash、实际采用清单、原任务及物理身份映射",
+      "units": "原账JSON中的明确单位及实际分钟；未知释放为null",
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "有权原始资源账提供方",
+      "direction": "inbound-simulation",
+      "template": "templates/32_原始资源事实账.csv",
+      "dates": [],
+      "version": "固定输入版本与原始来源；按相应契约保存",
+      "validation": [
+        "src/lib/original-resources.mjs#originalIssues"
+      ],
+      "limitations": "仅当前显式契约；字段缺失或未知组合阻断，不生成现场默认值"
+    },
+    {
+      "key": "resourceStops",
+      "label": "人员与工装停用例外",
+      "file": "31_人员与工装停用例外.csv",
+      "fields": [
+        "例外编号",
+        "资源类型",
+        "资源编号",
+        "起始分钟",
+        "结束分钟",
+        "原因"
+      ],
+      "uniqueKey": [
+        "例外编号"
+      ],
+      "references": "人员组或工装停用例外；按显式资源类型与编号关联现有资源",
+      "units": "分钟；0=2026-11-02T08:00:00+08:00",
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "授权日历配置维护人",
+      "direction": "inbound-simulation",
+      "template": "templates/31_人员与工装停用例外.csv",
+      "dates": [],
+      "version": "固定输入版本与原始来源；按相应契约保存",
+      "validation": [
+        "src/lib/working-windows.mjs"
+      ],
+      "limitations": "仅当前显式契约；字段缺失或未知组合阻断，不生成现场默认值"
+    },
+    {
+      "key": "personnelPools",
+      "label": "物理人员池（P10核心）",
+      "file": "30_物理人员池.csv",
+      "fields": [
+        "poolId",
+        "池名称",
+        "总人数",
+        "是否启用",
+        "允许共用",
+        "容量来源",
+        "适用范围",
+        "生效时间",
+        "交接设置",
+        "策略版本",
+        "策略来源",
+        "互斥粒度",
+        "交接模式",
+        "交接起始分钟",
+        "交接结束分钟",
+        "交接容量人数",
+        "占用策略",
+        "释放策略"
+      ],
+      "uniqueKey": [
+        "poolId"
+      ],
+      "references": "人员物理池与显式共享/交接策略；组通过poolId引用；策略版本及来源须显式保存",
+      "units": "人数为安全整数；时间为半开分钟区间",
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "授权资源配置维护人",
+      "direction": "inbound-simulation",
+      "template": "templates/30_物理人员池.csv",
+      "dates": [],
+      "version": "固定输入版本与原始来源；按相应契约保存",
+      "validation": [
+        "src/lib/physical-pools.mjs#validatePhysicalPools"
+      ],
+      "limitations": "仅当前显式契约；字段缺失或未知组合阻断，不生成现场默认值"
     }
   ],
   "outbound": [

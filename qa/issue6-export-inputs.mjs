@@ -1,7 +1,7 @@
 import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';
 import {stageInput} from './issue6-stage-input.mjs';import {inspectCsvBatch} from '../server/csv-batch.mjs';import {defs} from '../server/planner.ts';import {parseInputCsvRecords} from '../src/lib/input-csv.mjs';
 const out=process.env.ISSUE6_EVIDENCE_DIR||'/evidence';fs.mkdirSync(out,{recursive:true});fs.mkdirSync(path.join(out,'converted'),{recursive:true});
-const inputs=stageInput(process.env.ISSUE6_INPUT_DIR||'/inputs',{selectApplicableMachines:true}),inspection=inspectCsvBatch(inputs.files,defs,inputs.repairs);if(inspection.issues.length)throw Error(JSON.stringify(inspection.issues));
+const inputs=stageInput(process.env.ISSUE6_INPUT_DIR||'/inputs',{selectApplicableMachines:true,calendarOnlyDependencies:true}),inspection=inspectCsvBatch(inputs.files,defs,inputs.repairs);if(inspection.issues.length)throw Error(JSON.stringify(inspection.issues));
 const hash=s=>createHash('sha256').update(s).digest('hex'),quote=v=>'"'+String(v).replaceAll('"','""')+'"',manifest={softwareOnly:true,orderChoicesAuthority:'Issue6 explicit software test operator choices; no customer facts',originals:inputs.originals.map(f=>({file:f.name,sha256:hash(f.text)})),selected:inputs.hashes,converted:[],lineage:[],excluded:[]};
 for(const [table,rows] of Object.entries(inspection.tables)){
  const def=defs.find(d=>d.key===table),original=inputs.originals.find(f=>f.name===def.file),raw=parseInputCsvRecords(original.text),source=inspection.sources[table];

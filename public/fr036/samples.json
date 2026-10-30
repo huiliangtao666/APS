@@ -240,7 +240,7 @@
       "contract": "main-header-only",
       "expected": "fill-before-import",
       "simulation": true,
-      "sha256": "5fbf747c7e4bbc78e6663098c51f932a3b2c48894545a057f35cf56c308b6c1b"
+      "sha256": "94336b3c3922b467136b07e231bc68d6d354f8de447aecdf0a8356b359646bf0"
     },
     {
       "file": "templates/19_人员组与可用时间.csv",
@@ -248,7 +248,7 @@
       "contract": "main-header-only",
       "expected": "fill-before-import",
       "simulation": true,
-      "sha256": "3ccceb48330619d9685d290332f03ae8ef5589490f554d3fa747b79fccfad4d2"
+      "sha256": "454573c979e7c89aad7eda1b78d6e6845ccdccfc32672a37c5f03408e3b187ce"
     },
     {
       "file": "templates/16_排程规则配置.csv",
@@ -375,7 +375,8 @@
       "contract": "original-v0.3-source-fields-only",
       "expected": "source-import-only; runtime-mapping-pending",
       "simulation": true,
-      "context": "所有值均为虚构示例；不批准共享池/任务占用/组名或班次映射"
+      "context": "所有值均为虚构示例；不批准共享池/任务占用/组名或班次映射",
+      "sha256": "b10bd1f4aa7027d5b1708db9184ed8835cfdbfc8d75d2194699a05b6a6c2b75d"
     },
     {
       "file": "examples/original06.csv",
@@ -383,7 +384,8 @@
       "contract": "original-v0.3-source-fields-only",
       "expected": "source-import-only; runtime-mapping-pending",
       "simulation": true,
-      "context": "所有值均为虚构示例；不批准共享池/任务占用/组名或班次映射"
+      "context": "所有值均为虚构示例；不批准共享池/任务占用/组名或班次映射",
+      "sha256": "4adf23981fd716593522b6b86e0d6f976db65fa0c53cb51add89bad2a7b32a5b"
     },
     {
       "file": "examples/original0506-mapping-draft.csv",
@@ -402,6 +404,70 @@
       "simulation": true,
       "sha256": "8e7ba0b451aa8b7415f4a65ef4be2e3b77eeb23dd8a0e9fba15883dd94f121eb",
       "context": "受控v0.3八行；UTF-8 BOM及物理CRLF与原件字节一致；不可当计算BOM"
+    },
+    {
+      "file": "templates/01_工厂与产线配置.csv",
+      "table": "factoryLines",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "ba485f65709d09f73523f5cd7577f89fc72a4f23d290314f314c185ca6620b34"
+    },
+    {
+      "file": "templates/05_模具与工具配置.csv",
+      "table": "originalTools",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "9e4ec402983db38ef4eccf4a34ad0dc117898cdf01279d9ae8a9ebc4bacd9ffb"
+    },
+    {
+      "file": "templates/06_人员技能与班次.csv",
+      "table": "originalPersonnel",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "862b513eb449a97643cb73d9c714031b05d8e275c8b52d13fc0bc9d0a3df5a2c"
+    },
+    {
+      "file": "templates/31_原05与06运行映射.csv",
+      "table": "resourceMappings",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "a1f31ec4aacb251a13c67b20acca2ca73f0c41d58e02969fd906f52264c5d769"
+    },
+    {
+      "file": "templates/09_物料BOM配置.csv",
+      "table": "originalBom",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "c2f6abfab98bf0d5533b0406a1808afe6e9628ebd94e7ff2140725665f255583"
+    },
+    {
+      "file": "templates/32_原始资源事实账.csv",
+      "table": "originalResourceEvents",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "961ede4d659a12f6546e8c0630acafff74a71269f5d20f47f37daf22c99e377a"
+    },
+    {
+      "file": "templates/31_人员与工装停用例外.csv",
+      "table": "resourceStops",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "d74450f3d872e3edefc97e4248c1e6a16cdad5d7ecbd178745ded2294bbd0399"
+    },
+    {
+      "file": "templates/30_物理人员池.csv",
+      "table": "personnelPools",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "ce391e75a9d298faaa1f5c20bdd7a9ab30117a41a44e09492d64f623b5d06096"
     }
   ]
 }

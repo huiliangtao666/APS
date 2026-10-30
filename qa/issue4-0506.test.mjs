@@ -23,8 +23,8 @@ test('original 7/6 columns preserve literals; preview, atomic save, exact reimpo
   const def=defs.find(d=>d.key===key),exported=await reopen.ok('/export',{table:key});assert.deepEqual(parseInputCsv(exported),[def.fields,...rows.map(r=>def.fields.map(f=>r[f]))]);
   const query=await reopen.ok('/export',{query:{table:key,revision:1,filters:{text:rows[0][def.fields[0]]}}});assert.ok(query.includes(rows[0][def.fields[0]]));
  }
- const run=freezeRunInput(state.data);assert.ok(run.conditions.checkScope.unchecked.some(s=>s.includes('原05/06')));assert.deepEqual(run.executionData.originalTools,d.originalTools);
- const plan=await reopen.ok('/calculate',{revision:1});assert.ok(plan.conditions.checkScope.unchecked.some(s=>s.includes('原05/06')));const persisted=JSON.parse(reopen.bytes());assert.deepEqual(persisted.inputVersions[plan.inputVersionId].data.originalTools,d.originalTools);assert.deepEqual(persisted.plans.find(p=>p.id===old.plans[0].id),old.plans[0]);
+ assert.throws(()=>freezeRunInput(state.data),/NOT_READY_CONFIG.*缺READY显式映射/);
+ const beforeRun=reopen.bytes(),result=await reopen.call('/calculate',{revision:1});assert.equal(result.status,400);assert.equal(reopen.bytes(),beforeRun);const persisted=JSON.parse(reopen.bytes());assert.deepEqual(persisted.data.originalTools,d.originalTools);assert.deepEqual(persisted.plans.find(p=>p.id===old.plans[0].id),old.plans[0]);
  console.log('SOURCE_ROUNDTRIP_AND_HISTORY_PASS');
 });
 test('single table and batch required values, safe quantity, minute units/date/bounds, duplicate identity, header and physical locations reject whole store',async t=>{

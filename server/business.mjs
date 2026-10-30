@@ -146,7 +146,9 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const result={status:200,body:null};
     const response={status(code){result.status=code;return this;},json(body){result.body=body;return this;}};
     const csvEvidence=Object.fromEntries(Object.entries(inspection.sources).filter(([key])=>['originalTools','originalPersonnel','resourceMappings'].includes(key)).map(([key,source])=>{const raw=req.body.files?.find(f=>f.name===source.file);return [key,{...source,...(raw?{text:raw.text,sha256:createHash('sha256').update(raw.text).digest('hex')}:{})}];}));
-    saveInputs({...req,csvEvidence},response,inspection.tables,undefined,dryRun);
+    const csvSources=Object.fromEntries(Object.entries(inspection.sources).map(([key,source])=>[key,{...source,originalText:source.originalText??req.body.files?.find(file=>file.name===source.file)?.text}]));
+    if(Object.values(csvSources).some(source=>typeof source.originalText!=='string'))return {status:400,body:{error:'csv_source_unavailable'}};
+    saveInputs({...req,csvEvidence,csvSources},response,inspection.tables,undefined,dryRun);
     if(result.body?.issues)result.body.issues=physicalIssues(result.body.issues,inspection.sources,defs);
     return result;
   }

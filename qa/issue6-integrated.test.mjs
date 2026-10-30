@@ -3,10 +3,10 @@ import {fixture} from './fr027-fixture.mjs';import {stageInput} from './issue6-s
 import {defs,calculate} from '../server/planner.ts';import {inputHash} from '../server/run-input.mjs';
 const dir=process.env.ISSUE6_INPUT_DIR||'/inputs';
 export async function importStage(f){
- const {files,repairs}=stageInput(dir,{selectApplicableMachines:true});assert.equal(files.length,10);
+ const {files,repairs}=stageInput(dir,{selectApplicableMachines:true,calendarOnlyDependencies:true});assert.equal(files.length,10);
  const state=await f.ok('/state');
  const missing=await f.ok('/imports/preview',{revision:state.revision,files});assert.equal(missing.valid,false);assert.equal(missing.issues.length,6);
- const raw=stageInput(dir);const original=await f.call('/imports/preview',{revision:state.revision,files:raw.files,repairs:raw.repairs});assert.equal(original.body.valid,false);assert.equal(original.body.issues.length,4);assert.ok(original.body.issues.every(i=>i.code==='INPUT / MACHINE_OPERATION_REFERENCE'));
+ const raw=stageInput(dir);const original=await f.call('/imports/preview',{revision:state.revision,files:raw.files,repairs:raw.repairs});assert.equal(original.body.valid,false);assert.equal(original.body.issues.filter(issue=>issue.code==='INPUT / MACHINE_OPERATION_REFERENCE').length,4);assert.ok(original.body.issues.some(issue=>issue.file==='12_工序资源与物料依赖.csv'));
  const p=await f.ok('/imports/preview',{revision:state.revision,files,repairs});assert.equal(p.valid,true,JSON.stringify(p));
  const saved=await f.ok('/imports/commit',{previewId:p.id});return {saved,files,repairs};
 }
@@ -15,7 +15,7 @@ export async function illegalSavedPlan(f,plan,start=14){
  const file=path.join(f.dir,'business.json'),s=JSON.parse(f.bytes()),p=s.plans.find(p=>p.id===plan.id),task=p.tasks.find(t=>t.id==='B-MIX');task.start=start;task.end=start+30;
  fs.writeFileSync(file,JSON.stringify(s));return p;
 }
-test('original ten-table atomic import, readback, fixed calendar verification, export, reopen and version isolation',async t=>{
+test('explicit calendar-only ten-table import, readback, verification, export, reopen and version isolation',async t=>{
  const f=await fixture(t);await f.ok('/calculate',{revision:0});
  const initial=(await f.ok('/state')).data;
  const {saved,files,repairs}=await importStage(f),v=saved.revision;

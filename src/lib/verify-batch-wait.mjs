@@ -3,6 +3,7 @@ import {quantityMath as Q} from './material-allocation.mjs';
 // It neither groups batches nor calls the planner or resource allocator.
 export function verifyBatchWait(plan,data,conditions=plan.conditions){
  if(!data||!conditions||conditions.mode==='minimal-r1')return {status:'not_checked',details:['缺少冻结支持模式输入；重量节点及等待未复核。'],findings:[]};
+ if(!Array.isArray(data.routes)||(plan.batchChecked&&['orders','products','machines'].some(table=>!Array.isArray(data[table]))))return {status:'not_checked',details:['冻结路线或批次主数据不完整；重量节点及等待未复核。'],findings:[]};
  const findings=[],tasks=plan.tasks||[];let checked=0;
  const add=(code,message,taskIds)=>findings.push({code,message,taskIds});
  for(const t of tasks){
