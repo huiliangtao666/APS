@@ -1,6 +1,6 @@
 import {sourceRefs} from './problem-records.mjs';
 import {effectiveClaim,windowMode} from './resource-policies.mjs';
-import {toolDiagnostics} from '../../prototypes/fr006-config-only/src/tool-validation.mjs';
+import {validateToolRows} from './tool-validation.mjs';
 export const legacyJointParameters={占用口径:'显式逐生产批完整区间',数量口径:'每生产批声明数量',FR006任务默认:'不自动采用，须逐批声明'};
 export const jointParameters={占用口径:'按表23逐项配置',数量口径:'每生产批声明数量',FR006任务默认:'由声明参数来源选择',参数契约:'CR-DEC02-03-v1'};
 export function jointFlags(data,at=new Date().toISOString()) {
@@ -14,8 +14,12 @@ export function validateJointResources(data,at){
  const issues=[],flags=jointFlags(data,at),claims=data.resourceClaims||[];
  const refs=(table,rows)=>sourceRefs(table,rows,data[table]||[]);
  const add=(message,table='resourceClaims',row=0,relatedRecords=[],extra={})=>issues.push({code:'INPUT / JOINT_RESOURCE',message,table,row,relatedRecords,...extra});
- for(const d of toolDiagnostics(data.tools||[]))add(d.message,'tools',d.index+2,d.members.map(i=>sourceRefs('tools',data.tools,data.tools)[i]),{field:d.field});
- for(const [ti,t] of (data.tools||[]).entries())for(const k of ['可用数量','每任务需求数量'])if(!decimal(t[k])||!Number.isSafeInteger(Number(t[k]))||Number(t[k])<1)add(`工装 ${t['工装编码']} ${k} 须为安全正整数套，不支持科学计数或其他单位`,'tools',ti+2,sourceRefs('tools',data.tools,data.tools).slice(ti,ti+1));
+ const toolRows=data.tools||[],toolSources=sourceRefs('tools',toolRows,toolRows);
+ issues.push(...validateToolRows(toolRows).map(issue=>({...issue,relatedRecords:issue.field==='工装编码'&&toolRows[issue.row-2]?.['工装编码']?.trim()?toolSources.filter((source,index)=>toolRows[index]['工装编码']?.trim()===toolRows[issue.row-2]['工装编码'].trim()):toolSources.slice(issue.row-2,issue.row-1)})));
+ for(const [index,tool] of toolRows.entries())for(const field of ['可用数量','每任务需求数量']){
+  if((!decimal(tool[field])||!Number.isSafeInteger(Number(tool[field]))||Number(tool[field])<1)&&!issues.some(issue=>issue.table==='tools'&&issue.row===index+2&&issue.field===field))
+   add(`工装 ${tool['工装编码']} ${field} 须为安全正整数套，不支持科学计数或其他单位`,'tools',index+2,toolSources.slice(index,index+1),{file:'18_工装配置.csv',field});
+ }
  const seen=new Set();
  for(const [i,raw] of claims.entries()){
   const c=effectiveClaim(raw,data);

@@ -105,7 +105,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
       const def=defs.find(d=>d.key===key);if(!def)return res.status(404).json({error:'unknown_table'});
       if(!Array.isArray(rows)||rows.length>10000||rows.some(r=>!r||typeof r!=='object'||Array.isArray(r)||Object.values(r).some(v=>typeof v!=='string')))return res.status(400).json({error:'invalid_rows'});
       if(rows.some(r=>Object.keys(r).some(f=>!def.fields.includes(f))))return res.status(400).json({error:'unknown_fields'});
-      proposed[key]=(migratePolicies({[key]:rows})[key]||rows).map(r=>Object.fromEntries(def.fields.map(f=>[f,r[f]??''])));
+      proposed[key]=(['tools','resourceClaims'].includes(key)?rows:(migratePolicies({[key]:rows})[key]||rows)).map(r=>Object.fromEntries(def.fields.map(f=>[f,r[f]??''])));
     }
     if(trialId&&factTables.some(k=>tables[k]!==undefined))return res.status(409).json({error:'trial_execution_edit_forbidden'});
     if(!trialId){const staged=stageEvents(target.data,proposed,Object.keys(tables));if(staged.issues.length)return res.status(409).json({error:'event_reconciliation_required',issues:staged.issues});proposed=staged.data;for(const def of defs.filter(d=>JSON.stringify(proposed[d.key])!==JSON.stringify(target.data[d.key]))){const rows=proposed[def.key]||[];if(rows.some(r=>!r||typeof r!=='object'||Array.isArray(r)||Object.keys(r).some(k=>!def.fields.includes(k))||Object.values(r).some(v=>typeof v!=='string')))return res.status(400).json({error:'invalid_event_effect'});proposed[def.key]=rows.map(r=>Object.fromEntries(def.fields.map(f=>[f,r[f]??''])));}}

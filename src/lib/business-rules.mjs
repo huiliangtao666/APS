@@ -30,9 +30,9 @@ export function validRuleTime(value) {
 export function assessRules(data, at=new Date().toISOString(), checkCoverage=false, mode='supported', checkPolicyExecution=true) {
  const material=(data.rules||[]).some(r=>r['规则编号']==='MATERIAL'&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at)));
  const checkScope=schedulingScope(mode,material,activeBatchRule(data,at),jointFlags(data,at),deliveryActive(data,at)), minimal=mode==='minimal-r1';
- const issues=validateBatchResources(data).map(f=>({...f,table:'batchResources',file:'15_空间与组批规则配置.csv',row:f.row||0,field:'关联配置'})),settings=[];const rows=data.rules||[];
- issues.push(...validateJointResources(data,at).map(f=>({...f,table:f.table||'resourceClaims',file:f.table==='tools'?'18_工装配置.csv':f.table==='dependencies'?'12_工序资源与物料依赖.csv':f.table==='rules'?'16_排程规则配置.csv':'23_资源占用声明.csv',row:f.row||0,field:'关联配置'})));
- issues.push(...validateDelivery(data),...validatePolicies(data,at,mode,checkPolicyExecution));
+ const issues=validateBatchResources(data).map(f=>({...f,table:'batchResources',file:'15_空间与组批规则配置.csv',row:f.row||0,field:f.field||'关联配置'})),settings=[];const rows=data.rules||[];
+ issues.push(...validateJointResources(data,at).map(f=>({...f,table:f.table||'resourceClaims',file:f.table==='tools'?'18_工装配置.csv':f.table==='dependencies'?'12_工序资源与物料依赖.csv':f.table==='rules'?'16_排程规则配置.csv':'23_资源占用声明.csv',row:f.row||0,field:f.field||'关联配置'})));
+ issues.push(...validateDelivery(data),...validatePolicies(data,at,mode,checkPolicyExecution).map(f=>f.table==='tools'?{...f,file:'18_工装配置.csv'}:f));
  if(!minimal)for(const [index,r] of (data.routes||[]).entries())if(r['最大等待分钟']?.trim()&&(!/^\d+(?:\.\d+)?$/.test(r['最大等待分钟'])||!Number.isFinite(Number(r['最大等待分钟']))))issues.push({table:'routes',row:index+2,field:'最大等待分钟',message:'最大等待须为显式非负有限分钟；空值不设默认'});
  const refs=(table,rows)=>sourceRefs(table,rows,data[table]||[]);
  const add=(index,field,message,relatedRecords=refs('rules',index<0?[]:[rows[index]]),missingTarget)=>issues.push({table:'rules',file:'16_排程规则配置.csv',row:index<0?0:index+2,field,message,relatedRecords,...(missingTarget?{missingTarget}:{}),...(index<0&&!relatedRecords.length?{associationState:'known-absent',associationGap:'必要规则记录不存在；本次检查没有现存触发记录，不生成虚构记录。'}:{})});
