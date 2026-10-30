@@ -23,7 +23,7 @@ export function validateInventoryBatches(batches = [], materials = []) {
     for (const field of ['物料编号', '有效期', '位置', '质量状态']) {
       if (!(batch[field] || '').trim()) findings.push({ code: 'INVENTORY_REQUIRED', message: `${prefix}（${id || '编号空'}）缺少${field}` });
     }
-    if (batch['物料编号'] && !materialIds.has(batch['物料编号'].trim())) findings.push({ code: 'INVENTORY_MATERIAL', message: `${prefix}引用未配置的物料 ${batch['物料编号']}` });
+    if (batch['物料编号'] && !materialIds.has(batch['物料编号'].trim())) findings.push({ code: 'INVENTORY_MATERIAL', field: '物料编号', message: `${prefix}引用未配置的物料 ${batch['物料编号']}` });
     for (const field of ['账面数量', '已占用数量']) {
       const raw = (batch[field] || '').trim();
       const amount = Number(raw);
@@ -31,7 +31,7 @@ export function validateInventoryBatches(batches = [], materials = []) {
     }
     const quantity = Number(batch['账面数量']);
     const reserved = Number(batch['已占用数量']);
-    if (Number.isFinite(quantity) && Number.isFinite(reserved) && reserved > quantity) findings.push({ code: 'INVENTORY_RESERVED', message: `${prefix}已占用数量不能大于账面数量` });
+    if (Number.isFinite(quantity) && Number.isFinite(reserved) && reserved > quantity) findings.push({ code: 'INVENTORY_RESERVED', field: '已占用数量', message: `${prefix}已占用数量不能大于账面数量` });
     if (batch['有效期'] && !validExpiry(batch['有效期'])) findings.push({ code: 'INVENTORY_EXPIRY', message: `${prefix}有效期须为有效日历日期 YYYY-MM-DD` });
     const ready = batch['预计可用时间'] || '';
     if (ready && Number.isNaN(Date.parse(ready))) findings.push({ code: 'INVENTORY_READY', message: `${prefix}预计可用时间须为有效日期时间` });

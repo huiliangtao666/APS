@@ -14,6 +14,7 @@ export function ExchangeGuide({current}:{current:TableDef}){
    <li>重复编号须修正完整表后重导；相同集合替换不追加。不要给 CSV 添加来源、版本或模拟标记等未知列；这些说明保存在配套清单和系统输入版本中。</li>
    <li>分钟 0 = 2026-11-02 08:00 +08:00。预计到达/可用须带时区，例如 2026-11-02T08:00:00+08:00；有效期用 YYYY-MM-DD。kg、支、袋和物料单位不能混写。</li>
    <li>计算并保存后进入“查询报表与导出”，按方案和筛选查询，再填写原因导出。六类报表保留方案、运行、原输入、单位、日期及模拟说明；查询权限与导出权限分别检查。</li></ol>
+  <p>原09六列物料BOM来源示例（仅保存资料，未映射计算）：<a href={url('examples/09_物料BOM配置.csv')} download="09_物料BOM配置.csv">下载原09 BOM示例</a>。现行09_库存批次.csv为库存，不能当作BOM。</p>
   <p>原05/06原字段示例（虚构资料，待运行映射）：<a href={url('examples/original05.csv')} download="05_模具与工具配置.csv">模具与工具资料</a> · <a href={url('examples/original06.csv')} download="06_人员技能与班次.csv">人员技能资料</a></p>
   <p>当前类别：{current.label}。<a href={url('templates/'+current.file)} download={current.file}>下载当前类别 CSV 表头模板</a></p>
   <p><a href={url('使用说明.txt')} download>下载中文说明与案例步骤</a> · <a href={url('matrix.json')} download>下载字段、唯一键与引用矩阵 JSON</a> · <a href={url('samples.json')} download>下载示例清单与上下文</a></p>

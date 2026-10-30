@@ -1,3 +1,4 @@
+import {originalBomNote} from './lib/original-bom.mjs';
 import {originalResourceNote} from './lib/original-resources.mjs';
 import {MasterDataContract} from './MasterDataContract';
 import {useEffect,useRef,useState} from 'react';
@@ -7,7 +8,7 @@ type Repair={file:string;row:number;field:string;value:string};
 type CsvFile={name:string;text:string};
 type Issue={file:string;row:number;field:string;reason?:string;message?:string;index?:number;table?:string;inBatch?:boolean};
 type Preview={id?:string;valid:boolean;issues:Issue[];tables:Record<string,Record<string,string>[]>;sources:Record<string,{file:string;lines:number[];originalText?:string;mappings?:{sourceField:string;quantityField:string;unitField:string;unit:string}[];records?:{line:number;values:Record<string,string>}[];repairs?:Repair[]}>;beforeTables:Record<string,Record<string,string>[]>;error?:string};
-const keys=['resourceMappings','personnelPools','personnelGroups','tools','resourceClaims','skillSubstitutions','originalTools','originalPersonnel','factoryLines','calendars','downtime','orders','routes','times','machines','dependencies','rules','products','materials'];
+const keys=['originalBom','resourceMappings','personnelPools','personnelGroups','tools','resourceClaims','skillSubstitutions','originalTools','originalPersonnel','factoryLines','calendars','downtime','orders','routes','times','machines','dependencies','rules','products','materials'];
 const errors:Record<string,string>={stale_preview:'预览后数据、执行事实或方案记录已变化，请重新预览。',stale_input:'输入版本已变化，请刷新数据后重新预览。',preview_expired_or_unowned:'预览已过期或身份已变化，请重新预览。',execution_reconciliation_required:'当前执行事实阻止修改；请检查关联事实，不得覆盖已执行记录。',protected_history_unavailable:'已确认历史缺少原始输入，已阻止导入；请联系维护人员修复历史记录。',forbidden:'当前角色没有导入权限。',reason_required:'请填写操作原因。'};
 export function CsvBatchPanel({revision,canWrite,busy,api,refresh,onLocate}:{revision:number;canWrite:boolean;busy:boolean;api:(path:string,body:object)=>Promise<any>;refresh:()=>Promise<void>;onLocate:(table:string,row:number)=>void}){
  const [repairs,setRepairs]=useState<Repair[]>([]);
@@ -22,6 +23,7 @@ export function CsvBatchPanel({revision,canWrite,busy,api,refresh,onLocate}:{rev
  const disabled=!canWrite||busy||pending;
  return <section className="panel" data-csv-batch><h2>CSV 批量导入 · 预览与问题处理</h2><p>按中文文件名选择多个 CSV。整批替换所选表，引用在批次合并后检查；错误时全部不写入。原17字段“合格需求kg”保真拆为“合格需求”及显式 kg。原文件缺少的“是否允许拆分 / 需求类型 / 订单状态”必须逐行补录，不设默认值；补录后须重新预览。时间字段按分钟，生效时间按现行日期契约。</p><p>支持：{defs.filter(d=>keys.includes(d.key)).map(d=>d.file).join('、')}。其他已支持类别请使用下方单表操作；后续未支持类别不在本次批导范围。</p>
  <p data-original-resource-contract>{originalResourceNote}</p>
+ <p data-original-bom-contract>{originalBomNote}</p>
  <MasterDataContract table={'batch'}/>
  <label>选择批量 CSV<input aria-label="选择批量 CSV" type="file" multiple accept=".csv,text/csv" disabled={disabled} onChange={async e=>{const chosen=Array.from(e.target.files||[]);e.target.value='';const run=++generation.current;setPreview(null);setPending(true);try{const next=await Promise.all(chosen.map(async f=>({name:f.name,text:new TextDecoder('utf-8',{ignoreBOM:true}).decode(await f.arrayBuffer())})));if(run===generation.current){setFiles(next);setRepairs([]);setActive(null);setMessage('已读取文件，请预览。');}}catch{setMessage('文件读取失败，请重新选择。');}finally{setPending(false);}}}/></label>
  <ul>{files.map((f,i)=><li key={i}><button disabled={pending} onClick={()=>{setActive({file:f.name,row:1,field:'整份文件'});requestAnimationFrame(()=>editor.current?.focus());}}>{f.name} · 编辑 CSV</button><button disabled={disabled} aria-label={'移除 '+f.name} onClick={()=>{change(files.filter((_,n)=>n!==i));setActive(null);}}>移除</button></li>)}</ul>

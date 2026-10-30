@@ -3,6 +3,7 @@ import {attachProblemRecords,sourceRefs} from '../src/lib/problem-records.mjs';
 import {originalProtection,originalSchedulingReservations} from '../src/lib/original-resources.mjs';
 import {allowedWindows} from '../src/lib/working-windows.mjs';
 import {resourceMappingDef} from '../src/lib/resource-mapping.mjs';
+import {originalBomDef} from '../src/lib/original-bom.mjs';
 import {originalResourceDefs} from '../src/lib/original-resources.mjs';
 import {eventSummary,eventAbsences,validateEvents} from '../src/lib/simulation-events.mjs';
 import {factFor,executionSummary,executionAdmission,validateExecution,executionRisks} from '../src/lib/execution-facts.mjs';
@@ -63,12 +64,13 @@ export const defs: TableDef[] = [
   { key: 'personnelPools', label: '物理人员池（P10核心）', file: '30_物理人员池.csv', fields: ['poolId','池名称','总人数','是否启用','允许共用','容量来源','适用范围','生效时间','交接设置','策略版本','策略来源','互斥粒度','交接模式','交接起始分钟','交接结束分钟','交接容量人数','占用策略','释放策略'] },
   { key: 'personnelGroups', label: '人员组与可用时间', file: '19_人员组与可用时间.csv', fields: ['人员组编号','人员组名称','人员数量','技能','班次','可用起始分钟','可用结束分钟','poolId'] },
   { key: 'rules', label: '排程规则', file: '16_排程规则配置.csv', fields: ['规则编号','中文名称','是否启用','参数JSON','适用对象','生效时间'] },
+  originalBomDef,
   ...originalResourceDefs,
   resourceMappingDef,
 ];
 export const seed: Record<string, Row[]> = {
   resourceMappings: [], originalResourceEvents: [],
-  originalTools: [], originalPersonnel: [],
+  originalBom: [], originalTools: [], originalPersonnel: [],
   simulationEvents: [], executionFacts: [], executionMaterials: [], executionSources: [],
   products: [
     {'产品编号':'HC40','产品名称':'模拟火腿肠40g','单支净重kg':'0.04','每袋支数':'10','总收率':'0.96','模拟交付等待分钟':'0'},

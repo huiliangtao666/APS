@@ -1,7 +1,7 @@
 import {parseInputCsvRecords} from '../src/lib/input-csv.mjs';
 // The isolated prototype used these same table keys, but older field shapes.
 // Reuse physical-record parsing/inspection; actual runtime defs are authoritative.
-export const batchKeys=['resourceMappings','tools','resourceClaims','skillSubstitutions','originalTools','originalPersonnel','personnelPools','personnelGroups','factoryLines','calendars','downtime','orders','routes','times','machines','dependencies','rules','products','materials'];
+export const batchKeys=['originalBom','resourceMappings','tools','resourceClaims','skillSubstitutions','originalTools','originalPersonnel','personnelPools','personnelGroups','factoryLines','calendars','downtime','orders','routes','times','machines','dependencies','rules','products','materials'];
 export const optionalFields={resourceMappings:['字段权威JSON'],personnelGroups:['poolId'],orders:['已完成合格数量'],dependencies:['人员岗位编号','候选人员组','所需班次','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'],rules:['适用对象','生效时间']};
 export function inspectCsvBatch(files,defs,repairs=[]){
  const tables={},sources={},issues=[],seen=new Set(),used=new Set();
@@ -23,7 +23,7 @@ export function inspectCsvBatch(files,defs,repairs=[]){
   sources[def.key]={file:file.name,lines:raw.slice(1).map(r=>r.line),headers,originalText:file.text,records:raw.slice(1).map(r=>({line:r.line,values:Object.fromEntries(headers.map((h,i)=>[h,r.cells[i]??'']))})),mappings:legacy?[{sourceField:'合格需求kg',quantityField:'合格需求',unitField:'数量单位',unit:'kg'}]:[],repairs:[]};
   tables[def.key]=raw.slice(1).map(({cells,line},index)=>{
    if(cells.length!==headers.length)add(file.name,line,'整行',`列数 ${cells.length} 与表头 ${headers.length} 不一致`,{table:def.key,index});
-   const row=Object.fromEntries(def.fields.map(f=>[f,headers.includes(f)?(['originalTools','originalPersonnel','resourceMappings'].includes(def.key)?(cells[headers.indexOf(f)]||''):(cells[headers.indexOf(f)]||'').trim()):'']));
+   const row=Object.fromEntries(def.fields.map(f=>[f,headers.includes(f)?(['originalBom','originalTools','originalPersonnel','resourceMappings'].includes(def.key)?(cells[headers.indexOf(f)]||''):(cells[headers.indexOf(f)]||'').trim()):'']));
    if(legacy){row['合格需求']=(cells[headers.indexOf('合格需求kg')]||'').trim();row['数量单位']='kg';}
    for(let n=0;n<repairs.length;n++){const e=repairs[n];if(e&&e.file===file.name&&e.row===line&&def.key==='orders'&&entryFields.includes(e.field)&&!headers.includes(e.field)&&typeof e.value==='string'){
     if(sources[def.key].repairs.some(p=>p.row===line&&p.field===e.field)){add(file.name,line,e.field,'重复补录',{table:def.key,index});continue;}

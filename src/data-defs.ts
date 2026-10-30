@@ -1,4 +1,5 @@
 import {resourceMappingDef} from './lib/resource-mapping.mjs';
+import {originalBomDef} from './lib/original-bom.mjs';
 import {originalResourceDefs} from './lib/original-resources.mjs';
 export type TableDef = { key:string; label:string; file:string; fields:string[] };
 export const defs: TableDef[] = [
@@ -32,6 +33,7 @@ export const defs: TableDef[] = [
   { key: 'personnelPools', label: '物理人员池（P10核心）', file: '30_物理人员池.csv', fields: ['poolId','池名称','总人数','是否启用','允许共用','容量来源','适用范围','生效时间','交接设置','策略版本','策略来源','互斥粒度','交接模式','交接起始分钟','交接结束分钟','交接容量人数','占用策略','释放策略'] },
   { key: 'personnelGroups', label: '人员组与可用时间', file: '19_人员组与可用时间.csv', fields: ['人员组编号','人员组名称','人员数量','技能','班次','可用起始分钟','可用结束分钟','poolId'] },
   { key: 'rules', label: '排程规则', file: '16_排程规则配置.csv', fields: ['规则编号','中文名称','是否启用','参数JSON','适用对象','生效时间'] },
+  originalBomDef,
   ...originalResourceDefs,
   resourceMappingDef,
 ];

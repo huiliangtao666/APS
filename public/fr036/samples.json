@@ -393,6 +393,15 @@
       "context": "显式待配置映射示例；仅版本/来源身份/原行快照，不选择运行模式、实体、单位、容量或公式；禁止新运行",
       "simulation": true,
       "sha256": "aa940f4f64b280197e892ed242ecf686103a071ef39c075d52d93622fbd79c58"
+    },
+    {
+      "file": "examples/09_物料BOM配置.csv",
+      "table": "originalBom",
+      "contract": "original09-source-only",
+      "expected": "accept in seed context; source records only",
+      "simulation": true,
+      "sha256": "8e7ba0b451aa8b7415f4a65ef4be2e3b77eeb23dd8a0e9fba15883dd94f121eb",
+      "context": "受控v0.3八行；UTF-8 BOM及物理CRLF与原件字节一致；不可当计算BOM"
     }
   ]
 }

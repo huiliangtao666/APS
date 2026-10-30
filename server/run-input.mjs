@@ -48,6 +48,7 @@ export function freezeRunInput(data, selection = {}, calculatedAt = new Date().t
   if((data[originalTable]||[]).length)checkScope.checked.push('N06有限已释放原账/来源链保护；未知释放阻断，真实客户原账仍待提供');
   if((data.executionFacts||[]).length){checkScope.checked.push('模拟累计执行事实、原始保护区间与剩余工时/耗料（支持口径）');checkScope.unchecked=checkScope.unchecked.map(x=>x==='执行事实与主管确认'?'真实执行/质量确认、FR031事件恢复/转机/冲销':x);}
   if((data.simulationEvents||[]).length)checkScope.checked.push('FR029事件时点累计事实、不可改写事件历史、禁止未开始任务开工保护窗口与需处理阻断；不含恢复/转机/撤销');
+  if((data.originalBom||[]).length)checkScope.unchecked.push('原09 BOM来源资料未映射计算：未推定版本、生效日期、用量类型、单位及基准/收率/损失/取整组合');
   if(hasMappings)checkScope.checked.push(`原05/06 ${mappingContract} 显式来源/运行绑定；全局唯一容量、套/人、半开分钟区间`);
   if(checkScope.mode==='minimal-r1'&&hasPhysicalPools(executionData))throw Error('P10物理人员池不可用于minimal-r1未检查模式；请选择支持人员策略的完整试算');
   if(checkScope.mode!=='minimal-r1'){const issues=validatePhysicalPools(executionData,{at:calculatedAt,forRun:true});if(issues.length)throw Error(issues.map(i=>`${i.file}:${i.row}:${i.field} ${i.message}`).join('；'));}

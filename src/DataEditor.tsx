@@ -1,3 +1,4 @@
+import {originalBomNote} from './lib/original-bom.mjs';
 import {currentRecord,type IdentityContext,type RecordRef} from './lib/problem-records.mjs';
 import {MasterDataContract} from './MasterDataContract';
 import {OriginalResourceConfig} from './OriginalResourceConfig';
@@ -42,6 +43,7 @@ export function DataEditor({initialRecord,identityContext,data={},def,rows,revis
   {def.key==='factoryLines'&&<p>五字段须显式填写，时区使用 IANA 名称（如 Asia/Shanghai）；不自动填充值。首次配置须覆盖现有机器、订单的产线及日历的工厂引用。可维护未投入排程的产线记录，R1 仍只允许一条排程产线。修改保存为新输入版本，已确认方案的原始输入保留。</p>}
   {def.key==='simulationEvents'&&<p>FR029：先更新全部在制任务观测分钟为事件时点，再保存完整事件集合；可跨表暂存后一并保存。保护策略仅支持“禁止未开始任务开工”，需处理事实JSON留空由服务器判定。故障/耗料影响事实永久保留待处理；恢复、转机、撤销及旧方案未执行任务锁定未定。模拟物料状态不代表QA在线放行。</p>}
   {["executionFacts","executionMaterials","executionSources"].includes(def.key)&&<p>FR031 模拟累计口径：可用产出与报废分开，不跨工序累加；空报废按零处理。正报废量须明确“按本工序BOM补做”或“待核对”；工时独立填写。来源汇总缺少显式物料/批次分配时阻断，不自动分批。已开始/完成事实、已耗批次、原始来源不允许删除或覆盖。</p>}
+ { def.key==='originalBom'&&<p data-original-bom-contract>{originalBomNote}</p>}
  <MasterDataContract table={def.key}/>
   {['tools','resourceClaims'].includes(def.key)&&<p role="note">建议初始值 / 请核对实际业务。新建工装：可用套数1、每任务需求套数1、提前取得0分钟、后延归还0分钟；新建占用声明：完整工序（显式逐生产批完整区间），窗口偏移0。仅点击“保存修改”后生效，未保存不作用新试算。来源：2026-10-30用户授权的建议，不是客户现场事实。工装编码、适用工序、真实可用起止及共享范围须按实际业务或明确CSV来源填写；同一实体请使用同一编号共享容量，不能按设备复制容量。表23仍须显式填写资源身份、订单/工序、单位及参数来源；选择“工装配置”采用表18套数/提前/后延时，表23对应三个字段须留空。时间为半开区间。已有记录、复制及CSV/API不补建议值。</p>}
   {def.key==='originalResourceEvents'&&<p>N06：原账只追加事件，不编辑或删除已有行。登记/草稿须有来源；释放/纠正填写前事件编号和独立原件。原账JSON包含原事实修订、原任务批清册、实际采用/未采用清单、历史规则、身份映射、逐资源实际量/单位/取得/释放及提供方。只支持每资源单连续窗口及一次全部释放。未知释放显示阻断，不能填计划结束。合成数据须标明确模拟，真实原件须由有权提供方核对。</p>}

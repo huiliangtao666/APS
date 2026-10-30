@@ -8,6 +8,7 @@ const defaults={'窗口外释放':'是','窗口开始偏移分钟':'0','窗口�
 export function inspectSingleCsv(file,def){
  const tables={},sources={},issues=[];
  const add=(row,field,message)=>issues.push({table:def.key,file:file.name,row,field,message,reason:message,severity:'error',inBatch:true});
+ if(def.key==='originalBom'&&file.name!==def.file){add(1,'文件','须使用原09专用文件名 '+def.file+'；库存与现行计算BOM不是此类别');return {tables,sources,issues};}
  let records;
  try{records=parseInputCsvRecords(file.text).filter(r=>r.cells.some(c=>c.trim()));}catch(e){add(e.line||1,'CSV 格式',e.message);return {tables,sources,issues};}
  if(records.length<2){add(records[0]?.line||1,'表头','CSV 需要表头和至少一行数据');return {tables,sources,issues};}
