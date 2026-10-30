@@ -122,10 +122,9 @@ def export(workbook_path=None, refresh=True):
                 row['current_phase'] = '本卡适用需求已独立验收；历史复核与证据见原卡'
                 row['blocker'] = ''
                 row['acceptance_result'] = record['conclusion']
-        review_records = re.findall(r'<!-- aps-card-review:(.*?) -->', body, re.S)
-        reviewed = review_records[-1] if review_records else None
+        reviewed = re.search(r'<!-- aps-card-review:(.*?) -->', body, re.S)
         if reviewed and status != 'Done':
-            review = json.loads(reviewed)
+            review = json.loads(reviewed.group(1))
             row['review_record'] = review
             row['current_phase'] = review['current_phase']
             row['blocker'] = review['blocker']
