@@ -43,7 +43,8 @@ export function validatePolicies(data,at=new Date().toISOString(),mode='supporte
  }
  for(const [i,t]of (data.tools||[]).entries())for(const k of ['提前占用分钟','后延占用分钟'])if(!minute(t[k]))add('tools',i,k,'须为0–525600整数分钟');
  for(const [i,t]of (data.tools||[]).entries()){
-  if(!minute(t['可用起始分钟'])||!minute(t['可用结束分钟'])||Number(t['可用结束分钟'])<=Number(t['可用起始分钟']))add('tools',i,'可用结束分钟','工装可用期须显式填写 0–525600 的整数分钟，结束大于开始');
+  for(const field of ['可用起始分钟','可用结束分钟'])if(!minute(t[field]))add('tools',i,field,'工装可用期须显式填写 0–525600 的整数分钟');
+  if(minute(t['可用起始分钟'])&&minute(t['可用结束分钟'])&&Number(t['可用结束分钟'])<=Number(t['可用起始分钟']))add('tools',i,'可用结束分钟','工装可用期结束须大于开始');
  }
  for(const [i,g]of (data.personnelGroups||[]).entries())if(!Number.isSafeInteger(Number(g['人员数量']))||Number(g['人员数量'])<1)add('personnelGroups',i,'人员数量','人数须为安全正整数；所有技能共用该人数池');
  const claimKeys=new Set();
