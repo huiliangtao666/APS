@@ -4335,6 +4335,40 @@
       "issue_state": "open",
       "repair_round": "r1 for two locator defects; no r2",
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_0d7fdb84-22cb-4056-9965-6ba6c2df97e5:r1",
+      "original_delivery": "dlv_0d7fdb84-22cb-4056-9965-6ba6c2df97e5",
+      "notification_delivery": "dlv_ca68fbd2-7a7e-4dd8-aeb9-44190eee9f65",
+      "type": "TEST_VERDICT",
+      "source": "APS-Test",
+      "state": "PROCESSED",
+      "processed_at": "2026-10-30T12:35:07+08:00",
+      "requirement": "FR-013/Issue4",
+      "product_sha": "31904e1d628a33240aa645e128dba35bf041e5ca",
+      "parent_sha": "8422dcdf9f5d3a82407972573d5c1274b2c097c0",
+      "result": "30组26 PASS/4 BLOCKED/0产品FAIL；原05/06确定字段切片通过，整卡NOT_READY",
+      "external_hashes": {
+        "Issue4-FR013-0506-31904e1d-Test1-r1-REPORT.md": "4a4045e7786d1cc2be410384d15967b9829f96d18bd9e6bb40cba7a8b7ba1dfa",
+        "Issue4-FR013-0506-31904e1d-Test1-r1-MATRIX.csv": "e3bcb68af890f39730d78e1dfdaa0291220dcae8f651feacbf8ddfaf0da5c54d",
+        "Issue4-FR013-0506-31904e1d-Test1-r1-EVIDENCE.zip": "a18e621f8fc531142d6776abad8d718eca3f4d295e93aee8dbc26a3e0735e668",
+        "Issue4-FR013-0506-31904e1d-Test1-r1-SHA256.json": "a7809d821db754d086532d698f0e93a3fef4f1014f7eaa22991673cae4f7d6e4"
+      },
+      "zip_crc": "PASS",
+      "manifest_hashes_verified": 136,
+      "project_status": {
+        "FR-013": "In progress"
+      },
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6515059919",
+      "issue_state": "open",
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES",
+      "remaining": [
+        "B05-runtime",
+        "B06-runtime",
+        "BLINE-export",
+        "BDEV19-access mapping task dlv_cc914ecc-98e1-4026-a45d-ff2b8bb667a3"
+      ]
     }
   ]
 }
