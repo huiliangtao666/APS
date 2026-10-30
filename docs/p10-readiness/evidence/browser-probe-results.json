@@ -1,0 +1,25 @@
+{
+  "scope": "Existing P08/P09 base UI readiness, NOT P10 acceptance",
+  "syntheticIdentity": true,
+  "labels": [
+    "选择第1行",
+    "人员组与可用时间 1 人员组编号",
+    "人员组与可用时间 1 人员组名称",
+    "人员组与可用时间 1 人员数量",
+    "人员组与可用时间 1 技能",
+    "人员组与可用时间 1 班次",
+    "人员组与可用时间 1 可用起始分钟",
+    "人员组与可用时间 1 可用结束分钟",
+    "选择第2行",
+    "人员组与可用时间 2 人员组编号",
+    "人员组与可用时间 2 人员组名称",
+    "人员组与可用时间 2 人员数量",
+    "人员组与可用时间 2 技能",
+    "人员组与可用时间 2 班次",
+    "人员组与可用时间 2 可用起始分钟",
+    "人员组与可用时间 2 可用结束分钟"
+  ],
+  "errors": [],
+  "reloaded": true,
+  "assertion": "Personnel group quantity exists; pool identity/total/sharing/handover fields absent"
+}

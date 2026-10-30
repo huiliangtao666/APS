@@ -1,0 +1,109 @@
+Issue3 / FR007/022 — P10 模型兼容审查与精确阻塞（r1）
+
+原delivery：dlv_e3bdd41f-abdb-4a17-9a5b-b7a26fcce2f9
+交接event_key：dlv_e3bdd41f-abdb-4a17-9a5b-b7a26fcce2f9:r1
+原调度键：issue3:cr-dec02-03:p10-cross-group-physical-pool:dev:v0.3:r1
+需求：APS-BL-001 v0.3 + 生效 CR-DEC02-03-20261029。
+主Issue：https://github.com/huiliangtao666/APS/issues/3
+FR007：https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgjs
+FR022：https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg1o
+
+结果：BLOCKED（设计契约/现有模型表达缺口）。整卡建议：NOT_READY。
+P10未实现、未交独立Test验收；无新增产品FAIL或缺陷轮次。
+新产品代码SHA：null。受检旧产品SHA：e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc。
+受检旧产品父：1cdf394eb954cd6ff15a48cc052edb64f6f093b4。
+交付分支：feat/issue3-p10-readiness；只增加本目录报告、探针、证据。
+报告/证据提交SHA由附带的GitHub回读凭据单独列出，不能当成P10产品版本。
+权威需求文档读取SHA：aa78dff3f5e49e561b3494da2938c81297a82f9b（main文档，不是产品版本）。
+
+一、阻塞是什么，谁解除
+
+已批准的是共用、交接容量、占用方式可配置的能力方向；受控CR原文另明确：
+“用户批准共享及交接参数化方向；默认值、具体配置枚举与跨组同物理池/N06契约待细化”。
+见 evidence/authoritative-contract.json 的 design_detail_status、approved_delta、acceptance_delta。
+原Issue用户决定同样没有给出下列计算语义。现有表19只有组人数、技能、班次和单可用期；
+分配器/独立检查器均以groupId为容量键。poolId不存在；模型不能安全表达本派工完整P10。
+
+工程上可以增加规范物理池表和引用，但仅这样做不能满足共用开/关及交接参数改变新试算
+的验收，也不能代替下列业务决定。未通过增加可保存但不采用的字段伪装交付。
+
+B01｜共用关闭时的互斥对象未定义：互斥两个组、两个任务、两个岗位，还是同池所有并发？
+同任务的两个独立岗位是否仍可用容量2；与跨任务/跨组的行为是否不同？
+例如容量2、G1/G2各需1，同一工序与两个工序是否都受互斥限制，现契约不能判定。
+影响：P10共用开/关正向预期、岗位兼容、顺延原因及独立检查器。
+
+B02｜交接容量缺少单位、锚点、窗口与扣算规则：是池的交接时段可用人数上限，还是交班
+双方额外需求；交接窗口取哪些实际边界，何时释放，是否与原岗位人数相加/取最大？
+例如总容量2、原岗占1、交接配置1：总需求为1还是2，现契约不能判定。
+本次不从多班、阶段名称或DEC04/05/06 mock推测这些语义，也不擅自发明“无交接”枚举。
+影响：P10交接参数前台→保存→新Worker→独立检查器的完整链路。
+
+B03｜组人数与物理池总容量、迁移授权须明确：池总容量应只有一处来源；组人数是另一个
+资格上限，还是被池容量替换？旧组不能按同名/技能自动合池，不能假定两组为两个独立池。
+这部分可先做待配置/禁止启用，但不能把这种阻断状态称为P10核心业务结果完成。
+没有现场值并非单独的开发阻塞；应由显式输入解决，不能用猜测值解除B01/B02。
+
+解除负责人：APS-Design 在原Issue3/生效CR补齐枚举、互斥粒度、交接扣算公式和边界例；
+APS-PM 确认属于既有CR细化，协调需用户决定的新增业务含义，沿原delivery续派。
+恢复条件：以上规则可让Worker和独立检查器对同一输入独立得出一致合法性预期；
+给出明确无值/不支持组合的禁止启用策略及兼容规则。无须以现场默认值获批作为通用门槛。
+下一可执行动作：Design补契约，PM统一排工；Dev不自派另一条P10或新CR。
+
+二、可审阅的最小兼容方案（提案，不是已批准枚举/实现）
+
+1. 单独规范物理池配置来源，稳定poolId、显式有限正整数总容量；人员组只引用poolId。
+显示中文字段、单位、有效范围、保存版本、审计与待配置原因；不把相同名称当物理身份。
+组人数若保留，需按B03决定是否作资格上限；绝不因技能/组数复制总容量。
+2. 共用标志按B01定义互斥，交接按B02定义占用事件。原人员依赖的明确窗口/窗口外保留
+继续是参与时间来源，禁止再引入另一套冲突覆盖。P06多班不借此自动实施。
+3. 无值/未知引用/不支持的交接组合不能启用，解释缺项；不迁移成0、无限或猜测独立池。
+迁移只建立待配置状态；旧运行/确认/输入/账本原字节保留。不拿当前配置补历史。
+4. 新运行冻结规范池和组映射及版本；分配器同时检查资格与物理总容量，并原子提交账；
+同池不同技能/组/岗位占用累计，重复阶段按既有岗位契约合并。半开边界释放后可复用。
+5. 独立检查器从冻结配置自行重建需求/交接和poolId来源，再扫池总占用与互斥，不调用
+分配器；账本必须同时保留组、物理池、岗位/来源和实际起止。复核/负荷/冲突解释一致。
+6. 统一覆盖React定义、Express/schema/CSV、规则预览、run-input指纹、Worker、账本、
+独立检查器、resource-conflicts、resource-load和位置复核，避免只修改主分配路径。
+7. 兼容/回退：未启用新契约的旧快照继续按旧版本解释，缺旧输入拒绝；不得将旧groupId
+按新配置改解释为poolId。代码回退不得改写新/旧快照；新增配置的读写版本不兼容须拒绝。
+
+三、实际证据和逐项结果（仅现有模型就绪性）
+
+MODEL01 PASS_PROBE：accepted schema没有poolId/池容量/共用/交接字段。
+MODEL02 PASS_PROBE：两组各1人，两个独立技能需求，分配总计2；外部“同一实体总量1”
+无法输入。这是派工已知范围缺口，不是违反当前“各组独立”输入语义的新产品FAIL。
+API三项 PASS_PROBE：提交poolId、共用/交接字段均400 unknown_fields，新增池表404
+unknown_table；逐项完整business.json SHA256前后一致（业务及审计零写入）。
+GUARD三项 PASS_PROBE：query/outsider均403，planner陈旧revision为409；全文件不变。
+WORKER_CHECKER PASS_PROBE：真实Express异步Worker完成；单任务两组资源账合计2，
+冻结独立检查器按原组契约pass。仅在账本附加poolId仍pass，证明不能靠账本标签宣称支持
+物理池；未改变产品代码/校验预期。原始run/input/plan/verify都在probe-results.json。
+真实React就绪探针：表19两组可显示，刷新仍有旧配置，确无物理池/交接编辑字段；截图
+current-personnel-ui.png，控件aria-label与页面错误0记录在browser-probe-results.json。
+相关回归：qa/p08.test.mjs、qa/s06.test.mjs、qa/dec0203-repair-r1.test.mjs共23/23 PASS；
+不与早先重叠的17项运行相加，不当作P10 PASS。容器TypeScript/Vite/Express/Worker
+生产构建PASS。docker隔离只读挂载源树，临时store及合成身份，未安装/运行宿主应用。
+未执行：新P10行为验收、P10配置迁移/回滚/历史用例、真实SSO、QA UAT；无新实现可验。
+
+四、父链与保持的历史
+
+证据lineage.json来自本次GitHub分支API与git fetch。
+main仅受控文档链，不含e0be9b6或7077e536；不从main冒充最新产品。
+e0be9b6直接父1cdf394，是P08/P09独立PASS旧版，本报告分支明确从此建立。
+fc273441ca93dcc47996bf5a6f7031e73be7f226是其后FR013校验分支；其他Issue9、FR026、
+FR016分支亦在此链上，未覆盖或合并这些工作。
+7077e536d421b79a634b2792790344bc258acd51是同源ca13c6d上的另一分支，其限定通过
+仍在原SHA，不宣称本分支已经集成FR017代码。
+D01–D03 round1 PASS固定24ba6884b3a5f07425a728b7733a677563c6aa44；本次只相关回归。
+P08/P09、S06/S07原范围结论、RAW01及其他已交付成果均不改签。
+P06、N06、工装多窗口、R01/R02、完整FR007/022与CR仍NOT_READY；DEC04/05/06仅设计。
+无main合并、无发布、无安全守卫放宽、无原卡状态或缺陷轮次回写。
+
+五、文件与访问
+
+GitHub普通push后同分支docs/p10-readiness/可独立取得全部报告、探针与证据，
+不依赖Dev未提交文件。evidence/SHA256.json逐文件散列不包含自身。
+根目录交付报告P10-ISSUE3-READINESS-REPORT.txt及P10-ISSUE3-READINESS-EVIDENCE.zip
+是本目录原件副本；外层SHA256与提交回读另附。未复制令牌/运行密钥/真实客户资料。
+交接只向APS-PM发送本delivery:r1的一条DEV_DELIVERED，结果BLOCKED、整卡NOT_READY；
+queued仅记SENT，收到PM PROCESSED前不宣称闭环。普通ACK不再发通知。

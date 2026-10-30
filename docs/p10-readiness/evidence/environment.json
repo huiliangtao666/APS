@@ -1,0 +1,27 @@
+{
+  "executedAt": "2026-10-29T16:12:06.447152+00:00",
+  "executor": "APS-Dev",
+  "containerImage": "aps-fr038-qa-runtime:latest",
+  "containerOnly": true,
+  "mounts": "product source readonly; evidence separate writable; copied into disposable container tree",
+  "identity": "synthetic test#planner/query/outsider through real authorization middleware",
+  "baselineProductSha": "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc",
+  "commands": [
+    "node --experimental-strip-types docs/p10-readiness/probe.mjs",
+    "node --experimental-strip-types --test qa/p08.test.mjs qa/s06.test.mjs qa/dec0203-repair-r1.test.mjs",
+    "npm run build",
+    "npx playwright install chromium --only-shell",
+    "node --experimental-strip-types docs/p10-readiness/browser-probe.mjs"
+  ],
+  "regression": "23/23 PASS (do not sum earlier overlapping run)",
+  "probe": "9 readiness observations passed, not P10 acceptance",
+  "browser": "real React/Express; save and refresh of baseline data; absence of pool/handover fields; zero page errors",
+  "build": "tsc/Vite/Express bundle/Worker bundle PASS",
+  "notExecuted": [
+    "P10 new implementation and its acceptance",
+    "production identity/SSO",
+    "QA UAT",
+    "new physical-pool migration, rollback or history mutation scenarios"
+  ],
+  "imageId": "sha256:0d45a31aa25c4cca1eaacbfd1ba4ee6d5028d899b329e49a6036a66fd0c35da8"
+}

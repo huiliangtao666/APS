@@ -1,0 +1,71 @@
+{
+  "projectId": "PVT_kwHOFM9WU84BpE1c",
+  "cards": [
+    {
+      "id": "PVTI_lAHOFM9WU84BpE1czhEHgjs",
+      "title": "[FR] FR-007 人员数量与技能配置",
+      "fieldValues": {
+        "nodes": [
+          {},
+          {
+            "name": "In progress",
+            "field": {
+              "name": "Status"
+            }
+          },
+          {
+            "name": "P0",
+            "field": {
+              "name": "Priority"
+            }
+          },
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "bodySha256": "fae1835448fb3ab474c2bf96aba8a943cbc90b52bce86bce1121934f89f2b440",
+      "currentReview": "<!-- aps-card-review:{\"event_key\": \"USER-DECISIONS-20261029-R1:FR-007\", \"requirement_version\": \"v0.3+CR-DEC02-03-20261029\", \"code_sha\": \"e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc\", \"current_phase\": \"P08/P09限定PASS；用户确认共享开关、交接容量与占用可配置；其余责任待闭环\", \"blocker\": \"P06多班交接、P10跨组物理池与原P02等责任待实现/验收；默认值未批准\", \"conclusion\": \"P08/P09旧SHA限定PASS；共享/交接参数化未验；整卡NOT_READY\", \"uat\": \"WAITING_DEPENDENCIES\"} -->\n\n\n<!-- issue3-p08p09-dev:dlv_8e493d57-3f86-48a9-85a3-b7dcb9a53968:r1 -->\n## P08/P09 独立同技能岗位：Dev限定交付（2026-10-29T22:47:53+08:00）\nAPS-PM核验 `dlv_8e493d57-3f86-48a9-85a3-b7dcb9a53968:r1`：既有批准CR-DEC02-03-20261029 / Issue3，产品 `feat/fr-013-016-main-batch` 固定SHA `e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc`，直接父 `1cdf394eb954cd6ff15a48cc052edb64f6f093b4`，设计文档SHA null。GitHub提交及分支已核对；未合main、未发布。\n\n表12可选人员岗位编号明确同岗重叠按最大人数、不同岗同时占用人数相加；同岗候选组/技能/班次冲突原子拒绝。React保存刷新、服务端/CSV、Worker/账本postId、原因、冻结独立检查器、输入身份和比较均纳入本次实现。Dev A01–A15限定自测PASS，含两独立同技能岗位容量2可排与容量1合法未排、释放/保留、有向替代、班次/可用窗口、非法及越权零写入、已确认历史全量保护、旧字段/CSV兼容、冻结篡改拒绝。报告及矩阵/证据ZIP在APS-Dev根目录，外层SHA256分别为 `281fde69d1dd195099c84ff55df66a7e9d0e9eb2c097552370d8f7a75af593f5`、`3372e946292700489229035ef69ec491a6e9767aff98a315131debd76e554e59`、`582dd4e2e8cd0a99d822e6574ffac2addb2cdff04da48bf6f618439edebf843a`；50条ZIP CRC与49项内部hash核对通过。合成成员经真实权限中间件；非Portal SSO或UAT。\n\n已有非空执行事实时，现行核对守卫对任何dependencies表变更返回409，即使修改其他订单；本次未放宽，不能声称现有事实下可任意改岗。P06多班交接、P10跨组物理池、N06原始资源事实账、多窗口工装、R01/R02联合回退及未批准默认值仍不在本次交付。旧S06/S07、FR017及D01–D03 round1/RAW01原SHA和轮次保留。独立APS-Test尚未执行本SHA；FR007整卡In progress / NOT_READY，UAT依赖WAITING_DEPENDENCIES，QA未调度。本次无新增产品FAIL或返修轮次；下一步APS-Test固定SHA定向验收P08/P09及必要回归。\n<!-- /issue3-p08p09-dev -->\n\n<!-- aps-card-review-history:{\"event_key\": \"dlv_f4ebcde5-67f6-4898-a740-535c299548de:r1\", \"requirement_version\": \"v0.3+CR-DEC02-03-20261029\", \"code_sha\": \"12eed5514c702f730aae65a39a08747c532f8536\", \"code_sha_status\": \"独立Test固定SHA，S06/S07有限PASS；本FR整体NOT_READY\", \"current_phase\": \"S06/S07独立验收PASS；本卡剩余条件归集待闭环；原FR007通过历史保留\", \"blocker\": \"P08/P09：独立同技能岗位身份及人数累加；P10：跨组同物理池身份、容量与禁止说明；P06：多班/交接表达或明确阻断。原P02等PARTIAL保持。\", \"conclusion\": \"S06/S07有限PASS；整卡NOT_READY。FR007原范围Done、D01-D03 round1 PASS及原48历史保留；非完整CR/UAT\", \"test_delivery\": \"dlv_f4ebcde5-67f6-4898-a740-535c299548de\", \"next_owner\": \"APS-Design\", \"next_step\": \"APS-Design先在Issue3细化本卡兼容表达/禁止契约；APS-Dev仅补既有授权缺项，push后APS-Test固定SHA定向验证P06/P08/P09/P10及必要回归。\", \"repair_round\": \"D01-D03各round1不变；本次仅回归，无新缺陷编号\", \"remaining_in_scope\": \"P08/P09：独立同技能岗位身份及人数累加；P10：跨组同物理池身份、容量与禁止说明；P06：多班/交接表达或明确阻断。原P02等PARTIAL保持。\", \"audit_url\": \"https://github.com/huiliangtao666/APS/blob/main/docs/requirements/operations/s06-candidate-12eed551-test-r1.md\"} -->\n\n## PM结果更新 2026-10-29T23:04:27+08:00\n原事件 `dlv_93ded349-85c5-4020-863c-79c10b6720b5:r1`；P08/P09固定e0be9b6d独立限定PASS；FR007/022整卡NOT_READY；完整CR/UAT未签；0新增产品FAIL；同源Issue记录 https://github.com/huiliangtao666/APS/issues/3#issuecomment-6500333001。\n\n\n<!-- USER-DECISIONS-20261029-R1:FR-007 -->\n## 用户业务决定（2026-10-29T23:21:34+08:00）\n可共用；共用开关、交接容量、占用方式可配置；无无限容量默认。\n本卡仍In progress/NOT_READY；既有测试PASS保留原SHA。 [同源Issue记录](https://github.com/huiliangtao666/APS/issues/3#issuecomment-6500755581)。\n\n\n<!-- aps-card-review-history:{\"event_key\": \"dlv_93ded349-85c5-4020-863c-79c10b6720b5:r1\", \"requirement_version\": \"v0.3+CR-DEC02-03-20261029\", \"code_sha\": \"e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc\", \"code_sha_status\": \"limited independent PASS; full card NOT_READY\", \"current_phase\": \"P08/P09独立15/15限定PASS；原S06/S07及其他旧PASS保留原SHA\", \"blocker\": \"P06多班/交接、P10跨组同物理池与原P02等剩余责任；已有事实下dependencies修改409限制\", \"conclusion\": \"P08/P09固定e0be9b6d独立限定PASS；FR007/022整卡NOT_READY；完整CR/UAT未签；0新增产品FAIL\", \"issue_comment\": \"https://github.com/huiliangtao666/APS/issues/3#issuecomment-6500333001\", \"repair_round\": \"0 added\", \"uat\": \"WAITING_DEPENDENCIES\"} -->\n\n## PM受控摘要 2026-10-29T23:26:36+08:00\nP08/P09旧SHA限定PASS；共享/交接参数化未验；整卡NOT_READY\n"
+    },
+    {
+      "id": "PVTI_lAHOFM9WU84BpE1czhEHg1o",
+      "title": "[FR] FR-022 设备、模具、人员及空间联合安排",
+      "fieldValues": {
+        "nodes": [
+          {},
+          {
+            "name": "In progress",
+            "field": {
+              "name": "Status"
+            }
+          },
+          {
+            "name": "P0",
+            "field": {
+              "name": "Priority"
+            }
+          },
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "bodySha256": "a6f6cedaf34646540836f96301c5fea2d6bde34d523c10cf44b4a8cb97682741",
+      "currentReview": "<!-- aps-card-review:{\"event_key\": \"USER-DECISIONS-20261029-R1:FR-022\", \"requirement_version\": \"v0.3+CR-DEC02-03-20261029+CR-DEC04-05-06-20261029\", \"code_sha\": \"e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc\", \"current_phase\": \"P08/P09限定PASS；共享/交接容量及占用可配置方向已批准\", \"blocker\": \"P06/P10、N06原始执行资源账、多窗口及R01/R02联合回退待闭环；DEC04-06仅设计/mock\", \"conclusion\": \"P08/P09旧SHA限定PASS；共享/交接配置未验；整卡NOT_READY\", \"uat\": \"WAITING_DEPENDENCIES\"} -->\n\n\n<!-- issue3-p08p09-dev:dlv_8e493d57-3f86-48a9-85a3-b7dcb9a53968:r1 -->\n## P08/P09 独立同技能岗位：Dev限定交付（2026-10-29T22:47:53+08:00）\nAPS-PM核验 `dlv_8e493d57-3f86-48a9-85a3-b7dcb9a53968:r1`：既有批准CR-DEC02-03-20261029 / Issue3，产品 `feat/fr-013-016-main-batch` 固定SHA `e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc`，直接父 `1cdf394eb954cd6ff15a48cc052edb64f6f093b4`，设计文档SHA null。GitHub提交及分支已核对；未合main、未发布。\n\n表12可选人员岗位编号明确同岗重叠按最大人数、不同岗同时占用人数相加；同岗候选组/技能/班次冲突原子拒绝。React保存刷新、服务端/CSV、Worker/账本postId、原因、冻结独立检查器、输入身份和比较均纳入本次实现。Dev A01–A15限定自测PASS，含两独立同技能岗位容量2可排与容量1合法未排、释放/保留、有向替代、班次/可用窗口、非法及越权零写入、已确认历史全量保护、旧字段/CSV兼容、冻结篡改拒绝。报告及矩阵/证据ZIP在APS-Dev根目录，外层SHA256分别为 `281fde69d1dd195099c84ff55df66a7e9d0e9eb2c097552370d8f7a75af593f5`、`3372e946292700489229035ef69ec491a6e9767aff98a315131debd76e554e59`、`582dd4e2e8cd0a99d822e6574ffac2addb2cdff04da48bf6f618439edebf843a`；50条ZIP CRC与49项内部hash核对通过。合成成员经真实权限中间件；非Portal SSO或UAT。\n\n已有非空执行事实时，现行核对守卫对任何dependencies表变更返回409，即使修改其他订单；本次未放宽，不能声称现有事实下可任意改岗。P06多班交接、P10跨组物理池、N06原始资源事实账、多窗口工装、R01/R02联合回退及未批准默认值仍不在本次交付。旧S06/S07、FR017及D01–D03 round1/RAW01原SHA和轮次保留。独立APS-Test尚未执行本SHA；FR022整卡In progress / NOT_READY，UAT依赖WAITING_DEPENDENCIES，QA未调度。本次无新增产品FAIL或返修轮次；下一步APS-Test固定SHA定向验收P08/P09及必要回归。\n<!-- /issue3-p08p09-dev -->\n\n<!-- aps-card-review-history:{\"event_key\": \"dlv_f4ebcde5-67f6-4898-a740-535c299548de:r1\", \"requirement_version\": \"v0.3+CR-DEC02-03-20261029\", \"code_sha\": \"12eed5514c702f730aae65a39a08747c532f8536\", \"code_sha_status\": \"独立Test固定SHA，S06/S07有限PASS；本FR整体NOT_READY\", \"current_phase\": \"S06/S07独立验收PASS；本卡剩余条件归集待闭环；CR-DEC04-05-06仍仅设计/mock，未派实现\", \"blocker\": \"独立岗位/跨组物理池/多班容量语义；N06：已执行且采用资源任务的原始资源事实账；同工装多不连续窗口；R01：多成员工具+人员联合Worker；R02：全部已启用物料/资源联合回退。\", \"conclusion\": \"S06/S07有限PASS；整卡NOT_READY。FR007原范围Done、D01-D03 round1 PASS及原48历史保留；非完整CR/UAT\", \"test_delivery\": \"dlv_f4ebcde5-67f6-4898-a740-535c299548de\", \"next_owner\": \"APS-Design\", \"next_step\": \"APS-Design在Issue3/13/16列本卡同时满足条件；APS-Dev在既有授权内补模型/守卫/计算链路；APS-Test固定SHA验证原始账、多窗口、联合Worker/回退。\", \"repair_round\": \"D01-D03各round1不变；本次仅回归，无新缺陷编号\", \"remaining_in_scope\": \"独立岗位/跨组物理池/多班容量语义；N06：已执行且采用资源任务的原始资源事实账；同工装多不连续窗口；R01：多成员工具+人员联合Worker；R02：全部已启用物料/资源联合回退。\", \"audit_url\": \"https://github.com/huiliangtao666/APS/blob/main/docs/requirements/operations/s06-candidate-12eed551-test-r1.md\"} -->\n\n## PM结果更新 2026-10-29T23:04:27+08:00\n原事件 `dlv_93ded349-85c5-4020-863c-79c10b6720b5:r1`；P08/P09固定e0be9b6d独立限定PASS；FR007/022整卡NOT_READY；完整CR/UAT未签；0新增产品FAIL；同源Issue记录 https://github.com/huiliangtao666/APS/issues/3#issuecomment-6500333001。\n\n\n<!-- USER-DECISIONS-20261029-R1:FR-022 -->\n## 用户业务决定（2026-10-29T23:21:34+08:00）\n共享身份/容量、交接容量和占用方式可配置；原资源守恒及历史保护不变。\n本卡仍In progress/NOT_READY；既有测试PASS保留原SHA。 [同源Issue记录](https://github.com/huiliangtao666/APS/issues/3#issuecomment-6500755581)。\n\n\n<!-- aps-card-review-history:{\"event_key\": \"dlv_93ded349-85c5-4020-863c-79c10b6720b5:r1\", \"requirement_version\": \"v0.3+CR-DEC02-03-20261029\", \"code_sha\": \"e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc\", \"code_sha_status\": \"limited independent PASS; full card NOT_READY\", \"current_phase\": \"P08/P09独立15/15限定PASS；原S06/S07及其他旧PASS保留原SHA\", \"blocker\": \"P06/P10、N06原始执行资源账、同工装多不连续窗口、R01/R02联合回退及已有事实409限制\", \"conclusion\": \"P08/P09固定e0be9b6d独立限定PASS；FR007/022整卡NOT_READY；完整CR/UAT未签；0新增产品FAIL\", \"issue_comment\": \"https://github.com/huiliangtao666/APS/issues/3#issuecomment-6500333001\", \"repair_round\": \"0 added\", \"uat\": \"WAITING_DEPENDENCIES\"} -->\n\n## PM受控摘要 2026-10-29T23:26:36+08:00\nP08/P09旧SHA限定PASS；共享/交接配置未验；整卡NOT_READY\n"
+    }
+  ]
+}

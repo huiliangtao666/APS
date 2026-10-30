@@ -1,0 +1,78 @@
+{
+  "readAt": "2026-10-30",
+  "candidateBase": "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc",
+  "reason": "accepted P08/P09 exact product base; no unrelated feature integration. 7077 sibling is preserved, not relabelled as integrated.",
+  "commonAncestorWith7077": "ca13c6d26a40eb329011c0fa66a747aa735570da",
+  "branches": [
+    {
+      "branch": "feat/fr-013-016-main-batch",
+      "sha": "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc",
+      "parents": [
+        "1cdf394eb954cd6ff15a48cc052edb64f6f093b4"
+      ],
+      "containsP08P09": true,
+      "containsFR017_7077": false,
+      "containsD01D03": true
+    },
+    {
+      "branch": "feat/fr-017-scope-status",
+      "sha": "7077e536d421b79a634b2792790344bc258acd51",
+      "parents": [
+        "ca13c6d26a40eb329011c0fa66a747aa735570da"
+      ],
+      "containsP08P09": false,
+      "containsFR017_7077": true,
+      "containsD01D03": true
+    },
+    {
+      "branch": "feat/issue4-fr013-validation",
+      "sha": "fc273441ca93dcc47996bf5a6f7031e73be7f226",
+      "parents": [
+        "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc"
+      ],
+      "containsP08P09": true,
+      "containsFR017_7077": false,
+      "containsD01D03": true
+    },
+    {
+      "branch": "feat/issue4-fr016-g01",
+      "sha": "b5a9bcfeb155e5b494a6ebe64f95bf88593c4e51",
+      "parents": [
+        "b7189157106ecc18cc87fd1821fd19c6d55ffed2"
+      ],
+      "containsP08P09": true,
+      "containsFR017_7077": false,
+      "containsD01D03": true
+    },
+    {
+      "branch": "fix/fr026-current-restore",
+      "sha": "e684ee162d2dc743692cc154733d1a494a8f6ef6",
+      "parents": [
+        "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc"
+      ],
+      "containsP08P09": true,
+      "containsFR017_7077": false,
+      "containsD01D03": true
+    },
+    {
+      "branch": "fix/issue9-fr010-stock-allocation-v03",
+      "sha": "b7189157106ecc18cc87fd1821fd19c6d55ffed2",
+      "parents": [
+        "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc"
+      ],
+      "containsP08P09": true,
+      "containsFR017_7077": false,
+      "containsD01D03": true
+    },
+    {
+      "branch": "main",
+      "sha": "aa78dff3f5e49e561b3494da2938c81297a82f9b",
+      "parents": [
+        "3a00c08e2bad0ee6dbd393a729d4435893497abf"
+      ],
+      "containsP08P09": false,
+      "containsFR017_7077": false,
+      "containsD01D03": false
+    }
+  ]
+}

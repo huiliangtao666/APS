@@ -1,0 +1,413 @@
+{
+  "documentationSha": "aa78dff3f5e49e561b3494da2938c81297a82f9b",
+  "documentationShaIsProduct": false,
+  "changeRegisterPath": "docs/requirements/changes/change-register.json",
+  "changeRegisterSha256": "da1e0f2e7fe529a0edca6f2c16a2b671072848fe56f905009e63fec90530b060",
+  "change": {
+    "id": "CR-DEC02-03-20261029",
+    "title": "工装、人员、技能业务选择的前台参数化维护及排程生效",
+    "classification": "新增/细化能力的需求变更；不是缺陷修复或单纯验收缺口",
+    "baseline_id": "APS-BL-001",
+    "from_version": "v0.3",
+    "target_version": "v0.3+CR-DEC02-03-20261029",
+    "requested_by": "项目用户（本会话）",
+    "requested_on": "2026-10-29",
+    "request_quote": "好。请把这些业务选择做成可配置参数，前台可以进行维护，而不是固化的逻辑。",
+    "approval_status": "已批准能力方向并授权开发；具体默认参数值未批准",
+    "approved_by": "项目用户（会话授权；未另登记实名签批）",
+    "approved_on": "2026-10-29（未补造精确时刻）",
+    "effective": true,
+    "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
+    "implementation_status": "P08/P09 fixed e0be9b6d scoped independent 15/15 PASS; FR017 prior scoped PASS; FR007/022 and full CR NOT_READY",
+    "primary_requirements": [
+      "FR-006",
+      "FR-007",
+      "FR-017",
+      "FR-022"
+    ],
+    "related_rules": [
+      "BR-06",
+      "BR-07"
+    ],
+    "decisions": [
+      "DEC-02",
+      "DEC-03"
+    ],
+    "acceptance_ids": [
+      "AC-06",
+      "AC-07",
+      "AC-15",
+      "AC-17",
+      "AC-24",
+      "AC-32"
+    ],
+    "uat_ids": [
+      "UAT-03",
+      "UAT-04",
+      "UAT-06",
+      "UAT-07",
+      "UAT-08"
+    ],
+    "before": "FR006/BR06已有数量、占用起止及提前/后延释放要求；FR007/BR07已有人员组、人数、技能、班次、参与阶段及未经配置不得替代要求。DEC02/03具体业务选择仍待决。原有要求不重复计为新增。",
+    "approved_delta": "将DEC02/03涉及的业务选择统一明确为前台可维护、可保存并实际作用于新试算的参数：工装占用/归还策略，人员参与阶段/窗口、人数与释放，显式技能替代关系及禁止替代；保留基线既有权限、历史输入/方案保护和结果可追溯要求。\n用户补充：相关资源可共用；是否共用、交接容量和占用方式均应为可维护配置，实际共享仍受实体身份、容量、时间窗口与历史保护约束。",
+    "design_detail_status": "用户批准共享及交接参数化方向；默认值、具体配置枚举与跨组同物理池/N06契约待细化",
+    "reason": "用户要求在前台调整业务策略，避免按单一业务选择固化逻辑，并明确作为基线增加能力管理",
+    "impact": "主数据/规则配置、前台表单、服务端校验持久化、运行输入版本、Worker及独立复核、资源人数容量与历史兼容；不包含人员考勤或恢复其他新backlog",
+    "plan_impact": "原R2.2/R2.3/R2.4及相关联合资源验收；未另承诺完成日期",
+    "effort": "未正式登记工时/成本评估，不推定已批准预算",
+    "acceptance_delta": "实际前台修改→保存→刷新读回→新试算行为变化；占用/释放边界、有向替代与共享人数容量正确；非法/越权原子拒绝、历史方案不变。原AC继续有效，新增检查为CR专项验收，不篡改基线AC条文。\n补充：验证共用开/关、交接容量/占用参数调整后新试算结果变化，非法组合拒绝且原确认/执行事实不变。",
+    "issue_url": "https://github.com/huiliangtao666/APS/issues/3",
+    "related_issue_urls": [
+      "https://github.com/huiliangtao666/APS/issues/13",
+      "https://github.com/huiliangtao666/APS/issues/16"
+    ],
+    "dev_delivery": "dlv_34829592-b369-4312-81ae-a29c8368ae1e",
+    "contract_review_delivery": "dlv_536b631b-bac0-40ca-a16c-1eeb6ce1a44f",
+    "code_sha": "12eed5514c702f730aae65a39a08747c532f8536",
+    "code_branch": "feat/fr-013-016-main-batch",
+    "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
+    "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
+    "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
+    "acceptance_result": "P08/P09 scoped 15/15 independent PASS at e0be9b6d; prior S06/S07, D01-D03 and FR017 PASS stay original SHAs; P06/P10, N06, R01/R02 and full FR007/022/CR/UAT remain open",
+    "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
+    "history": [
+      {
+        "date": "2026-10-29",
+        "event": "用户授权前台参数化能力"
+      },
+      {
+        "date": "2026-10-29",
+        "event": "用户明确该能力属于基线新增能力，建立变更管理"
+      },
+      {
+        "date": "2026-10-29",
+        "event": "登记基线清单与变更台账；原卡和原验收历史保留"
+      },
+      {
+        "date": "2026-10-29",
+        "event": "Design处理S06 DEV_DELIVERED dlv_3a49b951-ccd7-4575-b44e-45d70684be50:r1；固定12eed5514c702f730aae65a39a08747c532f8536交独立Test dlv_f4ebcde5-67f6-4898-a740-535c299548de；非D01-D03新轮次"
+      },
+      {
+        "date": "2026-10-29",
+        "event_key": "dlv_f4ebcde5-67f6-4898-a740-535c299548de:r1",
+        "event": "Design处理S06/S07独立TEST_VERDICT；有限PASS，FR007/017/022各NOT_READY，状态In progress；保留原通过和缺陷轮次，不恢复其他backlog"
+      },
+      {
+        "date": "2026-10-29",
+        "event_key": "dlv_20413b70-7284-427b-ab59-12e6023f3d90:r1",
+        "event": "PM核Dev FR017配置范围/五态/历史保护交付7077e536d421b79a634b2792790344bc258acd51，自测PASS，独立Test dlv_ef0c6e69-7c93-455b-bc96-98e52dee22e2 已SENT；原S06/S07与D01-D03历史不变，完整FR/CR/UAT未通过"
+      },
+      {
+        "date": "2026-10-29",
+        "event_key": "dlv_ef0c6e69-7c93-455b-bc96-98e52dee22e2:r1",
+        "event": "PM核FR017固定7077e536d421b79a634b2792790344bc258acd51独立Test：T08/T10/U01/U05/H02 PASS，本卡Done；原48矩阵及S06/S07/D01-D03历史不改；FR007/022及完整CR/UAT仍NOT_READY"
+      },
+      {
+        "date": "2026-10-29",
+        "event_key": "dlv_8e493d57-3f86-48a9-85a3-b7dcb9a53968:r1",
+        "event": "Dev P08/P09 fixed e0be9b6d scoped self-check PASS; independent Test dispatched; full FR007/022 and CR NOT_READY"
+      },
+      {
+        "date": "2026-10-29",
+        "event_key": "dlv_93ded349-85c5-4020-863c-79c10b6720b5:r1",
+        "event": "Test P08/P09 fixed e0be9b6d 15/15 scoped independent PASS; FR007/022 and full CR NOT_READY; old SHA PASS preserved; zero repair round"
+      },
+      {
+        "date": "2026-10-29",
+        "event_key": "USER-DECISIONS-20261029-R1:dec0203",
+        "event": "用户确认可共用，是否共用、交接容量与占用均可配置；既有P08/P09有限PASS不改签，FR007/022与完整CR未完成",
+        "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6500755581"
+      }
+    ],
+    "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
+    "repair_delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2",
+    "defects": [
+      {
+        "id": "DEC0203-D01",
+        "round": 1,
+        "status": "独立Test round1 PASS",
+        "description": "检查器信任被检结果自报规则，删除MOLD及工装账可绕过冻结启用配置",
+        "repair_delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2",
+        "test_delivery": "dlv_2c5caf14-f798-43ae-bb2f-737f33a40570",
+        "verified_sha": "24ba6884b3a5f07425a728b7733a677563c6aa44"
+      },
+      {
+        "id": "DEC0203-D02",
+        "round": 1,
+        "status": "独立Test round1 PASS",
+        "description": "明确窗口人员开始偏移空值可保存并隐式0，须原子拒绝且显式0合法",
+        "repair_delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2",
+        "test_delivery": "dlv_2c5caf14-f798-43ae-bb2f-737f33a40570",
+        "verified_sha": "24ba6884b3a5f07425a728b7733a677563c6aa44"
+      },
+      {
+        "id": "DEC0203-D03",
+        "round": 1,
+        "status": "独立Test round1 PASS",
+        "description": "未到生效时间的MOLD误拦合法执行事实，须按实际生效范围判断",
+        "repair_delivery": "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2",
+        "test_delivery": "dlv_2c5caf14-f798-43ae-bb2f-737f33a40570",
+        "verified_sha": "24ba6884b3a5f07425a728b7733a677563c6aa44"
+      }
+    ],
+    "repair_delivery_history": [
+      "dlv_105360d7-1929-489d-85b3-d769a1e15db6",
+      "dlv_197f09db-af6a-4cbf-96cf-16ae535359c2"
+    ],
+    "repair_runtime_blocker": "Original dlv_105360d7-1929-489d-85b3-d769a1e15db6 failed server_overloaded at 2026-10-29T03:14:20.564Z; recovery dlv_197f09db-af6a-4cbf-96cf-16ae535359c2; infrastructure retry does not increment defect repair round",
+    "repair_original_delivery": "dlv_105360d7-1929-489d-85b3-d769a1e15db6",
+    "acceptance_status": "FR017当前适用实现责任独立PASS；FR007/022及完整CR和业务UAT未通过；原S06/S07与D01-D03有限结果保留",
+    "test_completed_at": "2026-10-29T11:42:40+08:00",
+    "test_matrix_summary": {
+      "PASS": 25,
+      "PARTIAL": 19,
+      "FAIL_SCOPE": 2,
+      "NOT_EXECUTABLE": 2
+    },
+    "test_report_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/changes/CR-DEC02-03-20261029/test-review-20261029.md",
+    "active_dev_delivery": "dlv_3a49b951-ccd7-4575-b44e-45d70684be50",
+    "active_checkpoint": "S06/S07有限独立验收已通过并由Design处理；本事件不新增执行投递，不重复已完成验证",
+    "checkpoint_delivery": {
+      "event_key": "dlv_3a49b951-ccd7-4575-b44e-45d70684be50:r1",
+      "notification_delivery": "dlv_12bd1b32-b929-4c2e-9a92-a190bd36d6e4",
+      "dev_delivery": "dlv_3a49b951-ccd7-4575-b44e-45d70684be50",
+      "product_sha": "12eed5514c702f730aae65a39a08747c532f8536",
+      "design_document_sha": "730556fd18bd1b15d6c37005bf5ac4c09356cc93",
+      "test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
+      "test_status": "completed；Design PROCESSED，S06/S07有限PASS，三原卡NOT_READY",
+      "dev_result": "PASS（有限检查点）",
+      "card_recommendation": "NOT_READY",
+      "report_sha256": "2d7c9182e196aee5273ab4fc03811ba0a528063034ce66667cb99aace16e7d0e",
+      "evidence_sha256": "9d6c0ee99c9d5906dbcca73af9567e8ffcd288feb4125f7598536291270a662a",
+      "test_event_key": "dlv_f4ebcde5-67f6-4898-a740-535c299548de:r1",
+      "test_notification_delivery": "dlv_67474553-92d4-4155-848f-f6b32a324b5a",
+      "test_result": "PASS（有限检查点）",
+      "test_report": "APS-Test/S06-CANDIDATE-12eed551-INDEPENDENT-REPORT.txt",
+      "test_report_sha256": "bd8e3659b5181164582999c3136b92a7e5eef0031fecfb6c942782d8dfa05be5",
+      "test_evidence_sha256": "d9fd514dcb14268b9449b7fd27d0a5f2dd3eb33276ff0d3e6824bc3cbe5c9c00",
+      "test_audit_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/operations/s06-candidate-12eed551-test-r1.md"
+    },
+    "checkpoint_test_verdict": {
+      "event_key": "dlv_f4ebcde5-67f6-4898-a740-535c299548de:r1",
+      "test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
+      "product_sha": "12eed5514c702f730aae65a39a08747c532f8536",
+      "design_document_sha": "730556fd18bd1b15d6c37005bf5ac4c09356cc93",
+      "processed_at": "2026-10-29T13:13:07+08:00",
+      "finite_result": "PASS",
+      "card_recommendations": {
+        "FR-007": "NOT_READY",
+        "FR-017": "NOT_READY",
+        "FR-022": "NOT_READY"
+      },
+      "assertions_pass": 24,
+      "not_executed": [
+        "L01",
+        "L02"
+      ],
+      "no_new_product_defects": true,
+      "d01_d03_rounds_unchanged": true,
+      "evidence_hashes": {
+        "S06-CANDIDATE-12eed551-INDEPENDENT-REPORT.txt": "bd8e3659b5181164582999c3136b92a7e5eef0031fecfb6c942782d8dfa05be5",
+        "S06-CANDIDATE-12eed551-INDEPENDENT-ASSERTIONS.csv": "21b98392ba7832298978e51e76be4cf120eefa4609bb4021703d8dd14f4058f6",
+        "S06-CANDIDATE-12eed551-INDEPENDENT-48-RESULTS.csv": "223d68e9582b4ae9710931a1685e4545d1c3ac107e9ed0303da850846193d6bb",
+        "S06-CANDIDATE-12eed551-INDEPENDENT-EVIDENCE.zip": "d9fd514dcb14268b9449b7fd27d0a5f2dd3eb33276ff0d3e6824bc3cbe5c9c00"
+      },
+      "issue_comments": {
+        "3": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6488574838",
+        "13": "https://github.com/huiliangtao666/APS/issues/13#issuecomment-6488575154",
+        "16": "https://github.com/huiliangtao666/APS/issues/16#issuecomment-6488575443"
+      },
+      "audit_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/operations/s06-candidate-12eed551-test-r1.md",
+      "remaining_by_fr": {
+        "FR-007": "P08/P09：独立同技能岗位身份及人数累加；P10：跨组同物理池身份、容量与禁止说明；P06：多班/交接表达或明确阻断。原P02等PARTIAL保持。",
+        "FR-017": "T08/T10/U01：全参数适用范围/继承及中文预览；U05：未启用、待生效、未支持与缺项状态；H02：升级/回滚/缺旧snapshot迁移保留。岗位/物理池/多班未支持组合须前台说明并守卫，不以字段可保存声称采用。",
+        "FR-022": "独立岗位/跨组物理池/多班容量语义；N06：已执行且采用资源任务的原始资源事实账；同工装多不连续窗口；R01：多成员工具+人员联合Worker；R02：全部已启用物料/资源联合回退。"
+      },
+      "next_owner": "APS-Design",
+      "next_step": "按唯一原卡归集本卡剩余责任并细化已有契约；后续仅既有授权缺项实现、固定SHA定向验证；本事件未新增投递"
+    },
+    "uat_owner": "QA",
+    "pending_fr017_test": {
+      "event_key": "dlv_20413b70-7284-427b-ab59-12e6023f3d90:r1",
+      "dev_delivery": "dlv_20413b70-7284-427b-ab59-12e6023f3d90",
+      "test_delivery": "dlv_ef0c6e69-7c93-455b-bc96-98e52dee22e2",
+      "code_sha": "7077e536d421b79a634b2792790344bc258acd51",
+      "parent_sha": "ca13c6d26a40eb329011c0fa66a747aa735570da",
+      "branch": "feat/fr-017-scope-status",
+      "dev_result": "PASS self-test",
+      "test_status": "PROCESSED; FR017 current applicable implementation PASS",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6492970938",
+      "artifact_hashes": {
+        "FR017-SCOPE-STATUS-EVIDENCE-2026-10-29.zip": "24ccdc3b06aaa2a185f8a94d45cf34415cdbb9d78f1cf44530d833c2326a06b1",
+        "FR017-SCOPE-STATUS-REPORT-2026-10-29.txt": "9d637a91dd1a6be0a51a805a8dc7af878bf6a7c57096c27ffc96ca8f1699725b",
+        "FR017-SCOPE-STATUS-HANDOFF-2026-10-29.json": "672b0959e2def089265710f367eaff5c0e5933f5e8d4f2e19036165d4ee021d4"
+      }
+    },
+    "fr017_acceptance": {
+      "event_key": "dlv_ef0c6e69-7c93-455b-bc96-98e52dee22e2:r1",
+      "test_delivery": "dlv_ef0c6e69-7c93-455b-bc96-98e52dee22e2",
+      "code_sha": "7077e536d421b79a634b2792790344bc258acd51",
+      "parent_sha": "ca13c6d26a40eb329011c0fa66a747aa735570da",
+      "result": "PASS",
+      "card_recommendation": "READY_DONE",
+      "project_status": "Done",
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6493295793",
+      "artifact_hashes": {
+        "FR017-7077e536-INDEPENDENT-REPORT.txt": "c9192016fb376e23333bfc4a6d4091c937459b92d9be1fb0f9463dde49c2ce23",
+        "FR017-7077e536-INDEPENDENT-ASSERTIONS.csv": "d53ae5f2725a128e93d88723fc63ae6db29b623811d9b1f0fdff5e0f925f057d",
+        "FR017-7077e536-INDEPENDENT-LAYERS.csv": "7665e72b43ad2977d2176b75beab169ea35274f57413f557250af98696e3b340",
+        "FR017-7077e536-INDEPENDENT-ORIGINAL-48-PRESERVED.csv": "223d68e9582b4ae9710931a1685e4545d1c3ac107e9ed0303da850846193d6bb",
+        "FR017-7077e536-INDEPENDENT-EVIDENCE.zip": "ef656ded64436ad28846dfc3eb12c4f1f1f17a58e8c60e33f9ca5ce47b71427e"
+      },
+      "old48_preserved_sha256": "223d68e9582b4ae9710931a1685e4545d1c3ac107e9ed0303da850846193d6bb",
+      "limits": "FR007/022 and full CR/UAT not complete; CR-DEC04-05-06 design/mock only"
+    }
+  },
+  "baselinePath": "docs/requirements/baselines/APS-BL-001-v0.3.json",
+  "baselineSha256": "e30733655359e71b0c98220910303aefbc922ac123b96fb3025c4976a4067e36",
+  "baselineRelated": [
+    {
+      "id": "FR-007",
+      "type": "功能需求",
+      "title": "人员数量与技能配置",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R2.3；完整提供：R2.4。\n前置功能：FR-004/005。\n• 先配置人员组数量及任务需要的人数，再配置技能、班次、装卸/操作阶段和可用时间。P0不建设人员考勤系统。\n• 机器可自动运行的时段与需要人员参与的时段分开设置；人数足够但技能不符时，不能按可用处理。",
+      "acceptance_ids": [
+        "AC-07",
+        "AC-15"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 242,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHgjs",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAfw",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgjs"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R2.3；完整提供：R2.4"
+    },
+    {
+      "id": "FR-022",
+      "type": "功能需求",
+      "title": "设备、模具、人员及空间联合安排",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "范围：P0；关联流程：BP-04；页面：PG-04/07；开始提供：R2.2；完整提供：R4。\n前置功能：FR-005/006/007/008/017/019。\n• 逐阶段加入模具、人员及空间占用。一个任务必须同时满足已启用的全部资源条件，不能只检查机器。\n• 按占用开始至释放的完整时段检查数量，例如两套模具不能供三任务同时用，冷却空间按同时占用的重量或位置数计算。",
+      "acceptance_ids": [
+        "AC-05",
+        "AC-06",
+        "AC-07",
+        "AC-14",
+        "AC-15"
+      ],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第6章",
+      "source_paragraph": 335,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHg1o",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAh4",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHg1o"
+      },
+      "scope": "P0",
+      "stage": "开始提供：R2.2；完整提供：R4"
+    },
+    {
+      "id": "BR-07",
+      "type": "业务规则",
+      "title": "人员",
+      "baseline_id": "APS-BL-001",
+      "baseline_version": "v0.3",
+      "text": "技能组、人数、班次、任务需要的人数及参与阶段；不同技能不能未经配置互相替代。",
+      "scope": "按对应阶段启用",
+      "stage": "R2.3/R2.4",
+      "acceptance_ids": [],
+      "source": "APS需求分析与设计说明书_v0.3.docx 第7章",
+      "source_paragraph": 494,
+      "canonical": {
+        "item_id": "PVTI_lAHOFM9WU84BpE1czhEHhW8",
+        "content_id": "DI_lAHOFM9WU84BpE1czgLhAls",
+        "url": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhW8"
+      }
+    },
+    {
+      "id": "AC-07",
+      "title": "人员数量、技能与班次",
+      "source_paragraph": 1096,
+      "context": "阶段：R2.3/R2.4；关联：FR-007/008/022。",
+      "content": "阶段：R2.3/R2.4；关联：FR-007/008/022。\n项目\n内容\n数据\n并行任务需2人和1人，可用2人；另有技能人员09:00到岗。\n操作\n计算、查看需求/可用人数。\n预期\n不能超员或用不符技能替代；机器跨班运行不表示装卸人员也可用。",
+      "feature_ids": [
+        "FR-007",
+        "FR-008",
+        "FR-022"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-15",
+      "title": "配置规则逐步启用",
+      "source_paragraph": 1184,
+      "context": "阶段：R1至R7；关联：FR-003至008/016/017/025。",
+      "content": "阶段：R1至R7；关联：FR-003至008/016/017/025。\n项目\n内容\n数据\n两类基础规则；后续分别加入日历、工装、人料及未知规则。\n操作\n切换已支持规则、改参数、遗漏必要字段。\n预期\n规则来源和启用范围清楚；必要数据缺失时提示，未支持规则不伪装检查通过；已启用约束不自动忽略。",
+      "feature_ids": [
+        "FR-003"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-17",
+      "title": "甘特、输入和问题联动",
+      "source_paragraph": 1206,
+      "context": "阶段：R1至R4；关联：FR-014/025/033/034。",
+      "content": "阶段：R1至R4；关联：FR-014/025/033/034。\n项目\n内容\n数据\n机器/顺序及后续资源/物料问题样例。\n操作\n点击任务、问题、关联输入并筛选。\n预期\n三处定位同一任务；有具体时间、需求/可用量和规则解释；不用先导出再核对。",
+      "feature_ids": [
+        "FR-014",
+        "FR-025",
+        "FR-033",
+        "FR-034"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-24",
+      "title": "两类操作用户及查询用户",
+      "source_paragraph": 1283,
+      "context": "阶段：R1至R7；关联：FR-010/029/030/037。",
+      "content": "阶段：R1至R7；关联：FR-010/029/030/037。\n项目\n内容\n数据\n计划员、主管、其他查询用户，含模拟质量状态记录。\n操作\n执行数据维护、计算、确认、查询和导出。\n预期\n写入和确认权限正确；查询用户不能改；无QA在线放行流程；模拟状态由数据维护并标识。",
+      "feature_ids": [
+        "FR-010",
+        "FR-029",
+        "FR-030",
+        "FR-037"
+      ],
+      "acceptance_ids": []
+    },
+    {
+      "id": "AC-32",
+      "title": "保存、变化与复查",
+      "source_paragraph": 1371,
+      "context": "阶段：R3至R7；关联：FR-003/015/017/026/030/038。",
+      "content": "阶段：R3至R7；关联：FR-003/015/017/026/030/038。\n项目\n内容\n数据\n已保存方案及BOM/工艺/规则/输入修改。\n操作\n查询旧方案、保存新输入、重算、恢复模拟数据。\n预期\n旧方案可查原配置；新方案采用新输入；检查变化影响，不重复用料或改写已确认内容。",
+      "feature_ids": [
+        "FR-003",
+        "FR-015",
+        "FR-017",
+        "FR-026",
+        "FR-030",
+        "FR-038"
+      ],
+      "acceptance_ids": []
+    }
+  ],
+  "issue": {
+    "url": "https://github.com/huiliangtao666/APS/issues/3",
+    "state": "open",
+    "updated_at": "2026-10-29T15:21:37Z"
+  },
+  "decisions": [
+    {
+      "url": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6500755581",
+      "body": "<!-- USER-DECISIONS-20261029-R1:dec0203 -->\n## DEC02/03共享与交接参数业务决定\n\n用户本会话确认：相关资源允许共用；是否共用、交接容量、占用方式均可配置。共享不得解释为无限容量；身份、容量、占用起止/释放、交接与历史冻结应由明确配置及有效范围决定。纳入既有批准CR-DEC02-03-20261029/FR007/022设计与实现契约；具体默认值未批准。现有P08/P09限定PASS及旧SHA历史不变，P06/P10/N06等仍NOT_READY。",
+      "updated_at": "2026-10-29T15:21:37Z"
+    }
+  ]
+}
