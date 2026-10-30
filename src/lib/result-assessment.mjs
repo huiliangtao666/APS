@@ -1,3 +1,4 @@
+import {inheritedCalendarId} from './factory-lines.mjs';
 import {PLAN_TIME_ORIGIN} from './expected-supply.mjs';
 const date=m=>Number.isFinite(m)?new Date(Date.parse(PLAN_TIME_ORIGIN)+m*60000).toISOString():null;
 const ref=(table,row)=>({table,row:structuredClone(row)});
@@ -46,7 +47,7 @@ export function assessResult(data,plan,conditions={}){
    if(/UNDER_MIN_LOAD/.test(codes))suggestions.push(suggestion('demand-edit','核对资源批实际装载与最小装载；仅按允许的需求或兼容组批修改后重新计算，不自动超产。'));
    const refs=[ref('orders',order),ref('routes',op),...deps.map(r=>ref('dependencies',r))];
    if(time)refs.push(ref('times',time));if(machine)refs.push(ref('machines',machine));
-   refs.push(...(data.calendars||[]).filter(r=>r['日历编号']===machine?.['日历编号']).map(r=>ref('calendars',r)),...(data.downtime||[]).filter(r=>r['设备编号']===machineId).map(r=>ref('downtime',r)));
+   refs.push(...(data.calendars||[]).filter(r=>r['日历编号']===inheritedCalendarId(data,machine)).map(r=>ref('calendars',r)),...(data.downtime||[]).filter(r=>r['设备编号']===machineId).map(r=>ref('downtime',r)));
    refs.push(...(data.resourceClaims||[]).filter(r=>r['订单编号']===orderId&&r['工序编号']===operation).map(r=>ref('resourceClaims',r)));
    const claims=(data.resourceClaims||[]).filter(r=>r['订单编号']===orderId&&r['工序编号']===operation);
    refs.push(...(data.tools||[]).filter(r=>claims.some(c=>c['资源编号']===r['工装编码'])).map(r=>ref('tools',r)),...(data.batchResources||[]).filter(r=>r['资源编号']===machineId||claims.some(c=>c['资源编号']===r['资源编号'])).map(r=>ref('batchResources',r)));
@@ -63,6 +64,6 @@ export function assessResult(data,plan,conditions={}){
 }
 export function resultCsv(run,plan){
  const report=plan?.resultAssessment;
- const rows=[['模拟执行事实版本',plan?.conditions?.executionFactsVersion||'历史未记录'],['模拟执行快照',JSON.stringify(plan?.execution??null)],['FR024 运行结果与原因'],['试算编号',plan?.trialId||run?.trialId||'非试算'],['源方案',plan?.sourcePlanId||run?.sourcePlanId||'原始方案'],['结果来源',plan?.copiedResult?'复制保存的原结果；尚未重算':'服务端运行记录'],['原运行',plan?.sourceRunId||'不适用'],['运行编号',run?.id||plan?.runId||'未知'],['输入版本',run?.inputVersionId||plan?.inputVersionId||'未知'],['快照',run?.snapshotHash||plan?.snapshotHash||'未知'],['运行状态',JSON.stringify(resultState(run||{status:'unknown'},report))],['结果报告',report?JSON.stringify(report):run&&!run.planId?'本次无已保存结果；未使用当前输入生成任务或补算原因':'历史结果原因未知；未使用当前输入补算'],['交付评估',plan?.deliveryAssessment?JSON.stringify(plan.deliveryAssessment):'未知']];
+ const rows=[['独立复核',JSON.stringify(plan?.verification??null)],['模拟执行事实版本',plan?.conditions?.executionFactsVersion||'历史未记录'],['模拟执行快照',JSON.stringify(plan?.execution??null)],['FR024 运行结果与原因'],['试算编号',plan?.trialId||run?.trialId||'非试算'],['源方案',plan?.sourcePlanId||run?.sourcePlanId||'原始方案'],['结果来源',plan?.copiedResult?'复制保存的原结果；尚未重算':'服务端运行记录'],['原运行',plan?.sourceRunId||'不适用'],['运行编号',run?.id||plan?.runId||'未知'],['输入版本',run?.inputVersionId||plan?.inputVersionId||'未知'],['快照',run?.snapshotHash||plan?.snapshotHash||'未知'],['运行状态',JSON.stringify(resultState(run||{status:'unknown'},report))],['结果报告',report?JSON.stringify(report):run&&!run.planId?'本次无已保存结果；未使用当前输入生成任务或补算原因':'历史结果原因未知；未使用当前输入补算'],['交付评估',plan?.deliveryAssessment?JSON.stringify(plan.deliveryAssessment):'未知']];
  return rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
 }

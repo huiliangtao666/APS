@@ -72,9 +72,9 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   router.get('/state',permission('read'),(_req,res)=>{const s=read();res.json({data:s.data,revision:s.revision,inputVersionId:inputHash(s.data)});});
   router.get('/operations',permission('read'),(_req,res)=>res.json(read().records));
   const versionId=data=>createHash('sha256').update(JSON.stringify(data)).digest('hex');
-  const preserve=(s,target=s)=>{s.inputVersions??={};const id=versionId(target.data);if(!s.inputVersions[id])s.inputVersions[id]={id,revision:target.revision,data:structuredClone(target.data)};return id;};
+  const preserve=(s,target=s)=>{s.inputVersions??={};const id=versionId(target.data);if(!s.inputVersions[id])s.inputVersions[id]={id,revision:target.revision,data:structuredClone(target.data),csvSources:structuredClone(target.csvSources||{})};return id;};
   const inputs=(s,p)=>{const v=s.inputVersions?.[p.inputVersionId];return v&&v.data&&versionId(v.data)===p.inputVersionId?v:null;};
-  router.get('/plans',permission('read'),(_req,res)=>{const s=read();res.json(s.plans.map(p=>({...p,inputSnapshot:inputs(s,p)?.data??null})));});
+  router.get('/plans',permission('read'),(_req,res)=>{const s=read();res.json(s.plans.map(p=>({...p,inputSnapshot:inputs(s,p)?.data??null,inputCsvSources:inputs(s,p)?.csvSources??null})));});
   router.get('/plans/:id/inputs',permission('read'),(req,res)=>{const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});const v=inputs(s,p);if(!v)return res.status(409).json({error:'historical_inputs_unavailable'});res.json(v);});
   router.get('/inventory',permission('read'),(req,res)=>{
     const asOf=req.query.asOf??new Date().toISOString();
@@ -120,7 +120,10 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const changes=defs.map(d=>d.key).filter(key=>JSON.stringify(target.data[key])!==JSON.stringify(proposed[key]));
     if(!changes.length)return res.json({data:target.data,revision:target.revision,unchanged:true});
     const before=target.data;const fromVersion=preserve(s,target);
-    target.data=proposed;target.revision++;const toVersion=preserve(s,target);
+    target.data=proposed;target.revision++;
+    target.csvSources={...(target.csvSources||{})};
+    for(const key of new Set([...changes,...Object.keys(req.csvSources||{})])){delete target.csvSources[key];if(req.csvSources?.[key])target.csvSources[key]={...structuredClone(req.csvSources[key]),sha256:createHash('sha256').update(req.csvSources[key].originalText).digest('hex'),canonicalRows:structuredClone(proposed[key])};}
+    const toVersion=preserve(s,target);
     const batchId=randomUUID();
     for(const key of changes)record(s,req,operation||'edit',key,{before:before[key],after:proposed[key],fromVersion,toVersion,fromRevision:target.revision-1,toRevision:target.revision,batchId,trialId:trialId||null,...(req.csvSources?{csvSources:{[key]:req.csvSources[key]}}:{})});
     write(s);res.json({data:target.data,revision:target.revision,inputVersionId:toVersion});
@@ -323,7 +326,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   function makePlan(result,run){
     const original=read().inputVersions?.[run.inputVersionId]?.data;
     const source={domain:run.trialId?'trial:'+run.trialId:'current',inputVersionId:run.inputVersionId,executionVersionId:inputHash(run.executionData),revision:run.revision,checkedAt:run.createdAt,scope:run.conditions};
-    return {...result,findings:result.findings.map(f=>bindProblemSource(f,source,original,run.sourceMap||{})),...(run.lockSnapshot?{lockSnapshot:structuredClone(run.lockSnapshot)}:{}),trialId:run.trialId,sourcePlanId:run.sourcePlanId,id:randomUUID(),status:'draft',revision:run.revision,inputVersionId:run.inputVersionId,runId:run.id,conditions:run.conditions,snapshotHash:run.snapshotHash};}
+    return {...result,findings:result.findings.map(f=>bindProblemSource(f,source,original,run.sourceMap||{},read().inputVersions?.[run.inputVersionId]?.csvSources)),...(run.lockSnapshot?{lockSnapshot:structuredClone(run.lockSnapshot)}:{}),trialId:run.trialId,sourcePlanId:run.sourcePlanId,id:randomUUID(),status:'draft',revision:run.revision,inputVersionId:run.inputVersionId,runId:run.id,conditions:run.conditions,snapshotHash:run.snapshotHash};}
   function finish(id,req,status,details={}){
     const s=read(),run=s.runs?.find(r=>r.id===id);if(!run||terminal.has(run.status)||stopping.has(id))return;
     Object.assign(run,details,{status,finishedAt:new Date().toISOString(),phase:status==='completed'?'计算完成':status==='partial'?'计算完成，有未排或问题':status});
@@ -427,7 +430,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const execution=run?.executionData;
     const verification=independentlyVerifyPlan(p,execution?.orders??s.data.orders,execution?.routes??s.data.routes,p.rules,new Date().toISOString(),execution,run?.conditions);
     const source={domain:p.trialId?'trial:'+p.trialId:'current',inputVersionId:p.inputVersionId,revision:p.revision,checkedAt:verification.checkedAt,scope:run?.conditions};
-    p.verification={...verification,findings:verification.findings.map(f=>execution?bindProblemSource(f,source,inputs(s,p)?.data,run.sourceMap||{}):f),contentHash:contentHash(p)};record(s,req,'edit',p.id,{kind:'verify'});write(s);res.json(p);
+    p.verification={...verification,findings:verification.findings.map(f=>execution?bindProblemSource(f,source,inputs(s,p)?.data,run.sourceMap||{},inputs(s,p)?.csvSources):f),contentHash:contentHash(p)};if(p.verification.checks.calendar)p.verification.checks.calendar.findings=p.verification.findings.filter(f=>f.sourceRead==='frozen-calendar-v1');record(s,req,'edit',p.id,{kind:'verify'});write(s);res.json(p);
   });
   router.get('/plans/:id/review',permission('read'),(req,res)=>{
     const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});
@@ -507,7 +510,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
       const p=s.plans.find(p=>p.id===req.body.planId);if(!p)return res.status(404).json({error:'plan_not_found'});
       const w=req.body.resourceLoad;
       if(!validInterval(w.start,w.end)||!['all','machines','resources','materials','alerts'].includes(w.kind))return res.status(400).json({error:'invalid_load_view'});
-      csv=loadCsv(resourceLoad({...p,inputSnapshot:inputs(s,p)?.data??null},w),w.kind);target=p.id;
+      csv=loadCsv(resourceLoad({...p,inputSnapshot:inputs(s,p)?.data??null,inputCsvSources:inputs(s,p)?.csvSources??null},w),w.kind);target=p.id;
     }
     else if(req.body.runId){
       const run=s.runs?.find(r=>r.id===req.body.runId);if(!run)return res.status(404).json({error:'run_not_found'});

@@ -445,7 +445,7 @@ test('FR019 explicit minimal mode uses two assigned machines, fixed durations, n
  assert.equal(p.ruleSnapshot.settings.find(s=>s.id==='CALENDAR').enabled,true);assert.equal(p.ruleSnapshot.settings.find(s=>s.id==='CALENDAR').active,false);assert.match(p.ruleSnapshot.settings.find(s=>s.id==='CALENDAR').status,/未检查/);
  assert.deepEqual(p.rules,['MACHINE','PRECEDENCE']);assert.equal(p.supplyConditions.length,0);
  assert.ok(p.tasks.every(t=>/最小模式/.test(t.source)&&!/工厂日历02/.test(t.source)));
- const v=await call('/plans/'+p.id+'/verify',{});assert.equal(v.status,200);assert.deepEqual(Object.values(v.body.verification.checks).map(c=>c.status),['pass','pass','pass','not_checked']);assert.match(v.body.verification.checks.resourcePolicies.details.join(),/minimal-r1/);assert.match(v.body.verification.scopeNote,/不代表完整业务/);
+ const v=await call('/plans/'+p.id+'/verify',{});assert.equal(v.status,200);assert.deepEqual(Object.values(v.body.verification.checks).map(c=>c.status),['pass','pass','pass','not_checked','not_checked']);assert.match(v.body.verification.checks.resourcePolicies.details.join(),/minimal-r1/);assert.match(v.body.verification.scopeNote,/不代表完整业务/);
  for(const ruleSettings of [false,true]){const e=await call('/export',{planId:p.id,ruleSettings,conditions:{mode:'forged'}});assert.equal(e.status,200);for(const word of ['minimal-r1','日历与停机','人员','模具与工装','物料','不代表完整业务','运行快照'])assert.ok(e.body.includes(word),word);assert.ok(!e.body.includes('forged'));}
  const queryExport=await call('/export',{query:{table:'tasks',planId:p.id,revision}});assert.equal(queryExport.status,200);for(const word of ['R1 最小模式','尚未检查','日历与停机','不代表完整业务'])assert.ok(queryExport.body.includes(word),word);
  const run=(await call('/runs/'+p.runId)).body;assert.deepEqual(run.conditions,p.conditions);
@@ -496,7 +496,7 @@ test('FR019 constructive scheduling remains valid for unsorted routes, shared ma
   d.dependencies=d.orders.flatMap(o=>['MIX','FILL'].map(op=>({'订单编号':o['订单编号'],'工序编号':op,'资源类型':'设备','资源编号':op+'01'})));
   const p=calculate(d,0,new Date().toISOString(),{mode:'minimal-r1',startMinute:7});assert.equal(p.tasks.length,size*2);assert.equal(p.findings.length,0);
   assert.ok(p.tasks.every(t=>t.start>=7&&t.end-t.start===Number(d.times.find(r=>r['工序编号']===t.operation)['固定分钟'])&&t.machine===t.operation+'01'));
-  const v=independentlyVerifyPlan(p,d.orders,d.routes,p.rules);assert.deepEqual(Object.values(v.checks).map(c=>c.status),['pass','pass','pass','not_checked']);assert.match(v.checks.resourcePolicies.details.join(),/冻结输入/);
+  const v=independentlyVerifyPlan(p,d.orders,d.routes,p.rules);assert.deepEqual(Object.values(v.checks).map(c=>c.status),['pass','pass','pass','not_checked','not_checked']);assert.match(v.checks.resourcePolicies.details.join(),/冻结输入/);
  }
 });
 

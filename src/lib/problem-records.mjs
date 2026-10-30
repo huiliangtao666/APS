@@ -20,8 +20,8 @@ export function sourceRefs(table, rows, original=rows) {
  });
 }
 // Only explicit producer occurrences may be bound to a version. Legacy text stays legacy.
-export function bindProblemSource(finding, source, original, sourceMap) {
- if(finding.taskIds?.length)return finding;
+export function bindProblemSource(finding, source, original, sourceMap, csvSources) {
+ if(finding.taskIds?.length&&finding.sourceRead!=='frozen-calendar-v1')return finding;
  return {...finding,source,relatedRecords:(finding.relatedRecords||[]).map(ref=>{
   if(!(ref.occurrence?.index>=0))return ref;
   let occurrence=ref.occurrence;
@@ -31,7 +31,11 @@ export function bindProblemSource(finding, source, original, sourceMap) {
    occurrence={index,logicalRow:index+2,keyCount:rows.filter(r=>keys.every(k=>(r[k]||'').trim()===(ref.row[k]||'').trim())).length};
   }
   if(ref.sourceContext==='executionContext'&&(!original?.[ref.table]?.[occurrence.index]||JSON.stringify(original[ref.table][occurrence.index])!==JSON.stringify(ref.row)))return {...ref,origin:undefined};
-  return {...ref,origin:{...source,occurrence}};
+  const csv=csvSources?.[ref.table],index=occurrence.index;
+  const same=csv?.canonicalRows?.[index]&&JSON.stringify(csv.canonicalRows[index])===JSON.stringify(ref.row);
+  const mapping=csv?.mappings?.find(m=>m.quantityField===ref.field||m.unitField===ref.field);
+  const field=ref.field||'',sourceField=mapping?.sourceField||field;
+  return {...ref,origin:{...source,occurrence},...(same?{csv:{file:csv.file,physicalRow:csv.lines[index],field,sourceField,occurrence:index,sha256:csv.sha256,originalValue:csv.records?.[index]?.values?.[sourceField]??null,mapping:mapping||null,repair:csv.repairs?.find(r=>r.row===csv.lines[index]&&r.field===field)||null}}:{associationGap:'该冻结记录没有可验证的CSV物理行来源；仅保留逻辑发生位置，不猜测当前同行。'})};
  })};
 }
 export function currentRecord(ref, data, context={}) {

@@ -1,5 +1,5 @@
 import {sourceRefs} from '../src/lib/problem-records.mjs';
-import {validateFactoryLines} from '../src/lib/factory-lines.mjs';
+import {inheritedCalendarId,validateFactoryLines} from '../src/lib/factory-lines.mjs';
 import {validateBatchResources} from '../src/lib/batch-policy.mjs';
 import { assessRules } from '../src/lib/business-rules.mjs';
 import { validateMasterData } from '../src/lib/master-data.mjs';
@@ -22,7 +22,7 @@ export function validateInputs(defs,data,{at=new Date().toISOString(),checkPolic
   const seen=new Set();
   (data[def.key]||[]).forEach((r,i)=>{
    const required={machines:['设备名称','产线编号','日历编号','最小装载kg','最大装载kg','装载计量基准'],calendars:['工厂编号'],downtime:['原因']};
-   for(const f of required[def.key]||[])if(!r[f]?.trim())add(def.key,i,f,'字段不能为空');
+   for(const f of required[def.key]||[])if(!r[f]?.trim()&&!(def.key==='machines'&&f==='日历编号'&&inheritedCalendarId(data,r)))add(def.key,i,f,'字段不能为空');
    for(const f of keys[def.key])if(!(def.key==='dependencies'&&(f==='人员岗位编号'||f==='人员参与阶段'||f==='资源编号'&&r['资源类型']==='人员技能'&&r['候选人员组']?.trim()))&&!r[f]?.trim())add(def.key,i,f,'唯一键字段不能为空');
    const key=JSON.stringify(keys[def.key].map(f=>r[f]?.trim()||''));
    if(seen.has(key))add(def.key,i,keys[def.key].join(' + '),'唯一键重复',(data[def.key]||[]).filter(r=>JSON.stringify(keys[def.key].map(f=>r[f]?.trim()||''))===key));seen.add(key);
