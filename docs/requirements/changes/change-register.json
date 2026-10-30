@@ -485,7 +485,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR013受影响需求增量；不等于已实现或UAT通过",
-      "implementation_status": "FR013 1cdf394e original02/04 independent 45 PASS; original07/08 independent 13 PASS/2 product FAIL (fractional bag count and yield >100% accepted in preview); two assertions await one Dev validation repair; full FR013/CR NOT_READY",
+      "implementation_status": "FR013 fixed 1cdf394e original02/04 independent 45 PASS; original07/08 13 PASS/2 product FAIL. PM dispatched first Dev validation repair dlv_50c139f5-bc21-4c22-adad-294f147b9055 (SENT, not delivered); full FR013/CR NOT_READY.",
       "primary_requirements": [
         "FR-013"
       ],
