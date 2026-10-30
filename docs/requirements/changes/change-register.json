@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "P10 fixed42a35d07 Test1 S-P01..10 PASS; Test2 H first six PASS, R2 H-P06 PASS/H-P04 PARTIAL. H-P08/10 Test1 verdict awaits PM review; H-P04 personnel early/late formula awaits user decision. N06 and other scope open; full CR NOT_READY.",
+      "implementation_status": "P10 fixed42a35d07 Test1 S-P01..10 PASS; Test2 H first six PASS, R2 H-P06 PASS/H-P04 PARTIAL. H-P08/10 Test1 verdict reviewed PASS on fixed42a35d07; H-P04 personnel early/late formula awaits user decision. N06 and other scope open; full CR NOT_READY.",
       "primary_requirements": [
         "FR-006",
         "FR-007",
