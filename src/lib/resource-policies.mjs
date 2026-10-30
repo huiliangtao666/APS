@@ -7,7 +7,6 @@ export const whole='显式逐生产批完整区间';
 export const windowMode='明确窗口';
 export function migratePolicies(input){
  const d=structuredClone(input);d.skillSubstitutions??=[];
- d.tools=(d.tools||[]).map(t=>({...t,'可用起始分钟':t['可用起始分钟']??'0','可用结束分钟':t['可用结束分钟']??'525600'}));
  d.resourceClaims=(d.resourceClaims||[]).map(c=>({...c,'窗口开始偏移分钟':c['窗口开始偏移分钟']??'0','窗口结束偏移分钟':c['窗口结束偏移分钟']??'0','参数来源':c['参数来源']??'逐项声明'}));
  d.dependencies=(d.dependencies||[]).map(r=>r['资源类型']==='人员技能'?{...r,'窗口外释放':r['窗口外释放']??'是'}:r);
  return d;
@@ -44,8 +43,9 @@ export function validatePolicies(data,at=new Date().toISOString(),mode='supporte
   if(r['适用工序']!=='*'&&!(data.routes||[]).some(x=>x['工序编号']===r['适用工序']))fail('适用工序','须为 * 或单个现有工序编号；精确工序优先于 *，禁用也覆盖 *');
  }
  for(const [i,t]of (data.tools||[]).entries())for(const k of ['提前占用分钟','后延占用分钟'])if(!minute(t[k]))add('tools',i,k,'须为0–525600整数分钟');
- for(const [i,t]of (data.tools||[]).entries())if(t['可用起始分钟']!==undefined||t['可用结束分钟']!==undefined){
-  if(!minute(t['可用起始分钟'])||!minute(t['可用结束分钟'])||Number(t['可用结束分钟'])<=Number(t['可用起始分钟']))add('tools',i,'可用结束分钟','工装可用期须显式填写 0–525600 的整数分钟，结束大于开始');
+ for(const [i,t]of (data.tools||[]).entries()){
+  for(const field of ['可用起始分钟','可用结束分钟'])if(!minute(t[field]))add('tools',i,field,'工装可用期须显式填写 0–525600 的整数分钟');
+  if(minute(t['可用起始分钟'])&&minute(t['可用结束分钟'])&&Number(t['可用结束分钟'])<=Number(t['可用起始分钟']))add('tools',i,'可用结束分钟','工装可用期结束须大于开始');
  }
  for(const [i,g]of (data.personnelGroups||[]).entries())if(!Number.isSafeInteger(Number(g['人员数量']))||Number(g['人员数量'])<1)add('personnelGroups',i,'人员数量','人数须为安全正整数；所有技能共用该人数池');
  const claimKeys=new Set();

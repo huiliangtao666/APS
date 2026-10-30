@@ -1,5 +1,5 @@
 import {effectiveClaim,windowMode} from './resource-policies.mjs';
-import {validateTools} from '../../prototypes/fr006-config-only/src/tool-validation.mjs';
+import {validateToolRows} from './tool-validation.mjs';
 export const legacyJointParameters={占用口径:'显式逐生产批完整区间',数量口径:'每生产批声明数量',FR006任务默认:'不自动采用，须逐批声明'};
 export const jointParameters={占用口径:'按表23逐项配置',数量口径:'每生产批声明数量',FR006任务默认:'由声明参数来源选择',参数契约:'CR-DEC02-03-v1'};
 export function jointFlags(data,at=new Date().toISOString()) {
@@ -12,8 +12,12 @@ const typeRule=t=>t==='工装'?'MOLD':t==='空间'?'STORAGE':null;
 export function validateJointResources(data,at){
  const issues=[],flags=jointFlags(data,at),claims=data.resourceClaims||[];
  const add=(message,table='resourceClaims',row=0)=>issues.push({code:'INPUT / JOINT_RESOURCE',message,table,row});
- for(const message of validateTools(data.tools||[]))add(message,'tools');
- for(const t of data.tools||[])for(const k of ['可用数量','每任务需求数量'])if(!decimal(t[k])||!Number.isSafeInteger(Number(t[k]))||Number(t[k])<1)add(`工装 ${t['工装编码']} ${k} 须为安全正整数套，不支持科学计数或其他单位`,'tools');
+ issues.push(...validateToolRows(data.tools||[]));
+ for(const [i,t] of (data.tools||[]).entries())for(const k of ['可用数量','每任务需求数量']){
+  // Keep the stricter safe/decimal contract, without duplicating an existing field error.
+  if((!decimal(t[k])||!Number.isSafeInteger(Number(t[k]))||Number(t[k])<1)&&!issues.some(issue=>issue.table==='tools'&&issue.row===i+2&&issue.field===k))
+   issues.push({code:'INPUT / JOINT_RESOURCE',message:`工装 ${t['工装编码']} ${k} 须为安全正整数套，不支持科学计数或其他单位`,table:'tools',file:'18_工装配置.csv',row:i+2,field:k});
+ }
  const seen=new Set();
  for(const [i,raw] of claims.entries()){
   const c=effectiveClaim(raw,data);
