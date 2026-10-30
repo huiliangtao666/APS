@@ -509,7 +509,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR013受影响需求增量；不等于已实现或UAT通过",
-      "implementation_status": "FR013 original05/06 bd6f9fab explicit config delivered; R-C01 multi-source c70d6607 Dev bounded slice delivered, independent Test executing. Original09/B09 and other categories unchanged; full FR013/CR NOT_READY.",
+      "implementation_status": "FR013 original05/06 a49edb1d legacy v1 no-op repair delivered and independently passed; R-C08/09 same defect closed round1. Other original categories, R-C03 positive, FR016 shared duties and full FR013/CR remain NOT_READY.",
       "primary_requirements": [
         "FR-013"
       ],
@@ -527,7 +527,7 @@
       "acceptance_delta": "CSV模板/预览/导入按批准配置校验：小数袋支拒绝，总收率>100%拒绝；合法配置保存刷新后生效，非法/越权整批零写入；保留旧确认/历史。",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006",
       "related_issue_urls": [],
-      "acceptance_result": "bd6f9fab original05/06 independent 8 PASS/2 PARTIAL/0 product FAIL; Test2 resource-map integration 11/11 PASS; R-C10 native filename PASS; old SHA evidence retained. c70d6607 multi-source Dev selftest only, independent Test pending. R-C03 cross-line positive and other FR013 scope remain; full CR NOT_READY.",
+      "acceptance_result": "a49edb1d DEF-V1-NOOP-01 round1 independent 25/25 PASS on legacy v1 no-op and impacted regression; R-C08/09 same defect closed. Prior bd6f9fab and c70d6607 conclusions remain on original SHAs; no full CR acceptance, FR013 NOT_READY, UAT01/11 WAITING_DEPENDENCIES.",
       "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
       "history": [
         {
@@ -558,17 +558,23 @@
           "event_key": "dlv_c76969f4-9d99-4082-91fa-4d3efeff98db:r1",
           "event": "c70d6607 multi-source same-entity Dev bounded selftest PASS; independent Test dlv_fe220c7f SENT/EXECUTING, not a new product PASS; full CR NOT_READY",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6519739923"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "dlv_ef297db0-49eb-450a-b7f7-4b26b4ffec52:r1",
+          "event": "a49edb1d independent Test 25/25 PASS; same DEF-V1-NOOP-01 round1 closed for R-C08/09 legacy v1 no-op compatibility; full FR013/CR NOT_READY, UAT01/11 WAITING_DEPENDENCIES",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6520196323"
         }
       ],
       "dev_delivery": "dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1",
       "contract_review_delivery": "",
-      "product_test_delivery": "dlv_b4987c57-516c-4c3a-b0d6-2cab6febb7c9；dlv_1aef3889-5dad-4483-a367-479e14a240dd",
-      "code_sha": "fc273441ca93dcc47996bf5a6f7031e73be7f226",
-      "code_branch": "",
+      "product_test_delivery": "dlv_ef297db0-49eb-450a-b7f7-4b26b4ffec52:r1",
+      "code_sha": "a49edb1d4fefedabae53d7a15f09534da7da0f9e",
+      "code_branch": "fix/issue4-fr013-v1-noop-r1",
       "dev_report": "",
-      "test_report": "",
+      "test_report": "APS-Test/Issue4-FR013-DEF-V1-NOOP-01-a49edb1d-Test1-r1-REPORT.md",
       "design_commit": "",
-      "repair_delivery": "",
+      "repair_delivery": "dlv_d108b114-edb2-4041-a2e9-4ab6765b976b:r1",
       "test_contract": ""
     },
     {
