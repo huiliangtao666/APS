@@ -22,6 +22,16 @@ export function related(data,table,index){
  if(table==='routes'&&row['工序编号']?.trim())(data.skillSubstitutions||[]).forEach((relation,i)=>{if(relation['适用工序']===row['工序编号'])results.push({table:'skillSubstitutions',index:i,label:'声明适用工序'});});
  if(table==='rules'&&row['规则编号'])(data.tasks||[]).forEach((r,i)=>{if((r['方案记录规则']||'').split('、').includes(row['规则编号']))results.push({table:'tasks',index:i});});
  if(table==='tasks')(data.rules||[]).forEach((r,i)=>{if(r['规则编号']&&(row['方案记录规则']||'').split('、').includes(r['规则编号']))results.push({table:'rules',index:i});});
+ const originalLinks=[
+  ['originalTools','资源编号','tools','工装编码',()=>true],
+  ['originalPersonnel','人员组编号','personnelGroups','人员组编号',()=>true],
+  ['originalTools','资源编号','dependencies','资源编号',(a,b)=>a['资源类型']===b['资源类型']],
+  ['originalPersonnel','人员组编号','dependencies','资源编号',(_a,b)=>['人员','人员技能'].includes(b['资源类型'])]
+ ];
+ for(const [a,af,b,bf,accept] of originalLinks){
+  if(table===a)(data[b]||[]).forEach((other,i)=>{if(row[af]&&row[af]===other[bf]&&accept(row,other))results.push({table:b,index:i,label:'原件同编号关联（待运行映射核对）'});});
+  if(table===b)(data[a]||[]).forEach((other,i)=>{if(row[bf]&&row[bf]===other[af]&&accept(other,row))results.push({table:a,index:i,label:'原件同编号关联（待运行映射核对）'});});
+ }
  const edges=[
  ['personnelPools','personnelGroups',['poolId']],
  ['factoryLines','machines',['产线编号']],['factoryLines','orders',['产线编号']],['factoryLines','calendars',['工厂编号']],['factoryLines','factoryLines',['工厂编号']],

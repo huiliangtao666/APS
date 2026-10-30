@@ -1,0 +1,3 @@
+import {defs} from '../server/planner.ts';
+export const sourceRows={originalTools:[{'资源编号':'G01','资源名称':'灌装共用规格工装','资源类型':'模具','可用数量':'2','最早可用分钟':'0','最晚可用分钟':'600','共享范围':'全工厂'},{'资源编号':'T01','资源名称':'混合批次周转工具','资源类型':'工具','可用数量':'3','最早可用分钟':'0','最晚可用分钟':'600','共享范围':'全工厂'}],originalPersonnel:[{'人员组编号':'LP01','技能':'综合操作','可用人数':'1','起始分钟':'0','结束分钟':'600','共享范围':'全工厂'}]};
+export function files(tables=sourceRows){return Object.entries(tables).map(([key,rows])=>{const def=defs.find(d=>d.key===key);return {name:def.file,text:[def.fields,...rows.map(r=>def.fields.map(f=>r[f]||''))].map(c=>c.map(v=>'"'+v.replace(/"/g,'""')+'"').join(',')).join('\r\n')};});}

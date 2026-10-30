@@ -1,7 +1,7 @@
 import {parseInputCsvRecords} from '../src/lib/input-csv.mjs';
 // The isolated prototype used these same table keys, but older field shapes.
 // Reuse physical-record parsing/inspection; actual runtime defs are authoritative.
-export const batchKeys=['personnelPools','personnelGroups','factoryLines','calendars','downtime','orders','routes','times','machines','dependencies','rules','products','materials'];
+export const batchKeys=['originalTools','originalPersonnel','personnelPools','personnelGroups','factoryLines','calendars','downtime','orders','routes','times','machines','dependencies','rules','products','materials'];
 export const optionalFields={personnelGroups:['poolId'],orders:['已完成合格数量'],dependencies:['人员岗位编号','候选人员组','所需班次','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'],rules:['适用对象','生效时间']};
 export function inspectCsvBatch(files,defs){
  const tables={},sources={},issues=[],seen=new Set();
@@ -20,7 +20,7 @@ export function inspectCsvBatch(files,defs){
   sources[def.key]={file:file.name,lines:raw.slice(1).map(r=>r.line),headers};
   tables[def.key]=raw.slice(1).map(({cells,line},index)=>{
    if(cells.length!==headers.length)add(file.name,line,'整行',`列数 ${cells.length} 与表头 ${headers.length} 不一致`,{table:def.key,index});
-   const row=Object.fromEntries(def.fields.map(f=>[f,headers.includes(f)?(cells[headers.indexOf(f)]||'').trim():'']));
+   const row=Object.fromEntries(def.fields.map(f=>[f,headers.includes(f)?(['originalTools','originalPersonnel'].includes(def.key)?(cells[headers.indexOf(f)]||''):(cells[headers.indexOf(f)]||'').trim()):'']));
    const required=def.key==='orders'?['合格需求']:def.key==='times'&&row['计算方式']==='固定'?['固定分钟']:def.key==='rules'?['是否启用']:[];
    for(const f of required)if(!row[f])add(file.name,line,f,'必填，待补充；不把空白值视为 0',{table:def.key,index});
    if(def.key==='dependencies'&&!headers.includes('窗口外释放')&&row['资源类型']==='人员技能')row['窗口外释放']='是';

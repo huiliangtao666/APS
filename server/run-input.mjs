@@ -39,6 +39,7 @@ export function freezeRunInput(data, selection = {}, calculatedAt = new Date().t
   checkScope=schedulingScope(checkScope.mode,executionData.rules.some(r=>r['规则编号']==='MATERIAL'&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(calculatedAt))),activeBatchRule(executionData,calculatedAt),jointFlags(executionData,calculatedAt),deliveryActive(executionData,calculatedAt));
   if((data.executionFacts||[]).length){checkScope.checked.push('模拟累计执行事实、原始保护区间与剩余工时/耗料（支持口径）');checkScope.unchecked=checkScope.unchecked.map(x=>x==='执行事实与主管确认'?'真实执行/质量确认、FR031事件恢复/转机/冲销':x);}
   if((data.simulationEvents||[]).length)checkScope.checked.push('FR029事件时点累计事实、不可改写事件历史、禁止未开始任务开工保护窗口与需处理阻断；不含恢复/转机/撤销');
+  if((data.originalTools||[]).length||(data.originalPersonnel||[]).length)checkScope.unchecked.push('原05/06资料尚未作为运行资源采用');
   if(checkScope.mode==='minimal-r1'&&hasPhysicalPools(executionData))throw Error('P10物理人员池不可用于minimal-r1未检查模式；请选择支持人员策略的完整试算');
   if(checkScope.mode!=='minimal-r1'){const issues=validatePhysicalPools(executionData,{at:calculatedAt,forRun:true});if(issues.length)throw Error(issues.map(i=>`${i.file}:${i.row}:${i.field} ${i.message}`).join('；'));}
   if(checkScope.mode==='supported')checkScope.checked.push('P06单窗多班：继承工厂工作窗口、扣除人员/工装停用例外；完整阶段与占用；不跨班拼接');
