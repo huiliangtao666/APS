@@ -1880,6 +1880,33 @@
       ],
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_e9326287-49f1-47be-9bb0-3b66c7d673c7:r1",
+      "original_delivery": "dlv_e9326287-49f1-47be-9bb0-3b66c7d673c7",
+      "notification_delivery": "dlv_bf52fa08-cafc-42f3-a79d-6116e79e07e7",
+      "type": "TEST_PREPARATION_COMPLETED",
+      "state": "PROCESSED",
+      "source": "APS-Test",
+      "processed_at": "2026-10-30T16:21:00+08:00",
+      "requirement": "FR-013 v0.3+CR-FR013-VALIDATION-20261029 / Issue4 original05/06",
+      "reference_product_sha": "31904e1d628a33240aa645e128dba35bf041e5ca",
+      "new_tested_product_sha": null,
+      "result": "R-C01..R-C10 PREPARED_CONDITIONAL; all product NOT_EXECUTED; 39 oracle self-check only; FR013 NOT_READY",
+      "external_hashes": {
+        "Issue4-FR013-config-Test1-prep-r1.zip": "7b2c321665fe7fc95242caacc630e433946cd48a968f0c2ba25f75ee587a4907"
+      },
+      "zip_crc": "PASS",
+      "zip_entries": 31,
+      "internal_hashes_verified": 30,
+      "oracle_cases_verified": 39,
+      "operation_fixtures_prepared": 12,
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6518362636",
+      "project_status": {
+        "FR-013": "In progress"
+      },
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES"
     }
   ]
 }
