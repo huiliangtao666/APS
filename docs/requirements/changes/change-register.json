@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "P10 explicit strategy 42a35d07 Dev delivered; Test1 S-P01..10 PASS; Test2 H six PASS/four PARTIAL. Earlier N06 and other scope retained; full CR NOT_READY.",
+      "implementation_status": "P10 fixed42a35d07 Test1 S-P01..10 PASS; Test2 H first six PASS, R2 H-P06 PASS/H-P04 PARTIAL. H-P08/10 Test1 verdict awaits PM review; H-P04 personnel early/late formula awaits user decision. N06 and other scope open; full CR NOT_READY.",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "P10 fixed42a35d07 independent S 10 PASS; H 6 PASS/4 PARTIAL (H-P04/06/08/10), 0 product FAIL; older SHA results retained; full CR and UAT NOT_READY.",
+      "acceptance_result": "P10 fixed42a35d07 independent S 10 PASS; H-P01/02/03/05/06/07/09 PASS, H-P04/08/10 PARTIAL pending closure; this R2 zero product FAIL, +0 repair. Full FR007/022/CR and UAT NOT_READY.",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -156,6 +156,12 @@
           "event_key": "issue3:p10:explicit-handoff-occupation:test2:42a35d07ce29ec073d43bb8adb6083328a9d16dc:r1",
           "event": "P10 fixed42a35d07 Test2 H-P01/02/03/05/07/09 PASS, H-P04/06/08/10 PARTIAL evidence gaps; 0 product FAIL, +0 repair; full CR NOT_READY",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6518508867"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "issue3:p10:h-p04-p06:test2:42a35d07ce29ec073d43bb8adb6083328a9d16dc:r2",
+          "event": "Test2 fixed42a35d07 H-P06 independent PASS, H-P04 PARTIAL; personnel outside-task early/late formula referred to user; 0 established product FAIL, +0 repair; full CR NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6518692456"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
