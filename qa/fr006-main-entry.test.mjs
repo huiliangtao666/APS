@@ -6,7 +6,9 @@ import {policyFixture} from './dec0203-fixture.mjs';
 import {defs} from '../server/planner.ts';
 import {validateInputs} from '../server/input-validation.mjs';
 const tool={工装编码:'ENTRY-01',工装名称:'首轮测试工装',适用任务:'MIX',可用数量:'2',每任务需求数量:'1',提前占用分钟:'5',后延占用分钟:'10',是否启用:'是',说明:'仅测试',可用起始分钟:'0',可用结束分钟:'600'};
-const template=fs.readFileSync('prototypes/fr006-config-only/sample-data/FR-006/18_工装配置.csv','utf8');
+const legacyTemplate=fs.readFileSync('prototypes/fr006-config-only/sample-data/FR-006/18_工装配置.csv','utf8');
+// Main product now requires explicit availability; the nine-column prototype remains unchanged.
+const template=legacyTemplate.trimEnd().split(/\r?\n/).map((line,i)=>line+(i===0?',可用起始分钟,可用结束分钟':',0,600')).join('\r\n')+'\r\n';
 test('root API tooling CRUD versions audit and saved plan input remain immutable',async t=>{
  const f=await fixture(t);let s=await f.ok('/state');const base=await f.ok('/calculate',{revision:s.revision});const old=await f.ok('/plans/'+base.id+'/inputs');
  for(const role of ['planner','supervisor']){s=await f.ok('/state');await f.ok('/inputs',{revision:s.revision,tables:{tools:[{...tool,说明:role}]}},role);}

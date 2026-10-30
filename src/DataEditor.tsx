@@ -20,6 +20,13 @@ export function DataEditor({data={},def,rows,revision,canWrite,busy,reason,onSav
  useEffect(()=>{if(!target||target.table!==def.key)return;const field=def.fields.find(f=>target.field.split(' + ').includes(f))||def.fields[0];const node=document.getElementById(`edit-${def.key}-${Math.max(0,target.row-2)}-${field}`);if(node){((node.querySelector('input:not([type="hidden"]),select') as HTMLElement)||node).focus();node.scrollIntoView({block:'center'});}setTarget(null);},[def.key,target]);
  const list=drafts[def.key]??rows,disabled=!canWrite||busy||saving;
  const stale=draft&&base!==revision;
+ function newRow():Row {
+  const row=Object.fromEntries(def.fields.map(f=>[f,'']));
+  // Suggestions belong only to a newly added draft, never imported or existing rows.
+  if(def.key==='tools')Object.assign(row,{'可用数量':'1','每任务需求数量':'1','提前占用分钟':'0','后延占用分钟':'0'});
+  if(def.key==='resourceClaims')Object.assign(row,{'占用口径':'显式逐生产批完整区间','窗口开始偏移分钟':'0','窗口结束偏移分钟':'0'});
+  return row;
+ }
  function change(next:Row[],op='edit'){if(!draft)setBase(revision);setDrafts({...drafts,[def.key]:next});setOperation(op);setSaved('');setError('');setIssues([]);}
  async function save(){if(!draft)return;setSaving(true);setError('');try{const result=await onSave(drafts,base,operation);setSaved(result?.unchanged?'内容相同，未新增版本或操作记录。':'保存完成，当前输入已更新；原方案及其输入保留。');setDrafts({});setSelected([]);}catch(e){setError(e instanceof Error?e.message:'保存失败');setIssues((e as any)?.detail?.issues||[]);}finally{setSaving(false);}}
  return <section aria-label="模拟记录编辑">
@@ -27,8 +34,9 @@ export function DataEditor({data={},def,rows,revision,canWrite,busy,reason,onSav
   {def.key==='factoryLines'&&<p>五字段须显式填写，时区使用 IANA 名称（如 Asia/Shanghai）；不自动填充值。首次配置须覆盖现有机器、订单的产线及日历的工厂引用。可维护未投入排程的产线记录，R1 仍只允许一条排程产线。修改保存为新输入版本，已确认方案的原始输入保留。</p>}
   {def.key==='simulationEvents'&&<p>FR029：先更新全部在制任务观测分钟为事件时点，再保存完整事件集合；可跨表暂存后一并保存。保护策略仅支持“禁止未开始任务开工”，需处理事实JSON留空由服务器判定。故障/耗料影响事实永久保留待处理；恢复、转机、撤销及旧方案未执行任务锁定未定。模拟物料状态不代表QA在线放行。</p>}
   {["executionFacts","executionMaterials","executionSources"].includes(def.key)&&<p>FR031 模拟累计口径：可用产出与报废分开，不跨工序累加；空报废按零处理。正报废量须明确“按本工序BOM补做”或“待核对”；工时独立填写。来源汇总缺少显式物料/批次分配时阻断，不自动分批。已开始/完成事实、已耗批次、原始来源不允许删除或覆盖。</p>}
+  {['tools','resourceClaims'].includes(def.key)&&<p role="note">建议初始值 / 请核对实际业务。新建工装：可用套数1、每任务需求套数1、提前取得0分钟、后延归还0分钟；新建占用声明：完整工序（显式逐生产批完整区间），窗口偏移0。仅点击“保存修改”后生效，未保存不作用新试算。来源：2026-10-30用户授权的建议，不是客户现场事实。工装编码、适用工序、真实可用起止及共享范围须按实际业务或明确CSV来源填写；同一实体请使用同一编号共享容量，不能按设备复制容量。表23仍须显式填写资源身份、订单/工序、单位及参数来源；选择“工装配置”采用表18套数/提前/后延时，表23对应三个字段须留空。时间为半开区间。已有记录、复制及CSV/API不补建议值。</p>}
   <PolicyPreview table={def.key} data={{...data,...drafts}} revision={revision}/>
-  <div className="actions"><button disabled={disabled} onClick={()=>change([...list,Object.fromEntries(def.fields.map(f=>[f,'']))],'add')}>新增一行</button><button disabled={disabled||!selected.length} onClick={()=>{change([...list,...selected.map(i=>({...list[i]}))],'copy');setSelected([]);}}>复制选中</button><button className="danger" disabled={disabled||!selected.length} onClick={()=>{change(list.filter((_,i)=>!selected.includes(i)),'delete');setSelected([]);}}>删除选中</button><button disabled={disabled||!draft||stale||!reason.trim()} onClick={save}>保存修改</button><button disabled={saving||!draft} onClick={()=>{setDrafts({});setSelected([]);setError('');setIssues([]);}}>取消修改</button></div>
+  <div className="actions"><button disabled={disabled} onClick={()=>change([...list,newRow()],'add')}>新增一行</button><button disabled={disabled||!selected.length} onClick={()=>{change([...list,...selected.map(i=>({...list[i]}))],'copy');setSelected([]);}}>复制选中</button><button className="danger" disabled={disabled||!selected.length} onClick={()=>{change(list.filter((_,i)=>!selected.includes(i)),'delete');setSelected([]);}}>删除选中</button><button disabled={disabled||!draft||stale||!reason.trim()} onClick={save}>保存修改</button><button disabled={saving||!draft} onClick={()=>{setDrafts({});setSelected([]);setError('');setIssues([]);}}>取消修改</button></div>
   {saved&&<p role="status">{saved}</p>}
   {draft&&<p role="status">未保存修改 · {Object.keys(drafts).length} 张表 · 基于版本 {base}。{stale?'服务端输入已变化，请取消草稿并刷新后重新编辑。':'保存须填写操作原因。'}</p>}
   {error&&<div role="alert"><p>{error}</p><ul aria-label="保存问题定位">{issues.map((issue,i)=><li key={i}><button onClick={()=>{onLocate?.(issue.table);setTarget(issue);}}>{issue.file||issue.table} · {issue.row>1?`第${issue.row}行`:'整表'} · {fieldLabel(issue.field)}：{issue.message} · 定位字段</button></li>)}</ul><p>行号包含 CSV 表头；整表问题需结合关联类别核对。草稿保留，修正后再保存。</p></div>}
