@@ -1,0 +1,86 @@
+{
+  "original_delivery": "dlv_1e86ea88-67a6-4d95-85fc-98c63f2436ae",
+  "event_key": "dlv_1e86ea88-67a6-4d95-85fc-98c63f2436ae:r1",
+  "scope": "P10-core-v1 shared-on explicit identity/unique capacity; NOT full P10/FR/CR",
+  "dev_core_result": "PASS",
+  "full_p10_result": "PARTIAL",
+  "card_recommendation": "NOT_READY",
+  "test_execution_role": "APS-Dev self-test; independent APS-Test pending",
+  "baseline": "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc",
+  "design_sha": "9c230d4aeda124915bcb917b929050f020a11951",
+  "tests": {
+    "p10-tests.log": {
+      "tests": 10,
+      "failed": 0,
+      "sha256": "84f4ecc414bbc695792ccc05711f0e780e1fa9a9997a6bf717e395b314f224c7"
+    },
+    "regression.log": {
+      "tests": 45,
+      "failed": 0,
+      "sha256": "2e1fbe5e4b005d37713accaf425c004113cff30ec0cb2c1fccdce5f594df20b8"
+    },
+    "npm-test.log": {
+      "tests": 124,
+      "failed": 0,
+      "sha256": "cc9642fcefbdebd112e8853edfb31c28be7baab26d8ca7b957f7982420dd4b97"
+    }
+  },
+  "build": "PASS TypeScript/Vite/server/Worker",
+  "browser": {
+    "complete": true,
+    "cases": 5,
+    "pageErrors": [],
+    "savedLoadUiAndDownload": true
+  },
+  "legacy_upgrade": {
+    "complete": true,
+    "actual_legacy_code": "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc",
+    "old_store_byte_read_only": true,
+    "history_equality": true,
+    "old_code_new_schema_rejections": [
+      404,
+      400
+    ]
+  },
+  "design_matrix": {
+    "PASS_DEV": 19,
+    "PARTIAL": 4,
+    "NOT_EXECUTED": 21,
+    "is_independent_acceptance": false
+  },
+  "environment": {
+    "image": "sha256:0d45a31aa25c4cca1eaacbfd1ba4ee6d5028d899b329e49a6036a66fd0c35da8",
+    "node": "v22.23.2",
+    "identity": "synthetic authorized membership; not real SSO",
+    "data": "isolated explicit synthetic data; no site defaults",
+    "browser": "Chromium Headless Shell 141.0.7390.37 / Playwright 1.56.1",
+    "entry": "qa/p10-core-container.sh creates isolated local Express/Vite production build and real worker threads",
+    "publication": "none"
+  },
+  "original_hash_validation": {
+    "design": {
+      "P10-B01-B03-BUSINESS-CONTRACT-r1.md": true,
+      "P10-B01-B03-ACCEPTANCE-r1.csv": true,
+      "P10-B01-B03-SCENARIOS-r1.json": true,
+      "P10-B01-B03-DESIGN-CHECK-r1.json": true,
+      "P10-B01-B03-DESIGN-DELIVERED-r1.json": true,
+      "README.md": true,
+      "sources.json": true,
+      "design_math.py": true
+    },
+    "pmCsvMatches": true,
+    "outerHashes": {
+      "P10-B01-B03-DESIGN-r1-PM-COPY.zip": "8d1dc4b0ae4dd94da139695b12ee75b87fb894a0b67ee0c2c20d3e885784f724",
+      "P10-B01-B03-ACCEPTANCE-r1-PM-COPY.csv": "07d1882b390fa7ec8a98681b5a656c247c1d672e0a25de3068263946b668af5c"
+    }
+  },
+  "limits": [
+    "U01 shared-off semantics pending user via PM",
+    "U02 handover semantics pending user via PM",
+    "single-line; no simultaneous two-line Worker",
+    "global * canonical pool capacity and effective timestamp only; no FR017 hierarchy integration",
+    "one shift/window per group; qualification intersections/individual identities not modeled",
+    "N06/P06/R01/R02 and DEC04-06 not implemented",
+    "FR021 fix2662 and FR016 U1c302 remain separate branches"
+  ]
+}

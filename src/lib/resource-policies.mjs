@@ -1,4 +1,6 @@
 import {sourceRefs} from './problem-records.mjs';
+import {originalIssues} from './original-resources.mjs';
+import {validatePhysicalPools} from './physical-pools.mjs';
 // One policy source per declaration; no name/grade based skill rules.
 export const skillsOf=value=>String(value||'').split(/[;,，；\s]+/).filter(Boolean);
 // Empty candidate field preserves an explicit single group; never means all groups.
@@ -20,6 +22,7 @@ const minute=v=>typeof v==='string'&&/^\d+$/.test(v)&&Number.isSafeInteger(Numbe
 // original execution ledger. Personnel dependencies remain intrinsic even when LABOR is off.
 export function validatePolicyExecution(data,at=new Date().toISOString(),mode='supported'){
  if(mode==='minimal-r1')return [];
+ if((data.originalResourceEvents||[]).length)return originalIssues(data);
  const active=id=>(data.rules||[]).some(r=>r['规则编号']===id&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at)));
  return (data.executionFacts||[]).flatMap((f,i)=>{
   const same=r=>r['订单编号']===f['订单编号']&&r['工序编号']===f['工序编号'];
@@ -29,7 +32,7 @@ export function validatePolicyExecution(data,at=new Date().toISOString(),mode='s
 }
 export function validatePolicies(data,at=new Date().toISOString(),mode='supported',checkExecution=true){
  const refs=(table,rows)=>sourceRefs(table,rows,data[table]||[]);
- const issues=[];const add=(table,i,field,message,relatedRecords=refs(table,[data[table][i]]))=>issues.push({relatedRecords,code:'INPUT / RESOURCE_POLICY',table,row:i+2,field,message,...(table==='dependencies'?{file:'12_工序资源与物料依赖.csv'}:{})});
+ const issues=[...validatePhysicalPools(data,{at})];const add=(table,i,field,message,relatedRecords=refs(table,[data[table][i]]))=>issues.push({relatedRecords,code:'INPUT / RESOURCE_POLICY',table,row:i+2,field,message,...(table==='dependencies'?{file:'12_工序资源与物料依赖.csv'}:{})});
  const skillSet=new Set((data.personnelGroups||[]).flatMap(g=>skillsOf(g['技能'])));
  for(const [i,r]of (data.dependencies||[]).entries())if(r['资源类型']==='人员技能'&&r['所需技能'])skillSet.add(r['所需技能']);
  if(checkExecution)issues.push(...validatePolicyExecution(data,at,mode));

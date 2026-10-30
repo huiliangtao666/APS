@@ -1,3 +1,5 @@
+import {originalTable} from '../src/lib/original-resources.mjs';
+import {hasPhysicalPools,validatePhysicalPools} from '../src/lib/physical-pools.mjs';
 import {migratePolicies} from '../src/lib/resource-policies.mjs';
 import {eventSummary} from '../src/lib/simulation-events.mjs';
 import {executionState,executionSummary} from '../src/lib/execution-facts.mjs';
@@ -26,6 +28,7 @@ export function freezeRunInput(data, selection = {}, calculatedAt = new Date().t
   const enabledRuleIds=selection.enabledRuleIds??data.rules.filter(r=>r['是否启用']==='是').map(r=>r['规则编号']);
   if(!Array.isArray(enabledRuleIds)||enabledRuleIds.some(id=>typeof id!=='string'||!data.rules.some(r=>r['规则编号']===id))||new Set(enabledRuleIds).size!==enabledRuleIds.length||ruleCatalog.some(c=>c.required&&!enabledRuleIds.includes(c.id)))throw Error('invalid_rule_selection');
   const executionData=migratePolicies(data);
+  executionData.resourceStops??=[];
   executionData.orders=selected.map(o=>({...o}));
   if((data.executionFacts||[]).length)executionData.executionContext=structuredClone(data);
   executionData.dependencies=executionData.dependencies.filter(r=>orderIds.includes(r['订单编号']));
@@ -35,9 +38,12 @@ export function freezeRunInput(data, selection = {}, calculatedAt = new Date().t
   executionData.rules=executionData.rules.map(r=>({...r,'是否启用':enabledRuleIds.includes(r['规则编号'])?'是':'否'}));
   if(executionData.executionContext)executionData.executionContext.rules=structuredClone(executionData.rules);
   checkScope=schedulingScope(checkScope.mode,executionData.rules.some(r=>r['规则编号']==='MATERIAL'&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(calculatedAt))),activeBatchRule(executionData,calculatedAt),jointFlags(executionData,calculatedAt),deliveryActive(executionData,calculatedAt));
+  if((data[originalTable]||[]).length)checkScope.checked.push('N06有限已释放原账/来源链保护；未知释放阻断，真实客户原账仍待提供');
   if((data.executionFacts||[]).length){checkScope.checked.push('模拟累计执行事实、原始保护区间与剩余工时/耗料（支持口径）');checkScope.unchecked=checkScope.unchecked.map(x=>x==='执行事实与主管确认'?'真实执行/质量确认、FR031事件恢复/转机/冲销':x);}
   if((data.simulationEvents||[]).length)checkScope.checked.push('FR029事件时点累计事实、不可改写事件历史、禁止未开始任务开工保护窗口与需处理阻断；不含恢复/转机/撤销');
-  const conditions={resourcePolicyContract:'CR-DEC02-03-v1',resourcePolicyVersion:inputHash({tools:executionData.tools,resourceClaims:executionData.resourceClaims,dependencies:executionData.dependencies,personnelGroups:executionData.personnelGroups,skillSubstitutions:executionData.skillSubstitutions}),eventSummary:eventSummary(data),executionFactsVersion:inputHash(executionState(data)),executionSummary:executionSummary(executionData.executionContext||executionData,calculatedAt),mode:checkScope.mode,checkScope,ruleEvaluationAt:calculatedAt,orderIds:selected.map(o=>o['订单编号']),lineId:selected[0]['产线编号'],startMinute,endMinute,priority,enabledRuleIds:[...enabledRuleIds],timeOrigin:'2026-11-02T08:00:00+08:00',interval:'[start,end)',horizonPolicy:'完整工序须在结束范围内；未排不代表全局无解'};
+  if(checkScope.mode!=='minimal-r1'){const issues=validatePhysicalPools(executionData,{at:calculatedAt,forRun:true});if(issues.length)throw Error(issues.map(i=>i.message).join('；'));}
+  if(checkScope.mode==='supported')checkScope.checked.push('P06单窗多班：继承工厂工作窗口、扣除人员/工装停用例外；完整阶段与占用；不跨班拼接');
+  const conditions={...((data[originalTable]||[]).length?{originalResourceContract:'N06-finite-v1',originalResourceVersion:inputHash(data[originalTable])}:{}),workingWindowsContract:checkScope.mode==='supported'?'P06-windows-v1':null,jointConditionsContract:checkScope.mode==='supported'?'FR022-joint-v1':null,personnelPoolContract:hasPhysicalPools(executionData)?'P10-core-v1':null,resourcePolicyContract:'CR-DEC02-03-v1',resourcePolicyVersion:inputHash({calendars:executionData.calendars,downtime:executionData.downtime,resourceStops:executionData.resourceStops,tools:executionData.tools,resourceClaims:executionData.resourceClaims,dependencies:executionData.dependencies,personnelGroups:executionData.personnelGroups,...(hasPhysicalPools(executionData)?{personnelPools:executionData.personnelPools}:{}),skillSubstitutions:executionData.skillSubstitutions}),eventSummary:eventSummary(data),executionFactsVersion:inputHash(executionState(data)),executionSummary:executionSummary(executionData.executionContext||executionData,calculatedAt),mode:checkScope.mode,checkScope,ruleEvaluationAt:calculatedAt,orderIds:selected.map(o=>o['订单编号']),lineId:selected[0]['产线编号'],startMinute,endMinute,priority,enabledRuleIds:[...enabledRuleIds],timeOrigin:'2026-11-02T08:00:00+08:00',interval:'[start,end)',horizonPolicy:'完整工序须在结束范围内；未排不代表全局无解'};
   const sourceMap=Object.fromEntries(Object.entries(data).filter(([,rows])=>Array.isArray(rows)).map(([table,rows])=>[table,rows.map((r,index)=>({r,index})).filter(({r})=>table==='orders'?selected.includes(r):['dependencies','deliveryConditions','resourceClaims','supplyUses'].includes(table)?orderIds.includes(r['订单编号']):true).map(({index})=>index)]));
   return {conditions,executionData,sourceMap,snapshotHash:inputHash({conditions,executionData})};
 }

@@ -1,0 +1,346 @@
+TAP version 13
+# Subtest: FR022 two sets permit two of three simultaneous machines, release boundary is reusable
+ok 1 - FR022 two sets permit two of three simultaneous machines, release boundary is reusable
+  ---
+  duration_ms: 33.235412
+  type: 'test'
+  ...
+# Subtest: FR022 one set covers before acquisition and 10-minute delayed release with exact touching
+ok 2 - FR022 one set covers before acquisition and 10-minute delayed release with exact touching
+  ---
+  duration_ms: 12.938428
+  type: 'test'
+  ...
+# Subtest: FR022 cooling 600+600 cannot share1000kg; full delayed release shifts the other task
+ok 3 - FR022 cooling 600+600 cannot share1000kg; full delayed release shifts the other task
+  ---
+  duration_ms: 3.433322
+  type: 'test'
+  ...
+# Subtest: FR022 space locations require integers and explicit same units; no kg inference from notes
+ok 4 - FR022 space locations require integers and explicit same units; no kg inference from notes
+  ---
+  duration_ms: 6.715231
+  type: 'test'
+  ...
+# Subtest: FR022 exact decimal capacity never uses epsilon and adjacent disjoint claims use peak
+ok 5 - FR022 exact decimal capacity never uses epsilon and adjacent disjoint claims use peak
+  ---
+  duration_ms: 0.323662
+  type: 'test'
+  ...
+# Subtest: FR022 personnel event sweep uses simultaneous peak rather than summing disjoint intervals
+ok 6 - FR022 personnel event sweep uses simultaneous peak rather than summing disjoint intervals
+  ---
+  duration_ms: 0.679281
+  type: 'test'
+  ...
+# Subtest: FR022 joint retry rechecks machine downtime, personnel arrival/participation and tooling release
+ok 7 - FR022 joint retry rechecks machine downtime, personnel arrival/participation and tooling release
+  ---
+  duration_ms: 5.155214
+  type: 'test'
+  ...
+# Subtest: FR022 missing policy/units/intervals or dependency release declaration blocks actionable findings
+ok 8 - FR022 missing policy/units/intervals or dependency release declaration blocks actionable findings
+  ---
+  duration_ms: 12.321021
+  type: 'test'
+  ...
+# Subtest: FR022 minimal mode and future rules remain truthfully unchecked; max lag refuses activation
+ok 9 - FR022 minimal mode and future rules remain truthfully unchecked; max lag refuses activation
+  ---
+  duration_ms: 4.817968
+  type: 'test'
+  ...
+# Subtest: FR022 resource shortage rolls back whole FR021 member cycle, material ledger and reservations
+ok 10 - FR022 resource shortage rolls back whole FR021 member cycle, material ledger and reservations
+  ---
+  duration_ms: 12.378436
+  type: 'test'
+  ...
+# Subtest: FR022 horizon shortage leaves no ghost reservation and exported saved occupancy is task-linked
+ok 11 - FR022 horizon shortage leaves no ghost reservation and exported saved occupancy is task-linked
+  ---
+  duration_ms: 5.773495
+  type: 'test'
+  ...
+# Subtest: FR022 declared dependency quantity/offset conflicts and dynamic release semantics block instead of picking precedence
+ok 12 - FR022 declared dependency quantity/offset conflicts and dynamic release semantics block instead of picking precedence
+  ---
+  duration_ms: 5.92316
+  type: 'test'
+  ...
+# Subtest: FR022 explicit per-production-batch space quantity repeats without inferred scaling and retains each original member link
+ok 13 - FR022 explicit per-production-batch space quantity repeats without inferred scaling and retains each original member link
+  ---
+  duration_ms: 3.54228
+  type: 'test'
+  ...
+# Subtest: FR022 unsupported machine multiplicity and unsafe tooling capacities fail closed
+ok 14 - FR022 unsupported machine multiplicity and unsafe tooling capacities fail closed
+  ---
+  duration_ms: 4.163854
+  type: 'test'
+  ...
+# Subtest: P06 two shifts: full machine/tool/labor cycle moves to later legal window, frozen checker and export agree
+ok 15 - P06 two shifts: full machine/tool/labor cycle moves to later legal window, frozen checker and export agree
+  ---
+  duration_ms: 53.524687
+  type: 'test'
+  ...
+# Subtest: P06 gaps/short shifts cannot be concatenated; complete occupancy after-release cannot cross gap
+ok 16 - P06 gaps/short shifts cannot be concatenated; complete occupancy after-release cannot cross gap
+  ---
+  duration_ms: 11.230787
+  type: 'test'
+  ...
+# Subtest: P06 explicit factory off, machine stop, personnel stop and tool stop all force fresh same-window candidate
+ok 17 - P06 explicit factory off, machine stop, personnel stop and tool stop all force fresh same-window candidate
+  ---
+  duration_ms: 28.090448
+  type: 'test'
+  ...
+# Subtest: P06 resource-specific stop with no later candidate leaves no commitments and identifies actual resource
+ok 18 - P06 resource-specific stop with no later candidate leaves no commitments and identifies actual resource
+  ---
+  duration_ms: 7.788757
+  type: 'test'
+  ...
+# Subtest: P06 missing qualified people, wrong shift, reverse-only skill relation and pool shortage are unscheduled
+ok 19 - P06 missing qualified people, wrong shift, reverse-only skill relation and pool shortage are unscheduled
+  ---
+  duration_ms: 14.2857
+  type: 'test'
+  ...
+# Subtest: P06 explicit second-shift groups and complete phase windows, no implicit handover
+ok 20 - P06 explicit second-shift groups and complete phase windows, no implicit handover
+  ---
+  duration_ms: 4.434308
+  type: 'test'
+  ...
+# Subtest: P06 half-open stop and adjacent shift boundaries allow reuse without bridging a shift
+ok 21 - P06 half-open stop and adjacent shift boundaries allow reuse without bridging a shift
+  ---
+  duration_ms: 8.357789
+  type: 'test'
+  ...
+# Subtest: P06 independent checker rejects adjacent-row union and stop/phase/contract tampering; old snapshots stay old
+ok 22 - P06 independent checker rejects adjacent-row union and stop/phase/contract tampering; old snapshots stay old
+  ---
+  duration_ms: 7.519678
+  type: 'test'
+  ...
+# Subtest: P06 overlapping role segmentation cannot evade a full phase using different shift groups
+ok 23 - P06 overlapping role segmentation cannot evade a full phase using different shift groups
+  ---
+  duration_ms: 0.642449
+  type: 'test'
+  ...
+# Subtest: P06 input guards reject missing reference, unknown type, fractional/reversed interval, blank reason
+ok 24 - P06 input guards reject missing reference, unknown type, fractional/reversed interval, blank reason
+  ---
+  duration_ms: 4.553389
+  type: 'test'
+  ...
+# Subtest: P06 60 small cases match an independent integer-minute same-window oracle
+ok 25 - P06 60 small cases match an independent integer-minute same-window oracle
+  ---
+  duration_ms: 226.043066
+  type: 'test'
+  ...
+# Subtest: cross-group physical total is unique; independent posts sum and group qualification cap retained
+ok 26 - cross-group physical total is unique; independent posts sum and group qualification cap retained
+  ---
+  duration_ms: 48.613178
+  type: 'test'
+  ...
+# Subtest: same pool across tasks and groups, endpoint release; distinct pools independent; candidate alternatives search without duplicate consumption
+ok 27 - same pool across tasks and groups, endpoint release; distinct pools independent; candidate alternatives search without duplicate consumption
+  ---
+  duration_ms: 1.277439
+  type: 'test'
+  ...
+# Subtest: same-post overlap max and distinct-post adjacent windows, no skill/shift/availability bypass
+ok 28 - same-post overlap max and distinct-post adjacent windows, no skill/shift/availability bypass
+  ---
+  duration_ms: 0.64949
+  type: 'test'
+  ...
+# Subtest: independent checker rebuilds pool identity/total and catches forged labels, quantity, missing coverage and wrong contract
+ok 29 - independent checker rebuilds pool identity/total and catches forged labels, quantity, missing coverage and wrong contract
+  ---
+  duration_ms: 6.626358
+  type: 'test'
+  ...
+# Subtest: no guesses for missing capacity/identity/shared flag or U01/U02; drafts save but cannot run; future effective version deferred
+ok 30 - no guesses for missing capacity/identity/shared flag or U01/U02; drafts save but cannot run; future effective version deferred
+  ---
+  duration_ms: 12.41702
+  type: 'test'
+  ...
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"at":"2026-10-29T21:10:49.103Z","action":"deny","requestId":"fr027-synthetic","actor":"user","reason":"membership_required"}
+# Subtest: Express invalid/unauthorized/stale/deletion/reused identity atomically reject; audit captures new versions; no downgrade
+ok 31 - Express invalid/unauthorized/stale/deletion/reused identity atomically reject; audit captures new versions; no downgrade
+  ---
+  duration_ms: 184.491905
+  type: 'test'
+  ...
+# Subtest: load retains identical same-group independent posts and maps physical identities from frozen data
+ok 32 - load retains identical same-group independent posts and maps physical identities from frozen data
+  ---
+  duration_ms: 3.064828
+  type: 'test'
+  ...
+# Subtest: N06 accepted execution facts still prevent dependency edits; corrupt confirmed history prevents P10 writes
+ok 33 - N06 accepted execution facts still prevent dependency edits; corrupt confirmed history prevents P10 writes
+  ---
+  duration_ms: 35.847955
+  type: 'test'
+  ...
+# Subtest: explicit same-name different pools stay distinct; referenced pool removal requires one complete cross-table remap
+ok 34 - explicit same-name different pools stay distinct; referenced pool removal requires one complete cross-table remap
+  ---
+  duration_ms: 25.764692
+  type: 'test'
+  ...
+# Subtest: design S08/S11/S12/S13 explicit quantities and malformed capacity/map inputs
+ok 35 - design S08/S11/S12/S13 explicit quantities and malformed capacity/map inputs
+  ---
+  duration_ms: 5.619164
+  type: 'test'
+  ...
+# Subtest: Design S01 supplied candidate, Worker and independent frozen reconstruction
+ok 36 - Design S01 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 32.465757
+  type: 'test'
+  ...
+# Subtest: Design S04 supplied candidate, Worker and independent frozen reconstruction
+ok 37 - Design S04 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 8.615744
+  type: 'test'
+  ...
+# Subtest: Design S08 supplied candidate, Worker and independent frozen reconstruction
+ok 38 - Design S08 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 3.453281
+  type: 'test'
+  ...
+# Subtest: Design S09 supplied candidate, Worker and independent frozen reconstruction
+ok 39 - Design S09 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 2.793207
+  type: 'test'
+  ...
+# Subtest: Design S10 supplied candidate, Worker and independent frozen reconstruction
+ok 40 - Design S10 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 2.836832
+  type: 'test'
+  ...
+# Subtest: Design S11 supplied candidate, Worker and independent frozen reconstruction
+ok 41 - Design S11 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 6.245322
+  type: 'test'
+  ...
+# Subtest: Design S12 supplied candidate, Worker and independent frozen reconstruction
+ok 42 - Design S12 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 2.163092
+  type: 'test'
+  ...
+# Subtest: Design S13 supplied candidate, Worker and independent frozen reconstruction
+ok 43 - Design S13 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 5.328461
+  type: 'test'
+  ...
+# Subtest: group bottleneck reports pool, posts, half-open interval, need, qualification and gap
+ok 44 - group bottleneck reports pool, posts, half-open interval, need, qualification and gap
+  ---
+  duration_ms: 0.867153
+  type: 'test'
+  ...
+# Subtest: same physical pool across independent lines and operations uses one total and half-open release
+not ok 45 - same physical pool across independent lines and operations uses one total and half-open release
+  ---
+  duration_ms: 76.903999
+  type: 'test'
+  location: '/workspace/apps/aps-fr032/qa/p10-e01.test.mjs:28:1'
+  failureType: 'testCodeFailure'
+  error: '/inputs {"status":400,"body":{"error":"invalid_input","issues":[{"code":"ORDER_MULTI_LINE","line":0,"field":"产线编号","message":"P0 单次排程仅支持一条产线","table":"orders","file":"17_生产订单与交期.csv","row":0},{"code":"SCOPE / MULTI_LINE","message":"R1 仅支持单线计算；当前订单包含多条产线：L01、L02。请拆分为单线订单集后再计算。","taskIds":[],"table":"machines","file":"03_设备资源配置.csv","row":0,"field":"关联配置"},{"code":"SCOPE / RESOURCE_MULTI_LINE","message":"R1 仅允许一条排程产线；设备资源配置引用了多条产线：L01、L02。","taskIds":[],"table":"machines","file":"03_设备资源配置.csv","row":0,"field":"关联配置"}]}}'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    Object.ok (file:///workspace/apps/aps-fr032/qa/fr027-fixture.mjs:15:101)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async TestContext.<anonymous> (file:///workspace/apps/aps-fr032/qa/p10-e01.test.mjs:36:27)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: forged actor, missing reason and malformed atomic pool updates preserve complete store
+ok 46 - forged actor, missing reason and malformed atomic pool updates preserve complete store
+  ---
+  duration_ms: 58.524777
+  type: 'test'
+  ...
+# Subtest: request actor cannot replace trusted membership actor in successful pool audit
+ok 47 - request actor cannot replace trusted membership actor in successful pool audit
+  ---
+  duration_ms: 13.379546
+  type: 'test'
+  ...
+# Subtest: R01 multi-member tool+independent personnel posts+physical pool+space+material hold together
+ok 48 - R01 multi-member tool+independent personnel posts+physical pool+space+material hold together
+  ---
+  duration_ms: 65.938498
+  type: 'test'
+  ...
+# Subtest: R02 any single enabled condition failure leaves whole multi-member cycle without ghost commit
+ok 49 - R02 any single enabled condition failure leaves whole multi-member cycle without ghost commit
+  ---
+  duration_ms: 24.738874
+  type: 'test'
+  ...
+# Subtest: R02 material arrival forces personnel, tooling, space, downtime and horizon recheck at new candidate
+ok 50 - R02 material arrival forces personnel, tooling, space, downtime and horizon recheck at new candidate
+  ---
+  duration_ms: 25.864107
+  type: 'test'
+  ...
+# Subtest: independent frozen checker rejects missing member/post/tool, altered material allocation/time/source/capacity and disabled flags
+ok 51 - independent frozen checker rejects missing member/post/tool, altered material allocation/time/source/capacity and disabled flags
+  ---
+  duration_ms: 16.623039
+  type: 'test'
+  ...
+# Subtest: U01/U02 and missing/unsupported inputs fail closed, explicit switched-off tool is truthfully unchecked
+ok 52 - U01/U02 and missing/unsupported inputs fail closed, explicit switched-off tool is truthfully unchecked
+  ---
+  duration_ms: 7.891588
+  type: 'test'
+  ...
+# Subtest: competing resource batches honor delayed tooling/space release and partial material commit isolation
+ok 53 - competing resource batches honor delayed tooling/space release and partial material commit isolation
+  ---
+  duration_ms: 14.38799
+  type: 'test'
+  ...
+# Subtest: candidate search bound leaves all ledgers uncommitted and explicitly reports search-not-found
+ok 54 - candidate search bound leaves all ledgers uncommitted and explicitly reports search-not-found
+  ---
+  duration_ms: 6267.481066
+  type: 'test'
+  ...
+1..54
+# tests 54
+# suites 0
+# pass 53
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6614.565042

@@ -1,0 +1,39 @@
+{
+  "targeted": {
+    "pass": 54,
+    "fail": 0
+  },
+  "affected_regression": {
+    "pass": 59,
+    "fail": 0
+  },
+  "npm_library": {
+    "pass": 92,
+    "fail": 0
+  },
+  "npm_server_auth": {
+    "pass": 124,
+    "fail": 0
+  },
+  "build": "PASS",
+  "browser_and_upgrade_cases": {
+    "p10-browser-results": 7,
+    "p06-browser-results": 9,
+    "joint-browser-results": 9,
+    "p10-e01-upgrade-results": 2
+  },
+  "executed_src_server_files": 137,
+  "source_matches": true,
+  "node": "v22.23.2",
+  "runtime_image": "sha256:0d45a31aa25c4cca1eaacbfd1ba4ee6d5028d899b329e49a6036a66fd0c35da8",
+  "matrix": {
+    "PASS": 19,
+    "PARTIAL": 4,
+    "BLOCKED": 21
+  },
+  "result": "PARTIAL",
+  "whole_card": "NOT_READY",
+  "new_product_failures": 0,
+  "added_repair_rounds": 0,
+  "identity": "synthetic membership; real React/Express/async Worker; no platform SSO or QA UAT"
+}

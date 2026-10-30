@@ -1,3 +1,4 @@
+import {windowFit} from './working-windows.mjs';
 import {effectiveClaim,windowMode} from './resource-policies.mjs';
 import {quantityMath as Q} from './material-allocation.mjs';
 import {jointParameters,jointFlags} from './joint-policy.mjs';
@@ -17,6 +18,7 @@ export function previewResources(claims,start,end,reservations=[]){
  for(const a of allocations){
   if(!(a.end>a.start))return {ok:false,reason:`${a.resourceId} 窗口不在本次实际工序时长内；请核对剩余工时/窗口配置`};
   if(a.start<(a.availableFrom??0)||a.end>(a.availableUntil??525600))return {ok:false,reason:`${a.resourceId} 占用 [${a.start},${a.end}) 超出可用期 [${a.availableFrom??0},${a.availableUntil??525600})`,nextStart:a.start<(a.availableFrom??0)?(a.availableFrom??0)-(a.offsetStart||0)+a.before:undefined};
+  if(a.allowedWindows){const fit=windowFit(a.allowedWindows,a.start,a.end);if(!fit.ok)return {ok:false,reason:`工装 ${a.resourceId} 完整占用 [${a.start},${a.end}) 未落在单个继承工厂窗口内（已扣停用例外）`,nextStart:fit.nextStart===undefined?undefined:fit.nextStart-(a.offsetStart||0)+a.before};}
   if(a.start<0)return {ok:false,reason:`${a.resourceId} 提前取得早于分钟0`,nextStart:a.before};
   const same=[...reservations,...allocations].filter(r=>r.type===a.type&&r.resourceId===a.resourceId&&r.start<a.end&&r.end>a.start);
   const points=[a.start,...same.map(r=>r.start).filter(t=>t>=a.start&&t<a.end)];

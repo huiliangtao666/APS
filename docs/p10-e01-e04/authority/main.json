@@ -1,0 +1,99 @@
+{
+  "name": "main",
+  "commit": {
+    "sha": "d6b8d2ec2d3efeace82d2d4f18d0ec433db7ae25",
+    "node_id": "C_kwDOVaKehNoAKGQ2YjhkMmVjMmQzZWZlYWNlODJkMmQ0ZjE4ZDBlYzQzM2RiN2FlMjU",
+    "commit": {
+      "author": {
+        "name": "huiliangtao666",
+        "email": "huiliang.tao@gmail.com",
+        "date": "2026-10-29T21:07:34Z"
+      },
+      "committer": {
+        "name": "huiliangtao666",
+        "email": "huiliang.tao@gmail.com",
+        "date": "2026-10-29T21:07:34Z"
+      },
+      "message": "docs: synchronize APS controlled requirement governance and role responsibilities",
+      "tree": {
+        "sha": "00077995fc1d7521fd017f601ba29733efa5ee40",
+        "url": "https://api.github.com/repos/huiliangtao666/APS/git/trees/00077995fc1d7521fd017f601ba29733efa5ee40"
+      },
+      "url": "https://api.github.com/repos/huiliangtao666/APS/git/commits/d6b8d2ec2d3efeace82d2d4f18d0ec433db7ae25",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/huiliangtao666/APS/commits/d6b8d2ec2d3efeace82d2d4f18d0ec433db7ae25",
+    "html_url": "https://github.com/huiliangtao666/APS/commit/d6b8d2ec2d3efeace82d2d4f18d0ec433db7ae25",
+    "comments_url": "https://api.github.com/repos/huiliangtao666/APS/commits/d6b8d2ec2d3efeace82d2d4f18d0ec433db7ae25/comments",
+    "author": {
+      "login": "huiliangtao666",
+      "id": 349132371,
+      "node_id": "U_kgDOFM9WUw",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349132371?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/huiliangtao666",
+      "html_url": "https://github.com/huiliangtao666",
+      "followers_url": "https://api.github.com/users/huiliangtao666/followers",
+      "following_url": "https://api.github.com/users/huiliangtao666/following{/other_user}",
+      "gists_url": "https://api.github.com/users/huiliangtao666/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/huiliangtao666/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/huiliangtao666/subscriptions",
+      "organizations_url": "https://api.github.com/users/huiliangtao666/orgs",
+      "repos_url": "https://api.github.com/users/huiliangtao666/repos",
+      "events_url": "https://api.github.com/users/huiliangtao666/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/huiliangtao666/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "huiliangtao666",
+      "id": 349132371,
+      "node_id": "U_kgDOFM9WUw",
+      "avatar_url": "https://avatars.githubusercontent.com/u/349132371?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/huiliangtao666",
+      "html_url": "https://github.com/huiliangtao666",
+      "followers_url": "https://api.github.com/users/huiliangtao666/followers",
+      "following_url": "https://api.github.com/users/huiliangtao666/following{/other_user}",
+      "gists_url": "https://api.github.com/users/huiliangtao666/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/huiliangtao666/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/huiliangtao666/subscriptions",
+      "organizations_url": "https://api.github.com/users/huiliangtao666/orgs",
+      "repos_url": "https://api.github.com/users/huiliangtao666/repos",
+      "events_url": "https://api.github.com/users/huiliangtao666/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/huiliangtao666/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "52a9e866d96f5710c627a5604646903e73a0b7b6",
+        "url": "https://api.github.com/repos/huiliangtao666/APS/commits/52a9e866d96f5710c627a5604646903e73a0b7b6",
+        "html_url": "https://github.com/huiliangtao666/APS/commit/52a9e866d96f5710c627a5604646903e73a0b7b6"
+      }
+    ]
+  },
+  "_links": {
+    "self": "https://api.github.com/repos/huiliangtao666/APS/branches/main",
+    "html": "https://github.com/huiliangtao666/APS/tree/main"
+  },
+  "protected": false,
+  "protection": {
+    "enabled": false,
+    "required_status_checks": {
+      "enforcement_level": "off",
+      "contexts": [],
+      "checks": []
+    }
+  },
+  "protection_url": "https://api.github.com/repos/huiliangtao666/APS/branches/main/protection"
+}

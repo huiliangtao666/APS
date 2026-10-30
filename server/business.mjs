@@ -2,6 +2,7 @@ import {validateMasterData} from '../src/lib/master-data.mjs';
 import {validateOrders} from '../src/lib/orders.mjs';
 import {validateSingleLineScope} from '../src/lib/line-scope.mjs';
 import {attachProblemRecords,bindProblemSource} from '../src/lib/problem-records.mjs';
+import {poolTransitionIssues} from '../src/lib/physical-pools.mjs';
 import {inspectSingleCsv} from './csv-single.mjs';
 import {configurationPreview} from '../src/lib/configuration-preview.mjs';
 import {migratePolicies} from '../src/lib/resource-policies.mjs';
@@ -37,7 +38,7 @@ import { independentlyVerifyPlan } from '../src/lib/independent-verification.mjs
 export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, runTimeoutMs = 30000, workerFactory = workerData => new Worker(new URL('./calculation-worker.mjs',import.meta.url),{workerData}) }) {
   fs.mkdirSync(dataDir, { recursive: true });
   const file=path.join(dataDir,'business.json');
-  const read=()=>{try{const s=JSON.parse(fs.readFileSync(file,'utf8'));s.data.simulationEvents??=[];s.data.executionFacts??=[];s.data.executionMaterials??=[];s.data.executionSources??=[];s.data=migratePolicies(s.data);return s;}catch(e){if(e.code!=='ENOENT')throw e;let legacy=[];try{legacy=JSON.parse(fs.readFileSync(path.join(dataDir,'plans.json'),'utf8'));}catch(old){if(old.code!=='ENOENT')throw old;}return {data:structuredClone(seed),revision:0,plans:legacy.map(p=>({...p,status:'legacy'})),records:[]};}};
+  const read=()=>{try{const s=JSON.parse(fs.readFileSync(file,'utf8'));s.data.simulationEvents??=[];s.data.executionFacts??=[];s.data.executionMaterials??=[];s.data.executionSources??=[];s.data=migratePolicies(s.data);s.data.personnelPools??=[];return s;}catch(e){if(e.code!=='ENOENT')throw e;let legacy=[];try{legacy=JSON.parse(fs.readFileSync(path.join(dataDir,'plans.json'),'utf8'));}catch(old){if(old.code!=='ENOENT')throw old;}return {data:structuredClone(seed),revision:0,plans:legacy.map(p=>({...p,status:'legacy'})),records:[]};}};
   const write=s=>{const tmp=`${file}.${randomUUID()}.tmp`;try{fs.writeFileSync(tmp,JSON.stringify(s),{mode:0o600,flag:'wx'});fs.renameSync(tmp,file);}finally{if(fs.existsSync(tmp))fs.unlinkSync(tmp);}};
   const activeWorkers=new Map();
   const positionPreviews=new Map();
@@ -111,7 +112,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(!trialId){const staged=stageEvents(target.data,proposed,Object.keys(tables));if(staged.issues.length)return res.status(409).json({error:'event_reconciliation_required',issues:staged.issues});proposed=staged.data;for(const def of defs.filter(d=>JSON.stringify(proposed[d.key])!==JSON.stringify(target.data[d.key]))){const rows=proposed[def.key]||[];if(rows.some(r=>!r||typeof r!=='object'||Array.isArray(r)||Object.keys(r).some(k=>!def.fields.includes(k))||Object.values(r).some(v=>typeof v!=='string')))return res.status(400).json({error:'invalid_event_effect'});proposed[def.key]=rows.map(r=>Object.fromEntries(def.fields.map(f=>[f,r[f]??''])));}}
     const transition=(trialId?executionTrialIssues(s.data,proposed):executionTransition(target.data,proposed));if(transition.length)return res.status(409).json({error:'execution_reconciliation_required',...transitionEvidence(transition,trialId?s.data:target.data,proposed,trialId?s.revision:target.revision)});
     const newlyEnabled=(proposed.rules||[]).some(r=>r['是否启用']==='是'&&!(target.data.rules||[]).some(old=>old['规则编号']===r['规则编号']&&old['是否启用']==='是'));
-    const issues=[...validateInputs(defs,proposed),...(newlyEnabled?assessRules(proposed,new Date().toISOString(),true).issues:[])];if(issues.length){
+    const issues=[...poolTransitionIssues(target.data,proposed,s.records),...validateInputs(defs,proposed),...(newlyEnabled?assessRules(proposed,new Date().toISOString(),true).issues:[])];if(issues.length){
       // The rejected proposal is an ephemeral check input, never a saved input version.
       const source={domain:'candidate:'+(trialId?'trial:'+trialId:'current'),inputVersionId:inputHash(proposed),revision:target.revision,checkedAt:new Date().toISOString(),scope:'complete proposed input validation'};
       const findings=issues.map(f=>bindProblemSource({...f,taskIds:[]},source));

@@ -1,0 +1,29 @@
+# Issue3 / FR022 N06 finite original-resource ledger
+
+Requirement: v0.3 FR022/BR06/BR07, this card's AC05/06/07/14/15, effective CR-DEC02-03-20261029.
+Fixed Design contract: ea1338ba9e1627b91c51aca55fa0fc9f484b4e34, docs/requirements/changes/CR-DEC02-03-20261029/n06-original-resource-ledger-r1/.
+Direct product parent: 7ae4ca827276c66b276c4cc32a4593825ee2623f. P10 evidence remains attached to that SHA, including its independent 18 PASS / 4 PARTIAL / 22 BLOCKED; this implementation does not replace that verdict.
+
+N06 adds `originalResourceEvents`, an optional append-only table. Older inputs without events keep their original execution-state digest and planner result contract. No persistent-store migration or rewrite is required. Keep original raw inputs/run/confirmation records when rolling back; a pre-N06 binary cannot validate a new N06 run and must not be used to confirm it. No main merge or publish is performed.
+
+## Operator path
+
+In 数据与 CSV, select 原始资源事实账（追加事件）. Add a row with 事件编号, 原账编号, 前事件编号 (empty on first registration), 事件类型 (登记/草稿/释放/纠正), and 原账JSON. Use the structured editor, or its expanded raw text field. The same editor can stage the cumulative fact and ledger in one atomic cross-table save. Fill the operation reason, save, refresh and read back the event and interval/source preview. Query members can read but cannot save.
+
+The JSON schema is illustrated by `qa/n06-fixture.mjs`. It explicitly contains the cumulative fact revision, original task/batch identities and member quantities, adoption/non-adoption for every resource class, historical rule contents/version/source, stable physical identities with current aliases, actual quantities/units/acquisition/release, original personnel group/pool/skill/shift/substitution, source document location/hash/domain/version/row, actual provider and reviewer, observation point and completeness responsibility. All example sources are labelled 明确模拟 and hash the actual `qa/n06-mock-source.txt` bytes. These are not real customer source documents. The app validates declared references and structural completeness; business source authenticity and access remain the provider/reviewer's responsibility.
+
+Registration creates a ledger, not a second cumulative-progress record. Subsequent events reference the latest event. A release changes exactly one unknown end to a finite actual end, preserving quantity and all preceding sources; a correction carries an independent source and replaces the effective view without summing the old quantity. An identical full-table resend is a no-op. Conflicting content, stale predecessor/revision, deletion, reordering, partial release or multiple windows per original task/physical resource fail atomically.
+
+All run inputs retain the full execution context, including unselected orders. A new run starts at or after the supplied observation point. Worker freezes raw events, fact revisions, adoption, historical rules, identities, current supply and selections. Past half-open intervals stay fixed. One proven shared physical acquisition counts once even with several original members; separate acquisitions count separately. Tool/space and physical personnel pool/group constraints include original actual use in addition to new plan demands. Current rule disablement is not actual release evidence.
+
+`verify-original-resources.mjs` independently walks the frozen event chain and rebuilds effective physical intervals and members. It does not import the scheduler's projection/allocation functions. It compares the result protection ledger and sweeps actual plus future reservations against frozen current supply. Completed original machine tasks remain fixed; their resource use comes from original actuals rather than today's planned demands. Existing nonempty-dependencies 409 protection remains.
+
+Confirmation and restore use the existing revision/input/frozen-snapshot guards. New events invalidate pending confirmation, even when the actual update could free capacity. Old plans, runs and confirmations remain readable with their original bytes. Confirmation never creates actual acquisition/release evidence.
+
+## Scope and verification
+
+Unknown release can be saved and displayed but blocks positive scheduling/confirmation. Drafts and missing adoption/source/quantity/mapping cannot be promoted to calculable facts. Real customer records, U01/U02, partial release, multiple disjoint windows, complex held-and-reacquired resources, cross-line runs and CR-DEC04/05/06 remain outside this delivery. Non-completed tasks with ambiguous FR031 remaining-stage coordination keep existing guards; do not infer a resumed execution from remaining minutes. No independent Test or QA/UAT verdict is claimed.
+
+`N06-DESIGN-CASES-r1.json` preserves Design's 16 labelled examples. `qa/n06.test.mjs` maps them to 16 Node tests (several examples share a test), including expected BLOCKED guards, exact boundary/quantity checks, Express permission/zero-write tests, real Worker/confirmation/history and tampered checker negatives. `qa/n06-browser.mjs` drives actual React registration/save/reload, Worker, original-ledger CSV export, correction/reopen/history and read-only membership. Synthetic actors are confined to the existing QA fixture and are not imported by production.
+
+Run installation/build/tests only in the application container. The reusable `qa/n06-container.sh` accepts absolute N06_REPO and N06_OUT host paths and a preinstalled Linux runtime image. It copies the source into an isolated container workspace; it does not modify the live app or publish. Node22, the P10 QA image's existing npm dependencies and Playwright Chromium are used. Targeted tests include N06/P10/P06/R01R02/joint resources; related regression includes staffing, resource load/explanation, trials, batching and material allocation; canonical npm test and production build are also required.

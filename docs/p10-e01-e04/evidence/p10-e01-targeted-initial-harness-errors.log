@@ -1,0 +1,356 @@
+TAP version 13
+# Subtest: FR022 two sets permit two of three simultaneous machines, release boundary is reusable
+ok 1 - FR022 two sets permit two of three simultaneous machines, release boundary is reusable
+  ---
+  duration_ms: 52.006877
+  type: 'test'
+  ...
+# Subtest: FR022 one set covers before acquisition and 10-minute delayed release with exact touching
+ok 2 - FR022 one set covers before acquisition and 10-minute delayed release with exact touching
+  ---
+  duration_ms: 10.758862
+  type: 'test'
+  ...
+# Subtest: FR022 cooling 600+600 cannot share1000kg; full delayed release shifts the other task
+ok 3 - FR022 cooling 600+600 cannot share1000kg; full delayed release shifts the other task
+  ---
+  duration_ms: 3.626912
+  type: 'test'
+  ...
+# Subtest: FR022 space locations require integers and explicit same units; no kg inference from notes
+ok 4 - FR022 space locations require integers and explicit same units; no kg inference from notes
+  ---
+  duration_ms: 9.371005
+  type: 'test'
+  ...
+# Subtest: FR022 exact decimal capacity never uses epsilon and adjacent disjoint claims use peak
+ok 5 - FR022 exact decimal capacity never uses epsilon and adjacent disjoint claims use peak
+  ---
+  duration_ms: 0.345078
+  type: 'test'
+  ...
+# Subtest: FR022 personnel event sweep uses simultaneous peak rather than summing disjoint intervals
+ok 6 - FR022 personnel event sweep uses simultaneous peak rather than summing disjoint intervals
+  ---
+  duration_ms: 1.835518
+  type: 'test'
+  ...
+# Subtest: FR022 joint retry rechecks machine downtime, personnel arrival/participation and tooling release
+ok 7 - FR022 joint retry rechecks machine downtime, personnel arrival/participation and tooling release
+  ---
+  duration_ms: 2.97467
+  type: 'test'
+  ...
+# Subtest: FR022 missing policy/units/intervals or dependency release declaration blocks actionable findings
+ok 8 - FR022 missing policy/units/intervals or dependency release declaration blocks actionable findings
+  ---
+  duration_ms: 11.390979
+  type: 'test'
+  ...
+# Subtest: FR022 minimal mode and future rules remain truthfully unchecked; max lag refuses activation
+ok 9 - FR022 minimal mode and future rules remain truthfully unchecked; max lag refuses activation
+  ---
+  duration_ms: 7.122034
+  type: 'test'
+  ...
+# Subtest: FR022 resource shortage rolls back whole FR021 member cycle, material ledger and reservations
+ok 10 - FR022 resource shortage rolls back whole FR021 member cycle, material ledger and reservations
+  ---
+  duration_ms: 17.942895
+  type: 'test'
+  ...
+# Subtest: FR022 horizon shortage leaves no ghost reservation and exported saved occupancy is task-linked
+ok 11 - FR022 horizon shortage leaves no ghost reservation and exported saved occupancy is task-linked
+  ---
+  duration_ms: 7.507362
+  type: 'test'
+  ...
+# Subtest: FR022 declared dependency quantity/offset conflicts and dynamic release semantics block instead of picking precedence
+ok 12 - FR022 declared dependency quantity/offset conflicts and dynamic release semantics block instead of picking precedence
+  ---
+  duration_ms: 9.684542
+  type: 'test'
+  ...
+# Subtest: FR022 explicit per-production-batch space quantity repeats without inferred scaling and retains each original member link
+ok 13 - FR022 explicit per-production-batch space quantity repeats without inferred scaling and retains each original member link
+  ---
+  duration_ms: 2.856464
+  type: 'test'
+  ...
+# Subtest: FR022 unsupported machine multiplicity and unsafe tooling capacities fail closed
+ok 14 - FR022 unsupported machine multiplicity and unsafe tooling capacities fail closed
+  ---
+  duration_ms: 3.826951
+  type: 'test'
+  ...
+# Subtest: P06 two shifts: full machine/tool/labor cycle moves to later legal window, frozen checker and export agree
+ok 15 - P06 two shifts: full machine/tool/labor cycle moves to later legal window, frozen checker and export agree
+  ---
+  duration_ms: 57.764053
+  type: 'test'
+  ...
+# Subtest: P06 gaps/short shifts cannot be concatenated; complete occupancy after-release cannot cross gap
+ok 16 - P06 gaps/short shifts cannot be concatenated; complete occupancy after-release cannot cross gap
+  ---
+  duration_ms: 14.912143
+  type: 'test'
+  ...
+# Subtest: P06 explicit factory off, machine stop, personnel stop and tool stop all force fresh same-window candidate
+ok 17 - P06 explicit factory off, machine stop, personnel stop and tool stop all force fresh same-window candidate
+  ---
+  duration_ms: 25.042179
+  type: 'test'
+  ...
+# Subtest: P06 resource-specific stop with no later candidate leaves no commitments and identifies actual resource
+ok 18 - P06 resource-specific stop with no later candidate leaves no commitments and identifies actual resource
+  ---
+  duration_ms: 6.231587
+  type: 'test'
+  ...
+# Subtest: P06 missing qualified people, wrong shift, reverse-only skill relation and pool shortage are unscheduled
+ok 19 - P06 missing qualified people, wrong shift, reverse-only skill relation and pool shortage are unscheduled
+  ---
+  duration_ms: 18.947258
+  type: 'test'
+  ...
+# Subtest: P06 explicit second-shift groups and complete phase windows, no implicit handover
+ok 20 - P06 explicit second-shift groups and complete phase windows, no implicit handover
+  ---
+  duration_ms: 6.278045
+  type: 'test'
+  ...
+# Subtest: P06 half-open stop and adjacent shift boundaries allow reuse without bridging a shift
+ok 21 - P06 half-open stop and adjacent shift boundaries allow reuse without bridging a shift
+  ---
+  duration_ms: 7.911065
+  type: 'test'
+  ...
+# Subtest: P06 independent checker rejects adjacent-row union and stop/phase/contract tampering; old snapshots stay old
+ok 22 - P06 independent checker rejects adjacent-row union and stop/phase/contract tampering; old snapshots stay old
+  ---
+  duration_ms: 8.333602
+  type: 'test'
+  ...
+# Subtest: P06 overlapping role segmentation cannot evade a full phase using different shift groups
+ok 23 - P06 overlapping role segmentation cannot evade a full phase using different shift groups
+  ---
+  duration_ms: 0.634242
+  type: 'test'
+  ...
+# Subtest: P06 input guards reject missing reference, unknown type, fractional/reversed interval, blank reason
+ok 24 - P06 input guards reject missing reference, unknown type, fractional/reversed interval, blank reason
+  ---
+  duration_ms: 5.214641
+  type: 'test'
+  ...
+# Subtest: P06 60 small cases match an independent integer-minute same-window oracle
+ok 25 - P06 60 small cases match an independent integer-minute same-window oracle
+  ---
+  duration_ms: 191.542759
+  type: 'test'
+  ...
+# Subtest: cross-group physical total is unique; independent posts sum and group qualification cap retained
+ok 26 - cross-group physical total is unique; independent posts sum and group qualification cap retained
+  ---
+  duration_ms: 36.274244
+  type: 'test'
+  ...
+# Subtest: same pool across tasks and groups, endpoint release; distinct pools independent; candidate alternatives search without duplicate consumption
+ok 27 - same pool across tasks and groups, endpoint release; distinct pools independent; candidate alternatives search without duplicate consumption
+  ---
+  duration_ms: 2.889338
+  type: 'test'
+  ...
+# Subtest: same-post overlap max and distinct-post adjacent windows, no skill/shift/availability bypass
+ok 28 - same-post overlap max and distinct-post adjacent windows, no skill/shift/availability bypass
+  ---
+  duration_ms: 0.908655
+  type: 'test'
+  ...
+# Subtest: independent checker rebuilds pool identity/total and catches forged labels, quantity, missing coverage and wrong contract
+ok 29 - independent checker rebuilds pool identity/total and catches forged labels, quantity, missing coverage and wrong contract
+  ---
+  duration_ms: 7.250116
+  type: 'test'
+  ...
+# Subtest: no guesses for missing capacity/identity/shared flag or U01/U02; drafts save but cannot run; future effective version deferred
+ok 30 - no guesses for missing capacity/identity/shared flag or U01/U02; drafts save but cannot run; future effective version deferred
+  ---
+  duration_ms: 15.179139
+  type: 'test'
+  ...
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"at":"2026-10-29T21:10:27.617Z","action":"deny","requestId":"fr027-synthetic","actor":"user","reason":"membership_required"}
+# Subtest: Express invalid/unauthorized/stale/deletion/reused identity atomically reject; audit captures new versions; no downgrade
+ok 31 - Express invalid/unauthorized/stale/deletion/reused identity atomically reject; audit captures new versions; no downgrade
+  ---
+  duration_ms: 159.087133
+  type: 'test'
+  ...
+# Subtest: load retains identical same-group independent posts and maps physical identities from frozen data
+ok 32 - load retains identical same-group independent posts and maps physical identities from frozen data
+  ---
+  duration_ms: 2.450552
+  type: 'test'
+  ...
+# Subtest: N06 accepted execution facts still prevent dependency edits; corrupt confirmed history prevents P10 writes
+ok 33 - N06 accepted execution facts still prevent dependency edits; corrupt confirmed history prevents P10 writes
+  ---
+  duration_ms: 26.987696
+  type: 'test'
+  ...
+# Subtest: explicit same-name different pools stay distinct; referenced pool removal requires one complete cross-table remap
+ok 34 - explicit same-name different pools stay distinct; referenced pool removal requires one complete cross-table remap
+  ---
+  duration_ms: 35.071801
+  type: 'test'
+  ...
+# Subtest: design S08/S11/S12/S13 explicit quantities and malformed capacity/map inputs
+ok 35 - design S08/S11/S12/S13 explicit quantities and malformed capacity/map inputs
+  ---
+  duration_ms: 4.840605
+  type: 'test'
+  ...
+# Subtest: Design S01 supplied candidate, Worker and independent frozen reconstruction
+ok 36 - Design S01 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 33.665486
+  type: 'test'
+  ...
+# Subtest: Design S04 supplied candidate, Worker and independent frozen reconstruction
+ok 37 - Design S04 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 10.847778
+  type: 'test'
+  ...
+# Subtest: Design S08 supplied candidate, Worker and independent frozen reconstruction
+ok 38 - Design S08 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 3.319916
+  type: 'test'
+  ...
+# Subtest: Design S09 supplied candidate, Worker and independent frozen reconstruction
+ok 39 - Design S09 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 2.88663
+  type: 'test'
+  ...
+# Subtest: Design S10 supplied candidate, Worker and independent frozen reconstruction
+ok 40 - Design S10 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 5.287932
+  type: 'test'
+  ...
+# Subtest: Design S11 supplied candidate, Worker and independent frozen reconstruction
+ok 41 - Design S11 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 6.253003
+  type: 'test'
+  ...
+# Subtest: Design S12 supplied candidate, Worker and independent frozen reconstruction
+ok 42 - Design S12 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 5.932924
+  type: 'test'
+  ...
+# Subtest: Design S13 supplied candidate, Worker and independent frozen reconstruction
+ok 43 - Design S13 supplied candidate, Worker and independent frozen reconstruction
+  ---
+  duration_ms: 10.820403
+  type: 'test'
+  ...
+# Subtest: group bottleneck reports pool, posts, half-open interval, need, qualification and gap
+ok 44 - group bottleneck reports pool, posts, half-open interval, need, qualification and gap
+  ---
+  duration_ms: 0.840781
+  type: 'test'
+  ...
+# Subtest: same physical pool across independent lines and operations uses one total and half-open release
+not ok 45 - same physical pool across independent lines and operations uses one total and half-open release
+  ---
+  duration_ms: 0.570909
+  type: 'test'
+  location: '/workspace/apps/aps-fr032/qa/p10-e01.test.mjs:28:1'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading '0')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/apps/aps-fr032/qa/p10-e01.test.mjs:29:62)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: forged actor, missing reason and malformed atomic pool updates preserve complete store
+not ok 46 - forged actor, missing reason and malformed atomic pool updates preserve complete store
+  ---
+  duration_ms: 82.984522
+  type: 'test'
+  location: '/workspace/apps/aps-fr032/qa/p10-e01.test.mjs:45:1'
+  failureType: 'testCodeFailure'
+  error: '{"status":200,"body":{"data":{"simulationEvents":[],"executionFacts":[],"executionMaterials":[],"executionSources":[],"products":[{"产品编号":"HC40","产品名称":"模拟火腿肠40g","单支净重kg":"0.04","每袋支数":"10","总收率":"0.96","模拟交付等待分钟":"0"},{"产品编号":"HC60","产品名称":"模拟火腿肠60g","单支净重kg":"0.06","每袋支数":"10","总收率":"0.96","模拟交付等待分钟":"0"}],"materials":[{"物料编号":"LEAN","物料名称":"模拟瘦肉","单位":"kg","类别":"原料"},{"物料编号":"FAT","物料名称":"模拟背膘","单位":"kg","类别":"原料"},{"物料编号":"WATER","物料名称":"生产用水","单位":"kg","类别":"原料"},{"物料编号":"PREMIX","物料名称":"复合辅料占位","单位":"kg","类别":"辅料"},{"物料编号":"BAG","物料名称":"十支外包装袋","单位":"个","类别":"包材"}],"supplies":[],"supplyDelays":[],"supplyUses":[],"inventory":[{"批次编号":"LEAN-LOT-001","物料编号":"LEAN","账面数量":"500","已占用数量":"120","有效期":"2026-12-31","位置":"冷库 A-01","质量状态":"合格","预计可用时间":""},{"批次编号":"LEAN-LOT-002","物料编号":"LEAN","账面数量":"200","已占用数量":"0","有效期":"2026-12-31","位置":"待检区 Q-01","质量状态":"待检","预计可用时间":""}],"bom":[],"orders":[{"订单编号":"A","产品编号":"HC40","产线编号":"L01","合格需求":"240","数量单位":"kg","要求可交付分钟":"480","优先顺序":"1","是否允许拆分":"否","需求类型":"正式订单","订单状态":"有效","已完成合格数量":""}],"routes":[{"产品编号":"HC40","工序编号":"MIX","工序名称":"混合","前序工序":"","最大等待分钟":"","程序编号":""},{"产品编号":"HC60","工序编号":"MIX","工序名称":"混合","前序工序":"","最大等待分钟":"","程序编号":""}],"times":[{"产品编号":"HC40","工序编号":"MIX","计算方式":"固定","固定分钟":"30","速度支每分钟":"120"},{"产品编号":"HC60","工序编号":"MIX","计算方式":"固定","固定分钟":"30","速度支每分钟":"100"}],"machines":[{"设备编号":"MIX01","设备名称":"混合设备1","产线编号":"L01","工序编号":"MIX","日历编号":"FC01","最小装载kg":"0","最大装载kg":"300","装载计量基准":"BOM总投入"},{"设备编号":"MIX02","设备名称":"混合设备2","产线编号":"L01","工序编号":"MIX","日历编号":"FC01","最小装载kg":"0","最大装载kg":"300","装载计量基准":"BOM总投入"},{"设备编号":"MIX03","设备名称":"混合设备3","产线编号":"L01","工序编号":"MIX","日历编号":"FC01","最小装载kg":"0","最大装载kg":"300","装载计量基准":"BOM总投入"}],"calendars":[{"日历编号":"FC01","工厂编号":"F01","起始分钟":"0","结束分钟":"600","是否工作":"是","说明":"2026-11-02 08:00—18:00；资源默认继承"}],"downtime":[],"resourceStops":[],"dependencies":[{"订单编号":"A","工序编号":"MIX","资源类型":"设备","资源编号":"MIX01","需求数量":"1","提前占用分钟":"0","后延占用分钟":"0","所需技能":"","所需班次":"","候选人员组":"","人员岗位编号":"","人员参与阶段":"","人员开始偏移":"","人员结束偏移":"","窗口外释放":""},{"订单编号":"A","工序编号":"MIX","资源类型":"人员技能","资源编号":"A","需求数量":"1","提前占用分钟":"","后延占用分钟":"","所需技能":"A","所需班次":"S","候选人员组":"","人员岗位编号":"P08","人员参与阶段":"操作","人员开始偏移":"0","人员结束偏移":"0","窗口外释放":"是"},{"订单编号":"A","工序编号":"MIX","资源类型":"人员技能","资源编号":"B","需求数量":"1","提前占用分钟":"","后延占用分钟":"","所需技能":"A","所需班次":"S","候选人员组":"","人员岗位编号":"P09","人员参与阶段":"操作","人员开始偏移":"0","人员结束偏移":"0","窗口外释放":"是"}],"tools":[],"deliveryConditions":[],"resourceClaims":[],"batchResources":[],"personnelGroups":[{"人员组编号":"A","人员组名称":"资格组A","人员数量":"2","技能":"A","班次":"S","可用起始分钟":"0","可用结束分钟":"600","poolId":"P"},{"人员组编号":"B","人员组名称":"资格组B","人员数量":"2","技能":"A","班次":"S","可用起始分钟":"0","可用结束分钟":"600","poolId":"P"}],"personnelPools":[{"poolId":"P","池名称":"显式合成池P","总人数":"3","是否启用":"是","允许共用":"是","容量来源":"P10合成验收输入，非现场默认值","适用范围":"*","生效时间":"","交接设置":""}],"skillSubstitutions":[],"rules":[{"规则编号":"MACHINE","中文名称":"机器不重叠","是否启用":"是","参数JSON":"{}","适用对象":"","生效时间":""},{"规则编号":"PRECEDENCE","中文名称":"工序顺序","是否启用":"是","参数JSON":"{}","适用对象":"","生效时间":""},{"规则编号":"CALENDAR","中文名称":"工厂及设备日历","是否启用":"是","参数JSON":"{}","适用对象":"","生效时间":""},{"规则编号":"MOLD","中文名称":"模具与工具占用","是否启用":"否","参数JSON":"{}","适用对象":"","生效时间":""},{"规则编号":"LABOR","中文名称":"人员技能及数量","是否启用":"是","参数JSON":"{}","适用对象":"","生效时间":""},{"规则编号":"MATERIAL","中文名称":"物料数量及可用时点","是否启用":"否","参数JSON":"{}","适用对象":"","生效时间":""},{"规则编号":"CAPACITY","中文名称":"设备装载","是否启用":"否","参数JSON":"{}","适用对象":"","生效时间":""},{"规则编号":"PROGRAM","中文名称":"资源程序兼容","是否启用":"否","参数JSON":"{}","适用对象":"","生效时间":""},{"规则编号":"MAX_LAG","中文名称":"工序最大等待","是否启用":"否","参数JSON":"{}","适用对象":"","生效时间":""},{"规则编号":"STORAGE","中文名称":"空间容量","是否启用":"否","参数JSON":"{}","适用对象":"","生效时间":""},{"规则编号":"PROGRESS","中文名称":"执行保护","是否启用":"否","参数JSON":"{}","适用对象":"","生效时间":""},{"规则编号":"DELIVERY","中文名称":"预计可交付","是否启用":"否","参数JSON":"{}","适用对象":"","生效时间":""},{"规则编号":"INVENTORY","中文名称":"库存质量状态可用性","是否启用":"是","参数JSON":"{\\"可用质量状态\\":[\\"合格\\"]}","适用对象":"","生效时间":""}]},"revision":2,"inputVersionId":"3df0ab5515bfd58882a266da01cc52294eedbc2903ec51fb88c6d7a98d22ae60"}}'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/apps/aps-fr032/qa/p10-e01.test.mjs:48:163)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: R01 multi-member tool+independent personnel posts+physical pool+space+material hold together
+ok 47 - R01 multi-member tool+independent personnel posts+physical pool+space+material hold together
+  ---
+  duration_ms: 54.155975
+  type: 'test'
+  ...
+# Subtest: R02 any single enabled condition failure leaves whole multi-member cycle without ghost commit
+ok 48 - R02 any single enabled condition failure leaves whole multi-member cycle without ghost commit
+  ---
+  duration_ms: 30.967479
+  type: 'test'
+  ...
+# Subtest: R02 material arrival forces personnel, tooling, space, downtime and horizon recheck at new candidate
+ok 49 - R02 material arrival forces personnel, tooling, space, downtime and horizon recheck at new candidate
+  ---
+  duration_ms: 19.42421
+  type: 'test'
+  ...
+# Subtest: independent frozen checker rejects missing member/post/tool, altered material allocation/time/source/capacity and disabled flags
+ok 50 - independent frozen checker rejects missing member/post/tool, altered material allocation/time/source/capacity and disabled flags
+  ---
+  duration_ms: 16.921992
+  type: 'test'
+  ...
+# Subtest: U01/U02 and missing/unsupported inputs fail closed, explicit switched-off tool is truthfully unchecked
+ok 51 - U01/U02 and missing/unsupported inputs fail closed, explicit switched-off tool is truthfully unchecked
+  ---
+  duration_ms: 16.3025
+  type: 'test'
+  ...
+# Subtest: competing resource batches honor delayed tooling/space release and partial material commit isolation
+ok 52 - competing resource batches honor delayed tooling/space release and partial material commit isolation
+  ---
+  duration_ms: 12.049555
+  type: 'test'
+  ...
+# Subtest: candidate search bound leaves all ledgers uncommitted and explicitly reports search-not-found
+ok 53 - candidate search bound leaves all ledgers uncommitted and explicitly reports search-not-found
+  ---
+  duration_ms: 5948.700867
+  type: 'test'
+  ...
+1..53
+# tests 53
+# suites 0
+# pass 51
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6293.395128

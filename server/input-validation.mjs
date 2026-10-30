@@ -1,5 +1,6 @@
 import {sourceRefs} from '../src/lib/problem-records.mjs';
 import {inheritedCalendarId,validateFactoryLines} from '../src/lib/factory-lines.mjs';
+import {originalIssues} from '../src/lib/original-resources.mjs';
 import {validateBatchResources} from '../src/lib/batch-policy.mjs';
 import { assessRules } from '../src/lib/business-rules.mjs';
 import { validateMasterData } from '../src/lib/master-data.mjs';
@@ -16,7 +17,7 @@ import {recordKeys as keys} from '../src/lib/record-identity.mjs';
 export {recordKeys} from '../src/lib/record-identity.mjs';
 // Both imports and edits validate the complete proposed state, before any write.
 export function validateInputs(defs,data,{at=new Date().toISOString(),checkPolicyExecution=true}={}){
- const issues=[...validateEvents(data),...validateFactoryLines(data)];
+ const issues=[...originalIssues(data),...validateEvents(data),...validateFactoryLines(data)];
  const add=(table,index,field,message,rows=[data[table][index]])=>issues.push({relatedRecords:sourceRefs(table,rows,data[table]),table,file:defs.find(d=>d.key===table).file,row:index+2,field,message});
  for(const def of defs){
   const seen=new Set();
@@ -28,9 +29,15 @@ export function validateInputs(defs,data,{at=new Date().toISOString(),checkPolic
    if(seen.has(key))add(def.key,i,keys[def.key].join(' + '),'唯一键重复',(data[def.key]||[]).filter(r=>JSON.stringify(keys[def.key].map(f=>r[f]?.trim()||''))===key));seen.add(key);
    const numeric=def.fields.filter(f=>/分钟|数量|净重kg|每袋支数|总收率|装载kg|配置用量|合格需求|优先顺序|速度支每分钟|人员开始偏移|人员结束偏移/.test(f)&&f!=='数量单位');
    for(const f of numeric)if(r[f]?.trim()&&(!/^(?:\d+(?:\.\d*)?|\.\d+)$/.test(r[f].trim())||!Number.isFinite(Number(r[f]))))add(def.key,i,f,'须为非负十进制数值，单位按字段名');
-   if(['calendars','downtime','personnelGroups'].includes(def.key)){
+   if(['calendars','downtime','personnelGroups','resourceStops'].includes(def.key)){
     const start=def.key==='personnelGroups'?'可用起始分钟':'起始分钟',end=def.key==='personnelGroups'?'可用结束分钟':'结束分钟';
     if(!r[start]?.trim()||!r[end]?.trim()||!(Number(r[end])>Number(r[start])))add(def.key,i,end,'结束分钟须大于起始分钟');
+   }
+   if(def.key==='resourceStops'){
+    const table=r['资源类型']==='人员'?'personnelGroups':r['资源类型']==='工装'?'tools':null,field=r['资源类型']==='人员'?'人员组编号':'工装编码';
+    if(!table||!(data[table]||[]).some(x=>x[field]===r['资源编号']))add(def.key,i,'资源编号','仅支持引用已配置的人员或工装；设备停机使用设备停机例外表');
+    for(const k of ['起始分钟','结束分钟'])if(!/^\d+$/.test(r[k]||'')||!Number.isSafeInteger(Number(r[k]))||Number(r[k])>525600)add(def.key,i,k,'须显式填写0–525600整数分钟');
+    if(!r['原因']?.trim())add(def.key,i,'原因','停用原因不能为空');
    }
    if(def.key==='personnelGroups'&&(!r['人员组名称']?.trim()||!Number.isInteger(Number(r['人员数量']))||Number(r['人员数量'])<1))add(def.key,i,'人员数量','人员组须有名称及正整数人数');
    if(def.key==='machines'&&Number(r['最大装载kg'])<Number(r['最小装载kg']))add(def.key,i,'最大装载kg','最大装载不能小于最小装载');

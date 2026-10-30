@@ -1,0 +1,16 @@
+{
+  "changed_existing_files": [
+    "qa/p10-core-browser.mjs",
+    "src/PolicyPreview.tsx",
+    "src/lib/staffing.mjs"
+  ],
+  "added_tests": [
+    "qa/p10-e01.test.mjs",
+    "qa/p10-e01-scenarios.json",
+    "qa/p10-e01-upgrade.mjs",
+    "qa/p10-source.mjs",
+    "qa/p10-e01-container.sh"
+  ],
+  "direct_parent": "7a26732efc0fb440ca6f8ac7aa6261e33757eb81",
+  "scope": "diagnostics and qualification preview plus design-mapped evidence; existing P10 engine reused"
+}

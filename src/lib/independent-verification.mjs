@@ -1,6 +1,8 @@
 import {ruleCatalog} from './business-rules.mjs';
 import {verifyCalendar} from './verify-calendar.mjs';
 import {verifyBatchWait} from './verify-batch-wait.mjs';
+import {verifyOriginalResources} from './verify-original-resources.mjs';
+import {verifyJointConditions} from './verify-joint-conditions.mjs';
 import {verifyResourcePolicies} from './verify-resource-policies.mjs';
 import {savedInterval} from './verification-endpoints.mjs';
 
@@ -117,6 +119,13 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
       findings.push(...(details.resourcePolicies.diagnostics||details.resourcePolicies.details.map(message=>({code:'VERIFY / RESOURCE_POLICY',message,taskIds:[],relatedRecords:[],associationGap:'旧复核没有保存生产端逐条来源；需按原冻结输入重新复核。'}))).filter(diagnostic=>{const message=diagnostic.message;return !structured.some(f=>{const m=message.match(/^(.*) 在分钟 ([\d.]+) 超容量 /);return m&&m[1]===f.interval.resourceId&&Number(m[2])>=f.interval.start&&Number(m[2])<f.interval.end;});}));
     }
   }
+  if(frozenConditions?.jointConditionsContract){
+    const problems=verifyJointConditions(plan,frozenData,frozenConditions);
+    details.jointConditions=result(problems.length?'problem':tasks.length?'pass':'not_checked',problems.length?problems:['按冻结输入复核机器完整日历与停机、物料需求覆盖、来源资格及累计分配守恒；不调用排程或分配器。']);
+    findings.push(...problems.map(message=>({code:'VERIFY / JOINT_CONDITIONS',message,taskIds:[]})));
+  }
+  const original=verifyOriginalResources(plan,frozenData,frozenConditions||{});
+  if(original){details.originalResources=original;findings.push(...(original.status==='problem'?original.details.map(message=>({code:'VERIFY / ORIGINAL_RESOURCES',message,taskIds:[]})):[]));}
   if(frozenData&&(frozenConditions??plan.conditions)?.mode!=='minimal-r1'){
     details.batchAndWait=verifyBatchWait(plan,frozenData,frozenConditions??plan.conditions);
     findings.push(...details.batchAndWait.findings);

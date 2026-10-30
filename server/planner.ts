@@ -1,5 +1,7 @@
 import {inheritedCalendarId} from '../src/lib/factory-lines.mjs';
 import {attachProblemRecords,sourceRefs} from '../src/lib/problem-records.mjs';
+import {originalProtection,originalSchedulingReservations} from '../src/lib/original-resources.mjs';
+import {allowedWindows} from '../src/lib/working-windows.mjs';
 import {eventSummary,eventAbsences,validateEvents} from '../src/lib/simulation-events.mjs';
 import {factFor,executionSummary,executionAdmission,validateExecution,executionRisks} from '../src/lib/execution-facts.mjs';
 import {remainingExecutionDemand} from '../src/lib/material-allocation.mjs';
@@ -32,6 +34,7 @@ export const defs: TableDef[] = [
   { key: 'factoryLines', label: '工厂与产线', file: '01_工厂与产线配置.csv', fields: ['工厂编号','工厂名称','产线编号','产线名称','时区'] },
   { key: 'simulationEvents', label: '模拟异常事件（先更新时点事实）', file: '28_模拟异常事件.csv', fields: ['事件编号','事件分钟','保护截止分钟','保护策略','事件类型','参数JSON','原因','需处理事实JSON'] },
   { key: 'executionSources', label: '模拟进度来源对账（显式映射）', file: '27_模拟进度来源对账.csv', fields: ['来源编号','原始任务编号','事实编号','原始汇总耗料','耗料单位','来源说明','原始分配JSON'] },
+  {key:'originalResourceEvents',label:'原始资源事实账（追加事件）',file:'32_原始资源事实账.csv',fields:['事件编号','原账编号','前事件编号','事件类型','原账JSON']},
   { key: 'executionFacts', label: '模拟任务执行事实（累计）', file: '25_模拟任务执行事实.csv', fields: ['事实编号','订单编号','工序编号','状态','开始分钟','完成分钟','观测分钟','工序完成数量','数量单位','剩余工时分钟','当前设备','暂停原因','累计报废数量','报废补做口径'] },
   { key: 'executionMaterials', label: '模拟累计耗料（账面扣前口径）', file: '26_模拟累计耗料.csv', fields: ['记录编号','事实编号','批次编号','物料编号','累计已用数量','单位'] },
 
@@ -51,14 +54,16 @@ export const defs: TableDef[] = [
   { key: 'resourceClaims', label: '显式逐生产批占用声明', file: '23_资源占用声明.csv', fields: ['声明编号','订单编号','工序编号','资源类型','资源编号','需求数量','单位','提前占用分钟','后延占用分钟','占用口径','窗口开始偏移分钟','窗口结束偏移分钟','参数来源'] },
   { key: 'batchResources', label: '空间与组批配置（存储不代表检查）', file: '15_空间与组批规则配置.csv', fields: ['资源编号','资源类型','容量','单位','允许程序','说明'] },
   { key: 'calendars', label: '工厂工作日历', file: '02_工厂工作日历.csv', fields: ['日历编号','工厂编号','起始分钟','结束分钟','是否工作','说明'] },
+  { key: 'resourceStops', label: '人员与工装停用例外', file: '31_人员与工装停用例外.csv', fields: ['例外编号','资源类型','资源编号','起始分钟','结束分钟','原因'] },
   { key: 'downtime', label: '设备停机例外', file: '04_设备停机与例外日历.csv', fields: ['设备编号','起始分钟','结束分钟','原因'] },
   { key: 'dependencies', label: '工序资源依赖', file: '12_工序资源与物料依赖.csv', fields: ['订单编号','工序编号','资源类型','资源编号','需求数量','提前占用分钟','后延占用分钟','所需技能','所需班次','候选人员组','人员岗位编号','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'] },
   { key: 'skillSubstitutions', label: '有向技能替代', file: '29_有向技能替代.csv', fields: ['关系编号','可提供技能','所需技能','是否启用','适用工序','说明'] },
-  { key: 'personnelGroups', label: '人员组与可用时间', file: '19_人员组与可用时间.csv', fields: ['人员组编号','人员组名称','人员数量','技能','班次','可用起始分钟','可用结束分钟'] },
+  { key: 'personnelPools', label: '物理人员池（P10核心）', file: '30_物理人员池.csv', fields: ['poolId','池名称','总人数','是否启用','允许共用','容量来源','适用范围','生效时间','交接设置'] },
+  { key: 'personnelGroups', label: '人员组与可用时间', file: '19_人员组与可用时间.csv', fields: ['人员组编号','人员组名称','人员数量','技能','班次','可用起始分钟','可用结束分钟','poolId'] },
   { key: 'rules', label: '排程规则', file: '16_排程规则配置.csv', fields: ['规则编号','中文名称','是否启用','参数JSON','适用对象','生效时间'] },
 ];
 export const seed: Record<string, Row[]> = {
-  simulationEvents: [], executionFacts: [], executionMaterials: [], executionSources: [],
+  originalResourceEvents: [], simulationEvents: [], executionFacts: [], executionMaterials: [], executionSources: [],
   products: [
     {'产品编号':'HC40','产品名称':'模拟火腿肠40g','单支净重kg':'0.04','每袋支数':'10','总收率':'0.96','模拟交付等待分钟':'0'},
     {'产品编号':'HC60','产品名称':'模拟火腿肠60g','单支净重kg':'0.06','每袋支数':'10','总收率':'0.96','模拟交付等待分钟':'0'},
@@ -95,7 +100,7 @@ export const seed: Record<string, Row[]> = {
     ...['FILL01','FILL02','FILL03'].map((id,i)=>({'设备编号':id,'设备名称':`灌装设备${i+1}`,'产线编号':'L01','工序编号':'FILL','日历编号':'FC01','最小装载kg':'0','最大装载kg':'10000','装载计量基准':'BOM总投入'})),
   ],
   calendars: [{'日历编号':'FC01','工厂编号':'F01','起始分钟':'0','结束分钟':'600','是否工作':'是','说明':'2026-11-02 08:00—18:00；资源默认继承'}],
-  downtime: [],
+  downtime: [], resourceStops: [],
   dependencies: [
     {'订单编号':'A','工序编号':'MIX','资源类型':'设备','资源编号':'MIX01','需求数量':'1','提前占用分钟':'0','后延占用分钟':'0','所需技能':''},
     {'订单编号':'A','工序编号':'FILL','资源类型':'设备','资源编号':'FILL01','需求数量':'1','提前占用分钟':'0','后延占用分钟':'0','所需技能':''},
@@ -106,7 +111,7 @@ export const seed: Record<string, Row[]> = {
   deliveryConditions: [],
   resourceClaims: [],
   batchResources: [],
-  personnelGroups: [], skillSubstitutions: [],
+  personnelGroups: [], personnelPools: [], skillSubstitutions: [],
   rules: [
     {'规则编号':'MACHINE','中文名称':'机器不重叠','是否启用':'是','参数JSON':'{}'},
     {'规则编号':'PRECEDENCE','中文名称':'工序顺序','是否启用':'是','参数JSON':'{}'},
@@ -116,7 +121,7 @@ export const seed: Record<string, Row[]> = {
 };
 
 function uid() { return `R1-${new Date().toISOString().replace(/[-:.TZ]/g,'').slice(0,14)}`; }
-function rulesInputFingerprint(data:Record<string,Row[]>) { const source=JSON.stringify({orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],tools:data.tools||[],personnelGroups:data.personnelGroups||[],machines:data.machines||[],calendars:data.calendars||[],downtime:data.downtime||[],rules:data.rules||[]});let hash=2166136261;for(let i=0;i<source.length;i++){hash^=source.charCodeAt(i);hash=Math.imul(hash,16777619);}return (hash>>>0).toString(16).padStart(8,'0'); }
+function rulesInputFingerprint(data:Record<string,Row[]>) { const source=JSON.stringify({orders:data.orders||[],routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],tools:data.tools||[],personnelGroups:data.personnelGroups||[],personnelPools:data.personnelPools||[],resourceStops:data.resourceStops||[],machines:data.machines||[],calendars:data.calendars||[],downtime:data.downtime||[],rules:data.rules||[]});let hash=2166136261;for(let i=0;i<source.length;i++){hash^=source.charCodeAt(i);hash=Math.imul(hash,16777619);}return (hash>>>0).toString(16).padStart(8,'0'); }
 function fmt(min: number) { const n=480+Math.round(min); return `${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`; }
 function findCalendarWindow(calendarId:string, earliest:number, duration:number, calendars:Row[], downtime:Row[], machineId:string):{start:number|null;reason:string}{
   const valid=calendars.filter(r=>r['日历编号']===calendarId).map(r=>({start:Number(r['起始分钟']),end:Number(r['结束分钟']),work:r['是否工作']==='是'})).filter(r=>Number.isFinite(r.start)&&Number.isFinite(r.end)&&r.end>r.start);
@@ -138,15 +143,16 @@ function validate(tasks: Task[]): Finding[] {
 
 export function calculate(data:Record<string,Row[]>, inputVersion:number, calculatedAt=new Date().toISOString(), conditions:{startMinute?:number;endMinute?:number|null;priority?:string;mode?:string;taskPositions?:Record<string,any>}={}) {
  const positions=conditions.taskPositions||{};
+ const jointAttempts:any[]=[];
  const resourceReservations:any[]=[];const flags=conditions.mode==='minimal-r1'?{}:jointFlags(data,calculatedAt);
- const sourceData=data;let batches:ReturnType<typeof prepareProductionBatches>|null=null;
+ const sourceData=data;const original=(data.originalResourceEvents||[]).length?originalSchedulingReservations(data):{resources:[],people:[]};let batches:ReturnType<typeof prepareProductionBatches>|null=null;
  const demandFor=(order:Row,operation:string,minute:number)=>batches?batches.demands(order,operation,minute):remainingExecutionDemand(sourceData,order,operation,minute);
  const minimal=conditions.mode==='minimal-r1';
  const policy=minimal?null:materialPolicy(data,calculatedAt);
  const materialDemands:MaterialDemandRow[]=[];const allocator=policy?createMaterialAllocator(data,policy):null;
  const ruleSnapshot=assessRules(data,calculatedAt,true,conditions.mode);
  let result:Plan|null=null;
- const setActivePlan=(p:Plan)=>{result={...p,findings:p.findings.map(f=>attachProblemRecords(f,sourceData)),resourcePolicyContract:'CR-DEC02-03-v1',execution:{...executionSummary((sourceData as any).executionContext||sourceData,calculatedAt),projectedTasks:p.tasks.map(t=>({taskId:t.id,orderId:t.orderId,operation:t.operation,start:t.start,end:t.end})),blockedTasks:p.findings.map(f=>({code:f.code,taskIds:f.taskIds,message:f.message}))},jointResourceChecks:flags,resourceReservations:resourceReservations.map(r=>({...r,taskIds:batches?(r.productionBatchId?p.tasks.filter((t:any)=>t.productionBatchId===r.productionBatchId&&t.operation===r.operation).map(t=>t.id):batches.taskIds(r.taskId)):[r.taskId]})),materialChecked:!!policy,materialDemands,...(batches?{batchChecked:true,...batchSummary(batches,p.tasks)}:{batchChecked:false}),ruleSnapshot,rules:ruleSnapshot.settings.filter(r=>r.active).map(r=>r.id)};};
+ const setActivePlan=(p:Plan)=>{result={...p,findings:p.findings.map(f=>attachProblemRecords(f,sourceData)),...((conditions as any).workingWindowsContract?{workingWindowsContract:(conditions as any).workingWindowsContract}:{}),...((conditions as any).jointConditionsContract?{jointConditionsContract:(conditions as any).jointConditionsContract,jointAttempts}:{}),...((sourceData.originalResourceEvents||[]).length?{originalResourceProtection:originalProtection(sourceData)}:{}),resourcePolicyContract:'CR-DEC02-03-v1',execution:{...executionSummary((sourceData as any).executionContext||sourceData,calculatedAt),projectedTasks:p.tasks.map(t=>({taskId:t.id,orderId:t.orderId,operation:t.operation,start:t.start,end:t.end})),blockedTasks:p.findings.map(f=>({code:f.code,taskIds:f.taskIds,message:f.message}))},jointResourceChecks:flags,resourceReservations:resourceReservations.map(r=>({...r,taskIds:batches?(r.productionBatchId?p.tasks.filter((t:any)=>t.productionBatchId===r.productionBatchId&&t.operation===r.operation).map(t=>t.id):batches.taskIds(r.taskId)):[r.taskId]})),materialChecked:!!policy,materialDemands,...(batches?{batchChecked:true,...batchSummary(batches,p.tasks)}:{batchChecked:false}),ruleSnapshot,rules:ruleSnapshot.settings.filter(r=>r.active).map(r=>r.id)};};
  const finishDelivery=()=>{if(result){(result as any).deliveryAssessment=assessDelivery(sourceData,result,calculatedAt,conditions);(result as any).resultAssessment=assessResult(sourceData,result,conditions);}};
  const setIssues=(_x:Finding[])=>{}; const setVerification=(_x:null)=>{};const setMessage=(_x:string)=>{};
  const enabledRules=(data.rules||[]).filter(r=>r['是否启用']==='是').map(r=>r['规则编号']);
@@ -159,7 +165,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
     const executionIssues=[...validateEvents(sourceData),...validateExecution((sourceData as any).executionContext||sourceData).map(f=>(sourceData as any).executionContext?{...f,relatedRecords:(f.relatedRecords||[]).map(r=>({...r,sourceContext:'executionContext'}))}:f),...executionAdmission(sourceData,{...conditions,ruleEvaluationAt:calculatedAt,enabledRuleIds:enabledRules})];if(executionIssues.length){setActivePlan({id:uid(),name:'模拟执行须核对',createdAt:calculatedAt,tasks:[],findings:executionIssues.map(i=>({...i,code:i.code,message:i.message,taskIds:[]})),rules:[],inputVersion:`v${inputVersion}`});return;}
     const risks=executionRisks((sourceData as any).executionContext||sourceData,calculatedAt);
     for(const risk of risks)findings.push({code:'UNPLANNED / EXECUTION_EVENT_REVIEW',message:risk.message,taskIds:[`${risk.orderId}-${risk.operation}`]});
-    personnelReservations.push(...eventAbsences(sourceData));
+    personnelReservations.push(...eventAbsences(sourceData),...original.people);
     for(const [id,p] of Object.entries(positions)){
       const busy=machineBusy.get(p.machine)||[];
       busy.push({id:'position:'+id,orderId:p.orderId,productId:'',operation:p.operation,label:'试算固定位置',machine:p.machine,start:p.start,end:p.end,duration:p.duration,predecessor:'',source:'FR027'});machineBusy.set(p.machine,busy);
@@ -239,11 +245,16 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
         let materialPreview:ReturnType<ReturnType<typeof createMaterialAllocator>['preview']>|null=null;
         let materialError='',resourceError='',personnelError='';
         const members=batches?batches.byId.get(oid).members:[{orderId:oid}];
-        const claims=minimal?[]:claimsFor(sourceData,members,operation,flags);
+        const windowContext=(conditions as any).workingWindowsContract==='P06-windows-v1'?{data:sourceData,calendarId}:undefined;
+        const claims=minimal?[]:claimsFor(sourceData,members,operation,flags).map(c=>windowContext&&c.type==='工装'?{...c,allowedWindows:allowedWindows(sourceData,calendarId,c.type,c.resourceId,c.availableFrom,c.availableUntil)}:c);
         const personnelRequirements=minimal?[]:(data.dependencies||[]).filter(d=>d['订单编号']===oid&&d['工序编号']===operation&&d['资源类型']==='人员技能');
         let jointPreview:ReturnType<typeof previewResources>={ok:true,allocations:[]};
         let personnel:ReturnType<typeof allocatePersonnel>={ok:true,allocations:[]};
+        let readyMinute:number|null=null;let attemptCount=0;const attemptOffset=jointAttempts.length;
         for(let attempt=0;attempt<1000;attempt++){
+          attemptCount++;readyMinute=null;materialPreview=null;
+          jointPreview={ok:false,allocations:[]};personnel={ok:false,allocations:[]};
+          jointAttempts.push({taskIds:batches?batches.taskIds(`${oid}-${operation}`):[`${oid}-${operation}`],candidate,attempt:attempt+1});
           if(position&&candidate!==position.start){reason='固定位置与资源/物料占用冲突；禁止自动顺延或解锁';break;}
           if(fact&&candidate!==Number(fact['观测分钟'])){reason='已开始任务余料/资源不满足；禁止自动延迟、转机或恢复，须核对';break;}
           const fit=minimal?{start:candidate,reason:''}:findCalendarWindow(calendarId,candidate,duration,data.calendars||[],data.downtime||[],machineId);
@@ -252,12 +263,12 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
           if(position&&fit.start!==position.start){reason=`固定位置与日历/停机冲突，候选分钟 ${fit.start}；禁止顺延`;break;}
           const overlap=busy.find(t=>t.id!==('position:'+`${oid}-${operation}`)&&t.id!==('事实:'+fact?.['事实编号'])&&fit.start!<t.end&&fit.start!+duration>t.start);
           if(overlap){timingReasons.push({code:'MACHINE_BUSY',sourceTaskId:overlap.id,resourceId:machineId,from:fit.start,to:overlap.end});candidate=overlap.end;continue;}
-          jointPreview=previewResources(claims,fit.start,fit.start+duration,resourceReservations);
+          jointPreview=previewResources(claims,fit.start,fit.start+duration,[...original.resources,...resourceReservations]);
           if(!jointPreview.ok){resourceError=jointPreview.reason||'资源不可用';if(jointPreview.nextStart!==undefined&&jointPreview.nextStart>fit.start){timingReasons.push({code:'JOINT_RESOURCE',source:claims,from:fit.start,to:jointPreview.nextStart,message:resourceError});candidate=jointPreview.nextStart;continue;}break;}
-          personnel=allocatePersonnel(personnelRequirements,data.personnelGroups||[],fit.start,fit.start+duration,personnelReservations,sourceData.skillSubstitutions||[]);
+          personnel=allocatePersonnel(personnelRequirements,data.personnelGroups||[],fit.start,fit.start+duration,personnelReservations,sourceData.skillSubstitutions||[],sourceData.personnelPools||[],windowContext);
           if(!personnel.ok){
            personnelError=personnel.reason||'人员不可用';
-           const next=personnelRequirements.flatMap(r=>[...personnelReservations.map(p=>p.end-(r['窗口外释放']==='否'?0:Number(r['人员开始偏移']||0))),...(data.personnelGroups||[]).map(g=>Number(g['可用起始分钟'])-(r['窗口外释放']==='否'?0:Number(r['人员开始偏移']||0)))]).filter(t=>Number.isFinite(t)&&t>fit.start!);
+           const next=[...(personnel.nextStart!==undefined?[personnel.nextStart]:[]),...personnelRequirements.flatMap(r=>[...personnelReservations.map(p=>p.end-(r['窗口外释放']==='否'?0:Number(r['人员开始偏移']||0))),...(data.personnelGroups||[]).map(g=>Number(g['可用起始分钟'])-(r['窗口外释放']==='否'?0:Number(r['人员开始偏移']||0)))])].filter(t=>Number.isFinite(t)&&t>fit.start!);
            if(next.length){timingReasons.push({code:'PERSONNEL',source:personnelRequirements,from:fit.start,to:Math.min(...next),message:personnelError});candidate=Math.min(...next);continue;}break;
           }
           if(allocator){
@@ -265,8 +276,13 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
            catch(e){materialError=e instanceof Error?e.message:'物料口径无效';break;}
            if(!materialPreview.ok){const next=allocator.futureMinutes.find(m=>m>fit.start!);if(next!==undefined){timingReasons.push({code:'MATERIAL',from:fit.start,to:next,demands:materialPreview.rows.map(r=>({materialId:r.materialId,quantity:r.quantity,shortage:r.shortage,allocations:r.allocations}))});candidate=next;continue;}materialError='物料不足';break;}
           }
-          start=fit.start;break;
+          readyMinute=fit.start;start=fit.start;break;
         }
+        const lastAttempt=jointAttempts.at(-1);
+        const searchLimited=start===null&&attemptCount===1000;
+        if(searchLimited){const limit='候选搜索达到1000次边界；未找到联合可行位置，不代表全局无解';reason=limit;if(resourceError)resourceError=limit+'；最后冲突：'+resourceError;else if(personnelError)personnelError=limit+'；最后冲突：'+personnelError;else if(materialError)materialError=limit+'；最后冲突：'+materialError;}
+        if(lastAttempt&&jointAttempts.length>attemptOffset)Object.assign(lastAttempt,{searchStatus:searchLimited?'limit':start===null?'no_candidate':'found',outcome:start===null?'unscheduled':'ready',reason:start===null?(resourceError||personnelError||materialError||reason||'候选搜索达到1000次边界；未找到联合可行位置，不代表全局无解'):'全部已启用条件在同一候选时点通过',timingReasons:structuredClone(timingReasons)});
+        if(start!==null&&(readyMinute!==start||!jointPreview.ok||!personnel.ok||allocator&&!materialPreview?.ok))throw Error('联合候选未完整通过，禁止提交任何资源或物料');
         if(start===null&&fact){const hold=busy.find(t=>t.id==='事实:'+fact['事实编号']);if(hold)hold.end=Number.POSITIVE_INFINITY;}
         if(allocator && (materialError||start===null&&materialPreview&&!materialPreview.ok)){
          if(materialPreview)materialDemands.push(...materialPreview.rows);
@@ -276,14 +292,15 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
          retainBlockedDemand(order,operation,candidate,'联合资源候选失败，未占用');
          findings.push({code:resourceError?'UNPLANNED / JOINT_RESOURCE':'UNPLANNED / PERSONNEL',message:`订单 ${oid} / 工序 ${operation} 未排：${resourceError||personnelError}。全部候选资源/物料未提交；请调整显式数量、参与/释放窗口或计划范围。`,taskIds:[`${oid}-${operation}`],context:failureContext(candidate)});continue;
         }
-        if(start===null){if(fact)busy.push({id:'待核对:'+fact['事实编号'],orderId:oid,productId:product,operation,label:'待处理执行',machine:machineId,start:Number(fact['开始分钟']),end:Number.POSITIVE_INFINITY,duration:Number.POSITIVE_INFINITY,predecessor:'',source:'模拟执行保护'});machineBusy.set(machineId,busy);retainBlockedDemand(order,operation,candidate,'无可用日历窗口；投料分钟仅为候选检查时点');findings.push({sourceRead:'frozen-calendar-v1',relatedRecords:[...sourceRefs('orders',[order],sourceData.orders),...sourceRefs('machines',[machine],sourceData.machines),...sourceRefs('times',sourceData.times.filter(r=>r['产品编号']===product&&r['工序编号']===operation),sourceData.times),...sourceRefs('calendars',sourceData.calendars.filter(r=>r['日历编号']===calendarId),sourceData.calendars),...sourceRefs('downtime',sourceData.downtime.filter(r=>r['设备编号']===machineId),sourceData.downtime),...sourceRefs('rules',sourceData.rules.filter(r=>r['规则编号']==='CALENDAR'),sourceData.rules)].map(r=>({...r,field:({orders:'合格需求',machines:'日历编号',times:'固定分钟',calendars:'起始分钟',downtime:'起始分钟',rules:'是否启用'} as Record<string,string>)[r.table]})),code:'UNPLANNED / CALENDAR',message:`订单 ${oid} / 工序 ${operation} 未排：设备 ${machineId} 不可用。${reason||'找不到满足连续工作时长的窗口'}。任务要求连续 ${duration} 分钟；跨班或中断规则尚未配置。`,taskIds:[`${oid}-${operation}`],context:failureContext(candidate)});continue;}
-        if(conditions.endMinute!=null&&start+duration>conditions.endMinute){if(fact){const hold=busy.find(t=>t.id==='事实:'+fact['事实编号']);if(hold)hold.end=Number.POSITIVE_INFINITY;}if(materialPreview)materialDemands.push(...materialPreview.rows.map(r=>({...r,blockedReason:'完整工序超出计划范围'})));findings.push({code:'UNPLANNED / HORIZON',message:`订单 ${oid} / 工序 ${operation} 完整工序超出计划结束分钟 ${conditions.endMinute}，未排；不代表无可行排法。`,taskIds:[`${oid}-${operation}`],context:failureContext(start)});continue;}
+        if(start===null){if(fact)busy.push({id:'待核对:'+fact['事实编号'],orderId:oid,productId:product,operation,label:'待处理执行',machine:machineId,start:Number(fact['开始分钟']),end:Number.POSITIVE_INFINITY,duration:Number.POSITIVE_INFINITY,predecessor:'',source:'模拟执行保护'});machineBusy.set(machineId,busy);retainBlockedDemand(order,operation,candidate,'无可用日历窗口；投料分钟仅为候选检查时点');findings.push({sourceRead:'frozen-calendar-v1',relatedRecords:[...sourceRefs('orders',[order],sourceData.orders),...sourceRefs('machines',[machine],sourceData.machines),...sourceRefs('times',sourceData.times.filter(r=>r['产品编号']===product&&r['工序编号']===operation),sourceData.times),...sourceRefs('calendars',sourceData.calendars.filter(r=>r['日历编号']===calendarId),sourceData.calendars),...sourceRefs('downtime',sourceData.downtime.filter(r=>r['设备编号']===machineId),sourceData.downtime),...sourceRefs('rules',sourceData.rules.filter(r=>r['规则编号']==='CALENDAR'),sourceData.rules)].map(r=>({...r,field:({orders:'合格需求',machines:'日历编号',times:'固定分钟',calendars:'起始分钟',downtime:'起始分钟',rules:'是否启用'} as Record<string,string>)[r.table]})),code:'UNPLANNED / CALENDAR',message:`订单 ${oid} / 工序 ${operation} 未排：设备 ${machineId} 不可用。${reason||'找不到满足连续工作时长的窗口'}。任务要求连续 ${duration} 分钟；不跨班拼接或自动中断。`,taskIds:[`${oid}-${operation}`],context:failureContext(candidate)});continue;}
+        if(conditions.endMinute!=null&&start+duration>conditions.endMinute){if(lastAttempt)Object.assign(lastAttempt,{outcome:'horizon',reason:'完整工序超出计划范围；全部候选未提交'});if(fact){const hold=busy.find(t=>t.id==='事实:'+fact['事实编号']);if(hold)hold.end=Number.POSITIVE_INFINITY;}if(materialPreview)materialDemands.push(...materialPreview.rows.map(r=>({...r,blockedReason:'完整工序超出计划范围'})));findings.push({code:'UNPLANNED / HORIZON',message:`订单 ${oid} / 工序 ${operation} 完整工序超出计划结束分钟 ${conditions.endMinute}，未排；不代表无可行排法。`,taskIds:[`${oid}-${operation}`],context:failureContext(start)});continue;}
         if(!minimal&&predecessor&&op['最大等待分钟']?.trim()){
          const limit=Number(op['最大等待分钟']),wait=start-predecessor.end;
          if(wait>limit)findings.push({code:'CONSTRAINT / MAX_LAG',message:`订单 ${oid} / 工序 ${operation} 等待 ${wait} 分钟 > 最大 ${limit} 分钟，缺口 ${wait-limit} 分钟；前序结束 ${predecessor.end}、后序开始 ${start}。须联动调整上游或冷却资源后重算；当前草稿不满足等待约束。`,taskIds:[predecessor.id,`${oid}-${operation}`],context:{...failureContext(start),predecessorEnd:predecessor.end,successorStart:start,maximumWait:limit,actualWait:wait,gap:wait-limit}});
         }
         const stop=minimal?null:findDowntimeShiftReason(data.downtime||[],machineId,initialEarliest,duration,firstCalendarFit??start);
         const calendarShift=firstCalendarFit!==null&&firstCalendarFit!==undefined&&firstCalendarFit>initialEarliest?(stop?`日历顺延：设备停机「${stop.reason}」${fmt(stop.start)}–${fmt(stop.end)}，安排至${fmt(start)}`:`日历顺延：工厂工作窗口，安排至${fmt(start)}`):'';
+        if(lastAttempt)lastAttempt.outcome='committed';
         if(materialPreview){materialPreview.commit();materialDemands.push(...materialPreview.rows);}
         const taskId=`${oid}-${operation}`;
         resourceReservations.push(...(jointPreview.allocations||[]).map(r=>({...r,taskId})),...(personnel.allocations||[]).map(r=>({...r,type:'人员',resourceId:r.groupId,quantity:String(r.count),unit:'人',start:r.start,end:r.end,taskId})),{type:'设备',resourceId:machineId,quantity:'1',unit:'台',start,end:start+duration,taskId});
