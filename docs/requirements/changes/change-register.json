@@ -171,7 +171,7 @@
         },
         {
           "date": "2026-10-31",
-          "event_key": "dlv_519f6044-dc0f-4ff9-aebf-2204c6cd3ca0:r1",
+          "event_key": "dlv_519f6044-dc0f-4ff9-8ebf-2204c6cd3ca0:r1",
           "event": "116eb5d4 three-slice FR006/FR013/R2.1 integration Dev self-test 18 assigned PASS, 2 customer-fact BLOCKED, 1 QA UAT NOT_EXECUTED; full CR NOT_READY; no new product FAIL/repair round",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6528284974"
         },
@@ -591,7 +591,7 @@
         },
         {
           "date": "2026-10-31",
-          "event_key": "dlv_519f6044-dc0f-4ff9-aebf-2204c6cd3ca0:r1",
+          "event_key": "dlv_519f6044-dc0f-4ff9-8ebf-2204c6cd3ca0:r1",
           "event": "116eb5d4 FR013 integration Dev self-test limited PASS on approved three-slice candidate; original09/B09/R-C03 and full CR/UAT remain open; no new product FAIL/repair round",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6528285870"
         },
