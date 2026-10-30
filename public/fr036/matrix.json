@@ -99,9 +99,10 @@
       "number": 9,
       "category": "物料BOM配置",
       "tables": [
+        "originalBom",
         "bom"
       ],
-      "limitation": "当前09_BOM与包装用量，不等于库存09文件"
+      "limitation": "original09 six-column source records are separate from versioned calculation BOM and inventory original13"
     },
     {
       "number": 10,
@@ -1157,6 +1158,40 @@
       ],
       "limitations": "仅原字段预览/保存/查询；尚未确定的组名/班次/任务与占用策略、共享池映射待用户决定，不自动采用到排程",
       "example": "examples/original06.csv"
+    },
+    {
+      "key": "originalBom",
+      "label": "original09 source-only BOM",
+      "file": "09_物料BOM配置.csv",
+      "fields": [
+        "产品编号",
+        "物料编号",
+        "投料工序",
+        "计量基准",
+        "定额",
+        "损坏比例"
+      ],
+      "uniqueKey": [
+        "产品编号",
+        "物料编号",
+        "投料工序"
+      ],
+      "references": "products + materials + product-specific routes; source only, no calculation mapping",
+      "units": "literal basis text; positive decimal quota; decimal damage ratio [0,1)",
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "v0.3 original09 CSV provider",
+      "direction": "inbound-simulation",
+      "template": "templates/09_物料BOM配置.csv",
+      "example": "examples/09_物料BOM配置.csv",
+      "dates": [],
+      "version": "revision + immutable input versions + audit; no invented BOM effective version",
+      "validation": [
+        "src/lib/original-bom.mjs#validateOriginalBom",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "limitations": "source persistence does not approve calculation basis/unit/yield/loss/rounding combinations"
     }
   ],
   "outbound": [

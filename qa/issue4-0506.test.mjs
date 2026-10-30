@@ -29,7 +29,7 @@ test('original 7/6 columns preserve literals; preview, atomic save, exact reimpo
 });
 test('single table and batch required values, safe quantity, minute units/date/bounds, duplicate identity, header and physical locations reject whole store',async t=>{
  const f=await setup(t),before=f.bytes();let count=0;
- for(const def of defs.filter(d=>d.key.startsWith('original'))){
+ for(const def of defs.filter(d=>['originalTools','originalPersonnel'].includes(d.key))){
   const key=def.key,start=key==='originalTools'?'最早可用分钟':'起始分钟',end=key==='originalTools'?'最晚可用分钟':'结束分钟',qty=key==='originalTools'?'可用数量':'可用人数';
   const cases=[...def.fields.map(field=>[field,'']),...['1.5','-1','1e2','2人','9007199254740992'].map(v=>[qty,v]),...[start,end].flatMap(field=>['-1','0h','2026-11-02T08:00:00+08:00','Infinity'].map(v=>[field,v])),[end,'0']];
   for(const [field,value]of cases){const d=structuredClone(sourceRows);d[key][0][field]=value;

@@ -1,3 +1,4 @@
+import {originalBomNote} from './lib/original-bom.mjs';
 import {MasterDataContract} from './MasterDataContract';
 import {useEffect,useMemo,useRef,useState} from 'react';
 import {recordIdentity} from './lib/record-identity.mjs';
@@ -32,6 +33,7 @@ export function DataQueries({data,plans,revision,canExport,reason,onExport,onTas
  function navigate(target:string,index?:number){setTable(target);setFilters({});setFocus(index??null);setPage(index===undefined?0:Math.floor(index/50));}
  return <section className="panel query-panel" aria-label="模拟数据查询">
   <h2>模拟数据查询 · FR-014</h2><p>导入 → 查询 → 计算 → 核对。共 {defs.length} 类当前输入及方案任务；所有数据均为模拟数据。分钟 0 = 2026-11-02 08:00（Asia/Shanghai），时间区间 [开始,结束)。</p>
+  {table==='originalBom'&&<p>{originalBomNote}</p>}
   <MasterDataContract table={table}/>
   <div className="query-controls"><label>数据类别<select aria-label="查询数据类别" value={table} onChange={e=>navigate(e.target.value)}>{categories.map(d=><option key={d.key} value={d.key}>{d.label}（{all[d.key]?.length||0}）</option>)}</select></label>
   <label>关联方案<select aria-label="查询方案" value={planId} onChange={e=>{setPlan(e.target.value);setHistorical(false);setFocus(null);setPage(0);}}><option value="">未选择方案</option>{plans.map(p=><option key={p.id} value={p.id}>{p.name||p.id} · {p.status==='draft'?'草稿':p.status==='legacy'?'历史快照':p.status} · {p.id}</option>)}</select></label></div>

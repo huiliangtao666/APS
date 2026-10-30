@@ -1,3 +1,4 @@
+import {originalBomDef} from './lib/original-bom.mjs';
 import {originalResourceDefs} from './lib/original-resources.mjs';
 export type TableDef = { key:string; label:string; file:string; fields:string[] };
 export const defs: TableDef[] = [
@@ -28,5 +29,6 @@ export const defs: TableDef[] = [
   { key: 'skillSubstitutions', label: '有向技能替代', file: '29_有向技能替代.csv', fields: ['关系编号','可提供技能','所需技能','是否启用','适用工序','说明'] },
   { key: 'personnelGroups', label: '人员组与可用时间', file: '19_人员组与可用时间.csv', fields: ['人员组编号','人员组名称','人员数量','技能','班次','可用起始分钟','可用结束分钟'] },
   { key: 'rules', label: '排程规则', file: '16_排程规则配置.csv', fields: ['规则编号','中文名称','是否启用','参数JSON','适用对象','生效时间'] },
+  originalBomDef,
   ...originalResourceDefs,
 ];

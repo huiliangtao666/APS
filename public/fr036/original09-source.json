@@ -1,0 +1,9 @@
+{
+  "source": "sample-data/UAT-01/baseline-v0.3/09_物料BOM配置.csv",
+  "source_document_sha": "9fa1f918adbf9662ef3ca43ab25b469efd68b0b2",
+  "raw_sha256": "8e7ba0b451aa8b7415f4a65ef4be2e3b77eeb23dd8a0e9fba15883dd94f121eb",
+  "download": "examples/09_物料BOM配置.csv",
+  "download_sha256": "8e7ba0b451aa8b7415f4a65ef4be2e3b77eeb23dd8a0e9fba15883dd94f121eb",
+  "transport_normalization": "none; byte-identical UTF-8 BOM and physical CRLF source",
+  "scope": "source text only; not calculation config"
+}

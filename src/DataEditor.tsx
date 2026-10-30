@@ -1,3 +1,4 @@
+import {originalBomNote} from './lib/original-bom.mjs';
 import {MasterDataContract} from './MasterDataContract';
 import {PolicyPreview,policyOptions} from './PolicyPreview';
 import {useEffect,useState} from 'react';
@@ -28,6 +29,7 @@ export function DataEditor({data={},def,rows,revision,canWrite,busy,reason,onSav
   {def.key==='factoryLines'&&<p>五字段须显式填写，时区使用 IANA 名称（如 Asia/Shanghai）；不自动填充值。首次配置须覆盖现有机器、订单的产线及日历的工厂引用。可维护未投入排程的产线记录，R1 仍只允许一条排程产线。修改保存为新输入版本，已确认方案的原始输入保留。</p>}
   {def.key==='simulationEvents'&&<p>FR029：先更新全部在制任务观测分钟为事件时点，再保存完整事件集合；可跨表暂存后一并保存。保护策略仅支持“禁止未开始任务开工”，需处理事实JSON留空由服务器判定。故障/耗料影响事实永久保留待处理；恢复、转机、撤销及旧方案未执行任务锁定未定。模拟物料状态不代表QA在线放行。</p>}
   {["executionFacts","executionMaterials","executionSources"].includes(def.key)&&<p>FR031 模拟累计口径：可用产出与报废分开，不跨工序累加；空报废按零处理。正报废量须明确“按本工序BOM补做”或“待核对”；工时独立填写。来源汇总缺少显式物料/批次分配时阻断，不自动分批。已开始/完成事实、已耗批次、原始来源不允许删除或覆盖。</p>}
+ { def.key==='originalBom'&&<p data-original-bom-contract>{originalBomNote}</p>}
  <MasterDataContract table={def.key}/>
   <PolicyPreview table={def.key} data={{...data,...drafts}} revision={revision}/>
   <div className="actions"><button disabled={disabled} onClick={()=>change([...list,Object.fromEntries(def.fields.map(f=>[f,'']))],'add')}>新增一行</button><button disabled={disabled||!selected.length} onClick={()=>{change([...list,...selected.map(i=>({...list[i]}))],'copy');setSelected([]);}}>复制选中</button><button className="danger" disabled={disabled||!selected.length} onClick={()=>{change(list.filter((_,i)=>!selected.includes(i)),'delete');setSelected([]);}}>删除选中</button><button disabled={disabled||!draft||stale||!reason.trim()} onClick={save}>保存修改</button><button disabled={saving||!draft} onClick={()=>{setDrafts({});setSelected([]);setError('');setIssues([]);}}>取消修改</button></div>

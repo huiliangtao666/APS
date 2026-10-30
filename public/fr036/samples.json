@@ -384,6 +384,15 @@
       "expected": "source-import-only; runtime-mapping-pending",
       "simulation": true,
       "context": "所有值均为虚构示例；不批准共享池/任务占用/组名或班次映射"
+    },
+    {
+      "file": "examples/09_物料BOM配置.csv",
+      "table": "originalBom",
+      "contract": "original09-source-only",
+      "expected": "accept in seed context; source records only",
+      "simulation": true,
+      "sha256": "8e7ba0b451aa8b7415f4a65ef4be2e3b77eeb23dd8a0e9fba15883dd94f121eb",
+      "context": "受控v0.3八行；UTF-8 BOM及物理CRLF与原件字节一致；不可当计算BOM"
     }
   ]
 }
