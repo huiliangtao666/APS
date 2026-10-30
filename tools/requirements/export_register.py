@@ -110,7 +110,8 @@ def export(workbook_path=None, refresh=True):
         if applied:
             row['current_text'] = b['text'] + ''.join('\n\n[' + c['id'] + ' 批准增量]\n' + c.get('requirement_deltas',{}).get(b['id'],c['approved_delta']) for c in applied)
             row['code_reference'] = next((c.get('code_sha') for c in reversed(applied) if c.get('code_sha')),(commits[-1] if commits else ''))
-        accepted = re.search(r'<!-- aps-card-acceptance:(.*?) -->', body, re.S)
+        accepted_records = list(re.finditer(r'<!-- aps-card-acceptance:(.*?) -->', body, re.S))
+        accepted = accepted_records[-1] if accepted_records else None
         if accepted:
             record = json.loads(accepted.group(1))
             row['accepted_requirement_version'] = record['requirement_version'] + '；' + record['code_sha'] + '；' + record['test_delivery']
@@ -122,7 +123,8 @@ def export(workbook_path=None, refresh=True):
                 row['current_phase'] = '本卡适用需求已独立验收；历史复核与证据见原卡'
                 row['blocker'] = ''
                 row['acceptance_result'] = record['conclusion']
-        reviewed = re.search(r'<!-- aps-card-review:(.*?) -->', body, re.S)
+        reviewed_records = list(re.finditer(r'<!-- aps-card-review:(.*?) -->', body, re.S))
+        reviewed = reviewed_records[-1] if reviewed_records else None
         if reviewed and status != 'Done':
             review = json.loads(reviewed.group(1))
             row['review_record'] = review
@@ -131,6 +133,13 @@ def export(workbook_path=None, refresh=True):
             row['acceptance_result'] = review['conclusion']
             row['code_reference'] = review['code_sha']
             row['code_reference_note'] = review.get('code_sha_status', '独立Test固定版本；结论见原卡review记录，不代表验收通过')
+        # Current Project fields are maintained after the historical review markers.
+        # Prefer them so a refreshed derivative does not resurrect an old blocker.
+        if status != 'Done':
+            for field, key in [('当前环节', 'current_phase'), ('阻塞原因', 'blocker'),
+                               ('验收结论', 'acceptance_result'), ('交付代码SHA', 'code_reference')]:
+                if fields.get(field):
+                    row[key] = fields[field]
         if uat_owner:
             row['owner'] += '；UAT业务验收：' + uat_owner
         requirements.append(row)
