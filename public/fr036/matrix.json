@@ -63,19 +63,21 @@
       "number": 5,
       "category": "模具与工具配置",
       "tables": [
+        "originalTools",
         "tools",
         "resourceClaims"
       ],
-      "limitation": "配置与显式占用分表，非自动推导"
+      "limitation": "原05七列按原字段导入查询；到18工装/23占用声明的任务、类型及共享池映射未确定，不自动推导"
     },
     {
       "number": 6,
       "category": "人员技能与班次",
       "tables": [
+        "originalPersonnel",
         "personnelGroups",
         "dependencies"
       ],
-      "limitation": ""
+      "limitation": "原06六列按原字段导入查询；原件无组名与班次，多窗口身份与共享池未确定，不自动生成19/12数据"
     },
     {
       "number": 7,
@@ -1090,6 +1092,71 @@
         "server/input-validation.mjs#validateInputs"
       ],
       "template": "templates/29_有向技能替代.csv"
+    },
+    {
+      "key": "originalTools",
+      "label": "05_模具与工具配置（原字段资料，待运行映射）",
+      "file": "05_模具与工具配置.csv",
+      "fields": [
+        "资源编号",
+        "资源名称",
+        "资源类型",
+        "可用数量",
+        "最早可用分钟",
+        "最晚可用分钟",
+        "共享范围"
+      ],
+      "uniqueKey": [
+        "资源编号"
+      ],
+      "references": "按原编号及类型关联查询；不推定到运行资源的语义映射",
+      "units": "数量为非负安全整数；时间为分钟偏移；其他原字段为必填文本",
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "原CSV提供方",
+      "direction": "inbound-simulation",
+      "template": "templates/05_模具与工具配置.csv",
+      "dates": [],
+      "version": "revision、输入版本冻结；不迁移旧快照",
+      "validation": [
+        "src/lib/original-resources.mjs#validateOriginalResources",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "limitations": "仅原字段预览/保存/查询；尚未确定的组名/班次/任务与占用策略、共享池映射待用户决定，不自动采用到排程",
+      "example": "examples/original05.csv"
+    },
+    {
+      "key": "originalPersonnel",
+      "label": "06_人员技能与班次（原字段资料，待运行映射）",
+      "file": "06_人员技能与班次.csv",
+      "fields": [
+        "人员组编号",
+        "技能",
+        "可用人数",
+        "起始分钟",
+        "结束分钟",
+        "共享范围"
+      ],
+      "uniqueKey": [
+        "人员组编号"
+      ],
+      "references": "按原编号及类型关联查询；不推定到运行资源的语义映射",
+      "units": "数量为非负安全整数；时间为分钟偏移；其他原字段为必填文本",
+      "systems": [
+        "APS"
+      ],
+      "sourceOwner": "原CSV提供方",
+      "direction": "inbound-simulation",
+      "template": "templates/06_人员技能与班次.csv",
+      "dates": [],
+      "version": "revision、输入版本冻结；不迁移旧快照",
+      "validation": [
+        "src/lib/original-resources.mjs#validateOriginalResources",
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "limitations": "仅原字段预览/保存/查询；尚未确定的组名/班次/任务与占用策略、共享池映射待用户决定，不自动采用到排程",
+      "example": "examples/original06.csv"
     }
   ],
   "outbound": [

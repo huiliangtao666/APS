@@ -1,3 +1,4 @@
+import {originalResourceDefs} from '../src/lib/original-resources.mjs';
 import {eventSummary,eventAbsences,validateEvents} from '../src/lib/simulation-events.mjs';
 import {factFor,executionSummary,executionAdmission,validateExecution,executionRisks} from '../src/lib/execution-facts.mjs';
 import {remainingExecutionDemand} from '../src/lib/material-allocation.mjs';
@@ -54,8 +55,10 @@ export const defs: TableDef[] = [
   { key: 'skillSubstitutions', label: '有向技能替代', file: '29_有向技能替代.csv', fields: ['关系编号','可提供技能','所需技能','是否启用','适用工序','说明'] },
   { key: 'personnelGroups', label: '人员组与可用时间', file: '19_人员组与可用时间.csv', fields: ['人员组编号','人员组名称','人员数量','技能','班次','可用起始分钟','可用结束分钟'] },
   { key: 'rules', label: '排程规则', file: '16_排程规则配置.csv', fields: ['规则编号','中文名称','是否启用','参数JSON','适用对象','生效时间'] },
+  ...originalResourceDefs,
 ];
 export const seed: Record<string, Row[]> = {
+  originalTools: [], originalPersonnel: [],
   simulationEvents: [], executionFacts: [], executionMaterials: [], executionSources: [],
   products: [
     {'产品编号':'HC40','产品名称':'模拟火腿肠40g','单支净重kg':'0.04','每袋支数':'10','总收率':'0.96','模拟交付等待分钟':'0'},

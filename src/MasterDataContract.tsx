@@ -1,4 +1,6 @@
+import {originalResourceKeys,originalResourceNote} from './lib/original-resources.mjs';
 export function MasterDataContract({table}:{table:string}){
+ if(originalResourceKeys.includes(table))return <p data-original-resource-contract>{originalResourceNote}</p>;
  if(!['products','materials','batch'].includes(table))return null;
  return <p data-master-contract>
   {table!=='materials'&&'产品配置：单支净重须大于0（kg/支）；每袋支数须为正整数（支/袋），不自动取整；总收率须为比例 0＜值≤1（0.96 = 96%，1 = 100%），不填写百分号；模拟交付等待分钟须显式填写非负数。'}

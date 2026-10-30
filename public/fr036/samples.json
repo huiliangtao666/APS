@@ -368,6 +368,22 @@
       "context": "CR-DEC02-03-v1；技能关系由中文表单维护；此文件仅表头",
       "simulation": true,
       "sha256": "e00a631daea5c41c1da312f5c048cd7e0e203270dcbcc533aa73e9665cde4655"
+    },
+    {
+      "file": "examples/original05.csv",
+      "table": "originalTools",
+      "contract": "original-v0.3-source-fields-only",
+      "expected": "source-import-only; runtime-mapping-pending",
+      "simulation": true,
+      "context": "所有值均为虚构示例；不批准共享池/任务占用/组名或班次映射"
+    },
+    {
+      "file": "examples/original06.csv",
+      "table": "originalPersonnel",
+      "contract": "original-v0.3-source-fields-only",
+      "expected": "source-import-only; runtime-mapping-pending",
+      "simulation": true,
+      "context": "所有值均为虚构示例；不批准共享池/任务占用/组名或班次映射"
     }
   ]
 }
