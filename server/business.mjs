@@ -1,6 +1,10 @@
 import {resourceMappingTransition,sameResourceMapping} from '../src/lib/resource-mapping.mjs';
 import {verifyResourcePolicies} from '../src/lib/verify-resource-policies.mjs';
 import {poolTransitionIssues} from '../src/lib/physical-pools.mjs';
+import {validateMasterData} from '../src/lib/master-data.mjs';
+import {validateOrders} from '../src/lib/orders.mjs';
+import {validateSingleLineScope} from '../src/lib/line-scope.mjs';
+import {attachProblemRecords,bindProblemSource} from '../src/lib/problem-records.mjs';
 import {inspectSingleCsv} from './csv-single.mjs';
 import {migratePolicies} from '../src/lib/resource-policies.mjs';
 import {inspectCsvBatch,physicalIssues,batchKeys} from './csv-batch.mjs';
@@ -12,6 +16,7 @@ import {reviewPlan,contentHash,validConfirmation} from './confirmation.mjs';
 import {stageEvents} from '../src/lib/simulation-events.mjs';
 import {executionState,executionTransition,executionAdmission,executionSummary,factTables,executionTrialIssues} from '../src/lib/execution-facts.mjs';
 import {executionInventory} from '../src/lib/material-allocation.mjs';
+import {inventoryView} from '../src/lib/inventory-view.mjs';
 import {queryInventoryAvailability} from '../src/lib/inventory.mjs';
 import {comparePlans,restoreBlockers,conditionChanges} from '../src/lib/plan-comparison.mjs';
 import {resultState,resultCsv} from '../src/lib/result-assessment.mjs';
@@ -67,14 +72,25 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   router.get('/meta',permission('read'),(_req,res)=>res.json({release:'R1 prototype + FR-037 supported-flow slice',baseline:'APS v0.3 review draft',supportedRules:['BR-02 precedence','BR-03 exclusive machine overlap','FR-008 calendar','FR-007 personnel','FR-022 explicit joint occupancy'],timeOrigin:'2026-11-02T08:00:00+08:00',interval:'[start,end)',unsupportedWorkflows:['external-dispatch','historical-restore'],confirmation:'FR030-v1 internal only'}));
   router.get('/rules/capabilities',permission('read'),(_req,res)=>res.json(ruleCatalog));
   router.get('/session',permission('read'),(req,res)=>res.json({role:req.member.role,canWrite:['planner','supervisor'].includes(req.member.role),canExport:req.member.role!=='query'||req.member.canExport===true}));
-  router.get('/state',permission('read'),(_req,res)=>{const s=read();res.json({data:s.data,revision:s.revision});});
+  router.get('/state',permission('read'),(_req,res)=>{const s=read();res.json({data:s.data,revision:s.revision,inputVersionId:inputHash(s.data)});});
   router.get('/operations',permission('read'),(_req,res)=>res.json(read().records));
   const versionId=data=>createHash('sha256').update(JSON.stringify(data)).digest('hex');
-  const preserve=(s,target=s)=>{s.inputVersions??={};const id=versionId(target.data);if(!s.inputVersions[id])s.inputVersions[id]={id,revision:target.revision,data:structuredClone(target.data)};return id;};
+  const preserve=(s,target=s)=>{s.inputVersions??={};const id=versionId(target.data);if(!s.inputVersions[id])s.inputVersions[id]={id,revision:target.revision,data:structuredClone(target.data),csvSources:structuredClone(target.csvSources||{})};return id;};
   const inputs=(s,p)=>{const v=s.inputVersions?.[p.inputVersionId];return v&&v.data&&versionId(v.data)===p.inputVersionId?v:null;};
-  router.get('/plans',permission('read'),(_req,res)=>{const s=read();res.json(s.plans.map(p=>({...p,inputSnapshot:inputs(s,p)?.data??null})));});
+  router.get('/plans',permission('read'),(_req,res)=>{const s=read();res.json(s.plans.map(p=>({...p,inputSnapshot:inputs(s,p)?.data??null,inputCsvSources:inputs(s,p)?.csvSources??null})));});
   router.get('/plans/:id/inputs',permission('read'),(req,res)=>{const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});const v=inputs(s,p);if(!v)return res.status(409).json({error:'historical_inputs_unavailable'});res.json(v);});
+  router.get('/inventory',permission('read'),(req,res)=>{
+    const asOf=req.query.asOf??new Date().toISOString();
+    if(typeof asOf!=='string'||!Number.isFinite(Date.parse(asOf)))return res.status(400).json({error:'invalid_inventory_time'});
+    const s=read();res.json({revision:s.revision,inputVersionId:inputHash(s.data),asOf,rows:inventoryView(s.data,asOf),scope:'模拟库存；当前查询与分配前余额；方案内分配保留在方案中，不写入库存占用'});
+  });
   router.get('/execution',permission('read'),(_req,res)=>{const s=read();const history=s.records.filter(r=>!r.trialId&&factTables.includes(r.target));res.json({...executionSummary(s.data),version:inputHash(executionState(s.data)),revision:s.revision,history,inventory:queryInventoryAvailability(executionInventory(s.data),{rules:s.data.rules}).map(row=>({...row,'扣耗后余额':row['账面数量'],'扣耗前账面数量':s.data.inventory.find(b=>b['批次编号']===row['批次编号'])?.['账面数量'],'说明':'模拟账面减累计耗料，再减独立占用；不是真实库存'}))});});
+  // Rejected transitions carry two explicit, independently versioned inputs.
+  function transitionEvidence(issues,before,after,revision,domain='current'){
+    const at=new Date().toISOString(),sources={before:{domain,inputVersionId:inputHash(before),revision,checkedAt:at},after:{domain:'candidate:'+domain,inputVersionId:inputHash(after),revision,checkedAt:at}};
+    const bound=issues.map(f=>({...f,taskIds:[],relatedRecords:(f.relatedRecords||[]).map(ref=>({...ref,origin:{...sources[ref.versionSide],occurrence:ref.occurrence}}))}));
+    return {findings:bound,checkedInputs:{before:{data:before,...sources.before},after:{data:after,...sources.after}},issues:bound};
+  }
   function saveInputs(req,res,tables,trialId,dryRun=false){
     const {revision,operation}=req.body;
     const s=read(),target=trialId?s.trials?.find(t=>t.id===trialId):s;
@@ -92,9 +108,14 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     }
     if(trialId&&factTables.some(k=>tables[k]!==undefined))return res.status(409).json({error:'trial_execution_edit_forbidden'});
     if(!trialId){const staged=stageEvents(target.data,proposed,Object.keys(tables));if(staged.issues.length)return res.status(409).json({error:'event_reconciliation_required',issues:staged.issues});proposed=staged.data;for(const def of defs.filter(d=>JSON.stringify(proposed[d.key])!==JSON.stringify(target.data[d.key]))){const rows=proposed[def.key]||[];if(rows.some(r=>!r||typeof r!=='object'||Array.isArray(r)||Object.keys(r).some(k=>!def.fields.includes(k))||Object.values(r).some(v=>typeof v!=='string')))return res.status(400).json({error:'invalid_event_effect'});proposed[def.key]=rows.map(r=>Object.fromEntries(def.fields.map(f=>[f,r[f]??''])));}}
-    const transition=(trialId?executionTrialIssues(s.data,proposed):executionTransition(target.data,proposed));if(transition.length)return res.status(409).json({error:'execution_reconciliation_required',issues:transition});
+    const transition=(trialId?executionTrialIssues(s.data,proposed):executionTransition(target.data,proposed));if(transition.length)return res.status(409).json({error:'execution_reconciliation_required',...transitionEvidence(transition,trialId?s.data:target.data,proposed,trialId?s.revision:target.revision)});
     const newlyEnabled=(proposed.rules||[]).some(r=>r['是否启用']==='是'&&!(target.data.rules||[]).some(old=>old['规则编号']===r['规则编号']&&old['是否启用']==='是'));
-    const issues=[...resourceMappingTransition(target.data,proposed,s.records),...poolTransitionIssues(target.data,proposed,s.records),...validateInputs(defs,proposed),...(newlyEnabled?assessRules(proposed,new Date().toISOString(),true).issues:[])];if(issues.length)return res.status(400).json({error:'invalid_input',issues});
+    const issues=[...resourceMappingTransition(target.data,proposed,s.records),...poolTransitionIssues(target.data,proposed,s.records),...validateInputs(defs,proposed),...(newlyEnabled?assessRules(proposed,new Date().toISOString(),true).issues:[])];if(issues.length){
+      // The rejected proposal is an ephemeral check input, never a saved input version.
+      const source={domain:'candidate:'+(trialId?'trial:'+trialId:'current'),inputVersionId:inputHash(proposed),revision:target.revision,checkedAt:new Date().toISOString(),scope:'complete proposed input validation'};
+      const findings=issues.map(f=>bindProblemSource({...f,taskIds:[]},source));
+      return res.status(400).json({error:'invalid_input',issues:findings,findings,checkedInput:{data:proposed,...source}});
+    }
     if(operation==='restore')return res.status(409).json({error:'restore_blocked',...restoreBlockers(s,null)});
     // A missing original confirmed snapshot cannot be reconstructed from today's data.
     if(s.plans.some(p=>['confirmed','released','archived'].includes(p.status)&&!inputs(s,p)))return res.status(409).json({error:'protected_history_unavailable'});
@@ -108,9 +129,12 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const changes=defs.map(d=>d.key).filter(key=>JSON.stringify(target.data[key])!==JSON.stringify(proposed[key]));
     if(!changes.length)return res.json({data:target.data,revision:target.revision,unchanged:true});
     const before=target.data;const fromVersion=preserve(s,target);
-    target.data=proposed;target.revision++;const toVersion=preserve(s,target);
+    target.data=proposed;target.revision++;
+    target.csvSources={...(target.csvSources||{})};
+    for(const key of new Set([...changes,...Object.keys(req.csvSources||{})])){delete target.csvSources[key];if(req.csvSources?.[key])target.csvSources[key]={...structuredClone(req.csvSources[key]),sha256:createHash('sha256').update(req.csvSources[key].originalText).digest('hex'),canonicalRows:structuredClone(proposed[key])};}
+    const toVersion=preserve(s,target);
     const batchId=randomUUID();
-    for(const key of changes)record(s,req,operation||'edit',key,{before:before[key],after:proposed[key],fromVersion,toVersion,batchId,trialId:trialId||null,...(req.csvEvidence?.[key]?{csvSource:req.csvEvidence[key]}:{})});
+    for(const key of changes)record(s,req,operation||'edit',key,{before:before[key],after:proposed[key],fromVersion,toVersion,fromRevision:target.revision-1,toRevision:target.revision,batchId,...(req.csvEvidence?.[key]?{csvSource:req.csvEvidence[key]}:{}),trialId:trialId||null,...(req.csvSources?{csvSources:{[key]:req.csvSources[key]}}:{})});
     write(s);res.json({data:target.data,revision:target.revision,inputVersionId:toVersion});
   }
   // Preview and commit pass through exactly the same transition/history/validation gates.
@@ -118,17 +142,17 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const result={status:200,body:null};
     const response={status(code){result.status=code;return this;},json(body){result.body=body;return this;}};
     const csvEvidence=Object.fromEntries(Object.entries(inspection.sources).filter(([key])=>['originalTools','originalPersonnel','resourceMappings'].includes(key)).map(([key,source])=>{const raw=req.body.files?.find(f=>f.name===source.file);return [key,{...source,...(raw?{text:raw.text,sha256:createHash('sha256').update(raw.text).digest('hex')}:{})}];}));
-    saveInputs({...req,csvEvidence},response,inspection.tables,undefined,dryRun);
+    saveInputs({...req,csvEvidence,csvSources:inspection.sources},response,inspection.tables,undefined,dryRun);
     if(result.body?.issues)result.body.issues=physicalIssues(result.body.issues,inspection.sources,defs);
     return result;
   }
   router.post('/imports/preview',permission('edit'),(req,res)=>{
-    const {files,revision,table}=req.body,s=read();
+    const {files,revision,table,repairs=[]}=req.body,s=read();
     if(revision!==s.revision)return res.status(409).json({error:'stale_input'});
     if(!Array.isArray(files)||!files.length||files.length>batchKeys.length||files.some(f=>!f||typeof f.name!=='string'||typeof f.text!=='string'||f.text.length>1000000))return res.status(400).json({error:'invalid_files'});
     const def=table===undefined?null:defs.find(d=>d.key===table&&d.key!=='factoryLines');
     if(table!==undefined&&(!def||files.length!==1))return res.status(400).json({error:'invalid_single_table'});
-    const inspection=def?inspectSingleCsv(files[0],def):inspectCsvBatch(files,defs);
+    const inspection=def?inspectSingleCsv(files[0],def):inspectCsvBatch(files,defs,repairs);
     if(table==='simulationEvents')inspection.tables.executionFacts=s.data.executionFacts||[];
     const base={tables:inspection.tables,sources:inspection.sources,revision,beforeTables:Object.fromEntries(Object.keys(inspection.tables).map(key=>[key,s.data[key]||[]]))};
     if(inspection.issues.length)return res.json({...base,valid:false,issues:inspection.issues});
@@ -136,7 +160,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(checked.status!==200)return res.status(checked.status).json({...base,valid:false,...checked.body});
     for(const [id,p] of csvPreviews)if(Date.now()-p.createdAt>15*60*1000)csvPreviews.delete(id);
     if(csvPreviews.size>=100)return res.status(429).json({error:'preview_capacity'});
-    const id=randomUUID();csvPreviews.set(id,{owner:subjectKey(req.praetorActor),createdAt:Date.now(),stateHash:contentHash(s),revision,table,files:structuredClone(files)});
+    const id=randomUUID();csvPreviews.set(id,{owner:subjectKey(req.praetorActor),createdAt:Date.now(),stateHash:contentHash(s),revision,table,files:structuredClone(files),repairs:structuredClone(repairs)});
     res.json({...base,id,valid:true,issues:[]});
   });
   router.post('/imports/commit',permission('edit'),(req,res)=>{
@@ -144,10 +168,10 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(!p||p.owner!==subjectKey(req.praetorActor)||Date.now()-p.createdAt>15*60*1000)return res.status(409).json({error:'preview_expired_or_unowned'});
     if(p.revision!==s.revision||p.stateHash!==contentHash(s))return res.status(409).json({error:'stale_preview'});
     // Ignore caller-supplied tables/actor/revision; reparse the server-owned original files.
-    const inspection=p.table?inspectSingleCsv(p.files[0],defs.find(d=>d.key===p.table)):inspectCsvBatch(p.files,defs);
+    const inspection=p.table?inspectSingleCsv(p.files[0],defs.find(d=>d.key===p.table)):inspectCsvBatch(p.files,defs,p.repairs);
     if(p.table==='simulationEvents')inspection.tables.executionFacts=s.data.executionFacts||[];
     if(inspection.issues.length)return res.status(400).json({error:'invalid_input',issues:inspection.issues});
-    const checked=checkCsv({...req,body:{reason:req.body.reason,revision:p.revision,operation:'import',files:p.files}},s,inspection,false);
+    const checked=checkCsv({...req,csvSources:inspection.sources,body:{reason:req.body.reason,revision:p.revision,operation:'import',files:p.files}},s,inspection,false);
     if(checked.status===200)csvPreviews.delete(req.body.previewId);
     res.status(checked.status).json(checked.body);
   });
@@ -271,7 +295,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(!source||!historical(s,source)||!historical(s,plan))return res.status(409).json({error:'historical_inputs_unavailable'});
     const comparison=comparePlans(source,inputs(s,source).data,plan,inputs(s,plan).data);
     if(inputHash(executionState(trial.data))!==inputHash(executionState(s.data)))return res.status(409).json({error:'current_execution_changed'});
-    const protectedIssues=executionTrialIssues(s.data,trial.data);if(protectedIssues.length)return res.status(409).json({error:'execution_reconciliation_required',issues:protectedIssues});
+    const protectedIssues=executionTrialIssues(s.data,trial.data);if(protectedIssues.length)return res.status(409).json({error:'execution_reconciliation_required',...transitionEvidence(protectedIssues,s.data,trial.data,s.revision)});
     const retained={id:randomUUID(),planId:plan.id,runId:plan.runId,inputVersionId:plan.inputVersionId,snapshotHash:plan.snapshotHash,trialRevision:trial.revision,at:new Date().toISOString(),actor:subjectKey(req.praetorActor),comparison};
     trial.retainedSnapshots??=[];trial.retainedSnapshots.push(retained);
     record(s,req,'trial_retained',trial.id,{retainedId:retained.id,planId:plan.id,runId:plan.runId,inputVersionId:plan.inputVersionId,snapshotHash:plan.snapshotHash,sourcePlanId:source.id});write(s);
@@ -310,16 +334,33 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const target=trial||s;
     if(req.body.revision!==target.revision){res.status(409).json({error:'stale_input'});return;}
     if(trial&&inputHash(executionState(trial.data))!==inputHash(executionState(s.data))){res.status(409).json({error:'current_execution_changed',message:'试算执行事实已落后当前版本；保留旧记录，请从当前事实新算再复制'});return;}
-    if(trial){const reconciliation=executionTrialIssues(s.data,trial.data);if(reconciliation.length){res.status(409).json({error:'execution_reconciliation_required',issues:reconciliation});return;}}
+    if(trial){const reconciliation=executionTrialIssues(s.data,trial.data);if(reconciliation.length){res.status(409).json({error:'execution_reconciliation_required',...transitionEvidence(reconciliation,s.data,trial.data,s.revision)});return;}}
     const calculatedAt=new Date().toISOString();let frozen;
-    try{frozen=freezeRunInput(target.data,req.body.selection??trial?.selection,calculatedAt);if(trial&&Object.keys(trial.locks||{}).length)frozen=freezePositions(target.data,frozen.conditions,trial.locks,calculatedAt);}catch(e){res.status(400).json({error:e.message});return;}
-    const issues=[...validateInputs(defs,target.data,{at:calculatedAt,checkPolicyExecution:false}),...executionAdmission(frozen.executionData,frozen.conditions),...assessRules(frozen.executionData,calculatedAt,true,frozen.conditions.mode).issues];
-    if(issues.length){res.status(422).json({error:'rule_configuration_blocked',issues});return;}
+    const source={domain:trial?'trial:'+trial.id:'current',inputVersionId:inputHash(target.data),revision:target.revision,checkedAt:calculatedAt,scope:req.body.selection??trial?.selection??null};
+    try{frozen=freezeRunInput(target.data,req.body.selection??trial?.selection,calculatedAt);if(trial&&Object.keys(trial.locks||{}).length)frozen=freezePositions(target.data,frozen.conditions,trial.locks,calculatedAt);}
+    catch(e){
+      const selection=req.body.selection??trial?.selection;
+      const selected=e.message==='invalid_line_scope'?target.data.orders.filter(o=>o['需求类型']==='正式订单'&&o['订单状态']==='有效'&&(!selection?.orderIds||selection.orderIds.includes(o['订单编号']))):[];
+      const findings=e.message==='invalid_line_scope'
+        ?validateSingleLineScope(selected,target.data.machines).map(f=>({...bindProblemSource(f,{...source,scope:selection??null},target.data,{orders:selected.map(o=>target.data.orders.indexOf(o)),machines:target.data.machines.map((_,i)=>i)}),sourceRevision:target.revision})):[...validateOrders(target.data.orders),...validateMasterData(target.data)].map(f=>({...bindProblemSource({...f,taskIds:[]},{...source,scope:'complete saved input validation'}),sourceRevision:target.revision}));
+      // Keep the early selection rejection; expose only actually absent mandatory rules.
+      if(e.message==='invalid_rule_selection')findings.push(...assessRules(target.data,calculatedAt,false).issues.filter(i=>i.associationState==='known-absent').map(i=>({...bindProblemSource({...i,code:'RULE / CONFIG',taskIds:[]},{...source,scope:'complete saved input rule presence'}),sourceRevision:target.revision})));
+      res.status(400).json({error:e.message,...(findings?{findings,checkedInput:{data:target.data,inputVersionId:source.inputVersionId}}:{})});return;
+    }
+    const native=validateInputs(defs,target.data,{at:calculatedAt,checkPolicyExecution:false});
+    const scoped=[...executionAdmission(frozen.executionData,frozen.conditions),...assessRules(frozen.executionData,calculatedAt,true,frozen.conditions.mode).issues];
+    const withSource=(i,data,context,map)=>bindProblemSource(attachProblemRecords({...i,code:i.code||'INPUT / CHECK',taskIds:[]},data),context,target.data,map);
+    const issues=[...native,...scoped];
+    const findings=[...native.map(i=>withSource(i,target.data,{...source,scope:'complete saved input validation'})),...scoped.map(i=>withSource(i,frozen.executionData,{...source,executionVersionId:inputHash(frozen.executionData),scope:frozen.conditions},frozen.sourceMap))];
+    if(issues.length){res.status(422).json({error:'rule_configuration_blocked',issues,checkedInput:{data:target.data,inputVersionId:source.inputVersionId},findings:findings.map(f=>({...f,sourceRevision:target.revision}))});return;}
     const run={id:randomUUID(),status:'queued',phase:'等待计算线程',createdAt:calculatedAt,revision:target.revision,trialId:trial?.id||null,sourcePlanId:trial?.sourcePlanId||null,inputVersionId:preserve(s,target),...frozen,lockSnapshot:structuredClone(trial?.locks||{}),actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim(),timeoutMs:runTimeoutMs};
     s.runs??=[];s.runs.unshift(run);return {s,run};
   }
   const publicRun=run=>{const {executionData,...summary}=run;const plan=run.planId?read().plans.find(p=>p.id===run.planId):null;return {...summary,durationMs:run.durationMs??Math.max(0,Date.parse(run.finishedAt||new Date().toISOString())-Date.parse(run.createdAt)),outcome:run.outcome??({completed:'succeeded',partial:'succeeded',timed_out:'timed_out'}[run.status]||run.status),resultState:resultState(run,plan?.resultAssessment)};};
-  function makePlan(result,run){return {...result,...(run.lockSnapshot?{lockSnapshot:structuredClone(run.lockSnapshot)}:{}),trialId:run.trialId,sourcePlanId:run.sourcePlanId,id:randomUUID(),status:'draft',revision:run.revision,inputVersionId:run.inputVersionId,runId:run.id,conditions:run.conditions,snapshotHash:run.snapshotHash};}
+  function makePlan(result,run){
+    const original=read().inputVersions?.[run.inputVersionId]?.data;
+    const source={domain:run.trialId?'trial:'+run.trialId:'current',inputVersionId:run.inputVersionId,executionVersionId:inputHash(run.executionData),revision:run.revision,checkedAt:run.createdAt,scope:run.conditions};
+    return {...result,findings:result.findings.map(f=>bindProblemSource(f,source,original,run.sourceMap||{},read().inputVersions?.[run.inputVersionId]?.csvSources)),...(run.lockSnapshot?{lockSnapshot:structuredClone(run.lockSnapshot)}:{}),trialId:run.trialId,sourcePlanId:run.sourcePlanId,id:randomUUID(),status:'draft',revision:run.revision,inputVersionId:run.inputVersionId,runId:run.id,conditions:run.conditions,snapshotHash:run.snapshotHash};}
   function finish(id,req,status,details={}){
     const s=read(),run=s.runs?.find(r=>r.id===id);if(!run||terminal.has(run.status)||stopping.has(id))return;
     Object.assign(run,details,{status,finishedAt:new Date().toISOString(),phase:status==='completed'?'计算完成':status==='partial'?'计算完成，有未排或问题':status});
@@ -382,7 +423,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(old.trialId&&s.trials?.find(t=>t.id===old.trialId)?.status!=='active')return res.status(409).json({error:'trial_discarded'});
     if(old.trialId){const t=s.trials.find(t=>t.id===old.trialId);if(old.revision!==t.revision||inputHash(old.conditions.taskPositions||{})!==inputHash(t.locks||{}))return res.status(409).json({error:'stale_trial_positions'});}
     if(old.conditions.executionFactsVersion!==inputHash(executionState(s.data)))return res.status(409).json({error:'current_execution_changed',message:'当前执行事实已变化；请从当前事实另开计算，原记录保留。'});
-    const run={id:randomUUID(),retryOf:old.id,status:'queued',phase:'等待计算线程',createdAt:new Date().toISOString(),revision:old.revision,trialId:old.trialId,sourcePlanId:old.sourcePlanId,lockSnapshot:structuredClone(old.lockSnapshot||{}),inputVersionId:old.inputVersionId,executionData:structuredClone(old.executionData),conditions:structuredClone(old.conditions),snapshotHash:old.snapshotHash,timeoutMs:runTimeoutMs,actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim()};
+    const run={id:randomUUID(),retryOf:old.id,status:'queued',phase:'等待计算线程',createdAt:new Date().toISOString(),revision:old.revision,trialId:old.trialId,sourcePlanId:old.sourcePlanId,lockSnapshot:structuredClone(old.lockSnapshot||{}),inputVersionId:old.inputVersionId,executionData:structuredClone(old.executionData),sourceMap:structuredClone(old.sourceMap||{}),conditions:structuredClone(old.conditions),snapshotHash:old.snapshotHash,timeoutMs:runTimeoutMs,actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim()};
     s.runs.unshift(run);record(s,req,'run_created',run.id,{retryOf:old.id,inputVersionId:run.inputVersionId,snapshotHash:run.snapshotHash});write(s);launch(req,run);res.status(202).json(publicRun(read().runs.find(r=>r.id===run.id)));
   });
   router.post('/runs/:id/cancel',permission('calculate'),async(req,res,next)=>{try{
@@ -421,7 +462,9 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const run=p.runId?s.runs?.find(r=>r.id===p.runId):null;
     if(p.runId&&(!run||run.snapshotHash!==p.snapshotHash||inputHash({conditions:run.conditions,executionData:run.executionData})!==p.snapshotHash||!inputs(s,p)))return res.status(409).json({error:'historical_inputs_unavailable'});
     const execution=run?.executionData;
-    p.verification={...independentlyVerifyPlan(p,execution?.orders??s.data.orders,execution?.routes??s.data.routes,p.rules,new Date().toISOString(),execution,run?.conditions),contentHash:contentHash(p)};record(s,req,'edit',p.id,{kind:'verify'});write(s);res.json(p);
+    const verification=independentlyVerifyPlan(p,execution?.orders??s.data.orders,execution?.routes??s.data.routes,p.rules,new Date().toISOString(),execution,run?.conditions);
+    const source={domain:p.trialId?'trial:'+p.trialId:'current',inputVersionId:p.inputVersionId,revision:p.revision,checkedAt:verification.checkedAt,scope:run?.conditions};
+    p.verification={...verification,findings:verification.findings.map(f=>execution?bindProblemSource(f,source,inputs(s,p)?.data,run.sourceMap||{},inputs(s,p)?.csvSources):f),contentHash:contentHash(p)};if(p.verification.checks.calendar)p.verification.checks.calendar.findings=p.verification.findings.filter(f=>f.sourceRead==='frozen-calendar-v1');record(s,req,'edit',p.id,{kind:'verify'});write(s);res.json(p);
   });
   router.get('/plans/:id/review',permission('read'),(req,res)=>{
     const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});
@@ -501,7 +544,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
       const p=s.plans.find(p=>p.id===req.body.planId);if(!p)return res.status(404).json({error:'plan_not_found'});
       const w=req.body.resourceLoad;
       if(!validInterval(w.start,w.end)||!['all','machines','resources','materials','alerts'].includes(w.kind))return res.status(400).json({error:'invalid_load_view'});
-      csv=loadCsv(resourceLoad({...p,inputSnapshot:inputs(s,p)?.data??null},w),w.kind);target=p.id;
+      csv=loadCsv(resourceLoad({...p,inputSnapshot:inputs(s,p)?.data??null,inputCsvSources:inputs(s,p)?.csvSources??null},w),w.kind);target=p.id;
     }
     else if(req.body.runId){
       const run=s.runs?.find(r=>r.id===req.body.runId);if(!run)return res.status(404).json({error:'run_not_found'});

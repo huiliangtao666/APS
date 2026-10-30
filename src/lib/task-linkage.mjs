@@ -1,3 +1,4 @@
+import {verifyCalendar} from './verify-calendar.mjs';
 import {resourceConflicts} from './resource-conflicts.mjs';
 import {personnelCandidates} from './resource-policies.mjs';
 import {savedInterval} from './verification-endpoints.mjs';
@@ -5,6 +6,10 @@ import {timetable,validInterval} from './timetable.mjs';
 // A read-only explanation of frozen evidence; never a solver or a live-capacity check.
 export function problemInterval(plan,finding){
  if(!finding)return null;
+ if(finding.interval?.kind==='calendar'){
+  const derived=verifyCalendar(plan,plan?.inputSnapshot,plan?.conditions,plan?.rules).findings.find(f=>JSON.stringify(f.taskIds)===JSON.stringify(finding.taskIds)&&JSON.stringify(f.interval)===JSON.stringify(finding.interval));
+  return derived?{...derived.interval,evidence:derived.evidence}:null;
+ }
  if(finding.interval?.kind==='resource-capacity'){
   const derived=resourceConflicts(plan,plan?.inputSnapshot,plan?.conditions).find(f=>JSON.stringify(f.interval)===JSON.stringify(finding.interval)&&JSON.stringify(f.taskIds)===JSON.stringify(finding.taskIds));
   return derived?{...derived.interval,evidence:derived.evidence}:null;

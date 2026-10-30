@@ -2,20 +2,21 @@ import {MasterDataContract} from './MasterDataContract';
 import {OriginalResourceConfig} from './OriginalResourceConfig';
 import {PersonnelPolicyTrial} from './PersonnelPolicyTrial';
 import {PolicyPreview,policyOptions,policyInputSpec} from './PolicyPreview';
+import {currentRecord,type IdentityContext,type RecordRef} from './lib/problem-records.mjs';
 import {useEffect,useState} from 'react';
 import {recordIdentity} from './lib/record-identity.mjs';
 import {StructuredValue,fieldLabel} from './StructuredValue';
 import {type TableDef} from './data-defs';
 type Row=Record<string,string>;
-export type EditProps={data?:Record<string,Row[]>;def:TableDef;rows:Row[];revision:number;canWrite:boolean;busy:boolean;reason:string;onLocate?:(table:string)=>void;onPolicyPreview?:(tables:Record<string,Row[]>,revision:number)=>Promise<any>;onSave:(tables:Record<string,Row[]>,revision:number,operation:string)=>Promise<void|{unchanged?:boolean;revision?:number}>};
-export function DataEditor({data={},def,rows,revision,canWrite,busy,reason,onSave,onLocate,onPolicyPreview}:EditProps){
+export type EditProps={identityContext?:IdentityContext;initialRecord?:RecordRef|null;data?:Record<string,Row[]>;def:TableDef;rows:Row[];revision:number;canWrite:boolean;busy:boolean;reason:string;onLocate?:(table:string)=>void;onPolicyPreview?:(tables:Record<string,Row[]>,revision:number)=>Promise<any>;onSave:(tables:Record<string,Row[]>,revision:number,operation:string)=>Promise<void|{unchanged?:boolean;revision?:number}>};
+export function DataEditor({initialRecord,identityContext,data={},def,rows,revision,canWrite,busy,reason,onSave,onLocate,onPolicyPreview}:EditProps){
  const [drafts,setDrafts]=useState<Record<string,Row[]>>({});
  const draft=Object.keys(drafts).length>0;
  const [previewed,setPreviewed]=useState('');
  const policyDraft=['personnelPools','personnelGroups','dependencies'].some(k=>drafts[k]);
  const draftKey=JSON.stringify(drafts);
  const needsPreview=!!drafts.resourceMappings?.some(m=>m['状态']==='READY')||policyDraft&&(drafts.personnelPools||data.personnelPools||[]).some(p=>p['策略版本']==='P10-explicit-v2'&&p['是否启用']==='是');
- useEffect(()=>{setSelected([]);},[def.key]);
+ useEffect(()=>{const target=initialRecord?.table===def.key?currentRecord(initialRecord,data,identityContext):null;setSelected(target?[target.index]:[]);if(target)document.getElementById(`edit-${def.key}-${target.index}-${def.fields[0]}`)?.scrollIntoView({block:'center'});},[def.key,initialRecord,revision]);
  const [base,setBase]=useState(revision);
  const [selected,setSelected]=useState<number[]>([]);
  const [operation,setOperation]=useState('edit');
@@ -51,6 +52,6 @@ export function DataEditor({data={},def,rows,revision,canWrite,busy,reason,onSav
   {saved&&<p role="status">{saved}</p>}
   {draft&&<p role="status">未保存修改 · {Object.keys(drafts).length} 张表 · 基于版本 {base}。{stale?'服务端输入已变化，请取消草稿并刷新后重新编辑。':'保存须填写操作原因。'}</p>}
   {error&&<div role="alert"><p>{error}</p><ul aria-label="保存问题定位">{issues.map((issue,i)=><li key={i}><button onClick={()=>{onLocate?.(issue.table);setTarget(issue);}}>{issue.file||issue.table} · {issue.row>1?`第${issue.row}行`:'整表'} · {fieldLabel(issue.field)}：{issue.message} · 定位字段</button></li>)}</ul><p>行号包含 CSV 表头；整表问题需结合关联类别核对。草稿保留，修正后再保存。</p></div>}
-  <div className="table-wrap edit-table"><table><thead><tr><th>选 / 记录标识</th>{def.fields.map(f=><th key={f}>{fieldLabel(f)}</th>)}</tr></thead><tbody>{list.map((row,i)=><tr key={i}><td><input aria-label={`选择第${i+1}行`} type="checkbox" disabled={disabled} checked={selected.includes(i)} onChange={e=>setSelected(e.target.checked?[...selected,i]:selected.filter(x=>x!==i))}/><small>{recordIdentity(def.key,row)}</small></td>{def.fields.map(f=><td key={f}><div id={`edit-${def.key}-${i}-${f}`} tabIndex={-1}>{policyOptions(def.key,f)?<select aria-label={`${def.label} ${i+1} ${f}`} disabled={disabled} value={row[f]||''} onChange={e=>change(list.map((r,n)=>n===i?{...r,[f]:e.target.value}:r),operation)}><option value="">请选择</option>{policyOptions(def.key,f)!.map(v=><option key={v}>{v}</option>)}</select>:f.endsWith('JSON')?<StructuredValue field={f} label={`${def.label} ${i+1} ${f}`} value={row[f]||''} disabled={disabled} onChange={value=>change(list.map((r,n)=>n===i?{...r,[f]:value}:r),operation)}/>:<input {...policyInputSpec(def.key,f)} id={`field-${def.key}-${i}-${f}`} disabled={disabled} aria-label={`${def.label} ${i+1} ${f}`} value={row[f]||''} onChange={e=>change(list.map((r,n)=>n===i?{...r,[f]:e.target.value}:r),operation)}/>}</div></td>)}</tr>)}</tbody></table>{!list.length&&<p className="empty">当前表无记录。可导入 CSV 或新增行。</p>}</div>
+  <div className="table-wrap edit-table"><table><thead><tr><th>选 / 记录标识</th>{def.fields.map(f=><th key={f}>{fieldLabel(f)}</th>)}</tr></thead><tbody>{list.map((row,i)=><tr key={i} className={selected.includes(i)?'selected-row':''}><td><input aria-label={`选择第${i+1}行`} type="checkbox" disabled={disabled} checked={selected.includes(i)} onChange={e=>setSelected(e.target.checked?[...selected,i]:selected.filter(x=>x!==i))}/><small>{recordIdentity(def.key,row)}</small></td>{def.fields.map(f=><td key={f}><div id={`edit-${def.key}-${i}-${f}`} tabIndex={-1}>{policyOptions(def.key,f)?<select aria-label={`${def.label} ${i+1} ${f}`} disabled={disabled} value={row[f]||''} onChange={e=>change(list.map((r,n)=>n===i?{...r,[f]:e.target.value}:r),operation)}><option value="">请选择</option>{policyOptions(def.key,f)!.map(v=><option key={v}>{v}</option>)}</select>:f.endsWith('JSON')?<StructuredValue field={f} label={`${def.label} ${i+1} ${f}`} value={row[f]||''} disabled={disabled} onChange={value=>change(list.map((r,n)=>n===i?{...r,[f]:value}:r),operation)}/>:<input {...policyInputSpec(def.key,f)} id={`field-${def.key}-${i}-${f}`} disabled={disabled} aria-label={`${def.label} ${i+1} ${f}`} value={row[f]||''} onChange={e=>change(list.map((r,n)=>n===i?{...r,[f]:e.target.value}:r),operation)}/>}</div></td>)}</tr>)}</tbody></table>{!list.length&&<p className="empty">当前表无记录。可导入 CSV 或新增行。</p>}</div>
  </section>;
 }

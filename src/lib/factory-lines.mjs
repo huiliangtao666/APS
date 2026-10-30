@@ -26,3 +26,12 @@ export function validateFactoryLines(data) {
  });
  return issues;
 }
+
+// Empty device calendar inherits only a unique calendar of its unique factory.
+export function inheritedCalendarId(data,machine) {
+ const explicit=machine?.['日历编号']?.trim();if(explicit)return explicit;
+ const factories=[...new Set((data.factoryLines||[]).filter(r=>r['产线编号']===machine?.['产线编号']).map(r=>r['工厂编号']).filter(Boolean))];
+ if(factories.length!==1)return '';
+ const ids=[...new Set((data.calendars||[]).filter(r=>r['工厂编号']===factories[0]).map(r=>r['日历编号']).filter(Boolean))];
+ return ids.length===1?ids[0]:'';
+}

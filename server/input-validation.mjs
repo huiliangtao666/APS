@@ -1,6 +1,7 @@
 import {validateResourceMappings} from '../src/lib/resource-mapping.mjs';
 import {validateOriginalResources} from '../src/lib/original-resources.mjs';
-import {validateFactoryLines} from '../src/lib/factory-lines.mjs';
+import {sourceRefs} from '../src/lib/problem-records.mjs';
+import {inheritedCalendarId,validateFactoryLines} from '../src/lib/factory-lines.mjs';
 import {validateBatchResources} from '../src/lib/batch-policy.mjs';
 import { assessRules } from '../src/lib/business-rules.mjs';
 import { validateMasterData } from '../src/lib/master-data.mjs';
@@ -18,15 +19,15 @@ export {recordKeys} from '../src/lib/record-identity.mjs';
 // Both imports and edits validate the complete proposed state, before any write.
 export function validateInputs(defs,data,{at=new Date().toISOString(),checkPolicyExecution=true}={}){
  const issues=[...validateOriginalResources(data),...validateResourceMappings(data),...validateEvents(data),...validateFactoryLines(data)];
- const add=(table,index,field,message)=>issues.push({table,file:defs.find(d=>d.key===table).file,row:index+2,field,message});
+ const add=(table,index,field,message,rows=[data[table][index]])=>issues.push({relatedRecords:sourceRefs(table,rows,data[table]),table,file:defs.find(d=>d.key===table).file,row:index+2,field,message});
  for(const def of defs){
   const seen=new Set();
   (data[def.key]||[]).forEach((r,i)=>{
    const required={machines:['设备名称','产线编号','日历编号','最小装载kg','最大装载kg','装载计量基准'],calendars:['工厂编号'],downtime:['原因']};
-   for(const f of required[def.key]||[])if(!r[f]?.trim())add(def.key,i,f,'字段不能为空');
+   for(const f of required[def.key]||[])if(!r[f]?.trim()&&!(def.key==='machines'&&f==='日历编号'&&inheritedCalendarId(data,r)))add(def.key,i,f,'字段不能为空');
    for(const f of keys[def.key])if(!(def.key==='dependencies'&&(f==='人员岗位编号'||f==='人员参与阶段'||f==='资源编号'&&r['资源类型']==='人员技能'&&r['候选人员组']?.trim()))&&!r[f]?.trim())add(def.key,i,f,'唯一键字段不能为空');
    const key=JSON.stringify(keys[def.key].map(f=>r[f]?.trim()||''));
-   if(seen.has(key))add(def.key,i,keys[def.key].join(' + '),'唯一键重复');seen.add(key);
+   if(seen.has(key))add(def.key,i,keys[def.key].join(' + '),'唯一键重复',(data[def.key]||[]).filter(r=>JSON.stringify(keys[def.key].map(f=>r[f]?.trim()||''))===key));seen.add(key);
    const numeric=def.fields.filter(f=>/分钟|数量|净重kg|每袋支数|总收率|装载kg|配置用量|合格需求|优先顺序|速度支每分钟|人员开始偏移|人员结束偏移/.test(f)&&f!=='数量单位');
    for(const f of numeric)if(r[f]?.trim()&&(!/^(?:\d+(?:\.\d*)?|\.\d+)$/.test(r[f].trim())||!Number.isFinite(Number(r[f]))))add(def.key,i,f,'须为非负十进制数值，单位按字段名');
    if(['calendars','downtime','personnelGroups','resourceStops'].includes(def.key)){
@@ -65,7 +66,11 @@ export function validateInputs(defs,data,{at=new Date().toISOString(),checkPolic
   const line=f.line||Number(f.message.match(/第\s*(\d+)\s*行/)?.[1]);
   const field=f.field||def.fields.find(x=>f.message.includes(x))||'关联配置';
   // Aggregate checks have no single source row; row 0 explicitly means table-level.
-  issues.push({...f,table,file:def.file,row:f.row??(line?line+1:0),field});
+  // Legacy display metadata may be inferred from prose above; it is not a record association.
+  // Keep those messages/locations intact, but require producer-owned references for navigation.
+  const association=f.relatedRecords||f.table&&Number.isInteger(f.row)&&f.row>=2?{}
+    :{relatedRecords:[],associationGap:'检查未提供明确的逐条来源记录；请联系维护人员补齐来源后重新检查。'};
+  issues.push({...f,...association,table,file:def.file,row:f.row??(line?line+1:0),field});
  }};
  collect('orders',validateOrders(data.orders));collect('machines',validateSingleLineScope(data.orders,data.machines));collect('products',validateMasterData(data));collect('routes',validateProcessConfig(data));collect('bom',validateBomConfig(data));collect('inventory',validateInventoryBatches(data.inventory,data.materials));
  collect('supplies',validateExpectedSupply({supplies:data.supplies,delays:data.supplyDelays,uses:data.supplyUses,materials:data.materials,orders:data.orders,routes:data.routes}));

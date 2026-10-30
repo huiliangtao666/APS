@@ -11,7 +11,7 @@ const routes = [
 ];
 const times = routes.map(row => ({'产品编号':'P1','工序编号':row['工序编号'],'计算方式':'固定','固定分钟':'12'}));
 const deps = ['设备','模具','工具','人员技能','空间','投料'].map((type, i) => ({'订单编号':'O1','工序编号':routes[i % routes.length]['工序编号'],'资源类型':type,'资源编号':`R${i}`}));
-const base = { products, orders, routes, times, dependencies:deps, machines:[{'设备编号':'R0','工序编号':'OP-A'}], materials:[{'物料编号':'R5'}] };
+const base = { tools:[{'工装编码':'R1'},{'工装编码':'R2'}], products, orders, routes, times, dependencies:deps, machines:[{'设备编号':'R0','工序编号':'OP-A'}], materials:[{'物料编号':'R5'}] };
 
 test('FR-004 accepts arbitrary route IDs and configurable precedence independent of CSV row order', () => {
   assert.deepEqual(validateProcessConfig(base), []);
@@ -69,4 +69,14 @@ test('FR-005 validates unique machine identifiers and supported operation applic
 test('FR-005 rejects fixed-time rows that point to an unconfigured product operation', () => {
   const issues = validateProcessConfig({...base, times:[...times, {'产品编号':'P2','工序编号':'OP-X','计算方式':'固定','固定分钟':'5'}]});
   assert.ok(issues.some(x => x.code === 'INPUT / PROCESS_TIME_REFERENCE'));
+});
+
+// Missing masters were previously accepted: FR013-NONDEVICE-REF-01.
+test('FR013 rejects unknown tool and mold masters while preserving registered references', () => {
+  for (const type of ['工具','模具']) {
+    const dep={'订单编号':'O1','工序编号':'OP-A','资源类型':type,'资源编号':'MISSING'};
+    const issues=validateProcessConfig({...base,dependencies:[dep]});
+    assert.ok(issues.some(x=>x.code==='INPUT / DEPENDENCY_REFERENCE'&&x.table==='dependencies'&&x.row===2&&x.field==='资源编号'));
+    assert.deepEqual(validateProcessConfig({...base,dependencies:[dep],tools:[{'工装编码':'MISSING'}]}),[]);
+  }
 });

@@ -13,7 +13,7 @@ export function inspectSingleCsv(file,def){
  const headers=records[0].cells.map(h=>h.trim()),headerLine=records[0].line;
  headers.forEach((h,i)=>{if(headers.indexOf(h)!==i)add(headerLine,h,'表头重复');if(!def.fields.includes(h))add(headerLine,h,'未知字段，须使用现行模板');});
  def.fields.filter(f=>!(optional[def.key]||[]).includes(f)&&!headers.includes(f)).forEach(f=>add(headerLine,f,'缺少契约字段'));
- sources[def.key]={file:file.name,lines:records.slice(1).map(r=>r.line),headers};
+ sources[def.key]={file:file.name,lines:records.slice(1).map(r=>r.line),headers,originalText:file.text,records:records.slice(1).map(r=>({line:r.line,values:Object.fromEntries(headers.map((h,i)=>[h,r.cells[i]??'']))})),mappings:[],repairs:[]};
  if(issues.length)return {tables,sources,issues};
  tables[def.key]=records.slice(1).map(({cells,line})=>{
   if(cells.length!==headers.length)add(line,'整行',`列数 ${cells.length} 与表头 ${headers.length} 不一致`);

@@ -48,16 +48,29 @@ export function getUsableQualityStatuses(rules = [], materialId = '', at = new D
   } catch { return DEFAULT_USABLE_QUALITY_STATUSES; }
 }
 
+// The caller supplies the existing rule's allowed statuses; no new state mapping.
+export function inventoryEligibility(batch, asOf, usableStatuses) {
+  const at=Date.parse(asOf), reasons=[];
+  if(!Number.isFinite(at)) reasons.push('查询时点无效');
+  if(!usableStatuses.includes(batch['质量状态'])) reasons.push('模拟质量状态不在本规则可用列表');
+  if(!validExpiry(batch['有效期']||'')) reasons.push('有效期无效');
+  else if(Number.isFinite(at)&&batch['有效期']<inventoryBusinessDate(asOf)) reasons.push('已过有效期');
+  const ready=batch['预计可用时间'];
+  if(ready&&(!Number.isFinite(Date.parse(ready))||Date.parse(ready)>at)) reasons.push('尚未到预计可用时间或时间无效');
+  const amount=Number(batch['账面数量']),reserved=Number(batch['已占用数量']);
+  if(!String(batch['账面数量']??'').trim()||!String(batch['已占用数量']??'').trim()||!Number.isFinite(amount)||!Number.isFinite(reserved)||reserved<0||amount<reserved) reasons.push('数量或占用无效');
+  return {eligible:reasons.length===0,reasons};
+}
+// Decimal subtraction avoids 0.3 - 0.1 exposing 0.199999... as usable stock.
+function netQuantity(a,b){
+ const parse=v=>{const m=String(v).match(/^(\d+)(?:\.(\d*))?$/);return m?{n:BigInt(m[1]+(m[2]||'')),scale:(m[2]||'').length}:null;};
+ const x=parse(a),y=parse(b);if(!x||!y)return Math.max(0,Number(a)-Number(b));
+ const scale=Math.max(x.scale,y.scale),n=x.n*10n**BigInt(scale-x.scale)-y.n*10n**BigInt(scale-y.scale);
+ return Math.max(0,Number(n)/10**scale);
+}
 export function queryInventoryAvailability(batches = [], { materialId = '', asOf = new Date().toISOString(), rules = [] } = {}) {
-  const at = Date.parse(asOf);
-  const date = Number.isFinite(at) ? inventoryBusinessDate(asOf) : String(asOf).slice(0, 10);
-
   return batches.filter(batch => !materialId || batch['物料编号'] === materialId).map(batch => {
-    const onHand = Number(batch['账面数量']) || 0;
-    const reserved = Number(batch['已占用数量']) || 0;
-    const readyAt = batch['预计可用时间'] ? Date.parse(batch['预计可用时间']) : -Infinity;
-    const expiry = batch['有效期'] || '';
-    const available = getUsableQualityStatuses(rules,batch['物料编号'],asOf).includes(batch['质量状态']) && (!expiry || (validExpiry(expiry) && expiry >= date)) && (!Number.isFinite(at) || readyAt <= at);
-    return { ...batch, '当前可用数量': available ? Math.max(0, onHand - reserved) : 0, '账面数量': onHand, '已占用数量': reserved };
+    const state=inventoryEligibility(batch,asOf,getUsableQualityStatuses(rules,batch['物料编号'],asOf));
+    return { ...batch, '当前可用数量': state.eligible ? netQuantity(batch['账面数量'],batch['已占用数量']) : 0, '账面数量': Number(batch['账面数量']), '已占用数量': Number(batch['已占用数量']), '不可用原因':state.reasons.join('；') };
   });
 }

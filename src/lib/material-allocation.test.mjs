@@ -61,3 +61,17 @@ test('FR020 feed-date expiry and BOM effective date share the v0.3 factory midni
  const d=fixture();d.inventory[0]['有效期']='2026-11-02';assert.equal(allocator(d).preview(demand(d,'MIX',959),959).ok,true);assert.equal(allocator(d).preview(demand(d,'MIX',960),960).ok,false);
  d.inventory[0]['有效期']='2026-12-31';d.bom.forEach(b=>b['生效日期']='2026-11-03');assert.throws(()=>demand(d,'MIX',959),/已生效/);assert.equal(demand(d,'MIX',960)[0].quantity,325);
 });
+
+test('FR016 P29 collision trace retains every actual original occurrence and excludes unrelated rows',()=>{
+ const d=fixture(),lot=d.inventory[0]['批次编号'];
+ d.inventory.push({...d.inventory[0]});
+ d.supplies=[{'供给编号':'S','批次编号':lot},{'供给编号':'S','批次编号':'UNRELATED'},{'供给编号':'S2','批次编号':lot}];
+ const before=JSON.stringify(d),seen=[];
+ const trace=(table,rows)=>seen.push({table,rows});
+ assert.throws(()=>allocator(d).preview(demand(d),0,trace),/库存与预计供给重复批次/);
+ assert.deepEqual(seen.map(x=>[x.table,x.rows.length]),[['inventory',2],['supplies',2]]);
+ assert.equal(seen[0].rows[0],d.inventory[0]);assert.equal(seen[0].rows[1],d.inventory.at(-1));
+ assert.equal(seen[1].rows[0],d.supplies[0]);assert.equal(seen[1].rows[1],d.supplies[2]);
+ assert.equal(JSON.stringify(d),before);
+ d.supplies=[];const clean=[];allocator(d).preview(demand(d),0,(...x)=>clean.push(x));assert.deepEqual(clean,[]);
+});

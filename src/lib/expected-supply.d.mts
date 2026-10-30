@@ -1,10 +1,11 @@
+import type {RecordRef} from './problem-records.mjs';
 type Row = Record<string, string>;
 type Task = { orderId: string; operation: string; id: string; productId: string; machine: string; start: number; end: number; duration: number; predecessor: string };
 export type ResolvedSupply = Row & { '延期记录': Row[] };
 export type SupplyCondition = ResolvedSupply & { '条件说明': string };
 export const PLAN_TIME_ORIGIN: string;
 export function validSupplyTime(raw: string): boolean;
-export function validateExpectedSupply(input?: { supplies?: Row[]; delays?: Row[]; uses?: Row[]; materials?: Row[]; orders?: Row[]; routes?: Row[] }): { code: string; message: string }[];
+export function validateExpectedSupply(input?: { supplies?: Row[]; delays?: Row[]; uses?: Row[]; materials?: Row[]; orders?: Row[]; routes?: Row[] }): { code: string; message: string;table:string;row:number;field:string;relatedRecords:RecordRef[];missingTarget?:{table:string;key?:string} }[];
 export function resolveExpectedSupply(supplies?: Row[], delays?: Row[]): ResolvedSupply[];
 export function supplyEarliestMinute(orderId: string, operation: string, supplies?: ResolvedSupply[], uses?: Row[]): number;
 export function buildSupplyConditions(tasks?: Task[], supplies?: ResolvedSupply[], uses?: Row[]): SupplyCondition[];

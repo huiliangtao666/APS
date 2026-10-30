@@ -1,4 +1,4 @@
-import {inventoryBusinessDate} from './inventory.mjs';
+import {inventoryBusinessDate,inventoryEligibility} from './inventory.mjs';
 import { PLAN_TIME_ORIGIN, resolveExpectedSupply } from './expected-supply.mjs';
 // Exact rational arithmetic: no tolerance, display rounding or repeated float deductions.
 const q = value => {
@@ -26,15 +26,19 @@ export function materialPolicy(data,at) {
  const r=(data.rules||[]).find(r=>r['规则编号']==='MATERIAL'&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at)));
  if(!r)return null;try{return JSON.parse(r['参数JSON']||'{}');}catch{return null;}
 }
-export function calculateMaterialDemand(data,order,operation,minute,remainingKg) {
+export function calculateMaterialDemand(data,order,operation,minute,remainingKg,trace=()=>{}) {
+ trace('orders',(data.orders||[]).includes(order)?[order]:[]);
  const product=(data.products||[]).find(p=>p['产品编号']===order['产品编号']);
+ trace('products',product?[product]:[]);
  const fail=message=>{throw Error(`订单 ${order['订单编号']} / 工序 ${operation}：${message}`);};
  const all=(data.bom||[]).filter(b=>b['产品编号']===order['产品编号']&&b['生效日期']<=dateAt(minute));
+ trace('bom',all);
  if(!all.length)fail('缺少已生效 BOM；物料未齐套');
  const latest=all.map(b=>b['生效日期']).sort().at(-1), versions=new Set(all.filter(b=>b['生效日期']===latest).map(b=>b['版本编号']));
  if(versions.size!==1)fail('同日存在多个 BOM 版本，不能推断采用版本');
  const bom=all.filter(b=>b['版本编号']===[...versions][0]);
  const required=(data.dependencies||[]).filter(d=>d['订单编号']===order['订单编号']&&d['工序编号']===operation&&d['资源类型']==='物料');
+ trace('dependencies',required);
  for(const d of required)if(!bom.some(b=>b['投料工序编号']===operation&&b['物料编号']===d['资源编号']))fail(`物料依赖 ${d['资源编号']} 缺少 BOM 投料配置`);
  let kg=q(order['合格需求']),completed=q(order['已完成合格数量']||'0');
  if(cmp(completed,kg)>0)fail('已完成合格数量超过需求');
@@ -74,12 +78,17 @@ export function createMaterialAllocator(data,policy) {
  const futureMinutes=[...(data.inventory||[]).map(b=>b['预计可用时间']),...resolved.map(s=>s['生效可用时间'])].filter(Boolean).map(t=>(Date.parse(t)-Date.parse(PLAN_TIME_ORIGIN))/60000).filter(Number.isFinite).sort((a,b)=>a-b);
  return {
   futureMinutes,
-  preview(demands,minute){
-   if(collisions.length)throw Error('库存与预计供给重复批次：'+collisions.map(s=>s['批次编号']).join('、'));
+  preview(demands,minute,trace=()=>{}){
+   if(collisions.length){
+    // Resolve preserves supply occurrence order; trace original inputs, never the derived rows.
+    trace('inventory',(data.inventory||[]).filter(b=>collisions.some(s=>s['批次编号']===b['批次编号'])));
+    trace('supplies',(data.supplies||[]).filter((_s,i)=>collisions.includes(resolved[i])));
+    throw Error('库存与预计供给重复批次：'+collisions.map(s=>s['批次编号']).join('、'));
+   }
    const baseGeneration=generation;let committed=false;const staged=new Map(used),rows=[];
    for(const demand of demands){
     let left=fromExact(demand.exactQuantity);const allocations=[];
-    const inventory=(data.inventory||[]).filter(b=>b['物料编号']===demand.materialId&&policy['可用状态'].includes(b['质量状态'])&&b['有效期']>=dateAt(minute)&&(!b['预计可用时间']||Date.parse(b['预计可用时间'])<=Date.parse(feedTime(minute)))).sort((a,b)=>a['有效期'].localeCompare(b['有效期'])||a['批次编号'].localeCompare(b['批次编号']));
+    const inventory=(data.inventory||[]).filter(b=>b['物料编号']===demand.materialId&&inventoryEligibility(b,feedTime(minute),policy['可用状态']).eligible).sort((a,b)=>a['有效期'].localeCompare(b['有效期'])||a['批次编号'].localeCompare(b['批次编号']));
     const candidates=inventory.map(b=>({key:'inventory:'+b['批次编号'],lotId:b['批次编号'],capacity:sub(q(b['账面数量']),q(b['已占用数量'])),expiry:b['有效期'],quality:b['质量状态'],readyAt:b['预计可用时间']||'',conditional:false}));
     if(policy['允许预计供给'])for(const use of data.supplyUses||[]){
      if(use['订单编号']!==demand.orderId||use['工序编号']!==demand.operation)continue;
@@ -121,15 +130,17 @@ export function remainingExecutionDemand(data,order,operation,minute){
 
 // Scrap is cumulative unusable operation output in the order unit, separate from usable output.
 // This explicit simulation assumption applies only to this operation; never to other stages.
-export function executionMaterialDemand(data,order,operation,minute){
+export function executionMaterialDemand(data,order,operation,minute,trace=()=>{}){
+ trace('orders',order?[order]:[]);
  const fact=(data.executionFacts||[]).find(f=>f['订单编号']===order['订单编号']&&f['工序编号']===operation);
+ trace('executionFacts',fact?[fact]:[]);
  const scrap=q(fact?.['累计报废数量']||'0');
- if(cmp(scrap,zero)===0n)return calculateMaterialDemand(data,order,operation,minute);
+ if(cmp(scrap,zero)===0n)return calculateMaterialDemand(data,order,operation,minute,undefined,trace);
  if(fact['报废补做口径']!=='按本工序BOM补做')throw Error('报废补做口径未核对，禁止推断补料');
  const demand=q(order['合格需求']);if(cmp(demand,zero)<=0)throw Error('报废订单需求无效');
  // Re-evaluate the original BOM with an exact expanded order-unit quantity so package rounding,
  // declared yield and kg/piece/bag conversion remain in the canonical demand calculator.
  const expanded=add(demand,scrap);let n=expanded.n%expanded.d;let text=String(expanded.n/expanded.d);
  if(n){text+='.';while(n){n*=10n;text+=String(n/expanded.d);n%=expanded.d;}}
- return calculateMaterialDemand(data,{...order,'合格需求':text},operation,minute).map(row=>({...row,formula:row.formula+'；显式模拟仅本工序（需求+累计报废）重新按BOM计算；非质量确认'}));
+ return calculateMaterialDemand(data,{...order,'合格需求':text},operation,minute,undefined,trace).map(row=>({...row,formula:row.formula+'；显式模拟仅本工序（需求+累计报废）重新按BOM计算；非质量确认'}));
 }

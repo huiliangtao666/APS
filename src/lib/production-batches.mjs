@@ -1,3 +1,4 @@
+import {sourceRefs} from './problem-records.mjs';
 import {quantityMath as Q, calculateMaterialDemand} from './material-allocation.mjs';
 import {isOrderSchedulable} from './orders.mjs';
 export {batchParameters,activeBatchRule} from './batch-policy.mjs';
@@ -5,23 +6,31 @@ export {batchParameters,activeBatchRule} from './batch-policy.mjs';
 // kg/BOM total input is explicitly selected; arbitrary operation load nodes remain blocked.
 export function prepareProductionBatches(source,orders,minute){
  const records=[],groups=[],findings=[];let serial=0,productionCount=0;
- const issue=(order,message)=>findings.push({code:'UNPLANNED / BATCH_CONFIG',message:`订单 ${order['订单编号']}：${message}`,taskIds:[],context:{orderId:order['订单编号']}});
+ let members=[];
+ const trace=(table,rows)=>members.push(...sourceRefs(table,rows,source[table]||[]));
+ const issue=(order,message)=>findings.push({relatedRecords:[...members],code:'UNPLANNED / BATCH_CONFIG',message:`订单 ${order['订单编号']}：${message}`,taskIds:[],context:{orderId:order['订单编号']}});
  for(const order of orders.filter(isOrderSchedulable)){
+  members=[];trace('orders',[order]);
   try{
    if(order['数量单位']!=='kg')throw Error('拆批仅支持显式 kg 订单；其他单位的拆分粒度未决定');
    const remaining=Q.sub(Q.q(order['合格需求']),Q.q(order['已完成合格数量']||'0'));if(Q.cmp(remaining,Q.zero)===0n)continue;
    const product=source.products.find(p=>p['产品编号']===order['产品编号']);
+   trace('products',product?[product]:[]);
    const input=Q.div(remaining,Q.q(product['总收率']));
    const route=source.routes.filter(r=>r['产品编号']===order['产品编号']);
+   trace('routes',route);
    if(!route.length)throw Error('缺少路线');
    const machines=route.map(op=>{
     const dep=source.dependencies.filter(d=>d['订单编号']===order['订单编号']&&d['工序编号']===op['工序编号']&&d['资源类型']==='设备');
+    trace('dependencies',dep);
     if(dep.length!==1)throw Error('设备依赖必须唯一');
     const machine=source.machines.find(m=>m['设备编号']===dep[0]['资源编号']);
+    trace('machines',machine?[machine]:[]);
     if(!machine||machine['装载计量基准']!=='BOM总投入')throw Error('设备须显式采用 BOM总投入；其他装载重量节点未决定');
     const low=Q.q(machine['最小装载kg']),high=Q.q(machine['最大装载kg']);
     if(Q.cmp(high,Q.zero)<=0n||Q.cmp(low,high)>0n)throw Error('装载上下限须满足 0 ≤ 最小 ≤ 最大且最大 > 0');
     const batch=(source.batchResources||[]).find(r=>r['资源编号']===machine['设备编号']&&r['资源类型']==='批处理装载');
+    trace('batchResources',batch?[batch]:[]);
     if(batch&&(!op['程序编号']?.trim()||!batch['允许程序'].split(';').includes(op['程序编号'])))throw Error(`工序 ${op['工序编号']} 缺少设备允许的显式程序；不能推断兼容`);
     return {machine,low,high,batch};
    });
@@ -33,13 +42,13 @@ export function prepareProductionBatches(source,orders,minute){
    if(n>1&&order['是否允许拆分']!=='是')throw Error('超过最大装载且订单不允许拆分');
    const kg=Q.div(remaining,Q.q(n)),load=Q.div(input,Q.q(n));
    // Reuse exact FR020 BOM validation at every operation. No inferred recipe mass.
-   const raw=route.flatMap(op=>calculateMaterialDemand(source,order,op['工序编号'],minute)).filter(d=>d.unit==='kg');
+   const raw=route.flatMap(op=>calculateMaterialDemand(source,order,op['工序编号'],minute,undefined,trace)).filter(d=>d.unit==='kg');
    const rawTotal=raw.reduce((sum,d)=>Q.add(sum,Q.fromExact(d.exactQuantity)),Q.zero);
    if(Q.cmp(rawTotal,input)!==0n)throw Error('装载需完整仅损失原料 BOM，总投入须与原料需求一致');
    // Existing packaging integer/rounding restrictions still apply to each production batch.
    for(const op of route){
-    const whole=calculateMaterialDemand(source,order,op['工序编号'],minute);
-    const part=calculateMaterialDemand(source,order,op['工序编号'],minute,Q.exact(kg));
+    const whole=calculateMaterialDemand(source,order,op['工序编号'],minute,undefined,trace);
+    const part=calculateMaterialDemand(source,order,op['工序编号'],minute,Q.exact(kg),trace);
     if(part.some((d,i)=>Q.cmp(Q.mul(Q.fromExact(d.exactQuantity),Q.q(n)),Q.fromExact(whole[i].exactQuantity))!==0n))throw Error('拆批后包材取整改变订单总需求；跨批取整分配未决定，拒绝自动增加或减少用料');
    }
    const signature=JSON.stringify([order['产品编号'],source.bom.filter(b=>b['产品编号']===order['产品编号']),route,machines.map(m=>m.machine['设备编号'])]);
@@ -54,7 +63,9 @@ export function prepareProductionBatches(source,orders,minute){
    }
   }catch(e){issue(order,e.message);}
  }
- const data=structuredClone(source);data.orders=[];data.dependencies=[];data.supplyUses=[];
+ const data=structuredClone(source);
+ const originals=Object.fromEntries(Object.keys(source).filter(k=>Array.isArray(source[k])).map(k=>[k,new Map(data[k].map((row,i)=>[row,source[k][i]]))]));
+ data.orders=[];data.dependencies=[];data.supplyUses=[];
  const byId=new Map();
  for(const g of groups){
   g.load=Q.num(g.exactLoad);g.exactInputKg=Q.exact(g.exactLoad);g.minimum=Q.num(g.low);g.maximum=Q.num(g.high);
@@ -70,6 +81,7 @@ export function prepareProductionBatches(source,orders,minute){
   }
  }
  return {data,orders:data.orders,findings,records,groups,byId,
+  originalRecords(table,rows){return rows.map(row=>originals[table]?.get(row)).filter(Boolean);},
   demands(order,operation,at){return byId.get(order['订单编号']).members.flatMap(m=>{
    const whole=calculateMaterialDemand(source,m.order,operation,at);
    const part=calculateMaterialDemand(source,m.order,operation,at,m.qualifiedKg);
