@@ -526,7 +526,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR013受影响需求增量；不等于已实现或UAT通过",
-      "implementation_status": "FR013 fixed 1cdf394e original02/04 independent 45 PASS; original07/08 13 PASS/2 product FAIL. PM dispatched first Dev validation repair dlv_50c139f5-bc21-4c22-adad-294f147b9055 (SENT, not delivered); full FR013/CR NOT_READY.",
+      "implementation_status": "FR013 original05/06 a49edb1d legacy v1 no-op repair delivered and independently passed; R-C08/09 same defect closed round1. Other original categories, R-C03 positive, FR016 shared duties and full FR013/CR remain NOT_READY.",
       "primary_requirements": [
         "FR-013"
       ],
@@ -544,7 +544,7 @@
       "acceptance_delta": "CSV模板/预览/导入按批准配置校验：小数袋支拒绝，总收率>100%拒绝；合法配置保存刷新后生效，非法/越权整批零写入；保留旧确认/历史。",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006",
       "related_issue_urls": [],
-      "acceptance_result": "Fixed 1cdf394e: original02/04 scoped PASS 45/45; original07/08 13 PASS/2 FAIL. CR integer bag count and total yield <=100% not yet accepted. Prior PASS remains on original SHA; full CR NOT_READY; Dev repair delivered 0/2.",
+      "acceptance_result": "a49edb1d DEF-V1-NOOP-01 round1 independent 25/25 PASS on legacy v1 no-op and impacted regression; R-C08/09 same defect closed. Prior bd6f9fab and c70d6607 conclusions remain on original SHAs; no full CR acceptance, FR013 NOT_READY, UAT01/11 WAITING_DEPENDENCIES.",
       "limitations": "当前两项产品FAIL已由独立Test确认，修复交付0/最多2；未批准其他默认值，旧PASS留原SHA，整卡/UAT未完成。",
       "history": [
         {
@@ -561,6 +561,36 @@
           "date": "2026-10-30",
           "event_key": "issue4:fr013:0708:independent:1cdf394e:r1",
           "event": "07/08 independent 13 PASS/2 product FAIL: 8.5 bag count and 1.01 total yield accepted by preview"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "dlv_5f136d17-d9da-4670-9f09-6caaa5e3c545:r1",
+          "event": "bd6f9fab original05/06 Test1 R-C01..10 7 PASS/3 PARTIAL/0 product FAIL; old SHA only",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6519250588"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "issue4:fr013-p10:resource-map-integration:test2:bd6f9fabe8354432e9c67b52219dc26989c2761d:r1",
+          "event": "bd6f9fab Test2 original05/06 resource-map integration 11/11 independent PASS, 0 product FAIL",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6519250588"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "issue4:fr013:rc10-native-filename:test2:bd6f9fabe8354432e9c67b52219dc26989c2761d:r1",
+          "event": "bd6f9fab Test2 R-C10 native filename PASS in Chrome156; Chromium141 compatibility observation; old SHA conclusion now 8 PASS/2 PARTIAL",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6519425332"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "dlv_c76969f4-9d99-4082-91fa-4d3efeff98db:r1",
+          "event": "c70d6607 multi-source same-entity Dev bounded selftest PASS; independent Test dlv_fe220c7f SENT/EXECUTING, not a new product PASS; full CR NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6519739923"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "dlv_ef297db0-49eb-450a-b7f7-4b26b4ffec52:r1",
+          "event": "a49edb1d independent Test 25/25 PASS; same DEF-V1-NOOP-01 round1 closed for R-C08/09 legacy v1 no-op compatibility; full FR013/CR NOT_READY, UAT01/11 WAITING_DEPENDENCIES",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6520196323"
         }
       ],
       "dev_delivery": "dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1",
@@ -569,9 +599,9 @@
       "code_sha": "1cdf394eb954cd6ff15a48cc052edb64f6f093b4",
       "code_branch": "feat/fr-013-016-main-batch (fixed historical SHA; head advanced)",
       "dev_report": "",
-      "test_report": "",
+      "test_report": "APS-Test/Issue4-FR013-DEF-V1-NOOP-01-a49edb1d-Test1-r1-REPORT.md",
       "design_commit": "",
-      "repair_delivery": "",
+      "repair_delivery": "dlv_d108b114-edb2-4041-a2e9-4ab6765b976b:r1",
       "test_contract": ""
     },
     {
