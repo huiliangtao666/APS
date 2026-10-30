@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "P10 fixed42a35d07 independent S-P01..10 PASS; H-P01/02/03/05/06/07/08/09/10 PASS, H-P04 PARTIAL pending personnel outside-task early/late rule; 0 new product FAIL, +0 repair. Full FR007/022/CR and UAT NOT_READY.",
+      "acceptance_result": "P10 fixed42a35d07 independent S-P01..10 PASS; H-P01/02/03/05/06/07/08/09/10 PASS, H-P04 PARTIAL pending personnel outside-task early/late rule; 0 new product FAIL, +0 repair. Full FR007/022/CR and UAT NOT_READY; FR006 7e4d4d0 Test2 window/checker and joint 14/14 scoped PASS; T11/T12 UI/history PARTIAL, Test1 config/CSV pending; FR006 and full CR NOT_READY",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -180,6 +180,11 @@
           "event_key": "issue3:fr006:main-ui-csv:v0.3:3d164d5:r1",
           "event": "FR006 main UI at 3d164d5: same entry gap independently reproduced by Test1/Test2; prototype CSV 6 PASS does not count as main product PASS; Dev R1 dispatched, full CR NOT_READY; no duplicate defect, repair round increment 0 until repair delivered",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6512915645"
+        },
+        {
+          "date": "2026-10-30",
+          "event_key": "dlv_0124f3c9-04dd-492c-85a9-b6837582ea27:r1",
+          "event": "FR006 fixed 7e4d4d0 Test2 Worker/checker capacity-window independent PASS; affected joint 14/14 PASS, 31/31 Node, 0 product FAIL. T11/T12 Worker/boundary subclaims PASS while actual UI/history remains PARTIAL; card NOT_READY, UAT WAITING_DEPENDENCIES. APS-Test1 same SHA config/CSV test in progress. Issue3 PM record https://github.com/huiliangtao666/APS/issues/3#issuecomment-6520667127."
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
@@ -219,7 +224,7 @@
       ],
       "repair_runtime_blocker": "Original dlv_105360d7-1929-489d-85b3-d769a1e15db6 failed server_overloaded at 2026-10-29T03:14:20.564Z; recovery dlv_197f09db-af6a-4cbf-96cf-16ae535359c2; infrastructure retry does not increment defect repair round",
       "repair_original_delivery": "dlv_105360d7-1929-489d-85b3-d769a1e15db6",
-      "acceptance_status": "FR017当前适用实现责任独立PASS；FR007/022及完整CR和业务UAT未通过；原S06/S07与D01-D03有限结果保留",
+      "acceptance_status": "FR017当前适用实现责任独立PASS；FR007/022及完整CR和业务UAT未通过；原S06/S07与D01-D03有限结果保留；FR006 7e4d4d0 Worker/checker定向PASS，UI/历史及配置CSV待补，整卡NOT_READY",
       "test_completed_at": "2026-10-29T11:42:40+08:00",
       "test_matrix_summary": {
         "PASS": 25,
