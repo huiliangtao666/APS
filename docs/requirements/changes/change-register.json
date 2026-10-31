@@ -1230,7 +1230,7 @@
       "approved_on": "2026-10-31",
       "effective": true,
       "implementation_authorized": true,
-      "implementation_status": "DESIGN_DISPATCHED；首批开发WAIT_DESIGN/WAIT_CANDIDATE",
+      "implementation_status": "D0总体设计待交；QA补丁保护完成；S1/S2 WAIT_DESIGN/WAIT_CANDIDATE",
       "registration_status": "REGISTERED",
       "event_key": "aps:user-cr:uiux-flow-design-high-priority:20261031:r1",
       "source_delivery": "dlv_b09b63c9-ef7c-4e7d-8442-ffb4eb879198",
@@ -1328,13 +1328,13 @@
       "qa_delivery": null,
       "code_sha": null,
       "design_commit": null,
-      "acceptance_result": "NOT_EXECUTED；历史QA限定通过留原SHA；无新增产品PASS/FAIL或修复轮次",
+      "acceptance_result": "仅原补丁保护PASS；产品测试/UAT未执行，整卡NOT_READY；历史PASS保留原SHA；修复增量0",
       "phasing": {
         "phase_1": "优先覆盖 PM 核实已完成测试且在统一候选版本可复现的 UAT 场景／断言；从 UAT01～05 核对起，不直接声称这些场景全部通过。必须交付可操作的完整小闭环而非断开的页面。",
         "phase_2": "其余未满足测试／数据／业务裁决条件的场景形成阶段清单、前置条件、设计占位、owner 及验收映射；不得把未批准业务能力混入 UI 改版"
       },
       "plan_impact": "总体设计现在执行；S1 Dev流程壳/配置维护返回，S2 Test独立状态/定位模型及自测，S3单候选整合后QA；实际文件边界在开工前核定",
-      "recovery_condition": "D0首批设计/映射完成，B08共享文件释放，QA未提交补丁保护及非main提交push，历史限定断言在统一候选复现、入口数据/配置/任务级证据齐备后PM启动首批；QA仅具体验收入口齐备派",
+      "recovery_condition": "D0设计/映射、B08共享文件释放、冲突吸收及统一可复现非main候选、具体文件互斥由PM核定；补丁保护门槛已完成",
       "limitations": "Design联系例外仅本CR；Test2暂停；不授权新业务默认、DEC04/05/06新应用、B02预占、真实D3、main合并或发布；共享免登录不得包装个人审批",
       "source_request_sha256": "58a2f9bbb2dfe1bda8032b3a3b181248ffb83b1ca02057399ff18f5cdd0b7d04",
       "source_manual_sha256": "6ddf3e5bf53889d90009aa67e5f94c62966b821988d40db13676816aee2a398c",
@@ -1344,7 +1344,60 @@
           "event_key": "aps:user-cr:uiux-flow-design-high-priority:20261031:r1",
           "event": "用户授权CR正式登记；Design已派SENT；Dev/Test协调保护QA补丁；首批开发待设计及候选核定"
         }
-      ]
+      ],
+      "scoped_execution_events": [
+        {
+          "event_key": "dlv_a0729164-52bf-46ad-97b8-520a591971e4:r3",
+          "source_notification": "dlv_96bbc3bc-c886-487a-8070-c8c14e071f37",
+          "protection_sha": "d462fb0a5c8cf5275c4fb97abec9c1476cedbb60",
+          "protection_branch": "dev/uiux-flow-qa-snapshot-protection-r3",
+          "parent": "aff693e826fd9d3d8346b738a6fb81db58a59ee2",
+          "source_parent": "93d68e183850dab17758face77c77d89a64e208e",
+          "scope": "EXACT_QA_SNAPSHOT_PROTECTION_ONLY",
+          "result": "PASS",
+          "pm_checks": {
+            "dev_outer_hashes": 3,
+            "qa_originals": 4,
+            "crc": "PASS",
+            "internal_hashes": 62,
+            "manifest_handoff": "PASS",
+            "patch_and_fingerprint": "PASS",
+            "base_git_blobs": 9,
+            "remote_changed_files": 13,
+            "remote_blob_hashes": 13,
+            "independent_fetch": "fresh empty repository from GitHub depth2"
+          },
+          "product_tests": "NOT_EXECUTED_PROTECTION_ONLY",
+          "new_uat_verdict": "NOT_EXECUTED",
+          "unified_candidate_sha": null,
+          "design_document_sha": null,
+          "whole_card": "NOT_READY",
+          "repair_round_increment": 0,
+          "processing": "PROCESSED",
+          "issue": "https://github.com/huiliangtao666/APS/issues/45",
+          "project_status": "In progress",
+          "priority": "P1",
+          "owner": "APS-PM",
+          "protection_task": "Done (protection only)",
+          "s1_s2": "NOT_STARTED",
+          "next_owner": "APS-PM",
+          "remaining": "D0设计/映射、B08共享文件释放、冲突处理与统一可复现非main候选、具体文件互斥；PM核门槛后安排Dev/Test",
+          "b08_qa_delivery": "dlv_40f55184-197e-4c3d-aa44-750b0d9e3f2d",
+          "b08_qa_status_observed": "executing",
+          "new_dispatches": 0,
+          "receipt_channel": "one-shot result hook; no separate ACK delivery"
+        }
+      ],
+      "qa_patch_protection": {
+        "status": "PASS_EXACT_SNAPSHOT_ONLY",
+        "branch": "dev/uiux-flow-qa-snapshot-protection-r3",
+        "sha": "d462fb0a5c8cf5275c4fb97abec9c1476cedbb60",
+        "parent": "aff693e826fd9d3d8346b738a6fb81db58a59ee2",
+        "event_key": "dlv_a0729164-52bf-46ad-97b8-520a591971e4:r3",
+        "unified_candidate_sha": null,
+        "product_test_verdict": "NOT_EXECUTED_PROTECTION_ONLY",
+        "new_uat_verdict": "NOT_EXECUTED"
+      }
     }
   ]
 }
