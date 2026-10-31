@@ -3160,7 +3160,7 @@
         "explicit_zero_override_distinct_from_inherit": true
       },
       "calculation_contract_status": "现有同基准kg生产损耗模型明确，可据受控公式开发自测；原料运输损耗上游应用环节待明确。非同单位/非质量守恒/新增工序加料不自动扩围。",
-      "implementation_status": "NOT_DISPATCHED新公式：先将已确认投入/产出边界固化为受控验收依据；未确定部分不擅定公式，不改变历史固定SHA证据",
+      "implementation_status": "SENT：APS-Test组件/域实现自测；APS-Dev主应用接入；尚无产品交付/QA结论",
       "business_questions": [],
       "original_bom_example_evidence": {
         "sha": "172b415122472b933fc9935b5537697ebc03ccfc",
@@ -3215,7 +3215,81 @@
         "no_double_count": "产品总收率从各物料生产损耗派生，不再并用旧固定总收率重复扣损耗；原料与运输损耗不纳入此生产收率"
       },
       "b09_business_gate": "READY_USER_CONFIRMED；剩余开发自测/FR011/AC22/适用QA由团队执行，不等业务方重复解释",
-      "nonblocking_future_details": "若另行实现原料/运输损耗上游消耗的特殊环节/数量基数，再按明确配置合同处理；不再列为当前B09业务验收前置，不擅自推三类相加或连乘。"
+      "nonblocking_future_details": "若另行实现原料/运输损耗上游消耗的特殊环节/数量基数，再按明确配置合同处理；不再列为当前B09业务验收前置，不擅自推三类相加或连乘。",
+      "dispatches": {
+        "APS-Dev": {
+          "id": "dlv_06b891d1-10ea-447b-94ee-ccf54999148f",
+          "status": "SENT/WAITING"
+        },
+        "APS-Test": {
+          "id": "dlv_8e6606f9-96c4-468f-b6f2-746954b681fa",
+          "status": "SENT/WAITING"
+        }
+      },
+      "product_base_sha": "172b415122472b933fc9935b5537697ebc03ccfc"
+    },
+    {
+      "id": "CR-PACK-BATCH-20261031",
+      "title": "包装工时速率配置、最小包装单位取整及不足批生产与合并",
+      "baseline_id": "APS-BL-001",
+      "from_version": "v0.3",
+      "requested_on": "2026-10-31",
+      "requested_by": "项目用户（本会话）",
+      "request_quote": "包装按照工时*速率计算，工时和速率是可配置项。包材按照最小包装单位取整。不足一批可以生产，可以合并。",
+      "approval_status": "已明确并授权上述具体能力；旧A01/A02所涉本三项业务方向解除等待，不等产品实现或验收",
+      "effective": true,
+      "effective_scope": "包装数量=工时×速率；两项可配置；包材按最小包装单位向上取整以覆盖需求；不足一批可生产且可兼容合并。仍受既有资源容量/程序兼容/投入产出守恒/等待/历史保护；不扩任意新装载节点、物理单位换算或DEC04-06全部应用",
+      "primary_requirements": [
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-020",
+        "FR-021",
+        "FR-022"
+      ],
+      "related_rules": [
+        "BR-02",
+        "BR-03",
+        "BR-04",
+        "BR-05",
+        "BR-10",
+        "BR-11",
+        "BR-12",
+        "BR-18"
+      ],
+      "acceptance_ids": [
+        "AC-08",
+        "AC-09",
+        "AC-13",
+        "AC-14",
+        "AC-17",
+        "AC-18",
+        "AC-32"
+      ],
+      "uat_ids": [
+        "UAT-12",
+        "UAT-13",
+        "UAT-14"
+      ],
+      "calculation_contract": {
+        "packaging_quantity": "Q=T*R，工时与速率使用匹配的时间单位；数量基准/单位显式配置",
+        "packaging_duration": "给定目标数量和显式正速率时T=Q/R；沿已有时间精度规则，不自行发明业务取整",
+        "rate_efficiency": "不额外要求或擅自叠乘未配置效率系数；不再将缺独立效率视为业务阻塞",
+        "packaging_material_rounding": "以显式最小包装单位u覆盖物料需求：ceil(required/u)*u；未满最小单位向上取整，不产生不足用量",
+        "rounding_boundary": "实际合并包装作业/分开包装作业的具体配置和来源须明示；不得因技术拆分反复取整，真实分开作业不无依据共享余数",
+        "partial_batch": "不足满载可生产，使用实际数量，不自动补足超产",
+        "merge": "允许在既有程序/产品兼容和资源容量等全部条件下合并，保留来源成员/订单/数量；不是任意不兼容混合",
+        "fixed_program_guard": "不足批或合并不自动缩短已有固定热加工/冷却程序；包装可配置工时模型单列"
+      },
+      "configuration_defaults": "具体真实工时/速率/包装单位可先显式可替换mock，非现场批准默认；沿用已批准配置保存/版本/冻结原则",
+      "business_gate": "本三项READY；不再以固定PACK50只mock、尾批必须满批、合并未许可阻塞明确开发",
+      "implementation_status": "NOT_DISPATCHED_AS_NEW_ROLE_TASK；拟追加现有APS-Dev B12串行范围，Test在途BOM损耗不重复派",
+      "issue_url": "https://github.com/huiliangtao666/APS/issues/39",
+      "related_issue_urls": [
+        "https://github.com/huiliangtao666/APS/issues/40"
+      ],
+      "product_sha": null,
+      "acceptance_result": "NOT_EXECUTED新范围；旧UAT PASS保留原SHA"
     }
   ]
 }
