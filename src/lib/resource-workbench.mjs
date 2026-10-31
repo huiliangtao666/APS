@@ -1,5 +1,6 @@
 import {verifyResourcePolicies} from './verify-resource-policies.mjs';
 import {resourceLoad} from './resource-load.mjs';
+import {personnelCandidates,skillsOf} from './resource-policies.mjs';
 
 export const resourceTables={originalResourceEvents:'MOCK取得归还释放账',tools:'工装与套数',resourceClaims:'取得与归还窗口',personnelPools:'共享人员池',personnelGroups:'人数、技能与班次',dependencies:'任务人数与参与窗口',skillSubstitutions:'有向技能替代',rules:'资源规则启用'};
 export const terminalResourceRun=run=>['completed','partial','failed','cancelled','timed_out'].includes(run.status);
@@ -25,15 +26,32 @@ export function resourceRunView(run,snapshot,plan){
 
 export function resourceTaskSources(view,taskIds){
  const tasks=view.plan.tasks.filter(t=>taskIds.includes(t.id)),input=view.snapshot.originalInput,refs=[];
- const dependencies=(input.dependencies||[]).filter(r=>tasks.some(t=>t.orderId===r['订单编号']&&t.operation===r['工序编号']));
- const originalDependencies=(input.originalDependencies||[]).filter(r=>tasks.some(t=>t.orderId===r['订单编号']&&t.operation===r['工序编号']));
- const claims=(input.resourceClaims||[]).filter(r=>tasks.some(t=>t.orderId===r['订单编号']&&t.operation===r['工序编号']));
+ // Failed tasks have no reservation or task geometry. Use only the producer's
+ // explicit structured context; never parse an identifier or translated text.
+ const contexts=(view.findings||[]).filter(f=>(f.taskIds||[]).some(id=>taskIds.includes(id))&&f.context?.orderId&&f.context?.operation).map(f=>({orderId:f.context.orderId,operation:f.context.operation,machine:f.context.machineId}));
+ const selected=[...tasks,...contexts],same=r=>selected.some(t=>t.orderId===r['订单编号']&&t.operation===r['工序编号']);
+ const dependencies=(input.dependencies||[]).filter(same);
+ const originalDependencies=(input.originalDependencies||[]).filter(same);
+ const claims=(input.resourceClaims||[]).filter(same);
  const reservations=view.reservations.filter(r=>(r.taskIds||[r.taskId]).some(id=>taskIds.includes(id)));
- const resourceMappings=(input.resourceMappings||[]).filter(m=>m['来源类别']==='originalTools'&&reservations.some(r=>r.type==='工装'&&r.resourceId===m['运行编号']));
- const originalTools=(input.originalTools||[]).filter(t=>resourceMappings.some(m=>m['来源编号']===t['资源编号']));
- for(const [table,rows] of Object.entries({originalDependencies,dependencies,resourceClaims:claims,originalTools,resourceMappings,tools:(input.tools||[]).filter(t=>reservations.some(r=>r.type==='工装'&&r.resourceId===t['工装编码'])),personnelGroups:(input.personnelGroups||[]).filter(g=>reservations.some(r=>r.type==='人员'&&r.resourceId===g['人员组编号'])),personnelPools:(input.personnelPools||[]).filter(p=>reservations.some(r=>r.poolId===p.poolId))}))for(const row of rows){
+ const personnelIds=new Set([...dependencies.filter(r=>r['资源类型']==='人员技能').flatMap(personnelCandidates),...reservations.filter(r=>r.type==='人员').map(r=>r.resourceId)]);
+ const toolIds=new Set([...claims.filter(r=>r['资源类型']==='工装').map(r=>r['资源编号']),...reservations.filter(r=>r.type==='工装').map(r=>r.resourceId)]);
+ const personnelGroups=(input.personnelGroups||[]).filter(g=>personnelIds.has(g['人员组编号']));
+ const poolIds=new Set(personnelGroups.map(g=>g.poolId).filter(Boolean));
+ // Mapping is the only authority connecting original05/06 and runtime IDs.
+ const resourceMappings=(input.resourceMappings||[]).filter(m=>m['来源类别']==='originalTools'?toolIds.has(m['运行编号']):m['来源类别']==='originalPersonnel'&&personnelIds.has(m['运行编号']));
+ const originalTools=(input.originalTools||[]).filter(t=>resourceMappings.some(m=>m['来源类别']==='originalTools'&&m['来源编号']===t['资源编号']));
+ const originalPersonnel=(input.originalPersonnel||[]).filter(g=>resourceMappings.some(m=>m['来源类别']==='originalPersonnel'&&m['来源编号']===g['人员组编号']));
+ const machines=(input.machines||[]).filter(m=>selected.some(t=>t.machine===m['设备编号']));
+ const calendars=new Set(machines.map(m=>m['日历编号']?.trim()||input.calendars?.[0]?.['日历编号']));
+ const skillSubstitutions=(input.skillSubstitutions||[]).filter(s=>dependencies.some(d=>d['资源类型']==='人员技能'&&d['所需技能']===s['所需技能']&&(s['适用工序']==='*'||s['适用工序']===d['工序编号'])&&personnelGroups.some(g=>personnelCandidates(d).includes(g['人员组编号'])&&skillsOf(g['技能']).includes(s['可提供技能']))));
+ const originalResourceEvents=(input.originalResourceEvents||[]).filter(r=>{try{const doc=JSON.parse(r['原账JSON']);return (doc.facts||[]).some(f=>same(f.snapshot||{}))||(doc.identities||[]).some(i=>i.type==='人员'&&poolIds.has(i.currentId)||i.type==='工装'&&toolIds.has(i.currentId));}catch{return false;}});
+ const tables={originalDependencies,dependencies,resourceClaims:claims,originalTools,originalPersonnel,resourceMappings,tools:(input.tools||[]).filter(t=>toolIds.has(t['工装编码'])),personnelGroups,personnelPools:(input.personnelPools||[]).filter(p=>poolIds.has(p.poolId)),skillSubstitutions,machines,calendars:(input.calendars||[]).filter(r=>calendars.has(r['日历编号'])),resourceStops:(input.resourceStops||[]).filter(r=>r['资源类型']==='人员'?personnelIds.has(r['资源编号']):r['资源类型']==='工装'&&toolIds.has(r['资源编号'])),originalResourceEvents};
+ for(const [table,rows] of Object.entries(tables))for(const row of rows){
   const index=input[table].indexOf(row),source=view.plan.inputCsvSources?.[table];
-  refs.push({table,index,physicalRow:source?.records?.[index]?.line??null,canonicalRow:index+2,file:source?.file??null,sourceSha256:source?.sha256??null,inputVersionId:view.run.inputVersionId,row});
+  // Preserve frozen logical positions when no independently matching CSV row exists.
+  const csvMatches=source?.canonicalRows?.[index]&&JSON.stringify(source.canonicalRows[index])===JSON.stringify(row);
+  refs.push({table,index,physicalRow:csvMatches?(source.records?.[index]?.line??source.lines?.[index]??null):null,canonicalRow:index+2,file:source?.file??null,sourceSha256:csvMatches?(source.sha256??null):null,inputVersionId:view.run.inputVersionId,row});
  }
  return refs;
 }
