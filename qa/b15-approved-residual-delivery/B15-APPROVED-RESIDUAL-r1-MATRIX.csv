@@ -1,0 +1,37 @@
+﻿assertion,basis,expected,actual,result,product_sha,evidence,remaining
+SOURCE-12,FR013/014/016/020/022;原05/06/12/17,原字节+显式运行配置实际采用、独立复核、原生CSV及历史不变,5任务；唯一READY；全部原12 BOUND；原09仍字面；旧快照不变,PASS_BOUNDED,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/residual/adopted-12.json,不是未改原19直通或完整UAT；计算BOM/库存/班次/物理池等明确mock
+SOURCE-13,FR013/014/016/020/022;原05/06/12/17,原字节+显式运行配置实际采用、独立复核、原生CSV及历史不变,10任务；唯一READY；全部原12 BOUND；原09仍字面；旧快照不变,PASS_BOUNDED,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/residual/adopted-13.json,不是未改原19直通或完整UAT；计算BOM/库存/班次/物理池等明确mock
+SOURCE-14,FR013/014/016/020/022;原05/06/12/17,原字节+显式运行配置实际采用、独立复核、原生CSV及历史不变,10任务；唯一READY；全部原12 BOUND；原09仍字面；旧快照不变,PASS_BOUNDED,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/residual/adopted-14.json,不是未改原19直通或完整UAT；计算BOM/库存/班次/物理池等明确mock
+SOURCE-15,FR013/014/016/020/022;原05/06/12/17,原字节+显式运行配置实际采用、独立复核、原生CSV及历史不变,4任务；唯一READY；全部原12 BOUND；原09仍字面；旧快照不变,PASS_BOUNDED,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/residual/adopted-15.json,不是未改原19直通或完整UAT；计算BOM/库存/班次/物理池等明确mock
+SOURCE-17,FR013/014/016/020/022;原05/06/12/17,原字节+显式运行配置实际采用、独立复核、原生CSV及历史不变,5任务；唯一READY；全部原12 BOUND；原09仍字面；旧快照不变,PASS_BOUNDED,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/residual/adopted-17.json,不是未改原19直通或完整UAT；计算BOM/库存/班次/物理池等明确mock
+SOURCE-18,FR013/014/016/020/022;原05/06/12/17,原字节+显式运行配置实际采用、独立复核、原生CSV及历史不变,2任务；唯一READY；全部原12 BOUND；原09仍字面；旧快照不变,PASS_BOUNDED,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/residual/adopted-18.json,不是未改原19直通或完整UAT；计算BOM/库存/班次/物理池等明确mock
+TEST-core/libraries.log,最终源码影响回归,113 PASS / 0 FAIL,113 PASS / 0 FAIL,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/core/libraries.log,
+TEST-core/business.log,最终源码影响回归,126 PASS / 0 FAIL,126 PASS / 0 FAIL,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/core/business.log,
+TEST-residual/tests.log,最终源码影响回归,138 PASS / 0 FAIL,138 PASS / 0 FAIL,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/residual/tests.log,
+TEST-b12/tests.log,最终源码影响回归,42 PASS / 0 FAIL,42 PASS / 0 FAIL,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/b12/tests.log,
+TEST-b15/tests.log,最终源码影响回归,30 PASS / 0 FAIL,30 PASS / 0 FAIL,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/b15/tests.log,
+TEST-r7/tests.log,最终源码影响回归,74 PASS / 0 FAIL,74 PASS / 0 FAIL,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/r7/tests.log,
+TEST-fr022-impact-80.log,最终源码影响回归,80 PASS / 0 FAIL,80 PASS / 0 FAIL,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/fr022-impact-80.log,
+TEST-b16-impact-28-final.log,最终源码影响回归,28 PASS / 0 FAIL,28 PASS / 0 FAIL,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/b16-impact-28-final.log,
+EXACT-267,FR020/021/022;CSV与冻结来源,独立CSV/SHA256/Fraction/工时/前序/装载及方向时间,267/267,PASS,172b415122472b933fc9935b5537697ebc03ccfc,independent-oracle.json;oracle.py,
+UI-original05-06-12-17-upload-repairs-Worker,真实React/API/应用Worker/权限/来源/持久化,实际用户操作与服务端证据一致,PASS,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-browser/report.json,
+UI-edit-runtime-mapping-preview-save-new-Worker-old-source-preserved,真实React/API/应用Worker/权限/来源/持久化,实际用户操作与服务端证据一致,PASS,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-browser/report.json,
+UI-real-shared-heat-group-lock,真实React/API/应用Worker/权限/来源/持久化,实际用户操作与服务端证据一致,PASS,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-browser/report.json,
+UI-batch-lock-persists-after-reload,真实React/API/应用Worker/权限/来源/持久化,实际用户操作与服务端证据一致,PASS,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-browser/report.json,
+UI-keyboard-production-batch-move,真实React/API/应用Worker/权限/来源/持久化,实际用户操作与服务端证据一致,PASS,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-browser/report.json,
+UI-batch-nativeCSV,真实React/API/应用Worker/权限/来源/持久化,实际用户操作与服务端证据一致,PASS,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-browser/report.json,
+UI-BR13-real-order-Worker-source-and-nativeCSV,真实React/API/应用Worker/权限/来源/持久化,实际用户操作与服务端证据一致,PASS,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-browser/report.json,
+UI-query-role-cannot-move-or-unlock,真实React/API/应用Worker/权限/来源/持久化,实际用户操作与服务端证据一致,PASS,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-browser/report.json,
+UI-MAX-LAG-SOURCE,FR025/034;原MAX_LAG契约,缺配对仍拒绝；物理CSV行明确；零写,物理第11行，带hash及原记录；UI可定位,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-browser/maxlag-report.json,
+SHARED-HEAT-MOVE,FR027/AC19/21;既有kg固定合炉,两成员一起移动；120不变；等待10合法/11拒绝,"[80,200)两成员；冷却210；非法提交409且存储零写",PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/shared-heat-move.json,
+PROCESS-REOPEN,持久化/冻结历史,独立新Node进程重开原持久化字节,7份方案/运行快照一致；旧存储字节不变,PASS,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/process-reopen.json,
+MERGES,main串行owner,实时main/父/共同祖先/交集/冲突及源blob核对,BR13 9文件、FR022 4文件源blob完整；交集=[]；普通push远端一致,PASS,172b415122472b933fc9935b5537697ebc03ccfc,br13-integration.json;fr022-integration.json;integration-final.json;github-verification.json,
+BR13-SAVED-ORDER,BR13前后方向/资源/人员/时长/等待/禁配,从实际相邻任务及完整生产账核对，非固定pair提案；失败无接受占用,正反10+5/20+7；共享池1拒绝/2通过；真实Worker/UI/CSV/重开,PASS_BOUNDED,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/residual/cleaning-false.json;cleaning-true.json;cleaning-shared-pool.json;cleaning-negative.json,只检查固定实际顺序；不自动搜索/插入换型位置；历史执行清洗、多日历人员、互斥交接组合显式阻断
+RAW19-12,完整原19,补齐缺值前拒绝且零写,3项原17缺值；零写,EXPECTED_REFUSAL,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/original19-admission.json,不当完整采用PASS
+RAW19-13,完整原19,补齐缺值前拒绝且零写,6项原17缺值；零写,EXPECTED_REFUSAL,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/original19-admission.json,不当完整采用PASS
+RAW19-14,完整原19,补齐缺值前拒绝且零写,6项原17缺值；零写,EXPECTED_REFUSAL,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/original19-admission.json,不当完整采用PASS
+RAW19-15,完整原19,补齐缺值前拒绝且零写,6项原17缺值；零写,EXPECTED_REFUSAL,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/original19-admission.json,不当完整采用PASS
+RAW19-17,完整原19,补齐缺值前拒绝且零写,3项原17缺值；零写,EXPECTED_REFUSAL,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/original19-admission.json,不当完整采用PASS
+RAW19-18,完整原19,补齐缺值前拒绝且零写,3项原17缺值；零写,EXPECTED_REFUSAL,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/original19-admission.json,不当完整采用PASS
+RAW19-CONFIGURED,原19全链,未有无损运行绑定的非空来源不可默认采用,6场景原13；UAT15另14/18/19精确拒绝且零写,PARTIAL,172b415122472b933fc9935b5537697ebc03ccfc,verified-evidence/original19-admission.json,具体字段/数据粒度与owner见REPORT；原09/A01/A02不猜公式
+QA-WHOLE-PACKAGE,Issue39/40/UAT12–15/17/18,PM核完整具体入口后QA独立执行,QA未派/未执行；整包NOT_READY,NOT_EXECUTED,172b415122472b933fc9935b5537697ebc03ccfc,REPORT.md,PM/QA；不覆盖旧候选
