@@ -1,0 +1,288 @@
+{
+  "kind": "TEMPLATE_NOT_ACTUAL_RESULTS",
+  "product_sha": null,
+  "deployment_fingerprint": null,
+  "frozen_input_fingerprint": null,
+  "assertions": [
+    {
+      "id": "IN-01",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-02",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-03",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-04",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-05",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-06",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-07",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-08",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-09",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-10",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-11",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-12",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-13",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-14",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-15",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-16",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-17",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-18",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-19",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-20",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-21",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-22",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-23",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-24",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-25",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-26",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-27",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-28",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-29",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-30",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-31",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-32",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-33",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-34",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    },
+    {
+      "id": "IN-35",
+      "product_sha": null,
+      "status": "NOT_EXECUTED",
+      "observed": null,
+      "reason": "Await fixed actual integrated product candidate",
+      "evidence": []
+    }
+  ]
+}

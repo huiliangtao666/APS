@@ -1,0 +1,3476 @@
+{
+  "schema": "IN-INDEPENDENT-EXPECTED-r1",
+  "design_sha": "13e2eeed4438cb0b200db9c4de3781c7f1248be3",
+  "product_sha": null,
+  "product_status": "NOT_EXECUTED",
+  "source_workbook_sha256": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+  "IN-01": {
+    "sheets": 29,
+    "input_tables": 16,
+    "reference_tables": 7,
+    "explanation_diagrams": 6
+  },
+  "IN-02": {
+    "配置参数": 3428,
+    "物料主数据": 140,
+    "单位换算": 275,
+    "关键路径明细": 27,
+    "客户与交付": 40,
+    "库区库位": 84,
+    "供应商与供货条件": 215,
+    "物料清单": 317,
+    "工艺路线": 87,
+    "设备与工装": 46,
+    "班组资源": 6,
+    "工厂日历": 44,
+    "停机安排": 5,
+    "每日需求": 2150,
+    "每日成品汇总": 430,
+    "期初库存": 420,
+    "既有采购在途": 55,
+    "期初在制": 8,
+    "生产补给建议": 695,
+    "物料需求来源": 8456,
+    "每日缺料净算": 6020,
+    "采购订单草案": 1901,
+    "采购缺料汇总": 110
+  },
+  "IN-06": {
+    "parameter_id": "PA0001",
+    "cell": "配置参数!E3",
+    "old_days": 3,
+    "new_days": 4,
+    "old_fg001_cumulative_days": 12,
+    "new_fg001_cumulative_days": 13,
+    "derived_cache_must_not_override_parameter": true
+  },
+  "IN-08": {
+    "demand_count": 2150,
+    "grouped_demand_count": 430,
+    "reference_supply_count": 0,
+    "physical_inventory_rows_from_netting": 0,
+    "day_totals_kg": {
+      "1": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "2": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "3": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "4": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "5": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "6": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "7": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "8": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "9": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "10": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "11": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "12": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "13": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "14": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "15": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "16": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "17": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "18": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "19": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "20": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "21": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "22": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "23": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "24": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "25": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "26": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "27": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "28": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "29": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "30": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "31": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "32": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "33": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "34": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "35": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "36": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "37": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "38": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "39": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "40": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "41": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "42": {
+        "numerator": "4676",
+        "denominator": "1"
+      },
+      "43": {
+        "numerator": "4676",
+        "denominator": "1"
+      }
+    },
+    "first_window_kg": {
+      "numerator": "65464",
+      "denominator": "1"
+    },
+    "november_kg": {
+      "numerator": "140280",
+      "denominator": "1"
+    },
+    "tail_kg": {
+      "numerator": "60788",
+      "denominator": "1"
+    }
+  },
+  "IN-12": {
+    "day_dates": {
+      "0": "2026-10-31",
+      "1": "2026-11-01",
+      "14": "2026-11-14",
+      "15": "2026-11-15",
+      "30": "2026-11-30",
+      "31": "2026-12-01",
+      "43": "2026-12-13"
+    },
+    "first_window": [
+      1,
+      15
+    ],
+    "first_window_demand_rows": 700,
+    "november_demand_rows": 1500
+  },
+  "IN-13": {
+    "old_origin": "2026-11-02T08:00:00+08:00",
+    "B0_minutes": -3360,
+    "B1_minutes": -1920,
+    "historical_shift_minutes": 0
+  },
+  "IN-14": {
+    "outage_count": 5,
+    "EQ007_unavailable": [
+      5,
+      6
+    ],
+    "EQ007_restored_day": 6,
+    "EQ010_known_day": 15,
+    "EQ010_visible_at_day1": false,
+    "EQ010_visible_at_day15": true
+  },
+  "IN-15": {
+    "resource": "EQ007",
+    "day_capacity_kg": {
+      "numerator": "2000",
+      "denominator": "1"
+    },
+    "zero_cross_day_jobs_workload_kg": {
+      "numerator": "2001",
+      "denominator": "1"
+    },
+    "over_capacity_kg": {
+      "numerator": "1",
+      "denominator": "1"
+    },
+    "first_four_fit_exactly": true,
+    "fifth_requires_delay_split_or_rejection": true,
+    "crew_available_people": {
+      "numerator": "20",
+      "denominator": "1"
+    },
+    "parallel_people_required": {
+      "numerator": "21",
+      "denominator": "1"
+    },
+    "parallel_overload_people": {
+      "numerator": "1",
+      "denominator": "1"
+    }
+  },
+  "IN-16": {
+    "fg_cumulative_days": {
+      "FG001": {
+        "numerator": "12",
+        "denominator": "1"
+      },
+      "FG002": {
+        "numerator": "11",
+        "denominator": "1"
+      },
+      "FG003": {
+        "numerator": "13",
+        "denominator": "1"
+      },
+      "FG004": {
+        "numerator": "13",
+        "denominator": "1"
+      },
+      "FG005": {
+        "numerator": "13",
+        "denominator": "1"
+      },
+      "FG006": {
+        "numerator": "12",
+        "denominator": "1"
+      },
+      "FG007": {
+        "numerator": "13",
+        "denominator": "1"
+      },
+      "FG008": {
+        "numerator": "11",
+        "denominator": "1"
+      },
+      "FG009": {
+        "numerator": "12",
+        "denominator": "1"
+      },
+      "FG010": {
+        "numerator": "12",
+        "denominator": "1"
+      }
+    },
+    "all_material_recursion": {
+      "PK001": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 108,
+        "supplier_relation": "SO147"
+      },
+      "PK002": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 109,
+        "supplier_relation": "SO148"
+      },
+      "PK003": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 110,
+        "supplier_relation": "SO150"
+      },
+      "PK031": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 138,
+        "supplier_relation": "SO207"
+      },
+      "PK032": {
+        "own_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 139,
+        "supplier_relation": "SO208"
+      },
+      "PK033": {
+        "own_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 140,
+        "supplier_relation": "SO210"
+      },
+      "PK034": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 141,
+        "supplier_relation": "SO213"
+      },
+      "PK035": {
+        "own_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 142,
+        "supplier_relation": "SO214"
+      },
+      "RM001": {
+        "own_days": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 33,
+        "supplier_relation": "SO001"
+      },
+      "RM002": {
+        "own_days": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 34,
+        "supplier_relation": "SO002"
+      },
+      "RM003": {
+        "own_days": {
+          "numerator": "3",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 35,
+        "supplier_relation": "SO004"
+      },
+      "RM004": {
+        "own_days": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 36,
+        "supplier_relation": "SO007"
+      },
+      "RM005": {
+        "own_days": {
+          "numerator": "3",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 37,
+        "supplier_relation": "SO008"
+      },
+      "RM006": {
+        "own_days": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 38,
+        "supplier_relation": "SO010"
+      },
+      "RM007": {
+        "own_days": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 39,
+        "supplier_relation": "SO013"
+      },
+      "RM008": {
+        "own_days": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 40,
+        "supplier_relation": "SO014"
+      },
+      "RM069": {
+        "own_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 101,
+        "supplier_relation": "SO132"
+      },
+      "RM025": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 57,
+        "supplier_relation": "SO045"
+      },
+      "RM035": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 67,
+        "supplier_relation": "SO064"
+      },
+      "RM045": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 77,
+        "supplier_relation": "SO084"
+      },
+      "RM055": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 87,
+        "supplier_relation": "SO105"
+      },
+      "RM063": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 95,
+        "supplier_relation": "SO120"
+      },
+      "RM070": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 102,
+        "supplier_relation": "SO135"
+      },
+      "RM071": {
+        "own_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 103,
+        "supplier_relation": "SO136"
+      },
+      "SF011": {
+        "own_days": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "RM045"
+        ],
+        "source_material_row": 23,
+        "supplier_relation": null
+      },
+      "SF001": {
+        "own_days": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "SF011"
+        ],
+        "source_material_row": 13,
+        "supplier_relation": null
+      },
+      "RM026": {
+        "own_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 58,
+        "supplier_relation": "SO046"
+      },
+      "SF008": {
+        "own_days": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "RM026",
+          "RM069"
+        ],
+        "source_material_row": 20,
+        "supplier_relation": null
+      },
+      "FG001": {
+        "own_days": {
+          "numerator": "3",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "9",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "SF001"
+        ],
+        "source_material_row": 3,
+        "supplier_relation": null
+      },
+      "PK004": {
+        "own_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 111,
+        "supplier_relation": "SO153"
+      },
+      "PK005": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 112,
+        "supplier_relation": "SO154"
+      },
+      "PK006": {
+        "own_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 113,
+        "supplier_relation": "SO156"
+      },
+      "RM009": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 41,
+        "supplier_relation": "SO016"
+      },
+      "RM010": {
+        "own_days": {
+          "numerator": "3",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 42,
+        "supplier_relation": "SO018"
+      },
+      "RM011": {
+        "own_days": {
+          "numerator": "3",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 43,
+        "supplier_relation": "SO019"
+      },
+      "RM012": {
+        "own_days": {
+          "numerator": "3",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 44,
+        "supplier_relation": "SO021"
+      },
+      "RM013": {
+        "own_days": {
+          "numerator": "3",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 45,
+        "supplier_relation": "SO023"
+      },
+      "RM014": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 46,
+        "supplier_relation": "SO024"
+      },
+      "RM036": {
+        "own_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 68,
+        "supplier_relation": "SO066"
+      },
+      "RM046": {
+        "own_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 78,
+        "supplier_relation": "SO087"
+      },
+      "RM056": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 88,
+        "supplier_relation": "SO106"
+      },
+      "RM064": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 96,
+        "supplier_relation": "SO123"
+      },
+      "RM072": {
+        "own_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 104,
+        "supplier_relation": "SO138"
+      },
+      "SF012": {
+        "own_days": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "RM026",
+          "RM036",
+          "RM046",
+          "RM072"
+        ],
+        "source_material_row": 24,
+        "supplier_relation": null
+      },
+      "SF002": {
+        "own_days": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "SF012"
+        ],
+        "source_material_row": 14,
+        "supplier_relation": null
+      },
+      "SF009": {
+        "own_days": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "RM026",
+          "RM069"
+        ],
+        "source_material_row": 21,
+        "supplier_relation": null
+      },
+      "FG002": {
+        "own_days": {
+          "numerator": "3",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "PK004",
+          "PK006",
+          "PK033",
+          "SF002"
+        ],
+        "source_material_row": 4,
+        "supplier_relation": null
+      },
+      "PK007": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 114,
+        "supplier_relation": "SO159"
+      },
+      "PK008": {
+        "own_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 115,
+        "supplier_relation": "SO160"
+      },
+      "PK009": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 116,
+        "supplier_relation": "SO162"
+      },
+      "RM027": {
+        "own_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 59,
+        "supplier_relation": "SO048"
+      },
+      "RM037": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 69,
+        "supplier_relation": "SO069"
+      },
+      "RM047": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 79,
+        "supplier_relation": "SO088"
+      },
+      "RM057": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 89,
+        "supplier_relation": "SO108"
+      },
+      "RM065": {
+        "own_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 97,
+        "supplier_relation": "SO124"
+      },
+      "RM073": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 105,
+        "supplier_relation": "SO141"
+      },
+      "SF013": {
+        "own_days": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "RM027",
+          "RM065"
+        ],
+        "source_material_row": 25,
+        "supplier_relation": null
+      },
+      "SF003": {
+        "own_days": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "9",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "SF013"
+        ],
+        "source_material_row": 15,
+        "supplier_relation": null
+      },
+      "SF010": {
+        "own_days": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "RM026",
+          "RM069"
+        ],
+        "source_material_row": 22,
+        "supplier_relation": null
+      },
+      "FG003": {
+        "own_days": {
+          "numerator": "3",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "10",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "SF003"
+        ],
+        "source_material_row": 5,
+        "supplier_relation": null
+      },
+      "PK010": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 117,
+        "supplier_relation": "SO165"
+      },
+      "PK011": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 118,
+        "supplier_relation": "SO166"
+      },
+      "PK012": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 119,
+        "supplier_relation": "SO168"
+      },
+      "SF004": {
+        "own_days": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "RM026",
+          "RM069"
+        ],
+        "source_material_row": 16,
+        "supplier_relation": null
+      },
+      "RM028": {
+        "own_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 60,
+        "supplier_relation": "SO051"
+      },
+      "RM038": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 70,
+        "supplier_relation": "SO070"
+      },
+      "RM048": {
+        "own_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 80,
+        "supplier_relation": "SO090"
+      },
+      "RM058": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 90,
+        "supplier_relation": "SO111"
+      },
+      "RM066": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 98,
+        "supplier_relation": "SO126"
+      },
+      "RM074": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 106,
+        "supplier_relation": "SO142"
+      },
+      "SF014": {
+        "own_days": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "RM028"
+        ],
+        "source_material_row": 26,
+        "supplier_relation": null
+      },
+      "RM029": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 61,
+        "supplier_relation": "SO052"
+      },
+      "RM039": {
+        "own_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 71,
+        "supplier_relation": "SO072"
+      },
+      "RM049": {
+        "own_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 81,
+        "supplier_relation": "SO093"
+      },
+      "RM059": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 91,
+        "supplier_relation": "SO112"
+      },
+      "RM067": {
+        "own_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 99,
+        "supplier_relation": "SO129"
+      },
+      "RM075": {
+        "own_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 107,
+        "supplier_relation": "SO144"
+      },
+      "SF015": {
+        "own_days": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "RM039"
+        ],
+        "source_material_row": 27,
+        "supplier_relation": null
+      },
+      "FG004": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "9",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "SF014",
+          "SF015"
+        ],
+        "source_material_row": 6,
+        "supplier_relation": null
+      },
+      "PK013": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 120,
+        "supplier_relation": "SO171"
+      },
+      "PK014": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 121,
+        "supplier_relation": "SO172"
+      },
+      "PK015": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 122,
+        "supplier_relation": "SO174"
+      },
+      "SF005": {
+        "own_days": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "RM026",
+          "RM069"
+        ],
+        "source_material_row": 17,
+        "supplier_relation": null
+      },
+      "RM030": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 62,
+        "supplier_relation": "SO054"
+      },
+      "RM040": {
+        "own_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 72,
+        "supplier_relation": "SO075"
+      },
+      "RM050": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 82,
+        "supplier_relation": "SO094"
+      },
+      "RM060": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 92,
+        "supplier_relation": "SO114"
+      },
+      "RM068": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 100,
+        "supplier_relation": "SO130"
+      },
+      "SF016": {
+        "own_days": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "RM040"
+        ],
+        "source_material_row": 28,
+        "supplier_relation": null
+      },
+      "RM031": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 63,
+        "supplier_relation": "SO057"
+      },
+      "RM041": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 73,
+        "supplier_relation": "SO076"
+      },
+      "RM051": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 83,
+        "supplier_relation": "SO096"
+      },
+      "RM061": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 93,
+        "supplier_relation": "SO117"
+      },
+      "SF017": {
+        "own_days": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "RM061"
+        ],
+        "source_material_row": 29,
+        "supplier_relation": null
+      },
+      "FG005": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "9",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "SF016"
+        ],
+        "source_material_row": 7,
+        "supplier_relation": null
+      },
+      "PK016": {
+        "own_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 123,
+        "supplier_relation": "SO177"
+      },
+      "PK017": {
+        "own_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 124,
+        "supplier_relation": "SO178"
+      },
+      "PK018": {
+        "own_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 125,
+        "supplier_relation": "SO180"
+      },
+      "SF006": {
+        "own_days": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "RM026",
+          "RM069"
+        ],
+        "source_material_row": 18,
+        "supplier_relation": null
+      },
+      "RM032": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 64,
+        "supplier_relation": "SO058"
+      },
+      "RM042": {
+        "own_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 74,
+        "supplier_relation": "SO078"
+      },
+      "RM052": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 84,
+        "supplier_relation": "SO099"
+      },
+      "RM062": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 94,
+        "supplier_relation": "SO118"
+      },
+      "SF018": {
+        "own_days": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "RM042"
+        ],
+        "source_material_row": 30,
+        "supplier_relation": null
+      },
+      "RM033": {
+        "own_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 65,
+        "supplier_relation": "SO060"
+      },
+      "RM043": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 75,
+        "supplier_relation": "SO081"
+      },
+      "RM053": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 85,
+        "supplier_relation": "SO100"
+      },
+      "SF019": {
+        "own_days": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "RM033",
+          "RM065"
+        ],
+        "source_material_row": 31,
+        "supplier_relation": null
+      },
+      "FG006": {
+        "own_days": {
+          "numerator": "3",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "9",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "SF018",
+          "SF019"
+        ],
+        "source_material_row": 8,
+        "supplier_relation": null
+      },
+      "PK019": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 126,
+        "supplier_relation": "SO183"
+      },
+      "PK020": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 127,
+        "supplier_relation": "SO184"
+      },
+      "PK021": {
+        "own_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 128,
+        "supplier_relation": "SO186"
+      },
+      "SF007": {
+        "own_days": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "RM026",
+          "RM069"
+        ],
+        "source_material_row": 19,
+        "supplier_relation": null
+      },
+      "RM034": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 66,
+        "supplier_relation": "SO063"
+      },
+      "RM044": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 76,
+        "supplier_relation": "SO082"
+      },
+      "RM054": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 86,
+        "supplier_relation": "SO102"
+      },
+      "SF020": {
+        "own_days": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "RM054"
+        ],
+        "source_material_row": 32,
+        "supplier_relation": null
+      },
+      "FG007": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "PK021",
+          "PK033",
+          "SF007",
+          "SF020"
+        ],
+        "source_material_row": 9,
+        "supplier_relation": null
+      },
+      "PK022": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 129,
+        "supplier_relation": "SO189"
+      },
+      "PK023": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 130,
+        "supplier_relation": "SO190"
+      },
+      "PK024": {
+        "own_days": {
+          "numerator": "6",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 131,
+        "supplier_relation": "SO192"
+      },
+      "FG008": {
+        "own_days": {
+          "numerator": "3",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "PK033",
+          "RM027",
+          "RM028",
+          "RM033"
+        ],
+        "source_material_row": 10,
+        "supplier_relation": null
+      },
+      "PK025": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 132,
+        "supplier_relation": "SO195"
+      },
+      "PK026": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 133,
+        "supplier_relation": "SO196"
+      },
+      "PK027": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 134,
+        "supplier_relation": "SO198"
+      },
+      "RM021": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 53,
+        "supplier_relation": "SO036"
+      },
+      "RM022": {
+        "own_days": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 54,
+        "supplier_relation": "SO039"
+      },
+      "RM023": {
+        "own_days": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 55,
+        "supplier_relation": "SO040"
+      },
+      "RM024": {
+        "own_days": {
+          "numerator": "3",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 56,
+        "supplier_relation": "SO042"
+      },
+      "FG009": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "PK033",
+          "RM027",
+          "RM028",
+          "RM033"
+        ],
+        "source_material_row": 11,
+        "supplier_relation": null
+      },
+      "PK028": {
+        "own_days": {
+          "numerator": "7",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 135,
+        "supplier_relation": "SO201"
+      },
+      "PK029": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 136,
+        "supplier_relation": "SO202"
+      },
+      "PK030": {
+        "own_days": {
+          "numerator": "5",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 137,
+        "supplier_relation": "SO204"
+      },
+      "RM015": {
+        "own_days": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 47,
+        "supplier_relation": "SO026"
+      },
+      "RM016": {
+        "own_days": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 48,
+        "supplier_relation": "SO028"
+      },
+      "RM017": {
+        "own_days": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 49,
+        "supplier_relation": "SO029"
+      },
+      "RM018": {
+        "own_days": {
+          "numerator": "3",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 50,
+        "supplier_relation": "SO031"
+      },
+      "RM019": {
+        "own_days": {
+          "numerator": "2",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 51,
+        "supplier_relation": "SO033"
+      },
+      "RM020": {
+        "own_days": {
+          "numerator": "3",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "critical_children": [],
+        "source_material_row": 52,
+        "supplier_relation": "SO034"
+      },
+      "FG010": {
+        "own_days": {
+          "numerator": "4",
+          "denominator": "1"
+        },
+        "children_longest_days": {
+          "numerator": "8",
+          "denominator": "1"
+        },
+        "critical_children": [
+          "PK033",
+          "RM027",
+          "RM028",
+          "RM033"
+        ],
+        "source_material_row": 12,
+        "supplier_relation": null
+      }
+    }
+  },
+  "IN-18": {
+    "bom": "BM001",
+    "source_cells": [
+      "物料清单!H3",
+      "物料清单!I3",
+      "物料清单!K3"
+    ],
+    "basis_type": "qualified-output-yield-included",
+    "child_kg": {
+      "numerator": "885416667",
+      "denominator": "5000000"
+    },
+    "double_deducted_wrong_kg": {
+      "numerator": "295138889",
+      "denominator": "1600000"
+    }
+  },
+  "IN-19": {
+    "profile": "bom-loss-kg-v1",
+    "basis_input_kg": {
+      "numerator": "1000",
+      "denominator": "1"
+    },
+    "output_kg": {
+      "numerator": "966",
+      "denominator": "1"
+    },
+    "yield": {
+      "numerator": "483",
+      "denominator": "500"
+    },
+    "row_outputs_kg": [
+      {
+        "numerator": "637",
+        "denominator": "1"
+      },
+      {
+        "numerator": "144",
+        "denominator": "1"
+      },
+      {
+        "numerator": "135",
+        "denominator": "1"
+      },
+      {
+        "numerator": "50",
+        "denominator": "1"
+      }
+    ],
+    "target_inputs_kg": [
+      {
+        "numerator": "26000",
+        "denominator": "161"
+      },
+      {
+        "numerator": "6000",
+        "denominator": "161"
+      },
+      {
+        "numerator": "6000",
+        "denominator": "161"
+      },
+      {
+        "numerator": "2000",
+        "denominator": "161"
+      }
+    ],
+    "target_outputs_kg": [
+      {
+        "numerator": "3640",
+        "denominator": "23"
+      },
+      {
+        "numerator": "5760",
+        "denominator": "161"
+      },
+      {
+        "numerator": "5400",
+        "denominator": "161"
+      },
+      {
+        "numerator": "2000",
+        "denominator": "161"
+      }
+    ],
+    "target_input_total_kg": {
+      "numerator": "40000",
+      "denominator": "161"
+    },
+    "target_output_total_kg": {
+      "numerator": "240",
+      "denominator": "1"
+    },
+    "raw_transport_affect_quota": false
+  },
+  "IN-20": {
+    "original_kg": {
+      "numerator": "60",
+      "denominator": "1"
+    },
+    "original_pieces": {
+      "numerator": "200",
+      "denominator": "1"
+    },
+    "changed_kg": {
+      "numerator": "80",
+      "denominator": "1"
+    },
+    "changed_pieces": {
+      "numerator": "200",
+      "denominator": "1"
+    }
+  },
+  "IN-21": {
+    "arrival_window_inclusive": [
+      9,
+      12
+    ],
+    "latest_dispatch_day": 8
+  },
+  "IN-22": {
+    "released": {
+      "2": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "3": {
+        "numerator": "80",
+        "denominator": "1"
+      },
+      "4": {
+        "numerator": "80",
+        "denominator": "1"
+      },
+      "5": {
+        "numerator": "0",
+        "denominator": "1"
+      }
+    },
+    "pending": {
+      "2": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "3": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "4": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "5": {
+        "numerator": "0",
+        "denominator": "1"
+      }
+    },
+    "frozen": {
+      "2": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "3": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "4": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "5": {
+        "numerator": "0",
+        "denominator": "1"
+      }
+    }
+  },
+  "IN-24": {
+    "available_day": 6,
+    "by_need_day": {
+      "4": {
+        "conditional_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "physical_inventory_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "supply_identity": "SIM-PO-1:1"
+      },
+      "6": {
+        "conditional_kg": {
+          "numerator": "100",
+          "denominator": "1"
+        },
+        "physical_inventory_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "supply_identity": "SIM-PO-1:1"
+      },
+      "10": {
+        "conditional_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "physical_inventory_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "supply_identity": "SIM-PO-1:1"
+      }
+    },
+    "unique_supply_count_after_retry": 1
+  },
+  "IN-25": {
+    "source_wip_count": 8,
+    "physical_output_added_kg": {
+      "numerator": "0",
+      "denominator": "1"
+    },
+    "wips": [
+      {
+        "wip_id": "WP001",
+        "expected_output_is_conditional": true,
+        "historical_ingredients_reissue_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "remaining_packaging": [
+          {
+            "bom_id": "BM003",
+            "child": "PK001",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "667",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM004",
+            "child": "PK002",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "667",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM005",
+            "child": "PK003",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM006",
+            "child": "PK031",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "1388889",
+              "denominator": "2500000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM007",
+            "child": "PK032",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "2083333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM008",
+            "child": "PK033",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM009",
+            "child": "PK034",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "8333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM010",
+            "child": "PK035",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          }
+        ],
+        "remaining_route_steps": [
+          "RT009"
+        ]
+      },
+      {
+        "wip_id": "WP002",
+        "expected_output_is_conditional": true,
+        "historical_ingredients_reissue_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "remaining_packaging": [
+          {
+            "bom_id": "BM013",
+            "child": "PK004",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "667",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM014",
+            "child": "PK005",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "667",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM015",
+            "child": "PK006",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM016",
+            "child": "PK031",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "1388889",
+              "denominator": "2500000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM017",
+            "child": "PK032",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "2083333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM018",
+            "child": "PK033",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM019",
+            "child": "PK034",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "8333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM020",
+            "child": "PK035",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          }
+        ],
+        "remaining_route_steps": [
+          "RT018"
+        ]
+      },
+      {
+        "wip_id": "WP003",
+        "expected_output_is_conditional": true,
+        "historical_ingredients_reissue_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "remaining_packaging": [
+          {
+            "bom_id": "BM024",
+            "child": "PK007",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "667",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM025",
+            "child": "PK008",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "667",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM026",
+            "child": "PK009",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM027",
+            "child": "PK031",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "1388889",
+              "denominator": "2500000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM028",
+            "child": "PK032",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "2083333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM029",
+            "child": "PK033",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM030",
+            "child": "PK034",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "8333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM031",
+            "child": "PK035",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          }
+        ],
+        "remaining_route_steps": [
+          "RT027"
+        ]
+      },
+      {
+        "wip_id": "WP004",
+        "expected_output_is_conditional": true,
+        "historical_ingredients_reissue_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "remaining_packaging": [
+          {
+            "bom_id": "BM035",
+            "child": "PK010",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "500",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "500",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM036",
+            "child": "PK011",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "500",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "500",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM037",
+            "child": "PK012",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM038",
+            "child": "PK031",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "2083333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM039",
+            "child": "PK032",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "5",
+              "denominator": "16"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM040",
+            "child": "PK033",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM041",
+            "child": "PK034",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "5",
+              "denominator": "4"
+            },
+            "required_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM042",
+            "child": "PK035",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          }
+        ],
+        "remaining_route_steps": [
+          "RT036"
+        ]
+      },
+      {
+        "wip_id": "WP005",
+        "expected_output_is_conditional": true,
+        "historical_ingredients_reissue_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "remaining_packaging": [
+          {
+            "bom_id": "BM046",
+            "child": "PK013",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "500",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "500",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM047",
+            "child": "PK014",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "500",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "500",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM048",
+            "child": "PK015",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM049",
+            "child": "PK031",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "2083333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM050",
+            "child": "PK032",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "5",
+              "denominator": "16"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM051",
+            "child": "PK033",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM052",
+            "child": "PK034",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "5",
+              "denominator": "4"
+            },
+            "required_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM053",
+            "child": "PK035",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          }
+        ],
+        "remaining_route_steps": [
+          "RT045"
+        ]
+      },
+      {
+        "wip_id": "WP006",
+        "expected_output_is_conditional": true,
+        "historical_ingredients_reissue_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "remaining_packaging": [
+          {
+            "bom_id": "BM057",
+            "child": "PK016",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "1000",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "1000",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM058",
+            "child": "PK017",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "1000",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "1000",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM059",
+            "child": "PK018",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM060",
+            "child": "PK031",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "2083333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM061",
+            "child": "PK032",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "5",
+              "denominator": "16"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM062",
+            "child": "PK033",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM063",
+            "child": "PK034",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "5",
+              "denominator": "4"
+            },
+            "required_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM064",
+            "child": "PK035",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          }
+        ],
+        "remaining_route_steps": [
+          "RT053"
+        ]
+      },
+      {
+        "wip_id": "WP007",
+        "expected_output_is_conditional": true,
+        "historical_ingredients_reissue_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "remaining_packaging": [
+          {
+            "bom_id": "BM067",
+            "child": "PK019",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "400",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "400",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM068",
+            "child": "PK020",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "400",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "400",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM069",
+            "child": "PK021",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "40",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "40",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM070",
+            "child": "PK031",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM071",
+            "child": "PK032",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "1",
+              "denominator": "2"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM072",
+            "child": "PK033",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "40",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "40",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM073",
+            "child": "PK034",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM074",
+            "child": "PK035",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "40",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "40",
+              "denominator": "1"
+            }
+          }
+        ],
+        "remaining_route_steps": [
+          "RT062",
+          "RT063"
+        ]
+      },
+      {
+        "wip_id": "WP008",
+        "expected_output_is_conditional": true,
+        "historical_ingredients_reissue_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "remaining_packaging": [
+          {
+            "bom_id": "BM003",
+            "child": "PK001",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "667",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM004",
+            "child": "PK002",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "667",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM005",
+            "child": "PK003",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM006",
+            "child": "PK031",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "1388889",
+              "denominator": "2500000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM007",
+            "child": "PK032",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "2083333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM008",
+            "child": "PK033",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM009",
+            "child": "PK034",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "8333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM010",
+            "child": "PK035",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          }
+        ],
+        "remaining_route_steps": [
+          "RT009"
+        ]
+      }
+    ]
+  },
+  "IN-26": {
+    "suggested_kg": [
+      {
+        "numerator": "200",
+        "denominator": "1"
+      },
+      {
+        "numerator": "250",
+        "denominator": "1"
+      }
+    ]
+  },
+  "IN-27": {
+    "theoretical_order_day": 1,
+    "earliest_order_day": 2,
+    "available_day": 6,
+    "late_days": 1
+  },
+  "IN-28": {
+    "source_ref": "SIM-REF-1",
+    "draft_id": "SIM-DRAFT-1",
+    "v1_quantity": "200",
+    "v2_quantity": "250",
+    "supply_id": "SIM-DRAFT-1:v1",
+    "adopt_twice_unique_supply_count": 1,
+    "void_new_version_unique_supply_count": 0,
+    "old_frozen_version_unique_supply_count": 1
+  },
+  "IN-29": {
+    "unmapped_source_sf_count": 20,
+    "supplement_sf_route_count": 20,
+    "supplement_step_count": 40,
+    "source_unselected_line_blocks": true,
+    "new_manufactured_sf_must_remain_manufactured": true
+  },
+  "IN-30": {
+    "quantity_edit_multiplier": {
+      "numerator": "2",
+      "denominator": "1"
+    },
+    "shifted_transit_arrival_day": 5,
+    "shifted_transit_available_day": 7,
+    "mutated_EQ007_outage": [
+      5,
+      7
+    ],
+    "restored_day_after_mutation": 7
+  },
+  "IN-31": {
+    "frozen_run_version": "v1",
+    "current_edit_version": "v2",
+    "reopen_export_version": "v1",
+    "historical_hash_must_equal_before": true
+  },
+  "IN-34": {
+    "necessary_unsupported_capability": "BLOCK_RUN_CONSISTENTLY",
+    "final_workbook_acceptance_with_unsupported_required": "NOT_READY"
+  }
+}
