@@ -1407,7 +1407,7 @@
       "requested_by": "项目用户（本会话）",
       "requested_on": "2026-10-31",
       "request_quote": "损坏比例按照原料损耗、生产损耗、运输损耗三项，可按照物料配置（默认采用所有物料的统一参数配置，统一参数默认0%）。总收率就应该指（1-生产损耗）是吧。这样生产损耗可配，那就可以算出总收率了。",
-      "approval_status": "已明确三类损耗、按物料覆盖/统一继承/统一默认0%、标准定额为投入且不受原料运输损耗影响、产出受生产损耗影响；各阶段基数/不同物料汇总未全部明确",
+      "approval_status": "已明确三类损耗/物料覆盖/统一继承0%、投入定额不变、各物料生产损耗不同；现有同基准kg模型按各物料保留量汇总产出和派生生产收率；原料运输上游环节未明确",
       "effective": true,
       "effective_scope": "仅明确三类损耗配置、物料覆盖和默认继承；不等于计算公式、原BOM映射、全DEC04-06应用或产品实现验收已批准",
       "primary_requirements": [
@@ -1449,11 +1449,10 @@
         "unified_initial_percent": 0,
         "explicit_zero_override_distinct_from_inherit": true
       },
-      "calculation_contract_status": "PARTIALLY_CONFIRMED：标准投入定额固定、生产损耗作用于产出；不得相加三类损耗改写定额。原料/运输损耗上游作用环节/数量基数，以及不同物料生产损耗汇总仍需明确。",
+      "calculation_contract_status": "现有同基准kg生产损耗模型明确，可据受控公式开发自测；原料运输损耗上游应用环节待明确。非同单位/非质量守恒/新增工序加料不自动扩围。",
       "implementation_status": "NOT_DISPATCHED新公式：先将已确认投入/产出边界固化为受控验收依据；未确定部分不擅定公式，不改变历史固定SHA证据",
       "business_questions": [
-        "原料和运输损耗具体减少哪个阶段的可用数量/用于哪一备料量基数，运输发生于原料还是成品环节？",
-        "若各物料生产损耗不同，产出品生产损耗如何汇总或另行配置？"
+        "原料和运输损耗具体减少哪个阶段的可用数量/用于哪一备料量基数，运输发生于原料还是成品环节？"
       ],
       "original_bom_example_evidence": {
         "sha": "172b415122472b933fc9935b5537697ebc03ccfc",
@@ -1476,15 +1475,32 @@
         "standard_quota": "标准定额表示标准投入量，不受原料损耗、运输损耗影响",
         "production_output": "产出品受生产损耗影响；不再次修改投入定额",
         "production_yield_simple_model": "同一明确生产损耗率下，生产收率=1-生产损耗率",
-        "raw_transport_loss_boundary": "不得用原料/运输损耗放大或改写标准定额；具体上游可用量/备料量影响与发生基数尚未指定"
+        "raw_transport_loss_boundary": "不得用原料/运输损耗放大或改写标准定额；具体上游可用量/备料量影响与发生基数尚未指定",
+        "production_loss_scope": "各物料生产损耗分别配置，不能以单一物料或简单算术平均值代表产品总收率"
       },
       "history": [
         {
           "event_key": "user:bom-standard-input-production-output:20261031:r1",
           "quote": "标准定额指投入量，不受原料损耗、运输损耗影响，产出品受生产损耗影响",
           "decision": "投入配方定额与产出生产损耗明确分离，保留已有三类配置及统一0%继承授权"
+        },
+        {
+          "event_key": "user:bom-per-material-production-loss:20261031:r1",
+          "quote": "各物料生产损耗不同",
+          "decision": "每物料损耗分别生效；在现有同基准kg质量守恒模型内汇总剩余产出，派生配方加权生产收率"
         }
-      ]
+      ],
+      "normalized_mass_model": {
+        "scope": "同一投入基准、可统一为质量单位的原料配方；其他单位/新增物质生成或工序加料不能自动套用",
+        "quota_input": "q_i 为每基准标准投入，保持原值",
+        "material_retained_output": "o_i=q_i*(1-production_loss_i)",
+        "base_total_input": "Q=sum(q_i)",
+        "base_total_output": "O=sum(q_i*(1-production_loss_i))",
+        "derived_production_yield": "O/Q（按配方投入质量加权，不简单平均）",
+        "target_output_scale": "目标合格产出/O",
+        "required_material_input": "q_i*目标合格产出/O",
+        "no_double_count": "产品总收率从各物料生产损耗派生，不再并用旧固定总收率重复扣损耗；原料与运输损耗不纳入此生产收率"
+      }
     }
   ]
 }
