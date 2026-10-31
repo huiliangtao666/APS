@@ -1,4 +1,5 @@
 import {validateOriginalStage} from '../src/lib/original-stage-data.mjs';
+import {adaptOriginalDependencies} from '../src/lib/original-dependencies.mjs';
 import {validateOriginalBom} from '../src/lib/original-bom.mjs';
 import {validateResourceMappings} from '../src/lib/resource-mapping.mjs';
 import {validateOriginalResources} from '../src/lib/original-resources.mjs';
@@ -20,7 +21,9 @@ import {recordKeys as keys} from '../src/lib/record-identity.mjs';
 export {recordKeys} from '../src/lib/record-identity.mjs';
 // Both imports and edits validate the complete proposed state, before any write.
 export function validateInputs(defs,data,{at=new Date().toISOString(),checkPolicyExecution=true,mode=data.inputStage||'supported'}={}){
- const issues=[...validateOriginalStage(data),...validateOriginalBom(data),...validateOriginalResources(data),...validateResourceMappings(data),...validateEvents(data),...validateFactoryLines(data)];
+ const intake=adaptOriginalDependencies(data,{at});
+ const issues=[...intake.issues,...validateOriginalStage(data),...validateOriginalBom(data),...validateOriginalResources(data),...validateResourceMappings(data),...validateEvents(data),...validateFactoryLines(data)];
+ data=intake.data;
  const add=(table,index,field,message,rows=[data[table][index]])=>issues.push({relatedRecords:sourceRefs(table,rows,data[table]),table,file:defs.find(d=>d.key===table).file,row:index+2,field,message});
  for(const def of defs){
   const seen=new Set();
@@ -30,7 +33,7 @@ export function validateInputs(defs,data,{at=new Date().toISOString(),checkPolic
    for(const f of keys[def.key])if(!(def.key==='dependencies'&&(f==='人员岗位编号'||f==='人员参与阶段'||f==='资源编号'&&r['资源类型']==='人员技能'&&r['候选人员组']?.trim()))&&!r[f]?.trim())add(def.key,i,f,'唯一键字段不能为空');
    const key=JSON.stringify(keys[def.key].map(f=>r[f]?.trim()||''));
    if(seen.has(key))add(def.key,i,keys[def.key].join(' + '),'唯一键重复',(data[def.key]||[]).filter(r=>JSON.stringify(keys[def.key].map(f=>r[f]?.trim()||''))===key));seen.add(key);
-   const numeric=def.fields.filter(f=>/分钟|数量|净重kg|每袋支数|总收率|装载kg|配置用量|合格需求|优先顺序|速度支每分钟|人员开始偏移|人员结束偏移/.test(f)&&f!=='数量单位');
+   const numeric=def.fields.filter(f=>/分钟|数量|净重kg|每袋支数|总收率|装载kg|配置用量|合格需求|优先顺序|速度支每分钟|人员开始偏移|人员结束偏移/.test(f)&&f!=='数量单位'&&!(def.key==='originalDependencies'&&f==='需求数量'));
    for(const f of numeric)if(r[f]?.trim()&&(!/^(?:\d+(?:\.\d*)?|\.\d+)$/.test(r[f].trim())||!Number.isFinite(Number(r[f]))))add(def.key,i,f,'须为非负十进制数值，单位按字段名');
    if(['calendars','downtime','personnelGroups','resourceStops'].includes(def.key)){
     const start=def.key==='personnelGroups'?'可用起始分钟':'起始分钟',end=def.key==='personnelGroups'?'可用结束分钟':'结束分钟';

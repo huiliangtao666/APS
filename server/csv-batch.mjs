@@ -1,17 +1,27 @@
 import {validateR21Config,r21OrderIds} from '../src/lib/r21-stage-config.mjs';
 import {parseInputCsvRecords} from '../src/lib/input-csv.mjs';
+import {originalDependencyDef,runtimeDependencyFile} from '../src/lib/original-dependencies.mjs';
+import {jointParameters} from '../src/lib/joint-policy.mjs';
 // The isolated prototype used these same table keys, but older field shapes.
 // Reuse physical-record parsing/inspection; actual runtime defs are authoritative.
 import {batchKeys} from '../src/lib/csv-contract.mjs';
 export {batchKeys};
 export const optionalFields={resourceMappings:['字段权威JSON'],personnelGroups:['poolId'],orders:['已完成合格数量'],dependencies:['人员岗位编号','候选人员组','所需班次','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'],rules:['适用对象','生效时间']};
-export function inspectCsvBatch(files,defs,repairs=[],r21Config=null){
+export function inspectCsvBatch(files,defs,repairs=[],r21Config=null,resourceRuleBinding=null){
  const tables={},sources={},issues=[],seen=new Set(),used=new Set();
  const entryFields=['是否允许拆分','需求类型','订单状态'];
  if(!Array.isArray(repairs)||repairs.length>30000)return {tables,sources,issues:[{file:'17_生产订单与交期.csv',row:1,field:'补录',reason:'补录格式无效',severity:'error'}]};
  const add=(file,row,field,reason,extra={})=>issues.push({file,row,field,reason,message:reason,severity:'error',...extra});
  for(const file of files){
-  const def=defs.find(d=>d.file===file.name&&batchKeys.includes(d.key));
+  let def=defs.find(d=>d.file===file.name&&batchKeys.includes(d.key));
+  if(file.name===runtimeDependencyFile)def=defs.find(d=>d.key==='dependencies');
+  // Exact original headers select literal storage. A malformed/mixed runtime
+  // contract still follows normal unknown/missing-header rejection.
+  if(def?.key==='dependencies'&&file.name!==runtimeDependencyFile){
+   try{const h=parseInputCsvRecords(file.text,{whitespace:true}).find(r=>r.cells.some(c=>c.trim()))?.cells.map(h=>h.trim());
+    if(h?.length===originalDependencyDef.fields.length&&originalDependencyDef.fields.every(f=>h.includes(f)))def=defs.find(d=>d.key==='originalDependencies');
+   }catch{/* Normal parser below reports the physical error. */}
+  }
   if(!def){add(file.name,1,'文件','不属于当前支持的批导类别；请使用现行中文文件名及模板');continue;}
   if(seen.has(def.key)){add(file.name,1,'文件','同一批次包含重复表');continue;}seen.add(def.key);
   let raw;try{raw=parseInputCsvRecords(file.text,{whitespace:true}).filter(r=>r.cells.some(c=>c.trim()));}catch(e){add(file.name,e.line||1,'CSV 格式',e.message);continue;}
@@ -34,7 +44,7 @@ export function inspectCsvBatch(files,defs,repairs=[],r21Config=null){
   }
   tables[def.key]=raw.slice(1).map(({cells,line},index)=>{
    if(cells.length!==headers.length)add(file.name,line,'整行',`列数 ${cells.length} 与表头 ${headers.length} 不一致`,{table:def.key,index});
-   const row=Object.fromEntries(def.fields.map(f=>[f,headers.includes(f)?(['originalInventory','originalSupply','originalProgress','originalEvents','originalBom','originalTools','originalPersonnel','resourceMappings'].includes(def.key)?(cells[headers.indexOf(f)]||''):(cells[headers.indexOf(f)]||'').trim()):'']));
+   const row=Object.fromEntries(def.fields.map(f=>[f,headers.includes(f)?(['originalDependencies','originalInventory','originalSupply','originalProgress','originalEvents','originalBom','originalTools','originalPersonnel','resourceMappings'].includes(def.key)?(cells[headers.indexOf(f)]||''):(cells[headers.indexOf(f)]||'').trim()):'']));
    if(legacy){row['合格需求']=(cells[headers.indexOf('合格需求kg')]||'').trim();row['数量单位']='kg';}
    for(let n=0;n<repairs.length;n++){const e=repairs[n];if(e&&e.file===file.name&&e.row===line&&def.key==='orders'&&entryFields.includes(e.field)&&!headers.includes(e.field)&&typeof e.value==='string'){
     if(sources[def.key].repairs.some(p=>p.row===line&&p.field===e.field)){add(file.name,line,e.field,'重复补录',{table:def.key,index});continue;}
@@ -49,6 +59,11 @@ export function inspectCsvBatch(files,defs,repairs=[],r21Config=null){
   });
  }
  repairs.forEach((e,n)=>{if(!used.has(n))add(typeof e?.file==='string'?e.file:'补录',Number.isInteger(e?.row)?e.row:1,typeof e?.field==='string'?e.field:'补录','无效补录：仅允许原订单缺失字段的物理行显式值');});
+ if(resourceRuleBinding!==null){
+  const b=resourceRuleBinding,rows=tables.rules?.filter(r=>r['规则编号']==='MOLD'),source=sources.rules;
+  if(!b||typeof b!=='object'||Array.isArray(b)||Object.keys(b).sort().join(',')!=='contract,reference'||b.contract!=='CR-DEC02-03-v1'||typeof b.reference!=='string'||!b.reference.trim()||b.reference.length>512||rows?.length!==1||rows[0]['参数JSON']!=='{}')add(source?.file||'16_排程规则配置.csv',1,'参数JSON','显式原16适配须引用CR-DEC02-03-v1及依据，并精确包含一条MOLD空对象原参数；不覆盖现行或未知参数');
+  else {const index=tables.rules.indexOf(rows[0]);source.resourceRuleBinding={...structuredClone(b),row:source.lines[index],sourceValue:'{}',runtimeValue:structuredClone(jointParameters)};rows[0]['参数JSON']=JSON.stringify(jointParameters);}
+ }
  return {tables,sources,issues};
 }
 export function physicalIssues(issues,sources,defs){

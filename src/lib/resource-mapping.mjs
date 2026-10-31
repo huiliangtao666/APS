@@ -15,7 +15,7 @@ export function sameResourceMapping(a,b){
 }
 const json=v=>{try{return JSON.parse(v);}catch{return null;}};
 export function mappingFingerprintInput(d){return Object.fromEntries(['originalTools','originalPersonnel','resourceMappings','tools','personnelGroups','personnelPools','resourceClaims','dependencies','skillSubstitutions','rules'].map(k=>[k,d[k]||[]]));}
-export function validateResourceMappings(d,{forRun=false}={}){
+export function validateResourceMappings(d,{forRun=false,at=new Date().toISOString()}={}){
  const issues=[],seenSource=new Set(),seenTarget=new Map();
  const add=(i,field,message)=>issues.push({code:'NOT_READY_CONFIG',table:'resourceMappings',file:resourceMappingDef.file,row:i+2,field,message});
  for(const [i,m] of (d.resourceMappings||[]).entries()){
@@ -52,7 +52,7 @@ export function validateResourceMappings(d,{forRun=false}={}){
    for(const c of (d.resourceClaims||[]).filter(c=>c['资源类型']==='工装'&&c['资源编号']===m['运行编号']))for(const field of ['单位','占用口径','窗口开始偏移分钟','窗口结束偏移分钟','参数来源'])if(!c[field]?.trim())fail('运行编号',`表23 ${c['声明编号']} 缺显式${field}；不补默认`);
    if(t['是否启用']!=='是')fail('运行编号','运行工装须显式启用');
    if(!(d.resourceClaims||[]).some(c=>c['资源类型']==='工装'&&c['资源编号']===m['运行编号']))fail('运行编号','须配置表23显式需求/单位/占用来源；不猜每任务数量或自动生成声明');
-   if(forRun&&!(d.rules||[]).some(r=>r['规则编号']==='MOLD'&&r['是否启用']==='是'))fail('运行编号','新运行须启用MOLD，不能保存映射却忽略工装');
+   if(forRun&&!(d.originalDependencies||[]).length&&!(d.rules||[]).some(r=>r['规则编号']==='MOLD'&&r['是否启用']==='是'))fail('运行编号','新运行须启用MOLD，不能保存映射却忽略工装');
   }else{
    if(t['技能']!==s['技能'])fail('运行记录JSON','原技能文本须原样映射；不自动改技能名或计算资格交集');
    if(!t['人员组名称']?.trim()||!t['班次']?.trim())fail('运行记录JSON','组名与班次必须显式配置，不能用技能名/窗口猜值');
@@ -82,7 +82,13 @@ export function validateResourceMappings(d,{forRun=false}={}){
    for(const field of ['来源类别','源类型','共享范围原文','适用产线','范围模式','容量单位','时间单位','释放策略','运行记录JSON'])if(group.some(x=>field==='运行记录JSON'?!sameRecord(json(x.m[field]),json(m[field])):x.m[field]!==m[field]))add(i,field,'同实体运行合同不一致；不生成第二个身份或容量');
   }
  }
- if(forRun)for(const def of originalResourceDefs)for(const s of d[def.key]||[]){const field=def.key==='originalTools'?'资源编号':'人员组编号';if(!(d.resourceMappings||[]).some(m=>m['状态']==='READY'&&m['来源类别']===def.key&&m['来源编号']===s[field]))add(-2,'来源编号',`${def.file} ${s[field]} 缺READY显式映射；资料不能冒充运行资源`);}
+ if(forRun)for(const def of originalResourceDefs)for(const s of d[def.key]||[]){const field=def.key==='originalTools'?'资源编号':'人员组编号';
+  // With an original12 intake, only referenced, effective resources are
+  // adopted. Unused G60 or disabled labor remains frozen source-only data.
+  if((d.originalDependencies||[]).length){const rule=def.key==='originalTools'?'MOLD':'LABOR',types=def.key==='originalTools'?['模具','工具']:['人员'];
+   if(!(d.rules||[]).some(r=>r['规则编号']===rule&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at)))||!d.originalDependencies.some(r=>types.includes(r['资源类型'])&&r['资源编号']===s[field]))continue;
+  }
+  if(!(d.resourceMappings||[]).some(m=>m['状态']==='READY'&&m['来源类别']===def.key&&m['来源编号']===s[field]))add(-2,'来源编号',`${def.file} ${s[field]} 缺READY显式映射；资料不能冒充运行资源`);}
  return issues;
 }
 export function resourceMappingTransition(before,after,records=[]){

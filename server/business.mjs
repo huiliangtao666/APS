@@ -173,7 +173,8 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     return result;
   }
   router.post('/imports/preview',permission('edit'),(req,res)=>{
-    const {files,revision,table,repairs=[],r21ConfigRevision,inputStage}=req.body,s=read();
+    const {files,revision,table,repairs=[],r21ConfigRevision,inputStage,resourceRuleBinding=null}=req.body,s=read();
+    if(resourceRuleBinding!==null&&table!==undefined)return res.status(400).json({error:'resource_rule_batch_required'});
     if(inputStage!==undefined&&!['minimal-r1','supported'].includes(inputStage))return res.status(400).json({error:'invalid_input_stage'});
     const r21Config=r21ConfigRevision===undefined?null:r21State(s).config;
     if(r21Config&&r21ConfigRevision!==r21Config.revision)return res.status(409).json({error:'stale_r21_config'});
@@ -182,7 +183,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(!Array.isArray(files)||!files.length||files.length>batchKeys.length||files.some(f=>!f||typeof f.name!=='string'||typeof f.text!=='string'||f.text.length>1000000))return res.status(400).json({error:'invalid_files'});
     const def=table===undefined?null:defs.find(d=>d.key===table&&d.key!=='factoryLines');
     if(table!==undefined&&(!def||files.length!==1))return res.status(400).json({error:'invalid_single_table'});
-    const inspection=def?inspectSingleCsv(files[0],def):inspectCsvBatch(files,defs,repairs,r21Config);
+    const inspection=def?inspectSingleCsv(files[0],def):inspectCsvBatch(files,defs,repairs,r21Config,resourceRuleBinding);
     if(table==='simulationEvents')inspection.tables.executionFacts=s.data.executionFacts||[];
     const base={tables:inspection.tables,sources:inspection.sources,revision,beforeTables:Object.fromEntries(Object.keys(inspection.tables).map(key=>[key,s.data[key]||[]]))};
     if(inspection.issues.length)return res.json({...base,valid:false,...csvProblemEvidence({issues:inspection.issues},inspection,s,defs,{physical:true})});
@@ -190,7 +191,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(checked.status!==200)return res.status(checked.status).json({...base,valid:false,...checked.body});
     for(const [id,p] of csvPreviews)if(Date.now()-p.createdAt>15*60*1000)csvPreviews.delete(id);
     if(csvPreviews.size>=100)return res.status(429).json({error:'preview_capacity'});
-    const id=randomUUID();csvPreviews.set(id,{owner:subjectKey(req.praetorActor),createdAt:Date.now(),stateHash:contentHash(s),revision,table,files:structuredClone(files),repairs:structuredClone(repairs),r21Config:structuredClone(r21Config),inputStage});
+    const id=randomUUID();csvPreviews.set(id,{owner:subjectKey(req.praetorActor),createdAt:Date.now(),stateHash:contentHash(s),revision,table,files:structuredClone(files),repairs:structuredClone(repairs),r21Config:structuredClone(r21Config),inputStage,resourceRuleBinding:structuredClone(resourceRuleBinding)});
     res.json({...base,id,valid:true,issues:[],devices:r21DeviceUsage({...s.data,...inspection.tables},inspection.sources.machines||s.csvSources?.machines)});
   });
   router.post('/imports/commit',permission('edit'),(req,res)=>{
@@ -198,7 +199,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(!p||p.owner!==subjectKey(req.praetorActor)||Date.now()-p.createdAt>15*60*1000)return res.status(409).json({error:'preview_expired_or_unowned'});
     if(p.revision!==s.revision||p.stateHash!==contentHash(s))return res.status(409).json({error:'stale_preview'});
     // Ignore caller-supplied tables/actor/revision; reparse the server-owned original files.
-    const inspection=p.table?inspectSingleCsv(p.files[0],defs.find(d=>d.key===p.table)):inspectCsvBatch(p.files,defs,p.repairs,p.r21Config);
+    const inspection=p.table?inspectSingleCsv(p.files[0],defs.find(d=>d.key===p.table)):inspectCsvBatch(p.files,defs,p.repairs,p.r21Config,p.resourceRuleBinding??null);
     if(p.table==='simulationEvents')inspection.tables.executionFacts=s.data.executionFacts||[];
     if(inspection.issues.length)return res.status(400).json({error:'invalid_input',...csvProblemEvidence({issues:inspection.issues},inspection,s,defs,{physical:true})});
     const checked=checkCsv({...req,inputStage:p.inputStage,csvSources:inspection.sources,body:{reason:req.body.reason,revision:p.revision,operation:'import',files:p.files}},s,inspection,false);
