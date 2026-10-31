@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {comparePlans as oldCompare} from './b15-test-baseline-plan-comparison.mjs';
+import {stageEvents as oldStage} from './b15-test-baseline-simulation-events.mjs';
+import {comparePlans} from '../src/lib/plan-comparison.mjs';
+import {stageEvents} from '../src/lib/simulation-events.mjs';
+import {executionFixture} from './execution-fixture.mjs';import {seed} from '../server/planner.ts';import {event} from './event-fixture.mjs';
+const p={tasks:[],resourceReservations:[{taskId:'A',start:0,end:30,resourceId:'M'}]},old=oldCompare(p,{},p,{}),fresh=comparePlans(p,{},p,{});
+p.resourceReservations[0].end=99;
+assert.equal(old.resources.before[0].end,99);assert.equal(fresh.resources.before[0].end,30);
+const a=executionFixture(seed),b=structuredClone(a);b.simulationEvents=[event(),event('人员缺勤',{groupId:'NO-SUCH',endMinute:60},{'事件编号':'E2'})];
+const original=oldStage(a,b,['executionFacts']),fixed=stageEvents(a,b,['executionFacts']);
+assert.ok(original.issues.length);assert.equal(original.data.downtime.length,a.downtime.length+1);assert.deepEqual(fixed.data,a);
+console.log(JSON.stringify({baseline:'66d4d43e4b1cc566a47d96a93671d179d8921434',comparison:{baselineEnd:old.resources.before[0].end,fixedEnd:fresh.resources.before[0].end},eventBatch:{baselinePartialEffects:original.data.downtime.length-a.downtime.length,fixedPartialEffects:fixed.data.downtime.length-a.downtime.length},classification:'two reproduced domain defects; fixed within this development task'},null,2));

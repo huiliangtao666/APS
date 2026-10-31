@@ -29,14 +29,15 @@ export function eventAbsences(data){return rows(data).filter(e=>e['事件类型'
 export function eventRisks(data){return rows(data).flatMap(e=>JSON.parse(e['需处理事实JSON']||'[]').map(id=>{const f=(data.executionFacts||[]).find(f=>f['事实编号']===id);return {factId:id,orderId:f?.['订单编号'],operation:f?.['工序编号'],eventId:e['事件编号'],lots:[],downtime:[],message:`需处理：事件 ${e['事件编号']} / ${e['事件类型']}：${e['原因']}；保留原始事实及设备占用，不自动恢复、转机或判质量合格`};}));}
 export function stageEvents(before,proposed,submitted=[]){
  const data=structuredClone(proposed),issues=[],old=rows(before),incoming=rows(data);
+ const finish=()=>({data:issues.length?structuredClone(before):data,issues});
  const fail=(i,field,msg)=>issues.push(issue(i,field,msg));
- if(incoming.length<old.length||old.some((e,i)=>!same(e,incoming[i]))){fail(0,'事件编号','历史事件不可覆盖、删除或重排');return {data,issues};}
- const added=incoming.slice(old.length);if(!added.length)return {data,issues};
- issues.push(...validateEvents(data,false));if(issues.length)return {data,issues};
+ if(incoming.length<old.length||old.some((e,i)=>!same(e,incoming[i]))){fail(0,'事件编号','历史事件不可覆盖、删除或重排');return finish();}
+ const added=incoming.slice(old.length);if(!added.length)return finish();
+ issues.push(...validateEvents(data,false));if(issues.length)return finish();
  const times=new Set(added.map(e=>e['事件分钟']));
- if(times.size!==1){fail(old.length,'事件分钟','一次原子批只接纳同一时点事件；不同事件时点须分别更新事实');return {data,issues};}
+ if(times.size!==1){fail(old.length,'事件分钟','一次原子批只接纳同一时点事件；不同事件时点须分别更新事实');return finish();}
  const time=Number(added[0]['事件分钟']);
- if(time<Math.max(0,...(before.executionFacts||[]).map(f=>Number(f['观测分钟'])))){fail(old.length,'事件分钟','禁止事件回到已观测事实之前');return {data,issues};}
+ if(time<Math.max(0,...(before.executionFacts||[]).map(f=>Number(f['观测分钟'])))){fail(old.length,'事件分钟','禁止事件回到已观测事实之前');return finish();}
  if((data.executionFacts||[]).length&&!submitted.includes('executionFacts'))fail(old.length,'事件分钟','事件须同批提交完整事件时点累计事实；不得用旧进度推算');
  for(const f of data.executionFacts||[]){if(f['状态']==='已完成'?Number(f['观测分钟'])>time:Number(f['观测分钟'])!==time)fail(old.length,'事件分钟','在制观测须等于事件时点；已完成观测不得在事件之后');}
  for(let j=0;j<added.length;j++){
@@ -72,5 +73,5 @@ export function stageEvents(before,proposed,submitted=[]){
   if(e['需处理事实JSON']&&e['需处理事实JSON']!=='[]'&&!same(JSON.parse(e['需处理事实JSON']),ids))fail(i,'需处理事实JSON','受影响事实由服务端依据事件和耗料/资源引用确定，不接受伪造');
   e['需处理事实JSON']=JSON.stringify(ids);
  }
- return {data,issues};
+ return finish();
 }

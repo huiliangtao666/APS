@@ -26,9 +26,25 @@ function impact(a,ad,b,bd,scopeComparable,evidence){
   const finite=x=>typeof x==='number'&&Number.isFinite(x);
   const delta=before&&after&&finite(before.expectedDeliverableMinute)&&finite(after.expectedDeliverableMinute)?after.expectedDeliverableMinute-before.expectedDeliverableMinute:null;
   const comparable=!!before&&!!after&&scopeComparable&&settingsComparable&&!demandChanged&&before.remainingQuantity===after.remainingQuantity&&before.unit===after.unit&&before.dueMinute===after.dueMinute;
-  return {orderId,before:clone(before),after:clone(after),deliverableDeltaMinutes:delta,delayDeltaMinutes:before&&after&&finite(before.delayMinutes)&&finite(after.delayMinutes)?after.delayMinutes-before.delayMinutes:null,outcome:a.copiedResult||b.copiedResult?'copied-not-recalculated':!comparable?'not-comparable':delta===null?'unknown':delta<0?'earlier-conditional':delta>0?'later-conditional':'unchanged-no-delivery-improvement',promised:false};
+  return {orderId,before:clone(before),after:clone(after),deliverableDeltaMinutes:delta,delayDeltaMinutes:before&&after&&finite(before.delayMinutes)&&finite(after.delayMinutes)?after.delayMinutes-before.delayMinutes:null,outcome:a.copiedResult||b.copiedResult?'copied-not-recalculated':!comparable?'not-comparable':delta===null?'unknown':delta<0?'earlier-conditional':delta>0?'later-conditional':'unchanged-no-delivery-improvement',bottlenecks:{before:savedBottlenecks(a,orderId),after:savedBottlenecks(b,orderId)},promised:false};
  });
  return {changedConditions:changed,settings:{before:settings(a.conditions),after:settings(b.conditions),comparable:settingsComparable,ruleEvaluationAt:{before:a.conditions?.ruleEvaluationAt??null,after:b.conditions?.ruleEvaluationAt??null}},demandChanged,orders,affectedTaskIds:[...new Set([...(evidence.tasks.changes||[]).map(c=>c.id),...(evidence.unplanned.changes||[]).map(c=>c.id),...['resources','materials'].flatMap(key=>(evidence[key].changes||[]).flatMap(c=>[...(c.before||[]),...(c.after||[])].flatMap(row=>[...(row.taskIds||[]),...(row.taskId?[row.taskId]:[])])))])].sort(),copiedResults:!!a.copiedResult||!!b.copiedResult,claim:'仅保存结果的差异；不推断单项条件因果、全局最早或真实交付',noAutomaticImprovement:true};
+}
+// Explain only saved evidence; changing a resource is never proof of a causal benefit.
+function savedBottlenecks(plan,orderId){
+ const taskIds=new Set((plan.tasks||[]).filter(t=>t.orderId===orderId).map(t=>t.id));
+ const order=plan.deliveryAssessment?.orders?.find(o=>o.orderId===orderId);
+ const assessed=(plan.resultAssessment?.tasks||[]).filter(t=>t.orderId===orderId);
+ assessed.forEach(t=>taskIds.add(t.id));
+ return {
+  timing:(plan.tasks||[]).filter(t=>t.orderId===orderId).flatMap(t=>(t.timingReasons||[]).map(reason=>({taskId:t.id,reason:clone(reason)}))),
+  findings:(plan.findings||[]).filter(f=>f.orderId===orderId||f.context?.orderId===orderId||(f.taskIds||[]).some(id=>taskIds.has(id))).map(clone),
+  materials:plan.materialChecked===true?(plan.materialDemands||[]).filter(m=>m.orderId===orderId||taskIds.has(m.taskId)).filter(m=>m.shortage>0||(m.allocations||[]).some(x=>x.conditional)).map(clone):null,
+  supplyConditions:clone(order?.supplyConditions??null),
+  deliveryConditions:clone(order??null),
+  unplanned:assessed.filter(t=>t.status==='unplanned').map(clone),
+  inference:'saved-evidence-only'
+ };
 }
 function projection(p,data){
  return {
@@ -43,6 +59,8 @@ function projection(p,data){
  };
 }
 export function comparePlans(a,ad,b,bd){
+ // The report is a detached historical value, even if callers subsequently edit a trial.
+ a=clone(a);ad=clone(ad);b=clone(b);bd=clone(bd);
  const left=projection(a,ad),right=projection(b,bd),out={};
  for(const category of ['tasks','resources','materials','orders','unplanned']){
   const x=left[category],y=right[category];
@@ -50,6 +68,7 @@ export function comparePlans(a,ad,b,bd){
   out[category]={known:x!==null&&y!==null,before:x,after:y,changes:x!==null&&y!==null?changes(x,y,key):null};
  }
  out.inputs=Object.keys({...ad,...bd}).sort().flatMap(table=>stable(ad[table])===stable(bd[table])?[]:[{table,before:clone(ad[table]??null),after:clone(bd[table]??null)}]);
+ out.execution={before:clone(a.execution??null),after:clone(b.execution??null),known:!!a.execution&&!!b.execution,changed:stable(a.execution??null)!==stable(b.execution??null)};
  const orderKnown=out.orders.known,orderChanged=orderKnown&&out.orders.changes.length>0;
  return {version:'FR028-v1',impact:impact(a,ad,b,bd,stable(left.scope)===stable(right.scope),out),left:{kind:a.trialId?'trial':'saved-original',copiedResult:!!a.copiedResult,planId:a.id,runId:a.runId,inputVersionId:a.inputVersionId,snapshotHash:a.snapshotHash,trialId:a.trialId??null},right:{kind:b.trialId?'trial':'saved-original',copiedResult:!!b.copiedResult,planId:b.id,runId:b.runId,inputVersionId:b.inputVersionId,snapshotHash:b.snapshotHash,trialId:b.trialId??null},conditions:{before:left.conditions,after:right.conditions,changed:stable(left.conditions)!==stable(right.conditions)},scope:{before:left.scope,after:right.scope,comparable:stable(left.scope)===stable(right.scope)},...out,orderOutcome:!orderKnown?'unknown':orderChanged?'changed-review-each-order':'unchanged-no-delivery-improvement',limits:['仅比较保存的模拟结果；不承诺全局最优或真实交付','未检查的物料分配保持未知，空数组不代表已检查','未排数量按任务/工序展示；不跨工序相加','交期变化可能来自需求或检查范围变化，须查看输入与条件差异','副本初始结果来自原运行；重算后有独立运行编号']};
 }
