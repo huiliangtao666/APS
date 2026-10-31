@@ -1,4 +1,5 @@
 import {adoptProcessScope,validateProcessPairConfiguration} from './process-route.mjs';
+import {adoptChangeoverScope,assessApplicationChangeovers} from './changeover-application.mjs';
 import {inheritedCalendarId} from './factory-lines.mjs';
 import {sourceRefs} from './problem-records.mjs';
 import {validatePolicies} from './resource-policies.mjs';
@@ -23,6 +24,7 @@ Object.assign(ruleCatalog.find(c=>c.id==='MAX_LAG'),{supported:true,parameters:'
 Object.assign(ruleCatalog.find(c=>c.id==='DELIVERY'),{supported:true,parameters:JSON.stringify(deliveryParameters),scope:'显式模拟交付等待/质量/余保；附条件，不作承诺',range:'须采用物料和批次检查；缺条件保留未知'});
 Object.assign(ruleCatalog.find(c=>c.id==='MAX_LAG'),{supported:true,parameters:'{}',scope:'仅显式kg固定程序加工/冷却配对；真实上游/下游、全资源及物料事务、冻结源独立复核',range:'须同时采用MATERIAL/CAPACITY/PROGRAM/STORAGE；缺配置拒绝启用，不接受client能力提示'});
 Object.assign(ruleCatalog.find(c=>c.id==='PROGRESS'),{supported:true,parameters:'{}',scope:'模拟累计事实原始时段、显式剩余分钟与耗料；即使关闭也不解除事实保护',range:'支持累计报废、显式本工序BOM补做及来源汇总映射；暂停/冲销/转机与批次/质量协调未定时阻断；不确认真实执行或质量'});
+Object.assign(ruleCatalog.find(c=>c.id==='CLEANING'),{supported:true,parameters:'{}',scope:'显式BR13-saved-order-v1方向政策；实际相邻任务/资源批与全部生产/换型占用复核，不自动搜索位置',range:'完整政策/显式零和空需求；前序结束起算；未配置方向、历史执行或未支持池组合明确阻断'});
 export function validRuleTime(value) {
  if(!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?(?:Z|[+-]\d{2}:\d{2})$/.test(value))return false;
  const parts=value.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2}):(\d{2})/);
@@ -31,7 +33,7 @@ export function validRuleTime(value) {
 }
 export function assessRules(data, at=new Date().toISOString(), checkCoverage=false, mode='supported', checkPolicyExecution=true) {
  const material=(data.rules||[]).some(r=>r['规则编号']==='MATERIAL'&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at)));
- const checkScope=adoptProcessScope(schedulingScope(mode,material,activeBatchRule(data,at),jointFlags(data,at),deliveryActive(data,at)),data,at), minimal=mode==='minimal-r1';
+ const checkScope=adoptChangeoverScope(adoptProcessScope(schedulingScope(mode,material,activeBatchRule(data,at),jointFlags(data,at),deliveryActive(data,at)),data,at),data,at), minimal=mode==='minimal-r1';
  const issues=validateBatchResources(data).map(f=>({...f,table:'batchResources',file:'15_空间与组批规则配置.csv',row:f.row||0,field:'关联配置'})),settings=[];const rows=data.rules||[];
  issues.push(...validateJointResources(data,at).map(f=>({...f,table:f.table||'resourceClaims',file:f.table==='tools'?'18_工装配置.csv':f.table==='dependencies'?'12_工序资源与物料依赖.csv':f.table==='rules'?'16_排程规则配置.csv':'23_资源占用声明.csv',row:f.row||0,field:f.field||'关联配置'})));
  issues.push(...validateProcessPairConfiguration(data,at));
@@ -49,8 +51,9 @@ export function assessRules(data, at=new Date().toISOString(), checkCoverage=fal
   if(enabled&&!c?.supported)add(i,'是否启用',`${r['规则编号']} 尚未实现，不得启用；保存字段不代表检查通过`);
   if(c?.required&&(!minimal||data.inputStage!=='minimal-r1'||['MACHINE','PRECEDENCE'].includes(c.id))&&(!enabled||(effectiveFrom&&Date.parse(effectiveFrom)>Date.parse(at))))add(i,'是否启用',`${c.id} 是始终有效的必要约束，不得关闭或延后生效`);
   if(enabled&&c?.supported){
-   const allowed=c.id==='DELIVERY'?Object.keys(deliveryParameters):c.id==='INVENTORY'?['可用质量状态']:c.id==='SORT'?['排序方式']:c.id==='MATERIAL'?['允许预计供给','可用状态','预计状态','不可用状态']:c.id==='CAPACITY'?Object.keys(batchParameters):c.id==='PROGRAM'?['兼容条件']:['MOLD','STORAGE'].includes(c.id)?Object.keys(jointParameters):[];
+   const allowed=c.id==='CLEANING'?['contract','source','startPolicy','policies']:c.id==='DELIVERY'?Object.keys(deliveryParameters):c.id==='INVENTORY'?['可用质量状态']:c.id==='SORT'?['排序方式']:c.id==='MATERIAL'?['允许预计供给','可用状态','预计状态','不可用状态']:c.id==='CAPACITY'?Object.keys(batchParameters):c.id==='PROGRAM'?['兼容条件']:['MOLD','STORAGE'].includes(c.id)?Object.keys(jointParameters):[];
    if(Object.keys(parameters).some(k=>!allowed.includes(k)))add(i,'参数JSON','包含当前执行器不支持的参数');
+   if(c.id==='CLEANING'&&(!effectiveFrom||Date.parse(effectiveFrom)<=Date.parse(at)))for(const f of assessApplicationChangeovers({tasks:[],resourceReservations:[]},data,{ruleEvaluationAt:at}).findings)add(i,'参数JSON',f.message);
    if(c.id==='INVENTORY'){
     const p=parameters['可用质量状态'];if(!Array.isArray(p)||!p.length||p.some(x=>typeof x!=='string'||!x.trim()||x!==x.trim())||new Set(p).size!==p.length)add(i,'参数JSON','可用质量状态须为非空、无重复的状态列表');
     const objects=scope.split(',');if(scope!=='*'&&(new Set(objects).size!==objects.length||objects.some(id=>!data.materials?.some(m=>m['物料编号']===id))))add(i,'适用对象','须为 * 或已配置物料编号的无重复逗号列表');

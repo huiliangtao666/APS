@@ -120,5 +120,6 @@ export function exportSupplyPlanCsv(plan) {
   for(const o of plan.deliveryAssessment?.orders||[])if(!plan.tasks.some(t=>t.orderId===o.orderId)){const row=Array(rows[0].length).fill('');row[1]=o.orderId;row[2]=o.productId;row[rows[0].indexOf('订单完成与交期影响')]=JSON.stringify(o);row[rows[0].indexOf('交付评估范围')]=JSON.stringify({...plan.deliveryAssessment,orders:undefined,taskCompletions:undefined});rows.push(row);}
   if(plan.workingWindowsContract){const row=Array(rows[0].length).fill('');row[0]='P06工作窗口冻结契约';row[rows[0].indexOf('联合候选与保守回退')]=plan.workingWindowsContract+'；完整单窗；半开区间；不跨班拼接';rows.push(row);}
   for(const a of (plan.jointAttempts||[]).filter(a=>a.outcome==='unscheduled'||a.outcome==='horizon')){const row=Array(rows[0].length).fill('');row[0]=a.taskIds.join('；');row[rows[0].indexOf('联合候选与保守回退')]=JSON.stringify(a);rows.push(row);}
+  if(plan.changeoverAssessment?.active){const row=Array(rows[0].length).fill('');row[0]='BR13实际相邻顺序与冻结政策';row[rows[0].indexOf('联合候选与保守回退')]=JSON.stringify(plan.changeoverAssessment);rows.push(row);}
   return rows.map(row => row.map(v => '"' + String(v ?? '').replace(/"/g, '""') + '"').join(',')).join('\r\n');
 }

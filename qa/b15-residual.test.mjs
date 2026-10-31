@@ -11,6 +11,7 @@ import {residualProfile} from './b15-residual-fixture.mjs';
 import {b2Worker} from './b2-fixture.mjs';
 import {resourceClient,resourceTaskSources} from '../src/lib/resource-workbench.mjs';
 import {verifyResourcePolicies} from '../src/lib/verify-resource-policies.mjs';
+import {reviewPlan,contentHash} from '../server/confirmation.mjs';
 const out=process.env.RESIDUAL_OUT;
 const save=(name,x)=>{if(out){fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,name+'.json'),JSON.stringify(x,null,2));}};
 const hash=x=>createHash('sha256').update(x).digest('hex');
@@ -100,9 +101,14 @@ test('full-route confirmation replays bound sources; changed quantities, provena
  const {f}=await imported(t,'17'),result=await b2Worker(f),p=result.plan;
  await f.ok('/plans/'+p.id+'/verify',{});
  const review=await f.ok('/plans/'+p.id+'/review');assert.deepEqual(review.blockers,[]);
+ const saved=JSON.parse(f.bytes()),tampered=[];
+ for(const [name,change]of [['quantity',p=>p.tasks[0].quantity++],['source-hash',p=>{const ref=p.tasks[0].processSources.find(r=>r.csv);ref.csv.sha256='0'.repeat(64);}],['wait',p=>{const c=p.tasks.find(t=>t.operation==='COOL'),h=p.tasks.find(t=>t.operation==='HEAT');c.start=h.end+11;c.end=c.start+c.duration;}]]){
+  const state=structuredClone(saved),candidate=state.plans.find(q=>q.id===p.id);change(candidate);candidate.verification.contentHash=contentHash(candidate);
+  const r=reviewPlan(state,candidate);assert.ok(r.blockers.some(b=>b.code==='result_mismatch'||b.code==='independent_conflict'));tampered.push({name,blockers:r.blockers});
+ }
  const decision=r=>({revision:r.revision,workflowRevision:r.workflowRevision,reviewHash:r.reviewHash,submissionId:r.submissionId,unplannedIds:r.unplanned.map(x=>x.id),acceptPartial:false,acceptConditionalSupply:true,acknowledgeScope:true});
  await f.ok('/plans/'+p.id+'/submit',decision(review));const submitted=await f.ok('/plans/'+p.id+'/review');await f.ok('/plans/'+p.id+'/confirm',decision(submitted),'supervisor');
  const confirmed=(await f.ok('/plans/'+p.id+'/review')).confirmation;assert.ok(confirmed?.snapshot);assert.equal(confirmed.snapshot.plan.processRouteContract,'R4-kg-fixed-pair-v1');
  const old=JSON.stringify(confirmed);await f.ok('/plans/'+p.id+'/copy',{});assert.equal(JSON.stringify(await f.ok('/confirmations/'+confirmed.id)),old);
- save('route-confirmed',{result,review,submitted,confirmation:confirmed});
+ save('route-confirmed',{result,review,submitted,confirmation:confirmed,tampered});
 });

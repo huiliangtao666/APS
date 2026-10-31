@@ -4,6 +4,7 @@ import {scheduleProcessRoute} from '../src/lib/process-route-planner.mjs';
 import {processRequested} from '../src/lib/process-route.mjs';
 import {verifyProcessRoute} from '../src/lib/verify-process-route.mjs';
 import {processRouteFindings} from '../src/lib/process-route-findings.mjs';
+import {assessApplicationChangeovers,cleaningActive} from '../src/lib/changeover-application.mjs';
 import {originalStageDefs,unmappedStageSources} from '../src/lib/original-stage-data.mjs';
 import {originalDependencyDef} from '../src/lib/original-dependencies.mjs';
 import {originalBomDef} from '../src/lib/original-bom.mjs';
@@ -358,6 +359,10 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
   }
  schedule();
  if(result){
+  if(!minimal&&cleaningActive(sourceData,calculatedAt)){
+   (result as any).changeoverAssessment=assessApplicationChangeovers(result,sourceData,{...conditions,ruleEvaluationAt:calculatedAt});
+   (result as any).findings.push(...(result as any).changeoverAssessment.findings);
+  }
   const protection=protectCalculatedTasks(null,result,sourceData,conditions,sourcePositions);
   (result as any).protection=protection;
   (result as any).findings.push(...protection.issues);
