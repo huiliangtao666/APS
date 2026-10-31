@@ -1,0 +1,316 @@
+{
+  "event_key": "dlv_62a68abb-93cf-43f9-bf95-9bdd59fcd1e1:r1",
+  "notification": "dlv_a24d69fe-a08a-4928-a2c2-933645aebb5a",
+  "source_sha": "c773572aa53da2235ef29233bffa3d5656ce191c",
+  "evidence_sha": "489b28802125106297a9413d505d053b2ffb3ef0",
+  "parent": "7fd9683291607b65e8fbf52f633fcbc9d88254e7",
+  "main_at_verify": "5bdf8287778e5b0e98c33b512da4ed0f724785f7",
+  "source_files": [
+    "src/lib/b12-changeover.d.mts",
+    "qa/b12-changeover-selftest.mjs",
+    "qa/b12-changeover-fixtures.mjs",
+    "qa/b12-changeover-capture.mjs",
+    "src/lib/b12-changeover.mjs",
+    "qa/b12-changeover-INTEGRATION.md",
+    "qa/b12-changeover-json-runner.mjs",
+    "qa/b12-changeover-oracle.py",
+    "qa/b12-changeover-worker.mjs"
+  ],
+  "evidence_files": [
+    "qa/b12-changeover-evidence/sample-worker-result.json",
+    "qa/b12-changeover-evidence/source/src/lib/working-windows.mjs",
+    "qa/b12-changeover-evidence/sample-input.json",
+    "qa/b12-changeover-delivery/B12-BR13-c773572-Test-r1-REPORT.md",
+    "qa/b12-changeover-evidence/oracle-actual.json",
+    "qa/b12-changeover-delivery/B12-BR13-c773572-Test-r1-VERSION.json",
+    "qa/b12-changeover-evidence/requirements-excerpt.json",
+    "qa/b12-changeover-delivery/B12-BR13-c773572-Test-r1-EVIDENCE.zip",
+    "qa/b12-changeover-evidence/oracle-matrix.csv",
+    "qa/b12-changeover-evidence/container.txt",
+    "qa/b12-changeover-evidence/oracle-expected.json",
+    "qa/b12-changeover-evidence/b12-changeover-CLOSURE.csv",
+    "qa/b12-changeover-evidence/selftest-matrix.csv",
+    "qa/b12-changeover-evidence/source-manifest.json",
+    "qa/b12-changeover-evidence/github-br13-card.json",
+    "qa/b12-changeover-delivery/B12-BR13-c773572-Test-r1-CLOSURE.csv",
+    "qa/b12-changeover-evidence/b12-changeover-REPORT.md",
+    "qa/b12-changeover-evidence/source/qa/b12-changeover-capture.mjs",
+    "qa/b12-changeover-evidence/source/src/lib/b12-changeover.d.mts",
+    "qa/b12-changeover-evidence/github-issue39-issue.json",
+    "qa/b12-changeover-evidence/source/src/lib/b12-changeover.mjs",
+    "qa/b12-changeover-evidence/container-source-manifest.json",
+    "qa/b12-changeover-evidence/node-version.txt",
+    "qa/b12-changeover-delivery/B12-BR13-c773572-Test-r1-SHA256.json",
+    "qa/b12-changeover-evidence/oracle-inputs.json",
+    "qa/b12-changeover-evidence/capture.log",
+    "qa/b12-changeover-CLOSURE.csv",
+    "qa/b12-changeover-evidence/source/qa/b12-changeover-INTEGRATION.md",
+    "qa/b12-changeover-evidence/github-project.json",
+    "qa/b12-changeover-evidence/source/qa/b12-changeover-json-runner.mjs",
+    "qa/b12-changeover-evidence/source/qa/b12-changeover-selftest.mjs",
+    "qa/b12-changeover-delivery/B12-BR13-c773572-Test-r1-ORACLE.csv",
+    "qa/b12-changeover-evidence/sample-saved-result.json",
+    "qa/b12-changeover-evidence/github-issue39-comments.json",
+    "qa/b12-changeover-evidence/source/qa/b12-changeover-oracle.py",
+    "qa/b12-changeover-evidence/oracle-summary.json",
+    "qa/b12-changeover-delivery/B12-BR13-c773572-Test-r1-SELFTEST.csv",
+    "qa/b12-changeover-evidence/selftest-fixed-source.log",
+    "qa/b12-changeover-REPORT.md",
+    "qa/b12-changeover-evidence/source/qa/b12-changeover-worker.mjs",
+    "qa/b12-changeover-evidence/source/qa/b12-changeover-fixtures.mjs",
+    "qa/b12-changeover-evidence/SHA256.json",
+    "qa/b12-changeover-evidence/version.json",
+    "qa/b12-changeover-evidence/b12-changeover-INTEGRATION.md",
+    "qa/b12-changeover-evidence/sample-reopened-result.json"
+  ],
+  "main_file_intersection": [],
+  "outer_artifacts": [
+    {
+      "name": "B12-BR13-c773572-Test-r1-CLOSURE.csv",
+      "bytes": 4107,
+      "sha256": "7390f1e14c646149b4def928f64206f82341a4691d5daa6558783ae8a1261867"
+    },
+    {
+      "name": "B12-BR13-c773572-Test-r1-EVIDENCE.zip",
+      "bytes": 138816,
+      "sha256": "f14e3ae969553022cc52c678e96bc33f900fcf221ab8e12ca271a9ce2929d176"
+    },
+    {
+      "name": "B12-BR13-c773572-Test-r1-ORACLE.csv",
+      "bytes": 6898,
+      "sha256": "a6a1c0ef71748d3f0867e2ee27129fd9b42fec8be79eb0c3329aea58698fdee4"
+    },
+    {
+      "name": "B12-BR13-c773572-Test-r1-REPORT.md",
+      "bytes": 7318,
+      "sha256": "b64a788524cd84e36646f094e468689e2ea691ebdcdb8bf4372db78d31342c52"
+    },
+    {
+      "name": "B12-BR13-c773572-Test-r1-SELFTEST.csv",
+      "bytes": 4467,
+      "sha256": "5b5ce172a27a13ff3b938808c166e042028b9b7cd57ccaeb29724c11ab58c045"
+    },
+    {
+      "name": "B12-BR13-c773572-Test-r1-SHA256.json",
+      "bytes": 971,
+      "sha256": "ae474626b3658d3c888e53b6b2524049ab312dcc87590e5ce78b836c5afaf7ad"
+    },
+    {
+      "name": "B12-BR13-c773572-Test-r1-VERSION.json",
+      "bytes": 1206,
+      "sha256": "6f744867efda3deb55c4e1e3685b6fd06140ec842d3e4a5e4986009cd6ba039a"
+    }
+  ],
+  "zip_crc": "PASS",
+  "whole_issue": "In progress / PARTIAL / NOT_READY",
+  "QA": "NOT_DISPATCHED / NOT_EXECUTED",
+  "repair_increment": 0,
+  "internal_hashes": 35,
+  "source_blobs_verified": 10,
+  "closure_rows": [
+    {
+      "requirement": "BR-13",
+      "responsibility": "方向/适用资源/时长/人员/验证等待/禁配独立政策域",
+      "result": "PASS",
+      "evidence": "CORE-01/02/03;NEG-01–39;BOUND-01–08;oracle160",
+      "remaining_action": "Dev接配置/实际顺序/共享入口/独立实际计划检查；QA场景后续",
+      "owner": "APS-Dev/PM/QA"
+    },
+    {
+      "requirement": "BR-13",
+      "responsibility": "缺政策与重复方向不可推0/允许/双向",
+      "result": "PASS",
+      "evidence": "NEG-02/03/08/11/12/13/36/38",
+      "remaining_action": "实际配置完整性由Dev入口验证",
+      "owner": "APS-Dev"
+    },
+    {
+      "requirement": "BR-13",
+      "responsibility": "完整占用/日历/验证等待边界及方向来源",
+      "result": "PASS",
+      "evidence": "CORE-01/02;BOUND-01–08;NEG-17–24;oracle160",
+      "remaining_action": "实际冻结源物理行/共享账本映射",
+      "owner": "APS-Dev"
+    },
+    {
+      "requirement": "BR-13",
+      "responsibility": "不伪造现场清洗完成/质量批准",
+      "result": "PASS",
+      "evidence": "overallSchedulable=null;notChecked;sample-saved-result.json",
+      "remaining_action": "现场真实质量状态沿原入口；本域只时间候选",
+      "owner": "APS-Dev/QA"
+    },
+    {
+      "requirement": "FR-004",
+      "responsibility": "显式前后关系与必要依赖，不忽略未知政策",
+      "result": "PASS_SUBASSERTION",
+      "evidence": "CORE-01/02;NEG-02/17/38",
+      "remaining_action": "完整路线/实际相邻任务和问题关联；非整FR通过",
+      "owner": "APS-Dev"
+    },
+    {
+      "requirement": "FR-005",
+      "responsibility": "固定生产时长不因换型需求改变",
+      "result": "PASS_SUBASSERTION",
+      "evidence": "CORE-04;oracle productionContext",
+      "remaining_action": "实际产品速度/单位与原A01仍原责任；不重测旧PASS",
+      "owner": "APS-Dev/PM"
+    },
+    {
+      "requirement": "FR-008",
+      "responsibility": "转换占用完整窗/停用例外；不累加断裂窗口",
+      "result": "PASS_SUBASSERTION",
+      "evidence": "NEG-20–24;BOUND-02/07;oracle",
+      "remaining_action": "Dev适配真实工厂继承日历/班次/跨班契约",
+      "owner": "APS-Dev"
+    },
+    {
+      "requirement": "FR-021",
+      "responsibility": "保留任务/订单/数量上下文，无额外产出或缩短固定程序",
+      "result": "PASS_SUBASSERTION",
+      "evidence": "CORE-04;oracle snapshot/conservation",
+      "remaining_action": "真实拆合批/尾批保持旧源边界，本次未重复验收",
+      "owner": "APS-Dev"
+    },
+    {
+      "requirement": "FR-022",
+      "responsibility": "域内资源与指定技能组完整占用，总需求不超独立容量",
+      "result": "PASS_SUBASSERTION",
+      "evidence": "BOUND-03/04/05/06/08;oracle",
+      "remaining_action": "Dev补共享池/跨组同人/全部生产资源联合与真实账本",
+      "owner": "APS-Dev"
+    },
+    {
+      "requirement": "FR-023",
+      "responsibility": "后序不得早于换型与验证等待完成",
+      "result": "PASS_SUBASSERTION",
+      "evidence": "CORE-01/02;NEG-18/19;BOUND-01",
+      "remaining_action": "整订单可交付与交期影响/质量条件未在本域检查",
+      "owner": "APS-Dev/QA"
+    },
+    {
+      "requirement": "FR-025",
+      "responsibility": "输出检查/具体问题/尚未检查项及冻结源",
+      "result": "PASS_SUBASSERTION",
+      "evidence": "sample-*.json;NEG cases;SAVE-01",
+      "remaining_action": "Dev独立读取实际保存计划全量复核，不能合法提案替代实际结果",
+      "owner": "APS-Dev"
+    },
+    {
+      "requirement": "FR-034",
+      "responsibility": "问题结构带任务/区间/需求容量/来源",
+      "result": "PASS_SUBASSERTION",
+      "evidence": "BOUND-03;findings/inspections;source metadata",
+      "remaining_action": "真实UI联动定位/原物理行/筛选未执行",
+      "owner": "APS-Dev"
+    },
+    {
+      "requirement": "AC-08",
+      "responsibility": "BOM/收率/物料数量",
+      "result": "NOT_REPEATED",
+      "evidence": "保留既有B12/B09原SHA证据",
+      "remaining_action": "与本独立域无新增断言；不算本次PASS",
+      "owner": "APS-PM/Dev"
+    },
+    {
+      "requirement": "AC-09",
+      "responsibility": "规格/包装/有效速度",
+      "result": "NOT_REPEATED",
+      "evidence": "原A01/A02与旧SHA证据不变",
+      "remaining_action": "原未决契约由PM→用户，合法既有模型继续",
+      "owner": "APS-PM/Dev"
+    },
+    {
+      "requirement": "AC-13",
+      "responsibility": "不改固定生产程序/不自动超产，仅保护本域输入上下文",
+      "result": "PASS_SUBASSERTION",
+      "evidence": "CORE-04;oracle conservation",
+      "remaining_action": "实际容量拆合批兼容/尾批由原B12实现和整合负责",
+      "owner": "APS-Dev/QA"
+    },
+    {
+      "requirement": "AC-14",
+      "responsibility": "BR13等待/所需资源时间窗及容量边界",
+      "result": "PASS_SUBASSERTION",
+      "evidence": "NEG-18–24;BOUND-01–08;oracle",
+      "remaining_action": "真实冷却/空间上游约束及全路线场景不在本域",
+      "owner": "APS-Dev/QA"
+    },
+    {
+      "requirement": "AC-15",
+      "responsibility": "未知/缺项/来源/显式零值与未检查项不可伪PASS",
+      "result": "PASS_SUBASSERTION",
+      "evidence": "CORE-03;NEG-01–39;notChecked",
+      "remaining_action": "Dev接应用规则选择/启用范围/配置入口",
+      "owner": "APS-Dev"
+    },
+    {
+      "requirement": "AC-17",
+      "responsibility": "可定位的问题对象与原方向来源",
+      "result": "PASS_SUBASSERTION",
+      "evidence": "BOUND-03;sample output policySource/sequenceSource",
+      "remaining_action": "真实甘特/原输入/问题联动未执行",
+      "owner": "APS-Dev/QA"
+    },
+    {
+      "requirement": "AC-18",
+      "responsibility": "验证等待不能视为立即可用或质量批准",
+      "result": "PASS_SUBASSERTION",
+      "evidence": "CORE-01/02;NEG-18;overallSchedulable=null",
+      "remaining_action": "完整可交付与剩余效期场景由Dev/QA",
+      "owner": "APS-Dev/QA"
+    },
+    {
+      "requirement": "AC-32",
+      "responsibility": "域JSON实际保存重开/冻结旧政策版本",
+      "result": "PASS_SUBASSERTION",
+      "evidence": "SAVE-01;sample-saved/reopened-result.json",
+      "remaining_action": "应用数据库/版本恢复/完整计划重开/CSV导出未执行",
+      "owner": "APS-Dev/QA"
+    },
+    {
+      "requirement": "WORKER",
+      "responsibility": "standalone Node worker domain等价",
+      "result": "PASS_DOMAIN_ONLY",
+      "evidence": "WORKER-01;sample-worker-result.json",
+      "remaining_action": "实际应用Worker/真实UI/API未执行",
+      "owner": "APS-Dev"
+    },
+    {
+      "requirement": "UAT-12/13/14",
+      "responsibility": "#39整包业务UAT",
+      "result": "NOT_EXECUTED",
+      "evidence": "QA未派；本结果不提供QA结论",
+      "remaining_action": "具体完整入口由PM核定后派QA",
+      "owner": "APS-PM/QA"
+    },
+    {
+      "requirement": "A01/A02",
+      "responsibility": "旧产品速度/单位/跨批包装等未知语义",
+      "result": "UNCHANGED",
+      "evidence": "原#39记录",
+      "remaining_action": "不扩BR13阻断、不推公式、不扩DEC04–06/B02/P1",
+      "owner": "APS-PM"
+    }
+  ],
+  "selftest_pass": 53,
+  "oracle_pass": 160,
+  "oracle_summary": {
+    "seed": 131320261031,
+    "cases": 160,
+    "pass": 160,
+    "fail": 0,
+    "valid": 27,
+    "negative": 133,
+    "method": "independent per-integer-minute enumeration + explicit expected occupations; no domain helper imports"
+  },
+  "pm_limits": "Artifact/hash/Git blob/archived result checks only; PM did not rerun product tests or UAT",
+  "test_next": "No independent ready approved task: #39/#40 remaining work writes Dev shared inputs; #41/42 application/P1 depend on current integration, #43 P1 and #44 D3 not enabled. APS-Test idle pending a new nonconflicting approved scope.",
+  "dev_source_input": "dlv_93f4c617-feb4-402f-ad5e-d5148e903c61",
+  "dev_source_input_status": "waiting",
+  "dev_original": "dlv_b3352a5a-be4b-4260-b49d-a211163a2e51",
+  "processed_at": "2026-10-31T11:53:20.388302+00:00",
+  "status": "PROCESSED_SCOPED_DOMAIN_DONE",
+  "plugin_write": "403; used existing authorized workspace GitHub API fallback",
+  "applicable_basis": "v0.3 BR13 and original #39 approved domain reassignment; no CR/default approval"
+}
