@@ -1,0 +1,29 @@
+{
+  "productSource": "c773572aa53da2235ef29233bffa3d5656ce191c",
+  "parent": "7fd9683291607b65e8fbf52f633fcbc9d88254e7",
+  "branch": "test/b12-br13-changeover-20261031",
+  "mainAtStart": "7fd9683291607b65e8fbf52f633fcbc9d88254e7",
+  "mainAtFinalFetch": "7fd9683291607b65e8fbf52f633fcbc9d88254e7",
+  "mainStartParent": "70f5811559c7b8767b85666f3e8592215abfb7b7",
+  "mergeBase": "7fd9683291607b65e8fbf52f633fcbc9d88254e7",
+  "changedFiles": [
+    "qa/b12-changeover-INTEGRATION.md",
+    "qa/b12-changeover-capture.mjs",
+    "qa/b12-changeover-fixtures.mjs",
+    "qa/b12-changeover-json-runner.mjs",
+    "qa/b12-changeover-oracle.py",
+    "qa/b12-changeover-selftest.mjs",
+    "qa/b12-changeover-worker.mjs",
+    "src/lib/b12-changeover.d.mts",
+    "src/lib/b12-changeover.mjs"
+  ],
+  "upstreamChangedFiles": [],
+  "fileIntersection": [],
+  "designSourceSHA": null,
+  "governanceBaseline": "7fd9683291607b65e8fbf52f633fcbc9d88254e7",
+  "event_key": "dlv_62a68abb-93cf-43f9-bf95-9bdd59fcd1e1:r1",
+  "dispatch_event_key": "b12:br13-domain-reassignment:20261031:r1:APS-Test",
+  "timeUTC": "2026-10-31T11:43:13.590443+00:00",
+  "qaUAT": "NOT_DISPATCHED/NOT_EXECUTED",
+  "integration": "NOT_EXECUTED; Dev owner"
+}

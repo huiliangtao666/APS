@@ -1,0 +1,32 @@
+[
+  {
+    "file": "B12-BR13-c773572-Test-r1-CLOSURE.csv",
+    "bytes": 4107,
+    "sha256": "7390f1e14c646149b4def928f64206f82341a4691d5daa6558783ae8a1261867"
+  },
+  {
+    "file": "B12-BR13-c773572-Test-r1-EVIDENCE.zip",
+    "bytes": 138816,
+    "sha256": "f14e3ae969553022cc52c678e96bc33f900fcf221ab8e12ca271a9ce2929d176"
+  },
+  {
+    "file": "B12-BR13-c773572-Test-r1-ORACLE.csv",
+    "bytes": 6898,
+    "sha256": "a6a1c0ef71748d3f0867e2ee27129fd9b42fec8be79eb0c3329aea58698fdee4"
+  },
+  {
+    "file": "B12-BR13-c773572-Test-r1-REPORT.md",
+    "bytes": 7318,
+    "sha256": "b64a788524cd84e36646f094e468689e2ea691ebdcdb8bf4372db78d31342c52"
+  },
+  {
+    "file": "B12-BR13-c773572-Test-r1-SELFTEST.csv",
+    "bytes": 4467,
+    "sha256": "5b5ce172a27a13ff3b938808c166e042028b9b7cd57ccaeb29724c11ab58c045"
+  },
+  {
+    "file": "B12-BR13-c773572-Test-r1-VERSION.json",
+    "bytes": 1206,
+    "sha256": "6f744867efda3deb55c4e1e3685b6fd06140ec842d3e4a5e4986009cd6ba039a"
+  }
+]

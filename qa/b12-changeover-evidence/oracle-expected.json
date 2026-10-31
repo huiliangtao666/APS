@@ -1,0 +1,6653 @@
+[
+  {
+    "id": "ORACLE-000",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        12,
+        18,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        12,
+        18,
+        2
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        18,
+        21,
+        1
+      ]
+    ],
+    "readyAt": 21,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-001",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        23,
+        33,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        23,
+        33,
+        2
+      ]
+    ],
+    "readyAt": 38,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-002",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        17,
+        23,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        17,
+        23,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        23,
+        30,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        23,
+        30,
+        1
+      ]
+    ],
+    "readyAt": 30,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-003",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        14,
+        24,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        14,
+        24,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        24,
+        28,
+        1
+      ]
+    ],
+    "readyAt": 28,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-004",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        12,
+        18,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        12,
+        18,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        18,
+        21,
+        1
+      ]
+    ],
+    "readyAt": 21,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-005",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        19,
+        28,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        19,
+        28,
+        3
+      ]
+    ],
+    "readyAt": 32,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-006",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        19,
+        30,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        19,
+        30,
+        2
+      ]
+    ],
+    "readyAt": 30,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-007",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        25,
+        27,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        25,
+        27,
+        3
+      ]
+    ],
+    "readyAt": 34,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-008",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP",
+      "PROHIBITED"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        19,
+        25,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        19,
+        25,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        25,
+        32,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        25,
+        32,
+        1
+      ]
+    ],
+    "readyAt": 32,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-009",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        15,
+        25,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        15,
+        25,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        25,
+        28,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        25,
+        28,
+        1
+      ]
+    ],
+    "readyAt": 28,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-010",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        21,
+        26,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        21,
+        26,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        26,
+        29,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        26,
+        29,
+        1
+      ]
+    ],
+    "readyAt": 29,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-011",
+    "codes": [
+      "CALENDAR"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        22,
+        35,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        22,
+        35,
+        3
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        35,
+        37,
+        1
+      ]
+    ],
+    "readyAt": 37,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-012",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        20,
+        25,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        20,
+        25,
+        3
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        25,
+        27,
+        1
+      ]
+    ],
+    "readyAt": 27,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-013",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "PROHIBITED",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        26,
+        34,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        26,
+        34,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        34,
+        38,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        34,
+        38,
+        1
+      ]
+    ],
+    "readyAt": 38,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-014",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        14,
+        28,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        14,
+        28,
+        3
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        28,
+        31,
+        1
+      ]
+    ],
+    "readyAt": 31,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-015",
+    "codes": [
+      "CALENDAR",
+      "PRECEDENCE",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        13,
+        15,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        13,
+        15,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        15,
+        19,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        15,
+        19,
+        1
+      ]
+    ],
+    "readyAt": 19,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-016",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "PROHIBITED"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        17,
+        29,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        17,
+        29,
+        3
+      ]
+    ],
+    "readyAt": 36,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-017",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        16,
+        20,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        16,
+        20,
+        2
+      ]
+    ],
+    "readyAt": 21,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-018",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        20,
+        22,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        20,
+        22,
+        3
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        22,
+        26,
+        1
+      ]
+    ],
+    "readyAt": 26,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-019",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "PROHIBITED"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        18,
+        30,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        18,
+        30,
+        3
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        30,
+        31,
+        1
+      ]
+    ],
+    "readyAt": 31,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-020",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        13,
+        15,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        13,
+        15,
+        3
+      ]
+    ],
+    "readyAt": 18,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-021",
+    "codes": [
+      "PROHIBITED"
+    ],
+    "occupations": [
+      [
+        "validation",
+        "personnel",
+        "P",
+        19,
+        27,
+        1
+      ]
+    ],
+    "readyAt": 27,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-022",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        14,
+        24,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        14,
+        24,
+        1
+      ]
+    ],
+    "readyAt": 24,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-023",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        24,
+        25,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        24,
+        25,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        25,
+        33,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        25,
+        33,
+        1
+      ]
+    ],
+    "readyAt": 33,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-024",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP",
+      "PRECEDENCE"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        21,
+        32,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        21,
+        32,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        32,
+        37,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        32,
+        37,
+        1
+      ]
+    ],
+    "readyAt": 37,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-025",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        12,
+        16,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        12,
+        16,
+        3
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        16,
+        22,
+        1
+      ]
+    ],
+    "readyAt": 22,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-026",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        28,
+        31,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        28,
+        31,
+        2
+      ]
+    ],
+    "readyAt": 37,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-027",
+    "codes": [
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        29,
+        37,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        29,
+        37,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        37,
+        44,
+        1
+      ]
+    ],
+    "readyAt": 44,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-028",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        20,
+        27,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        20,
+        27,
+        1
+      ]
+    ],
+    "readyAt": 33,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-029",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        14,
+        19,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        14,
+        19,
+        3
+      ]
+    ],
+    "readyAt": 19,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-030",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        29,
+        31,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        29,
+        31,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        31,
+        38,
+        1
+      ]
+    ],
+    "readyAt": 38,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-031",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        25,
+        32,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        25,
+        32,
+        3
+      ]
+    ],
+    "readyAt": 32,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-032",
+    "codes": [
+      "CALENDAR"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        23,
+        30,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        23,
+        30,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        30,
+        36,
+        1
+      ]
+    ],
+    "readyAt": 36,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-033",
+    "codes": [
+      "CALENDAR",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        24,
+        29,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        24,
+        29,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        29,
+        30,
+        1
+      ]
+    ],
+    "readyAt": 30,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-034",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        17,
+        29,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        17,
+        29,
+        1
+      ]
+    ],
+    "readyAt": 29,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-035",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        10,
+        22,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        10,
+        22,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        22,
+        23,
+        1
+      ]
+    ],
+    "readyAt": 23,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-036",
+    "codes": [
+      "CALENDAR",
+      "PROHIBITED"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        22,
+        29,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        22,
+        29,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        29,
+        34,
+        1
+      ]
+    ],
+    "readyAt": 34,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-037",
+    "codes": [
+      "CALENDAR"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        15,
+        25,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        15,
+        25,
+        1
+      ]
+    ],
+    "readyAt": 25,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-038",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        22,
+        32,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        22,
+        32,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        32,
+        39,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        32,
+        39,
+        1
+      ]
+    ],
+    "readyAt": 39,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-039",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        21,
+        25,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        21,
+        25,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        25,
+        31,
+        1
+      ]
+    ],
+    "readyAt": 31,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-040",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        28,
+        36,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        28,
+        36,
+        1
+      ]
+    ],
+    "readyAt": 44,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-041",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        26,
+        35,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        26,
+        35,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        35,
+        43,
+        1
+      ]
+    ],
+    "readyAt": 43,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-042",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        17,
+        26,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        17,
+        26,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        26,
+        28,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        26,
+        28,
+        1
+      ]
+    ],
+    "readyAt": 28,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-043",
+    "codes": [
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        25,
+        30,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        25,
+        30,
+        3
+      ]
+    ],
+    "readyAt": 38,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-044",
+    "codes": [
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        11,
+        16,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        11,
+        16,
+        2
+      ]
+    ],
+    "readyAt": 16,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-045",
+    "codes": [
+      "CALENDAR"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        24,
+        29,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        24,
+        29,
+        3
+      ]
+    ],
+    "readyAt": 29,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-046",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        17,
+        31,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        17,
+        31,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        31,
+        32,
+        1
+      ]
+    ],
+    "readyAt": 32,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-047",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        15,
+        21,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        15,
+        21,
+        2
+      ]
+    ],
+    "readyAt": 21,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-048",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        14,
+        17,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        14,
+        17,
+        3
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        17,
+        22,
+        1
+      ]
+    ],
+    "readyAt": 22,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-049",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP",
+      "PRECEDENCE"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        11,
+        25,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        11,
+        25,
+        2
+      ]
+    ],
+    "readyAt": 26,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-050",
+    "codes": [
+      "CALENDAR"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        24,
+        32,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        24,
+        32,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        32,
+        38,
+        1
+      ]
+    ],
+    "readyAt": 38,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-051",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        22,
+        33,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        22,
+        33,
+        1
+      ]
+    ],
+    "readyAt": 37,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-052",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        20,
+        34,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        20,
+        34,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        34,
+        35,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        34,
+        35,
+        1
+      ]
+    ],
+    "readyAt": 35,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-053",
+    "codes": [
+      "CALENDAR"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        12,
+        19,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        12,
+        19,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        19,
+        27,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        19,
+        27,
+        1
+      ]
+    ],
+    "readyAt": 27,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-054",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP",
+      "PROHIBITED"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        12,
+        25,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        12,
+        25,
+        3
+      ]
+    ],
+    "readyAt": 25,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-055",
+    "codes": [
+      "CALENDAR"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        22,
+        31,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        22,
+        31,
+        3
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        31,
+        35,
+        1
+      ]
+    ],
+    "readyAt": 35,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-056",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "PROHIBITED"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        20,
+        31,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        20,
+        31,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        31,
+        34,
+        1
+      ]
+    ],
+    "readyAt": 34,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-057",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "PROHIBITED",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        23,
+        35,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        23,
+        35,
+        2
+      ]
+    ],
+    "readyAt": 36,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-058",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "PRECEDENCE",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        29,
+        35,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        29,
+        35,
+        2
+      ]
+    ],
+    "readyAt": 35,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-059",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        15,
+        22,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        15,
+        22,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        22,
+        29,
+        1
+      ]
+    ],
+    "readyAt": 29,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-060",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        28,
+        32,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        28,
+        32,
+        1
+      ]
+    ],
+    "readyAt": 33,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-061",
+    "codes": [
+      "CALENDAR",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        11,
+        22,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        11,
+        22,
+        2
+      ]
+    ],
+    "readyAt": 23,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-062",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        26,
+        32,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        26,
+        32,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        32,
+        38,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        32,
+        38,
+        1
+      ]
+    ],
+    "readyAt": 38,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-063",
+    "codes": [
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        29,
+        30,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        29,
+        30,
+        1
+      ]
+    ],
+    "readyAt": 33,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-064",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        22,
+        33,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        22,
+        33,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        33,
+        38,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        33,
+        38,
+        1
+      ]
+    ],
+    "readyAt": 38,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-065",
+    "codes": [
+      "CALENDAR",
+      "PROHIBITED",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        16,
+        24,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        16,
+        24,
+        1
+      ]
+    ],
+    "readyAt": 31,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-066",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        29,
+        33,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        29,
+        33,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        33,
+        35,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        33,
+        35,
+        1
+      ]
+    ],
+    "readyAt": 35,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-067",
+    "codes": [
+      "CALENDAR"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        22,
+        27,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        22,
+        27,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        27,
+        35,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        27,
+        35,
+        1
+      ]
+    ],
+    "readyAt": 35,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-068",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        16,
+        18,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        16,
+        18,
+        3
+      ]
+    ],
+    "readyAt": 18,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-069",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        10,
+        17,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        10,
+        17,
+        3
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        17,
+        22,
+        1
+      ]
+    ],
+    "readyAt": 22,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-070",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        25,
+        36,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        25,
+        36,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        36,
+        41,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        36,
+        41,
+        1
+      ]
+    ],
+    "readyAt": 41,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-071",
+    "codes": [
+      "CALENDAR"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        22,
+        29,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        22,
+        29,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        29,
+        30,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        29,
+        30,
+        1
+      ]
+    ],
+    "readyAt": 30,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-072",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        15,
+        21,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        15,
+        21,
+        2
+      ]
+    ],
+    "readyAt": 21,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-073",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        24,
+        32,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        24,
+        32,
+        1
+      ]
+    ],
+    "readyAt": 37,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-074",
+    "codes": [
+      "PROHIBITED",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        25,
+        32,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        25,
+        32,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        32,
+        33,
+        1
+      ]
+    ],
+    "readyAt": 33,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-075",
+    "codes": [
+      "CALENDAR",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        20,
+        26,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        20,
+        26,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        26,
+        30,
+        1
+      ]
+    ],
+    "readyAt": 30,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-076",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "PROHIBITED",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        12,
+        22,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        12,
+        22,
+        1
+      ]
+    ],
+    "readyAt": 27,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-077",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        11,
+        16,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        11,
+        16,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        16,
+        18,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        16,
+        18,
+        1
+      ]
+    ],
+    "readyAt": 18,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-078",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        29,
+        32,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        29,
+        32,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        32,
+        37,
+        1
+      ]
+    ],
+    "readyAt": 37,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-079",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        23,
+        26,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        23,
+        26,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        26,
+        28,
+        1
+      ]
+    ],
+    "readyAt": 28,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-080",
+    "codes": [
+      "CALENDAR"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        19,
+        21,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        19,
+        21,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        21,
+        25,
+        1
+      ]
+    ],
+    "readyAt": 25,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-081",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        14,
+        15,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        14,
+        15,
+        1
+      ]
+    ],
+    "readyAt": 15,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-082",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        18,
+        19,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        18,
+        19,
+        3
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        19,
+        23,
+        1
+      ]
+    ],
+    "readyAt": 23,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-083",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        28,
+        39,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        28,
+        39,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        39,
+        46,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        39,
+        46,
+        1
+      ]
+    ],
+    "readyAt": 46,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-084",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        24,
+        28,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        24,
+        28,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        28,
+        31,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        28,
+        31,
+        1
+      ]
+    ],
+    "readyAt": 31,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-085",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "PRECEDENCE"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        29,
+        35,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        29,
+        35,
+        3
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        35,
+        43,
+        1
+      ]
+    ],
+    "readyAt": 43,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-086",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        12,
+        20,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        12,
+        20,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        20,
+        21,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        20,
+        21,
+        1
+      ]
+    ],
+    "readyAt": 21,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-087",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        15,
+        23,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        15,
+        23,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        23,
+        27,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        23,
+        27,
+        1
+      ]
+    ],
+    "readyAt": 27,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-088",
+    "codes": [
+      "CALENDAR",
+      "PRECEDENCE"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        17,
+        29,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        17,
+        29,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        29,
+        32,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        29,
+        32,
+        1
+      ]
+    ],
+    "readyAt": 32,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-089",
+    "codes": [
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [],
+    "readyAt": 33,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-090",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        19,
+        33,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        19,
+        33,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        33,
+        41,
+        1
+      ]
+    ],
+    "readyAt": 41,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-091",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        28,
+        29,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        28,
+        29,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        29,
+        32,
+        1
+      ]
+    ],
+    "readyAt": 32,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-092",
+    "codes": [
+      "PROHIBITED"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        29,
+        36,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        29,
+        36,
+        2
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        36,
+        42,
+        1
+      ]
+    ],
+    "readyAt": 42,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-093",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        11,
+        24,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        11,
+        24,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        24,
+        25,
+        1
+      ]
+    ],
+    "readyAt": 25,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-094",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        11,
+        13,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        11,
+        13,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        13,
+        17,
+        1
+      ]
+    ],
+    "readyAt": 17,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-095",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP",
+      "PRECEDENCE"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        17,
+        20,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        17,
+        20,
+        3
+      ]
+    ],
+    "readyAt": 21,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-096",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        13,
+        20,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        13,
+        20,
+        2
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        20,
+        22,
+        1
+      ]
+    ],
+    "readyAt": 22,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-097",
+    "codes": [
+      "PROHIBITED",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        16,
+        17,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        16,
+        17,
+        1
+      ]
+    ],
+    "readyAt": 22,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-098",
+    "codes": [
+      "CALENDAR",
+      "PROHIBITED"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        23,
+        36,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        23,
+        36,
+        1
+      ]
+    ],
+    "readyAt": 41,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-099",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "PRECEDENCE"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        24,
+        37,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        24,
+        37,
+        3
+      ]
+    ],
+    "readyAt": 42,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-100",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        16,
+        22,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        16,
+        22,
+        3
+      ]
+    ],
+    "readyAt": 28,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-101",
+    "codes": [
+      "CALENDAR"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        18,
+        31,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        18,
+        31,
+        1
+      ]
+    ],
+    "readyAt": 31,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-102",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        26,
+        36,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        26,
+        36,
+        2
+      ]
+    ],
+    "readyAt": 44,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-103",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        14,
+        16,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        14,
+        16,
+        1
+      ]
+    ],
+    "readyAt": 23,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-104",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        25,
+        36,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        25,
+        36,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        36,
+        44,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        36,
+        44,
+        1
+      ]
+    ],
+    "readyAt": 44,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-105",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP",
+      "PRECEDENCE"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        24,
+        38,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        24,
+        38,
+        3
+      ]
+    ],
+    "readyAt": 38,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-106",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        12,
+        17,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        12,
+        17,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        17,
+        18,
+        1
+      ]
+    ],
+    "readyAt": 18,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-107",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        17,
+        21,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        17,
+        21,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        21,
+        23,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        21,
+        23,
+        1
+      ]
+    ],
+    "readyAt": 23,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-108",
+    "codes": [
+      "CALENDAR"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        17,
+        30,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        17,
+        30,
+        3
+      ]
+    ],
+    "readyAt": 36,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-109",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        25,
+        33,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        25,
+        33,
+        3
+      ]
+    ],
+    "readyAt": 36,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-110",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        19,
+        23,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        19,
+        23,
+        2
+      ]
+    ],
+    "readyAt": 24,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-111",
+    "codes": [
+      "CALENDAR"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        17,
+        20,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        17,
+        20,
+        3
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        20,
+        28,
+        1
+      ]
+    ],
+    "readyAt": 28,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-112",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        23,
+        34,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        23,
+        34,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        34,
+        40,
+        1
+      ]
+    ],
+    "readyAt": 40,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-113",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        25,
+        30,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        25,
+        30,
+        2
+      ]
+    ],
+    "readyAt": 31,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-114",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP",
+      "PRECEDENCE",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        18,
+        29,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        18,
+        29,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        29,
+        36,
+        1
+      ]
+    ],
+    "readyAt": 36,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-115",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        14,
+        24,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        14,
+        24,
+        2
+      ]
+    ],
+    "readyAt": 24,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-116",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "PRECEDENCE"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        22,
+        24,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        22,
+        24,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        24,
+        26,
+        1
+      ]
+    ],
+    "readyAt": 26,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-117",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "PROHIBITED",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        27,
+        40,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        27,
+        40,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        40,
+        48,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        40,
+        48,
+        1
+      ]
+    ],
+    "readyAt": 48,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-118",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        22,
+        25,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        22,
+        25,
+        2
+      ]
+    ],
+    "readyAt": 33,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-119",
+    "codes": [
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        13,
+        16,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        13,
+        16,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        16,
+        18,
+        1
+      ]
+    ],
+    "readyAt": 18,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-120",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        14,
+        20,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        14,
+        20,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        20,
+        25,
+        1
+      ]
+    ],
+    "readyAt": 25,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-121",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        11,
+        16,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        11,
+        16,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        16,
+        23,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        16,
+        23,
+        1
+      ]
+    ],
+    "readyAt": 23,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-122",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        12,
+        20,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        12,
+        20,
+        3
+      ]
+    ],
+    "readyAt": 27,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-123",
+    "codes": [
+      "PROHIBITED"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        27,
+        34,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        27,
+        34,
+        1
+      ]
+    ],
+    "readyAt": 34,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-124",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        28,
+        33,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        28,
+        33,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        33,
+        40,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        33,
+        40,
+        1
+      ]
+    ],
+    "readyAt": 40,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-125",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        26,
+        32,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        26,
+        32,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        32,
+        37,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        32,
+        37,
+        1
+      ]
+    ],
+    "readyAt": 37,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-126",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        28,
+        40,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        28,
+        40,
+        2
+      ]
+    ],
+    "readyAt": 40,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-127",
+    "codes": [
+      "CALENDAR"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        20,
+        23,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        20,
+        23,
+        3
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        23,
+        24,
+        1
+      ]
+    ],
+    "readyAt": 24,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-128",
+    "codes": [
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        27,
+        37,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        27,
+        37,
+        3
+      ]
+    ],
+    "readyAt": 45,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-129",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        26,
+        33,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        26,
+        33,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        33,
+        38,
+        1
+      ]
+    ],
+    "readyAt": 38,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-130",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        28,
+        37,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        28,
+        37,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        37,
+        40,
+        1
+      ]
+    ],
+    "readyAt": 40,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-131",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        12,
+        13,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        12,
+        13,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        13,
+        18,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        13,
+        18,
+        1
+      ]
+    ],
+    "readyAt": 18,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-132",
+    "codes": [],
+    "occupations": [
+      [
+        "validation",
+        "resource",
+        "M",
+        28,
+        36,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        28,
+        36,
+        1
+      ]
+    ],
+    "readyAt": 36,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-133",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        27,
+        41,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        27,
+        41,
+        3
+      ]
+    ],
+    "readyAt": 41,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-134",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "PROHIBITED"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        28,
+        37,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        28,
+        37,
+        2
+      ]
+    ],
+    "readyAt": 40,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-135",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        16,
+        22,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        16,
+        22,
+        1
+      ]
+    ],
+    "readyAt": 22,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-136",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        23,
+        30,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        23,
+        30,
+        3
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        30,
+        35,
+        1
+      ]
+    ],
+    "readyAt": 35,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-137",
+    "codes": [],
+    "occupations": [
+      [
+        "validation",
+        "resource",
+        "M",
+        13,
+        20,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        13,
+        20,
+        1
+      ]
+    ],
+    "readyAt": 20,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-138",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "PROHIBITED",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        26,
+        32,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        26,
+        32,
+        2
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        32,
+        40,
+        1
+      ]
+    ],
+    "readyAt": 40,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-139",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        13,
+        23,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        13,
+        23,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        23,
+        28,
+        1
+      ]
+    ],
+    "readyAt": 28,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-140",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "PRECEDENCE"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        29,
+        39,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        29,
+        39,
+        2
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        39,
+        44,
+        1
+      ]
+    ],
+    "readyAt": 44,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-141",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        26,
+        38,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        26,
+        38,
+        3
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        38,
+        45,
+        1
+      ]
+    ],
+    "readyAt": 45,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-142",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        25,
+        30,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        25,
+        30,
+        2
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        30,
+        36,
+        1
+      ]
+    ],
+    "readyAt": 36,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-143",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        14,
+        21,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        14,
+        21,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        21,
+        28,
+        1
+      ]
+    ],
+    "readyAt": 28,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-144",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        28,
+        41,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        28,
+        41,
+        1
+      ]
+    ],
+    "readyAt": 41,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-145",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        25,
+        26,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        25,
+        26,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        26,
+        34,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        26,
+        34,
+        1
+      ]
+    ],
+    "readyAt": 34,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-146",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        22,
+        36,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        22,
+        36,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        36,
+        37,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        36,
+        37,
+        1
+      ]
+    ],
+    "readyAt": 37,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-147",
+    "codes": [
+      "PRECEDENCE"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        24,
+        26,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        24,
+        26,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        26,
+        27,
+        1
+      ]
+    ],
+    "readyAt": 27,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-148",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "PROHIBITED"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        14,
+        18,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        14,
+        18,
+        2
+      ]
+    ],
+    "readyAt": 18,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-149",
+    "codes": [
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        21,
+        34,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        21,
+        34,
+        3
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        34,
+        36,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        34,
+        36,
+        1
+      ]
+    ],
+    "readyAt": 36,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-150",
+    "codes": [
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        10,
+        20,
+        2
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        10,
+        20,
+        2
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        20,
+        21,
+        1
+      ]
+    ],
+    "readyAt": 21,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-151",
+    "codes": [
+      "CAPACITY_OVERLAP",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        23,
+        24,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        23,
+        24,
+        2
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        24,
+        28,
+        1
+      ]
+    ],
+    "readyAt": 28,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-152",
+    "codes": [
+      "CALENDAR",
+      "VALIDATION_WAIT"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        14,
+        23,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        14,
+        23,
+        2
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        23,
+        24,
+        1
+      ]
+    ],
+    "readyAt": 24,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-153",
+    "codes": [],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        15,
+        19,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        15,
+        19,
+        1
+      ]
+    ],
+    "readyAt": 19,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-154",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        19,
+        29,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        19,
+        29,
+        1
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        29,
+        36,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        29,
+        36,
+        1
+      ]
+    ],
+    "readyAt": 36,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-155",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        21,
+        32,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        21,
+        32,
+        2
+      ],
+      [
+        "validation",
+        "resource",
+        "M",
+        32,
+        35,
+        1
+      ]
+    ],
+    "readyAt": 35,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-156",
+    "codes": [
+      "PRECEDENCE"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        13,
+        25,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        13,
+        25,
+        2
+      ]
+    ],
+    "readyAt": 32,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-157",
+    "codes": [
+      "PROHIBITED"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        26,
+        40,
+        1
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        26,
+        40,
+        1
+      ]
+    ],
+    "readyAt": 40,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-158",
+    "codes": [
+      "CALENDAR",
+      "PROHIBITED"
+    ],
+    "occupations": [
+      [
+        "validation",
+        "resource",
+        "M",
+        20,
+        22,
+        1
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        20,
+        22,
+        1
+      ]
+    ],
+    "readyAt": 22,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  },
+  {
+    "id": "ORACLE-159",
+    "codes": [
+      "CALENDAR",
+      "CAPACITY_OVERLAP"
+    ],
+    "occupations": [
+      [
+        "changeover",
+        "resource",
+        "M",
+        14,
+        27,
+        3
+      ],
+      [
+        "changeover",
+        "personnel",
+        "P",
+        14,
+        27,
+        3
+      ],
+      [
+        "validation",
+        "personnel",
+        "P",
+        27,
+        30,
+        1
+      ]
+    ],
+    "readyAt": 30,
+    "productionQuantityBefore": 500,
+    "productionQuantityAfter": 500,
+    "productionDurationsBefore": [
+      30,
+      30
+    ],
+    "productionDurationsAfter": [
+      30,
+      30
+    ]
+  }
+]

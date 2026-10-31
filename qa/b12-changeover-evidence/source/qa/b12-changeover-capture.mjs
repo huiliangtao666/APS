@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import {mkdir, writeFile, readFile} from 'node:fs/promises';
+import {Worker} from 'node:worker_threads';
+import {checkChangeovers} from '../src/lib/b12-changeover.mjs';
+import {fixture} from './b12-changeover-fixtures.mjs';
+const out = process.argv[2] || 'qa/b12-changeover-evidence';
+await mkdir(out, {recursive: true});
+const input = fixture(), direct = checkChangeovers(input);
+await writeFile(out + '/sample-input.json', JSON.stringify(input, null, 2));
+await writeFile(out + '/sample-saved-result.json', JSON.stringify(direct, null, 2));
+const reopened = JSON.parse(await readFile(out + '/sample-saved-result.json', 'utf8'));
+const rechecked = checkChangeovers(reopened.snapshot);
+assert.deepEqual(rechecked, direct);
+const worker = await new Promise((resolve, reject) => {
+  const w = new Worker(new URL('./b12-changeover-worker.mjs', import.meta.url), {workerData: reopened.snapshot});
+  w.once('message', resolve); w.once('error', reject);
+  w.once('exit', code => {if (code) reject(Error('worker ' + code));});
+});
+assert.deepEqual(worker, direct);
+await writeFile(out + '/sample-reopened-result.json', JSON.stringify(rechecked, null, 2));
+await writeFile(out + '/sample-worker-result.json', JSON.stringify(worker, null, 2));
+console.log(JSON.stringify({result: 'PASS', capture: out, direct: true, diskReopen: true, standaloneNodeWorker: true, applicationIntegration: 'NOT_EXECUTED'}));
