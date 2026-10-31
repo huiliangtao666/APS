@@ -1,3 +1,5 @@
+import {originalStageNote} from './lib/original-stage-data.mjs';
+import {originalBomNote} from './lib/original-bom.mjs';
 import type {CsvProblem,CheckedCsvInput,OpenCsvProblem} from './lib/problem-records.mjs';
 import {originalResourceNote} from './lib/original-resources.mjs';
 import {MasterDataContract} from './MasterDataContract';
@@ -8,7 +10,7 @@ type Repair={file:string;row:number;field:string;value:string};
 type CsvFile={name:string;text:string};
 type Issue=CsvProblem;
 type Preview={checkedInput?:CheckedCsvInput;id?:string;valid:boolean;issues:Issue[];tables:Record<string,Record<string,string>[]>;sources:Record<string,{file:string;lines:number[];originalText?:string;mappings?:{sourceField:string;quantityField:string;unitField:string;unit:string}[];records?:{line:number;values:Record<string,string>}[];repairs?:Repair[]}>;beforeTables:Record<string,Record<string,string>[]>;error?:string};
-const keys=['resourceMappings','personnelPools','personnelGroups','tools','resourceClaims','skillSubstitutions','originalTools','originalPersonnel','factoryLines','calendars','downtime','orders','routes','times','machines','dependencies','rules','products','materials'];
+import {batchKeys as keys} from './lib/csv-contract.mjs';
 const errors:Record<string,string>={stale_preview:'预览后数据、执行事实或方案记录已变化，请重新预览。',stale_input:'输入版本已变化，请刷新数据后重新预览。',preview_expired_or_unowned:'预览已过期或身份已变化，请重新预览。',execution_reconciliation_required:'当前执行事实阻止修改；请检查关联事实，不得覆盖已执行记录。',protected_history_unavailable:'已确认历史缺少原始输入，已阻止导入；请联系维护人员修复历史记录。',forbidden:'当前角色没有导入权限。',reason_required:'请填写操作原因。'};
 export function CsvBatchPanel({revision,canWrite,busy,api,refresh,onProblem}:{revision:number;canWrite:boolean;busy:boolean;api:(path:string,body:object)=>Promise<any>;refresh:()=>Promise<void>;onProblem:OpenCsvProblem}){
  const [repairs,setRepairs]=useState<Repair[]>([]);
@@ -21,7 +23,8 @@ export function CsvBatchPanel({revision,canWrite,busy,api,refresh,onProblem}:{re
  async function commit(){setPending(true);try{const result=await api('/imports/commit',{previewId:preview?.id});setPreview(null);setMessage(result.unchanged?'重复导入内容相同，没有新增数据或操作记录。':'整批导入成功，已保存新输入版本和操作记录。');await refresh();}catch(e:any){setPreview(null);setMessage(errors[e.detail?.error]||e.message);}finally{setPending(false);}}
  function locate(issue:Issue){onProblem(issue,preview?.checkedInput);setActive(issue);const file=files.find(f=>f.name===issue.file);if(!file)return;requestAnimationFrame(()=>{const el=editor.current;if(!el)return;const text=el.value;const lines=[0];for(let i=0;i<text.length;i++){if(text[i]==='\r'){if(text[i+1]==='\n')i++;lines.push(i+1);}else if(text[i]==='\n')lines.push(i+1);}el.focus();el.setSelectionRange(lines[Math.max(0,issue.row-1)]??0,lines[issue.row]??text.length);});}
  const disabled=!canWrite||busy||pending;
- return <section className="panel" data-csv-batch><h2>CSV 批量导入 · 预览与问题处理</h2><p>按中文文件名选择多个 CSV。整批替换所选表，引用在批次合并后检查；错误时全部不写入。原17字段“合格需求kg”保真拆为“合格需求”及显式 kg。原文件缺少的“是否允许拆分 / 需求类型 / 订单状态”必须逐行补录，不设默认值；补录后须重新预览。时间字段按分钟，生效时间按现行日期契约。</p><p>支持：{defs.filter(d=>keys.includes(d.key)).map(d=>d.file).join('、')}。其他已支持类别请使用下方单表操作；后续未支持类别不在本次批导范围。</p>
+ return <section className="panel" data-csv-batch><h2>CSV 批量导入 · 预览与问题处理</h2><p>按中文文件名选择多个 CSV。整批替换所选表，引用在批次合并后检查；错误时全部不写入。原17字段“合格需求kg”保真拆为“合格需求”及显式 kg。原文件缺少的“是否允许拆分 / 需求类型 / 订单状态”必须逐行补录，不设默认值；补录后须重新预览。时间字段按分钟，生效时间按现行日期契约。</p><p>支持：{defs.filter(d=>keys.includes(d.key)).map(d=>d.file).join('、')}。每表预览替换前后内容；只有表头表示拟清空该表，确认时仍校验全部引用与历史保护。</p>
+ <p>{originalStageNote}</p><p data-original-bom-contract>{originalBomNote}</p>
  <p data-original-resource-contract>{originalResourceNote}</p>
  <MasterDataContract table={'batch'}/>
  <label>选择批量 CSV<input aria-label="选择批量 CSV" type="file" multiple accept=".csv,text/csv" disabled={disabled} onChange={async e=>{const chosen=Array.from(e.target.files||[]);e.target.value='';const run=++generation.current;setPreview(null);setPending(true);try{const next=await Promise.all(chosen.map(async f=>({name:f.name,text:new TextDecoder('utf-8',{ignoreBOM:true}).decode(await f.arrayBuffer())})));if(run===generation.current){setFiles(next);setRepairs([]);setActive(null);setMessage('已读取文件，请预览。');}}catch{setMessage('文件读取失败，请重新选择。');}finally{setPending(false);}}}/></label>

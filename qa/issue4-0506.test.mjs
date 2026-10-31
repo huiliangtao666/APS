@@ -23,13 +23,13 @@ test('original 7/6 columns preserve literals; preview, atomic save, exact reimpo
   const def=defs.find(d=>d.key===key),exported=await reopen.ok('/export',{table:key});assert.deepEqual(parseInputCsv(exported),[def.fields,...rows.map(r=>def.fields.map(f=>r[f]))]);
   const query=await reopen.ok('/export',{query:{table:key,revision:1,filters:{text:rows[0][def.fields[0]]}}});assert.ok(query.includes(rows[0][def.fields[0]]));
  }
- const run=freezeRunInput(state.data);assert.ok(run.conditions.checkScope.unchecked.some(s=>s.includes('原05/06')));assert.deepEqual(run.executionData.originalTools,d.originalTools);
- const plan=await reopen.ok('/calculate',{revision:1});assert.ok(plan.conditions.checkScope.unchecked.some(s=>s.includes('原05/06')));const persisted=JSON.parse(reopen.bytes());assert.deepEqual(persisted.inputVersions[plan.inputVersionId].data.originalTools,d.originalTools);assert.deepEqual(persisted.plans.find(p=>p.id===old.plans[0].id),old.plans[0]);
+ // Effective FR013 resource contract requires READY mappings before source records can run.
+ assert.throws(()=>freezeRunInput(state.data),/NOT_READY_CONFIG/);const unchanged=reopen.bytes();for(const endpoint of ['/calculate','/runs'])assert.equal((await reopen.call(endpoint,{revision:1})).status,400);assert.equal(reopen.bytes(),unchanged);assert.deepEqual(JSON.parse(unchanged).plans.find(p=>p.id===old.plans[0].id),old.plans[0]);
  console.log('SOURCE_ROUNDTRIP_AND_HISTORY_PASS');
 });
 test('single table and batch required values, safe quantity, minute units/date/bounds, duplicate identity, header and physical locations reject whole store',async t=>{
  const f=await setup(t),before=f.bytes();let count=0;
- for(const def of defs.filter(d=>d.key.startsWith('original'))){
+ for(const def of defs.filter(d=>['originalTools','originalPersonnel'].includes(d.key))){
   const key=def.key,start=key==='originalTools'?'最早可用分钟':'起始分钟',end=key==='originalTools'?'最晚可用分钟':'结束分钟',qty=key==='originalTools'?'可用数量':'可用人数';
   const cases=[...def.fields.map(field=>[field,'']),...['1.5','-1','1e2','2人','9007199254740992'].map(v=>[qty,v]),...[start,end].flatMap(field=>['-1','0h','2026-11-02T08:00:00+08:00','Infinity'].map(v=>[field,v])),[end,'0']];
   for(const [field,value]of cases){const d=structuredClone(sourceRows);d[key][0][field]=value;

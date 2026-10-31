@@ -1,3 +1,4 @@
+import {sourceRefs} from './problem-records.mjs';
 import { validRuleTime } from './business-rules.mjs';
 /** FR-010 inventory accounting and availability rules. Quantities stay in the material's configured unit. */
 // v0.3 factory timezone Asia/Shanghai; inherited minute origin is +08:00.
@@ -15,26 +16,27 @@ export function validateInventoryBatches(batches = [], materials = []) {
   const ids = new Set();
   const materialIds = new Set(materials.map(row => (row['物料编号'] || '').trim()).filter(Boolean));
   batches.forEach((batch, index) => {
+    const add=(code,field,message,members=[batch])=>findings.push({code,table:'inventory',row:index+2,field,message,relatedRecords:sourceRefs('inventory',members,batches)});
     const prefix = `库存批次第 ${index + 1} 行`;
     const id = (batch['批次编号'] || '').trim();
-    if (!id) findings.push({ code: 'INVENTORY_REQUIRED', message: `${prefix}缺少批次编号` });
-    else if (ids.has(id)) findings.push({ code: 'INVENTORY_DUPLICATE', message: `批次编号 ${id} 重复` });
+    if (!id) add('INVENTORY_REQUIRED','批次编号',`${prefix}缺少批次编号`);
+    else if (ids.has(id)) add('INVENTORY_DUPLICATE','批次编号',`批次编号 ${id} 重复`,batches.filter(r=>(r['批次编号']||'').trim()===id));
     ids.add(id);
     for (const field of ['物料编号', '有效期', '位置', '质量状态']) {
-      if (!(batch[field] || '').trim()) findings.push({ code: 'INVENTORY_REQUIRED', message: `${prefix}（${id || '编号空'}）缺少${field}` });
+      if (!(batch[field] || '').trim()) add('INVENTORY_REQUIRED',field,`${prefix}（${id || '编号空'}）缺少${field}`);
     }
-    if (batch['物料编号'] && !materialIds.has(batch['物料编号'].trim())) findings.push({ code: 'INVENTORY_MATERIAL', message: `${prefix}引用未配置的物料 ${batch['物料编号']}` });
+    if (batch['物料编号'] && !materialIds.has(batch['物料编号'].trim())) add('INVENTORY_MATERIAL','物料编号',`${prefix}引用未配置的物料 ${batch['物料编号']}`);
     for (const field of ['账面数量', '已占用数量']) {
       const raw = (batch[field] || '').trim();
       const amount = Number(raw);
-      if (!raw || !Number.isFinite(amount) || amount < 0) findings.push({ code: 'INVENTORY_AMOUNT', message: `${prefix} ${field} 必须为非负数值` });
+      if (!raw || !Number.isFinite(amount) || amount < 0) add('INVENTORY_AMOUNT',field,`${prefix} ${field} 必须为非负数值`);
     }
     const quantity = Number(batch['账面数量']);
     const reserved = Number(batch['已占用数量']);
-    if (Number.isFinite(quantity) && Number.isFinite(reserved) && reserved > quantity) findings.push({ code: 'INVENTORY_RESERVED', message: `${prefix}已占用数量不能大于账面数量` });
-    if (batch['有效期'] && !validExpiry(batch['有效期'])) findings.push({ code: 'INVENTORY_EXPIRY', message: `${prefix}有效期须为有效日历日期 YYYY-MM-DD` });
+    if (Number.isFinite(quantity) && Number.isFinite(reserved) && reserved > quantity) add('INVENTORY_RESERVED','已占用数量',`${prefix}已占用数量不能大于账面数量`);
+    if (batch['有效期'] && !validExpiry(batch['有效期'])) add('INVENTORY_EXPIRY','有效期',`${prefix}有效期须为有效日历日期 YYYY-MM-DD`);
     const ready = batch['预计可用时间'] || '';
-    if (ready && Number.isNaN(Date.parse(ready))) findings.push({ code: 'INVENTORY_READY', message: `${prefix}预计可用时间须为有效日期时间` });
+    if (ready && Number.isNaN(Date.parse(ready))) add('INVENTORY_READY','预计可用时间',`${prefix}预计可用时间须为有效日期时间`);
   });
   return findings;
 }

@@ -240,7 +240,7 @@
       "contract": "main-header-only",
       "expected": "fill-before-import",
       "simulation": true,
-      "sha256": "5fbf747c7e4bbc78e6663098c51f932a3b2c48894545a057f35cf56c308b6c1b"
+      "sha256": "5b0cd0c2236136769d6d71589e45d525d785c2bd50849b19f2595a846e9cef07"
     },
     {
       "file": "templates/19_人员组与可用时间.csv",
@@ -248,7 +248,7 @@
       "contract": "main-header-only",
       "expected": "fill-before-import",
       "simulation": true,
-      "sha256": "3ccceb48330619d9685d290332f03ae8ef5589490f554d3fa747b79fccfad4d2"
+      "sha256": "d1dd25ebf698290d2a0d21cbe3673986b29f0082cc64ba9065321f1025e77acf"
     },
     {
       "file": "templates/16_排程规则配置.csv",
@@ -375,7 +375,8 @@
       "contract": "original-v0.3-source-fields-only",
       "expected": "source-import-only; runtime-mapping-pending",
       "simulation": true,
-      "context": "所有值均为虚构示例；不批准共享池/任务占用/组名或班次映射"
+      "context": "所有值均为虚构示例；不批准共享池/任务占用/组名或班次映射",
+      "sha256": "b10bd1f4aa7027d5b1708db9184ed8835cfdbfc8d75d2194699a05b6a6c2b75d"
     },
     {
       "file": "examples/original06.csv",
@@ -383,7 +384,8 @@
       "contract": "original-v0.3-source-fields-only",
       "expected": "source-import-only; runtime-mapping-pending",
       "simulation": true,
-      "context": "所有值均为虚构示例；不批准共享池/任务占用/组名或班次映射"
+      "context": "所有值均为虚构示例；不批准共享池/任务占用/组名或班次映射",
+      "sha256": "4adf23981fd716593522b6b86e0d6f976db65fa0c53cb51add89bad2a7b32a5b"
     },
     {
       "file": "examples/original0506-mapping-draft.csv",
@@ -393,6 +395,47 @@
       "context": "显式待配置映射示例；仅版本/来源身份/原行快照，不选择运行模式、实体、单位、容量或公式；禁止新运行",
       "simulation": true,
       "sha256": "aa940f4f64b280197e892ed242ecf686103a071ef39c075d52d93622fbd79c58"
+    },
+    {
+      "file": "examples/09_物料BOM配置.csv",
+      "table": "originalBom",
+      "contract": "original09-source-only",
+      "expected": "accept in seed context; source records only",
+      "simulation": true,
+      "sha256": "8e7ba0b451aa8b7415f4a65ef4be2e3b77eeb23dd8a0e9fba15883dd94f121eb",
+      "context": "受控v0.3八行；UTF-8 BOM及物理CRLF与原件字节一致；不可当计算BOM"
+    },
+    {
+      "file": "examples/13_物料库存批次.csv",
+      "table": "originalInventory",
+      "contract": "v0.3-literal-source-only",
+      "expected": "source import; runtime mapping pending",
+      "simulation": true,
+      "sha256": "6c59a8a2938ff4a05fb537731cfbc0d5156480b662ccd0bb5cefe07a4dc04624"
+    },
+    {
+      "file": "examples/14_预计到料与可用时间.csv",
+      "table": "originalSupply",
+      "contract": "v0.3-literal-source-only",
+      "expected": "source import; runtime mapping pending",
+      "simulation": true,
+      "sha256": "65e650a8d1cd7debe1110f1ab95b78746f60919e3777cf2e36e326fbeaa45291"
+    },
+    {
+      "file": "examples/18_模拟执行进度.csv",
+      "table": "originalProgress",
+      "contract": "v0.3-literal-source-only",
+      "expected": "source import; runtime mapping pending",
+      "simulation": true,
+      "sha256": "b7354be8eb2dfdb2ea2b54582434b5b0c561057d4aa4746c227def78a5ab5f50"
+    },
+    {
+      "file": "examples/19_模拟异常与条件变更.csv",
+      "table": "originalEvents",
+      "contract": "v0.3-literal-source-only",
+      "expected": "source import; runtime mapping pending",
+      "simulation": true,
+      "sha256": "21b29ec7d05f2ab01176a6f608b0062a0ed56712b9238e962de989a1c5cf894a"
     }
   ]
 }

@@ -1,3 +1,4 @@
+import {unmappedStageSources} from '../src/lib/original-stage-data.mjs';
 import {checkedCsvSources,csvProblemEvidence} from './csv-problems.mjs';
 import {resourceMappingTransition,sameResourceMapping} from '../src/lib/resource-mapping.mjs';
 import {verifyResourcePolicies} from '../src/lib/verify-resource-policies.mjs';
@@ -350,7 +351,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
       res.status(400).json({error:e.message,...(findings?{findings,checkedInput:{data:target.data,inputVersionId:source.inputVersionId}}:{})});return;
     }
     const native=validateInputs(defs,target.data,{at:calculatedAt,checkPolicyExecution:false});
-    const scoped=[...executionAdmission(frozen.executionData,frozen.conditions),...assessRules(frozen.executionData,calculatedAt,true,frozen.conditions.mode).issues];
+    const scoped=[...unmappedStageSources(frozen.executionData),...executionAdmission(frozen.executionData,frozen.conditions),...assessRules(frozen.executionData,calculatedAt,true,frozen.conditions.mode).issues];
     const withSource=(i,data,context,map)=>bindProblemSource(attachProblemRecords({...i,code:i.code||'INPUT / CHECK',taskIds:[]},data),context,target.data,map,target.csvSources);
     const issues=[...native,...scoped];
     const findings=[...native.map(i=>withSource(i,target.data,{...source,scope:'complete saved input validation'})),...scoped.map(i=>withSource(i,frozen.executionData,{...source,executionVersionId:inputHash(frozen.executionData),scope:frozen.conditions},frozen.sourceMap))];

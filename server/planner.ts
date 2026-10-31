@@ -1,3 +1,5 @@
+import {originalStageDefs,unmappedStageSources} from '../src/lib/original-stage-data.mjs';
+import {originalBomDef} from '../src/lib/original-bom.mjs';
 import {allowedWindows} from '../src/lib/working-windows.mjs';
 import {resourceMappingDef} from '../src/lib/resource-mapping.mjs';
 import {originalResourceDefs} from '../src/lib/original-resources.mjs';
@@ -61,12 +63,15 @@ export const defs: TableDef[] = [
   { key: 'personnelPools', label: '物理人员池（P10核心）', file: '30_物理人员池.csv', fields: ['poolId','池名称','总人数','是否启用','允许共用','容量来源','适用范围','生效时间','交接设置','策略版本','策略来源','互斥粒度','交接模式','交接起始分钟','交接结束分钟','交接容量人数','占用策略','释放策略'] },
   { key: 'personnelGroups', label: '人员组与可用时间', file: '19_人员组与可用时间.csv', fields: ['人员组编号','人员组名称','人员数量','技能','班次','可用起始分钟','可用结束分钟','poolId'] },
   { key: 'rules', label: '排程规则', file: '16_排程规则配置.csv', fields: ['规则编号','中文名称','是否启用','参数JSON','适用对象','生效时间'] },
+  ...originalStageDefs,
+  originalBomDef,
   ...originalResourceDefs,
   resourceMappingDef,
 ];
 export const seed: Record<string, Row[]> = {
   resourceMappings: [],
-  originalTools: [], originalPersonnel: [],
+  originalInventory: [], originalSupply: [], originalProgress: [], originalEvents: [],
+  originalBom: [], originalTools: [], originalPersonnel: [],
   simulationEvents: [], executionFacts: [], executionMaterials: [], executionSources: [],
   products: [
     {'产品编号':'HC40','产品名称':'模拟火腿肠40g','单支净重kg':'0.04','每袋支数':'10','总收率':'0.96','模拟交付等待分钟':'0'},
@@ -183,7 +188,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
     let sorted=[...(data.orders||[])].filter(o=>o['需求类型']!=='预测'&&isOrderSchedulable(o)).sort((a,b)=>sortBy==='要求日期'?Number(a['要求可交付分钟'])-Number(b['要求可交付分钟'])||Number(a['优先顺序'])-Number(b['优先顺序']):Number(a['优先顺序'])-Number(b['优先顺序']));
     const orderIssues=validateOrders(data.orders||[]).filter(issue=>issue.code!=='ORDER_MULTI_LINE');
     if(orderIssues.length){findings.push(...orderIssues.map(issue=>({...issue,table:"orders",row:issue.line?issue.line+1:0,code:`FR-009 / ${issue.code}`,message:issue.message,taskIds:[]})));setIssues(findings);setActivePlan({id:uid(),name:'订单数据校验',createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules,inputVersion:`v${inputVersion}`});setVerification(null);setMessage(`FR-009 订单字段检查发现 ${orderIssues.length} 个问题，未生成任务。`);return;}
-    const masterIssues=[...validateBomConfig({products:data.products||[],materials:data.materials||[],routes:data.routes||[],bom:data.bom||[]}),...supplyIssues,...inventoryIssues,...validateMasterData({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],dependencies:data.dependencies||[]},data),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[],personnelGroups:data.personnelGroups||[],tools:data.tools||[]})];
+    const masterIssues=[...unmappedStageSources(data),...validateBomConfig({products:data.products||[],materials:data.materials||[],routes:data.routes||[],bom:data.bom||[]}),...supplyIssues,...inventoryIssues,...validateMasterData({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],dependencies:data.dependencies||[]},data),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[],personnelGroups:data.personnelGroups||[],tools:data.tools||[]})];
 
     if(masterIssues.length){
       findings.push(...masterIssues.map(issue=>({...issue,taskIds:[]})));

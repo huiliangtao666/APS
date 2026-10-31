@@ -1,3 +1,5 @@
+import {originalStageDefs,originalStageNote} from './lib/original-stage-data.mjs';
+import {originalBomNote} from './lib/original-bom.mjs';
 import {MasterDataContract} from './MasterDataContract';
 import {OriginalResourceConfig} from './OriginalResourceConfig';
 import {PersonnelPolicyTrial} from './PersonnelPolicyTrial';
@@ -43,7 +45,9 @@ export function DataEditor({initialRecord,identityContext,data={},def,rows,revis
   {def.key==='simulationEvents'&&<p>FR029：先更新全部在制任务观测分钟为事件时点，再保存完整事件集合；可跨表暂存后一并保存。保护策略仅支持“禁止未开始任务开工”，需处理事实JSON留空由服务器判定。故障/耗料影响事实永久保留待处理；恢复、转机、撤销及旧方案未执行任务锁定未定。模拟物料状态不代表QA在线放行。</p>}
   {["executionFacts","executionMaterials","executionSources"].includes(def.key)&&<p>FR031 模拟累计口径：可用产出与报废分开，不跨工序累加；空报废按零处理。正报废量须明确“按本工序BOM补做”或“待核对”；工时独立填写。来源汇总缺少显式物料/批次分配时阻断，不自动分批。已开始/完成事实、已耗批次、原始来源不允许删除或覆盖。</p>}
   {['tools','resourceClaims'].includes(def.key)&&<p role="note">建议初始值 / 请核对实际业务。新建工装：可用套数1、每任务需求套数1、提前取得0分钟、后延归还0分钟；新建占用声明：完整工序（显式逐生产批完整区间），窗口偏移0。仅点击“保存修改”后生效，未保存不作用新试算。来源：2026-10-30用户授权的建议，不是客户现场事实。工装编码、适用工序、真实可用起止及共享范围须按实际业务或明确CSV来源填写；同一实体请使用同一编号共享容量，不能按设备复制容量。表23仍须显式填写资源身份、订单/工序、单位及参数来源；选择“工装配置”采用表18套数/提前/后延时，表23对应三个字段须留空。时间为半开区间。已有记录、复制及CSV/API不补建议值。</p>}
- <MasterDataContract table={def.key}/>
+  {originalStageDefs.some(d=>d.key===def.key)&&<p>{originalStageNote}</p>}
+ {def.key==='originalBom'&&<p data-original-bom-contract>{originalBomNote}</p>}
+<MasterDataContract table={def.key}/>
   {['resourceMappings','originalTools','originalPersonnel'].includes(def.key)&&<OriginalResourceConfig key={draftKey} data={{...data,...drafts}} disabled={disabled} onDraft={rows=>{if(!draft)setBase(revision);setDrafts({...drafts,resourceMappings:rows});setSaved('');}} onPreview={onPolicyPreview?async()=>{const result=await onPolicyPreview(Object.keys(drafts).length?drafts:{resourceMappings:data.resourceMappings||[]},base);setPreviewed(draftKey);return result;}:undefined}/>}
   <PolicyPreview table={def.key} data={{...data,...drafts}} revision={revision}/>
   {['personnelPools','personnelGroups','dependencies'].includes(def.key)&&<PersonnelPolicyTrial key={draftKey} data={{...data,...drafts}} saved={data} schedulePreview={onPolicyPreview?()=>onPolicyPreview(Object.keys(drafts).length?drafts:{personnelPools:data.personnelPools||[]},base):undefined} onPreview={()=>setPreviewed(draftKey)}/>}

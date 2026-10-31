@@ -32,6 +32,11 @@ export function related(data,table,index){
  if(table==='rules'&&row['规则编号'])(data.tasks||[]).forEach((r,i)=>{if((r['方案记录规则']||'').split('、').includes(row['规则编号']))results.push({table:'tasks',index:i});});
  if(table==='tasks')(data.rules||[]).forEach((r,i)=>{if(r['规则编号']&&(row['方案记录规则']||'').split('、').includes(r['规则编号']))results.push({table:'rules',index:i});});
  const originalLinks=[
+  ['originalInventory','物料编号','materials','物料编号',()=>true],
+  ['originalSupply','物料编号','materials','物料编号',()=>true],
+  ['originalBom','产品编号','products','产品编号',()=>true],
+  ['originalBom','物料编号','materials','物料编号',()=>true],
+  ['originalBom','投料工序','routes','工序编号',(a,b)=>a['产品编号']===b['产品编号']],
   ['originalTools','资源编号','tools','工装编码',()=>true],
   ['originalPersonnel','人员组编号','personnelGroups','人员组编号',()=>true],
   ['originalTools','资源编号','dependencies','资源编号',(a,b)=>a['资源类型']===b['资源类型']],
