@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "本UAT07任务级PASS，QA整体结论待确认；无未闭真实产品FAIL，修复轮次+0。其他批准责任及原SHA证据保留，不推定完整CR验收。https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583",
+      "acceptance_result": "本UAT07任务级PASS，QA整体结论待确认；无未闭真实产品FAIL，修复轮次+0。其他批准责任及原SHA证据保留，不推定完整CR验收。https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583 | UAT07 fixed8084124 QA PASS (33PASS/1支持原件访问PARTIAL,无场景缺口), Issue34 Done；余项归#37-41，完整CR不由本次签收。",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -395,6 +395,29 @@
           "N06": "采用来源标识清晰的mock取得/归还/释放账；本阶段不等待现场来源且不设权限账号门槛",
           "status": "effective development direction; no default values approved"
         }
+      ],
+      "scope_acceptance_events": [
+        {
+          "event_key": "dlv_88fa9322-c89c-4e9b-93cb-8edc04134201:r1",
+          "product_sha": "80841247ac91cae193a452325097234f31e6609e",
+          "scope": "UAT07 complete explicit replaceable simulation AC06/17",
+          "qa_result": "PASS",
+          "matrix": {
+            "PASS": 33,
+            "PARTIAL_SUPPORT_ACCESS": 1
+          },
+          "product_fail": 0,
+          "repair_round_increment": 0,
+          "evidence_issue": "https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540477224",
+          "remaining_packages": [
+            37,
+            38,
+            39,
+            40,
+            41
+          ],
+          "whole_cr_accepted": false
+        }
       ]
     },
     {
@@ -618,7 +641,7 @@
       "acceptance_delta": "CSV模板/预览/导入按批准配置校验：小数袋支拒绝，总收率>100%拒绝；合法配置保存刷新后生效，非法/越权整批零写入；保留旧确认/历史。",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006",
       "related_issue_urls": [],
-      "acceptance_result": "本UAT07任务级PASS，QA整体结论待确认；无未闭真实产品FAIL，修复轮次+0。其他批准责任及原SHA证据保留，不推定完整CR验收。https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583",
+      "acceptance_result": "本UAT07任务级PASS，QA整体结论待确认；无未闭真实产品FAIL，修复轮次+0。其他批准责任及原SHA证据保留，不推定完整CR验收。https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583 | UAT07 fixed8084124 QA PASS (33PASS/1支持原件访问PARTIAL,无场景缺口), Issue34 Done；余项归#37-41，完整CR不由本次签收。",
       "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
       "history": [
         {
@@ -707,6 +730,29 @@
           "event_key": "dlv_a1ccdb55-d45a-428e-bb9c-a4dfd93fcae3:r1",
           "previous_implementation_status": "FR013-NONDEVICE-REF-01 first repair e7881a9 independently PASS 43 scoped cases; original05/06/09/12 positive source mappings and FULL03/16 blocked; full FR013/CR NOT_READY",
           "previous_acceptance_result": "First repair e7881a9 independent 43 PASS/0 FAIL/14 BLOCKED/2 NOT_EXECUTED; defect closed at round1/2; old bd58868 5 FAIL retained at old SHA; full CR NOT_READY"
+        }
+      ],
+      "scope_acceptance_events": [
+        {
+          "event_key": "dlv_88fa9322-c89c-4e9b-93cb-8edc04134201:r1",
+          "product_sha": "80841247ac91cae193a452325097234f31e6609e",
+          "scope": "UAT07 complete explicit replaceable simulation AC06/17",
+          "qa_result": "PASS",
+          "matrix": {
+            "PASS": 33,
+            "PARTIAL_SUPPORT_ACCESS": 1
+          },
+          "product_fail": 0,
+          "repair_round_increment": 0,
+          "evidence_issue": "https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540477224",
+          "remaining_packages": [
+            37,
+            38,
+            39,
+            40,
+            41
+          ],
+          "whole_cr_accepted": false
         }
       ]
     },
@@ -1002,7 +1048,7 @@
         "https://github.com/huiliangtao666/APS/issues/25",
         "https://github.com/huiliangtao666/APS/issues/26"
       ],
-      "acceptance_result": "本UAT07任务级PASS，QA整体结论待确认；无未闭真实产品FAIL，修复轮次+0。其他批准责任及原SHA证据保留，不推定完整CR验收。https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583",
+      "acceptance_result": "本UAT07任务级PASS，QA整体结论待确认；无未闭真实产品FAIL，修复轮次+0。其他批准责任及原SHA证据保留，不推定完整CR验收。https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583 | UAT07 fixed8084124 QA PASS (33PASS/1支持原件访问PARTIAL,无场景缺口), Issue34 Done；余项归#37-41，完整CR不由本次签收。",
       "acceptance_status": "NOT_EXECUTED，本CR登记不替代各原范围验收",
       "limitations": "不批准DEC04/05/06新应用实现、业务默认、账本能力、合main或发布；AC27暂定30秒不能通过改预算降低标准。",
       "code_sha": null,
@@ -1217,6 +1263,29 @@
           "event_key": "dlv_a1ccdb55-d45a-428e-bb9c-a4dfd93fcae3:r1",
           "previous_implementation_status": "REGISTERED_TRACKING_ONLY；已有沿原授权继续；新增未开工增量WAIT_START；当前UAT07 #34不改序",
           "previous_acceptance_result": "NOT_EXECUTED：本次仅登记关联；不新增产品/QA结论"
+        }
+      ],
+      "scope_acceptance_events": [
+        {
+          "event_key": "dlv_88fa9322-c89c-4e9b-93cb-8edc04134201:r1",
+          "product_sha": "80841247ac91cae193a452325097234f31e6609e",
+          "scope": "UAT07 complete explicit replaceable simulation AC06/17",
+          "qa_result": "PASS",
+          "matrix": {
+            "PASS": 33,
+            "PARTIAL_SUPPORT_ACCESS": 1
+          },
+          "product_fail": 0,
+          "repair_round_increment": 0,
+          "evidence_issue": "https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540477224",
+          "remaining_packages": [
+            37,
+            38,
+            39,
+            40,
+            41
+          ],
+          "whole_cr_accepted": false
         }
       ]
     },
