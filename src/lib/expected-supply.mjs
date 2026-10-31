@@ -2,6 +2,16 @@ import {sourceRefs} from './problem-records.mjs';
 /** FR-011: simulated supply never becomes on-hand stock or a receipt confirmation. */
 export const PLAN_TIME_ORIGIN = '2026-11-02T08:00:00+08:00';
 const value = (row, key) => String(row[key] ?? '').trim();
+// Same nonnegative decimal input contract as the exact allocation domain.
+const decimal = raw => /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(raw) && Number.isFinite(Number(raw));
+const exactDecimal = raw => {
+  const [whole, fraction=''] = raw.split('.');
+  return {n:BigInt((whole||'0')+fraction),scale:fraction.length};
+};
+const addDecimal = (a,b) => {
+  const scale=Math.max(a.scale,b.scale);
+  return {n:a.n*10n**BigInt(scale-a.scale)+b.n*10n**BigInt(scale-b.scale),scale};
+};
 // Require an explicit offset so browser locale cannot change imported business time.
 export function validSupplyTime(raw) {
   if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?(?:Z|[+-]\d{2}:\d{2})$/.test(raw)) return false;
@@ -21,7 +31,7 @@ export function validateExpectedSupply({ supplies = [], delays = [], uses = [], 
   const byId = new Map(supplies.map(r => [value(r, '供给编号'), r]));
   const required = (row, fields, label) => fields.forEach(f => { if (!value(row, f)) add('REQUIRED', `${label}缺少${f}`,undefined,f); });
   const unique = (id, seen, label, key, field) => { if (id && seen.has(id)) add('DUPLICATE', `${label} ${id} 重复`,refs(table,originals[table].filter(r=>key(r)===id)),field); seen.add(id); };
-  const positive = (raw, label) => { if (!raw || !Number.isFinite(Number(raw)) || Number(raw) <= 0) add('QUANTITY', `${label}须为正有限数值`); };
+  const positive = (raw, label) => { if (!decimal(raw) || Number(raw) <= 0) add('QUANTITY', `${label}须为正有限十进制数值`); };
   const times = (row, arrival, ready, label) => {
     for (const f of [arrival, ready]) if (!validSupplyTime(value(row, f))) add('TIME', `${label} ${f}须为带时区的有效 ISO 日期时间`,undefined,f);
     if (Date.parse(row[ready]) < Date.parse(row[arrival])) add('READY', `${label}预计可用时间不能早于预计到达`,undefined,ready);
@@ -70,9 +80,17 @@ export function validateExpectedSupply({ supplies = [], delays = [], uses = [], 
     if (!byId.has(id)) add('REFERENCE', `${label}引用不存在的供给`,undefined,'供给编号',{table:'supplies',key:value(row,'供给编号')});
     positive(value(row, '使用数量'), label + '使用数量');
     members.set(id,[...(members.get(id)||[]),row]);
-    totals.set(id, (totals.get(id) || 0) + Number(row['使用数量']));
+    const raw=value(row,'使用数量');
+    if(decimal(raw))totals.set(id,addDecimal(totals.get(id)||{n:0n,scale:0},exactDecimal(raw)));
   });
-  totals.forEach((amount, id) => { if (amount > Number(byId.get(id)?.['预计数量'])) {table='supplies';current=byId.get(id);add('OVERALLOCATED', `供给 ${id} 计划使用总量超过预计数量`,[...refs('supplies',[current]),...refs('supplyUses',members.get(id))],'预计数量 / 使用数量');} });
+  totals.forEach((amount, id) => {
+    const raw=value(byId.get(id)||{},'预计数量');
+    if(!decimal(raw))return; // Missing/invalid sources already have their own findings.
+    const capacity=exactDecimal(raw),scale=Math.max(amount.scale,capacity.scale);
+    if(amount.n*10n**BigInt(scale-amount.scale)>capacity.n*10n**BigInt(scale-capacity.scale)){
+      table='supplies';current=byId.get(id);add('OVERALLOCATED', `供给 ${id} 计划使用总量超过预计数量`,[...refs('supplies',[current]),...refs('supplyUses',members.get(id))],'预计数量 / 使用数量');
+    }
+  });
   return findings;
 }
 export function resolveExpectedSupply(supplies = [], delays = []) {

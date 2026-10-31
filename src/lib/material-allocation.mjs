@@ -1,5 +1,5 @@
 import {inventoryBusinessDate,inventoryEligibility} from './inventory.mjs';
-import { PLAN_TIME_ORIGIN, resolveExpectedSupply } from './expected-supply.mjs';
+import { PLAN_TIME_ORIGIN, resolveExpectedSupply, validSupplyTime } from './expected-supply.mjs';
 // Exact rational arithmetic: no tolerance, display rounding or repeated float deductions.
 const q = value => {
  if (value && typeof value==='object') return value;
@@ -102,7 +102,9 @@ export function createMaterialAllocator(data,policy) {
     if(policy['允许预计供给'])for(const use of data.supplyUses||[]){
      if(use['订单编号']!==demand.orderId||use['工序编号']!==demand.operation)continue;
      const s=resolved.find(s=>s['供给编号']===use['供给编号']);
-     if(!s||s['物料编号']!==demand.materialId||!policy['预计状态'].includes(s['质量状态'])||!s['有效期']||s['有效期']<dateAt(minute)||Date.parse(s['生效可用时间'])>Date.parse(feedTime(minute)))continue;
+     if(!s||s['物料编号']!==demand.materialId||!validSupplyTime(s['生效到达时间'])||!validSupplyTime(s['生效可用时间'])||Date.parse(s['生效可用时间'])<Date.parse(s['生效到达时间']))continue;
+     const state=inventoryEligibility({...s,'账面数量':s['预计数量'],'已占用数量':'0','预计可用时间':s['生效可用时间']},feedTime(minute),policy['预计状态']);
+     if(!state.eligible)continue;
      candidates.push({key:'supply:'+s['供给编号'],useKey:'use:'+use['引用编号'],limit:q(use['使用数量']),supplyId:s['供给编号'],lotId:s['批次编号'],capacity:q(s['预计数量']),expiry:s['有效期'],quality:s['质量状态'],readyAt:s['生效可用时间'],conditional:true});
     }
     // FEFO across eligible lots; expected supply remains explicitly earmarked and conditional.
