@@ -3,9 +3,19 @@ import assert from 'node:assert/strict';
 import {renderToStaticMarkup} from 'react-dom/server';
 import {DataQueries} from './DataQueries';
 import {defs} from './data-defs';
+import {RunPanel} from './RunPanel';
 const data:Record<string,Record<string,string>[]>=Object.fromEntries(defs.map(d=>[d.key,[]]));
 data.orders=[{'订单编号':'订单甲','产品编号':'产品甲','订单状态':'正式订单'}];
 const props={data,plans:[],revision:2,canExport:false,reason:'',onExport:()=>{},onTask:()=>{}};
+
+test('calculation feedback and disabled-button guidance appear next to the run action',()=>{
+ const runProps={data:{orders:[],rules:[]},runs:[],canWrite:true,busy:false,onStart:()=>{},onCancel:()=>{},onResult:()=>{},onInputs:async()=>({}),initialSelection:{mode:'minimal-r1'}};
+ const error=renderToStaticMarkup(<RunPanel {...runProps} feedback="计算失败：请求被安全校验拒绝"/>);
+ assert.ok(error.includes('计算失败：请求被安全校验拒绝'));
+ assert.ok(error.includes('role="status" aria-live="polite"'));
+ const disabled=renderToStaticMarkup(<RunPanel {...runProps} canWrite={false}/>);
+ assert.ok(disabled.includes('请先在页面顶部填写操作原因'));
+});
 test('Chinese query controls expose all supported categories, read-only rows, empty plan and disabled export without permission',()=>{
  const html=renderToStaticMarkup(<DataQueries {...props}/>);
  for(const def of defs)assert.ok(html.includes(def.label),def.label);

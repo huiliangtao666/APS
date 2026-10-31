@@ -9,7 +9,7 @@ export function ResourceWorkbench({data,revision,reason,canWrite,busy,draftPendi
  const [runs,setRuns]=useState<any[]>([]),[active,setActive]=useState<string|null>(null),[view,setView]=useState<any>(null),[preview,setPreview]=useState<any>(null);
  const [error,setError]=useState(''),[working,setWorking]=useState(false),[canExport,setCanExport]=useState(false),[selected,setSelected]=useState<string[]>([]);
  const request=async(path:string,body?:any)=>{
-  const response=await fetch(import.meta.env.BASE_URL+'api'+path,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,reason})}:{cache:'no-store'});
+  const response=await fetch(import.meta.env.BASE_URL+'api'+path,body?{method:'POST',headers:{'Content-Type':'application/json','X-APS-Request':'workbench'},body:JSON.stringify({...body,reason})}:{cache:'no-store'});
   const result=await response.json();if(!response.ok)throw Object.assign(Error(result.message||result.issues?.map((i:any)=>`${i.file||i.table}:${i.row}:${i.field} ${i.message}`).join('；')||result.error),{detail:result});return result;
  };
  const client=resourceClient(request),eligible=(data.orders||[]).filter(o=>o['需求类型']==='正式订单'&&o['订单状态']==='有效');
@@ -43,7 +43,7 @@ export function ResourceWorkbench({data,revision,reason,canWrite,busy,draftPendi
    {!!selected.length&&<section aria-label="冻结资源输入"><h3>选中任务与冻结输入：{selected.join('、')}</h3>{resourceTaskSources(view,selected).map((r:any,i:number)=><p key={i}>{r.table} · {r.file?`${r.file} 原文件第 ${r.physicalRow??'未知'} 行`:`规范化记录第 ${r.canonicalRow} 行（无原CSV行映射）`} · 输入 {r.inputVersionId} · {JSON.stringify(r.row)}</p>)}</section>}
    {view.findings.map((f:any,i:number)=><div key={i}><button onClick={()=>setSelected(f.taskIds||[])}>{f.code}：{f.message}</button>{f.relatedRecords?.map((r:any,n:number)=><p key={n}>{r.table} · 原始行 {r.origin?.physicalRow??r.row??r.index} · 输入版本 {r.origin?.inputVersionId||view.run.inputVersionId} · {JSON.stringify(r.key||r.identity||r)}</p>)}</div>)}
    {view.verification.details?.map((s:string,i:number)=><p key={i}>{s}</p>)}
-   <button disabled={!canExport||!reason.trim()||working} onClick={()=>perform(async()=>{const response=await fetch(import.meta.env.BASE_URL+'api/export',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...client.exportBody(view),reason})});if(!response.ok)throw Error((await response.json()).error);const url=URL.createObjectURL(await response.blob()),a=document.createElement('a');a.href=url;a.download='资源运行-'+view.run.id+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);})}>导出本运行资源账与来源</button>
+   <button disabled={!canExport||!reason.trim()||working} onClick={()=>perform(async()=>{const response=await fetch(import.meta.env.BASE_URL+'api/export',{method:'POST',headers:{'Content-Type':'application/json','X-APS-Request':'workbench'},body:JSON.stringify({...client.exportBody(view),reason})});if(!response.ok)throw Error((await response.json()).error);const url=URL.createObjectURL(await response.blob()),a=document.createElement('a');a.href=url;a.download='资源运行-'+view.run.id+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);})}>导出本运行资源账与来源</button>
   </section>}
  </aside>;
 }
