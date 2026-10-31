@@ -1433,8 +1433,18 @@
     "business_and_shared_tests_serial": "111/111 PASS",
     "maxlag_affected_suite": "80/80 PASS",
     "initial_combined_backend": "117/118; file SIGKILL under concurrent auth/business run; isolated serial business/shared re-run111/111 PASS",
-    "deploy_or_publish": false
+    "deploy_or_publish": false,
+    "final_full_production_build": "PASS: TypeScript, Vite, API and actual calculation-worker bundles; final-build-complete.log",
+    "final_library_tests": "115/115 PASS on current product source",
+    "final_ui_tests": "6/6 PASS on current product source",
+    "final_backend_and_impact_tests": "201 unique cases PASS across same-source runs:166 passed in final-all-impact.log and35 missing-input cases rerun35/35 with complete original files",
+    "raw_input_provenance": "114 CSVs and6 scene JSON files extracted byte-identically from original uploaded v0.3 dataset into temp/; never substituted defaults",
+    "initial_build_interruptions": "Killed compiler/build processes preserved; successful final full build recorded",
+    "inventory_assertion_correction": "Existing e603 main added optional normalized inventory columns. FR026 test now preserves full accepted snapshot and independently checks every raw field, instead of comparing against an incomplete raw fixture. No product code changed for this correction."
   },
   "pr_queue_at_two_checks": [],
-  "archive_restore": "All original source SHAs become ancestors of main. Restore a branch with git push origin <sha>:refs/heads/<original-name>."
+  "archive_restore": "All original source SHAs become ancestors of main. Restore a branch with git push origin <sha>:refs/heads/<original-name>.",
+  "final_tested_source": "cfea11779ca7a393b1daa702156c04fbd14203d2",
+  "concurrent_main_absorbed": "e603e8fc342d8d1e1f02b9ed8444aef1d9879463",
+  "pr_url": "https://github.com/huiliangtao666/APS/pull/46"
 }
