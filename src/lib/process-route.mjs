@@ -84,7 +84,10 @@ export function validateProcessPairConfiguration(data,at){
    if(space['单位']!=='kg'||claim['单位']!=='kg'||claim['占用口径']!=='显式逐生产批完整区间'||[dep,claim].some(r=>r['提前占用分钟']!=='0'||r['后延占用分钟']!=='0')||Q.cmp(Q.q(claim['需求数量']),Q.fromExact(b.qualifiedKg))!==0n||Q.cmp(Q.q(dep['需求数量']),Q.fromExact(b.qualifiedKg))!==0n)throw Error('冷却须显式按每生产批合格产出kg完整占用；其他释放/装载语义未决定');
   }
   return [];
- }catch(e){return [{table:'rules',field:'是否启用',code:'INPUT / PROCESS_PAIR',message:e.message,taskIds:[]}];}
+ }catch(e){
+  const rules=data.rules.filter(r=>r['规则编号']==='MAX_LAG');
+  return [{table:'rules',row:data.rules.indexOf(rules[0])+2,field:'是否启用',code:'INPUT / PROCESS_PAIR',message:e.message,taskIds:[],sourceRead:'frozen-calendar-v1',relatedRecords:[...sourceRefs('rules',rules,data.rules),...sourceRefs('routes',data.routes.filter(r=>String(r['最大等待分钟']??'').trim()!==''),data.routes)]}];
+ }
 }
 
 // Domain-owned frozen row associations. The UI owner may bind these occurrences
