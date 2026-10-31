@@ -1,0 +1,32 @@
+{
+  "source_sha": "44711f94dd329a823985e1bbb90d977bdd6084ed",
+  "event_key": "dlv_991020e0-9d19-4116-8a2d-68ac98573d8d:r1",
+  "files": [
+    {
+      "path": "B16-SHARING-Test-r1-REPORT.html",
+      "bytes": 25805,
+      "sha256": "e7ba9ba2740c04e860e6882615380c404bbda451ee5d8134086933937ea9cda2"
+    },
+    {
+      "path": "B16-SHARING-Test-r1-MATRIX.csv",
+      "bytes": 24210,
+      "sha256": "58a778a4f5a6154424a6a12e7371ed87e0d33ecd54e5634f0496d9b9acfbbce0"
+    },
+    {
+      "path": "B16-SHARING-Test-r1-CLOSURE.csv",
+      "bytes": 8377,
+      "sha256": "695943c9b257ab4d60cfdcc5854cc52f6dbddb3407a2196dd7c6439042e6ee36"
+    },
+    {
+      "path": "B16-SHARING-Test-r1-HANDOFF.json",
+      "bytes": 7986,
+      "sha256": "3ba03d5412827f9b2345af9a919a723e061ec116eec6dfdf02a06a6148c01c17"
+    },
+    {
+      "path": "B16-SHARING-Test-r1-EVIDENCE.zip",
+      "bytes": 410950,
+      "sha256": "1bc3e3b21975732e44b501ec1ebb6b8400774565a2c78ed6437dd6a8dcd34d22"
+    }
+  ],
+  "self_hash": "Recorded separately in ACCESS.json after remote readback; avoids self reference"
+}
