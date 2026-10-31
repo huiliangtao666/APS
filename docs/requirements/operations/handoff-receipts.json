@@ -1880,56 +1880,6 @@
       ],
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
-    },
-    {
-      "event_key": "dlv_deda4264-6544-428f-8f1f-6122d5d01826:r1",
-      "type": "DEV_DELIVERED",
-      "state": "PROCESSED",
-      "source": "APS-Test Inbox dlv_73f4b790-0fac-4172-a076-5bfac501bf6a",
-      "processed_at": "2026-10-31T01:11:00+08:00",
-      "requirement": "FR-013 v0.3+CR-FR013-VALIDATION-20261029 / Issue4",
-      "product_sha": "b1a4863c6e899274ef32b0fd7cdfb26e8c673cb5",
-      "result": "APS-Test developer selftest 28/28 PASS, CSV 8/8 PASS; bounded task Done; full FR013/CR NOT_READY",
-      "external_hashes": {
-        "REPORT.md": "fe1054346d2c78b9573fa62e6aadacb6763ab7b2fa0abeacc9b115fb1e8d826a",
-        "MATRIX.csv": "70a48d30ffe2c9df181bb6f5eca4ea115261274f0647e8b7cbaa3214f63cd03c",
-        "EVIDENCE.zip": "d0827ee965b7a9916de8b7a48928ca1a969ce4b8b941a10ce2be26955fe6cda8",
-        "SHA256.json": "89dd840642d62cc8fc5c2b80eaf442d1aba44b354a79dcf6ba140cf8d6e1b2f8"
-      },
-      "evidence_note": "ZIP Files API 504 twice; exact APS-Test workspace file read-only hash/CRC/298 manifest checked",
-      "matrix_rows_verified": 28,
-      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6528710360",
-      "project_status": {
-        "FR-013": "In progress"
-      },
-      "repair_rounds_added": 0,
-      "uat": "WAITING_DEPENDENCIES",
-      "next_dispatch": "dlv_2a2832da-d3ff-4d36-9542-f775d303f3ca"
-    },
-    {
-      "event_key": "dlv_355a9993-27c9-4ec1-aa48-8128aca850b2:r1",
-      "type": "DEV_DELIVERED",
-      "state": "PROCESSED",
-      "source": "APS-Dev Inbox dlv_a95f46cd-7a6e-44e3-bb51-aaf056ce8b1e",
-      "processed_on": "2026-10-31",
-      "requirement": "FR-013 v0.3+CR-FR013-VALIDATION-20261029 / FR-016 v0.3 / Issue4",
-      "product_sha": "cd10560774817c67bc0d6f0f7f6c66279941f89c",
-      "result": "Bounded integration developer task Done/PASS; 106 matrix PASS, 4 BLOCKED, 1 NOT_EXECUTED; full cards/CR NOT_READY; QA UAT WAITING_DEPENDENCIES",
-      "external_hashes": {
-        "REPORT.md": "76f109e2229c84fff07ed3813cd86f440678391d8da0444f3dead8d2ed9cdab5",
-        "MATRIX.csv": "5a33b1a20a541ad68e2d4d045f6b148f7711ebd5ddc0f284f918d41d1a606e8c",
-        "EVIDENCE.zip": "1f6822ff0149b83e46f72618d2c4eadd2660023ca526e0d6c976e2de1d1b27cc"
-      },
-      "evidence_note": "Files API report/matrix/check and five parts verified; ZIP CRC, 255 manifest hashes and 111 matrix evidence hashes matched",
-      "matrix_rows_verified": 111,
-      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6529417989",
-      "project_status": {
-        "FR-013": "In progress",
-        "FR-016": "In progress"
-      },
-      "repair_rounds_added": 0,
-      "uat": "WAITING_DEPENDENCIES",
-      "next_dispatch": null
     }
   ]
 }

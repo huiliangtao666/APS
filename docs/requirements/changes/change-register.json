@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "P10 fixed42a35d07 Test1 S-P01..10 PASS; Test2 H first six PASS, R2 H-P06 PASS/H-P04 PARTIAL. H-P08/10 Test1 verdict awaits PM review; H-P04/N06原历史阻塞已由2026-10-31用户裁决解除；后续实现仍待完成，完整CR NOT_READY. B234 833b3d56929f88c9521cb64765066eece9f83879 Dev同SHA受影响自测限定PASS；B4完整R4路线在后续固定be88f073b4c2597abcd3e5533e92f7f94a89ad59已完成授权工程自测；旧833b3d5 PARTIAL保留原SHA。完整CR/QA UAT仍NOT_READY。 PM按dlv_c71cb13e-596f-4ca6-9f9e-46abfed34f67:r1核76行70 PASS/4 BLOCKED/2 NOT_EXECUTED；Issue3 H-P04/N06独立续作dlv_7059d3b0-0d2a-4ff2-b792-46705063e713 SENT。",
+      "implementation_status": "P10 fixed42a35d07 Test1 S-P01..10 PASS; Test2 H first six PASS, R2 H-P06 PASS/H-P04 PARTIAL. H-P08/10 Test1 verdict awaits PM review; H-P04 personnel early/late formula awaits user decision. N06 and other scope open; full CR NOT_READY.",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,8 +66,8 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "P10 fixed42a35d07 independent S-P01..10 PASS; H-P01/02/03/05/06/07/08/09/10 PASS, H-P04旧SHA PARTIAL，业务裁决已于2026-10-31生效，工程实现另派; 0 new product FAIL, +0 repair. Full FR007/022/CR and UAT NOT_READY. B234 833b3d56929f88c9521cb64765066eece9f83879 58行联合矩阵47 PASS/5 PARTIAL/4 BLOCKED/2 NOT_EXECUTED/0 FAIL（跨Issue共享，非本CR独占计数）；仅适用本CR责任断言限定通过，历史结论原SHA保留；完整CR未验收，修复轮次+0。 固定be88f073b4c2597abcd3e5533e92f7f94a89ad59 R4工程任务级矩阵76行70 PASS/4 BLOCKED/2 NOT_EXECUTED/0 FAIL（跨Issue共享，非本CR独占）；五处工程接缝完成，客户事实/新增语义与QA UAT仍未验收；历史PASS旧SHA保留、产品FAIL修复轮次+0。",
-      "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围 B234原件APS-Dev根目录B234-INTEGRATED-20261031-r1-*；事件dlv_cd8fda2f-fd66-4947-83b1-8f03d883695b:r1。",
+      "acceptance_result": "P10 fixed42a35d07 independent S-P01..10 PASS; H-P01/02/03/05/06/07/08/09/10 PASS, H-P04 PARTIAL pending personnel outside-task early/late rule; 0 new product FAIL, +0 repair. Full FR007/022/CR and UAT NOT_READY.",
+      "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
           "date": "2026-10-29",
@@ -509,7 +509,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR013受影响需求增量；不等于已实现或UAT通过",
-      "implementation_status": "FR013 original05/06 a49edb1d legacy v1 no-op repair delivered and independently passed; R-C08/09 same defect closed round1. Other original categories, R-C03 positive, FR016 shared duties and full FR013/CR remain NOT_READY. APS-Test b1a4863c QA-only selftest files added on 116eb5d4; no product source changes; bounded task Done, full scope open. Integrated cd105607 bounded Dev task PASS; full FR013/effective CR NOT_READY. B234 833b3d56929f88c9521cb64765066eece9f83879 Dev同SHA受影响自测限定PASS；B4完整R4路线在后续固定be88f073b4c2597abcd3e5533e92f7f94a89ad59已完成授权工程自测；旧833b3d5 PARTIAL保留原SHA。完整CR/QA UAT仍NOT_READY。 PM按dlv_c71cb13e-596f-4ca6-9f9e-46abfed34f67:r1核76行70 PASS/4 BLOCKED/2 NOT_EXECUTED；Issue3 H-P04/N06独立续作dlv_7059d3b0-0d2a-4ff2-b792-46705063e713 SENT。",
+      "implementation_status": "FR013-NONDEVICE-REF-01 first repair e7881a9 independently PASS 43 scoped cases; original05/06/09/12 positive source mappings and FULL03/16 blocked; full FR013/CR NOT_READY",
       "primary_requirements": [
         "FR-013"
       ],
@@ -527,87 +527,24 @@
       "acceptance_delta": "CSV模板/预览/导入按批准配置校验：小数袋支拒绝，总收率>100%拒绝；合法配置保存刷新后生效，非法/越权整批零写入；保留旧确认/历史。",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006",
       "related_issue_urls": [],
-      "acceptance_result": "a49edb1d DEF-V1-NOOP-01 round1 independent 25/25 PASS on legacy v1 no-op and impacted regression; R-C08/09 same defect closed. Prior bd6f9fab and c70d6607 conclusions remain on original SHAs; no full CR acceptance, FR013 NOT_READY, UAT01/11 WAITING_DEPENDENCIES. QA a786ee30 v1 migration/no-op/frozen-history bounded slice 18/18 PASS; v1-specific repository 7/7 overlapping; full CR NOT_READY and UAT unsigned. APS-Test b1a4863c bounded v1 migration developer selftest 28/28 PASS and CSV 8/8 PASS on 116eb5d4 base; no product source diff or repair round; full CR/FR013 NOT_READY, UAT unsigned. Integrated cd105607 106 matrix PASS/4 BLOCKED/1 NOT_EXECUTED, Dev task Done only; QA overall UAT unsigned; no new product FAIL or repair round. B234 833b3d56929f88c9521cb64765066eece9f83879 58行联合矩阵47 PASS/5 PARTIAL/4 BLOCKED/2 NOT_EXECUTED/0 FAIL（跨Issue共享，非本CR独占计数）；仅适用本CR责任断言限定通过，历史结论原SHA保留；完整CR未验收，修复轮次+0。 固定be88f073b4c2597abcd3e5533e92f7f94a89ad59 R4工程任务级矩阵76行70 PASS/4 BLOCKED/2 NOT_EXECUTED/0 FAIL（跨Issue共享，非本CR独占）；五处工程接缝完成，客户事实/新增语义与QA UAT仍未验收；历史PASS旧SHA保留、产品FAIL修复轮次+0。",
-      "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次 B234原件APS-Dev根目录B234-INTEGRATED-20261031-r1-*；事件dlv_cd8fda2f-fd66-4947-83b1-8f03d883695b:r1。",
+      "acceptance_result": "First repair e7881a9 independent 43 PASS/0 FAIL/14 BLOCKED/2 NOT_EXECUTED; defect closed at round1/2; old bd58868 5 FAIL retained at old SHA; full CR NOT_READY",
+      "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
       "history": [
         {
           "date": "2026-10-29",
           "event_key": "USER-DECISIONS-20261029-R1:fr-013",
           "event": "用户确认本CR增量，原卡仍In progress/NOT_READY；待实现与独立验收"
-        },
-        {
-          "date": "2026-10-30",
-          "event_key": "dlv_5f136d17-d9da-4670-9f09-6caaa5e3c545:r1",
-          "event": "bd6f9fab original05/06 Test1 R-C01..10 7 PASS/3 PARTIAL/0 product FAIL; old SHA only",
-          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6519250588"
-        },
-        {
-          "date": "2026-10-30",
-          "event_key": "issue4:fr013-p10:resource-map-integration:test2:bd6f9fabe8354432e9c67b52219dc26989c2761d:r1",
-          "event": "bd6f9fab Test2 original05/06 resource-map integration 11/11 independent PASS, 0 product FAIL",
-          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6519250588"
-        },
-        {
-          "date": "2026-10-30",
-          "event_key": "issue4:fr013:rc10-native-filename:test2:bd6f9fabe8354432e9c67b52219dc26989c2761d:r1",
-          "event": "bd6f9fab Test2 R-C10 native filename PASS in Chrome156; Chromium141 compatibility observation; old SHA conclusion now 8 PASS/2 PARTIAL",
-          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6519425332"
-        },
-        {
-          "date": "2026-10-30",
-          "event_key": "dlv_c76969f4-9d99-4082-91fa-4d3efeff98db:r1",
-          "event": "c70d6607 multi-source same-entity Dev bounded selftest PASS; independent Test dlv_fe220c7f SENT/EXECUTING, not a new product PASS; full CR NOT_READY",
-          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6519739923"
-        },
-        {
-          "date": "2026-10-30",
-          "event_key": "dlv_ef297db0-49eb-450a-b7f7-4b26b4ffec52:r1",
-          "event": "a49edb1d independent Test 25/25 PASS; same DEF-V1-NOOP-01 round1 closed for R-C08/09 legacy v1 no-op compatibility; full FR013/CR NOT_READY, UAT01/11 WAITING_DEPENDENCIES",
-          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6520196323"
-        },
-        {
-          "date": "2026-10-30",
-          "event_key": "dlv_fe220c7f-00a0-4f81-86f3-ba53282c4652:r1",
-          "event": "c70d6607 independent Test1: 71 PASS/1 genuine product FAIL T061, one DEF-V1-NOOP-01 in R-C08/09 old v1 exact 19-column re-import; round1 repair dispatched; earlier PASS retained on original SHA",
-          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6520895402"
-        },
-        {
-          "date": "2026-10-30",
-          "event_key": "dlv_d108b114-edb2-4041-a2e9-4ab6765b976b:r1",
-          "event": "a49edb1d round1 repair delivered, Dev bounded 27/27 PASS only; independent Test pending at delivery; later Test1 result separately recorded as 25/25 PASS",
-          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6520895678"
-        },
-        {
-          "date": "2026-10-31",
-          "event_key": "dlv_3ce06cd4-8d72-4980-b830-c9eb0f53f808:r1",
-          "event": "QA fixed a786ee304003cfa45f2e2d60b6bf535cc328ebee legacy v1 migration/no-op/frozen-history slice: independent 18/18 PASS; repository v1-specific 7/7 PASS with overlapping coverage; no new product FAIL or repair round. Full FR013/effective CR NOT_READY; complete UAT unsigned.",
-          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6528290528",
-          "evidence": "APS-QA/Issue4-FR013-V1-a786ee30-QA-r1-REPORT.md (SHA256 affc0c4da45b57b4436ca08516376928ac482398544c03c520d87a0cbb4ff589)"
-        },
-        {
-          "date": "2026-10-31",
-          "event_key": "dlv_deda4264-6544-428f-8f1f-6122d5d01826:r1",
-          "event": "APS-Test fixed b1a4863c from 116eb5d4, legacy v1 migration/no-op/explicit version/Worker/React bounded developer selftest 28/28 PASS plus independent CSV parse 8/8 PASS; no product source diff, no new FAIL or repair round; full FR013/effective CR NOT_READY, UAT unsigned.",
-          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6528710360",
-          "evidence": "APS-Test/Issue4-FR013-V1-MIGRATION-116eb5-APS-Test-r1-REPORT.md (SHA256 fe1054346d2c78b9573fa62e6aadacb6763ab7b2fa0abeacc9b115fb1e8d826a)"
-        },
-        {
-          "date": "2026-10-31",
-          "event_key": "dlv_355a9993-27c9-4ec1-aa48-8128aca850b2:r1",
-          "event": "APS-Dev integrated fixed candidate cd105607 FR013 v1 and FR016 physical-row scope: task-level selftest PASS, 106 matrix PASS / 4 BLOCKED / 1 NOT_EXECUTED; no new product FAIL or repair round; full FR013/effective CR NOT_READY and QA overall UAT unsigned.",
-          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6529417989",
-          "evidence": "APS-Dev/Issue4-FR013-FR016-INTEGRATED-20261031-r1-REPORT.md (SHA256 76f109e2229c84fff07ed3813cd86f440678391d8da0444f3dead8d2ed9cdab5)"
         }
       ],
       "dev_delivery": "dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1",
       "contract_review_delivery": "",
-      "product_test_delivery": "dlv_ef297db0-49eb-450a-b7f7-4b26b4ffec52:r1",
-      "code_sha": "a49edb1d4fefedabae53d7a15f09534da7da0f9e",
-      "code_branch": "fix/issue4-fr013-v1-noop-r1",
+      "product_test_delivery": "dlv_b4987c57-516c-4c3a-b0d6-2cab6febb7c9；dlv_1aef3889-5dad-4483-a367-479e14a240dd",
+      "code_sha": "fc273441ca93dcc47996bf5a6f7031e73be7f226",
+      "code_branch": "",
       "dev_report": "",
-      "test_report": "APS-Test/Issue4-FR013-DEF-V1-NOOP-01-a49edb1d-Test1-r1-REPORT.md",
+      "test_report": "",
       "design_commit": "",
-      "repair_delivery": "dlv_d108b114-edb2-4041-a2e9-4ab6765b976b:r1",
+      "repair_delivery": "",
       "test_contract": ""
     },
     {
