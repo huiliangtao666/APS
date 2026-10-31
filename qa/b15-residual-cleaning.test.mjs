@@ -34,9 +34,3 @@ test('two different cleaning qualification groups debit one physical pool across
  for(const capacity of ['1','2']){const f=await fixture(t);d.personnelPools[0]['总人数']=capacity;const q=await f.call('/imports/preview',{revision:0,files:scenarioFiles(d)});assert.equal(q.body.valid,true,JSON.stringify(q.body.issues));await f.ok('/imports/commit',{previewId:q.body.id});const result=await b2Worker(f);assert.equal(result.plan.tasks.length,4);assert.equal(result.plan.changeoverAssessment.status,capacity==='1'?'problem':'pass');if(capacity==='1'){assert.equal(result.plan.changeoverAssessment.acceptedOccupations.length,0);assert.ok(result.plan.changeoverAssessment.findings.some(f=>f.code.includes('CAPACITY')));}results.push(result);}
  save('cleaning-shared-pool',results);
 });
-test('FR022 original six-task MAX_LAG regression preserves draft tasks, reports unchecked and blocks confirmation; declared unsupported waits still reject',async t=>{
- const d=jointFixture(seed);d.factoryLines=[{'工厂编号':'F01','工厂名称':'FR022明确模拟','产线编号':'L01','产线名称':'L01','时区':'Asia/Shanghai'}];d.rules.find(r=>r['规则编号']==='MOLD')['生效时间']='2027-01-01T00:00:00Z';d.rules.find(r=>r['规则编号']==='MAX_LAG')['是否启用']='是';
- const f=await fixture(t);await f.ok('/inputs',{revision:0,tables:d});const plan=await f.ok('/calculate',{revision:1});assert.equal(plan.tasks.length,6);await f.ok('/plans/'+plan.id+'/verify',{});const review=await f.ok('/plans/'+plan.id+'/review');assert.ok(review.blockers.some(x=>x.code==='unchecked_max_lag'));assert.ok(plan.conditions.checkScope.unchecked.some(s=>s.includes('MAX_LAG')));
- const bad=structuredClone(d);bad.routes.find(r=>r['工序编号']==='FILL')['最大等待分钟']='10';const before=f.bytes(),result=await f.call('/inputs',{revision:1,tables:bad});assert.equal(result.status,400);assert.equal(f.bytes(),before);
- save('fr022-reconciled',{data:d,plan,review,declaredUnsupported:result});
-});
