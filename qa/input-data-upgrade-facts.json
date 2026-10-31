@@ -1,0 +1,1489 @@
+{
+  "IN-01": {
+    "sheets": 29,
+    "input_tables": 16,
+    "reference_tables": 7,
+    "explanation_diagrams": 6
+  },
+  "IN-02": {
+    "配置参数": 3428,
+    "物料主数据": 140,
+    "单位换算": 275,
+    "关键路径明细": 27,
+    "客户与交付": 40,
+    "库区库位": 84,
+    "供应商与供货条件": 215,
+    "物料清单": 317,
+    "工艺路线": 87,
+    "设备与工装": 46,
+    "班组资源": 6,
+    "工厂日历": 44,
+    "停机安排": 5,
+    "每日需求": 2150,
+    "每日成品汇总": 430,
+    "期初库存": 420,
+    "既有采购在途": 55,
+    "期初在制": 8,
+    "生产补给建议": 695,
+    "物料需求来源": 8456,
+    "每日缺料净算": 6020,
+    "采购订单草案": 1901,
+    "采购缺料汇总": 110
+  },
+  "IN-12": {
+    "day_dates": {
+      "0": "2026-10-31",
+      "1": "2026-11-01",
+      "14": "2026-11-14",
+      "15": "2026-11-15",
+      "30": "2026-11-30",
+      "31": "2026-12-01",
+      "43": "2026-12-13"
+    },
+    "first_window": [
+      1,
+      15
+    ],
+    "first_window_demand_rows": 700,
+    "november_demand_rows": 1500
+  },
+  "IN-13": {
+    "old_origin": "2026-11-02T08:00:00+08:00",
+    "B0_minutes": -3360,
+    "B1_minutes": -1920,
+    "historical_shift_minutes": 0
+  },
+  "IN-14": {
+    "outage_count": 5,
+    "EQ007_unavailable": [
+      5,
+      6
+    ],
+    "EQ007_restored_day": 6,
+    "EQ010_known_day": 15,
+    "EQ010_visible_at_day1": false,
+    "EQ010_visible_at_day15": true
+  },
+  "IN-15": {
+    "resource": "EQ007",
+    "day_capacity_kg": {
+      "numerator": "2000",
+      "denominator": "1"
+    },
+    "zero_cross_day_jobs_workload_kg": {
+      "numerator": "2001",
+      "denominator": "1"
+    },
+    "over_capacity_kg": {
+      "numerator": "1",
+      "denominator": "1"
+    },
+    "first_four_fit_exactly": true,
+    "fifth_requires_delay_split_or_rejection": true,
+    "crew_available_people": {
+      "numerator": "20",
+      "denominator": "1"
+    },
+    "parallel_people_required": {
+      "numerator": "21",
+      "denominator": "1"
+    },
+    "parallel_overload_people": {
+      "numerator": "1",
+      "denominator": "1"
+    }
+  },
+  "IN-18": {
+    "bom": "BM001",
+    "source_cells": [
+      "物料清单!H3",
+      "物料清单!I3",
+      "物料清单!K3"
+    ],
+    "basis_type": "qualified-output-yield-included",
+    "child_kg": {
+      "numerator": "885416667",
+      "denominator": "5000000"
+    },
+    "double_deducted_wrong_kg": {
+      "numerator": "295138889",
+      "denominator": "1600000"
+    }
+  },
+  "IN-19": {
+    "profile": "bom-loss-kg-v1",
+    "basis_input_kg": {
+      "numerator": "1000",
+      "denominator": "1"
+    },
+    "output_kg": {
+      "numerator": "966",
+      "denominator": "1"
+    },
+    "yield": {
+      "numerator": "483",
+      "denominator": "500"
+    },
+    "row_outputs_kg": [
+      {
+        "numerator": "637",
+        "denominator": "1"
+      },
+      {
+        "numerator": "144",
+        "denominator": "1"
+      },
+      {
+        "numerator": "135",
+        "denominator": "1"
+      },
+      {
+        "numerator": "50",
+        "denominator": "1"
+      }
+    ],
+    "target_inputs_kg": [
+      {
+        "numerator": "26000",
+        "denominator": "161"
+      },
+      {
+        "numerator": "6000",
+        "denominator": "161"
+      },
+      {
+        "numerator": "6000",
+        "denominator": "161"
+      },
+      {
+        "numerator": "2000",
+        "denominator": "161"
+      }
+    ],
+    "target_outputs_kg": [
+      {
+        "numerator": "3640",
+        "denominator": "23"
+      },
+      {
+        "numerator": "5760",
+        "denominator": "161"
+      },
+      {
+        "numerator": "5400",
+        "denominator": "161"
+      },
+      {
+        "numerator": "2000",
+        "denominator": "161"
+      }
+    ],
+    "target_input_total_kg": {
+      "numerator": "40000",
+      "denominator": "161"
+    },
+    "target_output_total_kg": {
+      "numerator": "240",
+      "denominator": "1"
+    },
+    "raw_transport_affect_quota": false
+  },
+  "IN-20": {
+    "original_kg": {
+      "numerator": "60",
+      "denominator": "1"
+    },
+    "original_pieces": {
+      "numerator": "200",
+      "denominator": "1"
+    },
+    "changed_kg": {
+      "numerator": "80",
+      "denominator": "1"
+    },
+    "changed_pieces": {
+      "numerator": "200",
+      "denominator": "1"
+    }
+  },
+  "IN-21": {
+    "arrival_window_inclusive": [
+      9,
+      12
+    ],
+    "latest_dispatch_day": 8
+  },
+  "IN-22": {
+    "released": {
+      "2": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "3": {
+        "numerator": "80",
+        "denominator": "1"
+      },
+      "4": {
+        "numerator": "80",
+        "denominator": "1"
+      },
+      "5": {
+        "numerator": "0",
+        "denominator": "1"
+      }
+    },
+    "pending": {
+      "2": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "3": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "4": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "5": {
+        "numerator": "0",
+        "denominator": "1"
+      }
+    },
+    "frozen": {
+      "2": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "3": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "4": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "5": {
+        "numerator": "0",
+        "denominator": "1"
+      }
+    }
+  },
+  "IN-24": {
+    "available_day": 6,
+    "by_need_day": {
+      "4": {
+        "conditional_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "physical_inventory_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "supply_identity": "SIM-PO-1:1"
+      },
+      "6": {
+        "conditional_kg": {
+          "numerator": "100",
+          "denominator": "1"
+        },
+        "physical_inventory_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "supply_identity": "SIM-PO-1:1"
+      },
+      "10": {
+        "conditional_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "physical_inventory_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "supply_identity": "SIM-PO-1:1"
+      }
+    },
+    "unique_supply_count_after_retry": 1
+  },
+  "IN-25": {
+    "source_wip_count": 8,
+    "physical_output_added_kg": {
+      "numerator": "0",
+      "denominator": "1"
+    },
+    "wips": [
+      {
+        "wip_id": "WP001",
+        "expected_output_is_conditional": true,
+        "historical_ingredients_reissue_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "remaining_packaging": [
+          {
+            "bom_id": "BM003",
+            "child": "PK001",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "667",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM004",
+            "child": "PK002",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "667",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM005",
+            "child": "PK003",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM006",
+            "child": "PK031",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "1388889",
+              "denominator": "2500000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM007",
+            "child": "PK032",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "2083333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM008",
+            "child": "PK033",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM009",
+            "child": "PK034",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "8333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM010",
+            "child": "PK035",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          }
+        ],
+        "remaining_route_steps": [
+          "RT009"
+        ]
+      },
+      {
+        "wip_id": "WP002",
+        "expected_output_is_conditional": true,
+        "historical_ingredients_reissue_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "remaining_packaging": [
+          {
+            "bom_id": "BM013",
+            "child": "PK004",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "667",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM014",
+            "child": "PK005",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "667",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM015",
+            "child": "PK006",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM016",
+            "child": "PK031",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "1388889",
+              "denominator": "2500000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM017",
+            "child": "PK032",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "2083333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM018",
+            "child": "PK033",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM019",
+            "child": "PK034",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "8333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM020",
+            "child": "PK035",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          }
+        ],
+        "remaining_route_steps": [
+          "RT018"
+        ]
+      },
+      {
+        "wip_id": "WP003",
+        "expected_output_is_conditional": true,
+        "historical_ingredients_reissue_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "remaining_packaging": [
+          {
+            "bom_id": "BM024",
+            "child": "PK007",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "667",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM025",
+            "child": "PK008",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "667",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM026",
+            "child": "PK009",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM027",
+            "child": "PK031",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "1388889",
+              "denominator": "2500000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM028",
+            "child": "PK032",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "2083333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM029",
+            "child": "PK033",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM030",
+            "child": "PK034",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "8333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM031",
+            "child": "PK035",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          }
+        ],
+        "remaining_route_steps": [
+          "RT027"
+        ]
+      },
+      {
+        "wip_id": "WP004",
+        "expected_output_is_conditional": true,
+        "historical_ingredients_reissue_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "remaining_packaging": [
+          {
+            "bom_id": "BM035",
+            "child": "PK010",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "500",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "500",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM036",
+            "child": "PK011",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "500",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "500",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM037",
+            "child": "PK012",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM038",
+            "child": "PK031",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "2083333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM039",
+            "child": "PK032",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "5",
+              "denominator": "16"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM040",
+            "child": "PK033",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM041",
+            "child": "PK034",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "5",
+              "denominator": "4"
+            },
+            "required_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM042",
+            "child": "PK035",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          }
+        ],
+        "remaining_route_steps": [
+          "RT036"
+        ]
+      },
+      {
+        "wip_id": "WP005",
+        "expected_output_is_conditional": true,
+        "historical_ingredients_reissue_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "remaining_packaging": [
+          {
+            "bom_id": "BM046",
+            "child": "PK013",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "500",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "500",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM047",
+            "child": "PK014",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "500",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "500",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM048",
+            "child": "PK015",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM049",
+            "child": "PK031",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "2083333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM050",
+            "child": "PK032",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "5",
+              "denominator": "16"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM051",
+            "child": "PK033",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM052",
+            "child": "PK034",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "5",
+              "denominator": "4"
+            },
+            "required_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM053",
+            "child": "PK035",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          }
+        ],
+        "remaining_route_steps": [
+          "RT045"
+        ]
+      },
+      {
+        "wip_id": "WP006",
+        "expected_output_is_conditional": true,
+        "historical_ingredients_reissue_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "remaining_packaging": [
+          {
+            "bom_id": "BM057",
+            "child": "PK016",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "1000",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "1000",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM058",
+            "child": "PK017",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "1000",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "1000",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM059",
+            "child": "PK018",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM060",
+            "child": "PK031",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "2083333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM061",
+            "child": "PK032",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "5",
+              "denominator": "16"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM062",
+            "child": "PK033",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM063",
+            "child": "PK034",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "5",
+              "denominator": "4"
+            },
+            "required_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM064",
+            "child": "PK035",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "25",
+              "denominator": "1"
+            }
+          }
+        ],
+        "remaining_route_steps": [
+          "RT053"
+        ]
+      },
+      {
+        "wip_id": "WP007",
+        "expected_output_is_conditional": true,
+        "historical_ingredients_reissue_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "remaining_packaging": [
+          {
+            "bom_id": "BM067",
+            "child": "PK019",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "400",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "400",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM068",
+            "child": "PK020",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "400",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "400",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM069",
+            "child": "PK021",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "40",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "40",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM070",
+            "child": "PK031",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM071",
+            "child": "PK032",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "1",
+              "denominator": "2"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM072",
+            "child": "PK033",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "40",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "40",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM073",
+            "child": "PK034",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM074",
+            "child": "PK035",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "40",
+              "denominator": "1"
+            },
+            "required_quantity": {
+              "numerator": "40",
+              "denominator": "1"
+            }
+          }
+        ],
+        "remaining_route_steps": [
+          "RT062",
+          "RT063"
+        ]
+      },
+      {
+        "wip_id": "WP008",
+        "expected_output_is_conditional": true,
+        "historical_ingredients_reissue_kg": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "remaining_packaging": [
+          {
+            "bom_id": "BM003",
+            "child": "PK001",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "667",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM004",
+            "child": "PK002",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "3333333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "667",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM005",
+            "child": "PK003",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM006",
+            "child": "PK031",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "1388889",
+              "denominator": "2500000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM007",
+            "child": "PK032",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "2083333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "1",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM008",
+            "child": "PK033",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM009",
+            "child": "PK034",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "8333333",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "2",
+              "denominator": "1"
+            }
+          },
+          {
+            "bom_id": "BM010",
+            "child": "PK035",
+            "unit": "个",
+            "raw_quantity": {
+              "numerator": "166666667",
+              "denominator": "5000000"
+            },
+            "required_quantity": {
+              "numerator": "34",
+              "denominator": "1"
+            }
+          }
+        ],
+        "remaining_route_steps": [
+          "RT009"
+        ]
+      }
+    ]
+  },
+  "IN-26": {
+    "suggested_kg": [
+      {
+        "numerator": "200",
+        "denominator": "1"
+      },
+      {
+        "numerator": "250",
+        "denominator": "1"
+      }
+    ]
+  },
+  "IN-27": {
+    "theoretical_order_day": 1,
+    "earliest_order_day": 2,
+    "available_day": 6,
+    "late_days": 1
+  },
+  "IN-29": {
+    "unmapped_source_sf_count": 20,
+    "supplement_sf_route_count": 20,
+    "supplement_step_count": 40,
+    "source_unselected_line_blocks": true,
+    "new_manufactured_sf_must_remain_manufactured": true
+  },
+  "IN-30": {
+    "quantity_edit_multiplier": {
+      "numerator": "2",
+      "denominator": "1"
+    },
+    "shifted_transit_arrival_day": 5,
+    "shifted_transit_available_day": 7,
+    "mutated_EQ007_outage": [
+      5,
+      7
+    ],
+    "restored_day_after_mutation": 7
+  },
+  "IN-31": {
+    "frozen_run_version": "v1",
+    "current_edit_version": "v2",
+    "reopen_export_version": "v1",
+    "historical_hash_must_equal_before": true
+  },
+  "IN-34": {
+    "necessary_unsupported_capability": "BLOCK_RUN_CONSISTENTLY",
+    "final_workbook_acceptance_with_unsupported_required": "NOT_READY"
+  },
+  "IN-03": {
+    "same_batch_id_after_retry": true,
+    "inventory_rows": 420,
+    "demand_rows": 2150,
+    "transit_rows": 55,
+    "wip_rows": 8,
+    "unknown_commit_state_recovered_by_query": true
+  },
+  "IN-04": {
+    "batch_applied": false,
+    "previous_dataset_fingerprint_unchanged": true,
+    "issue_location": {
+      "sheet": "物料清单",
+      "physical_row": 3,
+      "field": "子项编号",
+      "cell": "E3",
+      "value": "UNKNOWN99"
+    }
+  },
+  "IN-05": {
+    "reordered_bom_record_count": 317,
+    "reordered_records_identical_by_key": true,
+    "duplicate_header_rejected": true,
+    "unknown_nonempty_Q_column_silent_drop": false,
+    "unknown_column_visible_or_rejected": true
+  },
+  "IN-06": {
+    "parameter_id": "PA0001",
+    "cell": "配置参数!E3",
+    "old_days": 3,
+    "new_days": 4,
+    "old_fg001_cumulative_days": 12,
+    "new_fg001_cumulative_days": 13,
+    "derived_cache_must_not_override_parameter": true,
+    "source_parameter_used": true,
+    "stale_cache_difference_visible": true,
+    "arbitrary_formula_executed": false
+  },
+  "IN-07": {
+    "unknown_function_rejected": true,
+    "external_reference_rejected": true,
+    "cached_value_accepted": false,
+    "formula_executed": false,
+    "issue_cell": "配置参数!E3"
+  },
+  "IN-08": {
+    "demand_count": 2150,
+    "grouped_demand_count": 430,
+    "reference_supply_count": 0,
+    "physical_inventory_rows_from_netting": 0,
+    "first_window_kg": {
+      "numerator": "65464",
+      "denominator": "1"
+    },
+    "november_kg": {
+      "numerator": "140280",
+      "denominator": "1"
+    },
+    "tail_kg": {
+      "numerator": "60788",
+      "denominator": "1"
+    }
+  },
+  "IN-09": {
+    "stored_subpages_queried": [
+      "需求",
+      "库存",
+      "生产",
+      "补单"
+    ],
+    "edit_save_reopen_retained": true,
+    "derived_fields_readonly_or_linked_to_parameter": true,
+    "json_required_for_maintenance": false
+  },
+  "IN-10": {
+    "parameter_id": "PA0001",
+    "unique_parameter_records": 1,
+    "old_value_days": 3,
+    "new_value_days": 4,
+    "new_fg001_cumulative_days": 13,
+    "new_run_uses_new_version": true,
+    "old_run_fingerprint_unchanged": true
+  },
+  "IN-11": {
+    "stale_version_rejected": true,
+    "stale_draft_preserved": true,
+    "referenced_material_delete_protected": true,
+    "old_history_fingerprint_unchanged": true
+  },
+  "IN-16": {
+    "fg_cumulative_days": {
+      "FG001": {
+        "numerator": "12",
+        "denominator": "1"
+      },
+      "FG002": {
+        "numerator": "11",
+        "denominator": "1"
+      },
+      "FG003": {
+        "numerator": "13",
+        "denominator": "1"
+      },
+      "FG004": {
+        "numerator": "13",
+        "denominator": "1"
+      },
+      "FG005": {
+        "numerator": "13",
+        "denominator": "1"
+      },
+      "FG006": {
+        "numerator": "12",
+        "denominator": "1"
+      },
+      "FG007": {
+        "numerator": "13",
+        "denominator": "1"
+      },
+      "FG008": {
+        "numerator": "11",
+        "denominator": "1"
+      },
+      "FG009": {
+        "numerator": "12",
+        "denominator": "1"
+      },
+      "FG010": {
+        "numerator": "12",
+        "denominator": "1"
+      }
+    }
+  },
+  "IN-17": {
+    "self_cycle_rejected": true,
+    "cycle_chain": [
+      "FG001",
+      "FG001"
+    ],
+    "overlapping_version_rejected": true,
+    "overlap_interval": [
+      -30,
+      44
+    ],
+    "original_version_fingerprint_unchanged": true
+  },
+  "IN-23": {
+    "cold_material_in_ambient_location_rejected": true,
+    "unconverted_kg_vs_piece_capacity": "NOT_COMPARABLE",
+    "unchecked_capacity_claimed_pass": false
+  },
+  "IN-28": {
+    "source_ref": "SIM-REF-1",
+    "draft_id": "SIM-DRAFT-1",
+    "v1_quantity": "200",
+    "v2_quantity": "250",
+    "supply_id": "SIM-DRAFT-1:v1",
+    "adopt_twice_unique_supply_count": 1,
+    "void_new_version_unique_supply_count": 0,
+    "old_frozen_version_unique_supply_count": 1,
+    "reference_automatically_supply": false,
+    "real_supplier_request_count": 0,
+    "adoption_explicit": true
+  },
+  "IN-32": {
+    "issue_targets_table_record_field_cell": true,
+    "selected_scope_and_focus_preserved": true,
+    "save_invalidates_affected_checks": true,
+    "cancel_fingerprint_unchanged": true
+  },
+  "IN-33": {
+    "legacy_csv_recognized": true,
+    "legacy_minute_origin_unchanged": true,
+    "legacy_profile_unchanged": true,
+    "new_excel_dataset_isolated": true,
+    "unsupported_field_claimed_pass": false
+  },
+  "IN-35": {
+    "ui_server_same_access_policy": true,
+    "rejected_write_fingerprint_unchanged": true,
+    "shared_access_claimed_personal_approval": false,
+    "import_success_claimed_run_success": false,
+    "partial_run_claimed_independent_check_pass": false
+  }
+}

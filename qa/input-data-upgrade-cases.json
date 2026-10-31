@@ -1,0 +1,115 @@
+{
+  "version": "IN-ORACLE-r1",
+  "all_values": "explicit simulation except identified original workbook cells",
+  "inventory": {
+    "on_hand": "100",
+    "reserved": "20",
+    "release": 3,
+    "expiry": 5,
+    "days": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "statuses": [
+      "released",
+      "pending",
+      "frozen"
+    ]
+  },
+  "in_transit": {
+    "id": "SIM-PO-1:1",
+    "quantity": "100",
+    "arrival": 4,
+    "inspection_days": 2,
+    "expiry": 10,
+    "days": [
+      4,
+      6,
+      10
+    ]
+  },
+  "procurement": {
+    "gaps": [
+      "101",
+      "211"
+    ],
+    "moq": "200",
+    "multiple": "50",
+    "need_day": 5,
+    "purchase_days": 3,
+    "inspection_days": 1,
+    "current_day": 2
+  },
+  "customer": {
+    "need_day": 10,
+    "early": 1,
+    "late": 2,
+    "transport_days": 2
+  },
+  "unit": {
+    "boxes": "10",
+    "kg_per_box": "6",
+    "kg_per_piece": "0.3",
+    "changed_kg_per_box": "8",
+    "changed_kg_per_piece": "0.4"
+  },
+  "bom": {
+    "id": "BM001",
+    "target_kg": "200"
+  },
+  "loss": {
+    "profile": "bom-loss-kg-v1",
+    "materials": [
+      "LEAN",
+      "FAT",
+      "WATER",
+      "PREMIX"
+    ],
+    "quotas": [
+      "650",
+      "150",
+      "150",
+      "50"
+    ],
+    "production_percent": [
+      "2",
+      "4",
+      "10",
+      "0"
+    ],
+    "raw_percent": "7",
+    "transport_percent": "9",
+    "target_kg": "240"
+  },
+  "capacity": {
+    "resource": "EQ007",
+    "day": 1,
+    "same_day_jobs_kg": [
+      "500",
+      "500",
+      "500",
+      "500",
+      "1"
+    ],
+    "physical_resource_count": "1",
+    "standard_daily_kg": "4000",
+    "day_fraction": "1/2",
+    "labor_crew": "TM02",
+    "overload_parallel_people": [
+      "12",
+      "9"
+    ]
+  },
+  "draft": {
+    "source_ref": "SIM-REF-1",
+    "draft_id": "SIM-DRAFT-1",
+    "v1_quantity": "200",
+    "v2_quantity": "250",
+    "supply_id": "SIM-DRAFT-1:v1",
+    "adopt_twice_unique_supply_count": 1,
+    "void_new_version_unique_supply_count": 0,
+    "old_frozen_version_unique_supply_count": 1
+  }
+}
