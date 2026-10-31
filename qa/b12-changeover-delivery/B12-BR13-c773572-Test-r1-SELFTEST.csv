@@ -1,0 +1,54 @@
+number,assertion,result,evidence
+1,"CORE-01 A→B: manual 30+10=40, 40+5=45; exact occupations and directed source",PASS,selftest-fixed-source.log
+2,"CORE-02 B→A uses 20+7, never reverse policy or source",PASS,selftest-fixed-source.log
+3,CORE-03 explicit zero duration/personnel/wait differs from omitted fields,PASS,selftest-fixed-source.log
+4,CORE-04 multiple independent transitions + auxiliary tool; no task/order/quantity loss,PASS,selftest-fixed-source.log
+5,NEG-01 prohibited directed pair,PASS,selftest-fixed-source.log
+6,NEG-02 exact policy missing,PASS,selftest-fixed-source.log
+7,NEG-03 duplicate direction even if identical,PASS,selftest-fixed-source.log
+8,NEG-04 unknown applicable resource,PASS,selftest-fixed-source.log
+9,NEG-05 unknown cleaning resource,PASS,selftest-fixed-source.log
+10,NEG-06 unknown personnel,PASS,selftest-fixed-source.log
+11,NEG-07 unknown skill,PASS,selftest-fixed-source.log
+12,NEG-08 missing duration,PASS,selftest-fixed-source.log
+13,NEG-09 negative duration,PASS,selftest-fixed-source.log
+14,NEG-10 fractional duration,PASS,selftest-fixed-source.log
+15,NEG-11 missing explicit personnel choice,PASS,selftest-fixed-source.log
+16,NEG-12 missing wait distinct from zero,PASS,selftest-fixed-source.log
+17,NEG-13 absent prohibition is not allow,PASS,selftest-fixed-source.log
+18,NEG-14 cannot assume working-minute clock,PASS,selftest-fixed-source.log
+19,NEG-15 missing policy source,PASS,selftest-fixed-source.log
+20,NEG-16 duplicate edge atomic,PASS,selftest-fixed-source.log
+21,NEG-17 predecessor overlap,PASS,selftest-fixed-source.log
+22,NEG-18 validation one minute early,PASS,selftest-fixed-source.log
+23,NEG-19 horizon one minute short,PASS,selftest-fixed-source.log
+24,NEG-20 fragmented calendar cannot be summed,PASS,selftest-fixed-source.log
+25,NEG-21 adjacent shifts cannot be silently bridged,PASS,selftest-fixed-source.log
+26,NEG-22 exception intersects cleaning,PASS,selftest-fixed-source.log
+27,NEG-23 complete validation occupancy calendar,PASS,selftest-fixed-source.log
+28,NEG-24 personnel window incomplete,PASS,selftest-fixed-source.log
+29,NEG-25 unsafe endpoint sum,PASS,selftest-fixed-source.log
+30,NEG-26 numeric strings are not explicit integers,PASS,selftest-fixed-source.log
+31,NEG-27 duplicate registry,PASS,selftest-fixed-source.log
+32,NEG-28 coupled pool cannot claim independent capacity,PASS,selftest-fixed-source.log
+33,NEG-29 missing occupied quantity,PASS,selftest-fixed-source.log
+34,NEG-30 unknown existing occupation resource,PASS,selftest-fixed-source.log
+35,NEG-31 missing validation hold choice,PASS,selftest-fixed-source.log
+36,NEG-32 invalid skills object returns gap instead of throwing,PASS,selftest-fixed-source.log
+37,NEG-33 empty transitions is not a pass,PASS,selftest-fixed-source.log
+38,NEG-34 duplicate demand cannot double count silently,PASS,selftest-fixed-source.log
+39,NEG-35 unknown transition resource,PASS,selftest-fixed-source.log
+40,NEG-36 reverse missing does not reuse A→B,PASS,selftest-fixed-source.log
+41,BOUND-01 endpoint adjacency/exact wait/horizon is allowed,PASS,selftest-fixed-source.log
+42,BOUND-02 complete cleaning + validation window can end at calendar boundary,PASS,selftest-fixed-source.log
+43,"BOUND-03 resource conflict during validation, no accepted partial transition",PASS,selftest-fixed-source.log
+44,BOUND-04 exact personnel capacity passes; one more head rejects,PASS,selftest-fixed-source.log
+45,BOUND-05 two new transitions compete even without existing occupations,PASS,selftest-fixed-source.log
+46,BOUND-06 explicit validation people and tool occupy the wait interval,PASS,selftest-fixed-source.log
+47,BOUND-07 explicit no hold means elapsed wait may cross offshift; occupied wait cannot,PASS,selftest-fixed-source.log
+48,BOUND-08 capacity sums stay exact beyond Number safe total,PASS,selftest-fixed-source.log
+49,NEG-37 invalid JSON values reject without state effects,PASS,selftest-fixed-source.log
+50,NEG-38 valid transition plus missing policy rejects atomically and retains both input identities,PASS,selftest-fixed-source.log
+51,NEG-39 malformed registries/policies/ledgers/calendars reject with precise gaps,PASS,selftest-fixed-source.log
+52,SAVE-01 JSON disk save/reopen freezes policy; new version changes only new evaluation,PASS,selftest-fixed-source.log
+53,WORKER-01 standalone Node domain worker equals direct JSON result; not app Worker,PASS,selftest-fixed-source.log
