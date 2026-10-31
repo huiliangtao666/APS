@@ -1,0 +1,44 @@
+{
+  "event_key": "dlv_ddea429a-af36-46f2-be80-25c6c26f9da4:r1",
+  "inbox_delivery": "dlv_568d0285-4926-4852-9da5-d5ecef9cf42c",
+  "receipt": "PROCESSED",
+  "product_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+  "evidence_sha": "b5970d1dbd6abdb9a1145aa310737d927c0d349f",
+  "project_status": "In review",
+  "whole_card": "NOT_READY",
+  "own_development": "DONE / PASS",
+  "qa_delivery": "dlv_b807aad3-e1c7-48d4-b5e8-7e872911465b",
+  "qa_handoff": "SENT",
+  "qa_key": "b09:qa-uat09:66d4d43:20261031:r1",
+  "qa_uat": "UAT09 only",
+  "qa10_11": "NOT_DISPATCHED",
+  "verification": {
+    "outer_hashes": 5,
+    "zip_crc": "PASS",
+    "internal_hashes": 1282,
+    "runtime_metadata": "MATCH",
+    "asset_hashes": "MATCH",
+    "baseline": "remote byte identical",
+    "matrix": {
+      "PASS": 25,
+      "WAIT_APPROVAL": 1,
+      "NOT_IMPLEMENTED_BY_AUTHORIZATION": 1,
+      "NOT_EXECUTED": 2
+    },
+    "portable_sources_git_blob_verified": 598,
+    "test_source_files_identical": 10,
+    "regression_product_subtrees_identical": [
+      "src",
+      "server",
+      "public"
+    ],
+    "runtime_source_manifest_hash": "MATCH"
+  },
+  "pm_entry": "https://github.com/huiliangtao666/APS/issues/38#issuecomment-6542010984",
+  "main_continuation": "dlv_4c01a1e7-3520-4764-81a6-b7438c2b41f1 already queued; no duplicate",
+  "test_b12": "dlv_eccbf433-46fc-4696-ab37-76817c015055 executing; preserve latest authorization",
+  "repair_round_increment": 0,
+  "qa_logs_closed": 0,
+  "publication": false,
+  "at": "2026-10-31T18:04:05.519615+08:00"
+}
