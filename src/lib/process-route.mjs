@@ -9,7 +9,8 @@ export const one=(rows,label)=>{if(rows.length!==1)throw Error(`${label} 须唯�
 export const integer=(raw,label)=>{if(!/^\d+$/.test(String(raw??''))||!Number.isSafeInteger(Number(raw)))throw Error(`${label} 须显式非负整数`);return Number(raw);};
 export const processRequested=data=>(data.routes||[]).some(r=>String(r['最大等待分钟']??'').trim()!=='');
 export function adoptProcessScope(scope,data,at){
- if(scope.mode==='minimal-r1'||!processRequested(data)||!data.rules.some(r=>r['规则编号']==='MAX_LAG'&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at))))return scope;
+ if(scope.mode==='minimal-r1'||!data.rules.some(r=>r['规则编号']==='MAX_LAG'&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at))))return scope;
+ if(!processRequested(data))return {...scope,unchecked:[...scope.unchecked,'MAX_LAG已启用但没有显式最大等待声明；保留普通任务结果，未检查该条件且不可确认']};
  return {...scope,checked:[...scope.checked,'显式kg固定程序加工/冷却：真实上下游、仅加工合炉、最大等待与合格产出完整冷却区间、多时点整对提交'],unchecked:scope.unchecked.map(s=>s==='最大等待、动态下游释放与其他空间单位'?'任意装载节点/通用分阶段重组、动态下游释放及其他空间单位':s),note:scope.note+' 显式加工/冷却完整路线由冻结源独立复核；采用范围不代替复核结果。'};
 }
 export function orderedOperations(data,product){
@@ -72,7 +73,7 @@ export function validateProcessPairConfiguration(data,at){
  const active=id=>data.rules.some(r=>r['规则编号']===id&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at)));
  if(!active('MAX_LAG'))return [];
  try{
-  if(!processRequested(data))throw Error('MAX_LAG须有显式加工/冷却顺序配对，不能由client提示启用');
+  if(!processRequested(data))return []; // No inferred waiting value or pair. Result stays explicitly unchecked.
   for(const id of ['MATERIAL','CAPACITY','PROGRAM','STORAGE','CALENDAR'])if(!active(id))throw Error(`配对须同时采用 ${id}`);
   const {records,contexts}=establishProcessProduction(data,data.orders.filter(o=>o['需求类型']!=='预测'));
   for(const b of records){const ctx=contexts.get(b.orderId);if(!ctx.cool)continue;

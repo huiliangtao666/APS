@@ -1,5 +1,7 @@
 import {effectiveClaim} from './resource-policies.mjs';
 import {sourceRefs} from './problem-records.mjs';
+import {establishProcessProduction} from './process-route.mjs';
+import {quantityMath as Q} from './material-allocation.mjs';
 
 // An eight-column original is source data, never the fifteen-column runtime
 // contract. No literal is rewritten and no business configuration is created.
@@ -16,7 +18,7 @@ export function adaptOriginalDependencies(input,{at=new Date().toISOString()}={}
  if(!rows.length)return {data:input,issues,bindings,contract:null};
  const fail=(i,field,message)=>issues.push({code:'NOT_READY_ORIGINAL12',table:'originalDependencies',file:originalDependencyDef.file,row:i+2,field,message,relatedRecords:sourceRefs('originalDependencies',[rows[i]],rows)});
  const active=id=>{const r=(input.rules||[]).find(r=>r['规则编号']===id);return r&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at));};
- const ruleFor={设备:'MACHINE',模具:'MOLD',工具:'MOLD',人员:'LABOR',物料:'MATERIAL'};
+ const ruleFor={设备:'MACHINE',模具:'MOLD',工具:'MOLD',人员:'LABOR',物料:'MATERIAL',空间:'STORAGE'};
  for(const [i,r] of rows.entries()){
   const before=issues.length,type=r['资源类型'],rule=ruleFor[type],binding={sourceIndex:i,sourceTable:'originalDependencies',sourceRecord:structuredClone(r),ruleId:rule,status:'BLOCKED',targets:[]};
   bindings.push(binding);
@@ -28,12 +30,32 @@ export function adaptOriginalDependencies(input,{at=new Date().toISOString()}={}
   if(order&&!(input.routes||[]).some(x=>x['产品编号']===order['产品编号']&&x['工序编号']===r['工序编号']))fail(i,'工序编号','原依赖不属于订单的产品路线');
   for(const f of ['提前占用分钟','后延占用分钟'])if(!minute(r[f]))fail(i,f,'须为显式0–525600整数分钟；原文不换算');
   if(type==='物料'){
-   if(r['需求数量']!=='由BOM计算'&&!positive(r['需求数量']))fail(i,'需求数量','仅保留原文“由BOM计算”或正整数；尚未支持原物料计算映射');
-   if(active(rule))fail(i,'需求数量','MATERIAL已启用：原12物料尚无已批准的BOM/单位/用量运行绑定；不把“由BOM计算”当数值或0，整批拒绝');
+   if(r['需求数量']!=='由BOM计算'&&(!positive(r['需求数量'])||active(rule)))fail(i,'需求数量','物料运行须显式“由BOM计算”并绑定独立配置的版本BOM；数值物料仅可在关闭规则时保留原文');
+  }else if(type==='空间'){
+   if(r['需求数量']!=='按合格产出kg'&&!positive(r['需求数量']))fail(i,'需求数量','空间仅支持显式正整数或既有kg生产批的“按合格产出kg”');
   }else if(!positive(r['需求数量']))fail(i,'需求数量','资源需求须为显式安全正整数');
   if(issues.length!==before)continue;
   if(!active(rule)){binding.status='DEFERRED';binding.reason=`${rule}显式关闭或尚未生效；仅保存原文，本次运行不采用`;continue;}
-  if(type==='设备'){
+  if(type==='物料'){
+   for(const f of ['提前占用分钟','后延占用分钟'])if(r[f]!=='0')fail(i,f,'物料投料时点仅支持本工序开始；提前/后延公式未定义');
+   const material=(input.materials||[]).filter(m=>m['物料编号']===r['资源编号']);
+   const bom=(input.bom||[]).filter(b=>b['产品编号']===order['产品编号']&&b['投料工序编号']===r['工序编号']&&b['物料编号']===r['资源编号']);
+   if(material.length!==1||!bom.length)fail(i,'资源编号','须有唯一物料及显式版本/日期/单位的运行BOM；原09来源不自动转成计算BOM');
+   projected.push({...r});binding.targets.push({table:'dependencies',record:{...r}},...bom.map(record=>({table:'bom',record})),...material.map(record=>({table:'materials',record})));
+   binding.materialContract='existing-versioned-bom-at-feed-v1';
+  }else if(type==='空间'){
+   const deps=(input.dependencies||[]).filter(d=>sameTask(d,r)&&d['资源类型']==='空间'&&d['资源编号']===r['资源编号']);
+   const claims=(input.resourceClaims||[]).filter(c=>sameTask(c,r)&&c['资源类型']==='空间'&&c['资源编号']===r['资源编号']);
+   const spaces=(input.batchResources||[]).filter(s=>s['资源编号']===r['资源编号']&&s['资源类型']==='共享冷却空间');
+   if(deps.length!==1||claims.length!==1||spaces.length!==1){fail(i,'资源编号','须显式绑定唯一空间、运行需求及表23占用声明');continue;}
+   const d=deps[0],c=claims[0];
+   for(const f of ['提前占用分钟','后延占用分钟'])if(!sameNumber(d[f],r[f])||!sameNumber(c[f],r[f]))fail(i,f,'运行空间需求/声明须与原12逐值一致');
+   if(r['需求数量']==='按合格产出kg'){
+    if(!active('CAPACITY')||spaces[0]['单位']!=='kg'||c['单位']!=='kg'||c['占用口径']!=='显式逐生产批完整区间')fail(i,'需求数量','按合格产出kg须采用既有kg生产批及显式逐生产批完整区间；不使用整炉投入或任意节点');
+    binding.quantityContract='existing-qualified-production-output-v1';
+   }else if(!sameNumber(d['需求数量'],r['需求数量'])||!sameNumber(c['需求数量'],r['需求数量']))fail(i,'需求数量','运行空间需求/声明须与原12数量一致');
+   projected.push(d);binding.targets.push({table:'dependencies',record:d},{table:'resourceClaims',record:c},{table:'batchResources',record:spaces[0]});
+  }else if(type==='设备'){
    if(!(input.machines||[]).some(m=>m['设备编号']===r['资源编号']&&m['工序编号']===r['工序编号']))fail(i,'资源编号','原设备与运行工序不匹配');
    if(r['需求数量']!=='1')fail(i,'需求数量','单设备依赖仅支持显式数量1');
    for(const f of ['提前占用分钟','后延占用分钟'])if(r[f]!=='0')fail(i,f,'设备依赖未支持额外提前/后延窗口，不能忽略原值');
@@ -69,5 +91,12 @@ export function adaptOriginalDependencies(input,{at=new Date().toISOString()}={}
  // Original source owns this order's dependency set. Disabled labor/material
  // must not leak in through an older canonical row or seed configuration.
  const dependencies=[...(input.dependencies||[]).filter(r=>!orders.has(r['订单编号'])),...projected];
+ for(const b of bindings.filter(b=>b.status==='BOUND'&&b.quantityContract)){
+  try{
+   const records=establishProcessProduction({...input,dependencies},input.orders.filter(o=>o['订单编号']===b.sourceRecord['订单编号'])).records;
+   const d=b.targets.find(t=>t.table==='dependencies').record,c=b.targets.find(t=>t.table==='resourceClaims').record;
+   if(!records.length||records.some(p=>Q.cmp(Q.q(d['需求数量']),Q.fromExact(p.qualifiedKg))!==0n||Q.cmp(Q.q(c['需求数量']),Q.fromExact(p.qualifiedKg))!==0n))throw Error('空间运行需求/声明须等于每个实际生产批合格产出，不能用整订单或热投入替代');
+  }catch(e){fail(b.sourceIndex,'需求数量',e.message);b.status='BLOCKED';}
+ }
  return {data:{...input,dependencies},issues,bindings,contract:originalDependencyContract};
 }

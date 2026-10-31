@@ -161,7 +161,7 @@ function validate(tasks: Task[]): Finding[] {
 }
 
 export function calculate(data:Record<string,Row[]>, inputVersion:number, calculatedAt=new Date().toISOString(), conditions:{startMinute?:number;endMinute?:number|null;priority?:string;mode?:string;taskPositions?:Record<string,any>}={}) {
- const positions=conditions.taskPositions||{};
+ const sourcePositions=conditions.taskPositions||{};let positions={...sourcePositions};
  const jointAttempts:any[]=[];
  const resourceReservations:any[]=[];const flags=conditions.mode==='minimal-r1'?{}:jointFlags(data,calculatedAt);
  const sourceData=data;const original=(data.originalResourceEvents||[]).length?originalSchedulingReservations(data):{resources:[],people:[]};let batches:ReturnType<typeof prepareProductionBatches>|null=null;
@@ -185,10 +185,11 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
     const risks=executionRisks((sourceData as any).executionContext||sourceData,calculatedAt);
     for(const risk of risks)findings.push({code:'UNPLANNED / EXECUTION_EVENT_REVIEW',message:risk.message,taskIds:[`${risk.orderId}-${risk.operation}`]});
     personnelReservations.push(...eventAbsences(sourceData),...original.people);
-    for(const [id,p] of Object.entries(positions)){
+    const holdPositions=()=>{for(const [id,p] of Object.entries(positions)){
       const busy=machineBusy.get(p.machine)||[];
       busy.push({id:'position:'+id,orderId:p.orderId,productId:'',operation:p.operation,label:'试算固定位置',machine:p.machine,start:p.start,end:p.end,duration:p.duration,predecessor:'',source:'FR027'});machineBusy.set(p.machine,busy);
-    }
+    }};
+    if(!activeBatchRule(data,calculatedAt))holdPositions();
     const eventState=eventSummary(sourceData);
     const observation=Math.max(eventState.eventMinute,...(sourceData.executionFacts||[]).map(f=>Number(f['观测分钟'])));
     for(const f of sourceData.executionFacts||[]){const selected=(sourceData.orders||[]).some(o=>o['订单编号']===f['订单编号']);const end=f['状态']==='暂停'||(!selected&&f['状态']!=='已完成')?Number.POSITIVE_INFINITY:(f['状态']==='已完成'?Number(f['完成分钟']):Number(f['观测分钟'])+Number(f['剩余工时分钟']));const busy=machineBusy.get(f['当前设备'])||[];busy.push({id:'事实:'+f['事实编号'],orderId:f['订单编号'],productId:'',operation:f['工序编号'],label:'模拟执行保护',machine:f['当前设备'],start:Number(f['开始分钟']),end,duration:end-Number(f['开始分钟']),predecessor:'',source:'保留原始模拟事实'});machineBusy.set(f['当前设备'],busy);}
@@ -211,8 +212,8 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
       const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
       setIssues(findings);setActivePlan(plan);setVerification(null);setMessage(findings.map(f=>f.message).join(' '));return;
     }
-    if(Object.keys(positions).length&&(minimal||activeBatchRule(data,calculatedAt))){
-      setActivePlan({id:uid(),name:'固定位置检查受阻',createdAt:calculatedAt,tasks:[],findings:[{code:'POSITION / UNSUPPORTED',message:'最小模式或生产批/合批位置语义未支持；保留锁定，不推断可行',taskIds:Object.keys(positions)}],rules:enabledRules,inputVersion:`v${inputVersion}`});return;
+    if(Object.keys(positions).length&&minimal){
+      setActivePlan({id:uid(),name:'固定位置检查受阻',createdAt:calculatedAt,tasks:[],findings:[{code:'POSITION / UNSUPPORTED',message:'最小模式位置语义未检查；保留锁定，不推断可行',taskIds:Object.keys(positions)}],rules:enabledRules,inputVersion:`v${inputVersion}`});return;
     }
     if(!minimal&&processRequested(sourceData)&&ruleSnapshot.settings.some(r=>r.id==='MAX_LAG'&&r.active)){
      try{
@@ -228,6 +229,19 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
     }
     if(!minimal&&activeBatchRule(data,calculatedAt)){
      batches=prepareProductionBatches(data,sorted,conditions.startMinute??0,calculatedAt);findings.push(...batches.findings);data=batches.data;sorted=batches.orders;
+     if(Object.keys(sourcePositions).length){
+      positions={};const used=new Set<string>();let invalid=false;
+      for(const g of batches.groups)for(const op of g.route){
+       const ids=g.members.map((m:any)=>JSON.stringify([m.orderId,m.index,op['工序编号']])),provided=ids.filter((id:string)=>sourcePositions[id]);
+       if(!provided.length)continue;
+       const p=sourcePositions[provided[0]],duration=Number(sourceData.times.find(t=>t['产品编号']===g.route[0]['产品编号']&&t['工序编号']===op['工序编号'])?.['固定分钟']);
+       const virtualId=`${g.id}-${op['工序编号']}`,resourceBatchId=JSON.stringify([g.id,op['工序编号']]);
+       if(provided.length!==ids.length||g.status==='blocked-under-min'||provided.some((id:string)=>{const q=sourcePositions[id],m=g.members.find((m:any)=>JSON.stringify([m.orderId,m.index,op['工序编号']])===id);return q.resourceBatchId!==resourceBatchId||q.productionBatchId!==m.id||q.orderId!==m.orderId||q.operation!==op['工序编号']||q.machine!==p.machine||q.start!==p.start||q.end!==p.end||q.duration!==duration;}))invalid=true;
+       positions[virtualId]={...p,orderId:g.id};provided.forEach((id:string)=>used.add(id));
+      }
+      if(invalid||Object.keys(sourcePositions).some(id=>!used.has(id))){setActivePlan({id:uid(),name:'固定批身份冲突',createdAt:calculatedAt,tasks:[],findings:[{code:'POSITION / BATCH_IDENTITY',message:'资源批固定成员、程序、工时或数量范围与当前源不一致；不拆散或重组',taskIds:Object.keys(sourcePositions)}],rules:enabledRules,inputVersion:`v${inputVersion}`});return;}
+      holdPositions();
+     }
      for(const g of batches.groups.filter((g:any)=>g.status==='blocked-under-min'))for(const op of g.route){
       const materialSources:any[]=[];const trace=(table:string,rows:Row[])=>materialSources.push(...sourceRefs(table,rows,sourceData[table]||[]));
       g.members.forEach((m:any)=>trace('orders',[m.order]));trace('routes',[op]);
@@ -344,7 +358,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
   }
  schedule();
  if(result){
-  const protection=protectCalculatedTasks(null,result,sourceData,conditions,positions);
+  const protection=protectCalculatedTasks(null,result,sourceData,conditions,sourcePositions);
   (result as any).protection=protection;
   (result as any).findings.push(...protection.issues);
  }

@@ -4,6 +4,7 @@ import {calculate,defs} from './planner.ts';
 import {validateInputs} from './input-validation.mjs';
 import {assessRules} from '../src/lib/business-rules.mjs';
 import {independentlyVerifyPlan} from '../src/lib/independent-verification.mjs';
+import {bindRunResultSources} from './run-result-sources.mjs';
 
 // All immutable confirmation reads share the same fail-closed digest check.
 export function validConfirmation(c){
@@ -29,7 +30,8 @@ export function reviewPlan(s,p,now=new Date().toISOString()){
  for(const f of p.findings||[])if(!partialCode.test(f.code)||!f.taskIds?.length||f.taskIds.some(id=>scheduled.has(id)||!unplanned.some(t=>t.id===id)))add('rule_conflict',f.message||'存在规则冲突或未支持的未排语义');
  if(unplanned.some(t=>!t.reasons?.length||t.reasons.some(r=>['unknown','unresolved'].includes(r.classification))||t.quantity==null||!t.unit)||p.resultAssessment?.orders?.some(o=>o.status==='unknown-route'))add('unknown_demand','未排数量、原因或路线未知，不能确认');
  if(p.deliveryAssessment?.active)for(const order of p.deliveryAssessment.orders||[])if(order.reasons?.some(r=>!['INCOMPLETE','NO_REMAINING_WORK','POST_COMPLETION_WAIT','SIMULATED_QUALITY_READY'].includes(r.code)))add('delivery_condition_blocked','已启用交付规则存在质量、效期、关键数据或未支持条件，不能确认');
- if((p.conditions?.orderIds||[]).some(id=>{const o=s.data.orders.find(o=>o['订单编号']===id);return s.data.routes.some(r=>r['产品编号']===o?.['产品编号']&&r['最大等待分钟']?.trim());}))add('unsupported_semantics','路线最大等待目前仅支持草稿检查与缺口报告；主管确认链路未验收，不能确认');
+ if((p.conditions?.orderIds||[]).some(id=>{const o=s.data.orders.find(o=>o['订单编号']===id);return s.data.routes.some(r=>r['产品编号']===o?.['产品编号']&&r['最大等待分钟']?.trim());})&&p.processRouteContract!=='R4-kg-fixed-pair-v1')add('unsupported_semantics','最大等待须有受支持的完整kg固定路线合同及独立复核；不能只凭草稿缺口报告确认');
+ if(p.conditions?.enabledRuleIds?.includes('MAX_LAG')&&!p.processRouteContract)add('unchecked_max_lag','MAX_LAG已启用但缺显式完整路线声明/检查；普通草稿结果不代表该条件通过，不能确认');
  for(const [type,flag] of [['工装','MOLD'],['空间','STORAGE']])if(!p.jointResourceChecks?.[flag]&&[...(s.data.dependencies||[]),...(s.data.resourceClaims||[])].some(r=>p.conditions?.orderIds?.includes(r['订单编号'])&&r['资源类型']===type))add('unchecked_resource','已声明资源条件未检查，不能确认');
  let checks=null;
  if(!blockers.length){
@@ -43,9 +45,10 @@ export function reviewPlan(s,p,now=new Date().toISOString()){
    if(inputHash(current.settings)!==inputHash(p.ruleSnapshot.settings))add('rule_effectivity_changed','规则生效状态已变化，须另开运行并重新提交');
    const enabled=s.data.rules.filter(r=>r['是否启用']==='是').map(r=>r['规则编号']);
    if(enabled.some(id=>!run.conditions.enabledRuleIds.includes(id)))add('unchecked_rules','本次运行遗漏当前启用规则');
-   const replay=calculate(run.executionData,run.revision,run.createdAt,run.conditions);
+   const replay=bindRunResultSources(calculate(run.executionData,run.revision,run.createdAt,run.conditions),run,original);
    for(const key of Object.keys(replay).filter(k=>!['id','name','createdAt'].includes(k)))if(inputHash(replay[key])!==inputHash(p[key])){add('result_mismatch','结果与原始输入、条件和规则重新检查不一致');break;}
    checks=independentlyVerifyPlan(p,run.executionData.orders,run.executionData.routes,p.rules,now,run.executionData,run.conditions);
+   if(p.processRouteContract&&(checks.checks.processRoute?.status!=='pass'||checks.checks.batchAndWait?.status!=='pass'))add('unchecked_process_route','完整生产身份、加工/冷却、等待及装载须全部独立复核通过');
    if(run.conditions.jointConditionsContract&&checks.checks.jointConditions?.status!=='pass')add('unchecked_joint_conditions','全部已启用资源与物料必须完成冻结输入独立复核');
    if(Object.values(checks.checks).some(c=>c.status==='problem')||checks.findings.length)add('independent_conflict','独立复核发现冲突');
    if(checks.checks.calendar?.status!=='pass')add('unchecked_calendar','冻结日历与停机尚未完成独立复核');

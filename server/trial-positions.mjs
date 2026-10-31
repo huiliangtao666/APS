@@ -7,9 +7,17 @@ import {freezeRunInput,inputHash} from './run-input.mjs';
 import {calculate} from './planner.ts';
 import {protectCalculatedTasks} from './trial-protection.mjs';
 
-export const taskPosition=t=>({orderId:t.orderId,operation:t.operation,machine:t.machine,start:t.start,end:t.end,duration:t.duration});
+export const taskPosition=t=>({orderId:t.orderId,operation:t.operation,machine:t.machine,start:t.start,end:t.end,duration:t.duration,...(t.productionBatchId?{productionBatchId:t.productionBatchId,resourceBatchId:t.resourceBatchId}:{})});
+export function positionGroup(plan,task){
+ if(!task)return [];
+ if(!task.productionBatchId&&!task.resourceBatchId)return [task];
+ if(!plan.batchChecked||plan.processRouteContract&&plan.processRouteContract!=='R4-kg-fixed-pair-v1'||!task.resourceBatchId||!task.productionBatchId)return [];
+ const group=(plan.resourceBatches||[]).filter(g=>g.id===task.resourceBatchId),members=plan.tasks.filter(t=>t.resourceBatchId===task.resourceBatchId);
+ if(group.length!==1||group[0].status!=='scheduled'||members.length!==group[0].members.length||group[0].members.some(id=>members.filter(t=>t.productionBatchId===id).length!==1)||members.some(t=>t.machine!==task.machine||t.operation!==task.operation||t.start!==task.start||t.end!==task.end))return [];
+ return members;
+}
 export function movableTask(task,...datasets){
- return !!task&&!task.productionBatchId&&!task.resourceBatchId&&datasets.every(d=>
+ return !!task&&datasets.every(d=>
   !(d.executionFacts||[]).some(f=>f['订单编号']===task.orderId&&f['工序编号']===task.operation)&&
   !(d.executionSources||[]).some(f=>f['原始任务编号']===task.id)&&
   !(d.orders||[]).some(o=>o['订单编号']===task.orderId&&Number(o['已完成合格数量']||0)>0));
@@ -38,9 +46,14 @@ export function checkPositions(plan,base,data,conditions,positions,locks){
  issues.push(...protection.issues);
  const add=(code,message,taskIds=[])=>issues.push({code:'POSITION / '+code,message,taskIds});
  for(const [name,c] of Object.entries(report.checks))if(c.status==='problem')add('INDEPENDENT_'+name,c.details.join('；'),plan.tasks.map(t=>t.id));
- if(conditions.mode!=='supported'||activeBatchRule(data,conditions.ruleEvaluationAt))add('UNSUPPORTED','最小模式及生产批/合批移动尚未检查');
+ if(conditions.mode!=='supported'||activeBatchRule(data,conditions.ruleEvaluationAt)&&!plan.batchChecked)add('UNSUPPORTED','最小模式或未检查生产批的位置不能证明可行');
  if(plan.tasks.length!==base.tasks.length||base.tasks.some(t=>!plan.tasks.some(n=>n.id===t.id&&n.orderId===t.orderId&&n.productId===t.productId&&n.operation===t.operation&&n.predecessor===t.predecessor&&n.duration===t.duration)))add('IDENTITY_DURATION','任务身份、数量范围或工时不一致；不接纳部分移动结果',base.tasks.map(t=>t.id));
- if(data.routes.some(r=>r['最大等待分钟']?.trim()))add('UNSUPPORTED','路线最大等待未支持，不能证明移动可行');
+ if(data.routes.some(r=>r['最大等待分钟']?.trim())&&plan.processRouteContract!=='R4-kg-fixed-pair-v1')add('UNSUPPORTED','路线最大等待未支持，不能证明移动可行');
+ if(plan.batchChecked){
+  const identity=t=>({id:t.id,productionBatchId:t.productionBatchId,resourceBatchId:t.resourceBatchId,quantity:t.quantity,exactQuantity:t.exactQuantity,exactLoadKg:t.exactLoadKg,program:t.program});
+  if(inputHash(plan.tasks.map(identity).sort((a,b)=>a.id.localeCompare(b.id)))!==inputHash(base.tasks.map(identity).sort((a,b)=>a.id.localeCompare(b.id)))||inputHash(plan.productionBatches)!==inputHash(base.productionBatches)||inputHash([...plan.resourceBatches].sort((a,b)=>a.id.localeCompare(b.id)))!==inputHash([...base.resourceBatches].sort((a,b)=>a.id.localeCompare(b.id))))add('BATCH_IDENTITY','移动不得改变生产批身份、合批成员、程序、装载或精确产出',base.tasks.map(t=>t.id));
+  if(report.checks.batchAndWait?.status!=='pass'||plan.processRouteContract&&report.checks.processRoute?.status!=='pass')add('BATCH_UNCHECKED','生产批装载、等待及适用完整路线须独立复核');
+ }
  for(const type of ['工装','空间'])if(!plan.jointResourceChecks?.[type==='工装'?'MOLD':'STORAGE']&&[...(data.dependencies||[]),...(data.resourceClaims||[])].some(r=>r['资源类型']===type))add('RESOURCE_UNCHECKED',`${type} 条件尚未检查，不能证明可行`);
  const event=eventSummary(data),observed=Math.max(event.eventMinute,...(data.executionFacts||[]).map(f=>Number(f['观测分钟'])));
  for(const task of plan.tasks){
@@ -86,7 +99,8 @@ export function evaluatePosition(trial,base,positions,locks){
   const id=r.taskIds?.[0]||r.taskId,old=base.tasks.find(t=>t.id===id),p=positions[id];
   return old&&p?{...r,start:r.start+p.start-old.start,end:r.end+p.start-old.start,...(r.type==='设备'?{resourceId:p.machine}:{})}:r;
  });
- const candidateCheck=checkPositions({...base,tasks:candidateTasks,resourceReservations:candidateReservations,findings:[]},base,frozen.executionData,frozen.conditions,positions,locks);
+ const replayed=result.tasks.length===candidateTasks.length&&candidateTasks.every(t=>result.tasks.some(n=>n.id===t.id&&inputHash(taskPosition(t))===inputHash(taskPosition(n))));
+ const candidateCheck=checkPositions({...base,...(replayed?{materialDemands:result.materialDemands,resourceReservations:result.resourceReservations}: {resourceReservations:candidateReservations}),tasks:candidateTasks,findings:[]},base,frozen.executionData,frozen.conditions,positions,locks);
  const check={...candidateCheck,engineChecks:engineCheck.checks,findings:[...engineCheck.findings,...candidateCheck.findings],feasibility:'supported-position-only',candidateTasks};
  return {frozen,result,check,valid:check.findings.length===0};
 }

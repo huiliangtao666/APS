@@ -15,7 +15,7 @@ export function scheduleProcessRoute(data,orders,at,conditions){
  const allocator=createMaterialAllocator(data,materialPolicy(data,at)),flags=jointFlags(data,at);
  const start=conditions.startMinute??0,end=conditions.endMinute??Math.max(...data.calendars.map(r=>Number(r['结束分钟'])));
  if(!Number.isSafeInteger(start)||!Number.isSafeInteger(end)||end<=start)throw Error('配对须有合法整数计划区间');
- if((data.executionFacts||[]).length||(data.simulationEvents||[]).length||Object.keys(conditions.taskPositions||{}).length)throw Error('配对路线尚不支持执行事实/事件恢复或固定位置组合；未释放保护');
+ if((data.executionFacts||[]).length||(data.simulationEvents||[]).length)throw Error('配对路线尚不支持执行事实/事件恢复；未释放保护');
  const idFor=(b,op)=>JSON.stringify([b.orderId,b.index,op]);
  const issue=(b,operations,message,code='UNPLANNED / PROCESS_PAIR')=>{for(const operation of operations)findings.push({code,message,taskIds:[idFor(b,operation)],relatedRecords:processTaskSources(data,b.orderId,[operation]),sourceRead:'frozen-calendar-v1',context:{orderId:b.orderId,productionBatchId:b.id,operation,machineId:operationMachine(data,b.orderId,operation)['设备编号']}});};
  const materialNext=minute=>allocator.futureMinutes.find(t=>t>minute);
@@ -59,6 +59,30 @@ export function scheduleProcessRoute(data,orders,at,conditions){
   return {ok:true};
  }
  const accept=c=>{for(const t of c.tasks)t.timingReasons=attempts.filter(a=>(a.memberIds||[]).includes(t.productionBatchId)||(a.taskIds||[]).includes(t.id)||a.memberId===t.productionBatchId).map(a=>({...a}));c.materials.commit();tasks.push(...c.tasks);reservations.push(...c.reservations);materialDemands.push(...c.materials.rows);};
+ // Replay the existing bounded route at exact positions. Membership, production
+ // quantities and programs come from source, never from the move request. Unlocked
+ // tasks keep the constructive baseline; this is no additional schedule search.
+ if(Object.keys(conditions.taskPositions||{}).length){
+  const baseline=scheduleProcessRoute(data,orders,at,{...conditions,taskPositions:{}}),positions=conditions.taskPositions;
+  if(baseline.findings.length)throw Error('固定批位置须有完整可复演的当前生产路线；未排原因须先处理');
+  for(const [id,p] of Object.entries(positions)){
+   const t=baseline.tasks.find(t=>t.id===id);
+   if(!t||p.orderId!==t.orderId||p.operation!==t.operation||p.machine!==t.machine||p.duration!==t.duration||p.end!==p.start+t.duration||!Number.isSafeInteger(p.start)||p.start<start||p.end>end||p.productionBatchId!==t.productionBatchId||p.resourceBatchId!==t.resourceBatchId)throw Error('固定批身份/成员/设备/工时或范围与当前源不一致：'+id);
+  }
+  const fixedGroups=baseline.resourceBatches.map(g=>{
+   const original=baseline.tasks.filter(t=>t.resourceBatchId===g.id),moved=original.map(t=>({...t,...(positions[t.id]||{})}));
+   if(!original.length||moved.some(t=>t.start!==moved[0].start||t.end!==moved[0].end||t.machine!==moved[0].machine))throw Error('同一资源批成员须整体移动/锁定，不能拆散或重组：'+g.id);
+   return {g,original,moved};
+  }).sort((a,b)=>a.moved[0].start-b.moved[0].start);
+  for(const {g,original,moved} of fixedGroups){
+   const c=newCandidate(),members=original.map(t=>byId.get(t.productionBatchId)),op=contexts.get(members[0].orderId).route.find(r=>r['工序编号']===g.operation);
+   const checked=previewOperation(c,members,op,moved[0].start,g.id);
+   attempts.push({stage:'fixed-resource-batch',taskIds:original.map(t=>t.id),...checked});
+   if(!checked.ok){c.materials.rollback();throw Error('固定资源批 '+g.id+'：'+checked.reason);}
+   accept(c);groups.push({...g});
+  }
+  return {tasks,findings,resourceReservations:reservations,materialDemands,jointAttempts:attempts,productionBatches:records.map(({order,...b})=>b),resourceBatches:groups,batchChecked:true,materialChecked:true,jointResourceChecks:flags,processRouteContract,positionContract:'existing-batch-members-fixed-v1'};
+ }
  function individual(b,op){
   const previous=op['前序工序']?tasks.find(t=>t.id===idFor(b,op['前序工序'])):null;
   if(op['前序工序']&&!previous){issue(b,[op['工序编号']],'实际前序未排；未占用任何候选');return false;}

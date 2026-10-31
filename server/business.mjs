@@ -14,7 +14,8 @@ import {configurationPreview} from '../src/lib/configuration-preview.mjs';
 import {migratePolicies} from '../src/lib/resource-policies.mjs';
 import {inspectCsvBatch,batchKeys} from './csv-batch.mjs';
 import {adaptOriginalDependencies} from '../src/lib/original-dependencies.mjs';
-import {taskPosition,movableTask,positionGuard,positionToken,freezePositions,evaluatePosition} from './trial-positions.mjs';
+import {bindRunResultSources} from './run-result-sources.mjs';
+import {taskPosition,positionGroup,movableTask,positionGuard,positionToken,freezePositions,evaluatePosition} from './trial-positions.mjs';
 import {querySavedReport,savedReportCsv,assessHandoff} from '../src/lib/r7-handoff.mjs';
 import {resourceLoad,loadCsv} from '../src/lib/resource-load.mjs';
 import {validInterval} from '../src/lib/timetable.mjs';
@@ -277,26 +278,29 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const s=read(),trial=s.trials?.find(t=>t.id===req.params.id),plan=s.plans.find(p=>p.id===trial?.latestPlanId);
     if(!trial||!plan)return res.status(404).json({error:'trial_not_found'});
     const history=inputs(s,plan)?.data;
-    res.json({trialId:trial.id,planId:plan.id,revision:trial.revision,planHash:contentHash(plan),blocked:positionGuard(s,trial,plan),locks:trial.locks||{},tasks:plan.tasks.map(t=>({...t,movable:!!history&&movableTask(t,s.data,trial.data,history),allowedMachines:trial.data.dependencies.filter(d=>d['订单编号']===t.orderId&&d['工序编号']===t.operation&&d['资源类型']==='设备').slice(0,1).map(d=>d['资源编号'])})),limits:['只采用当前显式设备依赖；不推断替代设备授权','生产批/合批、最小模式及上游未支持条件不能由移动证明可行']});
+    res.json({trialId:trial.id,planId:plan.id,revision:trial.revision,planHash:contentHash(plan),blocked:positionGuard(s,trial,plan),locks:trial.locks||{},tasks:plan.tasks.map(t=>({...t,movable:!!history&&positionGroup(plan,t).length>0&&positionGroup(plan,t).every(m=>movableTask(m,s.data,trial.data,history)),positionMemberIds:positionGroup(plan,t).map(m=>m.id),allowedMachines:trial.data.dependencies.filter(d=>d['订单编号']===t.orderId&&d['工序编号']===t.operation&&d['资源类型']==='设备').slice(0,1).map(d=>d['资源编号'])})),limits:['只采用当前显式设备依赖；不推断替代设备授权','已有完整kg固定路线的同一资源批整体移动/锁定；不改变成员、程序或数量。其他未支持条件仍阻断']});
   });
   function createPositionPreview(req,res,kind){
     const s=read(),trial=s.trials?.find(t=>t.id===req.params.id),plan=s.plans.find(p=>p.id===req.body.planId);
     const blocked=positionGuard(s,trial,plan);if(blocked)return res.status(409).json({error:blocked});
     if(req.body.revision!==trial.revision||req.body.planHash!==contentHash(plan))return res.status(409).json({error:'stale_position'});
     const task=plan.tasks.find(t=>t.id===req.body.taskId),history=inputs(s,plan).data;
-    if(!movableTask(task,s.data,trial.data,history))return res.status(409).json({error:'task_execution_protected',message:'当前或历史任务已开始/已完成/已执行，或批身份尚不支持；禁止移动及改变锁定'});
-    if(kind==='move'&&trial.locks?.[task.id])return res.status(409).json({error:'task_locked',message:'任务已锁定，请显式解除锁定后再创建移动预览'});
+    const members=positionGroup(plan,task);
+    if(!members.length||members.some(t=>!movableTask(t,s.data,trial.data,history)))return res.status(409).json({error:'task_execution_protected',message:'当前或历史任务已开始/已完成/已执行，或资源批成员/合同不完整；禁止移动及改变锁定'});
+    if(kind==='move'&&members.some(t=>trial.locks?.[t.id]))return res.status(409).json({error:'task_locked',message:'任务已锁定，请显式解除锁定后再创建移动预览'});
     const keys=kind==='move'?['reason','revision','planId','planHash','taskId','start','machine']:['reason','revision','planId','planHash','taskId','locked'];
     if(Object.keys(req.body).some(k=>!keys.includes(k))||kind==='move'&&(typeof req.body.start!=='number'||!Number.isFinite(req.body.start)||req.body.start<0||req.body.start>525600||typeof req.body.machine!=='string')||kind==='lock'&&typeof req.body.locked!=='boolean')return res.status(400).json({error:'invalid_position_request'});
-    const positions=Object.fromEntries(plan.tasks.filter(t=>movableTask(t,s.data,trial.data,history)).map(t=>[t.id,taskPosition(t)])),locks=structuredClone(trial.locks||{});
-    if(kind==='move')Object.assign(positions[task.id],{start:req.body.start,end:req.body.start+task.duration,machine:req.body.machine});
-    else if(req.body.locked)locks[task.id]=taskPosition(task);else delete locks[task.id];
+    const positions=Object.fromEntries(plan.tasks.filter(t=>positionGroup(plan,t).length>0&&positionGroup(plan,t).every(m=>movableTask(m,s.data,trial.data,history))).map(t=>[t.id,taskPosition(t)])),locks=structuredClone(trial.locks||{});
+    for(const member of members){
+     if(kind==='move')Object.assign(positions[member.id],{start:req.body.start,end:req.body.start+member.duration,machine:req.body.machine});
+     else if(req.body.locked)locks[member.id]=taskPosition(member);else delete locks[member.id];
+    }
     for(const [id,p] of Object.entries(locks))positions[id]=p;
     // Bounded, short-lived, actor-scoped tokens; no client-supplied plan/quantity accepted.
     for(const [id,p] of positionPreviews)if(Date.now()-p.createdAt>15*60*1000)positionPreviews.delete(id);
     if(positionPreviews.size>=100)return res.status(429).json({error:'preview_capacity'});
-    const preview={id:randomUUID(),trialId:trial.id,planId:plan.id,kind,taskId:task.id,owner:actorKey(req),token:positionToken(s,trial,plan),createdAt:Date.now(),positions,locks,checked:false};positionPreviews.set(preview.id,preview);
-    res.status(201).json({id:preview.id,kind,taskId:task.id,before:taskPosition(task),after:positions[task.id],locks,valid:false,checked:false,message:'仅预览，尚未独立复核；没有写入方案或输入'});
+    const preview={id:randomUUID(),trialId:trial.id,planId:plan.id,kind,taskId:task.id,memberIds:members.map(t=>t.id),owner:actorKey(req),token:positionToken(s,trial,plan),createdAt:Date.now(),positions,locks,checked:false};positionPreviews.set(preview.id,preview);
+    res.status(201).json({id:preview.id,kind,taskId:task.id,memberIds:members.map(t=>t.id),before:taskPosition(task),after:positions[task.id],locks,valid:false,checked:false,message:'仅预览，尚未独立复核；没有写入方案或输入'});
   }
   router.post('/trials/:id/move-preview',permission('edit'),(req,res)=>createPositionPreview(req,res,'move'));
   router.post('/trials/:id/lock-preview',permission('edit'),(req,res)=>createPositionPreview(req,res,'lock'));
@@ -310,7 +314,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const s=read(),trial=s.trials?.find(t=>t.id===preview.trialId),plan=s.plans.find(p=>p.id===preview.planId),blocked=positionGuard(s,trial,plan);
     if(blocked||positionToken(s,trial,plan)!==preview.token){res.status(409).json({error:blocked||'stale_position'});return;}
     const task=plan.tasks.find(t=>t.id===preview.taskId);
-    if(!movableTask(task,s.data,trial.data,inputs(s,plan).data)){res.status(409).json({error:'task_execution_protected'});return;}
+    if(!positionGroup(plan,task).length||positionGroup(plan,task).some(t=>!movableTask(t,s.data,trial.data,inputs(s,plan).data))){res.status(409).json({error:'task_execution_protected'});return;}
     const evaluation=evaluatePosition(trial,plan,preview.positions,preview.locks);
     return {s,trial,plan,preview,...evaluation};
   }
@@ -327,7 +331,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const x=checkedPreview(req,res);if(!x)return;
     if(!x.valid){x.preview.valid=false;return res.status(409).json({error:'position_conflict',check:x.check});}
     const {s,trial,plan,frozen,result}=x;trial.revision++;trial.locks=structuredClone(preview.locks);
-    const run={id:randomUUID(),status:'completed',phase:'试算位置独立复核完成',createdAt:frozen.conditions.ruleEvaluationAt,finishedAt:new Date().toISOString(),revision:trial.revision,trialId:trial.id,sourcePlanId:plan.id,inputVersionId:preserve(s,trial),...frozen,lockSnapshot:structuredClone(trial.locks),actor:actorKey(req),reason:req.body.reason.trim(),requestId:requestId(req),positionEdit:{kind:preview.kind,taskId:preview.taskId,sourcePlanId:plan.id,sourceContentHash:contentHash(plan),before:taskPosition(plan.tasks.find(t=>t.id===preview.taskId)),after:preview.positions[preview.taskId],source:plan.tasks.find(t=>t.id===preview.taskId).source}};
+    const run={id:randomUUID(),status:'completed',phase:'试算位置独立复核完成',createdAt:frozen.conditions.ruleEvaluationAt,finishedAt:new Date().toISOString(),revision:trial.revision,trialId:trial.id,sourcePlanId:plan.id,inputVersionId:preserve(s,trial),...frozen,lockSnapshot:structuredClone(trial.locks),actor:actorKey(req),reason:req.body.reason.trim(),requestId:requestId(req),positionEdit:{kind:preview.kind,taskId:preview.taskId,memberIds:preview.memberIds,sourcePlanId:plan.id,sourceContentHash:contentHash(plan),before:taskPosition(plan.tasks.find(t=>t.id===preview.taskId)),after:preview.positions[preview.taskId],source:plan.tasks.find(t=>t.id===preview.taskId).source}};
     const next=makePlan(result,run,s);next.positionEdit=structuredClone(run.positionEdit);next.positionCheck=x.check;
     // Additional provenance is recorded outside calculated content so replay remains exact.
     run.planId=next.id;s.runs??=[];s.runs.unshift(run);s.plans.unshift(next);trial.latestPlanId=next.id;
@@ -496,10 +500,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const baseline=trial?state.plans.find(p=>p.id===trial.latestPlanId):null;
     const applicationProtection=protectCalculatedTasks(baseline,result,run.executionData,run.conditions,run.lockSnapshot||{});
     if(!applicationProtection.valid){const error=Error('calculated_protection_conflict');error.protection=applicationProtection;throw error;}
-    const original=state.inputVersions?.[run.inputVersionId]?.data;
-    const source={domain:run.trialId?'trial:'+run.trialId:'current',inputVersionId:run.inputVersionId,executionVersionId:inputHash(run.executionData),revision:run.revision,checkedAt:run.createdAt,scope:run.conditions};
-    const bind=f=>bindProblemSource(f,source,original,run.sourceMap||{},state.inputVersions?.[run.inputVersionId]?.csvSources);
-    return {...result,applicationProtection,tasks:result.tasks.map(t=>Array.isArray(t.processSources)?{...t,processSources:bind({sourceRead:'frozen-calendar-v1',relatedRecords:t.processSources}).relatedRecords}:t),findings:result.findings.map(bind),...(run.lockSnapshot?{lockSnapshot:structuredClone(run.lockSnapshot)}:{}),trialId:run.trialId,sourcePlanId:run.sourcePlanId,id:randomUUID(),status:'draft',revision:run.revision,inputVersionId:run.inputVersionId,runId:run.id,conditions:run.conditions,snapshotHash:run.snapshotHash};}
+    return {...bindRunResultSources(result,run,state.inputVersions?.[run.inputVersionId]),applicationProtection,...(run.lockSnapshot?{lockSnapshot:structuredClone(run.lockSnapshot)}:{}),trialId:run.trialId,sourcePlanId:run.sourcePlanId,id:randomUUID(),status:'draft',revision:run.revision,inputVersionId:run.inputVersionId,runId:run.id,conditions:run.conditions,snapshotHash:run.snapshotHash};}
   function finish(id,req,status,details={}){
     const s=read(),run=s.runs?.find(r=>r.id===id);if(!run||terminal.has(run.status)||stopping.has(id))return;
     let candidate;
