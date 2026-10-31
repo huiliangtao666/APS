@@ -168,6 +168,18 @@
           "event_key": "issue3:p10:h-p08-p10:test1:42a35d07ce29ec073d43bb8adb6083328a9d16dc:r2",
           "event": "Test1 fixed42a35d07 H-P08/H-P10 independent PASS; H-P04 remains PARTIAL pending personnel outside-task early/late rule; 0 product FAIL, +0 repair; full CR NOT_READY",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6518756849"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_519f6044-dc0f-4ff9-8ebf-2204c6cd3ca0:r1",
+          "event": "116eb5d4 three-slice FR006/FR013/R2.1 integration Dev self-test 18 assigned PASS, 2 customer-fact BLOCKED, 1 QA UAT NOT_EXECUTED; full CR NOT_READY; no new product FAIL/repair round",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6528284974"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_4e34a1db-92f3-49a8-a454-53921a860c2e:r1",
+          "event": "a786ee30 QA historical software-only slice: repository regression 27/27 and independent capacity1/2 API chains 2/2 PASS; no UAT signoff; older SHA retained",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6528288315"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
@@ -602,6 +614,18 @@
           "event": "APS-Test fixed b1a4863c from 116eb5d4, legacy v1 migration/no-op/explicit version/Worker/React bounded developer selftest 28/28 PASS plus independent CSV parse 8/8 PASS; no product source diff, no new FAIL or repair round; full FR013/effective CR NOT_READY, UAT unsigned.",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6528710360",
           "evidence": "APS-Test/Issue4-FR013-V1-MIGRATION-116eb5-APS-Test-r1-REPORT.md (SHA256 fe1054346d2c78b9573fa62e6aadacb6763ab7b2fa0abeacc9b115fb1e8d826a)"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_519f6044-dc0f-4ff9-8ebf-2204c6cd3ca0:r1",
+          "event": "116eb5d4 FR013 integration Dev self-test limited PASS on approved three-slice candidate; original09/B09/R-C03 and full CR/UAT remain open; no new product FAIL/repair round",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6528285870"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_4e34a1db-92f3-49a8-a454-53921a860c2e:r1",
+          "event": "a786ee30 QA historical software-only slice: repository regression 27/27 and capacity API chains 2/2 PASS; v1 migration then NOT_EXECUTED; no UAT signoff",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6528288946"
         }
       ],
       "dev_delivery": "dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1",
