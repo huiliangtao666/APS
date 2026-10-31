@@ -1,9 +1,16 @@
 import {sourceRefs} from './problem-records.mjs';
 import { validRuleTime } from './business-rules.mjs';
+import { validSupplyTime } from './expected-supply.mjs';
 /** FR-010 inventory accounting and availability rules. Quantities stay in the material's configured unit. */
 // v0.3 factory timezone Asia/Shanghai; inherited minute origin is +08:00.
 export const inventoryBusinessDate = raw => new Date(Date.parse(raw)+8*60*60000).toISOString().slice(0,10);
 export const DEFAULT_USABLE_QUALITY_STATUSES = ['合格'];
+const decimal = raw => /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(String(raw).trim()) && Number.isFinite(Number(raw));
+const decimalDifference=(a,b)=>{
+ const parse=v=>{const [whole,fraction='']=String(v).trim().split('.');return {n:BigInt((whole||'0')+fraction),scale:fraction.length};};
+ const x=parse(a),y=parse(b),scale=Math.max(x.scale,y.scale);
+ return {n:x.n*10n**BigInt(scale-x.scale)-y.n*10n**BigInt(scale-y.scale),scale};
+};
 
 function validExpiry(raw) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(raw)) return false;
@@ -29,14 +36,17 @@ export function validateInventoryBatches(batches = [], materials = []) {
     for (const field of ['账面数量', '已占用数量']) {
       const raw = (batch[field] || '').trim();
       const amount = Number(raw);
-      if (!raw || !Number.isFinite(amount) || amount < 0) add('INVENTORY_AMOUNT',field,`${prefix} ${field} 必须为非负数值`);
+      if (!decimal(raw) || amount < 0) add('INVENTORY_AMOUNT',field,`${prefix} ${field} 必须为非负有限十进制数值`);
     }
     const quantity = Number(batch['账面数量']);
     const reserved = Number(batch['已占用数量']);
-    if (Number.isFinite(quantity) && Number.isFinite(reserved) && reserved > quantity) add('INVENTORY_RESERVED','已占用数量',`${prefix}已占用数量不能大于账面数量`);
+    const overReserved=decimal(batch['账面数量'])&&decimal(batch['已占用数量'])
+      ? decimalDifference(batch['账面数量'],batch['已占用数量']).n<0n
+      : Number.isFinite(quantity)&&Number.isFinite(reserved)&&reserved>quantity;
+    if (overReserved) add('INVENTORY_RESERVED','已占用数量',`${prefix}已占用数量不能大于账面数量`);
     if (batch['有效期'] && !validExpiry(batch['有效期'])) add('INVENTORY_EXPIRY','有效期',`${prefix}有效期须为有效日历日期 YYYY-MM-DD`);
     const ready = batch['预计可用时间'] || '';
-    if (ready && Number.isNaN(Date.parse(ready))) add('INVENTORY_READY','预计可用时间',`${prefix}预计可用时间须为有效日期时间`);
+    if (ready && !validSupplyTime(ready)) add('INVENTORY_READY','预计可用时间',`${prefix}预计可用时间须为带时区的有效日期时间`);
   });
   return findings;
 }
@@ -58,16 +68,13 @@ export function inventoryEligibility(batch, asOf, usableStatuses) {
   if(!validExpiry(batch['有效期']||'')) reasons.push('有效期无效');
   else if(Number.isFinite(at)&&batch['有效期']<inventoryBusinessDate(asOf)) reasons.push('已过有效期');
   const ready=batch['预计可用时间'];
-  if(ready&&(!Number.isFinite(Date.parse(ready))||Date.parse(ready)>at)) reasons.push('尚未到预计可用时间或时间无效');
-  const amount=Number(batch['账面数量']),reserved=Number(batch['已占用数量']);
-  if(!String(batch['账面数量']??'').trim()||!String(batch['已占用数量']??'').trim()||!Number.isFinite(amount)||!Number.isFinite(reserved)||reserved<0||amount<reserved) reasons.push('数量或占用无效');
+  if(ready&&(!validSupplyTime(ready)||Date.parse(ready)>at)) reasons.push('尚未到预计可用时间或时间无效');
+  if(!decimal(batch['账面数量'])||!decimal(batch['已占用数量'])||decimalDifference(batch['账面数量'],batch['已占用数量']).n<0n) reasons.push('数量或占用无效');
   return {eligible:reasons.length===0,reasons};
 }
 // Decimal subtraction avoids 0.3 - 0.1 exposing 0.199999... as usable stock.
 function netQuantity(a,b){
- const parse=v=>{const m=String(v).match(/^(\d+)(?:\.(\d*))?$/);return m?{n:BigInt(m[1]+(m[2]||'')),scale:(m[2]||'').length}:null;};
- const x=parse(a),y=parse(b);if(!x||!y)return Math.max(0,Number(a)-Number(b));
- const scale=Math.max(x.scale,y.scale),n=x.n*10n**BigInt(scale-x.scale)-y.n*10n**BigInt(scale-y.scale);
+ const {n,scale}=decimalDifference(a,b);
  return Math.max(0,Number(n)/10**scale);
 }
 export function queryInventoryAvailability(batches = [], { materialId = '', asOf = new Date().toISOString(), rules = [] } = {}) {
