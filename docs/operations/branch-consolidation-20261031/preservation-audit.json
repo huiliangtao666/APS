@@ -1,0 +1,21 @@
+{
+  "original_main_files": 3413,
+  "candidate_files": 3604,
+  "deleted": [],
+  "changed_existing": [
+    "README.md",
+    "docs/requirements/changes/change-register.json",
+    "docs/requirements/operations/handoff-receipts.json",
+    "docs/requirements/uat-register.md",
+    "server/business.mjs",
+    "server/r21-config.mjs",
+    "server/shared-access.test.mjs",
+    "src/App.tsx",
+    "src/R21ConfigurationPanel.tsx",
+    "src/ResourceWorkbench.tsx",
+    "src/RunPanel.tsx",
+    "src/query-ui.test.tsx",
+    "tools/requirements/export_register.py"
+  ],
+  "all_non_main_tips_reachable": 160
+}

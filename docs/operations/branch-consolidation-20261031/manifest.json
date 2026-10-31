@@ -1,0 +1,1440 @@
+{
+  "request": "用户：请合并github上分支，太多了；检查github上的PR，并合并",
+  "base_main": "172b415122472b933fc9935b5537697ebc03ccfc",
+  "initial_remote_branches_including_main": 161,
+  "initial_non_main_branches": 160,
+  "initial_already_merged": 109,
+  "initial_unique_heads": 51,
+  "original_refs": [
+    {
+      "branch": "candidate/issue4-fr013-fr016-20261031-r1",
+      "sha": "cd10560774817c67bc0d6f0f7f6c66279941f89c",
+      "date": "2026-10-31T01:26:52+08:00",
+      "behind": 278,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "candidate/uat-approved-20261031-r1",
+      "sha": "a786ee304003cfa45f2e2d60b6bf535cc328ebee",
+      "date": "2026-10-31T00:08:21+08:00",
+      "behind": 296,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "candidate/uat-r21-integration-20261031-c1",
+      "sha": "116eb5d4df2b9e857fa035ea9b3f0742fe3f49e7",
+      "date": "2026-10-31T00:23:26+08:00",
+      "behind": 281,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "design/cr-sched-config-20261031-r1",
+      "sha": "b481d2c860112213391a56fc14bd072fc8c3bffb",
+      "date": "2026-10-31T14:18:43+08:00",
+      "behind": 103,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "design/cr-uiux-flow-20261031-d0-r1",
+      "sha": "8676c79d9805b4d55fbb0d98a9ac9c8ab6424e44",
+      "date": "2026-10-31T15:38:07+08:00",
+      "behind": 62,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "design/issue3-fr022-n06-original-ledger-r1",
+      "sha": "ea1338ba9e1627b91c51aca55fa0fc9f484b4e34",
+      "date": "2026-10-30T05:05:29+08:00",
+      "behind": 316,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "design/issue3-p10-b01-b03-r1",
+      "sha": "9c230d4aeda124915bcb917b929050f020a11951",
+      "date": "2026-10-30T00:27:07+08:00",
+      "behind": 331,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "dev/b08-ac17-react31-r1",
+      "sha": "12d453d7cb03829dc609115e48c5e4c19af4a6ec",
+      "date": "2026-10-31T16:10:12+08:00",
+      "behind": 244,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "dev/b08-personnel-joint-20261031",
+      "sha": "979da1827d7190024621e0438a8c0055fed44ad8",
+      "date": "2026-10-31T15:27:40+08:00",
+      "behind": 246,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "dev/b09-material-joint-20261031",
+      "sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+      "date": "2026-10-31T17:40:01+08:00",
+      "behind": 237,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "dev/b1-uat01-02-integrated-20261031",
+      "sha": "98347f800c77c0468af3ae293d1dd852af5c207f",
+      "date": "2026-10-31T09:54:03+08:00",
+      "behind": 272,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "dev/b234-integrated-20261031",
+      "sha": "833b3d56929f88c9521cb64765066eece9f83879",
+      "date": "2026-10-31T11:03:39+08:00",
+      "behind": 261,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "dev/b234-r4-continuation-20261031",
+      "sha": "be88f073b4c2597abcd3e5533e92f7f94a89ad59",
+      "date": "2026-10-31T11:36:53+08:00",
+      "behind": 260,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "dev/b3-material-uat05-09-10-11-20261031",
+      "sha": "9805bb5fbc82d8a0335c3125497b9a2727a2ddc7",
+      "date": "2026-10-31T10:52:37+08:00",
+      "behind": 270,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "dev/issue3-hp04-n06-20261031",
+      "sha": "96a9dae3ff13d3254c091567fa57cad5d8f37279",
+      "date": "2026-10-31T12:02:01+08:00",
+      "behind": 258,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "dev/issue4-fr013-fr016-p0-closure-20261031",
+      "sha": "0dfcfe7c8e32436937c1e91fd6b12bfe1522f671",
+      "date": "2026-10-31T09:27:36+08:00",
+      "behind": 276,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "dev/issue4-fr016-physical-row-116-20261031",
+      "sha": "28ba4d7e9d3b75effea939804a99e21d0e1ca3df",
+      "date": "2026-10-31T01:14:27+08:00",
+      "behind": 280,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "dev/uat07-joint-20261031",
+      "sha": "80841247ac91cae193a452325097234f31e6609e",
+      "date": "2026-10-31T14:32:40+08:00",
+      "behind": 250,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "dev/uiux-flow-qa-snapshot-protection-r3",
+      "sha": "d462fb0a5c8cf5275c4fb97abec9c1476cedbb60",
+      "date": "2026-10-31T16:25:23+08:00",
+      "behind": 64,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "docs/fr-034-acceptance-reconciliation",
+      "sha": "e81a05b4d19c86fbcc8afad4ee3b48253ad74604",
+      "date": "2026-10-29T07:16:05+08:00",
+      "behind": 338,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "docs/fr006-review-dispatch-20261030",
+      "sha": "f4f55ce83b7b0f8fbb524349a9bda53045711faa",
+      "date": "2026-10-30T09:34:01+08:00",
+      "behind": 297,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "docs/fr006-test-result-fr013-dispatch-20261030",
+      "sha": "605fde41e15354a6bd17fb936892a8790c2d71ba",
+      "date": "2026-10-30T09:50:42+08:00",
+      "behind": 296,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "docs/fr013-batch-verdict-20261030",
+      "sha": "feb7a0dbcd7760d17cd91c4fcc7ee8d9e9669f90",
+      "date": "2026-10-30T10:38:19+08:00",
+      "behind": 295,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "docs/issue3-n06-contract-evidence",
+      "sha": "0c2802401db2376075473b8e3764caeb47efc58b",
+      "date": "2026-10-30T04:52:48+08:00",
+      "behind": 310,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "docs/issue9-fr010-browser-reconcile-20261030",
+      "sha": "38c42090a3bc6291f22ffa5f3a1030eb222ec804",
+      "date": "2026-10-30T10:09:30+08:00",
+      "behind": 293,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "evidence/b09-main-20261031",
+      "sha": "6510f89305c47699f5685362030360584b5a9315",
+      "date": "2026-10-31T18:13:16+08:00",
+      "behind": 38,
+      "ahead": 2,
+      "merged": false
+    },
+    {
+      "branch": "evidence/b09-material-joint-20261031",
+      "sha": "b5970d1dbd6abdb9a1145aa310737d927c0d349f",
+      "date": "2026-10-31T17:55:06+08:00",
+      "behind": 237,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "evidence/b12-main-20261031",
+      "sha": "47b34bb030c2ccac05f95861c1f364d4301bf188",
+      "date": "2026-10-31T18:33:44+08:00",
+      "behind": 28,
+      "ahead": 3,
+      "merged": false
+    },
+    {
+      "branch": "evidence/b15-approved-residual-20261031",
+      "sha": "bde4908a0c2a93e0530a1b9f06a13f771379c304",
+      "date": "2026-10-31T20:35:07+08:00",
+      "behind": 0,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "evidence/b15-main-20261031-final",
+      "sha": "27e1c5dc7ef9d8f8c886e002417da2b1328e15ae",
+      "date": "2026-10-31T19:11:58+08:00",
+      "behind": 19,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "evidence/b16-main-20261031",
+      "sha": "cbd56e780cef51c41f2ad71486593a204e824e82",
+      "date": "2026-10-31T19:45:24+08:00",
+      "behind": 8,
+      "ahead": 2,
+      "merged": false
+    },
+    {
+      "branch": "evidence/r7-main-20261031",
+      "sha": "10d51161bfb77d05e8bab2716d2f2ef8375cec60",
+      "date": "2026-10-31T19:35:48+08:00",
+      "behind": 12,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "feat/b2-resource-integrated-20261031",
+      "sha": "9aa7f785a7783211835d2654449093a79a2093dd",
+      "date": "2026-10-31T10:29:39+08:00",
+      "behind": 266,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/b4-process-cooling-20261031",
+      "sha": "88cfee25cb10850e071b7157558b49b821c6a2d2",
+      "date": "2026-10-31T10:50:15+08:00",
+      "behind": 265,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-003-bom-packaging-config",
+      "sha": "12f77d3dbd1f03bbaf4b3d4930225b2a14054bcc",
+      "date": "2026-10-28T18:16:16+08:00",
+      "behind": 394,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-005-machine-capability",
+      "sha": "e1b99835a304ee6f35ab3b478eb972dc1bbab6b9",
+      "date": "2026-10-28T23:03:12+08:00",
+      "behind": 393,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-007-personnel-config",
+      "sha": "9e9144214cf7a8b9041c2cc722663466d4fbba37",
+      "date": "2026-10-29T00:02:42+08:00",
+      "behind": 392,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-009-orders",
+      "sha": "3ae56568011de611abf0e1d80b53206cb27205ee",
+      "date": "2026-10-28T23:34:42+08:00",
+      "behind": 393,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-010-inventory-batches",
+      "sha": "753b940cc80ee17379745dab7af57c77172f8c67",
+      "date": "2026-10-29T00:09:22+08:00",
+      "behind": 389,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-011-expected-supply",
+      "sha": "1483f7654c4668498196fb9c44947f1b8e7e660a",
+      "date": "2026-10-29T00:28:05+08:00",
+      "behind": 387,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-012-simulated-execution",
+      "sha": "95332f111a07229a4fb9310e24e2b38e0a8ae721",
+      "date": "2026-10-29T03:56:56+08:00",
+      "behind": 358,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-013-016-main-batch",
+      "sha": "e0be9b6dfbf9be7ce404edc1b80d8c50858ed3dc",
+      "date": "2026-10-29T22:37:16+08:00",
+      "behind": 314,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-014-data-queries",
+      "sha": "db090453482261c386a6492e2106323e2100c20c",
+      "date": "2026-10-29T01:16:17+08:00",
+      "behind": 374,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-015-data-editing",
+      "sha": "542721102782852a3c549aace0c0d1754f916af0",
+      "date": "2026-10-29T01:16:23+08:00",
+      "behind": 370,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-017-rule-configuration",
+      "sha": "b9d87c65532d0e58bc6fc2162941b08f4a941dad",
+      "date": "2026-10-29T01:35:22+08:00",
+      "behind": 368,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-017-scope-status",
+      "sha": "7077e536d421b79a634b2792790344bc258acd51",
+      "date": "2026-10-29T17:13:47+08:00",
+      "behind": 318,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-018-immutable-runs",
+      "sha": "a9eb8f6d60e8adc523217c117e6152c96d7924c2",
+      "date": "2026-10-29T01:47:20+08:00",
+      "behind": 367,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-019-minimal-scheduling",
+      "sha": "1a534991556131f4d29512dac271a73556ac1b9b",
+      "date": "2026-10-29T01:56:22+08:00",
+      "behind": 366,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-020-material-allocation",
+      "sha": "a7d766614bbdfbb13c78217b516cae2730c11823",
+      "date": "2026-10-29T02:12:55+08:00",
+      "behind": 365,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-021-production-batches",
+      "sha": "e72c552fdd8eea189380d0bcc75c0265188d243b",
+      "date": "2026-10-29T02:30:01+08:00",
+      "behind": 364,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-022-joint-resources",
+      "sha": "a5e014ae6e646a5e5c4f4eabea8fe1b75cb21aef",
+      "date": "2026-10-29T02:42:48+08:00",
+      "behind": 363,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-023-feasible-delivery",
+      "sha": "675f6fd81555230260d2245aabed6dbb7e3f20d2",
+      "date": "2026-10-29T02:56:39+08:00",
+      "behind": 362,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-024-result-reasons",
+      "sha": "2375487b3d630190434fd4be4e3313de18d8df7a",
+      "date": "2026-10-29T03:09:26+08:00",
+      "behind": 361,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-026-plan-trials",
+      "sha": "e93fadce55d3f1deef0a602d3a01ebfe561a01b4",
+      "date": "2026-10-29T03:21:31+08:00",
+      "behind": 360,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-027-trial-task-moves",
+      "sha": "6857c1e569d8032a21a1ec4b32e9be7a024c791a",
+      "date": "2026-10-29T08:42:48+08:00",
+      "behind": 330,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-028-condition-trials",
+      "sha": "7465159d98fbc63f7e6b9413c71466b31d9bad82",
+      "date": "2026-10-29T03:32:33+08:00",
+      "behind": 359,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-029-event-rescheduling",
+      "sha": "a5fa26da552b7d8f4196eb93a6618652648cd50f",
+      "date": "2026-10-29T04:25:28+08:00",
+      "behind": 355,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-030-supervisor-archive",
+      "sha": "b09b3e2f50996aa01b6ec48f915c5f4e7d8f90e8",
+      "date": "2026-10-29T04:45:24+08:00",
+      "behind": 354,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-031-progress-impact",
+      "sha": "06895745273cde80ac681d2bb12bd388b297b04f",
+      "date": "2026-10-29T04:11:22+08:00",
+      "behind": 357,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-032-resource-load-alerts",
+      "sha": "28ed8f8e422173f9b83d8a974e26ea9af6f09c8e",
+      "date": "2026-10-29T06:24:46+08:00",
+      "behind": 343,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-033-machine-timetable",
+      "sha": "9783e9de6e500f895dbe6084bcfda2690dcbad7d",
+      "date": "2026-10-29T06:04:17+08:00",
+      "behind": 346,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-034-task-problem-linkage",
+      "sha": "72276614c0de122a6c45688e4f7b3cd7fbb129ed",
+      "date": "2026-10-29T06:15:01+08:00",
+      "behind": 344,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-035-scoped-reports",
+      "sha": "5cb08e86d42e982fb8d763db5376f7a8478af8c9",
+      "date": "2026-10-29T07:41:28+08:00",
+      "behind": 335,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-036-exchange-contracts",
+      "sha": "d8c8c3ef00d2358f4e6effc0bad0e089b73d95d8",
+      "date": "2026-10-29T08:21:20+08:00",
+      "behind": 331,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-037-permissions-audit",
+      "sha": "51e1e7ed1c7fe6c658e16337da97979fad344a30",
+      "date": "2026-10-29T00:46:35+08:00",
+      "behind": 376,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr-038-run-guidance",
+      "sha": "9082e3d82a11f00947d82f1f672c51fb08f3536a",
+      "date": "2026-10-29T08:09:30+08:00",
+      "behind": 332,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/fr006-tooling-config",
+      "sha": "d9cf4899435a62025e64b66fac82040ae5035a50",
+      "date": "2026-10-28T23:21:23+08:00",
+      "behind": 393,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue3-fr006-initial-config-r1",
+      "sha": "7e4d4d03d9687f3ec53127108ceb317b53cee3b9",
+      "date": "2026-10-30T18:22:39+08:00",
+      "behind": 310,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue3-fr022-joint-enabled",
+      "sha": "2016258169074d1e29292e5a3e58a0fa9304b4bf",
+      "date": "2026-10-30T02:15:46+08:00",
+      "behind": 312,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue3-n06-finite-ledger",
+      "sha": "cd115f077593cb4c1fc991cbaf54053e305e03ee",
+      "date": "2026-10-30T06:34:05+08:00",
+      "behind": 308,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue3-p06-multishift",
+      "sha": "7a26732efc0fb440ca6f8ac7aa6261e33757eb81",
+      "date": "2026-10-30T04:15:56+08:00",
+      "behind": 311,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue3-p10-core-pool",
+      "sha": "beae5b4ff309f0e108bebf16f96f9c0a69297f89",
+      "date": "2026-10-30T01:21:27+08:00",
+      "behind": 313,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue3-p10-e01-e04",
+      "sha": "7ae4ca827276c66b276c4cc32a4593825ee2623f",
+      "date": "2026-10-30T05:15:41+08:00",
+      "behind": 309,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue3-p10-explicit-config",
+      "sha": "42a35d07ce29ec073d43bb8adb6083328a9d16dc",
+      "date": "2026-10-30T16:06:26+08:00",
+      "behind": 308,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue3-p10-readiness",
+      "sha": "37e7677059c387981db6d8f27964fa0d1d5fc3d8",
+      "date": "2026-10-30T00:13:38+08:00",
+      "behind": 313,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue4-fr013-0506-fields",
+      "sha": "31904e1d628a33240aa645e128dba35bf041e5ca",
+      "date": "2026-10-30T12:14:47+08:00",
+      "behind": 312,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue4-fr013-explicit-resource-config",
+      "sha": "bd6f9fabe8354432e9c67b52219dc26989c2761d",
+      "date": "2026-10-30T16:53:22+08:00",
+      "behind": 304,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue4-fr013-multisource-explicit",
+      "sha": "c70d6607c33ff43e42446a7e6870aa889044ffd9",
+      "date": "2026-10-30T17:33:38+08:00",
+      "behind": 303,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue4-fr013-original09-bom",
+      "sha": "a8a8f2581ea8ae3a6402eee6daa14921d28288d8",
+      "date": "2026-10-30T13:13:52+08:00",
+      "behind": 310,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue4-fr013-validation",
+      "sha": "fc273441ca93dcc47996bf5a6f7031e73be7f226",
+      "date": "2026-10-29T23:38:30+08:00",
+      "behind": 313,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue4-fr016-g01",
+      "sha": "b5a9bcfeb155e5b494a6ebe64f95bf88593c4e51",
+      "date": "2026-10-29T23:53:32+08:00",
+      "behind": 312,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue4-fr016-g01-u1",
+      "sha": "c30276b626927fcc49bee6248946ff0819a5ee1e",
+      "date": "2026-10-30T00:39:30+08:00",
+      "behind": 311,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue4-fr016-g01-u2",
+      "sha": "08954ccb330147159ae3b1779a7f59ce67a51659",
+      "date": "2026-10-30T02:37:24+08:00",
+      "behind": 309,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue4-fr016-g01-u3",
+      "sha": "17b70e14082e91be44e56bbc3f59eca02db018c0",
+      "date": "2026-10-30T02:55:23+08:00",
+      "behind": 308,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue4-fr016-g01-u3-remaining",
+      "sha": "240605f1683189a27857aba473f9084c073af039",
+      "date": "2026-10-30T03:16:20+08:00",
+      "behind": 307,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue4-original17-explicit",
+      "sha": "bd58868fc210867b6f56c8262e3c35c8d5496831",
+      "date": "2026-10-30T04:30:49+08:00",
+      "behind": 312,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "feat/issue6-r21-s123",
+      "sha": "51d4f926c1d0c43d91112aade800d211da7b3aa4",
+      "date": "2026-10-30T08:51:41+08:00",
+      "behind": 301,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/fr-008-downtime-shift-reason",
+      "sha": "4e21ce744f4de70a2ae7d2351e9d1dcb6557aae2",
+      "date": "2026-10-28T23:39:17+08:00",
+      "behind": 392,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/fr-010-inventory-validation-r1",
+      "sha": "c9fd687e49bea9135ae9a44d02c21b60f1048040",
+      "date": "2026-10-29T00:27:56+08:00",
+      "behind": 388,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/fr-034-boundary-kbd04-round1",
+      "sha": "4e11da6c768e6eeb026f38e1d247191cbe3c2cf8",
+      "date": "2026-10-29T07:08:04+08:00",
+      "behind": 339,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/fr-034-keyboard-round1",
+      "sha": "02a5e307f4b731ebb2b1882ed02e16a7e20c52e3",
+      "date": "2026-10-29T06:58:27+08:00",
+      "behind": 340,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/fr-034-unknown-01",
+      "sha": "21ff4dd72d9583ec591436b160a0b79931d81900",
+      "date": "2026-10-29T06:31:37+08:00",
+      "behind": 342,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/fr026-current-restore",
+      "sha": "e684ee162d2dc743692cc154733d1a494a8f6ef6",
+      "date": "2026-10-29T23:00:45+08:00",
+      "behind": 313,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/issue16-fr021-ac14-r1",
+      "sha": "2662b2b39e5ae63b0ba3a0b0040e28c41c963337",
+      "date": "2026-10-30T00:55:53+08:00",
+      "behind": 313,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/issue26-fr038-save-feedback-r1",
+      "sha": "e21bf52e1e20c1d6ebdc658e06338afe5b9c3e4e",
+      "date": "2026-10-30T09:23:06+08:00",
+      "behind": 331,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/issue3-fr006-csv9-explicit-r1",
+      "sha": "ce8a038a08fee4a5f9b4c4afc74da7ada683db86",
+      "date": "2026-10-30T18:46:13+08:00",
+      "behind": 309,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/issue3-fr006-main-entry-01-r1",
+      "sha": "fe7098a08d24f58e42f6298fcd03e65cc7950ce8",
+      "date": "2026-10-30T09:55:07+08:00",
+      "behind": 313,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/issue3-fr006-tool-row-locator-r2",
+      "sha": "765433cb0e3c662a1e3ed658cf26cdcb2c377e09",
+      "date": "2026-10-30T10:49:58+08:00",
+      "behind": 312,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/issue4-fr013-0708-validation-r1",
+      "sha": "8422dcdf9f5d3a82407972573d5c1274b2c097c0",
+      "date": "2026-10-30T10:41:25+08:00",
+      "behind": 313,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/issue4-fr013-inventory-field-r1",
+      "sha": "c742cc635f34e47fc5207c3cee6a83be9675e24d",
+      "date": "2026-10-30T12:21:30+08:00",
+      "behind": 311,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/issue4-fr013-v1-noop-r1",
+      "sha": "a49edb1d4fefedabae53d7a15f09534da7da0f9e",
+      "date": "2026-10-30T17:56:24+08:00",
+      "behind": 302,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/issue4-fr016-early-process-source",
+      "sha": "c952768d903d9a03a933983f6c4498d4ce7fb0f6",
+      "date": "2026-10-30T07:29:26+08:00",
+      "behind": 305,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/issue4-fr016-p29-collision-source-r1",
+      "sha": "723fea514931a05ddb276bda4d0842cb9d90d255",
+      "date": "2026-10-30T06:07:03+08:00",
+      "behind": 306,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/issue4-nondevice-ref-r1",
+      "sha": "e7881a9725f59a2f74a517ddfe3c79e6d814460f",
+      "date": "2026-10-30T05:49:00+08:00",
+      "behind": 311,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "fix/issue9-fr010-stock-allocation-v03",
+      "sha": "b7189157106ecc18cc87fd1821fd19c6d55ffed2",
+      "date": "2026-10-29T23:16:59+08:00",
+      "behind": 313,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "pm/b08-ac15-triage-20261031",
+      "sha": "30bee28546223e0d94b4394b0141fb35b656aa97",
+      "date": "2026-10-31T15:52:56+08:00",
+      "behind": 62,
+      "ahead": 4,
+      "merged": false
+    },
+    {
+      "branch": "pm/b08-ac17-fix-verify-20261031",
+      "sha": "629bd0448c6e3a3d6486eb607ba8fb8c912c4fef",
+      "date": "2026-10-31T16:08:58+08:00",
+      "behind": 62,
+      "ahead": 6,
+      "merged": false
+    },
+    {
+      "branch": "pm/b08-joint-r1-qa-retest-20261031",
+      "sha": "e8e41c81fd59969c4afa3a47e23172af9d9fa325",
+      "date": "2026-10-31T16:21:25+08:00",
+      "behind": 62,
+      "ahead": 7,
+      "merged": false
+    },
+    {
+      "branch": "pm/b08-qa-handoff-20261031",
+      "sha": "d20b4b7a5fd8df193ff2c8b81202be3bbb2a0a0f",
+      "date": "2026-10-31T15:42:13+08:00",
+      "behind": 62,
+      "ahead": 2,
+      "merged": false
+    },
+    {
+      "branch": "pm/b08-qa-joint-closure-20261031",
+      "sha": "c074cb636da5696d8ace5612ab65cd61a67850ea",
+      "date": "2026-10-31T16:34:38+08:00",
+      "behind": 62,
+      "ahead": 3,
+      "merged": false
+    },
+    {
+      "branch": "pm/b08-qa-result-20261031",
+      "sha": "27b13cc0f6c9204c43df4a0fa9ee98b3aa5c14c9",
+      "date": "2026-10-31T15:56:31+08:00",
+      "behind": 62,
+      "ahead": 5,
+      "merged": false
+    },
+    {
+      "branch": "pm/b08-test-verification-20261031",
+      "sha": "a74b6c88218d466de9c0355813bb607dc1919daa",
+      "date": "2026-10-31T15:47:05+08:00",
+      "behind": 62,
+      "ahead": 3,
+      "merged": false
+    },
+    {
+      "branch": "pm/b09-material-test-verification-20261031",
+      "sha": "37a05c7b9c5f5244770fcad800f5224ebeb4126d",
+      "date": "2026-10-31T17:15:06+08:00",
+      "behind": 243,
+      "ahead": 2,
+      "merged": false
+    },
+    {
+      "branch": "pm/b09-qa11-processed-20261031",
+      "sha": "820c4d05e2d77c7d2d2844cee70d6623e591f1b2",
+      "date": "2026-10-31T19:04:47+08:00",
+      "behind": 28,
+      "ahead": 2,
+      "merged": false
+    },
+    {
+      "branch": "pm/b1-qa-uat01-02-verdict-20261031",
+      "sha": "d2b28798697167e6284de4a3caba5b9a433f164e",
+      "date": "2026-10-31T10:18:03+08:00",
+      "behind": 109,
+      "ahead": 7,
+      "merged": false
+    },
+    {
+      "branch": "pm/b12-domain-processed-20261031",
+      "sha": "f1e5c6aee104b1536df203af32355851020fac4c",
+      "date": "2026-10-31T18:07:59+08:00",
+      "behind": 38,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "pm/b12-main-processed-20261031",
+      "sha": "ce3e153fae7f1f1581654f9cdeb3ede6f88f8236",
+      "date": "2026-10-31T18:38:56+08:00",
+      "behind": 28,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "pm/b15-approved-residual-processed-20261031",
+      "sha": "d42d8f6fba45e682a9a3378342f0da97da7d54c0",
+      "date": "2026-10-31T20:41:32+08:00",
+      "behind": 0,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "pm/b15-domain-main09-processed-20261031",
+      "sha": "2bbc8749edb6f052b0ce7b26a2296f478aa77720",
+      "date": "2026-10-31T18:34:45+08:00",
+      "behind": 28,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "pm/b15-main-r2-processed-20261031",
+      "sha": "33c2228245678249279f91c5d8dbcd7828824ecf",
+      "date": "2026-10-31T19:20:53+08:00",
+      "behind": 19,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "pm/b16-domain-processed-20261031",
+      "sha": "838ee50ea2a306c85ca4b7c004c8acfa667e0c28",
+      "date": "2026-10-31T19:16:33+08:00",
+      "behind": 19,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "pm/b16-main-processed-20261031",
+      "sha": "16173690a4bd960136632b3dbaf719656c4bd4e9",
+      "date": "2026-10-31T19:50:12+08:00",
+      "behind": 8,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "pm/bom-loss-user-decisions-20261031",
+      "sha": "88be84f4bf4cffab76c53df5aedb331383eb32aa",
+      "date": "2026-10-31T21:00:22+08:00",
+      "behind": 0,
+      "ahead": 4,
+      "merged": false,
+      "latest_before_merge": "e196a894cf2e067141781f85cca2de35e2a06455"
+    },
+    {
+      "branch": "pm/br13-domain-processed-20261031",
+      "sha": "da33bdca57c0406d8c3eb374cc3a6c47f8997be6",
+      "date": "2026-10-31T19:53:22+08:00",
+      "behind": 8,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "pm/fr006-window-test2-20261030",
+      "sha": "7c82bcfc33f968cc5f4323c2d3b2e34b6f9e9931",
+      "date": "2026-10-30T18:40:27+08:00",
+      "behind": 271,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "pm/fr013-noop-eventchain-20261030",
+      "sha": "e40c79de7b7f5104e59d1d133eb021410996fad4",
+      "date": "2026-10-31T00:24:20+08:00",
+      "behind": 272,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "pm/fr013-qa-v1-a786-20261031",
+      "sha": "077ef350950f6ace96fd1d750967fb5547d4f13b",
+      "date": "2026-10-31T01:13:02+08:00",
+      "behind": 272,
+      "ahead": 4,
+      "merged": false
+    },
+    {
+      "branch": "pm/fr013-rc01-dev-20261030",
+      "sha": "17fd12f88d4d02d7eb03e00016387ef840d17a8b",
+      "date": "2026-10-30T18:13:40+08:00",
+      "behind": 273,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "pm/fr016-source-row-28ba-20261031",
+      "sha": "a116ad288f7bc18b117a2b732c70783b3197e630",
+      "date": "2026-10-31T01:22:16+08:00",
+      "behind": 272,
+      "ahead": 5,
+      "merged": false
+    },
+    {
+      "branch": "pm/fr022-maxlag-processed-20261031",
+      "sha": "4cc58c8a7649afb20e530302fca177ada0e5894f",
+      "date": "2026-10-31T20:14:37+08:00",
+      "behind": 8,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "pm/p10-h08-h10-20261030",
+      "sha": "68cf62f18c2cc27a7f9df0c3aeb4ec7ee6b3e21a",
+      "date": "2026-10-30T16:46:34+08:00",
+      "behind": 277,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "pm/r21-116eb5-reconcile-20261031",
+      "sha": "dee5535a4f46995ec9cf0b4ed3d829999b586c4f",
+      "date": "2026-10-31T00:57:03+08:00",
+      "behind": 272,
+      "ahead": 3,
+      "merged": false
+    },
+    {
+      "branch": "pm/r21-uat02-user-decisions-20261031",
+      "sha": "0b1de3256e7f0ec660ae1fb26cbfac0682768f24",
+      "date": "2026-10-31T12:12:00+08:00",
+      "behind": 109,
+      "ahead": 14,
+      "merged": false
+    },
+    {
+      "branch": "pm/r7-domain-processed-20261031",
+      "sha": "186b31e88b0e70d7c5f5f71d33ebf08d64c2c432",
+      "date": "2026-10-31T18:53:15+08:00",
+      "behind": 28,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "pm/r7-main-processed-20261031",
+      "sha": "1e6cc10cad0f0aecd739709c5c6e212a721d1776",
+      "date": "2026-10-31T19:41:31+08:00",
+      "behind": 12,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "pm/sched-config-registration-20261031",
+      "sha": "30380be2f875413019bbe4b541b0f344e2a87b4b",
+      "date": "2026-10-31T14:25:57+08:00",
+      "behind": 102,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "pm/uat07-qa-closure-20261031",
+      "sha": "70af4192d3fe9b044d08b68a44763b86c8d96c05",
+      "date": "2026-10-31T15:17:01+08:00",
+      "behind": 62,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "pm/uiux-flow-qa-protection-r3-20261031",
+      "sha": "3723e4ca351d0755f9f59231804d88de407188a5",
+      "date": "2026-10-31T16:30:11+08:00",
+      "behind": 62,
+      "ahead": 2,
+      "merged": false
+    },
+    {
+      "branch": "pm/uiux-flow-registration-20261031",
+      "sha": "4a43ea5fe7776a9253a0ddc0fab86f27f6d148e0",
+      "date": "2026-10-31T15:25:38+08:00",
+      "behind": 62,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "qa/fr-034-integrated-entrypoint-run",
+      "sha": "f3316991e4e2e5e4fce6b0a419fa1e4fc27f05ae",
+      "date": "2026-10-29T07:28:02+08:00",
+      "behind": 337,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "qa/uat05-ac08-10-11-17-96a9-20261031",
+      "sha": "df0d18d978bd8421f1d1cc54e6013a751ffcc0c2",
+      "date": "2026-10-31T13:16:06+08:00",
+      "behind": 256,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "qa/uat06-ac06-15-96a9-20261031",
+      "sha": "49c7a6f7a4421ae3be9070d0d86c9729caf8c42f",
+      "date": "2026-10-31T13:40:26+08:00",
+      "behind": 258,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "test/b08-personnel-core-20261031",
+      "sha": "d9292f39a1017c1dcac8c290a1b224283d429756",
+      "date": "2026-10-31T15:25:41+08:00",
+      "behind": 249,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "test/b09-material-core-20261031",
+      "sha": "f1af34d4c8316abc24afd84ee0d82986dba0155a",
+      "date": "2026-10-31T17:12:06+08:00",
+      "behind": 243,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "test/b1-stage-ac-gaps-20261031",
+      "sha": "242b04f0e069a50acda9d4b0b7f541cea637e318",
+      "date": "2026-10-31T11:24:25+08:00",
+      "behind": 272,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "test/b12-br13-changeover-20261031",
+      "sha": "489b28802125106297a9413d505d053b2ffb3ef0",
+      "date": "2026-10-31T19:45:31+08:00",
+      "behind": 11,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "test/b12-process-core-20261031",
+      "sha": "e3e17b26f7079c0ff2131505fbecb87f3327ed1b",
+      "date": "2026-10-31T18:01:08+08:00",
+      "behind": 241,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "test/b15-protection-comparison-20261031",
+      "sha": "c8187609a112a544b4a1b5723cec0151650d94f9",
+      "date": "2026-10-31T18:24:26+08:00",
+      "behind": 235,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "test/b16-sharing-core-20261031",
+      "sha": "d2feef7965de06f051bcd41e594c7adf7866b5ed",
+      "date": "2026-10-31T19:12:03+08:00",
+      "behind": 25,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "test/fr-034-keyboard-narrow",
+      "sha": "910fdbcf8fb6dd312cac4cf31c2b1a7a1950b75f",
+      "date": "2026-10-29T06:44:02+08:00",
+      "behind": 341,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "test/fr006-config-only",
+      "sha": "7097512ed8e06f59021b5c6615d9315e8d0f1895",
+      "date": "2026-10-28T18:06:47+08:00",
+      "behind": 394,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "test/fr013-batch-import",
+      "sha": "bbcafa1f9baaa652f17fb2bad7a897cae0670183",
+      "date": "2026-10-28T18:06:59+08:00",
+      "behind": 394,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "test/fr022-maxlag-contract-20261031",
+      "sha": "3ac76d9a7959731f6608f2a2a9a8552be208cafb",
+      "date": "2026-10-31T20:10:39+08:00",
+      "behind": 7,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "test/issue3-fr006-joint-oracle-r1",
+      "sha": "3727eaad3d6bb2ce5c412f75b3247d7f6d90306f",
+      "date": "2026-10-30T11:22:11+08:00",
+      "behind": 311,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "test/issue4-v1-migration-116eb5-20261031",
+      "sha": "b1a4863c6e899274ef32b0fd7cdfb26e8c673cb5",
+      "date": "2026-10-31T00:50:55+08:00",
+      "behind": 281,
+      "ahead": 2,
+      "merged": false
+    },
+    {
+      "branch": "test/issue6-uat02-decisions-20261031",
+      "sha": "d6fd0034a4a50441d3e6384959f998873fcb955c",
+      "date": "2026-10-31T09:28:30+08:00",
+      "behind": 277,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "test/r7-query-report-core-20261031",
+      "sha": "9556b2de14b54f136edc9cd75ca9be7187a4edcb",
+      "date": "2026-10-31T18:47:48+08:00",
+      "behind": 26,
+      "ahead": 1,
+      "merged": false
+    },
+    {
+      "branch": "test/uat03-sequential-entry-20261031",
+      "sha": "2dd69107f5e4ca2b1666c21df8daa67cddbf307f",
+      "date": "2026-10-31T11:44:35+08:00",
+      "behind": 260,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "test/uat04-ac07-17-96a9-20261031",
+      "sha": "5b0eb6998516299d53fb954b4a35b24de2a56961",
+      "date": "2026-10-31T12:41:28+08:00",
+      "behind": 257,
+      "ahead": 0,
+      "merged": true
+    },
+    {
+      "branch": "test/uat07-joint-independent-20261031",
+      "sha": "9736d7acda4e44ab51d2c5032fa3ce7d70af064b",
+      "date": "2026-10-31T14:31:46+08:00",
+      "behind": 256,
+      "ahead": 0,
+      "merged": true
+    }
+  ],
+  "all_original_commits_reachable": true,
+  "existing_main_paths_deleted": [],
+  "product_changes": "reviewed snapshot/request protection d462fb0 merged; App refresh/trial handling and both material/resource exports from newer main retained",
+  "product_conflicts": [
+    "src/App.tsx",
+    "src/ResourceWorkbench.tsx"
+  ],
+  "governance_resolution": "keyed CR histories merged; current scalar/status values retained on actual conflict; latest PM BOM/PACK decisions included; immutable baseline unchanged",
+  "derived_snapshots": "preserved byte-for-byte from latest main; official exporter cannot handle archived originals and newer heterogeneous CR record shapes. Live archived originals independently read but no source schema or Project status rewritten. PM must upgrade exporter before regenerating derived tables.",
+  "scalar_resolutions": [
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-FR013-VALIDATION-20261029]/implementation_status",
+      "kept_current": "当前：UAT07联合包#34固定80841247ac91cae193a452325097234f31e6609e，Dev/Test开发自测已核；整包In review，QA已派dlv_88fa9322-c89c-4e9b-93cb-8edc04134201。仅本场景增量；其余具体责任见#34收口表。历史状态保留pm_processing_events，不据旧字段恢复已解除的mock/账号/业务裁决等待。",
+      "source_value": "Dev fixed 0dfcfe7c assigned scope selftest Done; B1 UAT01/02 shared wiring ongoing; full FR/CR NOT_READY",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-FR013-VALIDATION-20261029]/acceptance_result",
+      "kept_current": "本UAT07任务级PASS，QA整体结论待确认；无未闭真实产品FAIL，修复轮次+0。其他批准责任及原SHA证据保留，不推定完整CR验收。https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583",
+      "source_value": "Dev limited selftest PASS; full FR013/016 and CR NOT_READY, QA UAT not executed; original inventory locator round 2 selftest PASS, no third round",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-R21-UAT02-20261031]/implementation_status",
+      "kept_current": "B1 integrated candidate 98347f8 Dev task-level Done; QA simulated UAT01/02 PASS at same SHA; original FR/CR remaining facts and scope NOT_READY",
+      "source_value": "APS-Test fixed d6fd003 R2.1-only config/isolated host 23 PASS/3 PARTIAL/2 BLOCKED/2 NOT_EXECUTED; D01/D02 shared production wiring and QA endpoint pending; full CR NOT_READY",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-R21-UAT02-20261031]/acceptance_result",
+      "kept_current": "QA simulation UAT01/02 scoped PASS, 32 PASS/6 BLOCKED/4 NOT_EXECUTED; full FR/CR NOT_READY, no product FAIL or new repair round",
+      "source_value": "APS-Test任务级PARTIAL；整卡/完整UAT02 NOT_READY；0产品FAIL/修复轮次+0",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-UIUX-FLOW-20261031]/implementation_status",
+      "kept_current": "D0总体设计待交；QA补丁保护完成；S1/S2 WAIT_DESIGN/WAIT_CANDIDATE",
+      "source_value": "DESIGN_DISPATCHED；首批开发WAIT_DESIGN/WAIT_CANDIDATE",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-UIUX-FLOW-20261031]/acceptance_result",
+      "kept_current": "仅原补丁保护PASS；产品测试/UAT未执行，整卡NOT_READY；历史PASS保留原SHA；修复增量0",
+      "source_value": "NOT_EXECUTED；历史QA限定通过留原SHA；无新增产品PASS/FAIL或修复轮次",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-UIUX-FLOW-20261031]/recovery_condition",
+      "kept_current": "D0设计/映射、B08共享文件释放、冲突吸收及统一可复现非main候选、具体文件互斥由PM核定；补丁保护门槛已完成",
+      "source_value": "D0首批设计/映射完成，B08共享文件释放，QA未提交补丁保护及非main提交push，历史限定断言在统一候选复现、入口数据/配置/任务级证据齐备后PM启动首批；QA仅具体验收入口齐备派",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-DEC02-03-20261029]/implementation_status",
+      "kept_current": "当前：UAT07联合包#34固定80841247ac91cae193a452325097234f31e6609e，Dev/Test开发自测已核；整包In review，QA已派dlv_88fa9322-c89c-4e9b-93cb-8edc04134201。仅本场景增量；其余具体责任见#34收口表。历史状态保留pm_processing_events，不据旧字段恢复已解除的mock/账号/业务裁决等待。",
+      "source_value": "116eb5d4 FR006/FR013/R2.1 three-slice candidate Dev self-test limited PASS; P10 fixed42a35d07 H-P08/10 and H-P06 independent PASS, H-P04 personnel outside-window PARTIAL; N06/customer facts and full CR/UAT NOT_READY",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-DEC02-03-20261029]/acceptance_result",
+      "kept_current": "本UAT07任务级PASS，QA整体结论待确认；无未闭真实产品FAIL，修复轮次+0。其他批准责任及原SHA证据保留，不推定完整CR验收。https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583",
+      "source_value": "Dev 116eb5d4 task-level integration PASS within assigned approved slice; QA a786ee30 capacity1/2 API chains PASS only on older SHA; H-P04 personnel early/late business rule and N06 source ledger remain open. Full CR/UAT NOT_READY; 0 new product FAIL, +0 repair round.",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-FR013-VALIDATION-20261029]/implementation_status",
+      "kept_current": "当前：UAT07联合包#34固定80841247ac91cae193a452325097234f31e6609e，Dev/Test开发自测已核；整包In review，QA已派dlv_88fa9322-c89c-4e9b-93cb-8edc04134201。仅本场景增量；其余具体责任见#34收口表。历史状态保留pm_processing_events，不据旧字段恢复已解除的mock/账号/业务裁决等待。",
+      "source_value": "116eb5d4 FR013 integrated candidate Dev task-level self-test limited PASS; QA a786ee30 v1 legacy migration/frozen history 18 groups PASS at older SHA; APS-Test v1 development/self-test on 116eb5d4 in progress; original09/B09/R-C03 and full FR013/CR NOT_READY",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-FR013-VALIDATION-20261029]/acceptance_result",
+      "kept_current": "本UAT07任务级PASS，QA整体结论待确认；无未闭真实产品FAIL，修复轮次+0。其他批准责任及原SHA证据保留，不推定完整CR验收。https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583",
+      "source_value": "a49edb1d DEF-V1-NOOP-01 round1 independent PASS remains at old SHA; QA a786ee30 v1 migration/frozen history 18 independent groups PASS plus 7 overlapping repo tests, not full UAT; Dev 116eb5d4 limited integrated self-test PASS; full FR013/CR/UAT NOT_READY. 0 new product FAIL, +0 repair round.",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-FR013-VALIDATION-20261029]/history[event_key=dlv_3ce06cd4-8d72-4980-b830-c9eb0f53f808:r1]/event",
+      "kept_current": "QA fixed a786ee304003cfa45f2e2d60b6bf535cc328ebee legacy v1 migration/no-op/frozen-history slice: independent 18/18 PASS; repository v1-specific 7/7 PASS with overlapping coverage; no new product FAIL or repair round. Full FR013/effective CR NOT_READY; complete UAT unsigned.",
+      "source_value": "a786ee30 QA v1 migration/frozen-history limited 18 independent groups PASS plus 7 overlapping repository tests PASS; task interrupted but accessible result/hash verified; old SHA only; full CR/UAT NOT_READY",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-DEC02-03-20261029]/implementation_status",
+      "kept_current": "当前：UAT07联合包#34固定80841247ac91cae193a452325097234f31e6609e，Dev/Test开发自测已核；整包In review，QA已派dlv_88fa9322-c89c-4e9b-93cb-8edc04134201。仅本场景增量；其余具体责任见#34收口表。历史状态保留pm_processing_events，不据旧字段恢复已解除的mock/账号/业务裁决等待。",
+      "source_value": "H-P04/N06 approved config/MOCK fixed 96a9dae3 Dev selftest PASS (36 PASS/2 BLOCKED/2 NOT_EXECUTED/0 FAIL); full CR NOT_READY",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-DEC02-03-20261029]/acceptance_result",
+      "kept_current": "本UAT07任务级PASS，QA整体结论待确认；无未闭真实产品FAIL，修复轮次+0。其他批准责任及原SHA证据保留，不推定完整CR验收。https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583",
+      "source_value": "B2历史9aa7f78范围PARTIAL，H-P04/N06原阻塞已由用户决策解除，待新固定SHA开发自测及联合整合验证；完整CR/UAT仍NOT_READY，0新增产品FAIL/修复轮次",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-DEC02-03-20261029]/acceptance_status",
+      "kept_current": "FR017当前适用实现责任独立PASS；FR007/022及完整CR和业务UAT未通过；原S06/S07与D01-D03有限结果保留 | 2026-10-31 UAT06限定G01/FILL=2模拟QA PASS，26PASS/1范围外BLOCKED/1可选未执行，执行#33 Done；0产品FAIL/修复+0；完整CR NOT_READY。详见 https://github.com/huiliangtao666/APS/issues/3#issuecomment-6539962572",
+      "source_value": "H-P04/N06 limited engineering PASS at 96a9dae3ff13d3254c091567fa57cad5d8f37279; whole FR/Issue/CR NOT_READY, QA on this SHA NOT_EXECUTED; customer/site facts and complex remaining semantics tracked in Issue3; prior fixed-SHA PASS and repair rounds preserved",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-FR013-VALIDATION-20261029]/implementation_status",
+      "kept_current": "当前：UAT07联合包#34固定80841247ac91cae193a452325097234f31e6609e，Dev/Test开发自测已核；整包In review，QA已派dlv_88fa9322-c89c-4e9b-93cb-8edc04134201。仅本场景增量；其余具体责任见#34收口表。历史状态保留pm_processing_events，不据旧字段恢复已解除的mock/账号/业务裁决等待。",
+      "source_value": "B1 integrated candidate 98347f8 Dev task-level Done; QA simulated UAT01/02 PASS at same SHA; original FR/CR remaining facts and scope NOT_READY",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-FR013-VALIDATION-20261029]/acceptance_result",
+      "kept_current": "本UAT07任务级PASS，QA整体结论待确认；无未闭真实产品FAIL，修复轮次+0。其他批准责任及原SHA证据保留，不推定完整CR验收。https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583",
+      "source_value": "QA simulation UAT01/02 scoped PASS, 32 PASS/6 BLOCKED/4 NOT_EXECUTED; full FR/CR NOT_READY, no product FAIL or new repair round",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-SCHED-CONFIG-20261031]/implementation_status",
+      "kept_current": "当前：UAT07联合包#34固定80841247ac91cae193a452325097234f31e6609e，Dev/Test开发自测已核；整包In review，QA已派dlv_88fa9322-c89c-4e9b-93cb-8edc04134201。仅本场景增量；其余具体责任见#34收口表。历史状态保留pm_processing_events，不据旧字段恢复已解除的mock/账号/业务裁决等待。",
+      "source_value": "REGISTERED_TRACKING_ONLY；已有沿原授权继续；新增未开工增量WAIT_START；当前UAT07 #34不改序",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-SCHED-CONFIG-20261031]/acceptance_result",
+      "kept_current": "本UAT07任务级PASS，QA整体结论待确认；无未闭真实产品FAIL，修复轮次+0。其他批准责任及原SHA证据保留，不推定完整CR验收。https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583",
+      "source_value": "NOT_EXECUTED：本次仅登记关联；不新增产品/QA结论",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-FR013-VALIDATION-20261029]/implementation_status",
+      "kept_current": "当前：UAT07联合包#34固定80841247ac91cae193a452325097234f31e6609e，Dev/Test开发自测已核；整包In review，QA已派dlv_88fa9322-c89c-4e9b-93cb-8edc04134201。仅本场景增量；其余具体责任见#34收口表。历史状态保留pm_processing_events，不据旧字段恢复已解除的mock/账号/业务裁决等待。",
+      "source_value": "FR013 original05/06 a49edb1d legacy v1 no-op repair delivered and independently passed; R-C08/09 same defect closed round1. Other original categories, R-C03 positive, FR016 shared duties and full FR013/CR remain NOT_READY. APS-Test b1a4863c QA-only selftest files added on 116eb5d4; no product source changes; bounded task Done, full scope open.",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json/changes[id=CR-FR013-VALIDATION-20261029]/acceptance_result",
+      "kept_current": "本UAT07任务级PASS，QA整体结论待确认；无未闭真实产品FAIL，修复轮次+0。其他批准责任及原SHA证据保留，不推定完整CR验收。https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583",
+      "source_value": "a49edb1d DEF-V1-NOOP-01 round1 independent 25/25 PASS on legacy v1 no-op and impacted regression; R-C08/09 same defect closed. Prior bd6f9fab and c70d6607 conclusions remain on original SHAs; no full CR acceptance, FR013 NOT_READY, UAT01/11 WAITING_DEPENDENCIES. QA a786ee30 v1 migration/no-op/frozen-history bounded slice 18/18 PASS; v1-specific repository 7/7 overlapping; full CR NOT_READY and UAT unsigned. APS-Test b1a4863c bounded v1 migration developer selftest 28/28 PASS and CSV 8/8 PASS on 116eb5d4 base; no product source diff or repair round; full CR/FR013 NOT_READY, UAT unsigned.",
+      "policy": "retain current consolidated scalar; preserve source history in parent commit"
+    }
+  ],
+  "validation": {
+    "production_build": "PASS",
+    "query_ui": "6/6 PASS",
+    "library_tests": "115/115 PASS",
+    "auth_tests": "PASS in initial npm test backend segment; aggregate117 passed before business process SIGKILL; serial business/shared segment111/111 is definitive",
+    "business_and_shared_tests_serial": "111/111 PASS",
+    "maxlag_affected_suite": "80/80 PASS",
+    "initial_combined_backend": "117/118; file SIGKILL under concurrent auth/business run; isolated serial business/shared re-run111/111 PASS",
+    "deploy_or_publish": false
+  },
+  "pr_queue_at_two_checks": [],
+  "archive_restore": "All original source SHAs become ancestors of main. Restore a branch with git push origin <sha>:refs/heads/<original-name>."
+}
