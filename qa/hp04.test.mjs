@@ -12,6 +12,7 @@ for(const order of hp04Orders)test('HP04 full-window pool capacity and half-open
  assert.deepEqual(p.resourceReservations.filter(r=>r.type==='人员').map(r=>[r.start,r.end]),[[0,45],[45,90]]);
  assert.equal(verifyResourcePolicies(p,f.executionData,f.conditions).status,'pass');
  const v=structuredClone(p);v.resourceReservations.find(r=>r.type==='人员').start=5;assert.equal(verifyResourcePolicies(v,f.executionData,f.conditions).status,'problem');
+ const forged=structuredClone(p);forged.resourceReservations.find(r=>r.type==='人员').occupationPolicies[0].version='forged';assert.equal(verifyResourcePolicies(forged,f.executionData,f.conditions).status,'problem');
  save('full-'+hp04Orders.indexOf(order)+'.json',{data:d,frozen:f,plan:p});
 });
 test('HP04 configured scope, retained pool, overlap max and separate roles; no implicit minutes/order',()=>{

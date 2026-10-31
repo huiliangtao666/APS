@@ -57,7 +57,7 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
     const whole=retain||d['人员占用基准']==='完整工序';
     const start=(whole?task.start:task.start+num(d,'人员开始偏移'))-(configured?num(d,'提前占用分钟'):0),end=(whole?task.end:task.end-num(d,'人员结束偏移'))+(configured?num(d,'后延占用分钟'):0);
     if(!(end>start))add(`${task.id} 人员窗口超出实际工序`);
-    return {d,ids,key,start,end,count:num(d,'需求数量')};
+    return {d,ids,key,start,end,configured,count:num(d,'需求数量')};
    });
    const keyFor=r=>r.demandKey||expected.find(e=>!e.d['人员岗位编号']?.trim()&&!e.d['候选人员组']?.trim()&&e.ids[0]===r.resourceId&&e.d['所需技能']===r.requiredSkill&&e.d.__policyRoleSource===r.roleSource)?.key;
    const roles=new Set([...expected.map(e=>e.key),...saved.map(r=>keyFor(r))]);
@@ -82,6 +82,8 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
     expectedReservations.add(r);
     const g=(data.personnelGroups||[]).find(g=>g['人员组编号']===r.resourceId),needs=expected.filter(e=>e.key===keyFor(r)&&e.ids.includes(r.resourceId)&&e.d['所需技能']===r.requiredSkill&&e.d.__policyRoleSource===r.roleSource);
     context=[...refs('personnelGroups',g?[g]:[]),...needs.flatMap(e=>members.flatMap(m=>refs('dependencies',(data.dependencies||[]).filter(d=>d['订单编号']===m.orderId&&d['工序编号']===m.operation&&Object.keys(d).every(k=>d[k]===e.d[k])))))];
+    const policies=needs.filter(e=>e.configured&&e.start<=r.start&&e.end>=r.end).map(e=>({scope:e.d['人员占用基准'],order:e.d['人员检查顺序'],before:num(e.d,'提前占用分钟'),after:num(e.d,'后延占用分钟'),source:e.d['人员配置来源'],version:e.d['人员配置版本']}));
+    if(JSON.stringify(r.occupationPolicies||[])!==JSON.stringify(policies))add(`${task.id} H-P04 占用账来源/版本/顺序与冻结依赖不一致`);
     if(!Number.isSafeInteger(Number(r.quantity))||!g||!matches(g,r.requiredSkill,task.operation,r)||!needs.length||needs.some(e=>e.d['人员岗位编号']?.trim()&&(r.postId||'')!==e.d['人员岗位编号'].trim())||needs.some(e=>e.d['所需班次']&&g['班次']!==e.d['所需班次']))add(`${task.id} 人员候选/需求/技能/有向替代/班次来源不匹配`);
    }
   }
