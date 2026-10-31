@@ -47,13 +47,13 @@
         "UAT-08"
       ],
       "before": "FR006/BR06已有数量、占用起止及提前/后延释放要求；FR007/BR07已有人员组、人数、技能、班次、参与阶段及未经配置不得替代要求。DEC02/03具体业务选择仍待决。原有要求不重复计为新增。",
-      "approved_delta": "将DEC02/03涉及的业务选择统一明确为前台可维护、可保存并实际作用于新试算的参数：工装占用/归还策略，人员参与阶段/窗口、人数与释放，显式技能替代关系及禁止替代；保留基线既有权限、历史输入/方案保护和结果可追溯要求。\n用户补充：相关资源可共用；是否共用、交接容量和占用方式均应为可维护配置，实际共享仍受实体身份、容量、时间窗口与历史保护约束。",
-      "design_detail_status": "用户批准共享及交接参数化方向；默认值、具体配置枚举与跨组同物理池/N06契约待细化",
+      "approved_delta": "将DEC02/03涉及的业务选择统一明确为前台可维护、可保存并实际作用于新试算的参数：工装占用/归还策略，人员参与阶段/窗口、人数与释放，显式技能替代关系及禁止替代；保留基线既有权限、历史输入/方案保护和结果可追溯要求。\n用户补充：相关资源可共用；是否共用、交接容量和占用方式均应为可维护配置，实际共享仍受实体身份、容量、时间窗口与历史保护约束。\n用户2026-10-31补充（user-hp04-n06-config-mock-20261031-r1）：H-P04人员任务窗口外的提前/后延占用按前台显式参数计算；主体任务视图可不绘制窗外占用，但必须提示窗外占用及冲突来源。扩展占用窗口与人员可用性检查的先后顺序为可维护配置；无论选择何种顺序，最终候选都须验证完整实际占用区间的可用性/容量，不能借顺序绕过约束。具体分钟数、适用人员组/技能/工序和顺序选择由配置提供，不猜默认。N06本阶段采用有来源标识、可复演的mock资源取得/归还/释放账，按配置和真实算法验证；不等待客户现场账，不设权限账号控制门槛，mock不能冒充现场事实。",
+      "design_detail_status": "H-P04提前/后延、检查顺序已由用户授权做成显式配置；具体业务数值不预设。N06本阶段采用可追溯mock来源账，不以现场来源或权限账号为阻塞；其他未决项仍按原记录。",
       "reason": "用户要求在前台调整业务策略，避免按单一业务选择固化逻辑，并明确作为基线增加能力管理",
       "impact": "主数据/规则配置、前台表单、服务端校验持久化、运行输入版本、Worker及独立复核、资源人数容量与历史兼容；不包含人员考勤或恢复其他新backlog",
       "plan_impact": "原R2.2/R2.3/R2.4及相关联合资源验收；未另承诺完成日期",
       "effort": "未正式登记工时/成本评估，不推定已批准预算",
-      "acceptance_delta": "实际前台修改→保存→刷新读回→新试算行为变化；占用/释放边界、有向替代与共享人数容量正确；非法/越权原子拒绝、历史方案不变。原AC继续有效，新增检查为CR专项验收，不篡改基线AC条文。\n补充：验证共用开/关、交接容量/占用参数调整后新试算结果变化，非法组合拒绝且原确认/执行事实不变。",
+      "acceptance_delta": "实际前台修改→保存→刷新读回→新试算行为变化；占用/释放边界、有向替代与共享人数容量正确；非法/越权原子拒绝、历史方案不变。原AC继续有效，新增检查为CR专项验收，不篡改基线AC条文。\n补充：验证共用开/关、交接容量/占用参数调整后新试算结果变化，非法组合拒绝且原确认/执行事实不变。\n本次补充验收：改变提前/后延分钟及检查顺序后，新试算的完整占用、冲突提示与结果可解释；窗外占用不必在主体视图绘出但须可提示。N06用明确标记的mock账覆盖取得/归还/释放及重叠/边界/历史冻结；不以真实来源账或权限账户作为当前任务级阻塞。",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/3",
       "related_issue_urls": [
         "https://github.com/huiliangtao666/APS/issues/13",
@@ -180,6 +180,22 @@
           "event_key": "dlv_4e34a1db-92f3-49a8-a454-53921a860c2e:r1",
           "event": "a786ee30 QA historical software-only slice: repository regression 27/27 and independent capacity1/2 API chains 2/2 PASS; no UAT signoff; older SHA retained",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6528288315"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_8dd441d1-12f3-4231-80bb-58e24a88be08:r1",
+          "event": "B2 integrated 7baefa4 Dev-equivalent selftest 30 PASS/1 PARTIAL/2 BLOCKED/1 NOT_EXECUTED, 0 product FAIL; B231 continuation dispatched; full CR/UAT NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6537872818"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_b9af13e1-7a7f-496e-bc0a-860a422271e2:r1",
+          "event": "B231 original12 9aa7f78 Dev-equivalent selftest 24 PASS/1 PARTIAL/2 BLOCKED/1 NOT_EXECUTED, 0 product FAIL; explicit simulation only; H-P04/N06 and customer/config choices remain; full CR/UAT NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6537928533"
+        },
+        {
+          "date": "2026-10-31",
+          "event": "PM PROCESSED dlv_7059d3b0-0d2a-4ff2-b792-46705063e713:r1; fixed 96a9dae3ff13d3254c091567fa57cad5d8f37279; 36 PASS/2 BLOCKED/2 NOT_EXECUTED/0 FAIL, scope-limited; https://github.com/huiliangtao666/APS/issues/3#issuecomment-6538834883"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
@@ -369,6 +385,15 @@
           "event_key": "dlv_a1ccdb55-d45a-428e-bb9c-a4dfd93fcae3:r1",
           "previous_implementation_status": "P10 fixed42a35d07 Test1 S-P01..10 PASS; Test2 H first six PASS, R2 H-P06 PASS/H-P04 PARTIAL. H-P08/10 Test1 verdict awaits PM review; H-P04 personnel early/late formula awaits user decision. N06 and other scope open; full CR NOT_READY. | 2026-10-31 UAT06限定G01/FILL=2模拟QA PASS，26PASS/1范围外BLOCKED/1可选未执行，执行#33 Done；0产品FAIL/修复+0；完整CR NOT_READY。详见 https://github.com/huiliangtao666/APS/issues/3#issuecomment-6539962572",
           "previous_acceptance_result": "P10 fixed42a35d07 independent S-P01..10 PASS; H-P01/02/03/05/06/07/08/09/10 PASS, H-P04 PARTIAL pending personnel outside-task early/late rule; 0 new product FAIL, +0 repair. Full FR007/022/CR and UAT NOT_READY. | 2026-10-31 UAT06限定G01/FILL=2模拟QA PASS，26PASS/1范围外BLOCKED/1可选未执行，执行#33 Done；0产品FAIL/修复+0；完整CR NOT_READY。详见 https://github.com/huiliangtao666/APS/issues/3#issuecomment-6539962572"
+        }
+      ],
+      "user_decisions": [
+        {
+          "key": "user-hp04-n06-config-mock-20261031-r1",
+          "source": "项目用户在APS-PM当前会话，2026-10-31",
+          "H-P04": "人员任务窗口外提前/后延占用计算可配置；主体视图可隐藏但提示窗外占用；扩展与人员可用性检查顺序可配置，最终完整占用仍须验证",
+          "N06": "采用来源标识清晰的mock取得/归还/释放账；本阶段不等待现场来源且不设权限账号门槛",
+          "status": "effective development direction; no default values approved"
         }
       ]
     },
@@ -632,6 +657,18 @@
           "event_key": "dlv_c828f195-4e75-4d7d-9536-d0642403c5a2:r1",
           "event": "Dev 0dfcfe7c selftest 305 PASS/7 BLOCKED/5 NOT_EXECUTED; FR013/016/Issue4 NOT_READY; B1 integrated UAT01/02 task dispatched; no new product FAIL",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6537352084"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_b71a615a-dcab-4186-bb5b-ba9be619d6b7:r1",
+          "event": "B1 fixed 98347f8 Dev assigned scope selftest 62 PASS/6 BLOCKED/5 NOT_EXECUTED; original FR/CR NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6537563857"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_58477f06-4245-4c62-97b5-a30c89ffa1f6:r1",
+          "event": "QA simulated UAT01/02 at fixed 98347f8: 32 PASS/6 BLOCKED/4 NOT_EXECUTED, no product FAIL; only these explicit simulation scenarios accepted; full FR/CR NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6537678865"
         }
       ],
       "dev_delivery": "dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1",
