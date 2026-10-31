@@ -140,6 +140,13 @@ def export(workbook_path=None, refresh=True):
                                ('验收结论', 'acceptance_result'), ('交付代码SHA', 'code_reference')]:
                 if fields.get(field):
                     row[key] = fields[field]
+        # A task closed by consolidation keeps its historical evidence, but is not
+        # a new requirement acceptance. Follow the explicit live handoff marker.
+        if '<!-- aps-merged-originals-closed-into34-20261031-r1:' in body:
+            row['execution_handoff_issue'] = 'https://github.com/huiliangtao666/APS/issues/34'
+            row['current_phase'] = '原任务Done（合并移交）；未完责任统一在联合执行包#34及其后续范围跟踪'
+            row['blocker'] = '无独立派工入口；未验断言、责任与恢复条件以#34逐FR收口表/后续范围清单为准'
+            row['acceptance_result'] = 'Done仅表示任务合并移交，不是新增产品PASS或整FR验收；历史证据留原SHA/范围'
         if uat_owner:
             row['owner'] += '；UAT业务验收：' + uat_owner
         requirements.append(row)

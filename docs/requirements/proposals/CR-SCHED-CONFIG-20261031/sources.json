@@ -1,0 +1,19 @@
+{
+  "read_at": "2026-10-31T06:16:01.677261+00:00",
+  "project_id": "PVT_kwHOFM9WU84BpE1c",
+  "main_sha": "01945c023e7c1d29b14a3d881b0e131e3f25f5a8",
+  "governance_branch": "pm/r21-uat02-user-decisions-20261031",
+  "governance_sha": "0b1de3256e7f0ec660ae1fb26cbfac0682768f24",
+  "reference_urls": {
+    "BASE": "https://github.com/huiliangtao666/APS/blob/01945c023e7c1d29b14a3d881b0e131e3f25f5a8/docs/requirements/baselines/APS-BL-001-v0.3.json",
+    "CR02": "https://github.com/huiliangtao666/APS/issues/3",
+    "P10": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6502106251",
+    "HP04": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6538271182",
+    "R21": "https://github.com/huiliangtao666/APS/issues/6#issuecomment-6537078558",
+    "FR013": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006",
+    "PERF": "https://github.com/huiliangtao666/APS/issues/26",
+    "B02": "https://github.com/huiliangtao666/APS/issues/9"
+  },
+  "sources": "当前用户原话＋固定基线/既有40参数＋GitHub Issue最新评论＋治理分支裁决；未读取其他工作区私有队列",
+  "no_product_execution": true
+}
