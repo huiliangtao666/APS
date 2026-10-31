@@ -1,0 +1,84 @@
+{
+  "event_key": "dlv_4c01a1e7-3520-4764-81a6-b7438c2b41f1:r1",
+  "notification": "dlv_c9763a9c-d688-4137-8b6a-fcc2d0544c48",
+  "product_sha": "b8512a3853160fca8deaf374cb1c5da3ea9e771c",
+  "evidence_sha": "47b34bb030c2ccac05f95861c1f364d4301bf188",
+  "outer_verified": 8,
+  "zip_crc": "PASS",
+  "internal_hashes": 1963,
+  "source_subset_git_blobs_verified": 704,
+  "source_total_manifest_files": 3352,
+  "live_environment_matches": true,
+  "live_assets_verified": 73,
+  "b12_domain_files_identical": 6,
+  "product_tree_fc85_identical": true,
+  "matrix_rows": 21,
+  "matrix_results": {
+    "PASS": 16,
+    "PARTIAL": 1,
+    "NOT_EXECUTED": 2,
+    "WAIT_APPROVAL": 2
+  },
+  "closure_rows": 14,
+  "input_mapping_rows": 57,
+  "dev_assigned_integration": "PASS / DONE",
+  "whole_issue": "PARTIAL / NOT_READY",
+  "qa": "NOT_EXECUTED",
+  "new_product_fail": 0,
+  "repair_round_increment": 0,
+  "qa_logs_closed": 0,
+  "independent_rebuild": "NOT_EXECUTED; reviewed fixed source/runtime and existing test evidence only",
+  "receipt": "PROCESSED",
+  "project_status": "In progress",
+  "next_tasks": {
+    "Dev": {
+      "delivery": "dlv_1ab0048f-351e-48f4-afc7-5dae95d37b8c",
+      "scope": "B15 source/main integration",
+      "status": "executing"
+    },
+    "Test": {
+      "delivery": "dlv_e35a72db-7415-42e8-969e-268408d33a15",
+      "scope": "R7/P0 independent domain",
+      "status": "executing"
+    },
+    "QA": {
+      "delivery": "dlv_82ed5e0d-1893-4bc7-9282-9c13d948d2cb",
+      "scope": "B09 UAT10 fixed a0b846e",
+      "status": "executing"
+    }
+  },
+  "remaining": [
+    {
+      "id": "R01",
+      "status": "PARTIAL",
+      "owner": "APS-Dev / APS-PM",
+      "next": "原Issue39下继续已批准05/06显式READY绑定、17订单显式选项、规则合同配置；12物料/BOM动态空间、13库存映射按原件逐条拆清工程与语义；不猜默认、不将profile通过当原19通过。Dev当前B15共享入口任务执行中，不重叠派第二个写任务；共享入口整合后优先核本批准残余可执行责任。"
+    },
+    {
+      "id": "A01",
+      "status": "WAIT_APPROVAL",
+      "owner": "APS-PM→用户",
+      "decision": "FR005按产品、单位、效率计算有效PACK速度的契约；固定50仅mock。需要确认速度单位、适用产品/规格、效率作用和换算依据后实现；不默认重量速度。"
+    },
+    {
+      "id": "A02",
+      "status": "WAIT_APPROVAL",
+      "owner": "APS-PM→用户",
+      "decision": "跨批包装取整的聚合范围/时点、非kg生产粒度与余数、允许装载节点、重组及尾批处理；保留当前合法kg固定模型，不新增通用公式。"
+    },
+    {
+      "id": "R02/BR13/A03",
+      "status": "NOT_EXECUTED",
+      "owner": "APS-Dev / APS-PM",
+      "next": "按已批准BR13补前后产品方向、换型/清洗资源、时长、人员、验证等待及禁止组合的实现和正反/边界证据；先核原规则和配置，若具体含义确实缺失再报PM，不新增第三项WAIT_APPROVAL。"
+    },
+    {
+      "id": "Q01",
+      "status": "NOT_EXECUTED / WAITING_DEPENDENCIES",
+      "owner": "APS-PM / APS-QA",
+      "next": "先完成B09 UAT10当前任务并核UAT11入口/结论；B12每个完整场景的批准责任、预期、数据配置与残余处理明确后，再核固定SHA运行入口按12→13→14串行派QA；当前没有新B12 QA/Test delivery。"
+    }
+  ],
+  "receipt_delivery_mechanism": "one-shot final hook only; no separate ACK delivery",
+  "at": "2026-10-31T18:38:55.086109+08:00"
+}
