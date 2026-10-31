@@ -4,7 +4,7 @@ import {p10Fixture} from './p10-core-fixture.mjs';
 import {policyFixture} from './dec0203-fixture.mjs';
 import {defs} from '../server/planner.ts';
 export const source=(id='s1')=>({id,kind:'明确模拟',domain:'N06-MOCK',version:'r1',record:id,location:'repo:qa/n06-mock-source.txt#'+id,providerRole:'资源负责人（模拟）',provider:'MOCK-provider',reviewer:'MOCK-reviewer',occurredAt:'2026-11-02T08:40:00+08:00',sha256:mockSourceHash});
-export function event(doc,id='e1',prior='',type='登记'){return {'事件编号':id,'原账编号':'L-A','前事件编号':prior,'事件类型':type,'原账JSON':JSON.stringify(doc)};}
+export function event(doc,id='e1',prior='',type='登记'){return {'事件编号':id,'原账编号':'MOCK:L-A','前事件编号':prior,'事件类型':type,'原账JSON':JSON.stringify(doc)};}
 export function n06Fixture({unknown=false}={}){
  const d=p10Fixture('2'),tool=policyFixture('tool');
  d.orders[0]['合格需求']='100';d.orders.push({...d.orders[0],'订单编号':'B'});

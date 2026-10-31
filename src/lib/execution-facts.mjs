@@ -1,10 +1,10 @@
+import {originalIssues,originalTransition} from './execution-resource-ledger.mjs';
 import {sourceRefs} from './problem-records.mjs';
-import {originalIssues,originalTransition} from './original-resources.mjs';
 import {quantityMath as Q,executionMaterialDemand,materialPolicy} from './material-allocation.mjs';
 import {getUsableQualityStatuses} from './inventory.mjs';
 import {eventRisks,eventSummary} from './simulation-events.mjs';
 export const factTables=['originalResourceEvents','executionFacts','executionMaterials','executionSources','simulationEvents'];
-export const executionState=data=>Object.fromEntries([...factTables.filter(k=>k!=='originalResourceEvents'),...((data.originalResourceEvents||[]).length?['originalResourceEvents']:[])].map(k=>[k,data[k]||[]]));
+export const executionState=data=>Object.fromEntries(factTables.filter(k=>k!=='originalResourceEvents'||(data.originalResourceEvents||[]).length).map(k=>[k,data[k]||[]]));
 const compare=(a,b)=>{try{return Q.cmp(Q.q(a),Q.q(b));}catch{return null;}};
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 const decimal=v=>typeof v==='string'&&/^\d+(?:\.\d{1,12})?$/.test(v)&&Number.isFinite(Number(v))&&Number(v)<=1e12&&Q.cmp(Q.q(v),Q.q('1000000000000'))<=0n;
@@ -136,19 +136,20 @@ export function executionAdmission(data,conditions){
  const eventIssues=[];if((data.simulationEvents||[]).length){const ids=(conditions.enabledRuleIds||(data.rules||[]).filter(r=>r['是否启用']==='是').map(r=>r['规则编号'])).filter(id=>{const r=(data.rules||[]).find(r=>r['规则编号']===id);return !r?.['生效时间']||Date.parse(r['生效时间'])<=Date.parse(conditions.ruleEvaluationAt||new Date().toISOString());});if(conditions.mode==='minimal-r1'||!ids.includes('CALENDAR')||(data.simulationEvents||[]).some(e=>['物料状态变化','到料延期'].includes(e['事件类型']))&&!ids.includes('MATERIAL'))eventIssues.push({relatedRecords:[...sourceRefs('simulationEvents',data.simulationEvents,data.simulationEvents),...sourceRefs('rules',(data.rules||[]).filter(r=>(conditions.enabledRuleIds||[]).includes(r['规则编号'])||!conditions.enabledRuleIds&&r['是否启用']==='是'),data.rules||[])],code:'EVENT_POLICY_REQUIRED',message:'异常事件须使用完整支持模式及日历；物料/延期事件须启用物料规则，不得绕过事件约束'});}
  const hasOriginal=(data.originalResourceEvents||[]).length>0;
  const original=hasOriginal?originalIssues(data,{forRun:true}):[];
- if(hasOriginal)for(const r of data.originalResourceEvents){const d=JSON.parse(r['原账JSON']);if(d.status==='已核对'&&Number(conditions.startMinute??0)<d.observedAt)original.push({code:'N06_OBSERVATION_BOUNDARY',message:'新运行下界不得早于原账观测点；历史重放只作容量核对'});}
+ if(hasOriginal&&!original.length)for(const r of data.originalResourceEvents){const d=JSON.parse(r['原账JSON']);if(d.status==='已核对'&&Number(conditions.startMinute??0)<d.observedAt)original.push({code:'N06_OBSERVATION_BOUNDARY',message:'新运行下界不得早于MOCK原账观测点；历史重放仅作容量核对'});}
  if(!facts(data).length)return [...eventIssues,...original];
  let members=[];const refs=(table,rows,input=data)=>sourceRefs(table,rows,input[table]||[]).map(r=>input===data?r:{...r,sourceContext:'executionContext'});
  const issues=[...eventIssues,...original],bad=(message,relatedRecords=members)=>issues.push({relatedRecords,code:'EXECUTION_SCOPE_UNDECIDED',table:'executionFacts',file:'25_模拟任务执行事实.csv',row:0,field:'计算口径',message});
  for(const f of facts(data))if(compare(f['累计报废数量']||'0','0')>0n&&f['报废补做口径']!=='按本工序BOM补做')bad('报废任务 '+f['事实编号']+' 的补做/补料口径待核对；不自动推断替代品、合格量或释放材料',refs('executionFacts',[f]));
  members=refs('executionFacts',facts(data));
+ if(hasOriginal&&facts(data).some(f=>f['状态']!=='已完成'))bad('N06有限MOCK仅支持已完成原任务的已释放账；在制剩余阶段锚点尚未建模，禁止重锚');
  if(conditions.mode==='minimal-r1')bad('有执行事实不能使用忽略保护的最小模式');
  const enabled=(conditions.enabledRuleIds||[]).filter(id=>{const row=(data.rules||[]).find(r=>r['规则编号']===id);return !row?.['生效时间']||Date.parse(row['生效时间'])<=Date.parse(conditions.ruleEvaluationAt||new Date().toISOString());});
  const full=data.executionContext||data;
  if(enabled.includes('MATERIAL'))for(const f of facts(full).filter(f=>f['状态']==='已完成'))try{members=[...refs('executionFacts',[f],full),...refs('rules',(data.rules||[]).filter(r=>r['规则编号']==='MATERIAL'))];const o=full.orders.find(o=>o['订单编号']===f['订单编号']);const trace=(table,rows)=>members.push(...refs(table,rows,full));const demands=executionMaterialDemand(full,o,f['工序编号'],Number(f['开始分钟']),trace),baseline=[...members];for(const demand of demands){members=[...baseline,...refs('executionMaterials',(full.executionMaterials||[]).filter(c=>c['事实编号']===f['事实编号']&&c['物料编号']===demand.materialId),full)];const used=(full.executionMaterials||[]).filter(c=>c['事实编号']===f['事实编号']&&c['物料编号']===demand.materialId).reduce((a,c)=>Q.add(a,Q.q(c['累计已用数量'])),Q.zero);if(Q.cmp(used,Q.fromExact(demand.exactQuantity))!==0n)bad('已完成工序耗料与支持BOM定额未齐；不能默认其物料仍未使用或擅自补耗料');}}catch{bad('已完成工序的BOM/耗料映射不明，须核对');}
  members=[...refs('executionFacts',facts(data)),...refs('rules',(data.rules||[]).filter(r=>['CAPACITY','PROGRAM','MOLD','STORAGE','DELIVERY'].includes(r['规则编号'])&&enabled.includes(r['规则编号'])))];
  if((hasOriginal?['CAPACITY','PROGRAM','DELIVERY']:['CAPACITY','PROGRAM','MOLD','STORAGE','DELIVERY']).some(id=>enabled.includes(id)))bad('执行事实与拆合批/联合占用/交付质量的完整协调待FR031；禁止虚构已确认执行或合格产出');
- if(!hasOriginal&&(data.dependencies||[]).some(d=>d['资源类型']==='人员技能'&&factFor(data,d['订单编号'],d['工序编号'])))bad('已开始任务人员阶段剩余范围未定，禁止重复占用',[...refs('dependencies',(data.dependencies||[]).filter(d=>d['资源类型']==='人员技能'&&factFor(data,d['订单编号'],d['工序编号']))),...refs('executionFacts',[...new Set((data.dependencies||[]).filter(d=>d['资源类型']==='人员技能').map(d=>factFor(data,d['订单编号'],d['工序编号'])).filter(Boolean))])]);
+ if((data.dependencies||[]).some(d=>d['资源类型']==='人员技能'&&factFor(data,d['订单编号'],d['工序编号'])&&(!hasOriginal||factFor(data,d['订单编号'],d['工序编号'])['状态']!=='已完成')))bad('已开始任务人员阶段剩余范围未定，禁止重复占用',[...refs('dependencies',(data.dependencies||[]).filter(d=>d['资源类型']==='人员技能'&&factFor(data,d['订单编号'],d['工序编号']))),...refs('executionFacts',[...new Set((data.dependencies||[]).filter(d=>d['资源类型']==='人员技能').map(d=>factFor(data,d['订单编号'],d['工序编号'])).filter(Boolean))])]);
  if(conditions.endMinute!==null&&conditions.endMinute!==undefined&&facts(data).some(f=>Number(f['观测分钟'])>conditions.endMinute))bad('计算结束早于执行观测时点，禁止裁去事实',refs('executionFacts',facts(data).filter(f=>Number(f['观测分钟'])>conditions.endMinute)));
  return issues;
 }

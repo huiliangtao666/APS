@@ -1,3 +1,4 @@
+import {originalIssues} from '../src/lib/execution-resource-ledger.mjs';
 import {validateOriginalStage} from '../src/lib/original-stage-data.mjs';
 import {adaptOriginalDependencies} from '../src/lib/original-dependencies.mjs';
 import {validateOriginalBom} from '../src/lib/original-bom.mjs';
@@ -5,7 +6,6 @@ import {validateResourceMappings} from '../src/lib/resource-mapping.mjs';
 import {validateOriginalResources} from '../src/lib/original-resources.mjs';
 import {sourceRefs} from '../src/lib/problem-records.mjs';
 import {inheritedCalendarId,validateFactoryLines} from '../src/lib/factory-lines.mjs';
-import {originalIssues} from '../src/lib/original-resources.mjs';
 import {validateBatchResources} from '../src/lib/batch-policy.mjs';
 import { assessRules } from '../src/lib/business-rules.mjs';
 import { validateMasterData } from '../src/lib/master-data.mjs';

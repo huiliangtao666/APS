@@ -1,7 +1,7 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {n06Fixture,event,source,selection,decision} from './n06-fixture.mjs';
-import {originalViews,originalIssues,originalTransition,originalProtection} from '../src/lib/original-resources.mjs';
-import {verifyOriginalResources} from '../src/lib/verify-original-resources.mjs';
+import {originalViews,originalIssues,originalTransition,originalProtection} from '../src/lib/execution-resource-ledger.mjs';
+import {verifyOriginalResources} from '../src/lib/verify-execution-resource-ledger.mjs';
 import {previewResources} from '../src/lib/joint-resources.mjs';import {allocatePersonnel} from '../src/lib/staffing.mjs';
 import {freezeRunInput} from '../server/run-input.mjs';import {calculate,defs} from '../server/planner.ts';import {validateInputs} from '../server/input-validation.mjs';import {fixture} from './fr027-fixture.mjs';
 const doc=d=>JSON.parse(d.originalResourceEvents.at(-1)['原账JSON']);

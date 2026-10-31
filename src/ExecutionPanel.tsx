@@ -1,11 +1,12 @@
 import {originalViews,originalIssues} from './lib/original-resources.mjs';
+import {MockLedger} from './MockLedger';
 import {executionInventory} from './lib/material-allocation.mjs';
 import {executionSummary} from './lib/execution-facts.mjs';
 type Row=Record<string,string>;
 export function ExecutionPanel({data,operations,historical}:{data:Record<string,Row[]>;operations:any[];historical?:any}){
  const summary=executionSummary(data),history=operations.filter(r=>!r.trialId&&['originalResourceEvents','executionFacts','executionMaterials','executionSources','simulationEvents'].includes(r.target));
  return <section aria-label="模拟执行事实与历史"><h2>模拟执行事实 / R5</h2><p>所有记录均为离线模拟输入。工序产出不代表质量合格或真实车间执行，不跨工序累加。已耗材料从扣耗前账面中一次扣除；重算只分配余料，不写库存、不入完成量。</p>
- <h3>N06 原始资源事实账</h3><p>数据页“原始资源事实账”录入事件及原账JSON。原任务/批、采用清单、实际量及单位、历史规则、取得/全部释放、原件位置与提供方必须明确。原记录只追加，释放和纠正须引用前事件。未知释放、缺项与草稿阻断运行；完成任务不代表资源释放。</p>
+ <MockLedger data={data}/> <h3>N06 原始资源事实账</h3><p>数据页“原始资源事实账”录入事件及原账JSON。原任务/批、采用清单、实际量及单位、历史规则、取得/全部释放、原件位置与提供方必须明确。原记录只追加，释放和纠正须引用前事件。未知释放、缺项与草稿阻断运行；完成任务不代表资源释放。</p>
  {originalIssues(data,{forRun:true}).map((x:any,i:number)=><p role="alert" key={'n06'+i}>{x.message}</p>)}
  {(data.originalResourceEvents||[]).length>0&&(()=>{try{return originalViews(data).map(({row,doc}:any)=><article key={row['原账编号']}><h4>{row['原账编号']} · {row['事件编号']} · {doc.status==='草稿'?'草稿待核':doc.occupancies.some((o:any)=>o.end===null)?'未知释放阻断':'可计算有限账'}</h4><p>观测分钟 {doc.observedAt} · 完整性责任 {doc.responsible} · 范围 {doc.scope} · 历史规则 {doc.ruleVersion}</p><table><thead><tr><th>占用 / 物理资源</th><th>实际量</th><th>真实区间</th><th>原任务成员</th></tr></thead><tbody>{(doc.occupancies||[]).map((o:any)=><tr key={o.id}><td>{o.id} / {o.physicalId}</td><td>{o.quantity} {o.unit}</td><td>[{o.start}, {o.end===null?'未知':o.end})</td><td>{o.members.join('、')}</td></tr>)}</tbody></table><details><summary>原批关联、采用清单、历史规则与原件来源</summary><pre>{JSON.stringify(doc,null,2)}</pre></details></article>)}catch{return <p role="alert">原账待核，无法建立有效视图</p>}})()}
  <h3>异常事件与保护时段</h3><p>事件表支持插单、设备故障、人员缺勤、到料延期及物料状态变化。先在同一批输入更新全部在制任务的事件时点累计事实，再接纳事件，最后从当前版本重算。保护策略“禁止未开始任务开工”：保护区间内只保留已有事实/未受影响的显式剩余工作，未开始任务最早在保护截止开工；不承诺冻结旧方案的未执行任务位置。恢复、撤销、转机与自动判合格不支持。</p><p>最近事件分钟 {summary.events.eventMinute} · 未开始任务保护截止 {summary.events.protectionUntil}</p><pre>{JSON.stringify(summary.events.rows,null,2)}</pre>

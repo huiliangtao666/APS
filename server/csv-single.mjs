@@ -3,7 +3,7 @@ import {originalDependencyDef} from '../src/lib/original-dependencies.mjs';
 // Preserve the existing single-table field contract and literal cell values.
 // Source positions are metadata, never accepted from the browser as row numbers.
 // Tool availability must be explicit; missing headers retain per-row validation.
-const optional={resourceMappings:['字段权威JSON'],personnelGroups:['poolId'],executionFacts:['累计报废数量','报废补做口径'],orders:['已完成合格数量'],bom:['损坏比例'],supplies:['质量状态','有效期'],dependencies:['人员岗位编号','所需班次','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'],rules:['适用对象','生效时间'],tools:['可用起始分钟','可用结束分钟'],resourceClaims:['窗口开始偏移分钟','窗口结束偏移分钟','参数来源']};
+const optional={resourceMappings:['字段权威JSON'],personnelGroups:['poolId'],executionFacts:['累计报废数量','报废补做口径'],orders:['已完成合格数量'],bom:['损坏比例'],supplies:['质量状态','有效期'],dependencies:['人员占用基准','人员检查顺序','人员配置来源','人员配置版本','人员岗位编号','所需班次','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'],rules:['适用对象','生效时间'],tools:['可用起始分钟','可用结束分钟'],resourceClaims:['窗口开始偏移分钟','窗口结束偏移分钟','参数来源']};
 const defaults={'窗口外释放':'是','窗口开始偏移分钟':'0','窗口结束偏移分钟':'0','参数来源':'逐项声明'};
 export function inspectSingleCsv(file,def){
  if(def.key==='dependencies'){

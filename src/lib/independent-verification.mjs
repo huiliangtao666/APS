@@ -1,3 +1,4 @@
+import {verifyOriginalResources as verifyExecutionResources} from './verify-execution-resource-ledger.mjs';
 import {ruleCatalog} from './business-rules.mjs';
 import {verifyCalendar} from './verify-calendar.mjs';
 import {verifyBatchWait} from './verify-batch-wait.mjs';
@@ -125,7 +126,7 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
     details.jointConditions=result(problems.length?'problem':tasks.length?'pass':'not_checked',problems.length?problems:['按冻结输入复核机器完整日历与停机、物料需求覆盖、来源资格及累计分配守恒；不调用排程或分配器。']);
     findings.push(...problems.map(message=>({code:'VERIFY / JOINT_CONDITIONS',message,taskIds:[]})));
   }
-  const original=verifyOriginalResources(plan,frozenData,frozenConditions||{});
+  const original=(frozenConditions?.executionResourceContract?verifyExecutionResources:verifyOriginalResources)(plan,frozenData,frozenConditions||{});
   if(original){details.originalResources=original;findings.push(...(original.status==='problem'?original.details.map(message=>({code:'VERIFY / ORIGINAL_RESOURCES',message,taskIds:[]})):[]));}
   if(frozenData&&(frozenConditions??plan.conditions)?.mode!=='minimal-r1'){
     details.batchAndWait=verifyBatchWait(plan,frozenData,frozenConditions??plan.conditions);
@@ -138,6 +139,8 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
     details.processRoute=result(check.status==='pass'?'pass':'problem',check.status==='pass'?['从冻结订单重建生产身份、完整工序覆盖、实际投料BOM兼容、加工单次占用、等待窗、产出空间及全资源/物料守恒。']:[...check.problems,...check.missing.map(id=>'完整路线缺少 '+id)]);
     if(check.status!=='pass')findings.push(...details.processRoute.details.map(message=>({code:'VERIFY / PROCESS_ROUTE',message,taskIds:[]})));
   }
+  const original=verifyOriginalResources(plan,frozenData,frozenConditions||{});
+  if(original){details.originalResources=original;findings.push(...(original.status==='problem'?original.details.map(message=>({code:'VERIFY / ORIGINAL_RESOURCES',message,taskIds:[]})):[]));}
   const ruleStatuses=(frozenData?.rules||[]).map(row=>{
     const id=row['规则编号'],catalog=ruleCatalog.find(c=>c.id===id),enabled=row['是否启用']==='是';
     const check={BATCH:details.batchAndWait,MAX_LAG:details.processRoute,MACHINE:details.machineOverlap,PRECEDENCE:details.precedence,CALENDAR:details.calendar,MOLD:details.resourcePolicies,STORAGE:details.resourcePolicies,LABOR:details.resourcePolicies}[id];

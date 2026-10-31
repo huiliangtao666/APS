@@ -1,0 +1,6 @@
+import {originalViews} from './lib/execution-resource-ledger.mjs';
+export function MockLedger({data,frozen=false}:{data:any;frozen?:boolean}){
+ if(!(data.originalResourceEvents||[]).length)return null;
+ let views:any[]=[];try{views=originalViews(data);}catch(e){return <p role="alert">MOCK原账待核：{(e as Error).message}</p>;}
+ return <section aria-label="MOCK资源取得归还释放账"><h3>{frozen?'本运行冻结的':'当前'} MOCK资源取得归还释放账</h3><p>明确模拟，非现场实账或QA UAT结论。事件仅追加；取得、归还、人员释放均有来源/版本。未知释放阻断，任务完成不代表资源归还。</p>{views.map(({row,doc})=><article key={row['原账编号']}><h4>{row['原账编号']} · {row['事件编号']} · {doc.status}</h4><p>观测 {doc.observedAt} · 规则 {doc.ruleVersion} · 范围 {doc.scope} · 责任 {doc.responsible}</p>{(doc.sources||[]).map((s:any)=><p key={s.id}>MOCK {s.kind} · {s.domain}/{s.version}/{s.record} · {s.location} · SHA256 {s.sha256}</p>)}<table><thead><tr><th>资源占用</th><th>数量</th><th>取得分钟</th><th>归还/释放分钟</th><th>原任务</th></tr></thead><tbody>{(doc.occupancies||[]).map((o:any)=><tr key={o.id}><td>{o.id}/{o.physicalId}</td><td>{o.quantity} {o.unit}</td><td>{o.start}</td><td>{o.end===null?'未知，阻断':o.end}</td><td>{o.members?.join('、')}</td></tr>)}</tbody></table><details><summary>冻结原批、采用集合、事件与来源链</summary><pre>{JSON.stringify(doc,null,2)}</pre></details></article>)}</section>;
+}

@@ -6,7 +6,7 @@ import {jointParameters} from '../src/lib/joint-policy.mjs';
 // Reuse physical-record parsing/inspection; actual runtime defs are authoritative.
 import {batchKeys} from '../src/lib/csv-contract.mjs';
 export {batchKeys};
-export const optionalFields={resourceMappings:['字段权威JSON'],personnelGroups:['poolId'],orders:['已完成合格数量'],dependencies:['人员岗位编号','候选人员组','所需班次','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'],rules:['适用对象','生效时间']};
+export const optionalFields={resourceMappings:['字段权威JSON'],personnelGroups:['poolId'],orders:['已完成合格数量'],dependencies:['人员占用基准','人员检查顺序','人员配置来源','人员配置版本','人员岗位编号','候选人员组','所需班次','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'],rules:['适用对象','生效时间']};
 export function inspectCsvBatch(files,defs,repairs=[],r21Config=null,resourceRuleBinding=null){
  const tables={},sources={},issues=[],seen=new Set(),used=new Set();
  const entryFields=['是否允许拆分','需求类型','订单状态'];
