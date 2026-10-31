@@ -1,0 +1,20 @@
+export type LossKind = 'raw' | 'production' | 'transport';
+export type Exact = {numerator:string;denominator:string};
+export type BomLossConfigValue = {model:'bom-loss-kg-v1';source:string;version:string;percentUnit:'%';unified:Record<LossKind,string>;overrides:{materialId:string;losses:Partial<Record<LossKind,string>>}[]};
+export type BomLossRecipe = {recipeId:string;version:string;source:string;unit:'kg';basisKg:string;materials:{materialId:string;quotaKg:string;unit:'kg'}[]};
+export type EffectiveLosses = Record<LossKind,{percent:string;source:'material'|'unified'}>;
+export type BomLossResult = {model:'bom-loss-kg-v1';unit:'kg';percentUnit:'%';recipeId:string;recipeVersion:string;configVersion:string;producible:boolean;totalInput:Exact;totalOutput:Exact;yield:Exact;rows:{materialId:string;quotaKg:string;unit:'kg';losses:EffectiveLosses;input:Exact;output:Exact;targetInput?:Exact;targetOutput?:Exact}[];targetKg?:string;scale?:Exact;targetTotalInput?:Exact;targetTotalOutput?:Exact};
+export const BOM_LOSS_MODEL:'bom-loss-kg-v1';
+export const LOSS_KINDS:readonly LossKind[];
+export class BomLossError extends Error {code:string;path:string;}
+export function decimalInput(value:unknown,path?:string,percent?:boolean):string;
+export function createBomLossConfig(source:string,version:string):BomLossConfigValue;
+export function normalizeBomLossConfig(value:unknown):BomLossConfigValue;
+export function normalizeBomLossRecipe(value:unknown):BomLossRecipe;
+export function resolveBomLosses(config:BomLossConfigValue,materialId:string):EffectiveLosses;
+export function setBomLossOverride(config:BomLossConfigValue,materialId:string,kind:LossKind,value?:string):BomLossConfigValue;
+export function calculateBomLoss(recipe:BomLossRecipe,config:BomLossConfigValue,targetKg?:string):BomLossResult;
+export function serializeBomLossConfig(config:BomLossConfigValue):string;
+export function parseBomLossConfig(json:string):BomLossConfigValue;
+export function freezeBomLossRun(recipe:BomLossRecipe,config:BomLossConfigValue,targetKg?:string):Readonly<{model:'bom-loss-kg-v1';recipe:BomLossRecipe;config:BomLossConfigValue;result:BomLossResult}>;
+export function displayBomLossExact(value:Exact,places?:number):string;
