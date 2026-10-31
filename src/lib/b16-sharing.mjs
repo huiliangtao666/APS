@@ -4,6 +4,7 @@ import {validateInventoryBatches} from './inventory.mjs';
 import {validateExpectedSupply} from './expected-supply.mjs';
 import {independentlyVerifyPlan} from './independent-verification.mjs';
 import {sourceRefs} from './problem-records.mjs';
+import {assessRules,validRuleTime} from './business-rules.mjs';
 
 // Opt-in offline adapter only. Nothing imports this from an application entry.
 export const sharingContract='B16-offline-sharing-v1';
@@ -63,6 +64,18 @@ export function lineCandidates(profile,productId,selection){
  return {status:'problem',candidates:[],reason:'Unknown selection or inapplicable specified line'};
 }
 
+function frozenConfigurationFindings(data,conditions){
+ if(!validRuleTime(conditions?.ruleEvaluationAt||''))return [problem('CONFIG','Explicit valid frozen rule evaluation timestamp required')];
+ const findings=assessRules(data,conditions.ruleEvaluationAt,true,'supported').issues.map(f=>problem('CONFIG',f.message,[],f.relatedRecords||[]));
+ for(const g of data.personnelGroups)if(!text(g['技能'])||!text(g['班次'])||!['可用起始分钟','可用结束分钟'].every(k=>typeof g[k]==='string'&&/^\d+$/.test(g[k])&&Number.isSafeInteger(Number(g[k]))&&Number(g[k])<=525600)||Number(g['可用结束分钟'])<=Number(g['可用起始分钟']))findings.push(problem('CONFIG','Explicit personnel skill/shift/availability required '+g['人员组编号']));
+ const adopted=['MACHINE','PRECEDENCE','CALENDAR','MATERIAL','MOLD','LABOR'];
+ if(conditions.mode!=='supported'||conditions.jointConditionsContract!=='FR022-joint-v1'||conditions.workingWindowsContract!=='P06-windows-v1')findings.push(problem('CONTRACT','Explicit supported joint and working-window contracts required'));
+ for(const r of data.rules)if(r['是否启用']==='是'&&!adopted.includes(r['规则编号']))findings.push(problem('GAP','Enabled rule requires an additional integration adapter '+r['规则编号']));
+ if(!Array.isArray(conditions.enabledRuleIds)||new Set(conditions.enabledRuleIds).size!==conditions.enabledRuleIds.length||conditions.enabledRuleIds.some(id=>!adopted.includes(id)))findings.push(problem('CONFIG','Unknown/duplicate run rule selection'));
+ for(const id of adopted)if(!conditions.enabledRuleIds?.includes(id)||!data.rules.some(r=>r['规则编号']===id&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(conditions.ruleEvaluationAt))))findings.push(problem('RULE','Required rule unavailable/disabled '+id));
+ return findings;
+}
+
 function fixedPlanFindings(profile,data,plan){
  const findings=[],tasks=plan?.tasks;
  const add=(code,message,ids=[],refs=[],interval)=>findings.push(problem(code,message,ids,refs,interval));
@@ -109,6 +122,7 @@ function fixedPlanFindings(profile,data,plan){
 export function allocateSharingMaterials({profile,data,plan,conditions}){
  const findings=[...validateSharingProfile(profile,data)];
  if(!findings.length)findings.push(...fixedPlanFindings(profile,data,plan));
+ if(!findings.length)findings.push(...frozenConfigurationFindings(data,conditions));
  const output=structuredClone(plan);
  // Refuse to overwrite a saved commitment or historical result.
  if(plan?.materialDemands?.length)findings.push(problem('FROZEN','Allocation requires an uncommitted candidate; saved ledgers are checked, never rewritten'));
@@ -134,6 +148,7 @@ export function checkSharingPlan({profile,data,plan,conditions}){
  const result=()=>({contract:sharingContract,status:findings.length?'problem':'pass',findings,checks,profile:structuredClone(profile),offlineOnly:true,applicationEnabled:false,qaUat:'NOT_EXECUTED',scope:'Fixed unsplit kg plan; no allocation search, application workflow or final multi-line UAT'});
  if(findings.length)return result();
  findings.push(...fixedPlanFindings(profile,data,plan));
+ if(!findings.length)findings.push(...frozenConfigurationFindings(data,conditions));
  if(findings.length)return result();
  const required=['MACHINE','PRECEDENCE','CALENDAR','MATERIAL','MOLD','LABOR'];
  for(const id of required){const rows=data.rules.filter(r=>r['规则编号']===id);if(rows.length!==1||rows[0]['是否启用']!=='是'||!conditions?.enabledRuleIds?.includes(id)||rows[0]['生效时间']&&Date.parse(rows[0]['生效时间'])>Date.parse(conditions?.ruleEvaluationAt))findings.push(problem('RULE','Required rule unavailable/disabled '+id));}

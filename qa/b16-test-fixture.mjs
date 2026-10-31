@@ -1,3 +1,4 @@
+import {jointParameters} from '../src/lib/joint-resources.mjs';
 import {claim} from './joint-fixture.mjs';
 import {sharingContract} from '../src/lib/b16-sharing.mjs';
 export const at='2026-11-02T08:00:00+08:00';
@@ -25,10 +26,10 @@ export function fixture(){
  data.supplies=[{'供给编号':'S90','物料编号':'LEAN','批次编号':'LEAN-FUTURE','预计数量':'162.5','预计到达时间':'2026-11-02T09:30:00+08:00','预计可用时间':'2026-11-02T09:30:00+08:00','质量状态':'预计可用','有效期':'2026-12-31','单位':'kg'}];
  data.supplyUses=[{'引用编号':'B-S90','订单编号':'B','工序编号':'MIX','供给编号':'S90','使用数量':'162.5'}];
  data.calendars=[{'日历编号':'FC01','工厂编号':'F01','起始分钟':'0','结束分钟':'600','是否工作':'是'}];
- data.tools=[{'工装编码':'G01','可用数量':'1','每任务需求数量':'1','提前占用分钟':'0','后延占用分钟':'0','可用起始分钟':'0','可用结束分钟':'600','是否启用':'是','适用任务':'FILL'}];
+ data.tools=[{'工装编码':'G01','工装名称':'MOCK G01','可用数量':'1','每任务需求数量':'1','提前占用分钟':'0','后延占用分钟':'0','可用起始分钟':'0','可用结束分钟':'600','是否启用':'是','适用任务':'FILL'}];
  data.personnelGroups=[{'人员组编号':'LP01','人员数量':'1','技能':'FILL','班次':'DAY','可用起始分钟':'0','可用结束分钟':'600'}];
  const enabled=['MACHINE','PRECEDENCE','CALENDAR','MATERIAL','MOLD','LABOR'];
- data.rules=enabled.map(id=>({'规则编号':id,'是否启用':'是','参数JSON':id==='MATERIAL'?JSON.stringify({'允许预计供给':true,'可用状态':['合格'],'预计状态':['预计可用']}):'{}'}));
+ data.rules=enabled.map(id=>({'规则编号':id,'是否启用':'是','参数JSON':id==='MATERIAL'?JSON.stringify({'允许预计供给':true,'可用状态':['合格'],'预计状态':['预计可用'],'不可用状态':['冻结','待检','不合格']}):id==='MOLD'?JSON.stringify(jointParameters):'{}'}));
  const profile={contract:sharingContract,version:'mock16-v1',source:'v0.3 UAT16 + explicit replaceable normalized domain MOCK',mock:true,lines:[{id:'L01',factoryId:'F01'},{id:'L02',factoryId:'F01'}],products:[{productId:'P1',lineIds:['L01','L02']},{productId:'P2',lineIds:['L02']}],resources:[{type:'工装',resourceId:'G01',factoryId:'F01',lineIds:['L01','L02'],allowCrossLine:true,capacity:'1',unit:'套'},{type:'人员',resourceId:'LP01',factoryId:'F01',lineIds:['L01','L02'],allowCrossLine:true,capacity:'1',unit:'人'}],materials:data.materials.map(m=>({materialId:m['物料编号'],factoryId:'F01',lineIds:['L01','L02']})),selections:[{orderId:'A',mode:'automatic'},{orderId:'B',mode:'specified',lineId:'L02'}]};
  const conditions={mode:'supported',ruleEvaluationAt:at,enabledRuleIds:enabled,jointConditionsContract:'FR022-joint-v1',workingWindowsContract:'P06-windows-v1',resourcePolicyVersion:'MOCK16-v1'};
  const plan={id:'MOCK16',tasks:[],resourceReservations:[],materialDemands:[],rules:enabled,jointConditionsContract:conditions.jointConditionsContract,workingWindowsContract:conditions.workingWindowsContract,resourcePolicyContract:'CR-DEC02-03-v1'};

@@ -115,4 +115,7 @@ test('B16-22 explicit supply over-reference and 0.1kg shortage remain exact',()=
  const f=fixture();f.data.supplyUses.push({...f.data.supplyUses[0],'引用编号':'EXTRA'});bad('supply-over-reference',f,/计划使用总量/);
  const tiny=fixture();tiny.data.supplies[0]['预计数量']='162.4';tiny.data.supplyUses[0]['使用数量']='162.4';const r=allocateSharingMaterials(tiny);assert.equal(r.status,'problem');const row=r.plan.materialDemands.find(d=>d.taskId==='B-MIX'&&d.materialId==='LEAN');assert.equal(row.shortage,0.1);assert.deepEqual(row.exactShortage,{numerator:'1',denominator:'10'});assert.ok(r.plan.materialDemands.every(d=>!d.committed));save('exact-gap0.1',tiny,r);
 });
+test('B16-23 existing configuration validation is binding; unknown parameters never pass',()=>{
+ for(const [i,change]of [f=>delete f.data.tools[0]['可用结束分钟'],f=>delete f.data.personnelGroups[0]['可用结束分钟'],f=>f.data.rules.find(r=>r['规则编号']==='MOLD')['参数JSON']='{}',f=>f.data.rules.push({'规则编号':'UNKNOWN','是否启用':'是','参数JSON':'{}'}),f=>f.data.rules[0]['生效时间']='bad',f=>delete f.conditions.ruleEvaluationAt,f=>f.conditions.enabledRuleIds.push('UNKNOWN')].entries()){const f=allocate(fixture());change(f);bad('config-unknown-'+i,f);}
+});
 test.after(()=>{fs.mkdirSync(process.env.B16_OUT,{recursive:true});fs.writeFileSync(process.env.B16_OUT+'/results.json',JSON.stringify(results,null,2));});
