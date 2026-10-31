@@ -4,13 +4,17 @@
 
 | CR | 名称 | 批准状态 | 影响FR/BR | 实施状态 | 验收结论 |
 | --- | --- | --- | --- | --- | --- |
-| CR-DEC02-03-20261029 | 工装、人员、技能业务选择的前台参数化维护及排程生效 | 已批准能力方向并授权开发；具体默认参数值未批准 | FR-006、FR-007、FR-017、FR-022、BR-06、BR-07 | B2 9aa7f78 original12 controlled adapter selftest 24 PASS/1 PARTIAL/2 BLOCKED/1 NOT_EXECUTED; incomplete customer/config facts; full CR NOT_READY | B2历史9aa7f78范围PARTIAL，H-P04/N06原阻塞已由用户决策解除，待新固定SHA开发自测及联合整合验证；完整CR/UAT仍NOT_READY，0新增产品FAIL/修复轮次 |
+| CR-DEC02-03-20261029 | 工装、人员、技能业务选择的前台参数化维护及排程生效 | 已批准能力方向并授权开发；具体默认参数值未批准 | FR-006、FR-007、FR-017、FR-022、BR-06、BR-07 | H-P04/N06 approved config/MOCK fixed 96a9dae3 Dev selftest PASS (36 PASS/2 BLOCKED/2 NOT_EXECUTED/0 FAIL); full CR NOT_READY | H-P04/N06 limited engineering PASS at 96a9dae3ff13d3254c091567fa57cad5d8f37279; whole FR/Issue/CR NOT_READY, QA on this SHA NOT_EXECUTED; customer/site facts and complex remaining semantics tracked in Issue3; prior fixed-SHA PASS and repair rounds preserved |
 | CR-DEC04-05-06-20261029 | DEC-04/05/06数量、质量可用性与工艺参数的需求设计深化及mock | 已批准需求设计深化、参数化及mock准备；应用实现未派发，具体业务值未批准 | FR-002、FR-003、FR-004、FR-005、FR-010、FR-011、FR-017、FR-020、FR-021、FR-022、FR-023、BR-02、BR-04、BR-08、BR-09、BR-10、BR-11、BR-12、BR-13、BR-14、BR-18 | 独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。 |
 | CR-FR013-VALIDATION-20261029 | FR013袋支/收率及字段可配置校验 | 已批准具体校验与可配置方向；具体其他业务默认值未批准 | FR-013 | B1 integrated candidate 98347f8 Dev task-level Done; QA simulated UAT01/02 PASS at same SHA; original FR/CR remaining facts and scope NOT_READY | QA simulation UAT01/02 scoped PASS, 32 PASS/6 BLOCKED/4 NOT_EXECUTED; full FR/CR NOT_READY, no product FAIL or new repair round |
 | CR-FR038-PERF-20261029 | FR038排程时间暂定目标 | 已批准暂定30秒目标；AC27规模/规则/环境仍待确认 | FR-038 | 8741bf0a exploratory Test2 18 tiers/62 Worker runs and C2 count correction; Test1 React full-chain 8/128 orders <1.3s and 512 cancellation, fixed SHA; formal spec pending | Exploration only: no formal AC27 30s PASS/FAIL; C1 task-count wording corrected by C2, 4096=3993+53+50; formal scale/rules/environment/timing boundary pending |
 | CR-R21-UAT02-20261031 | R2.1 UAT02 阶段未用设备、A/B 六字段配置及临时账号门槛裁决 | 已批准：用户明确授权本增量；实现和UAT尚未验收 | FR-008、FR-013、FR-016 | B1 integrated candidate 98347f8 Dev task-level Done; QA simulated UAT01/02 PASS at same SHA; original FR/CR remaining facts and scope NOT_READY | QA simulation UAT01/02 scoped PASS, 32 PASS/6 BLOCKED/4 NOT_EXECUTED; full FR/CR NOT_READY, no product FAIL or new repair round |
 
 ## CR-DEC02-03-20261029
+
+<!-- aps-pm-issue3-hp04-n06-96a9dae-r1 -->
+2026-10-31 PM处理 `dlv_7059d3b0-0d2a-4ff2-b792-46705063e713:r1`：产品固定SHA `96a9dae3ff13d3254c091567fa57cad5d8f37279`，来源基底 `be88f073b4c2597abcd3e5533e92f7f94a89ad59`，直接父 `0c9a527fe84523665b26f3ea00aab2f90a0e875f`。原件及40行矩阵按SHA256、ZIP CRC和1955个内部哈希复核；H-P04显式完整占用与N06有限MOCK台账开发自测36 PASS/2 BLOCKED/2 NOT_EXECUTED/0 FAIL。用户既有裁决已授权本阶段；不再列为待决定。客户采用选择与现场事实、复杂在制锚点/部分或多次领退、未知释放正向语义沿原Issue处理。FR006/007/022、完整CR仍NOT_READY；FR017历史Done、旧PASS与原修复轮次保留。QA在本SHA未执行；UAT03旧固定SHA另案。权威记录：https://github.com/huiliangtao666/APS/issues/3#issuecomment-6538834883。
+<!-- /aps-pm-issue3-hp04-n06-96a9dae-r1 -->
 
 **授权原话**：好。请把这些业务选择做成可配置参数，前台可以进行维护，而不是固化的逻辑。
 

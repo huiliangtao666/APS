@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "B2 9aa7f78 original12 controlled adapter selftest 24 PASS/1 PARTIAL/2 BLOCKED/1 NOT_EXECUTED; incomplete customer/config facts; full CR NOT_READY",
+      "implementation_status": "H-P04/N06 approved config/MOCK fixed 96a9dae3 Dev selftest PASS (36 PASS/2 BLOCKED/2 NOT_EXECUTED/0 FAIL); full CR NOT_READY",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -180,6 +180,10 @@
           "event_key": "dlv_b9af13e1-7a7f-496e-bc0a-860a422271e2:r1",
           "event": "B231 original12 9aa7f78 Dev-equivalent selftest 24 PASS/1 PARTIAL/2 BLOCKED/1 NOT_EXECUTED, 0 product FAIL; explicit simulation only; H-P04/N06 and customer/config choices remain; full CR/UAT NOT_READY",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6537928533"
+        },
+        {
+          "date": "2026-10-31",
+          "event": "PM PROCESSED dlv_7059d3b0-0d2a-4ff2-b792-46705063e713:r1; fixed 96a9dae3ff13d3254c091567fa57cad5d8f37279; 36 PASS/2 BLOCKED/2 NOT_EXECUTED/0 FAIL, scope-limited; https://github.com/huiliangtao666/APS/issues/3#issuecomment-6538834883"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
@@ -219,7 +223,7 @@
       ],
       "repair_runtime_blocker": "Original dlv_105360d7-1929-489d-85b3-d769a1e15db6 failed server_overloaded at 2026-10-29T03:14:20.564Z; recovery dlv_197f09db-af6a-4cbf-96cf-16ae535359c2; infrastructure retry does not increment defect repair round",
       "repair_original_delivery": "dlv_105360d7-1929-489d-85b3-d769a1e15db6",
-      "acceptance_status": "FR017当前适用实现责任独立PASS；FR007/022及完整CR和业务UAT未通过；原S06/S07与D01-D03有限结果保留",
+      "acceptance_status": "H-P04/N06 limited engineering PASS at 96a9dae3ff13d3254c091567fa57cad5d8f37279; whole FR/Issue/CR NOT_READY, QA on this SHA NOT_EXECUTED; customer/site facts and complex remaining semantics tracked in Issue3; prior fixed-SHA PASS and repair rounds preserved",
       "test_completed_at": "2026-10-29T11:42:40+08:00",
       "test_matrix_summary": {
         "PASS": 25,
