@@ -17,7 +17,7 @@ test('B12-03 exact capacity grid including unplanned-with-reasons and under-min 
  const d=r4Scenario('14');d.machines.find(m=>m['设备编号']==='HEAT01')['最小装载kg']='300';const r=run(d);assert.equal(r.plan.tasks.filter(t=>t.operation==='HEAT').length,0);assert.ok(r.plan.productionBatches.every(b=>b.load===250));save('under-min',r);
 });
 test('B12-04 common full heat window found later; under-min members combine without losing feasible work',()=>{
- const f=b4Fixture('13'),members=prepareCoolingMembers(f).members;for(const m of members)m.minimumInputKg='300';members[0].heatWindows=[[0,120],[180,600]];members[1].heatWindows=[[90,600]];const p=scheduleCoolingPairs({members,endMinute:600});assert.deepEqual(p.findings,[]);assert.equal(p.groups.length,1);assert.equal(p.groups[0].heatStart,180);assert.deepEqual(checkCooling(members,p),[]);save('common-window',{members,proposal:p});
+ const f=b4Fixture('13'),members=prepareCoolingMembers(f).members;for(const m of members){m.minimumInputKg='300';m.readyMinute=0;}members[0].heatWindows=[[0,120],[180,600]];members[1].heatWindows=[[90,600]];const p=scheduleCoolingPairs({members,endMinute:600});assert.deepEqual(p.findings,[]);assert.equal(p.groups.length,1);assert.equal(p.groups[0].heatStart,180);assert.deepEqual(checkCooling(members,p),[]);save('common-window',{members,proposal:p});
 });
 test('B12-05 proposal cooling exposes output load; independent of heat input and serialization',()=>{
  for(const id of ['12','13','14']){const f=b4Fixture(id),p=proposeProcessCooling(f);for(const t of p.tasks){assert.equal(t.exactLoadKg.numerator,t.loadBasis==='合格产出'?'240':'250');}assert.deepEqual(JSON.parse(JSON.stringify(p)),p);save('proposal-'+id,{fixture:f,proposal:p});}
