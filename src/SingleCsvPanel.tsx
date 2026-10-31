@@ -15,7 +15,7 @@ export function SingleCsvPanel({table,rows,revision,canWrite,busy,api,refresh,on
  async function inspect(file:File){
   const run=++generation.current;setPending(true);setPreview(null);setName(file.name);setMessage('读取并检查中…');
   try{
-   const raw=await file.text();if(run!==generation.current)return;setText(raw);
+   const raw=new TextDecoder('utf-8',{ignoreBOM:true}).decode(await file.arrayBuffer());if(run!==generation.current)return;setText(raw);
    const p=await api('/imports/preview',{table:table.key,files:[{name:file.name,text:raw}],revision});
    if(run===generation.current){setPreview(p);setMessage(p.valid?'检查通过，尚未导入。':'阻止导入，请修正文件后重新选择。');}
   }catch(e:any){if(run===generation.current){if(e.detail?.tables)setPreview({...e.detail,issues:e.detail.issues||[],valid:false});setMessage(errors[e.detail?.error]||e.message);}}

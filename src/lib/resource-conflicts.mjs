@@ -1,4 +1,6 @@
 import {poolCapacityAt,poolPolicyPoints} from './physical-pools.mjs';
+import {personnelWindowFindings} from './personnel-occupation.mjs';
+import {sourceRefs} from './problem-records.mjs';
 import {quantityMath as Q} from './material-allocation.mjs';
 // Fixed saved-result projection; never searches or invokes an allocator. Every
 // interval is an actual ledger window, including acquisition/return extensions.
@@ -6,7 +8,7 @@ export function resourceConflicts(plan,data,conditions=plan.conditions){
  if(!data||!Array.isArray(data.rules)||!conditions?.ruleEvaluationAt||conditions.mode==='minimal-r1')return [];
  const at=Date.parse(conditions.ruleEvaluationAt);if(!Number.isFinite(at))return [];
  const enabled=id=>data.rules.some(r=>r['规则编号']===id&&r['是否启用']==='是'&&(!conditions.enabledRuleIds||conditions.enabledRuleIds.includes(id))&&(!r['生效时间']||Date.parse(r['生效时间'])<=at));
- const tasks=plan.tasks||[],all=plan.resourceReservations||[],result=[];
+ const tasks=plan.tasks||[],all=plan.resourceReservations||[],result=personnelWindowFindings(plan,data,conditions);
  const grouped=new Map();
  for(const r of all){
   if(!['人员','工装','空间'].includes(r.type)||r.type==='工装'&&!enabled('MOLD')||r.type==='空间'&&!enabled('STORAGE'))continue;
@@ -34,7 +36,7 @@ export function resourceConflicts(plan,data,conditions=plan.conditions){
    if(!known||!declarations.length)continue;
    const interval={kind:'resource-capacity',type,resourceId,start,end,demand:Q.num(total),exactDemand:Q.exact(total),effectiveCapacity,baseCapacity,unit:units[0],taskIds};
    const evidence={ruleEvaluationAt:conditions.ruleEvaluationAt,ruleIds:type==='人员'?['人员显式依赖']: [type==='工装'?'MOLD':'STORAGE'],resourcePolicyVersion:conditions.resourcePolicyVersion??null,inputVersionId:plan.inputVersionId??null,snapshotHash:plan.snapshotHash??null,configuration:{table,row:config},declarations,ledger:active.map(x=>x.r),absences:absences.filter(e=>e.start<end&&e.end>start),basis:'按保存的实际占用窗口半开区间合计；同池跨技能共扣，工装含提前取得/后延归还；有效容量=配置容量在可用期内扣冻结缺勤（整组缺勤为0）；余额=有效容量−合计需求'};
-   result.push({code:'VERIFY / RESOURCE_POLICY',message:`${type} ${resourceId} 超容量 ${effectiveCapacity}；[${start},${end}) 合计需求 ${interval.demand} ${units[0]} / 有效容量 ${effectiveCapacity} ${units[0]}`,taskIds,interval,evidence});
+   result.push({relatedRecords:[...sourceRefs(table,[config],data[table]||[]),...declarations.flatMap(d=>sourceRefs(d.table,[d.row],data[d.table]||[]))],code:'VERIFY / RESOURCE_POLICY',message:`${type} ${resourceId} 超容量 ${effectiveCapacity}；[${start},${end}) 合计需求 ${interval.demand} ${units[0]} / 有效容量 ${effectiveCapacity} ${units[0]}`,taskIds,interval,evidence});
   }
  }
  for(const pool of data.personnelPools||[]){
@@ -46,7 +48,7 @@ export function resourceConflicts(plan,data,conditions=plan.conditions){
    const mutex=pool['允许共用']==='否'&&(pool['互斥粒度']==='人员组互斥'?new Set(active.map(r=>r.resourceId)).size>1:owners.size>1);
    if(!(demand>capacity)&&!mutex)continue;
    const taskIds=[...new Set(active.flatMap(r=>r.taskIds||[r.taskId]))].sort();
-   result.push({code:'VERIFY / PHYSICAL_POOL',message:`物理池 ${pool.poolId} [${start},${end}) 需求 ${demand} 人 / 窗口有效容量 ${capacity} 人 / 差额 ${Math.max(0,demand-capacity)}；互斥 ${pool['互斥粒度']||'旧核心无互斥'} ${mutex?'违反':'未违反'}`,taskIds,
+   result.push({relatedRecords:[...sourceRefs('personnelPools',[pool],data.personnelPools||[]),...sourceRefs('personnelGroups',members,data.personnelGroups||[])],code:'VERIFY / PHYSICAL_POOL',message:`物理池 ${pool.poolId} [${start},${end}) 需求 ${demand} 人 / 窗口有效容量 ${capacity} 人 / 差额 ${Math.max(0,demand-capacity)}；互斥 ${pool['互斥粒度']||'旧核心无互斥'} ${mutex?'违反':'未违反'}`,taskIds,
     interval:{kind:'resource-capacity',type:'物理人员池',resourceId:pool.poolId,start,end,demand,effectiveCapacity:capacity,baseCapacity:Number(pool['总人数']),unit:'人',taskIds},
     evidence:{configuration:{table:'personnelPools',row:pool},members,ledger:active,ruleEvaluationAt:conditions.ruleEvaluationAt,resourcePolicyVersion:conditions.resourcePolicyVersion,inputVersionId:plan.inputVersionId,snapshotHash:plan.snapshotHash,basis:'从冻结组映射重建同池成员，半开区间全组累计；组资格上限仍分别保留'}});
   }

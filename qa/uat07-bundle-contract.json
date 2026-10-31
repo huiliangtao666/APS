@@ -1,0 +1,34 @@
+{
+  "scenario": "UAT07",
+  "contract": "explicit replaceable software simulation; no customer defaults",
+  "timeOrigin": "2026-11-02T08:00:00+08:00",
+  "interval": "[start,end)",
+  "sourceFacts": {
+    "05.G01.capacity": 1,
+    "05.T01.capacity": 3,
+    "12.A.FILL.G01.quantity": 1,
+    "12.A.FILL.G01.lateMinutes": 10,
+    "12.B.FILL.G01.quantity": 1,
+    "12.B.FILL.G01.lateMinutes": 0,
+    "04.MIX02.downtime": [0, 15],
+    "11.MIX.durationMinutes": 30,
+    "11.FILL.durationMinutes": 30,
+    "expectedTasks": ["A-MIX", "A-FILL", "B-MIX", "B-FILL"]
+  },
+  "explicitSupplement": {
+    "17.splitAllowed": "否",
+    "17.demandType": "正式订单",
+    "17.orderStatus": "有效",
+    "17.completedQualifiedQuantity": "0",
+    "17.unit": "kg (explicit original header)",
+    "16.MOLD.runtimeContract": "CR-DEC02-03-v1 selected explicitly",
+    "toolApplicability": "MIX|FILL (replaceable runtime selection); per-task claims retain original12 identity",
+    "claimBasis": "whole task; per-claim quantity/early/late; unit套; windows0/0",
+    "mapping": "FR013-resource-map-v1 with original05 literal source snapshot and runtime snapshot; no identity guessing"
+  },
+  "enabledRules": ["MACHINE", "PRECEDENCE", "CALENDAR", "MOLD"],
+  "deferredRules": ["LABOR", "MATERIAL", "CAPACITY", "PROGRAM", "MAX_LAG", "STORAGE", "PROGRESS", "DELIVERY"],
+  "variants": ["no-delay", "G01.capacity2", "B.early5", "calendar100", "G01.available100", "B.demand2-capacity1", "horizon69"],
+  "oracle": "independent source CSV arithmetic; accepts any complete legal schedule; diagnostic copies are not Worker outputs",
+  "sourceBytes": "original19 never rewritten; source hash/provenance delivered separately"
+}

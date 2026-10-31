@@ -9,3 +9,29 @@ export function inventoryView(data,asOf=new Date().toISOString()){
   return {...row,'账面数量':Number(original['账面数量']),'累计模拟耗料':q.num(q.sub(q.q(original['账面数量']),q.q(row['账面数量']))),'扣耗后余额':row['账面数量'],'分配前可用数量':state?(state.eligible?q.num(q.sub(q.q(row['账面数量']),q.q(row['已占用数量']))):0):null,'分配守卫':state?(state.reasons.join('；')||'满足本规则质量、效期与预计可用条件'):policy?'MATERIAL 缺少可用状态列表；分配资格未检查，不推断默认状态':'MATERIAL 未启用或未生效；未检查分配','质量状态来源':'模拟数据维护','查询规则':'INVENTORY（沿用既有查询规则）','分配规则':policy?'MATERIAL（沿用既有独立状态配置）':'未采用'};
  });
 }
+
+// Follow only this run's explicit material identities. No parsing task IDs or
+// joining today's BOM/profile onto historical demand, including unplanned tasks.
+export function materialTaskSources(view,taskIds){
+ const input=view.snapshot.originalInput,demands=(view.plan.materialDemands||[]).filter(r=>taskIds.includes(r.taskId));
+ if(!demands.length)return [];
+ const materialIds=new Set(demands.map(r=>r.materialId)),productIds=new Set(demands.map(r=>r.productId)),orderIds=new Set(demands.map(r=>r.orderId));
+ const lotIds=new Set(demands.flatMap(r=>[...r.allocations.map(a=>a.lotId),...(r.excludedLots||[]).map(l=>l.lotId)]));
+ const supplyIds=new Set(demands.flatMap(r=>r.allocations.map(a=>a.supplyId).filter(Boolean)));
+ for(const use of input.supplyUses||[])if(demands.some(d=>d.orderId===use['订单编号']&&d.operation===use['工序编号']))supplyIds.add(use['供给编号']);
+ const tables={orders:(input.orders||[]).filter(r=>orderIds.has(r['订单编号'])),products:(input.products||[]).filter(r=>productIds.has(r['产品编号'])),materials:(input.materials||[]).filter(r=>materialIds.has(r['物料编号'])),
+  bom:(input.bom||[]).filter(r=>demands.some(d=>d.productId===r['产品编号']&&d.materialId===r['物料编号']&&d.operation===r['投料工序编号']&&d.version===r['版本编号']&&d.effective===r['生效日期'])),
+  inventory:(input.inventory||[]).filter(r=>lotIds.has(r['批次编号'])&&materialIds.has(r['物料编号'])),
+  supplies:(input.supplies||[]).filter(r=>supplyIds.has(r['供给编号'])),supplyDelays:(input.supplyDelays||[]).filter(r=>supplyIds.has(r['供给编号'])),
+  supplyUses:(input.supplyUses||[]).filter(r=>demands.some(d=>d.orderId===r['订单编号']&&d.operation===r['工序编号']&&supplyIds.has(r['供给编号']))),
+  rules:(input.rules||[]).filter(r=>['MATERIAL','INVENTORY'].includes(r['规则编号']))};
+ const refs=[];
+ for(const [table,rows] of Object.entries(tables))for(const row of rows){
+  const index=input[table].indexOf(row),csv=view.plan.inputCsvSources?.[table];
+  const same=csv?.canonicalRows?.[index]&&JSON.stringify(csv.canonicalRows[index])===JSON.stringify(row);
+  const line=same?(csv.records?.[index]?.line??csv.lines?.[index]):null;
+  const verified=Number.isSafeInteger(line)&&line>=2&&typeof csv?.sha256==='string'&&!!csv.sha256&&typeof csv?.file==='string';
+  refs.push({table,index,row,canonicalRow:index+2,physicalRow:verified?line:null,file:verified?csv.file:null,sourceSha256:verified?csv.sha256:null,inputVersionId:view.run.inputVersionId});
+ }
+ return refs;
+}
