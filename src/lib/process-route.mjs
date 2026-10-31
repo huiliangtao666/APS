@@ -103,7 +103,7 @@ export function processTaskSources(data,orderId,operations,minute){
  take('tools',t=>ids.has(t['工装编码']));
  const personnel=(data.personnelGroups||[]).filter(g=>deps.some(d=>d['资源类型']==='人员技能'&&(d['资源编号']===g['人员组编号']||(d['候选人员组']||'').split(';').includes(g['人员组编号']))));
  take('personnelGroups',g=>personnel.includes(g));take('personnelPools',p=>personnel.some(g=>g.poolId===p.poolId));
- const calendars=new Set((data.machines||[]).filter(m=>machineIds.has(m['设备编号'])).map(m=>inheritedCalendarId(data,m))); 
+ const calendars=new Set((data.machines||[]).filter(m=>machineIds.has(m['设备编号'])).map(m=>inheritedCalendarId(data,m)));
  take('factoryLines',l=>l['产线编号']===order?.['产线编号']);take('calendars',c=>calendars.has(c['日历编号']));
  take('downtime',d=>machineIds.has(d['设备编号']));take('resourceStops',d=>ids.has(d['资源编号']));
  take('rules',()=>true);
