@@ -1,6 +1,6 @@
 # 当前需求跟踪表
 
-快照：2026-10-31T09:21:08+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
+快照：2026-10-31T09:40:02+08:00。当前要求=基线+批准生效CR；状态是原卡实施状态，不等于完整版本验收。
 
 | 编号 | 名称 | 要求版本 | 生效CR | 原卡状态 | 当前环节 | 验收结论 | 原卡 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -11,7 +11,7 @@
 | FR-005 | 机器能力及适用范围 | v0.3+CR-DEC04-05-06-20261029 | CR-DEC04-05-06-20261029 | Done | CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgiI) |
 | FR-006 | 模具及工装配置 | v0.3+CR-DEC02-03-20261029 | CR-DEC02-03-20261029 | In progress | CSV9缺陷首轮修复 ce8a038a08fee4a5f9b4c4afc74da7ada683db86 Test2 C01-C09 PASS、影响回归31/31 PASS；特定缺陷关闭。FR006其他适用断言与UAT依赖待归并，整卡NOT_READY<br>2026-10-31候选a786ee30两修复组合自测PASS；R2.1未纳入；完整派工PARTIAL；Dev续派dlv_519f6044；QA就绪核查在途 | FR006-CSV9-EXPLICIT-AVAIL-01 首轮Test PASS并关闭该缺陷；Test2 C01-C09 PASS、C10 31/31 PASS。旧7e4d4d0的27 PASS/1 FAIL保留原SHA历史，其他FR006断言待归并；整卡NOT_READY，无第三轮。<br>候选a786ee30仅FR006/FR013限定组合Dev自测PASS；整卡NOT_READY；UAT WAITING_DEPENDENCIES；QA未签收；本轮修复+0 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgjI) |
 | FR-007 | 人员数量与技能配置 | v0.3+CR-DEC02-03-20261029 | CR-DEC02-03-20261029 | In progress | P10固定42a35d07：S 10 PASS、H 9 PASS/1 PARTIAL；Test1 H-P08/10已核，Test2 H-P04待用户裁决 | 固定42a35d07：S-P01..10 PASS；H-P01/02/03/05/06/07/08/09/10 PASS，H-P04 PARTIAL；0新产品FAIL，整卡NOT_READY | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgjs) |
-| FR-008 | 工作日历与停机配置 | v0.3+CR-R21-UAT02-20261031 | CR-R21-UAT02-20261031 | Done | CR-R21-UAT02-20261031：待 APS-Test 开发及任务级自测；QA UAT 尚未执行 | 基线原范围历史记录保留；本CR专项验收未完成；固定SHA及QA UAT待证据 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgk0) |
+| FR-008 | 工作日历与停机配置 | v0.3+CR-R21-UAT02-20261031 | CR-R21-UAT02-20261031 | Done | CR-R21-UAT02-20261031：APS-Test fixed d6fd003 R2.1-only config/isolated host 23 PASS/3 PARTIAL/2 BLOCKED/2 NOT_EXECUTED; D01/D02 shared production wiring and QA endpoint pending; full CR NOT_READY | 基线原范围历史记录保留；部分实现和自测；D01/D02生产接线与QA UAT未完成 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgk0) |
 | FR-009 | 订单与需求数据 | v0.3 |  | Done | 原卡已完成；按历史验收范围 | 原卡Done，保留原通过记录；不推定完整业务UAT通过 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHglg) |
 | FR-010 | 库存批次与模拟质量状态 | v0.3+CR-DEC04-05-06-20261029 | CR-DEC04-05-06-20261029 | In review | Test1 e0be浏览器B01-B20 20 PASS；B21真实平台签名身份NOT_EXECUTED；原任务dlv_96b9043a，结果dlv_8271d929已处理；整卡NOT_READY，UAT WAITING_DEPENDENCIES | 固定e0be9b6 Test1浏览器B01-B20 20 PASS/0 FAIL，B21 NOT_EXECUTED；旧Test2 3 PASS留原SHA；b718结果留原SHA；整卡NOT_READY，无新增产品FAIL/修复轮次，UAT WAITING_DEPENDENCIES | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgm8) |
 | FR-011 | 预计到料与可用时间 | v0.3+CR-DEC04-05-06-20261029 | CR-DEC04-05-06-20261029 | Done | CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始 | [原卡](https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHgn8) |

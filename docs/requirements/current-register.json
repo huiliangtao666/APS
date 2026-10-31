@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "snapshot_at": "2026-10-31T09:21:08+08:00",
+  "snapshot_at": "2026-10-31T09:40:02+08:00",
   "authority": "Baseline/CR条文以受控JSON为准，实施状态以GitHub Project原卡为准；本表为派生快照",
   "baseline_id": "APS-BL-001",
   "requirements": [
@@ -37,7 +37,7 @@
       "code_reference_note": "原卡引用/Dev交付SHA，非本表新增的验收结论",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -81,7 +81,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -126,7 +126,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -172,7 +172,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -217,7 +217,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -259,7 +259,7 @@
         "https://github.com/huiliangtao666/APS/issues/16"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -301,7 +301,7 @@
         "https://github.com/huiliangtao666/APS/issues/16"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "review_record": {
         "event_key": "dlv_8286fb53-0837-49b0-9113-14ee2858ef60:r1",
@@ -342,18 +342,18 @@
       "pending_changes": [],
       "current_text": "范围：P0；关联流程：BP-01/02；页面：PG-01；开始提供：R2.1；完整提供：R4。\n前置功能：FR-005。\n• 配置工厂工作日历、设备停机及人员/工装例外时段。资源默认继承工厂工作窗口，例外停机进一步减少可用时间；工厂不开工时不能仅因设备为空而排任务。\n• 工序能否跨班运行、能否中断、开始结束是否需要人员，均由配置决定。初期不支持中断加工时，明确提示不能拆开执行。\n\n[CR-R21-UAT02-20261031 批准增量]\n当前阶段未使用设备允许保留原始导入，但须保留未使用标记、来源和查询可追溯，不因未引用而拒绝整批。A、B两组的允许拆分、需求类型、状态分别提供可维护配置及来源/版本，可用部分模拟数据预填并明显标记模拟，不将模拟值冒充客户事实或业务验收真值。UAT全部完成前不要求正式Portal登录或成员权限账号控制；可用隔离测试身份/可访问环境运行场景，账号权限不再阻断UAT02入口。",
       "project_status": "Done",
-      "current_phase": "CR-R21-UAT02-20261031：待 APS-Test 开发及任务级自测；QA UAT 尚未执行",
-      "blocker": "CR-R21-UAT02-20261031：用户裁决已登记；APS-Test开发自测EXECUTING；完整R2.1/UAT02尚未签收",
-      "acceptance_result": "基线原范围历史记录保留；本CR专项验收未完成；固定SHA及QA UAT待证据",
+      "current_phase": "CR-R21-UAT02-20261031：APS-Test fixed d6fd003 R2.1-only config/isolated host 23 PASS/3 PARTIAL/2 BLOCKED/2 NOT_EXECUTED; D01/D02 shared production wiring and QA endpoint pending; full CR NOT_READY",
+      "blocker": "CR-R21-UAT02-20261031：APS-Test任务级PARTIAL；整卡/完整UAT02 NOT_READY；0产品FAIL/修复轮次+0",
+      "acceptance_result": "基线原范围历史记录保留；部分实现和自测；D01/D02生产接线与QA UAT未完成",
       "accepted_requirement_version": "未统一登记版本签收；原卡通过范围及历史证据保留",
-      "code_reference": "4e21ce744f4de70a2ae7d2351e9d1dcb6557aae2",
+      "code_reference": "d6fd0034a4a50441d3e6384959f998873fcb955c",
       "code_reference_note": "原卡引用/Dev交付SHA，非本表新增的验收结论",
       "issues": [
         "https://github.com/huiliangtao666/APS/issues/4",
         "https://github.com/huiliangtao666/APS/issues/6"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -391,7 +391,7 @@
       "code_reference_note": "原卡引用/Dev交付SHA，非本表新增的验收结论",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -435,7 +435,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "review_record": {
         "event_key": "dlv_b68071ac-65ce-4b2c-bcc8-aac82a99a1bb:r1",
@@ -490,7 +490,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -527,7 +527,7 @@
       "code_reference_note": "原卡已验收版本；CR整体状态另见受控变更记录",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "event_key": "dlv_aaa72c93-8beb-41aa-929c-0f1e265092d7:r1",
@@ -581,7 +581,7 @@
         "https://github.com/huiliangtao666/APS/issues/13"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "review_record": {
         "event_key": "dlv_355a9993-27c9-4ec1-aa48-8128aca850b2:r1",
@@ -630,7 +630,7 @@
       "code_reference_note": "原卡已验收版本；CR整体状态另见受控变更记录",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "event_key": "dlv_e2ac5f26-6f61-4e8c-badf-6fefd374af7c:r1",
@@ -690,7 +690,7 @@
       "code_reference_note": "原卡已验收版本；CR整体状态另见受控变更记录",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "event_key": "dlv_e2ac5f26-6f61-4e8c-badf-6fefd374af7c:r1",
@@ -756,7 +756,7 @@
         "https://github.com/huiliangtao666/APS/issues/13"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "review_record": {
         "event_key": "dlv_355a9993-27c9-4ec1-aa48-8128aca850b2:r1",
@@ -813,7 +813,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "event_key": "dlv_ef0c6e69-7c93-455b-bc96-98e52dee22e2:r1",
@@ -860,7 +860,7 @@
       "code_reference_note": "原卡已验收版本；CR整体状态另见受控变更记录",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "requirement_version": "v0.3",
@@ -908,7 +908,7 @@
       "code_reference_note": "原卡已验收版本；CR整体状态另见受控变更记录",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "requirement_version": "v0.3",
@@ -962,7 +962,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -1006,7 +1006,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "review_record": {
         "event_key": "dlv_a00720ee-290e-488a-92c8-132de42f7283:r1",
@@ -1063,7 +1063,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "review_record": {
         "event_key": "dlv_2f41b279-f30b-4570-9858-2fb3a92fe240:c1",
@@ -1117,7 +1117,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "review_record": {
         "event_key": "dlv_2133edc3-3635-4e0e-984a-65ed8b44b633:r1",
@@ -1167,7 +1167,7 @@
       "code_reference_note": "原卡已验收版本；CR整体状态另见受控变更记录",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "requirement_version": "v0.3",
@@ -1215,7 +1215,7 @@
       "code_reference_note": "原卡引用/Dev交付SHA，非本表新增的验收结论",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -1253,7 +1253,7 @@
       "code_reference_note": "原卡引用/Dev交付SHA，非本表新增的验收结论",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -1291,7 +1291,7 @@
         "https://github.com/huiliangtao666/APS/issues/13"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "requirement_version": "v0.3",
@@ -1339,7 +1339,7 @@
       "code_reference_note": "原卡已验收版本；CR整体状态另见受控变更记录",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "requirement_version": "v0.3",
@@ -1388,7 +1388,7 @@
       "code_reference_note": "原卡已验收版本；CR整体状态另见受控变更记录",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "event_key": "dlv_7eece95f-fb3f-4bd1-a8be-b32ea455d49b:r1",
@@ -1438,7 +1438,7 @@
         "https://github.com/huiliangtao666/APS/issues/13"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "requirement_version": "v0.3",
@@ -1488,7 +1488,7 @@
       "code_reference_note": "原卡已验收版本；CR整体状态另见受控变更记录",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "event_key": "dlv_0038ba5b-7098-4930-b115-b8a2ad1816c9:r1",
@@ -1537,7 +1537,7 @@
         "https://github.com/huiliangtao666/APS/issues/16"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "requirement_version": "v0.3",
@@ -1585,7 +1585,7 @@
       "code_reference_note": "原卡已验收版本；CR整体状态另见受控变更记录",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "requirement_version": "v0.3",
@@ -1633,7 +1633,7 @@
         "https://github.com/huiliangtao666/APS/issues/13"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "event_key": "dlv_0f7e77e1-2dde-492c-9dd8-b6e35f5a742d:r1",
@@ -1684,7 +1684,7 @@
         "https://github.com/huiliangtao666/APS/issues/13"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "requirement_version": "v0.3",
@@ -1730,7 +1730,7 @@
         "https://github.com/huiliangtao666/APS/issues/4"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "requirement_version": "v0.3",
@@ -1775,7 +1775,7 @@
       "code_reference_note": "原卡已验收版本；CR整体状态另见受控变更记录",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "acceptance_record": {
         "requirement_version": "v0.3",
@@ -1829,7 +1829,7 @@
         "https://github.com/huiliangtao666/APS/issues/13"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA",
       "review_record": {
         "event_key": "dlv_c76bb5e3-c641-4578-a7cc-45a7480c531d:c1",
@@ -1873,7 +1873,7 @@
       "code_reference_note": "原卡引用/Dev交付SHA，非本表新增的验收结论",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -1909,7 +1909,7 @@
       "code_reference_note": "原卡引用/Dev交付SHA，非本表新增的验收结论",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -1944,7 +1944,7 @@
       "code_reference_note": "原卡引用/Dev交付SHA，非本表新增的验收结论",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -1979,7 +1979,7 @@
       "code_reference_note": "原卡引用/Dev交付SHA，非本表新增的验收结论",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2014,7 +2014,7 @@
       "code_reference_note": "原卡引用/Dev交付SHA，非本表新增的验收结论",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2047,7 +2047,7 @@
       "code_reference_note": "原卡引用/Dev交付SHA，非本表新增的验收结论",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2087,7 +2087,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2120,7 +2120,7 @@
       "code_reference_note": "原卡引用/Dev交付SHA，非本表新增的验收结论",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2160,7 +2160,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2193,7 +2193,7 @@
       "code_reference_note": "原卡引用/Dev交付SHA，非本表新增的验收结论",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2232,7 +2232,7 @@
         "https://github.com/huiliangtao666/APS/issues/16"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2271,7 +2271,7 @@
         "https://github.com/huiliangtao666/APS/issues/16"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2311,7 +2311,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2351,7 +2351,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2391,7 +2391,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2431,7 +2431,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2471,7 +2471,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2511,7 +2511,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2551,7 +2551,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2584,7 +2584,7 @@
       "code_reference_note": "原卡引用/Dev交付SHA，非本表新增的验收结论",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2617,7 +2617,7 @@
       "code_reference_note": "原卡引用/Dev交付SHA，非本表新增的验收结论",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2650,7 +2650,7 @@
       "code_reference_note": "原卡引用/Dev交付SHA，非本表新增的验收结论",
       "issues": [],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     },
     {
@@ -2690,7 +2690,7 @@
         "https://github.com/huiliangtao666/APS/issues/25"
       ],
       "owner": "APS-PM维护与调度；APS-Dev开发及任务级自测；APS-Test同担开发与任务级自测；APS-Test2暂停新任务；APS-QA主责整体/UAT；用户提供业务事实；UAT业务验收：QA",
-      "snapshot_at": "2026-10-31T09:21:08+08:00",
+      "snapshot_at": "2026-10-31T09:40:02+08:00",
       "uat_owner": "QA"
     }
   ]
