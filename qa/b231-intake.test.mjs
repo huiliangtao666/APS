@@ -66,3 +66,9 @@ test('B231 explicit rule binding rejects unknown contract, blank authority and m
   const before=f.bytes(),r=await f.call('/imports/preview',{revision:0,files:batch.files,repairs:batch.repairs,resourceRuleBinding:binding});assert.equal(r.body.valid,false);assert.ok(!r.body.id);assert.equal(f.bytes(),before);assert.ok(r.body.issues.some(i=>i.field==='参数JSON'));results.push(r);
  }save('rule-binding-negative',results);
 });
+
+
+test('B231 original equipment facts alone supply new order C without a supplemental runtime dependency table',async t=>{
+ const f=await isolated(t);await f.ok('/state');const b=configuredOriginalBatch('06');b.files=b.files.filter(file=>file.name!=='32_运行工序资源依赖.csv');
+ const p=await f.ok('/imports/preview',{revision:0,files:b.files,repairs:b.repairs,resourceRuleBinding:b.resourceRuleBinding});assert.equal(p.valid,true);await f.ok('/imports/commit',{previewId:p.id});const result=await b2Worker(f);assert.equal(result.plan.tasks.length,6);assert.ok(result.input.executionData.dependencies.some(r=>r['订单编号']==='C'&&r['资源类型']==='设备'));assert.equal(verifyResourcePolicies(result.plan,result.input.executionData,result.input.conditions).status,'pass');save('equipment-projection-C',{batch:b,preview:p,result});
+});

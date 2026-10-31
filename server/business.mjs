@@ -12,6 +12,7 @@ import {attachProblemRecords,bindProblemSource} from '../src/lib/problem-records
 import {inspectSingleCsv} from './csv-single.mjs';
 import {migratePolicies} from '../src/lib/resource-policies.mjs';
 import {inspectCsvBatch,batchKeys} from './csv-batch.mjs';
+import {adaptOriginalDependencies} from '../src/lib/original-dependencies.mjs';
 import {taskPosition,movableTask,positionGuard,positionToken,freezePositions,evaluatePosition} from './trial-positions.mjs';
 import {scopedReport,reportCsv} from './scoped-report.mjs';
 import {resourceLoad,loadCsv} from '../src/lib/resource-load.mjs';
@@ -128,7 +129,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(!trialId){const staged=stageEvents(target.data,proposed,Object.keys(tables));if(staged.issues.length)return res.status(409).json({error:'event_reconciliation_required',issues:staged.issues});proposed=staged.data;for(const def of defs.filter(d=>JSON.stringify(proposed[d.key])!==JSON.stringify(target.data[d.key]))){const rows=proposed[def.key]||[];if(rows.some(r=>!r||typeof r!=='object'||Array.isArray(r)||Object.keys(r).some(k=>!def.fields.includes(k))||Object.values(r).some(v=>typeof v!=='string')))return res.status(400).json({error:'invalid_event_effect'});proposed[def.key]=rows.map(r=>Object.fromEntries(def.fields.map(f=>[f,r[f]??''])));}}
     const transition=(trialId?executionTrialIssues(s.data,proposed):executionTransition(target.data,proposed));if(transition.length)return res.status(409).json({error:'execution_reconciliation_required',...transitionEvidence(transition,trialId?s.data:target.data,proposed,trialId?s.revision:target.revision)});
     const newlyEnabled=(proposed.rules||[]).some(r=>r['是否启用']==='是'&&!(target.data.rules||[]).some(old=>old['规则编号']===r['规则编号']&&old['是否启用']==='是'));
-    const issues=[...resourceMappingTransition(target.data,proposed,s.records),...poolTransitionIssues(target.data,proposed,s.records),...validateInputs(defs,proposed),...(newlyEnabled?assessRules(proposed,new Date().toISOString(),true,proposed.inputStage||'supported').issues:[])];if(issues.length){
+    const issues=[...resourceMappingTransition(target.data,proposed,s.records),...poolTransitionIssues(target.data,proposed,s.records),...validateInputs(defs,proposed),...(newlyEnabled?assessRules(adaptOriginalDependencies(proposed).data,new Date().toISOString(),true,proposed.inputStage||'supported').issues:[])];if(issues.length){
       // The rejected proposal is an ephemeral check input, never a saved input version.
       const source={domain:'candidate:'+(trialId?'trial:'+trialId:'current'),inputVersionId:inputHash(proposed),revision:target.revision,checkedAt:new Date().toISOString(),scope:'complete proposed input validation'};
       const csvSources=checkedCsvSources(proposed,target.csvSources,req.csvSources);
