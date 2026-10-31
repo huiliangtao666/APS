@@ -8,7 +8,7 @@ const exact=v=>{try{return v?.numerator!==undefined?Q.fromExact(v):Q.q(v);}catch
 const sum=values=>{const qs=values.map(exact);return qs.some(q=>q===null)?null:qs.reduce(Q.add,Q.zero);};
 const amount=q=>q===null?null:{value:Q.num(q),exact:Q.exact(q)};
 const refs=(table,rows)=>rows.map(row=>({table,row}));
-export const loadLimits=['仅保存方案的计划负荷，不是实时剩余可用量；未分配不代表可排或资源空闲事实','DEC02 工装阶段/动态归还、DEC03 人员阶段/技能替代、最大等待及完整联合规则仍待确认；仅解释显式保存占用','候选分配不计入已提交消耗；不跨工序累加订单完成；不把预计到料当真实到货','确认快照、保存的执行事实与当前事实分别保留；不以当前输入补算历史'];
+export const loadLimits=['仅保存方案的计划负荷，不是实时剩余可用量；未分配不代表可排或资源空闲事实','已支持按方案冻结配置的 DEC02 工装整工序/明确窗口占用及窗口外释放、DEC03 人员整段/阶段参与、定向技能替代与唯一物理池，以及 H-P04 提前/后延占用和两种检查顺序；实际采用以本方案保存的启用规则、声明、参数和占用账为准。N06 取得/归还/释放账为带来源版本的明确模拟，不是现场实账；最大等待仅在本方案保存了工艺路线检查合同时按冻结配置检查，未保存该合同不表示已检查；下游动态释放未实现，不推定未配置或未启用的联合策略已检查','候选分配不计入已提交消耗；不跨工序累加订单完成；不把预计到料当真实到货','确认快照、保存的执行事实与当前事实分别保留；不以当前输入补算历史'];
 function union(intervals){let end=-Infinity,total=0;for(const [a,b] of intervals.sort((x,y)=>x[0]-y[0])){total+=Math.max(0,b-Math.max(a,end));end=Math.max(end,b);}return total;}
 // Pure projection. Reservations are aggregated once per physical reservation, never per task link.
 export function resourceLoad(plan,{start=0,end=120}={}){
