@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "P10 fixed42a35d07 Test1 S-P01..10 PASS; Test2 H first six PASS, R2 H-P06 PASS/H-P04 PARTIAL. H-P08/10 Test1 verdict awaits PM review; H-P04 personnel early/late formula awaits user decision. N06 and other scope open; full CR NOT_READY.",
+      "implementation_status": "B2 integrated 7baefa4 normalized resource slices selftest PASS; raw original19 adapter B231 continuation executing; H-P04/N06 exact blockers; full CR NOT_READY",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "P10 fixed42a35d07 independent S-P01..10 PASS; H-P01/02/03/05/06/07/08/09/10 PASS, H-P04 PARTIAL pending personnel outside-task early/late rule; 0 new product FAIL, +0 repair. Full FR007/022/CR and UAT NOT_READY.",
+      "acceptance_result": "B2 limited task-level 30 PASS/1 PARTIAL/2 BLOCKED/1 NOT_EXECUTED; QA UAT not executed; no product FAIL/repair increment",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -168,6 +168,12 @@
           "event_key": "issue3:p10:h-p08-p10:test1:42a35d07ce29ec073d43bb8adb6083328a9d16dc:r2",
           "event": "Test1 fixed42a35d07 H-P08/H-P10 independent PASS; H-P04 remains PARTIAL pending personnel outside-task early/late rule; 0 product FAIL, +0 repair; full CR NOT_READY",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6518756849"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_8dd441d1-12f3-4231-80bb-58e24a88be08:r1",
+          "event": "B2 integrated 7baefa4 Dev-equivalent selftest 30 PASS/1 PARTIAL/2 BLOCKED/1 NOT_EXECUTED, 0 product FAIL; B231 continuation dispatched; full CR/UAT NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6537872818"
         }
       ],
       "test_report": "APS-Test/DEC02-03-0d2de88-INDEPENDENT-REPORT.txt",
