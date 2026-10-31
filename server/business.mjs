@@ -486,7 +486,8 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   function makePlan(result,run){
     const original=read().inputVersions?.[run.inputVersionId]?.data;
     const source={domain:run.trialId?'trial:'+run.trialId:'current',inputVersionId:run.inputVersionId,executionVersionId:inputHash(run.executionData),revision:run.revision,checkedAt:run.createdAt,scope:run.conditions};
-    return {...result,findings:result.findings.map(f=>bindProblemSource(f,source,original,run.sourceMap||{},read().inputVersions?.[run.inputVersionId]?.csvSources)),...(run.lockSnapshot?{lockSnapshot:structuredClone(run.lockSnapshot)}:{}),trialId:run.trialId,sourcePlanId:run.sourcePlanId,id:randomUUID(),status:'draft',revision:run.revision,inputVersionId:run.inputVersionId,runId:run.id,conditions:run.conditions,snapshotHash:run.snapshotHash};}
+    const bind=f=>bindProblemSource(f,source,original,run.sourceMap||{},read().inputVersions?.[run.inputVersionId]?.csvSources);
+    return {...result,tasks:result.tasks.map(t=>Array.isArray(t.processSources)?{...t,processSources:bind({sourceRead:'frozen-calendar-v1',relatedRecords:t.processSources}).relatedRecords}:t),findings:result.findings.map(bind),...(run.lockSnapshot?{lockSnapshot:structuredClone(run.lockSnapshot)}:{}),trialId:run.trialId,sourcePlanId:run.sourcePlanId,id:randomUUID(),status:'draft',revision:run.revision,inputVersionId:run.inputVersionId,runId:run.id,conditions:run.conditions,snapshotHash:run.snapshotHash};}
   function finish(id,req,status,details={}){
     const s=read(),run=s.runs?.find(r=>r.id===id);if(!run||terminal.has(run.status)||stopping.has(id))return;
     Object.assign(run,details,{status,finishedAt:new Date().toISOString(),phase:status==='completed'?'计算完成':status==='partial'?'计算完成，有未排或问题':status});

@@ -2,6 +2,7 @@ import {originalProtection,originalSchedulingReservations} from '../src/lib/exec
 import {scheduleProcessRoute} from '../src/lib/process-route-planner.mjs';
 import {processRequested} from '../src/lib/process-route.mjs';
 import {verifyProcessRoute} from '../src/lib/verify-process-route.mjs';
+import {processRouteFindings} from '../src/lib/process-route-findings.mjs';
 import {originalStageDefs,unmappedStageSources} from '../src/lib/original-stage-data.mjs';
 import {originalDependencyDef} from '../src/lib/original-dependencies.mjs';
 import {originalBomDef} from '../src/lib/original-bom.mjs';
@@ -218,7 +219,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
       const frozen={...conditions,ruleEvaluationAt:calculatedAt,enabledRuleIds:ruleSnapshot.settings.filter(r=>r.active).map(r=>r.id),jointConditionsContract:'FR022-joint-v1',workingWindowsContract:'P06-windows-v1'};
       const plan:any={id:uid(),name:'加工冷却完整路线',createdAt:calculatedAt,inputVersion:`v${inputVersion}`,...route,rules:frozen.enabledRuleIds,ruleSnapshot,resourcePolicyContract:'CR-DEC02-03-v1',jointConditionsContract:frozen.jointConditionsContract,workingWindowsContract:frozen.workingWindowsContract,supplyInput,supplyConditions:buildSupplyConditions(route.tasks,resolvedSupplies,route.materialDemands.filter((r:any)=>r.committed).flatMap((r:any)=>r.allocations.filter((a:any)=>a.conditional).map((a:any,i:number)=>({'引用编号':`FR020-${r.taskId}-${r.materialId}-${i}`,'订单编号':r.orderId,'工序编号':r.operation,'供给编号':a.supplyId,'使用数量':String(a.quantity)}))))};
       plan.processRouteVerification=verifyProcessRoute(plan,sourceData,frozen);
-      if(plan.processRouteVerification.status==='problem')plan.findings.push(...plan.processRouteVerification.problems.map((message:string)=>({code:'VERIFY / PROCESS_ROUTE',message,taskIds:[]})));
+      if(plan.processRouteVerification.status==='problem')plan.findings.push(...processRouteFindings(plan.processRouteVerification,plan,sourceData));
       plan.findings=plan.findings.map((f:any)=>attachProblemRecords(f,sourceData));
       result=plan;
      }catch(e){setActivePlan({id:uid(),name:'加工冷却配置受阻',createdAt:calculatedAt,tasks:[],findings:[{code:'BLOCKED / PROCESS_ROUTE',message:e instanceof Error?e.message:String(e),taskIds:[]}],rules:enabledRules,inputVersion:`v${inputVersion}`});}

@@ -53,6 +53,14 @@ export function resourceTaskSources(view,taskIds){
   const csvMatches=source?.canonicalRows?.[index]&&JSON.stringify(source.canonicalRows[index])===JSON.stringify(row);
   refs.push({table,index,physicalRow:csvMatches?(source.records?.[index]?.line??source.lines?.[index]??null):null,canonicalRow:index+2,file:source?.file??null,sourceSha256:csvMatches?(source.sha256??null):null,inputVersionId:view.run.inputVersionId,row});
  }
+ // Process producers bind their occurrences through makePlan/bindProblemSource.
+ // Accept only this run's verified original record; never resolve against edits.
+ for(const ref of tasks.flatMap(t=>t.processSources||[])){
+  const index=ref.origin?.occurrence?.index,table=ref.table;
+  if(ref.origin?.inputVersionId!==view.run.inputVersionId||!Number.isInteger(index)||JSON.stringify(input[table]?.[index])!==JSON.stringify(ref.row))continue;
+  if(refs.some(r=>r.table===table&&r.index===index))continue;
+  refs.push({table,index,physicalRow:ref.csv?.physicalRow??null,canonicalRow:index+2,file:ref.csv?.file??null,sourceSha256:ref.csv?.sha256??null,inputVersionId:view.run.inputVersionId,row:ref.row});
+ }
  return refs;
 }
 
