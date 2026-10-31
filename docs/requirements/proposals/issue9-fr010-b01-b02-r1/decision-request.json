@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "document_kind": "DESIGN_DECISION_REQUEST_NOT_MASTER_REGISTER",
+  "event_key": "dlv_b68071ac-65ce-4b2c-bcc8-aac82a99a1bb:r1",
+  "dispatch_event_key": "issue9:fr010:quality-reservation-contract:design:v0.3:b7189157:r1",
+  "delivery_id": "dlv_b68071ac-65ce-4b2c-bcc8-aac82a99a1bb",
+  "recipient": "APS-PM",
+  "governance_source_sha": "25cd480716f6da8073cb3afc98195a87e1a4c0ec",
+  "referenced_product_sha": "b7189157106ecc18cc87fd1821fd19c6d55ffed2",
+  "product_change_sha": null,
+  "design_git_sha": null,
+  "design_fingerprint": "SHA256SUMS.txt in delivery archive; not a Git SHA",
+  "B01": {
+    "parent_cr": "CR-DEC04-05-06-20261029",
+    "design_authorized": true,
+    "product_default_approved": false,
+    "implementation_authorized": false,
+    "rules": "B01-DEC05-DECISION-REQUEST.md"
+  },
+  "B02": {
+    "suggested_cr_id": "CR-FR010020-RESERVATION-20261029",
+    "formal_registration_status": "NOT_REGISTERED_BY_PM",
+    "approval_status": "PROPOSED",
+    "effective": false,
+    "implementation_authorized": false,
+    "rules": "B02-GLOBAL-RESERVATION-CR-PROPOSAL.md"
+  },
+  "decisions": [
+    {
+      "id": "QD01",
+      "topic": "无隐式默认或显式批准初始模板",
+      "decision_status": "PENDING_BUSINESS_DECISION",
+      "owner_role": "计划主管/业务负责人；质量状态数据负责人供事实",
+      "named_owner": null,
+      "recovery_condition": "状态编码/别名/分类/适用范围/版本及批准依据明确；实施另授权"
+    },
+    {
+      "id": "QD02",
+      "topic": "版本生效、覆盖与历史",
+      "decision_status": "PENDING_BUSINESS_DECISION",
+      "owner_role": "计划主管",
+      "named_owner": null,
+      "recovery_condition": "单版本或覆盖顺序、时区/精度/有效区间、迁移/回滚规则决定"
+    },
+    {
+      "id": "QD03",
+      "topic": "未知及冲突的操作影响",
+      "decision_status": "PENDING_BUSINESS_DECISION",
+      "owner_role": "计划主管",
+      "named_owner": null,
+      "recovery_condition": "不默认为可用；选择整次阻断或受影响来源排除并保留确认守卫"
+    },
+    {
+      "id": "QD04",
+      "topic": "物理批/子批及部分可用",
+      "decision_status": "PENDING_BUSINESS_DECISION",
+      "owner_role": "计划主管；库存/质量数据负责人",
+      "named_owner": null,
+      "recovery_condition": "提供父子身份、数量、位置、质量来源及拆分粒度；父子不双计"
+    },
+    {
+      "id": "RD01",
+      "topic": "库存/占用/执行/WIP账权与口径",
+      "decision_status": "PENDING_BUSINESS_DECISION",
+      "owner_role": "业务负责人；库存/生产进度负责人",
+      "named_owner": null,
+      "recovery_condition": "明确模拟/真实边界、来源域、净/毛快照时点和占用包含关系"
+    },
+    {
+      "id": "RD02",
+      "topic": "确认/采用及可并存承诺范围",
+      "decision_status": "PENDING_BUSINESS_DECISION",
+      "owner_role": "业务负责人/计划主管",
+      "named_owner": null,
+      "recovery_condition": "生效/替换/部分确认及同需求唯一归属决定"
+    },
+    {
+      "id": "RD03",
+      "topic": "投料/释放/冲销/退料",
+      "decision_status": "PENDING_BUSINESS_DECISION",
+      "owner_role": "计划主管；库存/生产进度负责人",
+      "named_owner": null,
+      "recovery_condition": "事实唯一性、累计/增量、修订、退料及报废来源决定"
+    },
+    {
+      "id": "RD04",
+      "topic": "物理投料与WIP关系",
+      "decision_status": "PENDING_BUSINESS_DECISION",
+      "owner_role": "库存/生产进度/BOM数据负责人；计划主管",
+      "named_owner": null,
+      "recovery_condition": "批/子批/位置/单位/投料节点及原料与WIP转换依据齐备"
+    },
+    {
+      "id": "RD05",
+      "topic": "并发与存量迁移",
+      "decision_status": "PENDING_BUSINESS_DECISION",
+      "owner_role": "计划主管；库存负责人",
+      "named_owner": null,
+      "recovery_condition": "完整成功或拒绝、超时选择、旧方案/占用/耗用去重与对账决定"
+    }
+  ],
+  "product_test_execution": "NOT_EXECUTED_BY_DESIGN",
+  "uat_execution": "NOT_EXECUTED_BY_DESIGN",
+  "handoff": "This delivery result hook only; no duplicate manual agent send",
+  "next_role": "APS-PM",
+  "existing_test_event_key": "dlv_4cd15f89-56f8-4f1d-b5f9-6c056d2be208:r1"
+}

@@ -1,0 +1,43 @@
+{
+  "event_key": "design:scheduling-config-cr:20261031:r1",
+  "kind": "DESIGN_ASSET_VALIDATION_ONLY",
+  "files": {
+    "README.md": {
+      "bytes": 11423,
+      "sha256": "d759b8a9f5c5d92302365935d4dcc8c1d6bc6a732ec53a3d5bd363a961e2cc25"
+    },
+    "acceptance-matrix.csv": {
+      "bytes": 3543,
+      "sha256": "cb45861f1021c23a543893fed7672e6ac62a3f9047c0f461ce21c44c13add839"
+    },
+    "affected-requirements.csv": {
+      "bytes": 8810,
+      "sha256": "a262c04bd416eb02d888e35d722bac79b84e4a66288981dc925b69dd9d6312fa"
+    },
+    "change-request.json": {
+      "bytes": 11161,
+      "sha256": "45986cb0c15043f4247112b69e6aac2942a2ae2d3d52426040279769101ff0e9"
+    },
+    "parameter-inventory.csv": {
+      "bytes": 33736,
+      "sha256": "631dedac94dc33ea326940744fdf128c982f1c42d5eb63d7f33fb459a1b39d94"
+    },
+    "sources.json": {
+      "bytes": 1164,
+      "sha256": "d7190982d1418eeb1ce2e7a61808231618f0c8c519282bbd0edf9dfc953986aa"
+    },
+    "tracking-groups.csv": {
+      "bytes": 5277,
+      "sha256": "68f8c0c2274f4822ae2650e9c3e4ca078dbf291c0c8d1058d1cd16e89eef9add"
+    }
+  },
+  "checks": {
+    "source_files_match_immutable_remote": true,
+    "groups": 12,
+    "semantic_index_rows": 69,
+    "original_parameter_rows_preserved": 40,
+    "affected_original_requirements": 47,
+    "acceptance_assertions": 18,
+    "product_execution": false
+  }
+}

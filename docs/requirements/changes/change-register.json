@@ -330,6 +330,14 @@
           "record": "https://github.com/huiliangtao666/APS/issues/3#issuecomment-6539962572",
           "remaining": "raw19 direct import BLOCKED; optional T01=2 NOT_EXECUTED; full FR/Issue/CR and UAT07+ open"
         }
+      ],
+      "cross_references": [
+        {
+          "id": "CR-SCHED-CONFIG-20261031",
+          "event_key": "design:scheduling-config-cr:20261031:r1",
+          "issue_url": "https://github.com/huiliangtao666/APS/issues/35",
+          "scope": "共同原则/索引复用；本CR原身份、批准边界、SHA与验收范围保留。"
+        }
       ]
     },
     {
@@ -510,7 +518,15 @@
           "description": "细化配置覆盖/版本、来源去重、客户余保、换型依赖及机器验收状态"
         }
       ],
-      "test_report_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/changes/CR-DEC04-05-06-20261029/test-review-20261029.md"
+      "test_report_url": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/changes/CR-DEC04-05-06-20261029/test-review-20261029.md",
+      "cross_references": [
+        {
+          "id": "CR-SCHED-CONFIG-20261031",
+          "event_key": "design:scheduling-config-cr:20261031:r1",
+          "issue_url": "https://github.com/huiliangtao666/APS/issues/35",
+          "scope": "共同原则/索引复用；本CR原身份、批准边界、SHA与验收范围保留。"
+        }
+      ]
     },
     {
       "id": "CR-FR013-VALIDATION-20261029",
@@ -563,7 +579,15 @@
       "test_report": "",
       "design_commit": "",
       "repair_delivery": "",
-      "test_contract": ""
+      "test_contract": "",
+      "cross_references": [
+        {
+          "id": "CR-SCHED-CONFIG-20261031",
+          "event_key": "design:scheduling-config-cr:20261031:r1",
+          "issue_url": "https://github.com/huiliangtao666/APS/issues/35",
+          "scope": "共同原则/索引复用；本CR原身份、批准边界、SHA与验收范围保留。"
+        }
+      ]
     },
     {
       "id": "CR-FR038-PERF-20261029",
@@ -618,7 +642,518 @@
       "test_report": "",
       "design_commit": "",
       "repair_delivery": "",
-      "test_contract": ""
+      "test_contract": "",
+      "cross_references": [
+        {
+          "id": "CR-SCHED-CONFIG-20261031",
+          "event_key": "design:scheduling-config-cr:20261031:r1",
+          "issue_url": "https://github.com/huiliangtao666/APS/issues/35",
+          "scope": "共同原则/索引复用；本CR原身份、批准边界、SHA与验收范围保留。"
+        }
+      ]
+    },
+    {
+      "id": "CR-R21-UAT02-20261031",
+      "title": "R2.1 UAT02 阶段未用设备、A/B 六字段配置及临时账号门槛裁决",
+      "classification": "用户业务澄清与增量配置授权；非产品FAIL",
+      "baseline_id": "APS-BL-001",
+      "from_version": "v0.3",
+      "target_version": "v0.3+CR-R21-UAT02-20261031",
+      "requested_by": "项目用户（本会话）",
+      "requested_on": "2026-10-31",
+      "request_quote": "当前阶段未使用的设备允许保留导入；A、B两组各缺允许拆分、需求类型、状态，共六个值及来源，做成可配置项并默认部分模拟数据；UAT全部完成之前不要使用权限账号控制。",
+      "approval_status": "已批准：用户明确授权本增量；实现和UAT尚未验收",
+      "approved_by": "项目用户（本会话；未补造实名签批）",
+      "approved_on": "2026-10-31（未补造精确时刻）",
+      "effective": true,
+      "effective_scope": "R2.1 当前 UAT02/AC05/15/17；账号控制豁免仅限 UAT 全部完成前的测试入口，不等于生产永久取消权限",
+      "implementation_status": "B1 integrated candidate 98347f8 Dev task-level Done; QA simulated UAT01/02 PASS at same SHA; original FR/CR remaining facts and scope NOT_READY",
+      "primary_requirements": [
+        "FR-008",
+        "FR-013",
+        "FR-016"
+      ],
+      "related_rules": [],
+      "decisions": [],
+      "acceptance_ids": [
+        "AC-05",
+        "AC-15",
+        "AC-17"
+      ],
+      "uat_ids": [
+        "UAT-02"
+      ],
+      "before": "原03未使用设备是否保留导入未决；A/B各三字段无真实值及来源；正式Portal账号/成员权限被列为UAT入口阻塞。",
+      "approved_delta": "当前阶段未使用设备允许保留原始导入，但须保留未使用标记、来源和查询可追溯，不因未引用而拒绝整批。A、B两组的允许拆分、需求类型、状态分别提供可维护配置及来源/版本，可用部分模拟数据预填并明显标记模拟，不将模拟值冒充客户事实或业务验收真值。UAT全部完成前不要求正式Portal登录或成员权限账号控制；可用隔离测试身份/可访问环境运行场景，账号权限不再阻断UAT02入口。",
+      "reason": "项目用户直接裁决三个R2.1阻塞；配置能力让未确定的业务值可维护，避免持续等待固定默认值",
+      "impact": "阶段设备导入、A/B字段配置UI/API/保存重开/排程输入、模拟种子来源标识及UAT入口；不授权主干合并/发布/永久关闭生产安全控制",
+      "plan_impact": "R2.1及Issue6按新条件复核；其余已批准范围不自动通过",
+      "effort": "未登记工时或预算",
+      "acceptance_delta": "未使用设备导入保留且可查；六字段逐组配置、来源、版本及保存重开正确，非法/缺失值按既有明确规则处理、无静默0；模拟数据清晰标识且可替换。固定SHA完成受影响核心/边界/负面/持久化/UI/API/Worker自测后，PM核可运行QA环境和映射再派UAT02。正式账号/成员权限证明不作为本阶段UAT入口或结论门槛。",
+      "issue_url": "https://github.com/huiliangtao666/APS/issues/6",
+      "related_issue_urls": [
+        "https://github.com/huiliangtao666/APS/issues/4"
+      ],
+      "history": [
+        {
+          "date": "2026-10-31",
+          "event_key": "issue6:r21:uat02:user-decisions:20261031:r1",
+          "event": "用户三项R2.1裁决登记；待实现及UAT，不新增产品修复轮次"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_43c056c6-d661-43c1-984c-97a49395bd2b:r1",
+          "event": "APS-Test R2.1限定开发自测23 PASS/3 PARTIAL/2 BLOCKED/2未执行；D01/D02生产接线待Dev共享文件交接；QA UAT未执行；产品FAIL0/轮次+0",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/6#issuecomment-6537294963"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_b71a615a-dcab-4186-bb5b-ba9be619d6b7:r1",
+          "event": "B1 fixed 98347f8 Dev assigned scope selftest 62 PASS/6 BLOCKED/5 NOT_EXECUTED; original FR/CR NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6537563857"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_58477f06-4245-4c62-97b5-a30c89ffa1f6:r1",
+          "event": "QA simulated UAT01/02 at fixed 98347f8: 32 PASS/6 BLOCKED/4 NOT_EXECUTED, no product FAIL; only these explicit simulation scenarios accepted; full FR/CR NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6537678865"
+        }
+      ],
+      "acceptance_result": "QA simulation UAT01/02 scoped PASS, 32 PASS/6 BLOCKED/4 NOT_EXECUTED; full FR/CR NOT_READY, no product FAIL or new repair round",
+      "acceptance_status": "部分实现和自测；D01/D02生产接线与QA UAT未完成",
+      "code_sha": "d6fd0034a4a50441d3e6384959f998873fcb955c",
+      "dev_delivery": "dlv_43c056c6-d661-43c1-984c-97a49395bd2b",
+      "product_test_delivery": "",
+      "design_detail_status": "六字段真实客户值未给出；允许带明显simulation标记的部分模拟初值，后续可配置替换；不要求正式权限账号作UAT门槛",
+      "limitations": "不以模拟值判定客户业务真值；不永久取消生产权限；不合main/不发布",
+      "code_branch": "test/issue6-uat02-decisions-20261031",
+      "cross_references": [
+        {
+          "id": "CR-SCHED-CONFIG-20261031",
+          "event_key": "design:scheduling-config-cr:20261031:r1",
+          "issue_url": "https://github.com/huiliangtao666/APS/issues/35",
+          "scope": "共同原则/索引复用；本CR原身份、批准边界、SHA与验收范围保留。"
+        }
+      ]
+    },
+    {
+      "dev_delivery": "",
+      "product_test_delivery": "",
+      "contract_review_delivery": "",
+      "code_branch": "",
+      "dev_report": "",
+      "test_report": "",
+      "repair_delivery": "",
+      "test_contract": "",
+      "id": "CR-SCHED-CONFIG-20261031",
+      "title": "排程参数可配置原则与遗漏项归集：既有继续、未开工等待",
+      "classification": "用户授权共同原则与遗漏项追踪；非产品缺陷、非新产品派工",
+      "baseline_id": "APS-BL-001",
+      "from_version": "v0.3 + 每条需求适用的既有批准CR",
+      "target_version": "v0.3＋逐条既有生效CR＋CR-SCHED-CONFIG-20261031适用原则",
+      "requested_by": "项目用户（Design交付转达）",
+      "requested_on": "2026-10-31",
+      "request_quote": "在基线需求设计的时候，有不少配置参数没有考虑，或者遗留到后续深化设计中发现；从原则上，排程相关参数尽量可配置，不要写成固定逻辑。现在已经有了不少需求讨论，请把相关需求整理后，形成需求变更作为相应任务的跟踪事项。已有有的继续，没有的等待开工。",
+      "approval_status": "已批准可配置原则与遗漏项追踪；新增未开工实现WAIT_START；候选值未自动批准",
+      "approved_by": "项目用户（本轮原话经Design交付；未补造实名签批）",
+      "approved_on": "2026-10-31",
+      "effective": true,
+      "effective_scope": "共同原则及未覆盖增量追踪；具体实施仍按原CR/对应包授权",
+      "implementation_status": "REGISTERED_TRACKING_ONLY；已有沿原授权继续；新增未开工增量WAIT_START；当前UAT07 #34不改序",
+      "primary_requirements": [
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010",
+        "FR-011",
+        "FR-013",
+        "FR-014",
+        "FR-015",
+        "FR-016",
+        "FR-017",
+        "FR-018",
+        "FR-020",
+        "FR-021",
+        "FR-022",
+        "FR-023",
+        "FR-025",
+        "FR-027",
+        "FR-028",
+        "FR-029",
+        "FR-030",
+        "FR-035",
+        "FR-037",
+        "FR-038",
+        "FR-039",
+        "FR-040"
+      ],
+      "related_rules": [
+        "BR-01",
+        "BR-02",
+        "BR-04",
+        "BR-05",
+        "BR-06",
+        "BR-07",
+        "BR-08",
+        "BR-09",
+        "BR-10",
+        "BR-11",
+        "BR-12",
+        "BR-13",
+        "BR-14",
+        "BR-15",
+        "BR-16",
+        "BR-17",
+        "BR-18"
+      ],
+      "decisions": [],
+      "acceptance_ids": [
+        "AC-01",
+        "AC-02",
+        "AC-03",
+        "AC-04",
+        "AC-05",
+        "AC-06",
+        "AC-07",
+        "AC-08",
+        "AC-09",
+        "AC-10",
+        "AC-11",
+        "AC-12",
+        "AC-13",
+        "AC-14",
+        "AC-15",
+        "AC-16",
+        "AC-17",
+        "AC-18",
+        "AC-19",
+        "AC-20",
+        "AC-21",
+        "AC-22",
+        "AC-23",
+        "AC-24",
+        "AC-26",
+        "AC-27",
+        "AC-28",
+        "AC-29",
+        "AC-31",
+        "AC-32"
+      ],
+      "uat_ids": [
+        "UAT-01",
+        "UAT-02",
+        "UAT-03",
+        "UAT-04",
+        "UAT-05",
+        "UAT-06",
+        "UAT-07",
+        "UAT-08",
+        "UAT-09",
+        "UAT-10",
+        "UAT-11",
+        "UAT-12",
+        "UAT-13",
+        "UAT-14",
+        "UAT-15",
+        "UAT-16",
+        "UAT-17",
+        "UAT-18"
+      ],
+      "before": "基线已有分散配置要求，多个后续CR和设计包补充参数；缺少统一归属索引和遗漏项跟踪，部分候选/模拟值易被固定为唯一逻辑。",
+      "approved_delta": "对影响排程业务结果且随业务对象/场景变化的参数优先提供显式、可维护、可保存、可追溯且实际生效的配置；逐项复用既有CR与原卡，新增未覆盖配置进入对应包的待开工事项。不可配置项须有业务不变量或已有范围依据，不能静默硬编码mock。 仅批准可配置共同原则与遗漏项追踪；原有效CR身份保留，具体枚举/公式/默认值沿明确既有批准。69条为语义索引（保留原40项），不是69个新增已批字段或任务。历史Done/限定PASS留原范围和SHA，不重开、不重签，产品FAIL/修复轮次+0。",
+      "design_detail_status": "候选语义/默认值依原CR；F01–F04、QD未闭来源保留；8文档hash和12/69/47/18结构核验通过，不是产品验收。",
+      "impact": "12归属组/47条原FR-BR影响映射；复用同一参数索引。",
+      "plan_impact": "已有继续；新增等待对应包启动；P1多线/后续优化待启动；不新增细碎卡或并行UAT。",
+      "effort": "未批准工时/预算/日期",
+      "acceptance_delta": "18项CC专项断言按对应包适用；两组合法配置、非法/缺值、实际冻结采用、独立预期、保存重开及历史保护；不增加全项目重测门槛。",
+      "issue_url": "https://github.com/huiliangtao666/APS/issues/35",
+      "related_issue_urls": [
+        "https://github.com/huiliangtao666/APS/issues/3",
+        "https://github.com/huiliangtao666/APS/issues/4",
+        "https://github.com/huiliangtao666/APS/issues/6",
+        "https://github.com/huiliangtao666/APS/issues/9",
+        "https://github.com/huiliangtao666/APS/issues/16",
+        "https://github.com/huiliangtao666/APS/issues/25",
+        "https://github.com/huiliangtao666/APS/issues/26"
+      ],
+      "acceptance_result": "NOT_EXECUTED：本次仅登记关联；不新增产品/QA结论",
+      "acceptance_status": "NOT_EXECUTED，本CR登记不替代各原范围验收",
+      "limitations": "不批准DEC04/05/06新应用实现、业务默认、账本能力、合main或发布；AC27暂定30秒不能通过改预算降低标准。",
+      "code_sha": null,
+      "product_change_sha": null,
+      "design_commit": "b481d2c860112213391a56fc14bd072fc8c3bffb",
+      "event_key": "design:scheduling-config-cr:20261031:r1",
+      "registration_status": "REGISTERED",
+      "parent_existing_crs": [
+        "CR-DEC02-03-20261029",
+        "CR-DEC04-05-06-20261029",
+        "CR-FR013-VALIDATION-20261029",
+        "CR-FR038-PERF-20261029",
+        "CR-R21-UAT02-20261031"
+      ],
+      "existing_reservation_proposal": "CR-FR010020-RESERVATION-20261029",
+      "parameter_index_url": "https://github.com/huiliangtao666/APS/blob/b481d2c860112213391a56fc14bd072fc8c3bffb/docs/requirements/proposals/CR-SCHED-CONFIG-20261031/parameter-inventory.csv",
+      "affected_mapping_url": "https://github.com/huiliangtao666/APS/blob/b481d2c860112213391a56fc14bd072fc8c3bffb/docs/requirements/proposals/CR-SCHED-CONFIG-20261031/affected-requirements.csv",
+      "recovery_condition": "PM启动对应业务包；具备该组契约、字段/单位/合法组合、批准与待决边界、可复演模拟profile/独立预期和FR/AC/UAT映射；未批具体业务语义先明确裁决。无需重新索批已经允许的mock/六字段/HP04/N06。",
+      "history": [
+        {
+          "date": "2026-10-31",
+          "event_key": "design:scheduling-config-cr:20261031:r1",
+          "delivery_id": "dlv_18dee1a1-d2d3-44f8-8e24-ced13a1be46d",
+          "event": "PM核提案及最新原卡，登记共同原则，既有继续/新增等待；产品修复+0"
+        }
+      ],
+      "tracking_groups": [
+        {
+          "id": "CFG-01",
+          "domain": "共同配置契约",
+          "bundle": "各业务包共同检查项，不另拆开发任务",
+          "requirement_ids": "FR-017;FR-018;FR-025;FR-035;FR-037;FR-038;BR-18",
+          "uat": "全部适用UAT",
+          "parent": "既有CR各自继承；无归属的增量纳本CR",
+          "disposition": "沿相应既有任务继续；未覆盖增量等待对应包开工",
+          "task_urls": "https://github.com/huiliangtao666/APS/issues/3;https://github.com/huiliangtao666/APS/issues/4;https://github.com/huiliangtao666/APS/issues/6;https://github.com/huiliangtao666/APS/issues/25",
+          "boundary": "字段语义、类型、单位、范围、适用对象、覆盖冲突、生效版本、保存权限、模拟来源、历史冻结",
+          "pm_owner": "APS-PM（登记与包启动）",
+          "new_increment_state": "WAIT_START",
+          "resume_condition": "PM启动对应业务包；具备该组契约、字段/单位/合法组合、批准与待决边界、可复演模拟profile/独立预期和FR/AC/UAT映射；未批具体业务语义先明确裁决。无需重新索批已经允许的mock/六字段/HP04/N06。"
+        },
+        {
+          "id": "CFG-02",
+          "domain": "工装、人员、技能与共享资源",
+          "bundle": "B2 / R2.2–R2.4",
+          "requirement_ids": "FR-006;FR-007;FR-017;FR-022;BR-06;BR-07",
+          "uat": "UAT-03;UAT-04;UAT-06;UAT-07;UAT-08",
+          "parent": "CR-DEC02-03-20261029",
+          "disposition": "已有继续；H-P04/N06不再等待旧裁决",
+          "task_urls": "https://github.com/huiliangtao666/APS/issues/3",
+          "boundary": "数量/容量、占用释放、岗位/物理池、共用和交接、人员参与窗、方向技能替代、窗外处理顺序",
+          "pm_owner": "APS-PM（登记与包启动）",
+          "new_increment_state": "WAIT_START",
+          "resume_condition": "PM启动对应业务包；具备该组契约、字段/单位/合法组合、批准与待决边界、可复演模拟profile/独立预期和FR/AC/UAT映射；未批具体业务语义先明确裁决。无需重新索批已经允许的mock/六字段/HP04/N06。"
+        },
+        {
+          "id": "CFG-03",
+          "domain": "日历、停机及资源可用窗口",
+          "bundle": "B1 / R2.1；B2/B4复用",
+          "requirement_ids": "FR-008;FR-017;FR-022;BR-05",
+          "uat": "UAT-02；适用UAT-04/08/12",
+          "parent": "CR-R21-UAT02-20261031及基线；新增未覆盖配置归本CR",
+          "disposition": "原已通过模拟阶段证据保留；已有任务继续；新增配置增量待开工",
+          "task_urls": "https://github.com/huiliangtao666/APS/issues/6",
+          "boundary": "工作窗口、继承、停机/例外、班次、加班、跨班与可中断性；参数化不允许跨无效窗口排产",
+          "pm_owner": "APS-PM（登记与包启动）",
+          "new_increment_state": "WAIT_START",
+          "resume_condition": "PM启动对应业务包；具备该组契约、字段/单位/合法组合、批准与待决边界、可复演模拟profile/独立预期和FR/AC/UAT映射；未批具体业务语义先明确裁决。无需重新索批已经允许的mock/六字段/HP04/N06。"
+        },
+        {
+          "id": "CFG-04",
+          "domain": "订单与本轮模拟输入",
+          "bundle": "B1 / R1、R2.1",
+          "requirement_ids": "FR-009;FR-018;FR-021;BR-11",
+          "uat": "UAT-01;UAT-02",
+          "parent": "CR-R21-UAT02-20261031",
+          "disposition": "已有继续；六项已获裁决，不重复索批",
+          "task_urls": "https://github.com/huiliangtao666/APS/issues/6",
+          "boundary": "A/B各自允许拆分、需求类型、状态，来源/版本及模拟标识；未来其他订单范围待对应包",
+          "pm_owner": "APS-PM（登记与包启动）",
+          "new_increment_state": "WAIT_START",
+          "resume_condition": "PM启动对应业务包；具备该组契约、字段/单位/合法组合、批准与待决边界、可复演模拟profile/独立预期和FR/AC/UAT映射；未批具体业务语义先明确裁决。无需重新索批已经允许的mock/六字段/HP04/N06。"
+        },
+        {
+          "id": "CFG-05",
+          "domain": "BOM、收率、损失、包装与量化",
+          "bundle": "B3/B4 / R3、R4",
+          "requirement_ids": "FR-002;FR-003;FR-020;FR-021;BR-10;BR-18",
+          "uat": "UAT-05;UAT-09;UAT-10;UAT-12;UAT-13;UAT-14;UAT-18",
+          "parent": "CR-DEC04-05-06-20261029 / DEC04",
+          "disposition": "既有设计/mock继续；新增参数化应用实现等待开工",
+          "task_urls": "https://github.com/huiliangtao666/APS/issues/25",
+          "boundary": "复用13项DEC04候选参数，跟踪F01/F02；不批准默认值、非kg粒度或跨批取整语义",
+          "pm_owner": "APS-PM（登记与包启动）",
+          "new_increment_state": "WAIT_START",
+          "resume_condition": "PM启动对应业务包；具备该组契约、字段/单位/合法组合、批准与待决边界、可复演模拟profile/独立预期和FR/AC/UAT映射；未批具体业务语义先明确裁决。无需重新索批已经允许的mock/六字段/HP04/N06。"
+        },
+        {
+          "id": "CFG-06",
+          "domain": "质量映射、可用时点及供给分配",
+          "bundle": "B3 / R3",
+          "requirement_ids": "FR-010;FR-011;FR-020;FR-023;BR-08;BR-09;BR-14",
+          "uat": "UAT-05;UAT-09;UAT-10;UAT-11",
+          "parent": "CR-DEC04-05-06-20261029 / DEC05",
+          "disposition": "基线既有任务继续；新增参数化设计/mock继续、应用待开工",
+          "task_urls": "https://github.com/huiliangtao666/APS/issues/9;https://github.com/huiliangtao666/APS/issues/25",
+          "boundary": "复用9项DEC05候选；QD01–04、F03/F04和真实事实分列；软件模拟结论保留",
+          "pm_owner": "APS-PM（登记与包启动）",
+          "new_increment_state": "WAIT_START",
+          "resume_condition": "PM启动对应业务包；具备该组契约、字段/单位/合法组合、批准与待决边界、可复演模拟profile/独立预期和FR/AC/UAT映射；未批具体业务语义先明确裁决。无需重新索批已经允许的mock/六字段/HP04/N06。"
+        },
+        {
+          "id": "CFG-07",
+          "domain": "工艺、工时、效率、容量与拆合批",
+          "bundle": "B4 / R4",
+          "requirement_ids": "FR-004;FR-005;FR-008;FR-021;FR-022;FR-023;BR-02;BR-04;BR-11;BR-12;BR-13",
+          "uat": "UAT-12;UAT-13;UAT-14；UAT-17下游引用",
+          "parent": "CR-DEC04-05-06-20261029 / DEC06",
+          "disposition": "已授权工程沿原任务；新增参数化设计/mock继续，应用等待开工",
+          "task_urls": "https://github.com/huiliangtao666/APS/issues/16;https://github.com/huiliangtao666/APS/issues/25",
+          "boundary": "复用13项DEC06候选；任意装载节点、尾批、通用重组不因本原则自动获批",
+          "pm_owner": "APS-PM（登记与包启动）",
+          "new_increment_state": "WAIT_START",
+          "resume_condition": "PM启动对应业务包；具备该组契约、字段/单位/合法组合、批准与待决边界、可复演模拟profile/独立预期和FR/AC/UAT映射；未批具体业务语义先明确裁决。无需重新索批已经允许的mock/六字段/HP04/N06。"
+        },
+        {
+          "id": "CFG-08",
+          "domain": "导入校验、单位类别及阶段适用性",
+          "bundle": "B1共享数据链",
+          "requirement_ids": "FR-002;FR-013;FR-014;FR-015;FR-016;BR-18",
+          "uat": "UAT-01;UAT-02;UAT-11及各包输入",
+          "parent": "CR-FR013-VALIDATION-20261029；R21已批准未用设备政策",
+          "disposition": "已有继续；新增未覆盖策略作为本CR待开工项",
+          "task_urls": "https://github.com/huiliangtao666/APS/issues/4",
+          "boundary": "袋支整数、收率<=100%保留；单位/类别/业务字段显式配置；原件保真和阶段清单不被模拟改写",
+          "pm_owner": "APS-PM（登记与包启动）",
+          "new_increment_state": "WAIT_START",
+          "resume_condition": "PM启动对应业务包；具备该组契约、字段/单位/合法组合、批准与待决边界、可复演模拟profile/独立预期和FR/AC/UAT映射；未批具体业务语义先明确裁决。无需重新索批已经允许的mock/六字段/HP04/N06。"
+        },
+        {
+          "id": "CFG-09",
+          "domain": "排程条件、排序、重排保护与确认",
+          "bundle": "B5 / R6、R7",
+          "requirement_ids": "FR-018;FR-023;FR-027;FR-028;FR-029;FR-030;BR-15;BR-16;BR-17",
+          "uat": "UAT-15;UAT-17;UAT-18；AC19/22/32",
+          "parent": "基线＋本CR尚无归属的配置增量",
+          "disposition": "已有实现/证据保留；新策略细化等待对应包开工",
+          "task_urls": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhrQ",
+          "boundary": "计划起止/范围、任务排序、保护时段、锁定、条件试算、部分确认策略；多目标优化仍后续",
+          "pm_owner": "APS-PM（登记与包启动）",
+          "new_increment_state": "WAIT_START",
+          "resume_condition": "PM启动对应业务包；具备该组契约、字段/单位/合法组合、批准与待决边界、可复演模拟profile/独立预期和FR/AC/UAT映射；未批具体业务语义先明确裁决。无需重新索批已经允许的mock/六字段/HP04/N06。"
+        },
+        {
+          "id": "CFG-10",
+          "domain": "运行限额与性能验收口径",
+          "bundle": "B5 / FR038专项",
+          "requirement_ids": "FR-018;FR-038",
+          "uat": "AC-27专项；各包取消/失败",
+          "parent": "CR-FR038-PERF-20261029；候选工程运行参数归本CR",
+          "disposition": "沿既有目标继续；工程参数候选和正式规格等待对应任务",
+          "task_urls": "https://github.com/huiliangtao666/APS/issues/26",
+          "boundary": "区分运行预算/取消与验收SLA；暂定30秒不可随意改参数后宣称达标",
+          "pm_owner": "APS-PM（登记与包启动）",
+          "new_increment_state": "WAIT_START",
+          "resume_condition": "PM启动对应业务包；具备该组契约、字段/单位/合法组合、批准与待决边界、可复演模拟profile/独立预期和FR/AC/UAT映射；未批具体业务语义先明确裁决。无需重新索批已经允许的mock/六字段/HP04/N06。"
+        },
+        {
+          "id": "CFG-11",
+          "domain": "多线范围与共享策略",
+          "bundle": "F1冻结 / R8",
+          "requirement_ids": "FR-039;FR-040;BR-01;BR-06;BR-07;BR-09",
+          "uat": "UAT-16",
+          "parent": "基线P1＋本CR未来配置清单",
+          "disposition": "等待开工；不启动P1",
+          "task_urls": "https://github.com/users/huiliangtao666/projects/2?pane=issue&itemId=PVTI_lAHOFM9WU84BpE1czhEHhJE",
+          "boundary": "产线/产品适用、跨线共享许可与唯一物理容量；不扩展跨工厂运输",
+          "pm_owner": "APS-PM（登记与包启动）",
+          "new_increment_state": "WAIT_START",
+          "resume_condition": "PM启动对应业务包；具备该组契约、字段/单位/合法组合、批准与待决边界、可复演模拟profile/独立预期和FR/AC/UAT映射；未批具体业务语义先明确裁决。无需重新索批已经允许的mock/六字段/HP04/N06。"
+        },
+        {
+          "id": "CFG-12",
+          "domain": "全局实际预占与采用账能力边界",
+          "bundle": "B3/R7及未来共享",
+          "requirement_ids": "FR-010;FR-020;FR-030;BR-09;BR-16;BR-17",
+          "uat": "UAT-09/10及后续专项",
+          "parent": "沿用候选CR-FR010020-RESERVATION-20261029，不重复建CR",
+          "disposition": "既有变更提案待PM登记/批准及开工；不并入本次参数实现",
+          "task_urls": "https://github.com/huiliangtao666/APS/issues/9",
+          "boundary": "实际账/承诺范围、投料释放冲销、WIP、并发和迁移是能力变更，不只是配置开关",
+          "pm_owner": "APS-PM（登记与包启动）",
+          "new_increment_state": "ORIGINAL_PROPOSAL_FLOW_WAIT_APPROVAL_AND_START",
+          "resume_condition": "沿原B02提案登记/流转，明确账本能力批准范围后由PM按对应包启动；本CR不批准。"
+        }
+      ]
+    },
+    {
+      "dev_delivery": "",
+      "contract_review_delivery": "",
+      "product_test_delivery": "",
+      "code_branch": "",
+      "dev_report": "",
+      "test_report": "",
+      "design_commit": "",
+      "repair_delivery": "",
+      "test_contract": "",
+      "id": "CR-FR010020-RESERVATION-20261029",
+      "title": "跨方案承诺预占与模拟耗用对账（沿原B02待审提案）",
+      "classification": "原提案正式登记；待业务批准增量，不是配置开关或产品缺陷",
+      "baseline_id": "APS-BL-001",
+      "from_version": "v0.3＋每条适用生效CR",
+      "target_version": "待批准；不叠加当前有效版本",
+      "requested_by": "APS-Design（沿原提案）",
+      "requested_on": "2026-10-29（沿原建议编号；设计交付2026-10-30，不补造批准日期）",
+      "request_quote": "PM原设计派工要求明确“跨已采用方案全局预占与实际库存/WIP扣减的账本所有权、占用/扣减/释放/冲销时点、粒度、并发与历史方案边界”；是设计派工，不是实施批准。",
+      "approval_status": "待审批 / PROPOSED；未获业务或实施批准",
+      "approved_by": "未批准",
+      "approved_on": "",
+      "effective": false,
+      "implementation_authorized": false,
+      "implementation_status": "WAIT_APPROVAL / WAIT_START；原B02流程，不新增同义CR或执行任务",
+      "primary_requirements": [
+        "FR-010",
+        "FR-020"
+      ],
+      "related_rules": [
+        "BR-08",
+        "BR-09",
+        "BR-16",
+        "BR-18"
+      ],
+      "decisions": [],
+      "acceptance_ids": [
+        "AC-10",
+        "AC-11",
+        "AC-12",
+        "AC-21",
+        "AC-24",
+        "AC-32"
+      ],
+      "uat_ids": [
+        "UAT-09",
+        "UAT-10",
+        "UAT-15"
+      ],
+      "before": "原有方案内投影及模拟数量守恒已批准；全局承诺事件/账权/存量迁移未决定。",
+      "approved_delta": "无新增批准增量；候选承诺/投料/释放/冲销/WIP/并发/迁移仅供决定，见原B02提案。",
+      "design_detail_status": "RD01–RD05待业务决定；具体责任岗位有来源，实名未指定。",
+      "impact": "候选跨方案承诺与模拟对账；不撤销原数量守恒、已耗不得复用与幂等义务",
+      "plan_impact": "B3/R3及R7相关后续包；未批准不派实现，P1不启动",
+      "effort": "未批准工时/预算",
+      "acceptance_delta": "候选B02-P01–P07，仅批准后采用；原BASELINE断言沿原卡执行。",
+      "issue_url": "https://github.com/huiliangtao666/APS/issues/9",
+      "related_issue_urls": [
+        "https://github.com/huiliangtao666/APS/issues/35"
+      ],
+      "acceptance_result": "NOT_EXECUTED；无新增产品PASS/FAIL/修复轮次",
+      "limitations": "外部实账写入、业务默认、DEC04–06应用实现、main合并和发布均未授权。",
+      "code_sha": null,
+      "event_key": "dlv_b68071ac-65ce-4b2c-bcc8-aac82a99a1bb:r1",
+      "registration_event_key": "design:scheduling-config-cr:20261031:r1",
+      "registration_status": "REGISTERED_PROPOSAL_ONLY",
+      "source_report_sha256": "fcfc4ed5feb6ced66c56647935f239de3ad6e7dfb50d88646404450ad2cd0295",
+      "source_zip_sha256": "2960133e2a935314675d9ed19666f8a3d0887cc4e2956a6aaf97185801b067ef",
+      "recovery_condition": "PM组织RD01–05：账权口径、确认/采用与唯一范围、投料释放冲销、物理/WIP关系、并发与迁移；具体业务增量批准并独立授权实施后才开对应包。允许模拟范围不额外等待真实现场账。",
+      "history": [
+        {
+          "event_key": "design:scheduling-config-cr:20261031:r1",
+          "event": "本次沿原编号正式登记待审提案，effective=false，不代批，不另建Issue/CR。"
+        }
+      ]
     }
   ]
 }
