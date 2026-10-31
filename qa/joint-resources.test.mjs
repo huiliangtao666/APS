@@ -9,6 +9,8 @@ import {exportSupplyPlanCsv} from '../src/lib/expected-supply.mjs';
 import {queryData} from '../src/lib/data-query.mjs';
 import {batchFixture} from './batch-fixture.mjs';
 import {jointFixture,claim,enableJoint} from './joint-fixture.mjs';
+import {maxLagFixture} from './fr022-maxlag-contract-fixture.mjs';
+import {independentlyVerifyPlan} from '../src/lib/independent-verification.mjs';
 const at='2026-10-29T00:00:00Z';
 const plan=(d,selection={})=>{const f=freezeRunInput(d,selection,at);return calculate(f.executionData,0,at,f.conditions);};
 const mix=p=>p.tasks.filter(t=>t.operation==='MIX');
@@ -61,10 +63,22 @@ test('FR022 missing policy/units/intervals or dependency release declaration blo
  }
  const d=jointFixture(seed);d.resourceClaims=[];d.rules.find(r=>r['规则编号']==='MOLD')['是否启用']='否';assert.equal(plan(d).tasks.length,6);assert.equal(plan(d).jointResourceChecks.MOLD,false);
 });
-test('FR022 minimal mode and future rules remain truthfully unchecked; explicit max lag now supports draft gap checks',()=>{
+test('FR022 minimal/future remain unchecked; MAX_LAG rejects undeclared pairs and checks explicit full routes',()=>{
  const d=jointFixture(seed);const p=plan(d,{mode:'minimal-r1'});assert.equal(mix(p).filter(t=>t.start===0).length,3);assert.ok(!p.resourceReservations.some(r=>r.type==='工装'));assert.ok(p.ruleSnapshot.checkScope.unchecked.includes('模具与工装'));assert.deepEqual(p.jointResourceChecks,{});
  d.rules.find(r=>r['规则编号']==='MOLD')['生效时间']='2027-01-01T00:00:00Z';assert.equal(jointFlags(d,at).MOLD,false);assert.equal(mix(plan(d)).filter(t=>t.start===0).length,3);
- d.rules.find(r=>r['规则编号']==='MAX_LAG')['是否启用']='是';assert.equal(plan(d).tasks.length,6);
+ d.rules.find(r=>r['规则编号']==='MAX_LAG')['是否启用']='是';
+ // This MIX/FILL fixture declares no maximum wait. A bare toggle must surface
+ // a configuration rejection; it cannot demonstrate a checked MAX_LAG route.
+ const rejected=plan(d);assert.equal(rejected.name,'规则配置阻止计算');assert.deepEqual(rejected.tasks,[]);
+ assert.ok(rejected.findings.some(f=>f.code==='RULE / CONFIG'&&/MAX_LAG须有显式加工\/冷却顺序配对/.test(f.message)));
+ assert.deepEqual(rejected.resourceReservations,[]);
+ const full=maxLagFixture(),f=freezeRunInput(full,{},at),legal=calculate(f.executionData,0,at,f.conditions);
+ assert.deepEqual(legal.findings,[]);
+ assert.deepEqual(legal.tasks.map(t=>[t.orderId,t.operation,t.duration,t.quantity]),['MIX','FILL','HEAT','COOL','PACK'].map(op=>['A',op,Number(full.times.find(r=>r['工序编号']===op)['固定分钟']),240]));
+ const h=legal.tasks.find(t=>t.operation==='HEAT'),c=legal.tasks.find(t=>t.operation==='COOL');assert.ok(c.start-h.end>=0&&c.start-h.end<=10);
+ assert.ok(['MOLD','LABOR','STORAGE','MATERIAL','CAPACITY','PROGRAM','MAX_LAG','CALENDAR'].every(id=>legal.rules.includes(id)));
+ const verified=independentlyVerifyPlan(legal,f.executionData.orders,f.executionData.routes,legal.rules,at,f.executionData,f.conditions);
+ assert.equal(verified.ruleStatuses.find(r=>r.id==='MAX_LAG').status,'pass');assert.ok(Object.values(verified.checks).every(v=>v.status==='pass'));
 });
 test('FR022 resource shortage rolls back whole FR021 member cycle, material ledger and reservations',()=>{
  const d=batchFixture(seed);d.orders[0]['合格需求']='240';d.orders.push({...d.orders[0],'订单编号':'B','优先顺序':'2'});d.dependencies.push(...d.dependencies.filter(r=>r['订单编号']==='A').map(r=>({...r,'订单编号':'B'})));
