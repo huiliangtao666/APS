@@ -67,7 +67,7 @@ def validate(p,d,complete=True):
     else:
      src=next(z for z in d['inventory']if z['批次编号']==al['lotId']);assert src['质量状态']in JSONpolicy(d)['可用状态'];assert not src['预计可用时间']or minute(src['预计可用时间'])<=a
      capacity=F(src['账面数量'])-F(src['已占用数量'])
-    assert src['物料编号']==mid and src['批次编号']==al['lotId'];assert used[key]<=capacity,'lot conservation';assert F(str(al['remaining']))>=0 and exact(al['exactRemaining'])>=0,'no negative inventory'
+    assert src['物料编号']==mid and src['批次编号']==al['lotId'];assert used[key]<=capacity,'lot conservation';assert F(str(al['remaining']))==exact(al['exactRemaining'])==capacity-used[key]>=0,'exact projected deduction/no negative inventory'
    assert total==amount,'allocation conservation';committed_seen.add(id(row))
  assert len(committed_seen)==len([z for z in saved if z['committed']]),'orphan committed material'
  for z in intervals.values():cap(z,F(1))
@@ -109,6 +109,7 @@ for name in ['before180','missingtask','machine','BOM','doubleallocation','perso
  else:raise AssertionError('mutation accepted '+name)
 if (E/'ui/legal-result.json').exists():
  u=json.loads((E/'ui/legal-result.json').read_text());check('UI_WORKER_FULL',validate(u['plan'],u['input']['executionData']))
+ g=json.loads((E/'ui/gap01-result.json').read_text());check('UI_GAP01',validate(g['plan'],g['input']['executionData'],False));assert next(r for r in g['plan']['materialDemands']if r['orderId']=='B'and r['materialId']=='LEAN')['shortage']==0.1
  v=json.loads((E/'ui/delayed240-result.json').read_text());check('UI_DELAY240',validate(v['plan'],v['input']['executionData']));assert next(t['start']for t in v['plan']['tasks']if t['id']=='B-MIX')==240
  assert (E/'ui/native-plan.csv').read_bytes()==(E/'ui/history-native-plan.csv').read_bytes();rows=list(csv.reader((E/'ui/native-plan.csv').read_text(encoding='utf-8-sig').splitlines()));decoded=[]
  for row in rows:
