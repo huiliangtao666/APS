@@ -626,6 +626,12 @@
           "event_key": "dlv_4e34a1db-92f3-49a8-a454-53921a860c2e:r1",
           "event": "a786ee30 QA historical software-only slice: repository regression 27/27 and capacity API chains 2/2 PASS; v1 migration then NOT_EXECUTED; no UAT signoff",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6528288946"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_c828f195-4e75-4d7d-9536-d0642403c5a2:r1",
+          "event": "Dev 0dfcfe7c selftest 305 PASS/7 BLOCKED/5 NOT_EXECUTED; FR013/016/Issue4 NOT_READY; B1 integrated UAT01/02 task dispatched; no new product FAIL",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6537352084"
         }
       ],
       "dev_delivery": "dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1",
