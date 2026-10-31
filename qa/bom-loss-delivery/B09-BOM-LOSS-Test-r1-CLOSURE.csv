@@ -1,0 +1,15 @@
+requirement,assertion,this_delivery,remaining_owner_action
+CR-BOM-LOSS-20261031,"configuration, exact policy and freeze helper",PASS,Dev application save/API/Worker/native export/history integration
+FR-003,AC-08/15 config and exact inputs/output,PASS_COMPONENT,Dev actual adopted config and run persistence; rest baseline evidence retained
+FR-010,AC-10 existing inventory eligibility,NOT_EXECUTED_NEW_INTEGRATION,Dev new demand adapter + applicable inventory integration; old PASS retained
+FR-011,AC-11 supply arrival/usable/delay/conditions,NOT_EXECUTED,Dev approved remaining complete application chain
+FR-013,AC-26 serialization module; original input sources,PASS_MODULE_ONLY,Dev CSV/source/profile mapping and export; six original columns unchanged
+FR-017,AC-15 version/model and invalid input,PASS_COMPONENT,Dev actual activation and frozen run source
+FR-020,AC-08 exact per-material demand,PASS_DOMAIN,Dev allocation/shortage/supply adapter
+AC-10,availability/shortage for changed demands,NOT_EXECUTED_NEW_INTEGRATION,Dev fixed candidate -> PM -> QA affected assertions
+AC-11,estimated supply complete chain,NOT_EXECUTED,Dev -> PM -> QA
+AC-17,material/source visible in component,PASS_COMPONENT,Dev task/problem/input provenance linkage
+AC-26,JSON roundtrip and readback,PASS_MODULE_ONLY,Dev native query/export consistency
+AC-22,partial plan submit/confirm/return/resubmit,OUTSIDE_THIS_CHANGE,Dev along Issue41; no duplicate workflow
+UAT-09/10/11,prior accepted scopes,RETAIN_ORIGINAL_SHA,PM dispatch only new impact after Dev candidate; no old rerun
+Issue39 PACK/batch; Issue45 input profiles,separate authorized scope,OUTSIDE_THIS_CHANGE,Dev later approved scope; do not reclassify clarified business as pending

@@ -1,0 +1,63 @@
+id,status,expected,scope,evidence
+C01-default-zero,PASS,Q1000 O1000 Y1,new independent domain,selftest-fixed-source.log; source fixture assertions
+C02-weighted-example,PASS,O966; Y483/500; rows637/144/135/50,new independent domain,selftest-fixed-source.log; source fixture assertions
+C03-target240,PASS,"inputs26000/161,6000/161,6000/161,2000/161; outputs25480/161,5760/161,5400/161,2000/161",new independent domain,selftest-fixed-source.log; source fixture assertions
+C04-explicit-zero-missing-clear-unified,PASS,5% inherit -> 0% override -> 5% inherit -> 7% inherit,new independent domain,selftest-fixed-source.log; source fixture assertions
+C05-isolation,PASS,raw/transport100 do not alter production/quotas,new independent domain,selftest-fixed-source.log; source fixture assertions
+C06-single-full-loss,PASS,"LEAN output0, other rows retained; O350",new independent domain,selftest-fixed-source.log; source fixture assertions
+C07-all-full-loss-save,PASS,"valid config; O0,Y0,producible false; serialize roundtrip",new independent domain,selftest-fixed-source.log; source fixture assertions
+N01-no-output-target,PASS,named rejection NO_PRODUCIBLE_OUTPUT; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+C08-zero-target,PASS,"zero legal, exact0 target inputs",new independent domain,selftest-fixed-source.log; source fixture assertions
+C09-exact-decimal,PASS,0.1*99.9%+0.2*99.8%=0.2995; Y599/600,new independent domain,selftest-fixed-source.log; source fixture assertions
+C10-json-freeze-alias,PASS,snapshot JSON remains exact and isolated from recipe/config edits,new independent domain,selftest-fixed-source.log; source fixture assertions
+C11-original-inputs-unchanged,PASS,successful calls do not mutate recipe/config; old total yield is not read,new independent domain,selftest-fixed-source.log; source fixture assertions
+C12-fine-decimal,PASS,loss0.000000000000000001 exact output,new independent domain,selftest-fixed-source.log; source fixture assertions
+"N-percent-""-1""",PASS,named rejection INVALID_DECIMAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+"N-percent-""101""",PASS,named rejection PERCENT_RANGE; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+"N-percent-""NaN""",PASS,named rejection INVALID_DECIMAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+"N-percent-""Infinity""",PASS,named rejection INVALID_DECIMAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+"N-percent-""1e2""",PASS,named rejection INVALID_DECIMAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+"N-percent-""""",PASS,named rejection INVALID_DECIMAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-percent-null,PASS,named rejection INVALID_DECIMAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-percent-{},PASS,named rejection INVALID_DECIMAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+"N-percent-"" 2 """,PASS,named rejection INVALID_DECIMAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-override-raw,PASS,named rejection PERCENT_RANGE; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-override-production,PASS,named rejection PERCENT_RANGE; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-override-transport,PASS,named rejection PERCENT_RANGE; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-quantity--1,PASS,named rejection INVALID_DECIMAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-quantity-Infinity,PASS,named rejection INVALID_DECIMAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-quantity-NaN,PASS,named rejection INVALID_DECIMAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-quantity-[object Object],PASS,named rejection INVALID_DECIMAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-quantity-,PASS,named rejection INVALID_DECIMAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-target-negative,PASS,named rejection INVALID_DECIMAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-target-infinite,PASS,named rejection INVALID_DECIMAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-missing-recipe,PASS,named rejection MISSING_RECIPE; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-missing-source,PASS,named rejection MISSING_SOURCE; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-config-source,PASS,named rejection MISSING_SOURCE; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-unit,PASS,named rejection UNIT_MISMATCH; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-row-unit,PASS,named rejection UNIT_MISMATCH; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-duplicate,PASS,named rejection DUPLICATE_MATERIAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-incomplete-basis,PASS,named rejection BASIS_MISMATCH; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-zero-basis,PASS,named rejection ZERO_BASIS; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-unknown-material,PASS,named rejection UNKNOWN_MATERIAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-duplicate-override,PASS,named rejection DUPLICATE_OVERRIDE; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-model,PASS,named rejection MODEL_VERSION; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-percent-unit,PASS,named rejection PERCENT_UNIT; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-null-override,PASS,named rejection INVALID_DECIMAL; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-json,PASS,named rejection INVALID_JSON; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+N-unknown-kind,PASS,named rejection UNKNOWN_LOSS_KIND; input unchanged,new independent domain,selftest-fixed-source.log; source fixture assertions
+C13-legacy-snapshot-untouched,PASS,existing legacy bytes remain same,new independent domain,selftest-fixed-source.log; source fixture assertions
+UI01-default,PASS,"zero unified, inherited, yield100%",independent actual browser / QA JSON adapter,browser-report.json; browser.log; browser*.png
+UI02-explicit-zero,PASS,0 override survives uniform7 and callback JSON,independent actual browser / QA JSON adapter,browser-report.json; browser.log; browser*.png
+UI03-reload,PASS,serialized config reopens without loss,independent actual browser / QA JSON adapter,browser-report.json; browser.log; browser*.png
+UI04-clear,PASS,"clear removes override, inherits7",independent actual browser / QA JSON adapter,browser-report.json; browser.log; browser*.png
+UI05-example-freeze,PASS,"966kg,96.6%,target240 exact snapshot",independent actual browser / QA JSON adapter,browser-report.json; browser.log; browser*.png
+UI06-three-kinds-isolated,PASS,raw/transport can override and save without changing production output,independent actual browser / QA JSON adapter,browser-report.json; browser.log; browser*.png
+UI07-invalid,PASS,"invalid values retained visibly; no callback, no storage mutation",independent actual browser / QA JSON adapter,browser-report.json; browser.log; browser*.png
+UI08-invalid-target,PASS,negative target rejected,independent actual browser / QA JSON adapter,browser-report.json; browser.log; browser*.png
+UI09-full-loss,PASS,O0 valid saved config; target inversion refused,independent actual browser / QA JSON adapter,browser-report.json; browser.log; browser*.png
+UI10-freeze-history,PASS,old snapshot exact bytes unchanged after edits/save/reload,independent actual browser / QA JSON adapter,browser-report.json; browser.log; browser*.png
+UI11-cancel,PASS,restore controlled value,independent actual browser / QA JSON adapter,browser-report.json; browser.log; browser*.png
+ORACLE,PASS,"independent Fraction example, exact target mass conservation, browser frozen snapshot matches",independent formula,oracle-expected.json; oracle.log
+TYPE,PASS,targeted strict TypeScript exit0,component and entry,component-typecheck-fixed.log; environment.json
+MAIN-DEPENDENCY,PASS,48 new-domain assertions against fetched main src/lib with additive policy overlay,"read-only quantityMath compatibility smoke, not merged application",current-main-dependency-selftest.log
