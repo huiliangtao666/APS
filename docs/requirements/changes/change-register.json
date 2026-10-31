@@ -1450,7 +1450,7 @@
         "explicit_zero_override_distinct_from_inherit": true
       },
       "calculation_contract_status": "现有同基准kg生产损耗模型明确，可据受控公式开发自测；原料运输损耗上游应用环节待明确。非同单位/非质量守恒/新增工序加料不自动扩围。",
-      "implementation_status": "NOT_DISPATCHED新公式：先将已确认投入/产出边界固化为受控验收依据；未确定部分不擅定公式，不改变历史固定SHA证据",
+      "implementation_status": "SENT：APS-Test组件/域实现自测；APS-Dev主应用接入；尚无产品交付/QA结论",
       "business_questions": [],
       "original_bom_example_evidence": {
         "sha": "172b415122472b933fc9935b5537697ebc03ccfc",
@@ -1505,7 +1505,18 @@
         "no_double_count": "产品总收率从各物料生产损耗派生，不再并用旧固定总收率重复扣损耗；原料与运输损耗不纳入此生产收率"
       },
       "b09_business_gate": "READY_USER_CONFIRMED；剩余开发自测/FR011/AC22/适用QA由团队执行，不等业务方重复解释",
-      "nonblocking_future_details": "若另行实现原料/运输损耗上游消耗的特殊环节/数量基数，再按明确配置合同处理；不再列为当前B09业务验收前置，不擅自推三类相加或连乘。"
+      "nonblocking_future_details": "若另行实现原料/运输损耗上游消耗的特殊环节/数量基数，再按明确配置合同处理；不再列为当前B09业务验收前置，不擅自推三类相加或连乘。",
+      "dispatches": {
+        "APS-Dev": {
+          "id": "dlv_06b891d1-10ea-447b-94ee-ccf54999148f",
+          "status": "SENT/WAITING"
+        },
+        "APS-Test": {
+          "id": "dlv_8e6606f9-96c4-468f-b6f2-746954b681fa",
+          "status": "SENT/WAITING"
+        }
+      },
+      "product_base_sha": "172b415122472b933fc9935b5537697ebc03ccfc"
     }
   ]
 }
