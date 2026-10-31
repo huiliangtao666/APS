@@ -29,8 +29,8 @@ export async function startR21Uat({ dataDir, port = 0, browser = false, isolated
     const r = await fetch(url + '/api' + endpoint, { method: body ? 'POST' : 'GET', headers: { 'content-type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
     const x = await r.json(); if (!r.ok) throw Object.assign(Error(x.error), { status: r.status, body: x }); return x;
   }
-  app.use('/api', createBusinessRouter({ dataDir: dir, actorMiddleware: actor, requireMember: member }));
   app.get('/api/uat-build', (_req,res) => {const state=JSON.parse(fs.readFileSync(path.join(dir,'business.json'),'utf8'));const hash=x=>createHash('sha256').update(JSON.stringify(x)).digest('hex');res.json({productSha:process.env.B1_BUILD_SHA||null,environment:'B1 isolated UAT candidate',formalAccountRequired:false,identity:'synthetic-planner; not customer SSO',requirements:['APS-BL-001-v0.3','CR-FR013-VALIDATION-20261029','CR-R21-UAT02-20261031'],inputRevision:state.revision,dataFingerprint:hash(state.data),configFingerprint:hash(state.r21?.config||partialR21Seed()),node:process.version});});
+  app.use('/api', createBusinessRouter({ dataDir: dir, actorMiddleware: actor, requireMember: member }));
   if(process.env.B1_UAT_FIXTURES)app.use('/fixtures',express.static(process.env.B1_UAT_FIXTURES,{index:false,dotfiles:'deny'}));
   if (browser) {
     const { build } = await import('vite');
