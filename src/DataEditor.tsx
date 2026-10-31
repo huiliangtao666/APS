@@ -1,4 +1,6 @@
 import {originalStageDefs,originalStageNote} from './lib/original-stage-data.mjs';
+import {ResourceWorkbench} from './ResourceWorkbench';
+import {resourceTables} from './lib/resource-workbench.mjs';
 import {originalBomNote} from './lib/original-bom.mjs';
 import {MasterDataContract} from './MasterDataContract';
 import {OriginalResourceConfig} from './OriginalResourceConfig';
@@ -40,6 +42,7 @@ export function DataEditor({initialRecord,identityContext,data={},def,rows,revis
  function change(next:Row[],op='edit'){if(!draft)setBase(revision);setDrafts({...drafts,[def.key]:next});setOperation(op);setSaved('');setError('');setIssues([]);}
  async function save(){if(!draft)return;setSaving(true);setError('');try{const result=await onSave(drafts,base,operation);setSaved(result?.unchanged?'内容相同，未新增版本或操作记录。':'保存完成，当前输入已更新；原方案及其输入保留。');setDrafts({});setSelected([]);}catch(e){setError(e instanceof Error?e.message:'保存失败');setIssues((e as any)?.detail?.issues||[]);}finally{setSaving(false);}}
  return <section aria-label="模拟记录编辑">
+  {Object.prototype.hasOwnProperty.call(resourceTables,def.key)&&<ResourceWorkbench data={data} revision={revision} reason={reason} canWrite={canWrite} busy={busy} draftPending={draft} onLocate={onLocate}/>}
   <p>可跨类别暂存修改，全部草稿一起保存；新增工艺路线和工时等关联数据须一起保存。离开数据页将丢弃草稿。修改先保存在本页草稿，点击“保存修改”后由服务端检查；取消不会写入。复制后请填写新的唯一编号。删除仅影响新输入版本，已保存方案保留原输入。质量状态均为模拟状态。</p>
   {def.key==='factoryLines'&&<p>五字段须显式填写，时区使用 IANA 名称（如 Asia/Shanghai）；不自动填充值。首次配置须覆盖现有机器、订单的产线及日历的工厂引用。可维护未投入排程的产线记录，R1 仍只允许一条排程产线。修改保存为新输入版本，已确认方案的原始输入保留。</p>}
   {def.key==='simulationEvents'&&<p>FR029：先更新全部在制任务观测分钟为事件时点，再保存完整事件集合；可跨表暂存后一并保存。保护策略仅支持“禁止未开始任务开工”，需处理事实JSON留空由服务器判定。故障/耗料影响事实永久保留待处理；恢复、转机、撤销及旧方案未执行任务锁定未定。模拟物料状态不代表QA在线放行。</p>}
