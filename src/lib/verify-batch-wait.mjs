@@ -1,3 +1,4 @@
+import {productionYield} from './workbook-bom-profile.mjs';
 import {quantityMath as Q} from './material-allocation.mjs';
 // Fixed-output audit only: derive weights and waiting intervals from frozen rows.
 // It neither groups batches nor calls the planner or resource allocator.
@@ -24,7 +25,7 @@ export function verifyBatchWait(plan,data,conditions=plan.conditions){
    const expected=Q.sub(Q.q(order['合格需求']),Q.q(order['已完成合格数量']||'0'));
    const sum=members.reduce((s,m)=>Q.add(s,Q.fromExact(m.qualifiedKg)),Q.zero);checked++;
    if(Q.cmp(sum,expected)!==0n)add('VERIFY / BATCH_LOAD',`${order['订单编号']} 生产批合格量不守恒`,[]);
-   for(const m of members)if(Q.cmp(Q.fromExact(m.inputKg),Q.div(Q.fromExact(m.qualifiedKg),Q.q(product['总收率'])))!==0n)add('VERIFY / BATCH_LOAD',`${m.id} 投入量与合格量/收率不一致`,[]);
+   for(const m of members)if(Q.cmp(Q.fromExact(m.inputKg),Q.div(Q.fromExact(m.qualifiedKg),productionYield(data,product['产品编号'])))!==0n)add('VERIFY / BATCH_LOAD',`${m.id} 投入量与合格量/收率不一致`,[]);
   }
   for(const g of plan.resourceBatches||[]){
    const machine=data.machines.find(m=>m['设备编号']===g.machine),node=machine?.['装载计量基准'];

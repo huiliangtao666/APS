@@ -1,3 +1,4 @@
+import {productionYield} from './workbook-bom-profile.mjs';
 import {operationDuration,timeFor} from './pack-batch.mjs';
 import {inheritedCalendarId} from './factory-lines.mjs';
 import {sourceRefs} from './problem-records.mjs';
@@ -35,7 +36,7 @@ export function establishProcessProduction(data,orders){
  const records=[],contexts=new Map();
  for(const order of orders.filter(isOrderSchedulable)){
   if(order['数量单位']!=='kg')throw Error('配对路线仅支持显式kg；其他粒度未决定');
-  const product=one(data.products.filter(p=>p['产品编号']===order['产品编号']),'产品'),yieldRate=Q.q(product['总收率']);
+  const product=one(data.products.filter(p=>p['产品编号']===order['产品编号']),'产品'),yieldRate=productionYield(data,order['产品编号']);
   if(Q.cmp(yieldRate,Q.zero)<=0n||Q.cmp(yieldRate,Q.one)>0n)throw Error('总收率须在(0,1]');
   const remaining=Q.sub(Q.q(order['合格需求']),Q.q(order['已完成合格数量']||'0'));if(Q.cmp(remaining,Q.zero)<0n)throw Error('订单已完成数量超过合格需求');if(Q.cmp(remaining,Q.zero)===0n)continue;
   const route=orderedOperations(data,order['产品编号']),cools=route.filter(r=>String(r['最大等待分钟']??'').trim()!=='');

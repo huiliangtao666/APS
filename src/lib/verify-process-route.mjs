@@ -1,3 +1,4 @@
+import {productionYield} from './workbook-bom-profile.mjs';
 import {verifyPackMinutes} from './verify-pack-batch.mjs';
 import {sourceRefs} from './problem-records.mjs';
 import {quantityMath as Q,feedTime} from './material-allocation.mjs';
@@ -32,7 +33,7 @@ export function verifyProcessRoute(plan,data,conditions={}){
   for(const order of data.orders.filter(o=>o['需求类型']!=='预测'&&o['订单状态']==='有效')){
    const oid=order['订单编号'],pid=order['产品编号'],product=only(data.products.filter(p=>p['产品编号']===pid),'产品');
    if(order['数量单位']!=='kg')throw Error('非kg生产身份未定义');
-   const yieldRate=Q.q(product['总收率']),remaining=Q.sub(Q.q(order['合格需求']),Q.q(order['已完成合格数量']||'0'));
+   const yieldRate=productionYield(data,pid),remaining=Q.sub(Q.q(order['合格需求']),Q.q(order['已完成合格数量']||'0'));
    if(Q.cmp(yieldRate,Q.zero)<=0n||Q.cmp(yieldRate,Q.one)>0n||Q.cmp(remaining,Q.zero)<0n)throw Error('冻结订单余量/总收率无效');
    if(Q.cmp(remaining,Q.zero)===0n)continue;
    const route=data.routes.filter(r=>r['产品编号']===pid),coolRows=route.filter(r=>String(r['最大等待分钟']??'').trim()!=='');

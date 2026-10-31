@@ -1,3 +1,4 @@
+import {productionYield} from './workbook-bom-profile.mjs';
 import {partialAllowed} from './pack-batch.mjs';
 import {quantityMath as Q} from './material-allocation.mjs';
 import {inheritedCalendarId} from './factory-lines.mjs';
@@ -27,7 +28,7 @@ export function prepareCoolingMembers({data,productionBatches,upstreamTasks,star
    const order=one((data.orders||[]).filter(o=>o['订单编号']===b.orderId),'订单');
    const product=one((data.products||[]).filter(p=>p['产品编号']===order['产品编号']),'产品');
    if(order['数量单位']!=='kg')throw Error('订单非kg，粒度未决');
-   if(Q.cmp(Q.mul(input,Q.q(product['总收率'])),output)!==0n)throw Error('生产批投入×总收率与合格产出不守恒');
+   if(Q.cmp(Q.mul(input,productionYield(data,product['产品编号'])),output)!==0n)throw Error('生产批投入×总收率与合格产出不守恒');
    const route=(data.routes||[]).filter(r=>r['产品编号']===order['产品编号']);
    if(new Set(route.map(r=>r['工序编号'])).size!==route.length||!route.length)throw Error('路线为空或工序重复');
    const roots=route.filter(r=>!r['前序工序']);let cursor=one(roots,'顺序路线起点'),visited=new Set();

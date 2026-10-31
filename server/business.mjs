@@ -1,3 +1,5 @@
+import {bomApplication,saveBomApplication} from './workbook-bom-application.mjs';
+import {createWorkbookRouter} from './workbook-router.mjs';
 import {packTransition} from '../src/lib/pack-batch.mjs';
 import {stageMappingTransition} from '../src/lib/stage-bindings.mjs';
 import {createR21ConfigRouter} from './r21-config.mjs';
@@ -93,6 +95,9 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     next();
   };
   const record=(s,req,action,target,details={})=>s.records.push({id:randomUUID(),action,target,actor:actorKey(req),role:req.member.role,at:new Date().toISOString(),reason:req.body.reason.trim(),requestId:requestId(req),...details});
+  router.use('/workbooks',createWorkbookRouter({dataDir,permission,actorKey,requestId,workerFactory}));
+  router.get('/bom-loss',permission('read'),(req,res)=>{const s=read();try{const p=bomApplication(s.data,String(req.query.productId||''),String(req.query.version||''));res.json({...p,revision:s.revision});}catch(e){res.status(422).json({error:e.message});}});
+  router.post('/bom-loss',permission('edit'),(req,res)=>{const s=read();if(req.body.revision!==s.revision)return res.status(409).json({error:'stale_input'});try{const p=saveBomApplication(s.data,req.body.productId,req.body.version,req.body.config,s.revision+1);s.data.bomLossProfiles=[...(s.data.bomLossProfiles||[]).filter(old=>old.productId!==p.productId||old.recipe.version!==p.recipe.version),p];s.revision++;record(s,req,'bom_loss_saved',p.productId,{model:p.config.model,configVersion:p.config.version});write(s);res.json({...p,revision:s.revision});}catch(e){res.status(422).json({error:e.message});}});
   router.get('/meta',permission('read'),(_req,res)=>res.json({release:'R1 prototype + FR-037 supported-flow slice',baseline:'APS v0.3 review draft',supportedRules:['BR-02 precedence','BR-03 exclusive machine overlap','FR-008 calendar','FR-007 personnel','FR-022 explicit joint occupancy'],timeOrigin:'2026-11-02T08:00:00+08:00',interval:'[start,end)',unsupportedWorkflows:['external-dispatch'],confirmation:'FR030-v1 internal only'}));
   router.get('/rules/preview',permission('read'),(_req,res)=>{const s=read();res.json({revision:s.revision,...configurationPreview(s.data)});});
   router.get('/rules/capabilities',permission('read'),(_req,res)=>res.json(ruleCatalog));

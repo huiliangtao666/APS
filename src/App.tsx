@@ -1,3 +1,4 @@
+import {InputData,BomApplication} from './InputData';
 import {R21ConfigurationPanel} from './R21ConfigurationPanel';
 import {loadRunSnapshot} from './lib/run-snapshot.mjs';
 import {ProblemRecords} from './ProblemRecords';
@@ -55,7 +56,7 @@ export default function App() {
   const [currentInputId,setCurrentInputId]=useState<string>();
   const [queryInputRow,setQueryInputRow]=useState<Row|undefined>();
   const [queryInputTable,setQueryInputTable]=useState<string|undefined>();
-  const [view,setView]=useState<'schedule'|'data'|'query'|'decisions'|'reports'>('schedule');
+  const [view,setView]=useState<'schedule'|'data'|'input'|'query'|'decisions'|'reports'>('schedule');
   useEffect(()=>{if(view!=='query')setQueryInputTable(undefined);},[view]);
   const [tableKey,setTableKey]=useState('orders');
   const [inventoryAsOf,setInventoryAsOf]=useState(new Date(Date.now()+8*3600000).toISOString().slice(0,16));
@@ -118,12 +119,14 @@ export default function App() {
   function locate(f:Finding){if(!f.taskIds.length){setRecordProblem(f);setRecordProblemOpen(n=>n+1);return;}setRecordProblem(f.relatedRecords?.length?f:null);setRecordProblemOpen(n=>n+1);setFocusedProblem(f);setSelected(f.taskIds);setView('schedule');}
 
   return <div className="app-shell">
-    <header className={`topbar ${embedded?'embedded-topbar':''}`}><div className="brandmark">APS</div><div className="brand"><b>APS · 单线最小排程</b><span>R1 原型 / v0.3 需求基线</span></div>{<nav><button className={view==='schedule'?'active':''} onClick={()=>setView('schedule')}>排程工作台</button><button className={view==='query'?'active':''} onClick={()=>setView('query')}>模拟数据查询</button><button className={view==='data'?'active':''} onClick={()=>setView('data')}>数据与 CSV</button><button aria-label="工装配置" onClick={openTools}>工装配置</button><button className={view==='reports'?'active':''} onClick={()=>setView('reports')}>查询报表与导出</button><button className={view==='decisions'?'active':''} onClick={()=>setView('decisions')}>范围与待决</button></nav>}<div className="top-status"><i/>预览环境</div></header>
+    <header className={`topbar ${embedded?'embedded-topbar':''}`}><div className="brandmark">APS</div><div className="brand"><b>APS · 单线最小排程</b><span>R1 原型 / v0.3 需求基线</span></div>{<nav><button className={view==='input'?'active':''} onClick={()=>setView('input')}>输入数据</button><button className={view==='schedule'?'active':''} onClick={()=>setView('schedule')}>排程工作台</button><button className={view==='query'?'active':''} onClick={()=>setView('query')}>模拟数据查询</button><button className={view==='data'?'active':''} onClick={()=>setView('data')}>数据与 CSV</button><button aria-label="工装配置" onClick={openTools}>工装配置</button><button className={view==='reports'?'active':''} onClick={()=>setView('reports')}>查询报表与导出</button><button className={view==='decisions'?'active':''} onClick={()=>setView('decisions')}>范围与待决</button></nav>}<div className="top-status"><i/>预览环境</div></header>
     <main>
       <section className="panel"><h2>共享操作与记录</h2><p>当前无需应用账号，所有访问者共用数据及操作权限。记录仅标记共享工作台，不代表个人身份或独立审批。所有质量状态均为模拟数据；确认仅在本系统支持范围内生效。</p><label>操作原因（必填）<input aria-label="操作原因" value={reason} onChange={e=>setReason(e.target.value)}/></label><button onClick={()=>perform(refresh)}>刷新数据与记录</button><details><summary>操作记录（{operations.length}）</summary>{operations.map(r=><p key={r.id}>{r.at} · {r.actor} · {r.action} · {r.reason}</p>)}</details></section>
-      <section className="hero"><div><p className="eyebrow">单线排程 · R1 最小模式 / 已有支持模式</p><h1>{view==='schedule'?'排程计算与范围核对':view==='data'?'日历与排程数据':view==='query'?'模拟数据与关联查询':view==='reports'?'查询报表与文件导出':'实现范围与业务决策'}</h1><p className="sub">基于 v0.3 UAT-02 / 2026-11-02 08:00（Asia/Shanghai）；样例业务值均为虚构，仅用于软件验证。</p></div><div className="hero-source"><span>追溯基线</span><b>FR-008 · UAT-02 · AC-05</b><small>工厂窗口继承 · 设备停机例外 · 连续工作窗口</small></div></section>
+      <section className="hero"><div><p className="eyebrow">单线排程 · R1 最小模式 / 已有支持模式</p><h1>{view==='schedule'?'排程计算与范围核对':view==='input'?'输入数据与整本采用':view==='data'?'日历与排程数据':view==='query'?'模拟数据与关联查询':view==='reports'?'查询报表与文件导出':'实现范围与业务决策'}</h1><p className="sub">基于 v0.3 UAT-02 / 2026-11-02 08:00（Asia/Shanghai）；样例业务值均为虚构，仅用于软件验证。</p></div><div className="hero-source"><span>追溯基线</span><b>FR-008 · UAT-02 · AC-05</b><small>工厂窗口继承 · 设备停机例外 · 连续工作窗口</small></div></section>
       {message&&<div className="toast" role="status" aria-live="polite" aria-atomic="true"><span>{message}</span><button aria-label="关闭提示" onClick={()=>setMessage('')}>×</button></div>}
       {recordProblem&&<ProblemRecords key={recordProblemOpen} finding={recordProblem} data={data} identityContext={{inputVersionId:currentInputId,operations}} canWrite={!!session?.canWrite&&!busy} onClose={()=>setRecordProblem(null)} onQuery={(ref,current)=>{const resolved=current?currentRecord(ref,data,{inputVersionId:currentInputId,operations}):null;if(current&&!resolved)return;const id=ref.origin?.inputVersionId;const original=id?(checkedInputs[id]||plans.find(p=>(p as any).inputVersionId===id)?.inputSnapshot):undefined;if(!current&&!original){setMessage('原输入版本不可用；上方保留原检查值，不能使用当前同位记录替代。');return;}setQuerySnapshot(!current&&original&&id?{data:original,id}:undefined);setQueryOccurrence(current?resolved?.index:ref.origin?.occurrence.index);setQueryHistorical(!current);setQueryInputTable(ref.table);setQueryInputRow(current?resolved!.row:ref.row);setView('query');}} onEdit={ref=>{setTableKey(ref.table);setEditRecord(ref);setView('data');}}/>}
+      {view==='input'&&<InputData api={api} canWrite={!!session?.canWrite} canExport={!!session?.canExport} reason={reason}/>}
+      {view==='data'&&<BomApplication api={api} data={data} canWrite={!!session?.canWrite&&!busy&&!!reason.trim()} onSaved={refresh}/>}
       {view==='reports'&&<ReportPanel plans={plans} api={api} onExport={session?.canExport&&!busy&&!!reason.trim()?download:undefined}/>}
       {view==='schedule'&&<>
         <ConfirmationPanel plans={plans} role={session?.role} busy={busy} reason={reason} api={api} refresh={refresh} onExport={session?.canExport?id=>download({confirmationId:id},id+'-确认副本.json'):undefined}/>

@@ -1,3 +1,4 @@
+import {productionYield} from './workbook-bom-profile.mjs';
 import {partialAllowed} from './pack-batch.mjs';
 import {sourceRefs} from './problem-records.mjs';
 import {quantityMath as Q, calculateMaterialDemand} from './material-allocation.mjs';
@@ -26,7 +27,7 @@ export function prepareProductionBatches(source,orders,minute,at=new Date().toIS
    const remaining=Q.sub(Q.q(order['合格需求']),Q.q(order['已完成合格数量']||'0'));if(Q.cmp(remaining,Q.zero)===0n)continue;
    const product=source.products.find(p=>p['产品编号']===order['产品编号']);
    trace('products',product?[product]:[]);
-   const input=Q.div(remaining,Q.q(product['总收率']));
+   const input=Q.div(remaining,productionYield(source,order['产品编号']));
    const route=source.routes.filter(r=>r['产品编号']===order['产品编号']);
    trace('routes',route);
    if(!route.length)throw Error('缺少路线');
@@ -42,7 +43,7 @@ export function prepareProductionBatches(source,orders,minute,at=new Date().toIS
     const batch=(source.batchResources||[]).find(r=>r['资源编号']===machine['设备编号']&&r['资源类型']==='批处理装载');
     trace('batchResources',batch?[batch]:[]);
     if(batch&&(!op['程序编号']?.trim()||!batch['允许程序'].split(';').includes(op['程序编号'])))throw Error(`工序 ${op['工序编号']} 缺少设备允许的显式程序；不能推断兼容`);
-    const factor=machine['装载计量基准']==='合格产出'?Q.q(product['总收率']):Q.q('1');
+    const factor=machine['装载计量基准']==='合格产出'?productionYield(source,order['产品编号']):Q.q('1');
     return {machine,low:partialAllowed(machine)?Q.zero:Q.div(low,factor),high:Q.div(high,factor),nodeLow:low,nodeHigh:high,factor,batch};
    });
    let high=machines[0].high,low=machines[0].low;

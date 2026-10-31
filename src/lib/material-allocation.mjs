@@ -1,3 +1,4 @@
+import {calculateBomLoss} from './bom-loss-policy.mjs';
 import {minuteMode,minuteInstant} from './minute-validity.mjs';
 import {inventoryBusinessDate,inventoryEligibility} from './inventory.mjs';
 import { PLAN_TIME_ORIGIN, resolveExpectedSupply, validSupplyTime } from './expected-supply.mjs';
@@ -44,6 +45,7 @@ export function calculateMaterialDemand(data,order,operation,minute,remainingKg,
  let kg=q(order['合格需求']),completed=q(order['已完成合格数量']||'0');
  if(cmp(completed,kg)>0)fail('已完成合格数量超过需求');
  kg=sub(kg,completed);
+ const lossProfile=(data.bomLossProfiles||[]).find(p=>p.productId===order['产品编号']&&p.recipe.version===bom[0]?.['版本编号']);
  const weight=q(product['单支净重kg']),bag=q(product['每袋支数']),yieldRate=q(product['总收率']);
  if(cmp(yieldRate,zero)<=0||cmp(yieldRate,one)>0)fail('总收率须大于零且不超过1');
  if(order['数量单位']==='支')kg=mul(kg,weight);
@@ -53,13 +55,14 @@ export function calculateMaterialDemand(data,order,operation,minute,remainingKg,
  const raw=bom.filter(b=>b['用量类型']==='BOM物料');
  if(raw.length){
   if(raw.some(b=>b['用量基准']!=='每1000kg投入'||b['用量单位']!=='kg'||b['收率/损耗口径备注']?.trim()||(String(b['损坏比例']||'').trim()&&cmp(q(b['损坏比例']),zero)!==0n)))fail('仅支持无加料的每1000kg投入；备注口径须先明确，不能推断');
+  if(lossProfile&&raw.some(b=>!lossProfile.recipe.materials.some(m=>m.materialId===b['物料编号']&&cmp(q(m.quotaKg),q(b['配置用量']))===0n)))fail('新损耗配方与当前标准投入不一致，请重新保存该配置');
   const total=raw.reduce((a,b)=>add(a,q(b['配置用量'])),zero);
   if(cmp(total,q('1000'))!==0n)fail('每1000kg投入的完整配方定额之和须为1000；不能自动归一化');
  }
  return bom.filter(b=>b['投料工序编号']===operation).map(b=>{
   let amount,formula;
   if(b['用量类型']==='BOM物料'){
-   amount=mul(div(kg,yieldRate),div(q(b['配置用量']),q('1000')));formula='订单余量kg ÷ 总收率 × 定额 ÷ 1000（仅损失、无工序加料）';
+   if(lossProfile){const result=calculateBomLoss(lossProfile.recipe,lossProfile.config,'1'),line=result.rows.find(r=>r.materialId===b['物料编号']);if(!line)fail('新损耗配方缺物料');amount=mul(kg,fromExact(line.targetInput));formula='bom-loss-kg-v1：标准投入定额 × 目标合格产出 ÷ Σ逐物料合格产出；配置版本'+lossProfile.config.version;}else{amount=mul(div(kg,yieldRate),div(q(b['配置用量']),q('1000')));formula='订单余量kg ÷ 总收率 × 定额 ÷ 1000（仅损失、无工序加料）';}
   }else{
    if(b['用量基准']!=='每袋'||b['用量单位']!=='个'||b['收率/损耗口径备注']?.trim()||!String(b['损坏比例']??'').trim())fail('包材仅支持每袋/个及显式领用量中损坏比例；其他口径未定义');
    const loss=q(b['损坏比例']);if(cmp(loss,one)>=0)fail('包材损坏比例须小于1');

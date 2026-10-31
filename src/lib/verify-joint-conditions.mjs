@@ -1,3 +1,4 @@
+import {productionYield} from './workbook-bom-profile.mjs';
 import {verifyPackAmounts} from './verify-pack-batch.mjs';
 import {verifyWorkingWindows} from './verify-working-windows.mjs';
 import {quantityMath as Q,calculateMaterialDemand,remainingExecutionDemand,feedTime} from './material-allocation.mjs';
@@ -48,8 +49,8 @@ function verifyFixed(plan,data,conditions){
     const remaining=Q.sub(Q.q(order['合格需求']),Q.q(order['已完成合格数量']||'0'));
     const route=data.routes.filter(r=>r['产品编号']===order['产品编号']);
     const pair=route.some(r=>String(r['最大等待分钟']??'').trim()!=='');
-    const maxima=route.map(r=>{const dep=data.dependencies.find(d=>d['订单编号']===order['订单编号']&&d['工序编号']===r['工序编号']&&d['资源类型']==='设备');const m=data.machines.find(m=>m['设备编号']===dep?.['资源编号']),max=Q.q(m['最大装载kg']);return m['装载计量基准']==='合格产出'?Q.div(max,Q.q(product['总收率'])):max;});
-    const maximum=maxima.reduce((a,b)=>Q.min(a,b)),count=Number(Q.ceil(Q.div(Q.div(remaining,Q.q(product['总收率'])),maximum)).n);
+    const maxima=route.map(r=>{const dep=data.dependencies.find(d=>d['订单编号']===order['订单编号']&&d['工序编号']===r['工序编号']&&d['资源类型']==='设备');const m=data.machines.find(m=>m['设备编号']===dep?.['资源编号']),max=Q.q(m['最大装载kg']);return m['装载计量基准']==='合格产出'?Q.div(max,productionYield(data,product['产品编号'])):max;});
+    const maximum=maxima.reduce((a,b)=>Q.min(a,b)),count=Number(Q.ceil(Q.div(Q.div(remaining,productionYield(data,product['产品编号'])),maximum)).n);
     batchKg=Q.exact(Q.div(remaining,Q.q(count)));
     if(!Number.isSafeInteger(task.productionBatchIndex)||task.productionBatchIndex<1||task.productionBatchIndex>count||task.productionBatchId!==JSON.stringify([task.orderId,task.productionBatchIndex])||Q.cmp(Q.fromExact(task.exactQuantity),Q.fromExact(batchKg))!==0n||task.quantity!==Q.num(Q.fromExact(batchKg)))add(`${task.id} 生产批成员身份/均分数量与冻结订单及装载上限不符`);
    }

@@ -1,0 +1,5635 @@
+{
+  "mock": true,
+  "version": "SIM-INPUT-r1",
+  "author": "APS-Test",
+  "line": {
+    "id": "SIM-LINE-INPUT-01",
+    "selection": "explicit single simulation line; all source products/routes/resources bound once",
+    "not_site_default": true
+  },
+  "profile": {
+    "id": "excel-qualified-output-202611-r1",
+    "basis_kg": "1000",
+    "yield_already_included": true,
+    "original_source_unchanged": true
+  },
+  "resources": [
+    {
+      "id": "EQ001",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG001",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "2000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 3
+      }
+    },
+    {
+      "id": "EQ002",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG001",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "2000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 4
+      }
+    },
+    {
+      "id": "EQ003",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG002",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "2500",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 5
+      }
+    },
+    {
+      "id": "EQ004",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG002",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "2500",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 6
+      }
+    },
+    {
+      "id": "EQ005",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG003",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "3000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 7
+      }
+    },
+    {
+      "id": "EQ006",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG003",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "3000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 8
+      }
+    },
+    {
+      "id": "EQ007",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG004",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "4000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 9
+      }
+    },
+    {
+      "id": "EQ008",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG004",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "4000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 10
+      }
+    },
+    {
+      "id": "EQ009",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG005",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "3000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 11
+      }
+    },
+    {
+      "id": "EQ010",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG005",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "3000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 12
+      }
+    },
+    {
+      "id": "EQ011",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG006",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "3000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 13
+      }
+    },
+    {
+      "id": "EQ012",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG006",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "3000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 14
+      }
+    },
+    {
+      "id": "EQ013",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG007",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "2500",
+      "daily_kg": "2500",
+      "occupancy_kg": "2500",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 15
+      }
+    },
+    {
+      "id": "EQ014",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG007",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "2500",
+      "daily_kg": "2500",
+      "occupancy_kg": "2500",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 16
+      }
+    },
+    {
+      "id": "EQ015",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG008",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "4000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 17
+      }
+    },
+    {
+      "id": "EQ016",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG008",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "4000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 18
+      }
+    },
+    {
+      "id": "EQ017",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG008",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "4000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 19
+      }
+    },
+    {
+      "id": "EQ018",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG009",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "2500",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 20
+      }
+    },
+    {
+      "id": "EQ019",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG009",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "2500",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 21
+      }
+    },
+    {
+      "id": "EQ020",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG009",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "2500",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 22
+      }
+    },
+    {
+      "id": "EQ021",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG010",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "2000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 23
+      }
+    },
+    {
+      "id": "EQ022",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG011",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "2000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 24
+      }
+    },
+    {
+      "id": "EQ023",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG011",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "2000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 25
+      }
+    },
+    {
+      "id": "EQ024",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG012",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "5000",
+      "daily_kg": "5000",
+      "occupancy_kg": "5000",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 26
+      }
+    },
+    {
+      "id": "EQ025",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG012",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "5000",
+      "daily_kg": "5000",
+      "occupancy_kg": "5000",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 27
+      }
+    },
+    {
+      "id": "EQ026",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG012",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "5000",
+      "daily_kg": "5000",
+      "occupancy_kg": "5000",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 28
+      }
+    },
+    {
+      "id": "EQ027",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG013",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "4000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 29
+      }
+    },
+    {
+      "id": "EQ028",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG013",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "4000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 30
+      }
+    },
+    {
+      "id": "EQ029",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG013",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "4000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 31
+      }
+    },
+    {
+      "id": "EQ030",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG014",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "5000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 32
+      }
+    },
+    {
+      "id": "EQ031",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG014",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "5000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 33
+      }
+    },
+    {
+      "id": "EQ032",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "EG014",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "600",
+      "daily_kg": "5000",
+      "occupancy_kg": null,
+      "source": {
+        "sheet": "设备与工装",
+        "row": 34
+      }
+    },
+    {
+      "id": "TL001",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "TG001",
+      "kind": "工装",
+      "units": "1",
+      "batch_kg": "500",
+      "daily_kg": null,
+      "occupancy_kg": "500",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 35
+      }
+    },
+    {
+      "id": "TL002",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "TG001",
+      "kind": "工装",
+      "units": "1",
+      "batch_kg": "500",
+      "daily_kg": null,
+      "occupancy_kg": "500",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 36
+      }
+    },
+    {
+      "id": "TL003",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "TG001",
+      "kind": "工装",
+      "units": "1",
+      "batch_kg": "500",
+      "daily_kg": null,
+      "occupancy_kg": "500",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 37
+      }
+    },
+    {
+      "id": "TL004",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "TG001",
+      "kind": "工装",
+      "units": "1",
+      "batch_kg": "500",
+      "daily_kg": null,
+      "occupancy_kg": "500",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 38
+      }
+    },
+    {
+      "id": "TL005",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "TG001",
+      "kind": "工装",
+      "units": "1",
+      "batch_kg": "500",
+      "daily_kg": null,
+      "occupancy_kg": "500",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 39
+      }
+    },
+    {
+      "id": "TL006",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "TG001",
+      "kind": "工装",
+      "units": "1",
+      "batch_kg": "500",
+      "daily_kg": null,
+      "occupancy_kg": "500",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 40
+      }
+    },
+    {
+      "id": "TL007",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "TG002",
+      "kind": "工装",
+      "units": "1",
+      "batch_kg": "500",
+      "daily_kg": null,
+      "occupancy_kg": "500",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 41
+      }
+    },
+    {
+      "id": "TL008",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "TG002",
+      "kind": "工装",
+      "units": "1",
+      "batch_kg": "500",
+      "daily_kg": null,
+      "occupancy_kg": "500",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 42
+      }
+    },
+    {
+      "id": "TL009",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "TG002",
+      "kind": "工装",
+      "units": "1",
+      "batch_kg": "500",
+      "daily_kg": null,
+      "occupancy_kg": "500",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 43
+      }
+    },
+    {
+      "id": "TL010",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "TG002",
+      "kind": "工装",
+      "units": "1",
+      "batch_kg": "500",
+      "daily_kg": null,
+      "occupancy_kg": "500",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 44
+      }
+    },
+    {
+      "id": "TL011",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "TG003",
+      "kind": "工装",
+      "units": "1",
+      "batch_kg": "500",
+      "daily_kg": null,
+      "occupancy_kg": "500",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 45
+      }
+    },
+    {
+      "id": "TL012",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "TG003",
+      "kind": "工装",
+      "units": "1",
+      "batch_kg": "500",
+      "daily_kg": null,
+      "occupancy_kg": "500",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 46
+      }
+    },
+    {
+      "id": "TL013",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "TG003",
+      "kind": "工装",
+      "units": "1",
+      "batch_kg": "500",
+      "daily_kg": null,
+      "occupancy_kg": "500",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 47
+      }
+    },
+    {
+      "id": "TL014",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "TG003",
+      "kind": "工装",
+      "units": "1",
+      "batch_kg": "500",
+      "daily_kg": null,
+      "occupancy_kg": "500",
+      "source": {
+        "sheet": "设备与工装",
+        "row": 48
+      }
+    },
+    {
+      "id": "SIM-EQ-SF",
+      "line_id": "SIM-LINE-INPUT-01",
+      "group": "SIM-EG-SF",
+      "kind": "设备",
+      "units": "1",
+      "batch_kg": "500",
+      "daily_kg": "1000",
+      "occupancy_kg": "500",
+      "source": {
+        "new_record": "SIM-INPUT-r1/SF resource",
+        "author": "APS-Test",
+        "mock": true
+      }
+    }
+  ],
+  "tool_pools": {
+    "料车": [
+      "TL001",
+      "TL002",
+      "TL003",
+      "TL004",
+      "TL005",
+      "TL006"
+    ],
+    "挂架": [
+      "TL007",
+      "TL008",
+      "TL009",
+      "TL010"
+    ],
+    "模具": [
+      "TL011",
+      "TL012",
+      "TL013",
+      "TL014"
+    ],
+    "无专用工装": []
+  },
+  "labor_pools": [
+    {
+      "_row": 3,
+      "班组编号": "TM01",
+      "班组名称": "备料修整组",
+      "每班可用人数": "18",
+      "标准日班次数": "2",
+      "周日班次数": "1",
+      "替代规则": "只允许同技能组"
+    },
+    {
+      "_row": 4,
+      "班组编号": "TM02",
+      "班组名称": "调配灌装组",
+      "每班可用人数": "20",
+      "标准日班次数": "2",
+      "周日班次数": "1",
+      "替代规则": "只允许同技能组"
+    },
+    {
+      "_row": 5,
+      "班组编号": "TM03",
+      "班组名称": "热加工操作组",
+      "每班可用人数": "10",
+      "标准日班次数": "2",
+      "周日班次数": "1",
+      "替代规则": "只允许同技能组"
+    },
+    {
+      "_row": 6,
+      "班组编号": "TM04",
+      "班组名称": "包装检验组",
+      "每班可用人数": "24",
+      "标准日班次数": "2",
+      "周日班次数": "1",
+      "替代规则": "只允许同技能组"
+    },
+    {
+      "_row": 7,
+      "班组编号": "TM05",
+      "班组名称": "质量放行组",
+      "每班可用人数": "6",
+      "标准日班次数": "2",
+      "周日班次数": "1",
+      "替代规则": "只允许同技能组"
+    },
+    {
+      "_row": 8,
+      "班组编号": "TM06",
+      "班组名称": "冷库搬运组",
+      "每班可用人数": "8",
+      "标准日班次数": "2",
+      "周日班次数": "1",
+      "替代规则": "只允许同技能组"
+    }
+  ],
+  "feed_mappings": [
+    {
+      "bom_id": "BM001",
+      "parent": "FG001",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT003",
+      "source": {
+        "sheet": "物料清单",
+        "row": 3,
+        "cell": "L3"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM002",
+      "parent": "FG001",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT003",
+      "source": {
+        "sheet": "物料清单",
+        "row": 4,
+        "cell": "L4"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM003",
+      "parent": "FG001",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT009",
+      "source": {
+        "sheet": "物料清单",
+        "row": 5,
+        "cell": "L5"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM004",
+      "parent": "FG001",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT009",
+      "source": {
+        "sheet": "物料清单",
+        "row": 6,
+        "cell": "L6"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM005",
+      "parent": "FG001",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT009",
+      "source": {
+        "sheet": "物料清单",
+        "row": 7,
+        "cell": "L7"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM006",
+      "parent": "FG001",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT009",
+      "source": {
+        "sheet": "物料清单",
+        "row": 8,
+        "cell": "L8"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM007",
+      "parent": "FG001",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT009",
+      "source": {
+        "sheet": "物料清单",
+        "row": 9,
+        "cell": "L9"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM008",
+      "parent": "FG001",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT009",
+      "source": {
+        "sheet": "物料清单",
+        "row": 10,
+        "cell": "L10"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM009",
+      "parent": "FG001",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT009",
+      "source": {
+        "sheet": "物料清单",
+        "row": 11,
+        "cell": "L11"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM010",
+      "parent": "FG001",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT009",
+      "source": {
+        "sheet": "物料清单",
+        "row": 12,
+        "cell": "L12"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM011",
+      "parent": "FG002",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT012",
+      "source": {
+        "sheet": "物料清单",
+        "row": 13,
+        "cell": "L13"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM012",
+      "parent": "FG002",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT012",
+      "source": {
+        "sheet": "物料清单",
+        "row": 14,
+        "cell": "L14"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM013",
+      "parent": "FG002",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT018",
+      "source": {
+        "sheet": "物料清单",
+        "row": 15,
+        "cell": "L15"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM014",
+      "parent": "FG002",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT018",
+      "source": {
+        "sheet": "物料清单",
+        "row": 16,
+        "cell": "L16"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM015",
+      "parent": "FG002",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT018",
+      "source": {
+        "sheet": "物料清单",
+        "row": 17,
+        "cell": "L17"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM016",
+      "parent": "FG002",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT018",
+      "source": {
+        "sheet": "物料清单",
+        "row": 18,
+        "cell": "L18"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM017",
+      "parent": "FG002",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT018",
+      "source": {
+        "sheet": "物料清单",
+        "row": 19,
+        "cell": "L19"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM018",
+      "parent": "FG002",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT018",
+      "source": {
+        "sheet": "物料清单",
+        "row": 20,
+        "cell": "L20"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM019",
+      "parent": "FG002",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT018",
+      "source": {
+        "sheet": "物料清单",
+        "row": 21,
+        "cell": "L21"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM020",
+      "parent": "FG002",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT018",
+      "source": {
+        "sheet": "物料清单",
+        "row": 22,
+        "cell": "L22"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM021",
+      "parent": "FG003",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT021",
+      "source": {
+        "sheet": "物料清单",
+        "row": 23,
+        "cell": "L23"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM022",
+      "parent": "FG003",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT021",
+      "source": {
+        "sheet": "物料清单",
+        "row": 24,
+        "cell": "L24"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM023",
+      "parent": "FG003",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT021",
+      "source": {
+        "sheet": "物料清单",
+        "row": 25,
+        "cell": "L25"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM024",
+      "parent": "FG003",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT027",
+      "source": {
+        "sheet": "物料清单",
+        "row": 26,
+        "cell": "L26"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM025",
+      "parent": "FG003",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT027",
+      "source": {
+        "sheet": "物料清单",
+        "row": 27,
+        "cell": "L27"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM026",
+      "parent": "FG003",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT027",
+      "source": {
+        "sheet": "物料清单",
+        "row": 28,
+        "cell": "L28"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM027",
+      "parent": "FG003",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT027",
+      "source": {
+        "sheet": "物料清单",
+        "row": 29,
+        "cell": "L29"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM028",
+      "parent": "FG003",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT027",
+      "source": {
+        "sheet": "物料清单",
+        "row": 30,
+        "cell": "L30"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM029",
+      "parent": "FG003",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT027",
+      "source": {
+        "sheet": "物料清单",
+        "row": 31,
+        "cell": "L31"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM030",
+      "parent": "FG003",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT027",
+      "source": {
+        "sheet": "物料清单",
+        "row": 32,
+        "cell": "L32"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM031",
+      "parent": "FG003",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT027",
+      "source": {
+        "sheet": "物料清单",
+        "row": 33,
+        "cell": "L33"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM032",
+      "parent": "FG004",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT030",
+      "source": {
+        "sheet": "物料清单",
+        "row": 34,
+        "cell": "L34"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM033",
+      "parent": "FG004",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT030",
+      "source": {
+        "sheet": "物料清单",
+        "row": 35,
+        "cell": "L35"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM034",
+      "parent": "FG004",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT030",
+      "source": {
+        "sheet": "物料清单",
+        "row": 36,
+        "cell": "L36"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM035",
+      "parent": "FG004",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT036",
+      "source": {
+        "sheet": "物料清单",
+        "row": 37,
+        "cell": "L37"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM036",
+      "parent": "FG004",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT036",
+      "source": {
+        "sheet": "物料清单",
+        "row": 38,
+        "cell": "L38"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM037",
+      "parent": "FG004",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT036",
+      "source": {
+        "sheet": "物料清单",
+        "row": 39,
+        "cell": "L39"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM038",
+      "parent": "FG004",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT036",
+      "source": {
+        "sheet": "物料清单",
+        "row": 40,
+        "cell": "L40"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM039",
+      "parent": "FG004",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT036",
+      "source": {
+        "sheet": "物料清单",
+        "row": 41,
+        "cell": "L41"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM040",
+      "parent": "FG004",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT036",
+      "source": {
+        "sheet": "物料清单",
+        "row": 42,
+        "cell": "L42"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM041",
+      "parent": "FG004",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT036",
+      "source": {
+        "sheet": "物料清单",
+        "row": 43,
+        "cell": "L43"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM042",
+      "parent": "FG004",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT036",
+      "source": {
+        "sheet": "物料清单",
+        "row": 44,
+        "cell": "L44"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM043",
+      "parent": "FG005",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT039",
+      "source": {
+        "sheet": "物料清单",
+        "row": 45,
+        "cell": "L45"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM044",
+      "parent": "FG005",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT039",
+      "source": {
+        "sheet": "物料清单",
+        "row": 46,
+        "cell": "L46"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM045",
+      "parent": "FG005",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT039",
+      "source": {
+        "sheet": "物料清单",
+        "row": 47,
+        "cell": "L47"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM046",
+      "parent": "FG005",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT045",
+      "source": {
+        "sheet": "物料清单",
+        "row": 48,
+        "cell": "L48"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM047",
+      "parent": "FG005",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT045",
+      "source": {
+        "sheet": "物料清单",
+        "row": 49,
+        "cell": "L49"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM048",
+      "parent": "FG005",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT045",
+      "source": {
+        "sheet": "物料清单",
+        "row": 50,
+        "cell": "L50"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM049",
+      "parent": "FG005",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT045",
+      "source": {
+        "sheet": "物料清单",
+        "row": 51,
+        "cell": "L51"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM050",
+      "parent": "FG005",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT045",
+      "source": {
+        "sheet": "物料清单",
+        "row": 52,
+        "cell": "L52"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM051",
+      "parent": "FG005",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT045",
+      "source": {
+        "sheet": "物料清单",
+        "row": 53,
+        "cell": "L53"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM052",
+      "parent": "FG005",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT045",
+      "source": {
+        "sheet": "物料清单",
+        "row": 54,
+        "cell": "L54"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM053",
+      "parent": "FG005",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT045",
+      "source": {
+        "sheet": "物料清单",
+        "row": 55,
+        "cell": "L55"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM054",
+      "parent": "FG006",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT047",
+      "source": {
+        "sheet": "物料清单",
+        "row": 56,
+        "cell": "L56"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM055",
+      "parent": "FG006",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT047",
+      "source": {
+        "sheet": "物料清单",
+        "row": 57,
+        "cell": "L57"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM056",
+      "parent": "FG006",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT047",
+      "source": {
+        "sheet": "物料清单",
+        "row": 58,
+        "cell": "L58"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM057",
+      "parent": "FG006",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT053",
+      "source": {
+        "sheet": "物料清单",
+        "row": 59,
+        "cell": "L59"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM058",
+      "parent": "FG006",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT053",
+      "source": {
+        "sheet": "物料清单",
+        "row": 60,
+        "cell": "L60"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM059",
+      "parent": "FG006",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT053",
+      "source": {
+        "sheet": "物料清单",
+        "row": 61,
+        "cell": "L61"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM060",
+      "parent": "FG006",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT053",
+      "source": {
+        "sheet": "物料清单",
+        "row": 62,
+        "cell": "L62"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM061",
+      "parent": "FG006",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT053",
+      "source": {
+        "sheet": "物料清单",
+        "row": 63,
+        "cell": "L63"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM062",
+      "parent": "FG006",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT053",
+      "source": {
+        "sheet": "物料清单",
+        "row": 64,
+        "cell": "L64"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM063",
+      "parent": "FG006",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT053",
+      "source": {
+        "sheet": "物料清单",
+        "row": 65,
+        "cell": "L65"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM064",
+      "parent": "FG006",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT053",
+      "source": {
+        "sheet": "物料清单",
+        "row": 66,
+        "cell": "L66"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM065",
+      "parent": "FG007",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT056",
+      "source": {
+        "sheet": "物料清单",
+        "row": 67,
+        "cell": "L67"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM066",
+      "parent": "FG007",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT056",
+      "source": {
+        "sheet": "物料清单",
+        "row": 68,
+        "cell": "L68"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM067",
+      "parent": "FG007",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT063",
+      "source": {
+        "sheet": "物料清单",
+        "row": 69,
+        "cell": "L69"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM068",
+      "parent": "FG007",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT063",
+      "source": {
+        "sheet": "物料清单",
+        "row": 70,
+        "cell": "L70"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM069",
+      "parent": "FG007",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT063",
+      "source": {
+        "sheet": "物料清单",
+        "row": 71,
+        "cell": "L71"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM070",
+      "parent": "FG007",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT063",
+      "source": {
+        "sheet": "物料清单",
+        "row": 72,
+        "cell": "L72"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM071",
+      "parent": "FG007",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT063",
+      "source": {
+        "sheet": "物料清单",
+        "row": 73,
+        "cell": "L73"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM072",
+      "parent": "FG007",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT063",
+      "source": {
+        "sheet": "物料清单",
+        "row": 74,
+        "cell": "L74"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM073",
+      "parent": "FG007",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT063",
+      "source": {
+        "sheet": "物料清单",
+        "row": 75,
+        "cell": "L75"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM074",
+      "parent": "FG007",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT063",
+      "source": {
+        "sheet": "物料清单",
+        "row": 76,
+        "cell": "L76"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM075",
+      "parent": "FG008",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT064",
+      "source": {
+        "sheet": "物料清单",
+        "row": 77,
+        "cell": "L77"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM076",
+      "parent": "FG008",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT064",
+      "source": {
+        "sheet": "物料清单",
+        "row": 78,
+        "cell": "L78"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM077",
+      "parent": "FG008",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT064",
+      "source": {
+        "sheet": "物料清单",
+        "row": 79,
+        "cell": "L79"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM078",
+      "parent": "FG008",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT064",
+      "source": {
+        "sheet": "物料清单",
+        "row": 80,
+        "cell": "L80"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM079",
+      "parent": "FG008",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT064",
+      "source": {
+        "sheet": "物料清单",
+        "row": 81,
+        "cell": "L81"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM080",
+      "parent": "FG008",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT064",
+      "source": {
+        "sheet": "物料清单",
+        "row": 82,
+        "cell": "L82"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM081",
+      "parent": "FG008",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT064",
+      "source": {
+        "sheet": "物料清单",
+        "row": 83,
+        "cell": "L83"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM082",
+      "parent": "FG008",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT064",
+      "source": {
+        "sheet": "物料清单",
+        "row": 84,
+        "cell": "L84"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM083",
+      "parent": "FG008",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT065",
+      "source": {
+        "sheet": "物料清单",
+        "row": 85,
+        "cell": "L85"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM084",
+      "parent": "FG008",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT065",
+      "source": {
+        "sheet": "物料清单",
+        "row": 86,
+        "cell": "L86"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM085",
+      "parent": "FG008",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT065",
+      "source": {
+        "sheet": "物料清单",
+        "row": 87,
+        "cell": "L87"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM086",
+      "parent": "FG008",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT065",
+      "source": {
+        "sheet": "物料清单",
+        "row": 88,
+        "cell": "L88"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM087",
+      "parent": "FG008",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT065",
+      "source": {
+        "sheet": "物料清单",
+        "row": 89,
+        "cell": "L89"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM088",
+      "parent": "FG008",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT065",
+      "source": {
+        "sheet": "物料清单",
+        "row": 90,
+        "cell": "L90"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM089",
+      "parent": "FG008",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT065",
+      "source": {
+        "sheet": "物料清单",
+        "row": 91,
+        "cell": "L91"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM090",
+      "parent": "FG008",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT065",
+      "source": {
+        "sheet": "物料清单",
+        "row": 92,
+        "cell": "L92"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM091",
+      "parent": "FG008",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT065",
+      "source": {
+        "sheet": "物料清单",
+        "row": 93,
+        "cell": "L93"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM092",
+      "parent": "FG008",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT065",
+      "source": {
+        "sheet": "物料清单",
+        "row": 94,
+        "cell": "L94"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM093",
+      "parent": "FG008",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT065",
+      "source": {
+        "sheet": "物料清单",
+        "row": 95,
+        "cell": "L95"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM094",
+      "parent": "FG008",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT065",
+      "source": {
+        "sheet": "物料清单",
+        "row": 96,
+        "cell": "L96"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM095",
+      "parent": "FG008",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT065",
+      "source": {
+        "sheet": "物料清单",
+        "row": 97,
+        "cell": "L97"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM096",
+      "parent": "FG008",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT071",
+      "source": {
+        "sheet": "物料清单",
+        "row": 98,
+        "cell": "L98"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM097",
+      "parent": "FG008",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT071",
+      "source": {
+        "sheet": "物料清单",
+        "row": 99,
+        "cell": "L99"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM098",
+      "parent": "FG008",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT071",
+      "source": {
+        "sheet": "物料清单",
+        "row": 100,
+        "cell": "L100"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM099",
+      "parent": "FG008",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT071",
+      "source": {
+        "sheet": "物料清单",
+        "row": 101,
+        "cell": "L101"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM100",
+      "parent": "FG008",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT071",
+      "source": {
+        "sheet": "物料清单",
+        "row": 102,
+        "cell": "L102"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM101",
+      "parent": "FG008",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT071",
+      "source": {
+        "sheet": "物料清单",
+        "row": 103,
+        "cell": "L103"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM102",
+      "parent": "FG008",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT071",
+      "source": {
+        "sheet": "物料清单",
+        "row": 104,
+        "cell": "L104"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM103",
+      "parent": "FG008",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT071",
+      "source": {
+        "sheet": "物料清单",
+        "row": 105,
+        "cell": "L105"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM104",
+      "parent": "FG009",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT072",
+      "source": {
+        "sheet": "物料清单",
+        "row": 106,
+        "cell": "L106"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM105",
+      "parent": "FG009",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT072",
+      "source": {
+        "sheet": "物料清单",
+        "row": 107,
+        "cell": "L107"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM106",
+      "parent": "FG009",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT072",
+      "source": {
+        "sheet": "物料清单",
+        "row": 108,
+        "cell": "L108"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM107",
+      "parent": "FG009",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT072",
+      "source": {
+        "sheet": "物料清单",
+        "row": 109,
+        "cell": "L109"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM108",
+      "parent": "FG009",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT074",
+      "source": {
+        "sheet": "物料清单",
+        "row": 110,
+        "cell": "L110"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM109",
+      "parent": "FG009",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT074",
+      "source": {
+        "sheet": "物料清单",
+        "row": 111,
+        "cell": "L111"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM110",
+      "parent": "FG009",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT074",
+      "source": {
+        "sheet": "物料清单",
+        "row": 112,
+        "cell": "L112"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM111",
+      "parent": "FG009",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT074",
+      "source": {
+        "sheet": "物料清单",
+        "row": 113,
+        "cell": "L113"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM112",
+      "parent": "FG009",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT074",
+      "source": {
+        "sheet": "物料清单",
+        "row": 114,
+        "cell": "L114"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM113",
+      "parent": "FG009",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT074",
+      "source": {
+        "sheet": "物料清单",
+        "row": 115,
+        "cell": "L115"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM114",
+      "parent": "FG009",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT074",
+      "source": {
+        "sheet": "物料清单",
+        "row": 116,
+        "cell": "L116"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM115",
+      "parent": "FG009",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT074",
+      "source": {
+        "sheet": "物料清单",
+        "row": 117,
+        "cell": "L117"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM116",
+      "parent": "FG009",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT074",
+      "source": {
+        "sheet": "物料清单",
+        "row": 118,
+        "cell": "L118"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM117",
+      "parent": "FG009",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT074",
+      "source": {
+        "sheet": "物料清单",
+        "row": 119,
+        "cell": "L119"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM118",
+      "parent": "FG009",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT074",
+      "source": {
+        "sheet": "物料清单",
+        "row": 120,
+        "cell": "L120"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM119",
+      "parent": "FG009",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT074",
+      "source": {
+        "sheet": "物料清单",
+        "row": 121,
+        "cell": "L121"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM120",
+      "parent": "FG009",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT074",
+      "source": {
+        "sheet": "物料清单",
+        "row": 122,
+        "cell": "L122"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM121",
+      "parent": "FG009",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT079",
+      "source": {
+        "sheet": "物料清单",
+        "row": 123,
+        "cell": "L123"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM122",
+      "parent": "FG009",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT079",
+      "source": {
+        "sheet": "物料清单",
+        "row": 124,
+        "cell": "L124"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM123",
+      "parent": "FG009",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT079",
+      "source": {
+        "sheet": "物料清单",
+        "row": 125,
+        "cell": "L125"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM124",
+      "parent": "FG009",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT079",
+      "source": {
+        "sheet": "物料清单",
+        "row": 126,
+        "cell": "L126"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM125",
+      "parent": "FG009",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT079",
+      "source": {
+        "sheet": "物料清单",
+        "row": 127,
+        "cell": "L127"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM126",
+      "parent": "FG009",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT079",
+      "source": {
+        "sheet": "物料清单",
+        "row": 128,
+        "cell": "L128"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM127",
+      "parent": "FG009",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT079",
+      "source": {
+        "sheet": "物料清单",
+        "row": 129,
+        "cell": "L129"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM128",
+      "parent": "FG009",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT079",
+      "source": {
+        "sheet": "物料清单",
+        "row": 130,
+        "cell": "L130"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM129",
+      "parent": "FG010",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT080",
+      "source": {
+        "sheet": "物料清单",
+        "row": 131,
+        "cell": "L131"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM130",
+      "parent": "FG010",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT080",
+      "source": {
+        "sheet": "物料清单",
+        "row": 132,
+        "cell": "L132"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM131",
+      "parent": "FG010",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT080",
+      "source": {
+        "sheet": "物料清单",
+        "row": 133,
+        "cell": "L133"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM132",
+      "parent": "FG010",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT080",
+      "source": {
+        "sheet": "物料清单",
+        "row": 134,
+        "cell": "L134"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM133",
+      "parent": "FG010",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT080",
+      "source": {
+        "sheet": "物料清单",
+        "row": 135,
+        "cell": "L135"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM134",
+      "parent": "FG010",
+      "source_feed_name": "原料备料",
+      "route_step_id": "RT080",
+      "source": {
+        "sheet": "物料清单",
+        "row": 136,
+        "cell": "L136"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM135",
+      "parent": "FG010",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT082",
+      "source": {
+        "sheet": "物料清单",
+        "row": 137,
+        "cell": "L137"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM136",
+      "parent": "FG010",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT082",
+      "source": {
+        "sheet": "物料清单",
+        "row": 138,
+        "cell": "L138"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM137",
+      "parent": "FG010",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT082",
+      "source": {
+        "sheet": "物料清单",
+        "row": 139,
+        "cell": "L139"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM138",
+      "parent": "FG010",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT082",
+      "source": {
+        "sheet": "物料清单",
+        "row": 140,
+        "cell": "L140"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM139",
+      "parent": "FG010",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT082",
+      "source": {
+        "sheet": "物料清单",
+        "row": 141,
+        "cell": "L141"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM140",
+      "parent": "FG010",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT082",
+      "source": {
+        "sheet": "物料清单",
+        "row": 142,
+        "cell": "L142"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM141",
+      "parent": "FG010",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT082",
+      "source": {
+        "sheet": "物料清单",
+        "row": 143,
+        "cell": "L143"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM142",
+      "parent": "FG010",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT082",
+      "source": {
+        "sheet": "物料清单",
+        "row": 144,
+        "cell": "L144"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM143",
+      "parent": "FG010",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT082",
+      "source": {
+        "sheet": "物料清单",
+        "row": 145,
+        "cell": "L145"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM144",
+      "parent": "FG010",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT082",
+      "source": {
+        "sheet": "物料清单",
+        "row": 146,
+        "cell": "L146"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM145",
+      "parent": "FG010",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT082",
+      "source": {
+        "sheet": "物料清单",
+        "row": 147,
+        "cell": "L147"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM146",
+      "parent": "FG010",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT082",
+      "source": {
+        "sheet": "物料清单",
+        "row": 148,
+        "cell": "L148"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM147",
+      "parent": "FG010",
+      "source_feed_name": "调配混合",
+      "route_step_id": "RT082",
+      "source": {
+        "sheet": "物料清单",
+        "row": 149,
+        "cell": "L149"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM148",
+      "parent": "FG010",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT087",
+      "source": {
+        "sheet": "物料清单",
+        "row": 150,
+        "cell": "L150"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM149",
+      "parent": "FG010",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT087",
+      "source": {
+        "sheet": "物料清单",
+        "row": 151,
+        "cell": "L151"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM150",
+      "parent": "FG010",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT087",
+      "source": {
+        "sheet": "物料清单",
+        "row": 152,
+        "cell": "L152"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM151",
+      "parent": "FG010",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT087",
+      "source": {
+        "sheet": "物料清单",
+        "row": 153,
+        "cell": "L153"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM152",
+      "parent": "FG010",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT087",
+      "source": {
+        "sheet": "物料清单",
+        "row": 154,
+        "cell": "L154"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM153",
+      "parent": "FG010",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT087",
+      "source": {
+        "sheet": "物料清单",
+        "row": 155,
+        "cell": "L155"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM154",
+      "parent": "FG010",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT087",
+      "source": {
+        "sheet": "物料清单",
+        "row": 156,
+        "cell": "L156"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM155",
+      "parent": "FG010",
+      "source_feed_name": "包装检验",
+      "route_step_id": "RT087",
+      "source": {
+        "sheet": "物料清单",
+        "row": 157,
+        "cell": "L157"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM156",
+      "parent": "SF001",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF001-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 158,
+        "cell": "L158"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM157",
+      "parent": "SF001",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF001-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 159,
+        "cell": "L159"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM158",
+      "parent": "SF001",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF001-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 160,
+        "cell": "L160"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM159",
+      "parent": "SF001",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF001-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 161,
+        "cell": "L161"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM160",
+      "parent": "SF001",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF001-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 162,
+        "cell": "L162"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM161",
+      "parent": "SF001",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF001-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 163,
+        "cell": "L163"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM162",
+      "parent": "SF001",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF001-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 164,
+        "cell": "L164"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM163",
+      "parent": "SF001",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF001-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 165,
+        "cell": "L165"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM164",
+      "parent": "SF001",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF001-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 166,
+        "cell": "L166"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM165",
+      "parent": "SF001",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF001-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 167,
+        "cell": "L167"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM166",
+      "parent": "SF002",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF002-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 168,
+        "cell": "L168"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM167",
+      "parent": "SF002",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF002-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 169,
+        "cell": "L169"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM168",
+      "parent": "SF002",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF002-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 170,
+        "cell": "L170"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM169",
+      "parent": "SF002",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF002-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 171,
+        "cell": "L171"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM170",
+      "parent": "SF002",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF002-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 172,
+        "cell": "L172"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM171",
+      "parent": "SF002",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF002-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 173,
+        "cell": "L173"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM172",
+      "parent": "SF002",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF002-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 174,
+        "cell": "L174"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM173",
+      "parent": "SF002",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF002-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 175,
+        "cell": "L175"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM174",
+      "parent": "SF003",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF003-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 176,
+        "cell": "L176"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM175",
+      "parent": "SF003",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF003-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 177,
+        "cell": "L177"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM176",
+      "parent": "SF003",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF003-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 178,
+        "cell": "L178"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM177",
+      "parent": "SF003",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF003-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 179,
+        "cell": "L179"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM178",
+      "parent": "SF003",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF003-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 180,
+        "cell": "L180"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM179",
+      "parent": "SF003",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF003-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 181,
+        "cell": "L181"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM180",
+      "parent": "SF003",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF003-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 182,
+        "cell": "L182"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM181",
+      "parent": "SF003",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF003-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 183,
+        "cell": "L183"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM182",
+      "parent": "SF004",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF004-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 184,
+        "cell": "L184"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM183",
+      "parent": "SF004",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF004-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 185,
+        "cell": "L185"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM184",
+      "parent": "SF004",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF004-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 186,
+        "cell": "L186"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM185",
+      "parent": "SF004",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF004-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 187,
+        "cell": "L187"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM186",
+      "parent": "SF004",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF004-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 188,
+        "cell": "L188"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM187",
+      "parent": "SF004",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF004-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 189,
+        "cell": "L189"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM188",
+      "parent": "SF004",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF004-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 190,
+        "cell": "L190"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM189",
+      "parent": "SF004",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF004-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 191,
+        "cell": "L191"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM190",
+      "parent": "SF004",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF004-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 192,
+        "cell": "L192"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM191",
+      "parent": "SF004",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF004-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 193,
+        "cell": "L193"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM192",
+      "parent": "SF004",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF004-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 194,
+        "cell": "L194"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM193",
+      "parent": "SF005",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF005-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 195,
+        "cell": "L195"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM194",
+      "parent": "SF005",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF005-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 196,
+        "cell": "L196"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM195",
+      "parent": "SF005",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF005-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 197,
+        "cell": "L197"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM196",
+      "parent": "SF005",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF005-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 198,
+        "cell": "L198"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM197",
+      "parent": "SF005",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF005-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 199,
+        "cell": "L199"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM198",
+      "parent": "SF005",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF005-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 200,
+        "cell": "L200"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM199",
+      "parent": "SF005",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF005-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 201,
+        "cell": "L201"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM200",
+      "parent": "SF005",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF005-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 202,
+        "cell": "L202"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM201",
+      "parent": "SF005",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF005-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 203,
+        "cell": "L203"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM202",
+      "parent": "SF005",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF005-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 204,
+        "cell": "L204"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM203",
+      "parent": "SF005",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF005-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 205,
+        "cell": "L205"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM204",
+      "parent": "SF006",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF006-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 206,
+        "cell": "L206"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM205",
+      "parent": "SF006",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF006-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 207,
+        "cell": "L207"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM206",
+      "parent": "SF006",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF006-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 208,
+        "cell": "L208"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM207",
+      "parent": "SF006",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF006-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 209,
+        "cell": "L209"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM208",
+      "parent": "SF006",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF006-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 210,
+        "cell": "L210"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM209",
+      "parent": "SF006",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF006-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 211,
+        "cell": "L211"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM210",
+      "parent": "SF006",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF006-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 212,
+        "cell": "L212"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM211",
+      "parent": "SF006",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF006-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 213,
+        "cell": "L213"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM212",
+      "parent": "SF006",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF006-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 214,
+        "cell": "L214"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM213",
+      "parent": "SF006",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF006-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 215,
+        "cell": "L215"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM214",
+      "parent": "SF006",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF006-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 216,
+        "cell": "L216"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM215",
+      "parent": "SF007",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF007-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 217,
+        "cell": "L217"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM216",
+      "parent": "SF007",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF007-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 218,
+        "cell": "L218"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM217",
+      "parent": "SF007",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF007-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 219,
+        "cell": "L219"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM218",
+      "parent": "SF007",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF007-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 220,
+        "cell": "L220"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM219",
+      "parent": "SF007",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF007-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 221,
+        "cell": "L221"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM220",
+      "parent": "SF007",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF007-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 222,
+        "cell": "L222"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM221",
+      "parent": "SF007",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF007-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 223,
+        "cell": "L223"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM222",
+      "parent": "SF007",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF007-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 224,
+        "cell": "L224"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM223",
+      "parent": "SF007",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF007-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 225,
+        "cell": "L225"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM224",
+      "parent": "SF007",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF007-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 226,
+        "cell": "L226"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM225",
+      "parent": "SF007",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF007-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 227,
+        "cell": "L227"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM226",
+      "parent": "SF008",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF008-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 228,
+        "cell": "L228"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM227",
+      "parent": "SF008",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF008-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 229,
+        "cell": "L229"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM228",
+      "parent": "SF008",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF008-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 230,
+        "cell": "L230"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM229",
+      "parent": "SF008",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF008-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 231,
+        "cell": "L231"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM230",
+      "parent": "SF008",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF008-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 232,
+        "cell": "L232"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM231",
+      "parent": "SF008",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF008-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 233,
+        "cell": "L233"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM232",
+      "parent": "SF008",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF008-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 234,
+        "cell": "L234"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM233",
+      "parent": "SF008",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF008-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 235,
+        "cell": "L235"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM234",
+      "parent": "SF008",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF008-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 236,
+        "cell": "L236"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM235",
+      "parent": "SF008",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF008-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 237,
+        "cell": "L237"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM236",
+      "parent": "SF008",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF008-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 238,
+        "cell": "L238"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM237",
+      "parent": "SF009",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF009-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 239,
+        "cell": "L239"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM238",
+      "parent": "SF009",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF009-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 240,
+        "cell": "L240"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM239",
+      "parent": "SF009",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF009-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 241,
+        "cell": "L241"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM240",
+      "parent": "SF009",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF009-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 242,
+        "cell": "L242"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM241",
+      "parent": "SF009",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF009-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 243,
+        "cell": "L243"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM242",
+      "parent": "SF009",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF009-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 244,
+        "cell": "L244"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM243",
+      "parent": "SF009",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF009-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 245,
+        "cell": "L245"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM244",
+      "parent": "SF009",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF009-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 246,
+        "cell": "L246"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM245",
+      "parent": "SF009",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF009-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 247,
+        "cell": "L247"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM246",
+      "parent": "SF010",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF010-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 248,
+        "cell": "L248"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM247",
+      "parent": "SF010",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF010-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 249,
+        "cell": "L249"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM248",
+      "parent": "SF010",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF010-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 250,
+        "cell": "L250"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM249",
+      "parent": "SF010",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF010-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 251,
+        "cell": "L251"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM250",
+      "parent": "SF010",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF010-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 252,
+        "cell": "L252"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM251",
+      "parent": "SF010",
+      "source_feed_name": "原料备料",
+      "route_step_id": "SIM-RT-SF010-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 253,
+        "cell": "L253"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM252",
+      "parent": "SF010",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF010-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 254,
+        "cell": "L254"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM253",
+      "parent": "SF010",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF010-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 255,
+        "cell": "L255"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM254",
+      "parent": "SF010",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF010-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 256,
+        "cell": "L256"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM255",
+      "parent": "SF011",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF011-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 257,
+        "cell": "L257"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM256",
+      "parent": "SF011",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF011-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 258,
+        "cell": "L258"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM257",
+      "parent": "SF011",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF011-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 259,
+        "cell": "L259"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM258",
+      "parent": "SF011",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF011-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 260,
+        "cell": "L260"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM259",
+      "parent": "SF011",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF011-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 261,
+        "cell": "L261"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM260",
+      "parent": "SF011",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF011-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 262,
+        "cell": "L262"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM261",
+      "parent": "SF011",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF011-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 263,
+        "cell": "L263"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM262",
+      "parent": "SF012",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF012-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 264,
+        "cell": "L264"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM263",
+      "parent": "SF012",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF012-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 265,
+        "cell": "L265"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM264",
+      "parent": "SF012",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF012-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 266,
+        "cell": "L266"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM265",
+      "parent": "SF012",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF012-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 267,
+        "cell": "L267"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM266",
+      "parent": "SF012",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF012-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 268,
+        "cell": "L268"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM267",
+      "parent": "SF012",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF012-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 269,
+        "cell": "L269"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM268",
+      "parent": "SF012",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF012-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 270,
+        "cell": "L270"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM269",
+      "parent": "SF013",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF013-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 271,
+        "cell": "L271"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM270",
+      "parent": "SF013",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF013-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 272,
+        "cell": "L272"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM271",
+      "parent": "SF013",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF013-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 273,
+        "cell": "L273"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM272",
+      "parent": "SF013",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF013-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 274,
+        "cell": "L274"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM273",
+      "parent": "SF013",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF013-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 275,
+        "cell": "L275"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM274",
+      "parent": "SF013",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF013-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 276,
+        "cell": "L276"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM275",
+      "parent": "SF013",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF013-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 277,
+        "cell": "L277"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM276",
+      "parent": "SF014",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF014-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 278,
+        "cell": "L278"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM277",
+      "parent": "SF014",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF014-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 279,
+        "cell": "L279"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM278",
+      "parent": "SF014",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF014-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 280,
+        "cell": "L280"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM279",
+      "parent": "SF014",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF014-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 281,
+        "cell": "L281"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM280",
+      "parent": "SF014",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF014-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 282,
+        "cell": "L282"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM281",
+      "parent": "SF014",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF014-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 283,
+        "cell": "L283"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM282",
+      "parent": "SF014",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF014-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 284,
+        "cell": "L284"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM283",
+      "parent": "SF015",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF015-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 285,
+        "cell": "L285"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM284",
+      "parent": "SF015",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF015-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 286,
+        "cell": "L286"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM285",
+      "parent": "SF015",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF015-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 287,
+        "cell": "L287"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM286",
+      "parent": "SF015",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF015-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 288,
+        "cell": "L288"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM287",
+      "parent": "SF015",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF015-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 289,
+        "cell": "L289"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM288",
+      "parent": "SF015",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF015-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 290,
+        "cell": "L290"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM289",
+      "parent": "SF015",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF015-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 291,
+        "cell": "L291"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM290",
+      "parent": "SF016",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF016-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 292,
+        "cell": "L292"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM291",
+      "parent": "SF016",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF016-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 293,
+        "cell": "L293"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM292",
+      "parent": "SF016",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF016-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 294,
+        "cell": "L294"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM293",
+      "parent": "SF016",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF016-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 295,
+        "cell": "L295"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM294",
+      "parent": "SF016",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF016-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 296,
+        "cell": "L296"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM295",
+      "parent": "SF016",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF016-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 297,
+        "cell": "L297"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM296",
+      "parent": "SF017",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF017-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 298,
+        "cell": "L298"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM297",
+      "parent": "SF017",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF017-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 299,
+        "cell": "L299"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM298",
+      "parent": "SF017",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF017-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 300,
+        "cell": "L300"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM299",
+      "parent": "SF017",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF017-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 301,
+        "cell": "L301"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM300",
+      "parent": "SF017",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF017-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 302,
+        "cell": "L302"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM301",
+      "parent": "SF017",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF017-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 303,
+        "cell": "L303"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM302",
+      "parent": "SF018",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF018-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 304,
+        "cell": "L304"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM303",
+      "parent": "SF018",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF018-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 305,
+        "cell": "L305"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM304",
+      "parent": "SF018",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF018-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 306,
+        "cell": "L306"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM305",
+      "parent": "SF018",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF018-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 307,
+        "cell": "L307"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM306",
+      "parent": "SF018",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF018-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 308,
+        "cell": "L308"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM307",
+      "parent": "SF018",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF018-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 309,
+        "cell": "L309"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM308",
+      "parent": "SF019",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF019-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 310,
+        "cell": "L310"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM309",
+      "parent": "SF019",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF019-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 311,
+        "cell": "L311"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM310",
+      "parent": "SF019",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF019-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 312,
+        "cell": "L312"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM311",
+      "parent": "SF019",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF019-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 313,
+        "cell": "L313"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM312",
+      "parent": "SF019",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF019-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 314,
+        "cell": "L314"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM313",
+      "parent": "SF020",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF020-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 315,
+        "cell": "L315"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM314",
+      "parent": "SF020",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF020-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 316,
+        "cell": "L316"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM315",
+      "parent": "SF020",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF020-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 317,
+        "cell": "L317"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM316",
+      "parent": "SF020",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF020-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 318,
+        "cell": "L318"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    },
+    {
+      "bom_id": "BM317",
+      "parent": "SF020",
+      "source_feed_name": "调配混合",
+      "route_step_id": "SIM-RT-SF020-1",
+      "source": {
+        "sheet": "物料清单",
+        "row": 319,
+        "cell": "L319"
+      },
+      "mapping_source": "SIM-INPUT-r1 explicit feed mapping; not inferred production default"
+    }
+  ],
+  "wip_remaining": [
+    {
+      "id": "WP001",
+      "product": "FG001",
+      "quantity_kg": "200",
+      "current_route_step": "RT008",
+      "resource": "EQ024",
+      "current_occupancy_day_interval": [
+        0,
+        1
+      ],
+      "expected_release_day": 1,
+      "quality": "CONDITIONAL_NOT_PHYSICAL_STOCK",
+      "remaining_route_steps": [
+        "RT009"
+      ],
+      "remaining_material_bom_ids": [
+        "BM003",
+        "BM004",
+        "BM005",
+        "BM006",
+        "BM007",
+        "BM008",
+        "BM009",
+        "BM010"
+      ],
+      "material_policy": "SIM-INPUT-r1 explicitly: historical pre-pack ingredients already netted; packaging still required at packaging step; do not reissue historical ingredients",
+      "remaining_labor_pool": "TM03",
+      "remaining_labor_count": "2",
+      "remaining_tool_type": "挂架",
+      "remaining_tool_count": "1",
+      "source": {
+        "sheet": "期初在制",
+        "row": 3
+      },
+      "supplement_source": "APS-Test SIM-INPUT-r1, explicit replaceable simulation, not inferred zero remaining work"
+    },
+    {
+      "id": "WP002",
+      "product": "FG002",
+      "quantity_kg": "200",
+      "current_route_step": "RT017",
+      "resource": "EQ025",
+      "current_occupancy_day_interval": [
+        0,
+        2
+      ],
+      "expected_release_day": 2,
+      "quality": "CONDITIONAL_NOT_PHYSICAL_STOCK",
+      "remaining_route_steps": [
+        "RT018"
+      ],
+      "remaining_material_bom_ids": [
+        "BM013",
+        "BM014",
+        "BM015",
+        "BM016",
+        "BM017",
+        "BM018",
+        "BM019",
+        "BM020"
+      ],
+      "material_policy": "SIM-INPUT-r1 explicitly: historical pre-pack ingredients already netted; packaging still required at packaging step; do not reissue historical ingredients",
+      "remaining_labor_pool": "TM03",
+      "remaining_labor_count": "2",
+      "remaining_tool_type": "挂架",
+      "remaining_tool_count": "1",
+      "source": {
+        "sheet": "期初在制",
+        "row": 4
+      },
+      "supplement_source": "APS-Test SIM-INPUT-r1, explicit replaceable simulation, not inferred zero remaining work"
+    },
+    {
+      "id": "WP003",
+      "product": "FG003",
+      "quantity_kg": "200",
+      "current_route_step": "RT026",
+      "resource": "EQ026",
+      "current_occupancy_day_interval": [
+        0,
+        1
+      ],
+      "expected_release_day": 1,
+      "quality": "CONDITIONAL_NOT_PHYSICAL_STOCK",
+      "remaining_route_steps": [
+        "RT027"
+      ],
+      "remaining_material_bom_ids": [
+        "BM024",
+        "BM025",
+        "BM026",
+        "BM027",
+        "BM028",
+        "BM029",
+        "BM030",
+        "BM031"
+      ],
+      "material_policy": "SIM-INPUT-r1 explicitly: historical pre-pack ingredients already netted; packaging still required at packaging step; do not reissue historical ingredients",
+      "remaining_labor_pool": "TM03",
+      "remaining_labor_count": "2",
+      "remaining_tool_type": "挂架",
+      "remaining_tool_count": "1",
+      "source": {
+        "sheet": "期初在制",
+        "row": 5
+      },
+      "supplement_source": "APS-Test SIM-INPUT-r1, explicit replaceable simulation, not inferred zero remaining work"
+    },
+    {
+      "id": "WP004",
+      "product": "FG004",
+      "quantity_kg": "200",
+      "current_route_step": "RT035",
+      "resource": "EQ024",
+      "current_occupancy_day_interval": [
+        0,
+        2
+      ],
+      "expected_release_day": 2,
+      "quality": "CONDITIONAL_NOT_PHYSICAL_STOCK",
+      "remaining_route_steps": [
+        "RT036"
+      ],
+      "remaining_material_bom_ids": [
+        "BM035",
+        "BM036",
+        "BM037",
+        "BM038",
+        "BM039",
+        "BM040",
+        "BM041",
+        "BM042"
+      ],
+      "material_policy": "SIM-INPUT-r1 explicitly: historical pre-pack ingredients already netted; packaging still required at packaging step; do not reissue historical ingredients",
+      "remaining_labor_pool": "TM03",
+      "remaining_labor_count": "2",
+      "remaining_tool_type": "挂架",
+      "remaining_tool_count": "1",
+      "source": {
+        "sheet": "期初在制",
+        "row": 6
+      },
+      "supplement_source": "APS-Test SIM-INPUT-r1, explicit replaceable simulation, not inferred zero remaining work"
+    },
+    {
+      "id": "WP005",
+      "product": "FG005",
+      "quantity_kg": "200",
+      "current_route_step": "RT044",
+      "resource": "EQ025",
+      "current_occupancy_day_interval": [
+        0,
+        1
+      ],
+      "expected_release_day": 1,
+      "quality": "CONDITIONAL_NOT_PHYSICAL_STOCK",
+      "remaining_route_steps": [
+        "RT045"
+      ],
+      "remaining_material_bom_ids": [
+        "BM046",
+        "BM047",
+        "BM048",
+        "BM049",
+        "BM050",
+        "BM051",
+        "BM052",
+        "BM053"
+      ],
+      "material_policy": "SIM-INPUT-r1 explicitly: historical pre-pack ingredients already netted; packaging still required at packaging step; do not reissue historical ingredients",
+      "remaining_labor_pool": "TM03",
+      "remaining_labor_count": "2",
+      "remaining_tool_type": "挂架",
+      "remaining_tool_count": "1",
+      "source": {
+        "sheet": "期初在制",
+        "row": 7
+      },
+      "supplement_source": "APS-Test SIM-INPUT-r1, explicit replaceable simulation, not inferred zero remaining work"
+    },
+    {
+      "id": "WP006",
+      "product": "FG006",
+      "quantity_kg": "200",
+      "current_route_step": "RT052",
+      "resource": "EQ026",
+      "current_occupancy_day_interval": [
+        0,
+        2
+      ],
+      "expected_release_day": 2,
+      "quality": "CONDITIONAL_NOT_PHYSICAL_STOCK",
+      "remaining_route_steps": [
+        "RT053"
+      ],
+      "remaining_material_bom_ids": [
+        "BM057",
+        "BM058",
+        "BM059",
+        "BM060",
+        "BM061",
+        "BM062",
+        "BM063",
+        "BM064"
+      ],
+      "material_policy": "SIM-INPUT-r1 explicitly: historical pre-pack ingredients already netted; packaging still required at packaging step; do not reissue historical ingredients",
+      "remaining_labor_pool": "TM03",
+      "remaining_labor_count": "2",
+      "remaining_tool_type": "挂架",
+      "remaining_tool_count": "1",
+      "source": {
+        "sheet": "期初在制",
+        "row": 8
+      },
+      "supplement_source": "APS-Test SIM-INPUT-r1, explicit replaceable simulation, not inferred zero remaining work"
+    },
+    {
+      "id": "WP007",
+      "product": "FG007",
+      "quantity_kg": "200",
+      "current_route_step": "RT061",
+      "resource": "EQ024",
+      "current_occupancy_day_interval": [
+        0,
+        1
+      ],
+      "expected_release_day": 1,
+      "quality": "CONDITIONAL_NOT_PHYSICAL_STOCK",
+      "remaining_route_steps": [
+        "RT062",
+        "RT063"
+      ],
+      "remaining_material_bom_ids": [
+        "BM067",
+        "BM068",
+        "BM069",
+        "BM070",
+        "BM071",
+        "BM072",
+        "BM073",
+        "BM074"
+      ],
+      "material_policy": "SIM-INPUT-r1 explicitly: historical pre-pack ingredients already netted; packaging still required at packaging step; do not reissue historical ingredients",
+      "remaining_labor_pool": "TM03",
+      "remaining_labor_count": "2",
+      "remaining_tool_type": "模具",
+      "remaining_tool_count": "1",
+      "source": {
+        "sheet": "期初在制",
+        "row": 9
+      },
+      "supplement_source": "APS-Test SIM-INPUT-r1, explicit replaceable simulation, not inferred zero remaining work"
+    },
+    {
+      "id": "WP008",
+      "product": "FG001",
+      "quantity_kg": "200",
+      "current_route_step": "RT008",
+      "resource": "EQ025",
+      "current_occupancy_day_interval": [
+        0,
+        2
+      ],
+      "expected_release_day": 2,
+      "quality": "CONDITIONAL_NOT_PHYSICAL_STOCK",
+      "remaining_route_steps": [
+        "RT009"
+      ],
+      "remaining_material_bom_ids": [
+        "BM003",
+        "BM004",
+        "BM005",
+        "BM006",
+        "BM007",
+        "BM008",
+        "BM009",
+        "BM010"
+      ],
+      "material_policy": "SIM-INPUT-r1 explicitly: historical pre-pack ingredients already netted; packaging still required at packaging step; do not reissue historical ingredients",
+      "remaining_labor_pool": "TM03",
+      "remaining_labor_count": "2",
+      "remaining_tool_type": "挂架",
+      "remaining_tool_count": "1",
+      "source": {
+        "sheet": "期初在制",
+        "row": 10
+      },
+      "supplement_source": "APS-Test SIM-INPUT-r1, explicit replaceable simulation, not inferred zero remaining work"
+    }
+  ],
+  "capabilities_required": [
+    "daily-capacity",
+    "same-day-nonzero-workload",
+    "predecessor-order",
+    "finite-physical-pools",
+    "known-day-outages",
+    "multilevel-bom",
+    "profile-separated-yield",
+    "conditional-supply",
+    "expiry-quality",
+    "frozen-version-reopen-export"
+  ],
+  "capabilities_verified_on_product": [],
+  "notes": [
+    "SF CSV is a supplement, not replacement of the original 87 route rows. Single SIM-EQ-SF shared by all 20 SF; no duplicated capacity.",
+    "Per-shift crew counts stay simultaneous persons; never multiply headcount by shift count. Day capacity scaling is a different dimension.",
+    "Same-day operations have ordinal precedence and quantity/daily-capacity workload; duration 0 is never zero resource use.",
+    "WIP still reserves original cooling resources/labor/tool pool until explicit end; at planning day1 the four WIP with end2 remain active. Historical day0 is not rescheduled.",
+    "Mapping completeness does not prove a feasible full workbook schedule or product capability. Finite shortages/unscheduled demand must remain visible."
+  ],
+  "sfRoutes": [
+    {
+      "路线工序编号": "SIM-RT-SF001-1",
+      "路线编号": "SIM-RP-SF001",
+      "成品编号": "SF001",
+      "成品名称": "原味猪肉灌装馅",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF001-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF001-2",
+      "路线编号": "SIM-RP-SF001",
+      "成品编号": "SF001",
+      "成品名称": "原味猪肉灌装馅",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF001-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF001-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "1",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF002-1",
+      "路线编号": "SIM-RP-SF002",
+      "成品编号": "SF002",
+      "成品名称": "鸡肉灌装馅",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF002-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF002-2",
+      "路线编号": "SIM-RP-SF002",
+      "成品编号": "SF002",
+      "成品名称": "鸡肉灌装馅",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF002-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF002-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "1",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF003-1",
+      "路线编号": "SIM-RP-SF003",
+      "成品编号": "SF003",
+      "成品名称": "玉米灌装馅",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF003-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF003-2",
+      "路线编号": "SIM-RP-SF003",
+      "成品编号": "SF003",
+      "成品名称": "玉米灌装馅",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF003-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF003-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "1",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF004-1",
+      "路线编号": "SIM-RP-SF004",
+      "成品编号": "SF004",
+      "成品名称": "香辣烤肠腌制肉馅",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF004-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF004-2",
+      "路线编号": "SIM-RP-SF004",
+      "成品编号": "SF004",
+      "成品名称": "香辣烤肠腌制肉馅",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF004-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF004-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "2",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF005-1",
+      "路线编号": "SIM-RP-SF005",
+      "成品编号": "SF005",
+      "成品名称": "蒜香烤肠腌制肉馅",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF005-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF005-2",
+      "路线编号": "SIM-RP-SF005",
+      "成品编号": "SF005",
+      "成品名称": "蒜香烤肠腌制肉馅",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF005-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF005-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "2",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF006-1",
+      "路线编号": "SIM-RP-SF006",
+      "成品编号": "SF006",
+      "成品名称": "早餐肠腌制肉馅",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF006-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF006-2",
+      "路线编号": "SIM-RP-SF006",
+      "成品编号": "SF006",
+      "成品名称": "早餐肠腌制肉馅",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF006-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF006-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "2",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF007-1",
+      "路线编号": "SIM-RP-SF007",
+      "成品编号": "SF007",
+      "成品名称": "火腿腌制肉坯",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF007-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF007-2",
+      "路线编号": "SIM-RP-SF007",
+      "成品编号": "SF007",
+      "成品名称": "火腿腌制肉坯",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF007-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF007-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "2",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF008-1",
+      "路线编号": "SIM-RP-SF008",
+      "成品编号": "SF008",
+      "成品名称": "猪肉乳化基料",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF008-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF008-2",
+      "路线编号": "SIM-RP-SF008",
+      "成品编号": "SF008",
+      "成品名称": "猪肉乳化基料",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF008-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF008-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "1",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF009-1",
+      "路线编号": "SIM-RP-SF009",
+      "成品编号": "SF009",
+      "成品名称": "鸡肉乳化基料",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF009-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF009-2",
+      "路线编号": "SIM-RP-SF009",
+      "成品编号": "SF009",
+      "成品名称": "鸡肉乳化基料",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF009-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF009-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "1",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF010-1",
+      "路线编号": "SIM-RP-SF010",
+      "成品编号": "SF010",
+      "成品名称": "猪鸡混合乳化基料",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF010-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF010-2",
+      "路线编号": "SIM-RP-SF010",
+      "成品编号": "SF010",
+      "成品名称": "猪鸡混合乳化基料",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF010-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF010-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "1",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF011-1",
+      "路线编号": "SIM-RP-SF011",
+      "成品编号": "SF011",
+      "成品名称": "原味肠调味预混料",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF011-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF011-2",
+      "路线编号": "SIM-RP-SF011",
+      "成品编号": "SF011",
+      "成品名称": "原味肠调味预混料",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF011-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF011-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "1",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF012-1",
+      "路线编号": "SIM-RP-SF012",
+      "成品编号": "SF012",
+      "成品名称": "鸡肉肠调味预混料",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF012-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF012-2",
+      "路线编号": "SIM-RP-SF012",
+      "成品编号": "SF012",
+      "成品名称": "鸡肉肠调味预混料",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF012-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF012-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "1",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF013-1",
+      "路线编号": "SIM-RP-SF013",
+      "成品编号": "SF013",
+      "成品名称": "玉米肠调味预混料",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF013-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF013-2",
+      "路线编号": "SIM-RP-SF013",
+      "成品编号": "SF013",
+      "成品名称": "玉米肠调味预混料",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF013-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF013-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "1",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF014-1",
+      "路线编号": "SIM-RP-SF014",
+      "成品编号": "SF014",
+      "成品名称": "香辣烤肠预混料",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF014-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF014-2",
+      "路线编号": "SIM-RP-SF014",
+      "成品编号": "SF014",
+      "成品名称": "香辣烤肠预混料",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF014-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF014-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "1",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF015-1",
+      "路线编号": "SIM-RP-SF015",
+      "成品编号": "SF015",
+      "成品名称": "烟熏烧烤预混料",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF015-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF015-2",
+      "路线编号": "SIM-RP-SF015",
+      "成品编号": "SF015",
+      "成品名称": "烟熏烧烤预混料",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF015-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF015-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "1",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF016-1",
+      "路线编号": "SIM-RP-SF016",
+      "成品编号": "SF016",
+      "成品名称": "蒜香烤肠预混料",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF016-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF016-2",
+      "路线编号": "SIM-RP-SF016",
+      "成品编号": "SF016",
+      "成品名称": "蒜香烤肠预混料",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF016-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF016-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "1",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF017-1",
+      "路线编号": "SIM-RP-SF017",
+      "成品编号": "SF017",
+      "成品名称": "葱香烤肠预混料",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF017-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF017-2",
+      "路线编号": "SIM-RP-SF017",
+      "成品编号": "SF017",
+      "成品名称": "葱香烤肠预混料",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF017-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF017-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "1",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF018-1",
+      "路线编号": "SIM-RP-SF018",
+      "成品编号": "SF018",
+      "成品名称": "早餐肠调味预混料",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF018-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF018-2",
+      "路线编号": "SIM-RP-SF018",
+      "成品编号": "SF018",
+      "成品名称": "早餐肠调味预混料",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF018-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF018-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "1",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF019-1",
+      "路线编号": "SIM-RP-SF019",
+      "成品编号": "SF019",
+      "成品名称": "早餐肠腌制液",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF019-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF019-2",
+      "路线编号": "SIM-RP-SF019",
+      "成品编号": "SF019",
+      "成品名称": "早餐肠腌制液",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF019-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF019-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "1",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF020-1",
+      "路线编号": "SIM-RP-SF020",
+      "成品编号": "SF020",
+      "成品名称": "火腿腌制液",
+      "工序顺序": "1",
+      "工序编号": "SIM-RT-SF020-1",
+      "工序名称": "仿真称量投料",
+      "前序工序编号": "",
+      "设备组编号": "EG003",
+      "跨日历时天数": "0",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    },
+    {
+      "路线工序编号": "SIM-RT-SF020-2",
+      "路线编号": "SIM-RP-SF020",
+      "成品编号": "SF020",
+      "成品名称": "火腿腌制液",
+      "工序顺序": "2",
+      "工序编号": "SIM-RT-SF020-2",
+      "工序名称": "仿真半成品制造",
+      "前序工序编号": "SIM-RT-SF020-1",
+      "设备组编号": "SIM-EG-SF",
+      "跨日历时天数": "1",
+      "最大等待天数": "0",
+      "允许加工中断": "否",
+      "班组编号": "TM02",
+      "需求人数": "2",
+      "所需工装类型": "料车",
+      "每批工装套数": "1",
+      "仿真来源": "APS-Test；可替换仿真 SIM-INPUT-r1；非现场默认"
+    }
+  ]
+}

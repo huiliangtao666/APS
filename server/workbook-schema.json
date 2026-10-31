@@ -1,0 +1,2352 @@
+{
+  "version": "CR-INPUT-DATA-20261031:r1",
+  "designSha": "13e2eeed4438cb0b200db9c4de3781c7f1248be3",
+  "tables": {
+    "说明索引": {
+      "category": "说明",
+      "kind": "说明",
+      "key": "不适用",
+      "fields": []
+    },
+    "图表索引": {
+      "category": "说明",
+      "kind": "说明",
+      "key": "不适用",
+      "fields": []
+    },
+    "配置参数": {
+      "category": "共享配置",
+      "kind": "输入",
+      "key": "参数编号",
+      "fields": [
+        {
+          "name": "参数编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "对象编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "对象名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "参数名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "参数值",
+          "type": "整数",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "单位",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "生效日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "失效日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "参数说明",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        }
+      ]
+    },
+    "字段说明": {
+      "category": "说明",
+      "kind": "说明",
+      "key": "不适用",
+      "fields": []
+    },
+    "物料主数据": {
+      "category": "库存",
+      "kind": "输入",
+      "key": "物料编号",
+      "fields": [
+        {
+          "name": "物料编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "物料名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "物料类别",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "物料来源",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "补给方式",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "基础单位",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "生产提前期天数",
+          "type": "公式数值",
+          "unit": "整数天",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "采购提前期天数",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "检验提前期天数",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "本级补给提前期天数",
+          "type": "公式数值",
+          "unit": "整数天",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": true
+        },
+        {
+          "name": "累计提前期天数",
+          "type": "公式数值",
+          "unit": "整数天",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": true
+        },
+        {
+          "name": "最长子件累计天数",
+          "type": "公式数值",
+          "unit": "整数天",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": true
+        },
+        {
+          "name": "代表关键子项编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "并列关键子项数",
+          "type": "整数",
+          "unit": "无",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "参考供应商编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "参考供货关系编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "储存环境",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "保质天数",
+          "type": "公式数值",
+          "unit": "整数天",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "安全库存覆盖天数",
+          "type": "公式数值",
+          "unit": "整数天",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "安全库存量",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": true
+        },
+        {
+          "name": "参考日均毛用量",
+          "type": "小数",
+          "unit": "本行单位",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "每箱净重千克",
+          "type": "公式数值",
+          "unit": "千克",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "每件净重千克",
+          "type": "公式数值",
+          "unit": "千克",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "每箱件数",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "仓储损耗参考率",
+          "type": "公式数值",
+          "unit": "比例",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "来源与补货说明",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        }
+      ]
+    },
+    "单位换算": {
+      "category": "库存",
+      "kind": "输入",
+      "key": "物料编号",
+      "fields": [
+        {
+          "name": "物料编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "物料名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "关联显示；名称在所属主记录维护",
+          "derived": false
+        },
+        {
+          "name": "换算前单位",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "换算后单位",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "换算系数",
+          "type": "整数",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "换算关系",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "适用范围",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        }
+      ]
+    },
+    "关键路径明细": {
+      "category": "生产",
+      "kind": "参考结果",
+      "key": "成品编号",
+      "fields": [
+        {
+          "name": "成品编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "成品名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "路径顺序",
+          "type": "整数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "路径物料编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "路径物料名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "物料来源",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "本级补给天数",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "该物料累计天数",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "相对开始日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "相对完成日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "成品累计天数",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "本节点并列关键子件数",
+          "type": "整数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "路径说明",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        }
+      ]
+    },
+    "客户与交付": {
+      "category": "需求",
+      "kind": "输入",
+      "key": "客户编号",
+      "fields": [
+        {
+          "name": "客户编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "客户名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "渠道类型",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "区域编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "区域名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "配送范围",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "客户等级",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "运输天数",
+          "type": "公式数值",
+          "unit": "整数天",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "允许提前天数",
+          "type": "公式数值",
+          "unit": "整数天",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "允许延后天数",
+          "type": "公式数值",
+          "unit": "整数天",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "到货剩余保质比例",
+          "type": "公式数值",
+          "unit": "比例",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "服务优先级",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "名称性质",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        }
+      ]
+    },
+    "库区库位": {
+      "category": "库存",
+      "kind": "输入",
+      "key": "库位编号",
+      "fields": [
+        {
+          "name": "仓库编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "仓库名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "库位编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "库位名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "储存环境",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "卫生类别",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "最低温度",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "最高温度",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "最大容量",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "容量单位",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "库位状态",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        }
+      ]
+    },
+    "供应商与供货条件": {
+      "category": "补单",
+      "kind": "输入",
+      "key": "供货关系编号",
+      "fields": [
+        {
+          "name": "供货关系编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "供应商编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "供应商名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "供应类别",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "物料编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "物料名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "采购优先级",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "采购导期天数",
+          "type": "公式数值",
+          "unit": "整数天",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "检验天数",
+          "type": "公式数值",
+          "unit": "整数天",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "最小订货量",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "订货倍数",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "数量单位",
+          "type": "文字",
+          "unit": "本行单位",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "供应延期概率",
+          "type": "公式数值",
+          "unit": "比例",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "延期天数上限",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "名称性质",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        }
+      ]
+    },
+    "物料清单": {
+      "category": "生产",
+      "kind": "输入",
+      "key": "用量关系编号",
+      "fields": [
+        {
+          "name": "用量关系编号",
+          "type": "文字",
+          "unit": "本行单位",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "清单版本编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "父项编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "父项名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "关联显示；名称在所属主记录维护",
+          "derived": false
+        },
+        {
+          "name": "子项编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "子项名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "关联显示；名称在所属主记录维护",
+          "derived": false
+        },
+        {
+          "name": "父项层级性质",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "父项基准产出千克",
+          "type": "公式数值",
+          "unit": "千克",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "子项基准用量",
+          "type": "公式数值",
+          "unit": "本行单位",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "数量单位",
+          "type": "文字",
+          "unit": "本行单位",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "标准收率",
+          "type": "公式数值",
+          "unit": "比例",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "投料位置",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "取整方式",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "生效日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "失效日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "配方性质",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        }
+      ]
+    },
+    "工艺路线": {
+      "category": "生产",
+      "kind": "输入",
+      "key": "路线工序编号",
+      "fields": [
+        {
+          "name": "路线工序编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "路线编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "成品编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "成品名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "工序顺序",
+          "type": "整数",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "工序编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "工序名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "前序工序编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "设备组编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "设备组名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "跨日历时天数",
+          "type": "公式数值",
+          "unit": "整数天",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "最大等待天数",
+          "type": "公式数值",
+          "unit": "整数天",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "允许加工中断",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "班组编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "需求人数",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "所需工装类型",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "每批工装套数",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "清洗与日粒度说明",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        }
+      ]
+    },
+    "设备与工装": {
+      "category": "生产",
+      "kind": "输入",
+      "key": "资源编号",
+      "fields": [
+        {
+          "name": "资源编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "资源名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "资源类别",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "资源组编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "资源组名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "可用数量",
+          "type": "公式数值",
+          "unit": "本行单位",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "单次批量上限千克",
+          "type": "公式数值",
+          "unit": "千克",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "标准日产能千克",
+          "type": "公式数值",
+          "unit": "千克",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "同时占位上限千克",
+          "type": "公式数值",
+          "unit": "千克",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "能力口径",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        }
+      ]
+    },
+    "班组资源": {
+      "category": "生产",
+      "kind": "输入",
+      "key": "班组编号",
+      "fields": [
+        {
+          "name": "班组编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "班组名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "每班可用人数",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "标准日班次数",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "周日班次数",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "替代规则",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        }
+      ]
+    },
+    "工厂日历": {
+      "category": "生产",
+      "kind": "输入",
+      "key": "日序",
+      "fields": [
+        {
+          "name": "日序",
+          "type": "整数",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "公历日期",
+          "type": "整数",
+          "unit": "无",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "星期",
+          "type": "文字",
+          "unit": "无",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "生产班次数",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "日产能分子",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "日产能分母",
+          "type": "公式数值",
+          "unit": "无",
+          "rule": "配置映射/派生；不把公式缓存当第二权威值",
+          "derived": true
+        },
+        {
+          "name": "作业规则",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "冷库规则",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        }
+      ]
+    },
+    "停机安排": {
+      "category": "生产",
+      "kind": "输入",
+      "key": "停机编号",
+      "fields": [
+        {
+          "name": "停机编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "资源编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "资源名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "关联显示；名称在所属主记录维护",
+          "derived": false
+        },
+        {
+          "name": "停机类型",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "开始日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "结束日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "可知日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "停机边界",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "产品处置",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        }
+      ]
+    },
+    "每日需求": {
+      "category": "需求",
+      "kind": "输入",
+      "key": "需求编号",
+      "fields": [
+        {
+          "name": "需求编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "需求日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "客户编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "客户名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "区域编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "区域名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "客户等级",
+          "type": "文字",
+          "unit": "无",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "成品编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "成品名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "需求箱数",
+          "type": "整数",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "每箱净重千克",
+          "type": "整数",
+          "unit": "千克",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "需求千克",
+          "type": "整数",
+          "unit": "千克",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "最早到货日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "最晚到货日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "按要求日最晚发运日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "到货剩余保质天数",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "范围",
+          "type": "文字",
+          "unit": "无",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        }
+      ]
+    },
+    "每日成品汇总": {
+      "category": "需求",
+      "kind": "参考结果",
+      "key": "需求日",
+      "fields": [
+        {
+          "name": "需求日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "成品编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "成品名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "全市场需求千克",
+          "type": "小数",
+          "unit": "千克",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "全市场需求箱数",
+          "type": "整数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "月度范围",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "最深清单层数",
+          "type": "整数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        }
+      ]
+    },
+    "期初库存": {
+      "category": "库存",
+      "kind": "输入",
+      "key": "库存批次编号",
+      "fields": [
+        {
+          "name": "库存批次编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "物料编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "物料名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "供应商编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "仓库编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "库位编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "当前数量",
+          "type": "小数",
+          "unit": "本行单位",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "数量单位",
+          "type": "文字",
+          "unit": "本行单位",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "质量状态",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "生产日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "入库日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "放行日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "到期日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "期初已占用量",
+          "type": "整数",
+          "unit": "本行单位",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "期初可用量",
+          "type": "整数",
+          "unit": "本行单位",
+          "rule": "应用重算或关联显示；Excel缓存仅核对",
+          "derived": false
+        },
+        {
+          "name": "快照日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        }
+      ]
+    },
+    "既有采购在途": {
+      "category": "补单",
+      "kind": "输入",
+      "key": "在途记录编号",
+      "fields": [
+        {
+          "name": "在途记录编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "采购订单编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "订单行号",
+          "type": "整数",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "物料编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "物料名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "关联显示；名称在所属主记录维护",
+          "derived": false
+        },
+        {
+          "name": "供应商编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "供应商名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "关联显示；名称在所属主记录维护",
+          "derived": false
+        },
+        {
+          "name": "供货关系编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "订购数量",
+          "type": "整数",
+          "unit": "本行单位",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "数量单位",
+          "type": "文字",
+          "unit": "本行单位",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "下单日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "约定到货日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "预计放行日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "预计到期日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "在途状态",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        }
+      ]
+    },
+    "期初在制": {
+      "category": "生产",
+      "kind": "输入",
+      "key": "在制批次编号",
+      "fields": [
+        {
+          "name": "在制批次编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "成品编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "成品名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "关联显示；名称在所属主记录维护",
+          "derived": false
+        },
+        {
+          "name": "当前工序编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "当前工序名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "关联显示；名称在所属主记录维护",
+          "derived": false
+        },
+        {
+          "name": "占用资源编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "预计合格产出",
+          "type": "整数",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "数量单位",
+          "type": "文字",
+          "unit": "本行单位",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "已开工日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "预计完工日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "预计放行日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "已投料口径",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        },
+        {
+          "name": "库存口径",
+          "type": "文字",
+          "unit": "无",
+          "rule": "输入字段；按同版本合同维护",
+          "derived": false
+        }
+      ]
+    },
+    "生产补给建议": {
+      "category": "生产",
+      "kind": "参考结果",
+      "key": "生产建议编号",
+      "fields": [
+        {
+          "name": "生产建议编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "物料编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "物料名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "需求日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "净补给需求",
+          "type": "小数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "建议生产量",
+          "type": "整数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "数量单位",
+          "type": "文字",
+          "unit": "本行单位",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "生产补给天数",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "理论最晚开工日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "本版最早可开工日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "本版最早预计完成日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "提前期不足天数",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "需下层投料日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "状态或风险",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        }
+      ]
+    },
+    "物料需求来源": {
+      "category": "补单",
+      "kind": "参考结果",
+      "key": "物料需求编号",
+      "fields": [
+        {
+          "name": "物料需求编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "来源生产建议编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "父项编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "所需物料编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "需料日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "需求数量",
+          "type": "小数",
+          "unit": "本行单位",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "数量单位",
+          "type": "文字",
+          "unit": "本行单位",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "用量关系编号",
+          "type": "文字",
+          "unit": "本行单位",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "父项建议生产量",
+          "type": "整数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "计算说明",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        }
+      ]
+    },
+    "每日缺料净算": {
+      "category": "补单",
+      "kind": "参考结果",
+      "key": "净算记录编号",
+      "fields": [
+        {
+          "name": "净算记录编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "需料日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "物料编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "物料名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "数量单位",
+          "type": "文字",
+          "unit": "本行单位",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "毛需求量",
+          "type": "小数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "本日固定供给量",
+          "type": "小数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "本日到期扣除量",
+          "type": "整数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "本日扣需求前库存量",
+          "type": "小数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "满足需求条件的可用量",
+          "type": "小数",
+          "unit": "本行单位",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "安全库存目标",
+          "type": "小数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "需新增补给缺口",
+          "type": "小数",
+          "unit": "本行单位",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "本日建议补给量",
+          "type": "整数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "数量演算期末量",
+          "type": "小数",
+          "unit": "本行单位",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "补给建议编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "理论最晚释放日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "最早预计可用日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "时序风险",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "需求来源笔数",
+          "type": "整数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "计算边界",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        }
+      ]
+    },
+    "采购订单草案": {
+      "category": "补单",
+      "kind": "参考结果",
+      "key": "采购建议编号",
+      "fields": [
+        {
+          "name": "拟制采购订单编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "采购建议编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "供应商编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "供应商名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "物料编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "物料名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "供货关系编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "生产需料日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "净缺料数量",
+          "type": "整数",
+          "unit": "本行单位",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "建议采购数量",
+          "type": "整数",
+          "unit": "本行单位",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "数量单位",
+          "type": "文字",
+          "unit": "本行单位",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "最小订货量",
+          "type": "整数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "订货倍数",
+          "type": "整数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "采购导期天数",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "检验天数",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "理论最晚下单日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "建议下单日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "预计到货日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "预计放行日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "预计晚于需料天数",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "单据状态",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "处理建议",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        }
+      ]
+    },
+    "采购缺料汇总": {
+      "category": "补单",
+      "kind": "参考结果",
+      "key": "物料编号",
+      "fields": [
+        {
+          "name": "物料编号",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "物料名称",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "数量单位",
+          "type": "文字",
+          "unit": "本行单位",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "演算范围毛需求总量",
+          "type": "小数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "新增净缺口总量",
+          "type": "小数",
+          "unit": "本行单位",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "建议采购总量",
+          "type": "整数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "首14天采购建议笔数",
+          "type": "整数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "提前期不足建议笔数",
+          "type": "整数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "首次缺料日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "最早理论下单日",
+          "type": "整数",
+          "unit": "整数天",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "拟选供应商数",
+          "type": "整数",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        },
+        {
+          "name": "统计口径",
+          "type": "文字",
+          "unit": "无",
+          "rule": "导入参考值；应用派生只读；草稿通过复制修改",
+          "derived": false
+        }
+      ]
+    },
+    "BOM对应图": {
+      "category": "生产",
+      "kind": "图示",
+      "key": "不适用",
+      "fields": []
+    },
+    "提前期时序图": {
+      "category": "生产",
+      "kind": "图示",
+      "key": "不适用",
+      "fields": []
+    },
+    "工艺设备示意图": {
+      "category": "生产",
+      "kind": "图示",
+      "key": "不适用",
+      "fields": []
+    }
+  }
+}

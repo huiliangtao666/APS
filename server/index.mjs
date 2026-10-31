@@ -5,6 +5,6 @@ import { createLiteAppServer } from '@praetor/lite-app-server';
 import { createBusinessRouter } from './business.mjs';
 const __dirname=path.dirname(fileURLToPath(import.meta.url));
 const {app,listen,dataDir}=createLiteAppServer({port:3000,apiPort:3001,distDir:path.join(__dirname,'..','dist')});
-app.use(express.json({limit:'2mb'}));
+app.use(express.json({limit:'20mb'}));
 app.use('/api',createBusinessRouter({dataDir,accessMode:'shared'}));
 listen();
