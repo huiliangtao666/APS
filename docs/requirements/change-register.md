@@ -4,7 +4,7 @@
 
 | CR | 名称 | 批准状态 | 影响FR/BR | 实施状态 | 验收结论 |
 | --- | --- | --- | --- | --- | --- |
-| CR-DEC02-03-20261029 | 工装、人员、技能业务选择的前台参数化维护及排程生效 | 已批准能力方向并授权开发；具体默认参数值未批准 | FR-006、FR-007、FR-017、FR-022、BR-06、BR-07 | B2 9aa7f78 original12 controlled adapter selftest 24 PASS/1 PARTIAL/2 BLOCKED/1 NOT_EXECUTED; incomplete customer/config facts; full CR NOT_READY | B2 software slice PARTIAL, no QA UAT; H-P04/N06 and input mapping remain; no product FAIL or repair increment |
+| CR-DEC02-03-20261029 | 工装、人员、技能业务选择的前台参数化维护及排程生效 | 已批准能力方向并授权开发；具体默认参数值未批准 | FR-006、FR-007、FR-017、FR-022、BR-06、BR-07 | B2 9aa7f78 original12 controlled adapter selftest 24 PASS/1 PARTIAL/2 BLOCKED/1 NOT_EXECUTED; incomplete customer/config facts; full CR NOT_READY | B2历史9aa7f78范围PARTIAL，H-P04/N06原阻塞已由用户决策解除，待新固定SHA开发自测及联合整合验证；完整CR/UAT仍NOT_READY，0新增产品FAIL/修复轮次 |
 | CR-DEC04-05-06-20261029 | DEC-04/05/06数量、质量可用性与工艺参数的需求设计深化及mock | 已批准需求设计深化、参数化及mock准备；应用实现未派发，具体业务值未批准 | FR-002、FR-003、FR-004、FR-005、FR-010、FR-011、FR-017、FR-020、FR-021、FR-022、FR-023、BR-02、BR-04、BR-08、BR-09、BR-10、BR-11、BR-12、BR-13、BR-14、BR-18 | 独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。 |
 | CR-FR013-VALIDATION-20261029 | FR013袋支/收率及字段可配置校验 | 已批准具体校验与可配置方向；具体其他业务默认值未批准 | FR-013 | B1 integrated candidate 98347f8 Dev task-level Done; QA simulated UAT01/02 PASS at same SHA; original FR/CR remaining facts and scope NOT_READY | QA simulation UAT01/02 scoped PASS, 32 PASS/6 BLOCKED/4 NOT_EXECUTED; full FR/CR NOT_READY, no product FAIL or new repair round |
 | CR-FR038-PERF-20261029 | FR038排程时间暂定目标 | 已批准暂定30秒目标；AC27规模/规则/环境仍待确认 | FR-038 | 8741bf0a exploratory Test2 18 tiers/62 Worker runs and C2 count correction; Test1 React full-chain 8/128 orders <1.3s and 512 cancellation, fixed SHA; formal spec pending | Exploration only: no formal AC27 30s PASS/FAIL; C1 task-count wording corrected by C2, 4096=3993+53+50; formal scale/rules/environment/timing boundary pending |
@@ -18,11 +18,13 @@
 
 **批准增量**：将DEC02/03涉及的业务选择统一明确为前台可维护、可保存并实际作用于新试算的参数：工装占用/归还策略，人员参与阶段/窗口、人数与释放，显式技能替代关系及禁止替代；保留基线既有权限、历史输入/方案保护和结果可追溯要求。
 用户补充：相关资源可共用；是否共用、交接容量和占用方式均应为可维护配置，实际共享仍受实体身份、容量、时间窗口与历史保护约束。
+用户2026-10-31补充（user-hp04-n06-config-mock-20261031-r1）：H-P04人员任务窗口外的提前/后延占用按前台显式参数计算；主体任务视图可不绘制窗外占用，但必须提示窗外占用及冲突来源。扩展占用窗口与人员可用性检查的先后顺序为可维护配置；无论选择何种顺序，最终候选都须验证完整实际占用区间的可用性/容量，不能借顺序绕过约束。具体分钟数、适用人员组/技能/工序和顺序选择由配置提供，不猜默认。N06本阶段采用有来源标识、可复演的mock资源取得/归还/释放账，按配置和真实算法验证；不等待客户现场账，不设权限账号控制门槛，mock不能冒充现场事实。
 
 **专项验收**：实际前台修改→保存→刷新读回→新试算行为变化；占用/释放边界、有向替代与共享人数容量正确；非法/越权原子拒绝、历史方案不变。原AC继续有效，新增检查为CR专项验收，不篡改基线AC条文。
 补充：验证共用开/关、交接容量/占用参数调整后新试算结果变化，非法组合拒绝且原确认/执行事实不变。
+本次补充验收：改变提前/后延分钟及检查顺序后，新试算的完整占用、冲突提示与结果可解释；窗外占用不必在主体视图绘出但须可提示。N06用明确标记的mock账覆盖取得/归还/释放及重叠/边界/历史冻结；不以真实来源账或权限账户作为当前任务级阻塞。
 
-**设计细化与默认值**：用户批准共享及交接参数化方向；默认值、具体配置枚举与跨组同物理池/N06契约待细化
+**设计细化与默认值**：H-P04提前/后延、检查顺序已由用户授权做成显式配置；具体业务数值不预设。N06本阶段采用可追溯mock来源账，不以现场来源或权限账号为阻塞；其他未决项仍按原记录。
 
 **影响**：主数据/规则配置、前台表单、服务端校验持久化、运行输入版本、Worker及独立复核、资源人数容量与历史兼容；不包含人员考勤或恢复其他新backlog
 
