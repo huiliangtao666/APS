@@ -664,6 +664,56 @@
       "design_commit": "",
       "repair_delivery": "",
       "test_contract": ""
+    },
+    {
+      "id": "CR-R21-UAT02-20261031",
+      "title": "R2.1 UAT02 阶段未用设备、A/B 六字段配置及临时账号门槛裁决",
+      "classification": "用户业务澄清与增量配置授权；非产品FAIL",
+      "baseline_id": "APS-BL-001",
+      "from_version": "v0.3",
+      "target_version": "v0.3+CR-R21-UAT02-20261031",
+      "requested_by": "项目用户（本会话）",
+      "requested_on": "2026-10-31",
+      "request_quote": "当前阶段未使用的设备允许保留导入；A、B两组各缺允许拆分、需求类型、状态，共六个值及来源，做成可配置项并默认部分模拟数据；UAT全部完成之前不要使用权限账号控制。",
+      "approval_status": "用户已明确批准本增量；实现和UAT尚未验收",
+      "approved_by": "项目用户（本会话；未补造实名签批）",
+      "approved_on": "2026-10-31（未补造精确时刻）",
+      "effective": true,
+      "effective_scope": "R2.1 当前 UAT02/AC05/15/17；账号控制豁免仅限 UAT 全部完成前的测试入口，不等于生产永久取消权限",
+      "implementation_status": "待 APS-Test 开发及任务级自测；QA UAT 尚未执行",
+      "primary_requirements": [
+        "FR-008",
+        "FR-013",
+        "FR-016"
+      ],
+      "related_rules": [],
+      "decisions": [],
+      "acceptance_ids": [
+        "AC-05",
+        "AC-15",
+        "AC-17"
+      ],
+      "uat_ids": [
+        "UAT-02"
+      ],
+      "before": "原03未使用设备是否保留导入未决；A/B各三字段无真实值及来源；正式Portal账号/成员权限被列为UAT入口阻塞。",
+      "approved_delta": "当前阶段未使用设备允许保留原始导入，但须保留未使用标记、来源和查询可追溯，不因未引用而拒绝整批。A、B两组的允许拆分、需求类型、状态分别提供可维护配置及来源/版本，可用部分模拟数据预填并明显标记模拟，不将模拟值冒充客户事实或业务验收真值。UAT全部完成前不要求正式Portal登录或成员权限账号控制；可用隔离测试身份/可访问环境运行场景，账号权限不再阻断UAT02入口。",
+      "reason": "项目用户直接裁决三个R2.1阻塞；配置能力让未确定的业务值可维护，避免持续等待固定默认值",
+      "impact": "阶段设备导入、A/B字段配置UI/API/保存重开/排程输入、模拟种子来源标识及UAT入口；不授权主干合并/发布/永久关闭生产安全控制",
+      "plan_impact": "R2.1及Issue6按新条件复核；其余已批准范围不自动通过",
+      "effort": "未登记工时或预算",
+      "acceptance_delta": "未使用设备导入保留且可查；六字段逐组配置、来源、版本及保存重开正确，非法/缺失值按既有明确规则处理、无静默0；模拟数据清晰标识且可替换。固定SHA完成受影响核心/边界/负面/持久化/UI/API/Worker自测后，PM核可运行QA环境和映射再派UAT02。正式账号/成员权限证明不作为本阶段UAT入口或结论门槛。",
+      "issue_url": "https://github.com/huiliangtao666/APS/issues/6",
+      "related_issue_urls": [
+        "https://github.com/huiliangtao666/APS/issues/4"
+      ],
+      "history": [
+        {
+          "date": "2026-10-31",
+          "event_key": "issue6:r21:uat02:user-decisions:20261031:r1",
+          "event": "用户三项R2.1裁决登记；待实现及UAT，不新增产品修复轮次"
+        }
+      ]
     }
   ]
 }
