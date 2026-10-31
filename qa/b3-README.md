@@ -1,7 +1,9 @@
 # B3 material scenario development/selftest package
 
 Dispatch: `dlv_0c1d1eec-9195-4fa0-8e0c-1df9a0313fa5`; event `dlv_0c1d1eec-9195-4fa0-8e0c-1df9a0313fa5:r1`.
-Direct parent: `98347f800c77c0468af3ae293d1dd852af5c207f` (B1).
+Branch base: `98347f800c77c0468af3ae293d1dd852af5c207f` (B1).
+The scheduler may return any complete legal arrangement; only the material lower bound
+is asserted, while the allocation boundary separately proves179 invalid and180 eligible.
 
 Approved v0.3 UAT05/09/10/11 and applicable FR002/003/010/011/016/020/024/025.
 The fixture generator cites the immutable baseline hash, uses seed `B3-v1`, and labels
