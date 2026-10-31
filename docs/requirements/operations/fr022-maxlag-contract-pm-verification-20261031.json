@@ -1,0 +1,392 @@
+{
+  "event_key": "dlv_2c657fad-a63a-46ac-932e-792da41d1b03:r1",
+  "notification": "dlv_66d1040f-5f15-4d2a-87f3-c57403c7c317",
+  "source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+  "parent": "5bdf8287778e5b0e98c33b512da4ed0f724785f7",
+  "evidence_sha": "3ac76d9a7959731f6608f2a2a9a8552be208cafb",
+  "main_at_verify": "5bdf8287778e5b0e98c33b512da4ed0f724785f7",
+  "source_files": [
+    "qa/fr022-maxlag-contract-fixture.mjs",
+    "qa/fr022-maxlag-contract-probe.mjs",
+    "qa/fr022-maxlag-contract.test.mjs",
+    "qa/joint-resources.test.mjs"
+  ],
+  "evidence_files": [
+    "qa/fr022-maxlag-contract-delivery/FR022-MAXLAG-Test-r1-EVIDENCE.zip",
+    "qa/fr022-maxlag-contract-delivery/FR022-MAXLAG-Test-r1-MATRIX.csv",
+    "qa/fr022-maxlag-contract-delivery/FR022-MAXLAG-Test-r1-REPORT.md",
+    "qa/fr022-maxlag-contract-delivery/FR022-MAXLAG-Test-r1-SHA256.json",
+    "qa/fr022-maxlag-contract-delivery/FR022-MAXLAG-Test-r1-SIX-TASKS.csv",
+    "qa/fr022-maxlag-contract-delivery/FR022-MAXLAG-Test-r1-VERSION.json"
+  ],
+  "outer_artifacts": [
+    {
+      "name": "FR022-MAXLAG-Test-r1-REPORT.md",
+      "bytes": 8910,
+      "sha256": "2af22ab25e9c6d59ce00b17196240e586eff76eda4c82865495f6e273a9c7ee7"
+    },
+    {
+      "name": "FR022-MAXLAG-Test-r1-MATRIX.csv",
+      "bytes": 6783,
+      "sha256": "73e0a8df64428631981951178b78ed6a4dbe958154fee66775d0594c3d60d0df"
+    },
+    {
+      "name": "FR022-MAXLAG-Test-r1-SIX-TASKS.csv",
+      "bytes": 1622,
+      "sha256": "ce740f6b535d861b436ad0b8554e2adb10d88d7487cddebf90578b3fa15b0d01"
+    },
+    {
+      "name": "FR022-MAXLAG-Test-r1-VERSION.json",
+      "bytes": 1762,
+      "sha256": "1a8b35f5f2356342f9f65d25caa586f8edfaf9eb3c27593ca38370d0d9168f11"
+    },
+    {
+      "name": "FR022-MAXLAG-Test-r1-EVIDENCE.zip",
+      "bytes": 9741585,
+      "sha256": "70bd1d3f04ea7ae7aacea13690b534ced34f3dc210c6dcd0fb5a34c519a3c944"
+    },
+    {
+      "name": "FR022-MAXLAG-Test-r1-SHA256.json",
+      "bytes": 732,
+      "sha256": "e5498187da85ad055d63eb0014b9344127f02ca25d450c99d91c7b9b138a6b11"
+    }
+  ],
+  "zip_crc": "PASS",
+  "main_file_intersection": [],
+  "whole_issue": "In progress / PARTIAL / NOT_READY",
+  "QA": "NOT_DISPATCHED / NOT_EXECUTED",
+  "repair_increment": 0,
+  "new_product_fail": 0,
+  "qa_logs_closed": 0,
+  "design_sha": null,
+  "internal_hashes": 2652,
+  "source_manifest_files": 3398,
+  "source_blobs_verified": 466,
+  "matrix": [
+    {
+      "id": "old-six",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "A/B/C MIX0-30,FILL30-60 before activation; activation with no wait declaration => explicit configuration rejection, not_checked",
+      "actual_max_rule_status": "not_checked",
+      "result": "PASS",
+      "classification": "CONTRACT",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#old-six"
+    },
+    {
+      "id": "legal-five-all-resources",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "5 original operations, fixed30/30/120/60/50;240kg output/250kg input; full enabled resource checks; upstream shifts for cold-open210",
+      "actual_max_rule_status": "pass",
+      "result": "PASS",
+      "classification": "CONTRACT",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#legal-five-all-resources"
+    },
+    {
+      "id": "wait-0",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "raw wait0 <=10",
+      "actual_max_rule_status": "pass",
+      "result": "PASS",
+      "classification": "BOUNDARY",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#wait-0"
+    },
+    {
+      "id": "wait-10",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "raw wait10 <=10",
+      "actual_max_rule_status": "pass",
+      "result": "PASS",
+      "classification": "BOUNDARY",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#wait-10"
+    },
+    {
+      "id": "wait-11",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "raw wait11 >10; exact gap1",
+      "actual_max_rule_status": "problem",
+      "result": "PASS",
+      "classification": "BOUNDARY",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#wait-11"
+    },
+    {
+      "id": "wait-30",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "raw wait30 >10; exact gap20",
+      "actual_max_rule_status": "problem",
+      "result": "PASS",
+      "classification": "BOUNDARY",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#wait-30"
+    },
+    {
+      "id": "explicit-zero-max",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "explicit0 maximum, heat end=cool start; complete route checked",
+      "actual_max_rule_status": "pass",
+      "result": "PASS",
+      "classification": "CONTRACT",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#explicit-zero-max"
+    },
+    {
+      "id": "missing-pair",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "atomic explicit rejection; no tasks/reservations; missing CALENDAR may refuse before freezing",
+      "actual_max_rule_status": "not_checked",
+      "result": "PASS",
+      "classification": "EXPECTED_REJECTION",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#missing-pair"
+    },
+    {
+      "id": "missing-predecessor",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "atomic explicit rejection; no tasks/reservations; missing CALENDAR may refuse before freezing",
+      "actual_max_rule_status": "problem",
+      "result": "PASS",
+      "classification": "EXPECTED_REJECTION",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#missing-predecessor"
+    },
+    {
+      "id": "wrong-predecessor",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "atomic explicit rejection; no tasks/reservations; missing CALENDAR may refuse before freezing",
+      "actual_max_rule_status": "problem",
+      "result": "PASS",
+      "classification": "EXPECTED_REJECTION",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#wrong-predecessor"
+    },
+    {
+      "id": "missing-cold-claim",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "atomic explicit rejection; no tasks/reservations; missing CALENDAR may refuse before freezing",
+      "actual_max_rule_status": "problem",
+      "result": "PASS",
+      "classification": "EXPECTED_REJECTION",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#missing-cold-claim"
+    },
+    {
+      "id": "wrong-cold-quantity",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "atomic explicit rejection; no tasks/reservations; missing CALENDAR may refuse before freezing",
+      "actual_max_rule_status": "problem",
+      "result": "PASS",
+      "classification": "EXPECTED_REJECTION",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#wrong-cold-quantity"
+    },
+    {
+      "id": "invalid-max-negative",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "atomic explicit rejection; no tasks/reservations; missing CALENDAR may refuse before freezing",
+      "actual_max_rule_status": "problem",
+      "result": "PASS",
+      "classification": "EXPECTED_REJECTION",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#invalid-max-negative"
+    },
+    {
+      "id": "invalid-max-nan",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "atomic explicit rejection; no tasks/reservations; missing CALENDAR may refuse before freezing",
+      "actual_max_rule_status": "problem",
+      "result": "PASS",
+      "classification": "EXPECTED_REJECTION",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#invalid-max-nan"
+    },
+    {
+      "id": "invalid-max-json",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "atomic explicit rejection; no tasks/reservations; missing CALENDAR may refuse before freezing",
+      "actual_max_rule_status": "problem",
+      "result": "PASS",
+      "classification": "EXPECTED_REJECTION",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#invalid-max-json"
+    },
+    {
+      "id": "unsupported-max-parameter",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "atomic explicit rejection; no tasks/reservations; missing CALENDAR may refuse before freezing",
+      "actual_max_rule_status": "problem",
+      "result": "PASS",
+      "classification": "EXPECTED_REJECTION",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#unsupported-max-parameter"
+    },
+    {
+      "id": "missing-required-MATERIAL",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "atomic explicit rejection; no tasks/reservations; missing CALENDAR may refuse before freezing",
+      "actual_max_rule_status": "problem",
+      "result": "PASS",
+      "classification": "EXPECTED_REJECTION",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#missing-required-MATERIAL"
+    },
+    {
+      "id": "missing-required-CAPACITY",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "atomic explicit rejection; no tasks/reservations; missing CALENDAR may refuse before freezing",
+      "actual_max_rule_status": "problem",
+      "result": "PASS",
+      "classification": "EXPECTED_REJECTION",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#missing-required-CAPACITY"
+    },
+    {
+      "id": "missing-required-PROGRAM",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "atomic explicit rejection; no tasks/reservations; missing CALENDAR may refuse before freezing",
+      "actual_max_rule_status": "problem",
+      "result": "PASS",
+      "classification": "EXPECTED_REJECTION",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#missing-required-PROGRAM"
+    },
+    {
+      "id": "missing-required-STORAGE",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "atomic explicit rejection; no tasks/reservations; missing CALENDAR may refuse before freezing",
+      "actual_max_rule_status": "problem",
+      "result": "PASS",
+      "classification": "EXPECTED_REJECTION",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#missing-required-STORAGE"
+    },
+    {
+      "id": "missing-required-CALENDAR",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "atomic explicit rejection; no tasks/reservations; missing CALENDAR may refuse before freezing",
+      "actual_max_rule_status": "absent/before-freeze",
+      "result": "PASS",
+      "classification": "EXPECTED_REJECTION",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#missing-required-CALENDAR"
+    },
+    {
+      "id": "state-disabled",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "MAX_LAG missing or not_checked; never PASS",
+      "actual_max_rule_status": "not_checked",
+      "result": "PASS",
+      "classification": "STATUS",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#state-disabled"
+    },
+    {
+      "id": "state-future",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "MAX_LAG missing or not_checked; never PASS",
+      "actual_max_rule_status": "not_checked",
+      "result": "PASS",
+      "classification": "STATUS",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#state-future"
+    },
+    {
+      "id": "state-missing",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "MAX_LAG missing or not_checked; never PASS",
+      "actual_max_rule_status": "absent/before-freeze",
+      "result": "PASS",
+      "classification": "STATUS",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#state-missing"
+    },
+    {
+      "id": "state-minimal",
+      "basis": "v0.3 FR022/BR12/AC14;UAT12/14 + existing explicit mock contract",
+      "expected": "MAX_LAG missing or not_checked; never PASS",
+      "actual_max_rule_status": "not_checked",
+      "result": "PASS",
+      "classification": "STATUS",
+      "tested_source_sha": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+      "evidence": "contract-results.json#state-minimal"
+    }
+  ],
+  "six_tasks": [
+    {
+      "task": "A-MIX",
+      "old_raw_time": "[0,30)",
+      "maximum_wait_declared": "none",
+      "current_expected": "global config rejection before scheduling; zero tasks",
+      "actual": "absent; explicit RULE / CONFIG",
+      "cause": "no maximum declared + no pair; MAX_LAG enabled; upstream admission rejects all; not per-task leak",
+      "evidence": "probe.json#legacyMax; contract-results.json#old-six"
+    },
+    {
+      "task": "A-FILL",
+      "old_raw_time": "[30,60)",
+      "maximum_wait_declared": "none",
+      "current_expected": "global config rejection before scheduling; zero tasks",
+      "actual": "absent; explicit RULE / CONFIG",
+      "cause": "no maximum declared + no pair; MAX_LAG enabled; upstream admission rejects all; not per-task leak",
+      "evidence": "probe.json#legacyMax; contract-results.json#old-six"
+    },
+    {
+      "task": "B-MIX",
+      "old_raw_time": "[0,30)",
+      "maximum_wait_declared": "none",
+      "current_expected": "global config rejection before scheduling; zero tasks",
+      "actual": "absent; explicit RULE / CONFIG",
+      "cause": "no maximum declared + no pair; MAX_LAG enabled; upstream admission rejects all; not per-task leak",
+      "evidence": "probe.json#legacyMax; contract-results.json#old-six"
+    },
+    {
+      "task": "B-FILL",
+      "old_raw_time": "[30,60)",
+      "maximum_wait_declared": "none",
+      "current_expected": "global config rejection before scheduling; zero tasks",
+      "actual": "absent; explicit RULE / CONFIG",
+      "cause": "no maximum declared + no pair; MAX_LAG enabled; upstream admission rejects all; not per-task leak",
+      "evidence": "probe.json#legacyMax; contract-results.json#old-six"
+    },
+    {
+      "task": "C-MIX",
+      "old_raw_time": "[0,30)",
+      "maximum_wait_declared": "none",
+      "current_expected": "global config rejection before scheduling; zero tasks",
+      "actual": "absent; explicit RULE / CONFIG",
+      "cause": "no maximum declared + no pair; MAX_LAG enabled; upstream admission rejects all; not per-task leak",
+      "evidence": "probe.json#legacyMax; contract-results.json#old-six"
+    },
+    {
+      "task": "C-FILL",
+      "old_raw_time": "[30,60)",
+      "maximum_wait_declared": "none",
+      "current_expected": "global config rejection before scheduling; zero tasks",
+      "actual": "absent; explicit RULE / CONFIG",
+      "cause": "no maximum declared + no pair; MAX_LAG enabled; upstream admission rejects all; not per-task leak",
+      "evidence": "probe.json#legacyMax; contract-results.json#old-six"
+    }
+  ],
+  "selftest_pass": 80,
+  "oracle_pass": 149,
+  "pm_limits": "PM checked artifacts, hashes, archived results and Git blobs; did not rerun product tests or QA UAT.",
+  "test_next": "Idle: #39/#40 shared application entries remain with executing Dev; #41 complete application/AC27 requires concrete profile; #42 P1 application not enabled; #43 topic contracts and #44 D3 authorization not ready. Resume only for independent approved concrete scope.",
+  "classification": "Existing fixture/admission contract mismatch; scoped test reconciliation DONE/PASS; general maximum-wait requirements and complete application diagnosis remain in #39.",
+  "app_remaining": [
+    "Dev serially integrate test source with fresh main/parents/file overlap/conflict and affected 80 checks",
+    "Original #39 complete configuration, joint actual plan checking, UI/API/application Worker/save-reopen/native CSV and confirmation gates",
+    "relatedRecords=[] associationGap: full CSV physical-row localization evidence still required",
+    "Original #40 production/merged-batch positioning",
+    "PM A01/A02 user decisions; QA12–14 only after concrete full entry is ready"
+  ],
+  "dev_source_input": "dlv_d5824200-7377-4374-b2df-ba635ccc3c30",
+  "dev_source_input_status": "waiting",
+  "dev_original": "dlv_b3352a5a-be4b-4260-b49d-a211163a2e51",
+  "dev_original_status": "executing",
+  "processed_at": "2026-10-31T12:14:35.279507+00:00",
+  "status": "PROCESSED_SCOPED_TEST_CONTRACT_DONE",
+  "applicable_basis": "APS-BL-001-v0.3 FR022/BR12/AC14/UAT12/14 plus effective CR; general maximum wait requirements retained, no new CR/default approval"
+}
