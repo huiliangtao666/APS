@@ -1,3 +1,4 @@
+import {minuteValidityFields} from '../src/lib/minute-validity.mjs';
 import {validateR21Config,r21OrderIds} from '../src/lib/r21-stage-config.mjs';
 import {parseInputCsvRecords} from '../src/lib/input-csv.mjs';
 import {originalDependencyDef,runtimeDependencyFile} from '../src/lib/original-dependencies.mjs';
@@ -6,7 +7,7 @@ import {jointParameters} from '../src/lib/joint-policy.mjs';
 // Reuse physical-record parsing/inspection; actual runtime defs are authoritative.
 import {batchKeys} from '../src/lib/csv-contract.mjs';
 export {batchKeys};
-export const optionalFields={resourceMappings:['字段权威JSON'],personnelGroups:['poolId'],orders:['已完成合格数量'],dependencies:['人员占用基准','人员检查顺序','人员配置来源','人员配置版本','人员岗位编号','候选人员组','所需班次','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'],rules:['适用对象','生效时间']};
+export const optionalFields={inventory:minuteValidityFields,supplies:['已占用数量',...minuteValidityFields],resourceMappings:['字段权威JSON'],personnelGroups:['poolId'],orders:['已完成合格数量'],dependencies:['人员占用基准','人员检查顺序','人员配置来源','人员配置版本','人员岗位编号','候选人员组','所需班次','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'],rules:['适用对象','生效时间']};
 export function inspectCsvBatch(files,defs,repairs=[],r21Config=null,resourceRuleBinding=null){
  const tables={},sources={},issues=[],seen=new Set(),used=new Set();
  const entryFields=['是否允许拆分','需求类型','订单状态'];
@@ -44,7 +45,7 @@ export function inspectCsvBatch(files,defs,repairs=[],r21Config=null,resourceRul
   }
   tables[def.key]=raw.slice(1).map(({cells,line},index)=>{
    if(cells.length!==headers.length)add(file.name,line,'整行',`列数 ${cells.length} 与表头 ${headers.length} 不一致`,{table:def.key,index});
-   const row=Object.fromEntries(def.fields.map(f=>[f,headers.includes(f)?(['originalDependencies','originalInventory','originalSupply','originalProgress','originalEvents','originalBom','originalTools','originalPersonnel','resourceMappings'].includes(def.key)?(cells[headers.indexOf(f)]||''):(cells[headers.indexOf(f)]||'').trim()):'']));
+   const row=Object.fromEntries(def.fields.map(f=>[f,headers.includes(f)?(['originalDependencies','originalInventory','originalSupply','originalProgress','originalEvents','originalBom','originalTools','originalPersonnel','resourceMappings','stageMappings'].includes(def.key)?(cells[headers.indexOf(f)]||''):(cells[headers.indexOf(f)]||'').trim()):'']));
    if(legacy){row['合格需求']=(cells[headers.indexOf('合格需求kg')]||'').trim();row['数量单位']='kg';}
    for(let n=0;n<repairs.length;n++){const e=repairs[n];if(e&&e.file===file.name&&e.row===line&&def.key==='orders'&&entryFields.includes(e.field)&&!headers.includes(e.field)&&typeof e.value==='string'){
     if(sources[def.key].repairs.some(p=>p.row===line&&p.field===e.field)){add(file.name,line,e.field,'重复补录',{table:def.key,index});continue;}

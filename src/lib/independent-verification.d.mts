@@ -17,6 +17,7 @@ export type VerificationReport = {
     batchAndWait?: VerificationCheck;
     jointConditions?: VerificationCheck;
     originalResources?: VerificationCheck;
+    stageBindings?: VerificationCheck;
     processRoute?: VerificationCheck;
   };
 };

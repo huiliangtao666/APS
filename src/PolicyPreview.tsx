@@ -21,6 +21,9 @@ export function PolicyPreview({table,data,revision}:{table:string;data:Record<st
  </aside>;
 }
 export function policyOptions(table:string,field:string):string[]|null{
+ if(table==='stageMappings'){const options:Record<string,string[]>={'合同版本':['FR013-stage-bindings-v1'],'状态':['READY','NOT_READY_CONFIG'],'来源类别':['originalInventory','originalSupply','originalProgress','originalEvents'],'数据性质':['明确模拟','已核实事实']};if(options[field])return options[field];}
+ if(['inventory','supplies'].includes(table)&&field==='时效模式')return ['显式分钟'];
+ if(['inventory','supplies'].includes(table)&&field==='到期边界')return ['截止前','含截止'];
  if(table==='resourceMappings'&&mappingOptions[field])return mappingOptions[field];
  if(table==='resourceClaims'&&field==='占用口径')return ['显式逐生产批完整区间','明确窗口'];
  if(table==='resourceClaims'&&field==='参数来源')return ['逐项声明','工装配置'];

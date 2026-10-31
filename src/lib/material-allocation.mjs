@@ -1,3 +1,4 @@
+import {minuteMode,minuteInstant} from './minute-validity.mjs';
 import {inventoryBusinessDate,inventoryEligibility} from './inventory.mjs';
 import { PLAN_TIME_ORIGIN, resolveExpectedSupply, validSupplyTime } from './expected-supply.mjs';
 // Exact rational arithmetic: no tolerance, display rounding or repeated float deductions.
@@ -96,16 +97,16 @@ export function createMaterialAllocator(data,policy) {
    for(const demand of demands){
     let left=fromExact(demand.exactQuantity);const allocations=[];
     const lotChecks=(data.inventory||[]).filter(b=>b['物料编号']===demand.materialId).map(b=>({b,state:inventoryEligibility(b,feedTime(minute),policy['可用状态'])}));
-    const excludedLots=lotChecks.filter(x=>!x.state.eligible).map(({b,state})=>({lotId:b['批次编号'],bookQuantity:b['账面数量'],occupiedQuantity:b['已占用数量'],quality:b['质量状态'],expiry:b['有效期'],readyAt:b['预计可用时间']||'',reasons:state.reasons}));
-    const inventory=lotChecks.filter(x=>x.state.eligible).map(x=>x.b).sort((a,b)=>a['有效期'].localeCompare(b['有效期'])||a['批次编号'].localeCompare(b['批次编号']));
-    const candidates=inventory.map(b=>({key:'inventory:'+b['批次编号'],lotId:b['批次编号'],capacity:sub(q(b['账面数量']),q(b['已占用数量'])),expiry:b['有效期'],quality:b['质量状态'],readyAt:b['预计可用时间']||'',conditional:false}));
+    const excludedLots=lotChecks.filter(x=>!x.state.eligible).map(({b,state})=>({lotId:b['批次编号'],bookQuantity:b['账面数量'],occupiedQuantity:b['已占用数量'],quality:b['质量状态'],expiry:minuteMode(b)?minuteInstant(b['时间原点'],b['到期分钟']):b['有效期'],readyAt:b['预计可用时间']||'',reasons:state.reasons}));
+    const inventory=lotChecks.filter(x=>x.state.eligible).map(x=>x.b).sort((a,b)=>(minuteMode(a)?minuteInstant(a['时间原点'],a['到期分钟']):a['有效期']).localeCompare(minuteMode(b)?minuteInstant(b['时间原点'],b['到期分钟']):b['有效期'])||a['批次编号'].localeCompare(b['批次编号']));
+    const candidates=inventory.map(b=>({key:'inventory:'+b['批次编号'],lotId:b['批次编号'],capacity:sub(q(b['账面数量']),q(b['已占用数量'])),expiry:minuteMode(b)?minuteInstant(b['时间原点'],b['到期分钟']):b['有效期'],quality:b['质量状态'],readyAt:b['预计可用时间']||'',conditional:false}));
     if(policy['允许预计供给'])for(const use of data.supplyUses||[]){
      if(use['订单编号']!==demand.orderId||use['工序编号']!==demand.operation)continue;
      const s=resolved.find(s=>s['供给编号']===use['供给编号']);
      if(!s||s['物料编号']!==demand.materialId||!validSupplyTime(s['生效到达时间'])||!validSupplyTime(s['生效可用时间'])||Date.parse(s['生效可用时间'])<Date.parse(s['生效到达时间']))continue;
-     const state=inventoryEligibility({...s,'账面数量':s['预计数量'],'已占用数量':'0','预计可用时间':s['生效可用时间']},feedTime(minute),policy['预计状态']);
+     const state=inventoryEligibility({...s,'账面数量':s['预计数量'],'已占用数量':s['已占用数量']||'0'},feedTime(minute),policy['预计状态'],{readyAt:s['生效可用时间']});
      if(!state.eligible)continue;
-     candidates.push({key:'supply:'+s['供给编号'],useKey:'use:'+use['引用编号'],limit:q(use['使用数量']),supplyId:s['供给编号'],lotId:s['批次编号'],capacity:q(s['预计数量']),expiry:s['有效期'],quality:s['质量状态'],readyAt:s['生效可用时间'],conditional:true});
+     candidates.push({key:'supply:'+s['供给编号'],useKey:'use:'+use['引用编号'],limit:q(use['使用数量']),supplyId:s['供给编号'],lotId:s['批次编号'],capacity:sub(q(s['预计数量']),q(s['已占用数量']||'0')),expiry:minuteMode(s)?minuteInstant(s['时间原点'],s['到期分钟']):s['有效期'],quality:s['质量状态'],readyAt:s['生效可用时间'],conditional:true});
     }
     // FEFO across eligible lots; expected supply remains explicitly earmarked and conditional.
     candidates.sort((a,b)=>a.expiry.localeCompare(b.expiry)||Number(a.conditional)-Number(b.conditional)||a.lotId.localeCompare(b.lotId));

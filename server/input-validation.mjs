@@ -1,3 +1,4 @@
+import {checkStageBindings} from '../src/lib/stage-bindings.mjs';
 import {originalIssues} from '../src/lib/execution-resource-ledger.mjs';
 import {validateOriginalStage} from '../src/lib/original-stage-data.mjs';
 import {adaptOriginalDependencies} from '../src/lib/original-dependencies.mjs';
@@ -23,7 +24,7 @@ export {recordKeys} from '../src/lib/record-identity.mjs';
 // Both imports and edits validate the complete proposed state, before any write.
 export function validateInputs(defs,data,{at=new Date().toISOString(),checkPolicyExecution=true,mode=data.inputStage||'supported'}={}){
  const intake=adaptOriginalDependencies(data,{at});
- const issues=[...originalIssues(data),...intake.issues,...validateOriginalStage(data),...validateOriginalBom(data),...validateOriginalResources(data),...validateResourceMappings(data),...validateEvents(data),...validateFactoryLines(data)];
+ const issues=[...checkStageBindings(data).issues,...originalIssues(data),...intake.issues,...validateOriginalStage(data),...validateOriginalBom(data),...validateOriginalResources(data),...validateResourceMappings(data),...validateEvents(data),...validateFactoryLines(data)];
  data=intake.data;
  const add=(table,index,field,message,rows=[data[table][index]])=>issues.push({relatedRecords:sourceRefs(table,rows,data[table]),table,file:defs.find(d=>d.key===table).file,row:index+2,field,message});
  for(const def of defs){
