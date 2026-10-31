@@ -1,3 +1,4 @@
+import {cleaningHistoryTransition} from '../src/lib/changeover-application.mjs';
 import {bomApplication,saveBomApplication} from './workbook-bom-application.mjs';
 import {createWorkbookRouter} from './workbook-router.mjs';
 import {packTransition} from '../src/lib/pack-batch.mjs';
@@ -151,8 +152,9 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
       proposed[key]=(['tools','resourceClaims'].includes(key)?rows:(migratePolicies({[key]:rows})[key]||rows)).map(r=>Object.fromEntries(def.fields.map(f=>[f,r[f]??''])));
     }
     if(trialId&&factTables.some(k=>tables[k]!==undefined))return res.status(409).json({error:'trial_execution_edit_forbidden'});
+    if(trialId){const history=d=>{try{return JSON.parse((d.rules||[]).find(r=>r['规则编号']==='CLEANING')?.['参数JSON']||'{}').completedTransitions||[];}catch{return null;}};if(JSON.stringify(history(target.data))!==JSON.stringify(history(proposed)))return res.status(409).json({error:'trial_cleaning_history_edit_forbidden'});}
     if(!trialId){const staged=stageEvents(target.data,proposed,Object.keys(tables));if(staged.issues.length)return res.status(409).json({error:'event_reconciliation_required',issues:staged.issues});proposed=staged.data;for(const def of defs.filter(d=>JSON.stringify(proposed[d.key])!==JSON.stringify(target.data[d.key]))){const rows=proposed[def.key]||[];if(rows.some(r=>!r||typeof r!=='object'||Array.isArray(r)||Object.keys(r).some(k=>!def.fields.includes(k))||Object.values(r).some(v=>typeof v!=='string')))return res.status(400).json({error:'invalid_event_effect'});proposed[def.key]=rows.map(r=>Object.fromEntries(def.fields.map(f=>[f,r[f]??''])));}}
-    const transition=(trialId?trialInputIssues(s.data,proposed):executionTransition(target.data,proposed));if(transition.length)return res.status(409).json({error:'execution_reconciliation_required',...transitionEvidence(transition,trialId?s.data:target.data,proposed,trialId?s.revision:target.revision)});
+    const transition=[...cleaningHistoryTransition(target.data,proposed),...(trialId?trialInputIssues(s.data,proposed):executionTransition(target.data,proposed))];if(transition.length)return res.status(409).json({error:'execution_reconciliation_required',...transitionEvidence(transition,trialId?s.data:target.data,proposed,trialId?s.revision:target.revision)});
     const newlyEnabled=(proposed.rules||[]).some(r=>r['是否启用']==='是'&&!(target.data.rules||[]).some(old=>old['规则编号']===r['规则编号']&&old['是否启用']==='是'));
     const issues=[...packTransition(target.data,proposed,s.records),...stageMappingTransition(target.data,proposed,s.records),...resourceMappingTransition(target.data,proposed,s.records),...poolTransitionIssues(target.data,proposed,s.records),...validateInputs(defs,proposed),...(newlyEnabled?assessRules(adaptOriginalDependencies(proposed).data,new Date().toISOString(),true,proposed.inputStage||'supported').issues:[])];if(issues.length){
       // The rejected proposal is an ephemeral check input, never a saved input version.

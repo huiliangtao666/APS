@@ -1,3 +1,4 @@
+import {assessApplicationChangeovers,cleaningActive} from './changeover-application.mjs';
 import {operationDuration,timeFor,partialAllowed} from './pack-batch.mjs';
 import {quantityMath as Q,createMaterialAllocator,materialPolicy} from './material-allocation.mjs';
 import {claimsFor,previewResources,jointFlags} from './joint-resources.mjs';
@@ -56,6 +57,13 @@ export function scheduleProcessRoute(data,orders,at,conditions){
    const prior=op['前序工序']?idFor(b,op['前序工序']):'',actual=[...tasks,...candidate.tasks].find(t=>t.id===prior);
    if(prior&&(!actual||actual.end>startMinute))return fail('实际前序缺失/尚未完成',undefined,'PREDECESSOR');
    candidate.tasks.push({id:idFor(b,op['工序编号']),orderId:b.orderId,productId:b.order['产品编号'],productionBatchId:b.id,productionBatchIndex:b.index,resourceBatchId,batchGroupId:resourceBatchId,operation:op['工序编号'],label:op['工序名称'],machine:machine['设备编号'],start:startMinute,end:finish,duration,predecessor:prior,quantity:b.quantity,exactQuantity:b.qualifiedKg,quantityUnit:'kg',loadKg:Q.num(Q.fromExact(basis==='合格产出'?b.qualifiedKg:b.inputKg)),exactLoadKg:basis==='合格产出'?b.qualifiedKg:b.inputKg,loadBasis:basis,program:op['程序编号']||'',source:processRouteContract+' · 实际前序/完整联合候选',processSources:processTaskSources(data,b.orderId,[op['工序编号']],startMinute),timingReasons:[]});
+  }
+  if(cleaningActive(data,at)){
+   const checked=assessApplicationChangeovers({tasks:[...tasks,...candidate.tasks],resourceReservations:[...reservations,...candidate.reservations]},data,{...conditions,ruleEvaluationAt:at});
+   if(checked.status==='problem'){
+    const next=Math.max(startMinute,...(checked.domain?.findings||[]).filter(f=>f.code==='VALIDATION_WAIT').map(f=>f.readyAt));
+    return fail(checked.findings.map(f=>f.code+' '+f.message).join('；'),next>startMinute?next:undefined,'BR13');
+   }
   }
   return {ok:true};
  }

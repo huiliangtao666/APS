@@ -7,7 +7,7 @@ import {scheduleProcessRoute} from '../src/lib/process-route-planner.mjs';
 import {processRequested} from '../src/lib/process-route.mjs';
 import {verifyProcessRoute} from '../src/lib/verify-process-route.mjs';
 import {processRouteFindings} from '../src/lib/process-route-findings.mjs';
-import {assessApplicationChangeovers,cleaningActive} from '../src/lib/changeover-application.mjs';
+import {assessApplicationChangeovers,cleaningActive,changeoverOrderCandidates} from '../src/lib/changeover-application.mjs';
 import {originalStageDefs,unmappedStageSources} from '../src/lib/original-stage-data.mjs';
 import {originalDependencyDef} from '../src/lib/original-dependencies.mjs';
 import {originalBomDef} from '../src/lib/original-bom.mjs';
@@ -164,7 +164,7 @@ function validate(tasks: Task[]): Finding[] {
   return out;
 }
 
-export function calculate(data:Record<string,Row[]>, inputVersion:number, calculatedAt=new Date().toISOString(), conditions:{startMinute?:number;endMinute?:number|null;priority?:string;mode?:string;taskPositions?:Record<string,any>}={}) {
+export function calculate(data:Record<string,Row[]>, inputVersion:number, calculatedAt=new Date().toISOString(), conditions:{startMinute?:number;endMinute?:number|null;priority?:string;mode?:string;taskPositions?:Record<string,any>}={}, changeoverOrder:string[]|null=null) {
  const sourcePositions=conditions.taskPositions||{};let positions={...sourcePositions};
  const jointAttempts:any[]=[];
  const resourceReservations:any[]=[];const flags=conditions.mode==='minimal-r1'?{}:jointFlags(data,calculatedAt);
@@ -201,6 +201,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
     const sortBy=conditions.priority&&conditions.priority!=='规则设置'?conditions.priority:ruleSnapshot.settings.find(r=>r.id==='SORT'&&r.active)?.parameters['排序方式'];
     ruleSnapshot.note+=` 实际任务排序：${sortBy==='要求日期'?'要求日期':'优先顺序'}；来源：${conditions.priority&&conditions.priority!=='规则设置'?'本次计算条件（覆盖 SORT 的排序方式）':'本次规则设置或默认优先顺序'}。`;
     let sorted=[...(data.orders||[])].filter(o=>o['需求类型']!=='预测'&&isOrderSchedulable(o)).sort((a,b)=>sortBy==='要求日期'?Number(a['要求可交付分钟'])-Number(b['要求可交付分钟'])||Number(a['优先顺序'])-Number(b['优先顺序']):Number(a['优先顺序'])-Number(b['优先顺序']));
+    if(changeoverOrder){const rank=new Map(changeoverOrder.map((id,i)=>[id,i]));sorted.sort((a,b)=>(rank.get(a['订单编号'])??1e9)-(rank.get(b['订单编号'])??1e9));ruleSnapshot.note+=' BR13合法替代顺序候选：'+changeoverOrder.join(' → ');}
     const orderIssues=validateOrders(data.orders||[]).filter(issue=>issue.code!=='ORDER_MULTI_LINE');
     if(orderIssues.length){findings.push(...orderIssues.map(issue=>({...issue,table:"orders",row:issue.line?issue.line+1:0,code:`FR-009 / ${issue.code}`,message:issue.message,taskIds:[]})));setIssues(findings);setActivePlan({id:uid(),name:'订单数据校验',createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules,inputVersion:`v${inputVersion}`});setVerification(null);setMessage(`FR-009 订单字段检查发现 ${orderIssues.length} 个问题，未生成任务。`);return;}
     const masterIssues=[...unmappedStageSources(data),...validateBomConfig({products:data.products||[],materials:data.materials||[],routes:data.routes||[],bom:data.bom||[]}),...supplyIssues,...inventoryIssues,...validateMasterData({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],dependencies:data.dependencies||[]},data),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[],personnelGroups:data.personnelGroups||[],tools:data.tools||[]})];
@@ -320,6 +321,16 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
            const next=[...(personnel.nextStart!==undefined?[personnel.nextStart]:[]),...personnelRequirements.flatMap(r=>[...personnelReservations.map(p=>p.end-(r['窗口外释放']==='否'?0:Number(r['人员开始偏移']||0))),...(data.personnelGroups||[]).map(g=>Number(g['可用起始分钟'])-(r['窗口外释放']==='否'?0:Number(r['人员开始偏移']||0)))])].filter(t=>Number.isFinite(t)&&t>fit.start!);
            if(next.length){timingReasons.push({code:'PERSONNEL',source:personnelRequirements,from:fit.start,to:Math.min(...next),message:personnelError});candidate=Math.min(...next);continue;}break;
           }
+          if(!minimal&&cleaningActive(sourceData,calculatedAt)&&!batches){
+           const candidateTask={id:`${oid}-${operation}`,orderId:oid,productId:product,operation,machine:machineId,start:fit.start,end:fit.start+duration,duration};
+           const candidateRows=[...resourceReservations,...(jointPreview.allocations||[]),...(personnel.allocations||[]).map(r=>({...r,type:'人员',resourceId:r.groupId,quantity:String(r.count),taskIds:[candidateTask.id]})),{type:'设备',resourceId:machineId,quantity:'1',start:fit.start,end:fit.start+duration,taskIds:[candidateTask.id]}];
+           const cleaning=assessApplicationChangeovers({tasks:[...built,candidateTask],resourceReservations:candidateRows},sourceData,{...conditions,ruleEvaluationAt:calculatedAt});
+           if(cleaning.status==='problem'){
+            const ready=Math.max(fit.start,...(cleaning.domain?.findings||[]).filter((f:any)=>f.code==='VALIDATION_WAIT').map((f:any)=>f.readyAt));
+            if(ready>fit.start&&!position&&!fact){timingReasons.push({code:'BR13_READY',from:fit.start,to:ready,message:'显式方向清洗时长和验证等待；完整资源候选重新检查'});candidate=ready;continue;}
+            resourceError=cleaning.findings.map((f:any)=>f.code+' '+f.message).join('；');break;
+           }
+          }
           if(allocator){
            try{materialPreview=allocator.preview(demandFor(order,operation,fit.start),fit.start);}
            catch(e){materialError=e instanceof Error?e.message:'物料口径无效';break;}
@@ -370,5 +381,21 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
   (result as any).protection=protection;
   (result as any).findings.push(...protection.issues);
  }
- finishDelivery(); return result!;
+ finishDelivery();
+ if(result&&!minimal&&cleaningActive(sourceData,calculatedAt)&&!changeoverOrder){
+  const initial:any=result;
+  const needsSearch=initial.changeoverAssessment?.status==='problem'||initial.findings.some((f:any)=>f.message.includes('BR13'));
+  if(needsSearch){
+   const ids=sourceData.orders.filter(isOrderSchedulable).map(o=>o['订单编号']);
+   const tried:any[]=[];let accepted:any=null;
+   for(const order of changeoverOrderCandidates(ids)){
+    const candidate:any=calculate(sourceData,inputVersion,calculatedAt,conditions,order);
+    tried.push({order,status:candidate.changeoverAssessment?.status??'not_checked',tasks:candidate.tasks.map((t:any)=>t.id),findings:candidate.findings.map((f:any)=>({code:f.code,message:f.message}))});
+    if(!candidate.findings.length&&candidate.changeoverAssessment?.status==='pass'&&candidate.tasks.length>=initial.tasks.length){accepted=candidate;break;}
+   }
+   const search={contract:'BR13-bounded-full-candidate-v1',limit:120,maxOrders:8,attempts:tried,selectedOrder:accepted?tried.at(-1).order:null,status:accepted?'legal-alternative':'rejected',explanation:accepted?'合法替代顺序已经完整排程并检查方向/日历/人员/资源/物料及执行保护；冻结输入未改写。':(ids.length>8?'订单数超过8项搜索边界；保留原结果与冲突，不自动采用未核顺序。':'已检查的顺序均不满足当前约束；保留锁定及已开始事实。')+'搜索有界，不宣称全局无解；可维护显式方向/资源/日历后重新运行。'};
+   result=accepted??initial;(result as any).changeoverSearch=search;
+  }
+ }
+ return result!;
 }
