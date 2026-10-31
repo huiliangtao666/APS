@@ -460,6 +460,34 @@
           "processing": "PROCESSED",
           "remaining": "QA UAT08 #37; residual responsibility per 18-row closure #38/#39/#40/#41/#42",
           "no_duplicate_qa_dispatch": true
+        },
+        {
+          "event_key": "b08:uat08:979da18:AC15-export-stale-dec03:r1",
+          "scope": "UAT08 AC15/FR017/FR035; effective CR-DEC02-03 H-P04/N06 and PM explicit stale resource-load note cleanup",
+          "product_sha": "979da1827d7190024621e0438a8c0055fed44ad8",
+          "issue_log": "https://github.com/huiliangtao666/APS/issues/37#issuecomment-6540805940",
+          "classification": "真实产品FAIL",
+          "severity": "Medium: native exported capability boundary contradicts effective supported personnel policy",
+          "status": "IN_PROGRESS",
+          "pm_triage": {
+            "source_delivery": "dlv_38302ab1-d157-4f15-a434-0306269eaac9",
+            "scope_append_delivery": "dlv_6f9e8158-9e70-455d-bfe9-bcae1451e686",
+            "active_repair_delivery": "dlv_352b72b2-e1b9-47a5-aefe-d96bbc204065",
+            "scope_append_status": "SENT/waiting",
+            "repair_round": 1,
+            "triage_increment": 0,
+            "verification": {
+              "crc": "PASS",
+              "csv_bytes": 38905,
+              "csv_sha256": "448a0c7c2a6c86715295404fa08a49b1553eefb5802aa29f940c2f52141d167d",
+              "csv_archive_path": "B08-resource.csv",
+              "original_evidence_path": "evidence/browser/B08-resource.csv"
+            },
+            "qa_retest": "WAIT_FIXED_SHA_SELFTEST_AND_ENTRY"
+          },
+          "project_status": "In progress",
+          "uat": "FAIL_OPEN_PENDING_FIX_AND_QA_RETEST",
+          "cr_approval_unchanged": true
         }
       ]
     },
@@ -1372,6 +1400,34 @@
           "processing": "PROCESSED",
           "remaining": "QA UAT08 #37; residual responsibility per 18-row closure #38/#39/#40/#41/#42",
           "no_duplicate_qa_dispatch": true
+        },
+        {
+          "event_key": "b08:uat08:979da18:AC15-export-stale-dec03:r1",
+          "scope": "UAT08 AC15/FR017/FR035; effective CR-DEC02-03 H-P04/N06 and PM explicit stale resource-load note cleanup",
+          "product_sha": "979da1827d7190024621e0438a8c0055fed44ad8",
+          "issue_log": "https://github.com/huiliangtao666/APS/issues/37#issuecomment-6540805940",
+          "classification": "真实产品FAIL",
+          "severity": "Medium: native exported capability boundary contradicts effective supported personnel policy",
+          "status": "IN_PROGRESS",
+          "pm_triage": {
+            "source_delivery": "dlv_38302ab1-d157-4f15-a434-0306269eaac9",
+            "scope_append_delivery": "dlv_6f9e8158-9e70-455d-bfe9-bcae1451e686",
+            "active_repair_delivery": "dlv_352b72b2-e1b9-47a5-aefe-d96bbc204065",
+            "scope_append_status": "SENT/waiting",
+            "repair_round": 1,
+            "triage_increment": 0,
+            "verification": {
+              "crc": "PASS",
+              "csv_bytes": 38905,
+              "csv_sha256": "448a0c7c2a6c86715295404fa08a49b1553eefb5802aa29f940c2f52141d167d",
+              "csv_archive_path": "B08-resource.csv",
+              "original_evidence_path": "evidence/browser/B08-resource.csv"
+            },
+            "qa_retest": "WAIT_FIXED_SHA_SELFTEST_AND_ENTRY"
+          },
+          "project_status": "In progress",
+          "uat": "FAIL_OPEN_PENDING_FIX_AND_QA_RETEST",
+          "cr_approval_unchanged": true
         }
       ]
     },
