@@ -5,6 +5,7 @@ import {activeBatchRule} from '../src/lib/batch-policy.mjs';
 import {quantityMath as Q} from '../src/lib/material-allocation.mjs';
 import {freezeRunInput,inputHash} from './run-input.mjs';
 import {calculate} from './planner.ts';
+import {protectCalculatedTasks} from './trial-protection.mjs';
 
 export const taskPosition=t=>({orderId:t.orderId,operation:t.operation,machine:t.machine,start:t.start,end:t.end,duration:t.duration});
 export function movableTask(task,...datasets){
@@ -33,6 +34,8 @@ export function freezePositions(data,conditions,positions,at){
 // Calendar and capacity sweeps inspect saved output at its exact proposed position.
 export function checkPositions(plan,base,data,conditions,positions,locks){
  const report=independentlyVerifyPlan(plan,data.orders,data.routes,plan.rules,new Date().toISOString(),data,conditions),issues=[];
+ const protection=protectCalculatedTasks(base,plan,data,conditions,locks);
+ issues.push(...protection.issues);
  const add=(code,message,taskIds=[])=>issues.push({code:'POSITION / '+code,message,taskIds});
  for(const [name,c] of Object.entries(report.checks))if(c.status==='problem')add('INDEPENDENT_'+name,c.details.join('；'),plan.tasks.map(t=>t.id));
  if(conditions.mode!=='supported'||activeBatchRule(data,conditions.ruleEvaluationAt))add('UNSUPPORTED','最小模式及生产批/合批移动尚未检查');
@@ -70,7 +73,7 @@ export function checkPositions(plan,base,data,conditions,positions,locks){
  if(inputHash(demandKey(plan.materialDemands||[]))!==inputHash(demandKey(base.materialDemands||[])))add('EXACT_QUANTITY','移动前后的物料需求精确数量不同；不能推断守恒');
  // Preserve upstream unknown checks. A successful supported check is never a proof of all rules.
  const unchecked=conditions.checkScope?.unchecked||[];
- return {checkedAt:new Date().toISOString(),checks:report.checks,findings:[...(plan.findings||[]),...issues],unchecked,scope:'固定结果独立核对单线、机器、顺序、日历、保护、保存资源容量及精确物料需求；其余上游语义保持未检查'};
+ return {checkedAt:new Date().toISOString(),checks:report.checks,protection,findings:[...(plan.findings||[]),...issues],unchecked,scope:'固定结果独立核对单线、机器、顺序、日历、保护、保存资源容量及精确物料需求；其余上游语义保持未检查'};
 }
 export function evaluatePosition(trial,base,positions,locks){
  const frozen=freezePositions(trial.data,base.conditions,positions,new Date().toISOString());

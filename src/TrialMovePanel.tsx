@@ -29,6 +29,8 @@ export function TrialMovePanel(p:Props){
  <button disabled={blocked} onClick={()=>act(async()=>{const n=epoch.current,x=await p.api(root+'/previews/'+preview.id+'/recheck',{});if(n===epoch.current)setPreview((old:any)=>old?.id===x.id?{...old,...x}:old);})}>独立复核位置</button>
  <button disabled={blocked||!preview.checked||!preview.valid} onClick={()=>act(async()=>{const x=await p.api(root+'/previews/'+preview.id+'/commit',{});setPreview(null);await p.refresh();p.onResult(x.id);})}>提交位置变更</button>
  <button disabled={working||!p.canWrite} onClick={()=>act(cancel)}>取消位置预览</button>
+ {preview.check?.protection&&<p>执行保护{preview.check.protection.valid?'通过':'存在冲突'}；资源、物料和位置独立复核另列，保护通过不代表全部可行。</p>}
+ {preview.check?.protection?.handlingRequired.map((f:any)=><p role="status" key={f.factId}>需处理：{f.orderId} / {f.operation} · {f.reason}</p>)}
  {preview.check?.findings.map((f:any,i:number)=><p key={i}>{f.code} · {f.taskIds?.join('、')} · {f.message}</p>)}
  {preview.check&&<details><summary>独立检查、未检查范围与锁定证据</summary><pre style={{maxHeight:260,overflow:'auto'}}>{JSON.stringify({check:preview.check,locks:preview.locks},null,2)}</pre></details>}</article>}
  {state?.limits.map(l=><p key={l}>{l}</p>)}

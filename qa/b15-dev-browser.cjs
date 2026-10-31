@@ -1,0 +1,73 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
+(async()=>{
+ const out=process.env.B15_EVIDENCE||'/evidence/browser',base=process.env.B15_BASE_URL||'http://127.0.0.1:4317';fs.mkdirSync(out,{recursive:true});
+ const hash=x=>crypto.createHash('sha256').update(x).digest('hex'),dump=(n,x)=>fs.writeFileSync(out+'/'+n,typeof x==='string'?x:JSON.stringify(x,null,2));
+ const api=async(p,b,role='planner')=>{const r=await fetch(base+'/api'+p,{method:b?'POST':'GET',headers:{'content-type':'application/json','X-UAT-Synthetic-Role':role},body:b?JSON.stringify({reason:'B15 explicit replaceable simulation Dev selftest',...b}):undefined});const text=await r.text();assert.ok(r.ok,p+' '+r.status+' '+text.slice(0,500));return r.headers.get('content-type')?.includes('json')?JSON.parse(text):text;};
+ const bytes=()=>fs.readFileSync('/state/business.json','utf8'),report={checks:[],errors:[],network:[],identity:'explicit simulated members; real React/API/Worker; no formal SSO or QA verdict'},saved={};
+ const pass=(id,x={})=>{report.checks.push({id,result:'PASS',...x});dump('browser-report.json',report);console.log('PASS '+id);};
+ const {chromium}=require('playwright'),browser=await chromium.launch({headless:true,args:['--no-sandbox','--disable-dev-shm-usage','--disable-gpu']}),page=await browser.newPage({viewport:{width:1440,height:900},acceptDownloads:true});page.setDefaultTimeout(20000);report.browserVersion=browser.version();
+ page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.url().includes('/api/'))report.network.push({path:new URL(r.url()).pathname,status:r.status(),method:r.request().method()});});
+ const batch=()=>page.locator('[data-csv-batch]'),trialPanel=()=>page.getByRole('region',{name:'方案副本与比较',exact:true}),movePanel=()=>page.getByRole('region',{name:'试算任务移动与锁定',exact:true});
+ async function open(role='planner'){await page.goto(base+'/__qa/role/'+role,{waitUntil:'networkidle'});await page.getByLabel('操作原因',{exact:true}).fill('B15 explicit simulation UI selftest');}
+ async function upload(id){await page.getByRole('button',{name:'数据与 CSV',exact:true}).click();const files=JSON.parse(fs.readFileSync('/fixtures/UAT-'+id+'/IMPORT-REQUEST.json')).files;await batch().getByLabel('选择批量 CSV',{exact:true}).setInputFiles(files.map(f=>({name:f.name,mimeType:'text/csv',buffer:Buffer.from(f.text)})));await batch().getByText('已读取文件，请预览。',{exact:true}).waitFor();await batch().getByRole('button',{name:'预览并检查整批',exact:true}).click();await batch().getByText('检查通过，尚未导入。',{exact:true}).waitFor();await batch().getByRole('button',{name:'确认整批导入',exact:true}).click();await batch().getByText(/整批导入成功|重复导入内容相同/).waitFor();await page.getByRole('button',{name:'排程工作台',exact:true}).click();}
+ async function run(scope=page){const pending=page.waitForResponse(r=>r.url().endsWith('/api/runs')&&r.request().method()==='POST');await scope.getByRole('button',{name:'另开计算（冻结当前输入）',exact:true}).click();const created=await(await pending).json();assert.ok(created.id);let r;for(let n=0;n<1000;n++){r=await api('/runs/'+created.id);if(r.planId)break;assert.ok(!['failed','timed_out','cancelled'].includes(r.status),JSON.stringify(r));await new Promise(resolve=>setTimeout(resolve,20));}assert.ok(r.planId);assert.equal(r.status,'completed');await scope.getByRole('article',{name:'运行记录 '+r.id,exact:true}).getByRole('button',{name:'查看结果',exact:true}).click();return {run:r,plan:(await api('/plans')).find(p=>p.id===r.planId),input:await api('/runs/'+r.id+'/inputs')};}
+ async function verify(plan){const response=page.waitForResponse(r=>r.url().endsWith('/api/plans/'+plan.id+'/verify')&&r.request().method()==='POST');await page.getByRole('button',{name:'独立复核',exact:true}).click();const p=await(await response).json();assert.equal(p.verification.protection.valid,true);assert.equal(p.verification.checks.jointConditions.status,'pass');return p;}
+ async function exportCsv(name){const download=page.waitForEvent('download');await page.getByRole('button',{name:'导出 CSV',exact:true}).click();const file=out+'/'+name+'.csv';await(await download).saveAs(file);return fs.readFileSync(file,'utf8');}
+ async function editTrial(table,changes){await trialPanel().getByLabel('试算输入类别',{exact:true}).selectOption(table);for(const [row,field,value]of changes)await trialPanel().locator('[id='+JSON.stringify('field-'+table+'-'+row+'-'+field)+']').fill(value);const pending=page.waitForResponse(r=>r.url().includes('/trials/')&&r.url().endsWith('/inputs')&&r.request().method()==='POST');await trialPanel().getByRole('button',{name:'保存修改',exact:true}).click();assert.ok((await pending).ok());}
+ try{
+  report.metadata=await api('/uat-build');assert.equal(report.metadata.productSha,process.env.B15_PRODUCT_SHA);assert.equal(report.metadata.workBuild,false);
+  for(const id of ['15','17','18']){
+   await open();await upload(id);if(id==='15')await page.getByLabel('开始分钟',{exact:true}).fill('60');
+   const first=await run();await verify(first.plan);await page.getByRole('button',{name:'保存快照',exact:true}).click();
+   const originalCsv=await exportCsv('UAT'+id+'-original');saved[id]={...first,csv:originalCsv};
+   await trialPanel().getByRole('button',{name:'复制当前方案为独立试算',exact:true}).click();await movePanel().waitFor();
+   const trial=(await api('/trials'))[0];
+   if(id==='15'){
+    const before=bytes();await trialPanel().getByLabel('试算输入类别',{exact:true}).selectOption('personnelGroups');
+    for(let row=0;row<trial.data.personnelGroups.length;row++)await trialPanel().locator('[id='+JSON.stringify('field-personnelGroups-'+row+'-人员数量')+']').fill('2');
+    await trialPanel().getByLabel('试算输入类别',{exact:true}).selectOption('personnelPools');await trialPanel().locator('[id="field-personnelPools-0-总人数"]').fill('2');
+    await trialPanel().getByRole('button',{name:'预览人员修改（零写入）',exact:true}).click();await trialPanel().getByText('人员联合预览通过，可以保存当前草稿。',{exact:true}).waitFor();assert.equal(bytes(),before);
+    await trialPanel().getByRole('button',{name:'保存修改',exact:true}).click();await trialPanel().getByText('保存完成，当前输入已更新；原方案及其输入保留。',{exact:true}).waitFor();
+   }
+   if(id==='18'){
+    // Drafts span tables and are committed together, so BOM total remains1000.
+    await trialPanel().getByLabel('试算输入类别',{exact:true}).selectOption('times');await trialPanel().locator('[id="field-times-0-固定分钟"]').fill('40');
+    await trialPanel().getByLabel('试算输入类别',{exact:true}).selectOption('calendars');await trialPanel().locator('[id="field-calendars-0-起始分钟"]').fill('60');
+    await trialPanel().getByLabel('试算输入类别',{exact:true}).selectOption('tools');await trialPanel().locator('[id="field-tools-0-工装编码"]').fill('G60');await trialPanel().locator('[id="field-tools-0-可用起始分钟"]').fill('130');
+    await trialPanel().getByLabel('试算输入类别',{exact:true}).selectOption('resourceClaims');await trialPanel().locator('[id="field-resourceClaims-0-资源编号"]').fill('G60');
+    await trialPanel().getByLabel('试算输入类别',{exact:true}).selectOption('bom');
+    for(const [i,row]of trial.data.bom.entries())if(['LEAN','FAT'].includes(row['物料编号']))await trialPanel().locator('[id='+JSON.stringify('field-bom-'+i+'-配置用量')+']').fill(row['物料编号']==='LEAN'?'700':'100');
+    await trialPanel().getByRole('button',{name:'保存修改',exact:true}).click();await trialPanel().getByText('保存完成，当前输入已更新；原方案及其输入保留。',{exact:true}).waitFor();
+   }
+   const next=await run(trialPanel());const verified=await verify(next.plan);assert.equal(verified.verification.checks.jointConditions.status,'pass');
+   if(id==='15'){assert.deepEqual(next.plan.tasks.filter(t=>t.orderId==='A').map(t=>[t.start,t.end]),[[0,30],[30,60]]);assert.equal(next.plan.tasks.find(t=>t.id==='B-MIX').start,180);assert.deepEqual(next.plan.originalResourceProtection,first.plan.originalResourceProtection);}
+   if(id==='17'){assert.equal(next.plan.tasks.length,5);assert.equal(next.plan.tasks.find(t=>t.operation==='HEAT').duration,120);assert.equal(next.plan.deliveryAssessment.orders[0].expectedDeliverableMinute,350);assert.equal(next.plan.deliveryAssessment.orders[0].delayMinutes,260);}
+   if(id==='18'){assert.deepEqual(next.plan.tasks.map(t=>[t.start,t.end]),[[60,100],[130,160]]);assert.equal(next.plan.materialDemands.find(t=>t.materialId==='LEAN').quantity,175);}
+   await trialPanel().getByRole('button',{name:'比较原方案与最近试算',exact:true}).click();const compare=trialPanel().getByRole('article',{name:'保存的比较结果',exact:true});await compare.getByText('保存的瓶颈证据（不推断单项因果）',{exact:true}).waitFor();
+   const comparison=await api('/plans/'+first.plan.id+'/compare/'+next.plan.id);assert.equal(comparison.impact.noAutomaticImprovement,true);if(id==='15')assert.equal(comparison.orderOutcome,'unchanged-no-delivery-improvement');
+   const retainedResponse=page.waitForResponse(r=>r.url().endsWith('/trials/'+trial.id+'/retain'));await trialPanel().getByRole('button',{name:'保留最近重算结果（独立快照）',exact:true}).click();assert.ok((await retainedResponse).ok());
+   const csv=await exportCsv('UAT'+id+'-candidate');dump('UAT'+id+'-app.json',{first,next,verified,comparison,csv});await page.screenshot({path:out+'/UAT'+id+'-comparison.png',fullPage:true});
+   assert.deepEqual(await api('/runs/'+first.run.id+'/inputs'),first.input);assert.equal((await api('/plans')).find(p=>p.id===first.plan.id).snapshotHash,first.plan.snapshotHash);
+   if(id!=='18'){const discarded=page.waitForResponse(r=>r.url().endsWith('/trials/'+trial.id+'/discard'));await trialPanel().getByRole('button',{name:'放弃试算（保留历史）',exact:true}).click();assert.ok((await discarded).ok());}
+   pass('B15_UI_'+id+'_IMPORT_WORKER_TRIAL_EDIT_COMPARE_RETAIN_HISTORY',{runId:next.run.id,planId:next.plan.id,sourcePlanId:first.plan.id});
+  }
+  const tp=trialPanel(),mp=movePanel(),preview=()=>mp.getByRole('status',{name:'位置预览',exact:true}),lastTrial=(await api('/trials'))[0];
+  const source=mp.getByRole('button',{name:'移动任务 A-FILL',exact:true});await source.scrollIntoViewIfNeeded();const bounds=await source.boundingBox(),beforePlans=await api('/plans');
+  await page.mouse.move(bounds.x+20,bounds.y+16);await page.mouse.down();await page.mouse.move(bounds.x+50,bounds.y+16,{steps:12});await page.mouse.up();await preview().waitFor();assert.deepEqual(await api('/plans'),beforePlans);
+  await preview().getByRole('button',{name:'独立复核位置',exact:true}).click();await preview().getByText(/已有支持检查通过/).waitFor();await preview().getByText(/执行保护通过/).waitFor();
+  await preview().getByRole('button',{name:'提交位置变更',exact:true}).click();await preview().waitFor({state:'hidden'});assert.equal((await api('/plans'))[0].tasks.find(t=>t.id==='A-FILL').start,160);
+  await mp.getByLabel('移动任务',{exact:true}).selectOption('A-FILL');await mp.getByRole('button',{name:'预览锁定',exact:true}).click();await preview().getByRole('button',{name:'独立复核位置',exact:true}).click();await preview().getByText(/已有支持检查通过/).waitFor();await preview().getByRole('button',{name:'提交位置变更',exact:true}).click();await preview().waitFor({state:'hidden'});assert.equal(await mp.getByRole('button',{name:'移动任务 A-FILL',exact:true}).isEnabled(),false);
+  await page.reload({waitUntil:'networkidle'});await page.getByLabel('操作原因',{exact:true}).fill('B15 reload exact lock');await tp.getByLabel('独立试算',{exact:true}).selectOption(lastTrial.id);await mp.getByLabel('移动任务',{exact:true}).selectOption('A-FILL');await mp.getByRole('button',{name:'预览解除锁定',exact:true}).waitFor();assert.equal(await mp.getByRole('button',{name:'移动任务 A-FILL',exact:true}).isEnabled(),false);await mp.screenshot({path:out+'/pointer-lock-reopened.png'});
+  pass('B15_UI_POINTER_PREVIEW_INDEPENDENT_RECHECK_COMMIT_LOCK_REOPEN');
+  const lockedRun=await run(tp);assert.equal(lockedRun.plan.tasks.find(t=>t.id==='A-FILL').start,160);assert.equal(lockedRun.plan.lockSnapshot['A-FILL'].start,160);
+  await mp.getByLabel('移动任务',{exact:true}).selectOption('A-MIX');await mp.getByLabel('移动开始分钟',{exact:true}).fill('150');const unchanged=bytes();await mp.getByRole('button',{name:'预览移动',exact:true}).click();await preview().getByRole('button',{name:'独立复核位置',exact:true}).click();await preview().getByText(/存在冲突，不能提交/).waitFor();assert.equal(await preview().getByRole('button',{name:'提交位置变更',exact:true}).isEnabled(),false);assert.equal(bytes(),unchanged);await preview().getByRole('button',{name:'取消位置预览',exact:true}).click();pass('B15_UI_ILLEGAL_PRECEDENCE_REJECTS_WITHOUT_STORE_WRITE');
+  await open('query');await tp.getByLabel('独立试算',{exact:true}).selectOption(lastTrial.id);await mp.getByLabel('移动任务',{exact:true}).selectOption('A-FILL');assert.equal(await mp.getByRole('button',{name:'预览解除锁定',exact:true}).isEnabled(),false);const readonly=await page.request.post(base+'/api/trials/'+lastTrial.id+'/lock-preview',{data:{reason:'forged query mutation'},headers:{'X-UAT-Synthetic-Role':'query'}});assert.equal(readonly.status(),403);pass('B15_UI_QUERY_READONLY_AND_API_DENIAL');
+  await open();await page.getByRole('button',{name:'数据与 CSV',exact:true}).click();
+  const rawDir='/fixtures/originals/UAT-18',rawFiles=fs.readdirSync(rawDir).filter(n=>/^(0[1-9]|1[0-9])_.*\.csv$/.test(n));assert.equal(rawFiles.length,19);const beforeRaw=bytes();
+  await batch().getByLabel('选择批量 CSV',{exact:true}).setInputFiles(rawFiles.map(n=>({name:n,mimeType:'text/csv',buffer:fs.readFileSync(rawDir+'/'+n)})));await batch().getByText('已读取文件，请预览。',{exact:true}).waitFor();await batch().getByRole('button',{name:'预览并检查整批',exact:true}).click();await batch().getByRole('list',{name:'批量导入问题',exact:true}).waitFor();assert.equal(await batch().getByRole('button',{name:'确认整批导入',exact:true}).isEnabled(),false);assert.equal(bytes(),beforeRaw);dump('original19-ui-blockers.txt',await batch().innerText());await batch().screenshot({path:out+'/original19-rejection.png'});pass('B15_UI_ORIGINAL19_EXPLICIT_REJECTION_ZERO_WRITE');
+  await page.getByRole('button',{name:'排程工作台',exact:true}).click();await page.getByLabel('已保存方案',{exact:true}).selectOption(saved['18'].plan.id);const oldCsv=await exportCsv('UAT18-original-after-edits');assert.equal(oldCsv,saved['18'].csv);assert.deepEqual(await api('/runs/'+saved['18'].run.id+'/inputs'),saved['18'].input);
+  dump('restart-target.json',{runId:saved['18'].run.id,planId:saved['18'].plan.id,snapshot:saved['18'].input,tasks:saved['18'].plan.tasks,csvSha256:hash(oldCsv)});
+  assert.deepEqual(report.errors,[]);report.complete=true;
+ }catch(e){report.failure=e.stack;dump('failure-dom.txt',await page.locator('body').innerText().catch(()=>''));await page.screenshot({path:out+'/failure.png'}).catch(()=>{});throw e;}
+ finally{dump('browser-report.json',report);await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

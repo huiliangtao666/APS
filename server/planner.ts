@@ -1,4 +1,5 @@
 import {originalProtection,originalSchedulingReservations} from '../src/lib/execution-resource-ledger.mjs';
+import {protectCalculatedTasks} from './trial-protection.mjs';
 import {scheduleProcessRoute} from '../src/lib/process-route-planner.mjs';
 import {processRequested} from '../src/lib/process-route.mjs';
 import {verifyProcessRoute} from '../src/lib/verify-process-route.mjs';
@@ -341,5 +342,11 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
     const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:built,supplyConditions:minimal?[]:buildSupplyConditions(built,resolvedSupplies,policy?materialDemands.filter(r=>r.committed).flatMap(r=>r.allocations.filter(a=>a.conditional).map((a,i)=>({'引用编号':`FR020-${r.taskId}-${r.materialId}-${i}`,'订单编号':r.orderId,'工序编号':r.operation,'供给编号':a.supplyId,'使用数量':String(a.quantity)}))):sourceData.supplyUses||[]),supplyInput:minimal?undefined:supplyInput,findings:[...findings,...hard],rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
     setIssues(plan.findings);setActivePlan(plan);setVerification(null);setMessage(plan.findings.length?`生成 ${built.length} 项任务，并发现 ${plan.findings.length} 个需处理的问题。`:`生成 ${built.length} 项任务；当前启用的机器与顺序检查通过。`);
   }
- schedule(); finishDelivery(); return result!;
+ schedule();
+ if(result){
+  const protection=protectCalculatedTasks(null,result,sourceData,conditions,positions);
+  (result as any).protection=protection;
+  (result as any).findings.push(...protection.issues);
+ }
+ finishDelivery(); return result!;
 }
