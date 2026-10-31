@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "P10 fixed42a35d07 Test1 S-P01..10 PASS; Test2 H first six PASS, R2 H-P06 PASS/H-P04 PARTIAL. H-P08/10 Test1 verdict awaits PM review; H-P04 personnel early/late formula awaits user decision. N06 and other scope open; full CR NOT_READY. | 2026-10-31 UAT06限定G01/FILL=2模拟QA PASS，26PASS/1范围外BLOCKED/1可选未执行，执行#33 Done；0产品FAIL/修复+0；完整CR NOT_READY。详见 https://github.com/huiliangtao666/APS/issues/3#issuecomment-6539962572",
+      "implementation_status": "当前：UAT07联合包#34固定80841247ac91cae193a452325097234f31e6609e，Dev/Test开发自测已核；整包In review，QA已派dlv_88fa9322-c89c-4e9b-93cb-8edc04134201。仅本场景增量；其余具体责任见#34收口表。历史状态保留pm_processing_events，不据旧字段恢复已解除的mock/账号/业务裁决等待。",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -66,7 +66,7 @@
       "dev_report": "APS-Dev/S06-CANDIDATE-REPORT-2026-10-29.txt",
       "test_contract": "APS-Test/DEC02-03-ISSUE3-ACCEPTANCE-MATRIX.csv（48项待指定版本执行；不是产品通过）",
       "product_test_delivery": "dlv_f4ebcde5-67f6-4898-a740-535c299548de",
-      "acceptance_result": "P10 fixed42a35d07 independent S-P01..10 PASS; H-P01/02/03/05/06/07/08/09/10 PASS, H-P04 PARTIAL pending personnel outside-task early/late rule; 0 new product FAIL, +0 repair. Full FR007/022/CR and UAT NOT_READY. | 2026-10-31 UAT06限定G01/FILL=2模拟QA PASS，26PASS/1范围外BLOCKED/1可选未执行，执行#33 Done；0产品FAIL/修复+0；完整CR NOT_READY。详见 https://github.com/huiliangtao666/APS/issues/3#issuecomment-6539962572",
+      "acceptance_result": "本UAT07任务级PASS，QA整体结论待确认；无未闭真实产品FAIL，修复轮次+0。其他批准责任及原SHA证据保留，不推定完整CR验收。https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583",
       "limitations": "Dev交付声明：工装仅单连续窗口；缺原始资源账的已有执行任务组合明确阻断；由独立Test判断是否满足批准范围，不静默缩小范围",
       "history": [
         {
@@ -338,6 +338,26 @@
           "issue_url": "https://github.com/huiliangtao666/APS/issues/35",
           "scope": "共同原则/索引复用；本CR原身份、批准边界、SHA与验收范围保留。"
         }
+      ],
+      "pm_processing_events": [
+        {
+          "events": [
+            "dlv_a1ccdb55-d45a-428e-bb9c-a4dfd93fcae3:r1",
+            "dlv_e18bc633-e1cc-497c-9775-bbface55f331:r1"
+          ],
+          "state": "PROCESSED",
+          "sha": "80841247ac91cae193a452325097234f31e6609e",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583",
+          "project_status": "In review",
+          "qa_delivery": "dlv_88fa9322-c89c-4e9b-93cb-8edc04134201",
+          "qa_state": "SENT",
+          "qa_key": "uat07:qa-joint-complete:8084124:20261031:r1",
+          "repair_round_increment": 0,
+          "at": "2026-10-31T14:46:37.723315+08:00",
+          "event_key": "dlv_a1ccdb55-d45a-428e-bb9c-a4dfd93fcae3:r1",
+          "previous_implementation_status": "P10 fixed42a35d07 Test1 S-P01..10 PASS; Test2 H first six PASS, R2 H-P06 PASS/H-P04 PARTIAL. H-P08/10 Test1 verdict awaits PM review; H-P04 personnel early/late formula awaits user decision. N06 and other scope open; full CR NOT_READY. | 2026-10-31 UAT06限定G01/FILL=2模拟QA PASS，26PASS/1范围外BLOCKED/1可选未执行，执行#33 Done；0产品FAIL/修复+0；完整CR NOT_READY。详见 https://github.com/huiliangtao666/APS/issues/3#issuecomment-6539962572",
+          "previous_acceptance_result": "P10 fixed42a35d07 independent S-P01..10 PASS; H-P01/02/03/05/06/07/08/09/10 PASS, H-P04 PARTIAL pending personnel outside-task early/late rule; 0 new product FAIL, +0 repair. Full FR007/022/CR and UAT NOT_READY. | 2026-10-31 UAT06限定G01/FILL=2模拟QA PASS，26PASS/1范围外BLOCKED/1可选未执行，执行#33 Done；0产品FAIL/修复+0；完整CR NOT_READY。详见 https://github.com/huiliangtao666/APS/issues/3#issuecomment-6539962572"
+        }
       ]
     },
     {
@@ -543,7 +563,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR013受影响需求增量；不等于已实现或UAT通过",
-      "implementation_status": "FR013-NONDEVICE-REF-01 first repair e7881a9 independently PASS 43 scoped cases; original05/06/09/12 positive source mappings and FULL03/16 blocked; full FR013/CR NOT_READY",
+      "implementation_status": "当前：UAT07联合包#34固定80841247ac91cae193a452325097234f31e6609e，Dev/Test开发自测已核；整包In review，QA已派dlv_88fa9322-c89c-4e9b-93cb-8edc04134201。仅本场景增量；其余具体责任见#34收口表。历史状态保留pm_processing_events，不据旧字段恢复已解除的mock/账号/业务裁决等待。",
       "primary_requirements": [
         "FR-013"
       ],
@@ -561,7 +581,7 @@
       "acceptance_delta": "CSV模板/预览/导入按批准配置校验：小数袋支拒绝，总收率>100%拒绝；合法配置保存刷新后生效，非法/越权整批零写入；保留旧确认/历史。",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006",
       "related_issue_urls": [],
-      "acceptance_result": "First repair e7881a9 independent 43 PASS/0 FAIL/14 BLOCKED/2 NOT_EXECUTED; defect closed at round1/2; old bd58868 5 FAIL retained at old SHA; full CR NOT_READY",
+      "acceptance_result": "本UAT07任务级PASS，QA整体结论待确认；无未闭真实产品FAIL，修复轮次+0。其他批准责任及原SHA证据保留，不推定完整CR验收。https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583",
       "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
       "history": [
         {
@@ -586,6 +606,26 @@
           "event_key": "design:scheduling-config-cr:20261031:r1",
           "issue_url": "https://github.com/huiliangtao666/APS/issues/35",
           "scope": "共同原则/索引复用；本CR原身份、批准边界、SHA与验收范围保留。"
+        }
+      ],
+      "pm_processing_events": [
+        {
+          "events": [
+            "dlv_a1ccdb55-d45a-428e-bb9c-a4dfd93fcae3:r1",
+            "dlv_e18bc633-e1cc-497c-9775-bbface55f331:r1"
+          ],
+          "state": "PROCESSED",
+          "sha": "80841247ac91cae193a452325097234f31e6609e",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583",
+          "project_status": "In review",
+          "qa_delivery": "dlv_88fa9322-c89c-4e9b-93cb-8edc04134201",
+          "qa_state": "SENT",
+          "qa_key": "uat07:qa-joint-complete:8084124:20261031:r1",
+          "repair_round_increment": 0,
+          "at": "2026-10-31T14:46:37.723315+08:00",
+          "event_key": "dlv_a1ccdb55-d45a-428e-bb9c-a4dfd93fcae3:r1",
+          "previous_implementation_status": "FR013-NONDEVICE-REF-01 first repair e7881a9 independently PASS 43 scoped cases; original05/06/09/12 positive source mappings and FULL03/16 blocked; full FR013/CR NOT_READY",
+          "previous_acceptance_result": "First repair e7881a9 independent 43 PASS/0 FAIL/14 BLOCKED/2 NOT_EXECUTED; defect closed at round1/2; old bd58868 5 FAIL retained at old SHA; full CR NOT_READY"
         }
       ]
     },
@@ -759,7 +799,7 @@
       "approved_on": "2026-10-31",
       "effective": true,
       "effective_scope": "共同原则及未覆盖增量追踪；具体实施仍按原CR/对应包授权",
-      "implementation_status": "REGISTERED_TRACKING_ONLY；已有沿原授权继续；新增未开工增量WAIT_START；当前UAT07 #34不改序",
+      "implementation_status": "当前：UAT07联合包#34固定80841247ac91cae193a452325097234f31e6609e，Dev/Test开发自测已核；整包In review，QA已派dlv_88fa9322-c89c-4e9b-93cb-8edc04134201。仅本场景增量；其余具体责任见#34收口表。历史状态保留pm_processing_events，不据旧字段恢复已解除的mock/账号/业务裁决等待。",
       "primary_requirements": [
         "FR-002",
         "FR-003",
@@ -881,7 +921,7 @@
         "https://github.com/huiliangtao666/APS/issues/25",
         "https://github.com/huiliangtao666/APS/issues/26"
       ],
-      "acceptance_result": "NOT_EXECUTED：本次仅登记关联；不新增产品/QA结论",
+      "acceptance_result": "本UAT07任务级PASS，QA整体结论待确认；无未闭真实产品FAIL，修复轮次+0。其他批准责任及原SHA证据保留，不推定完整CR验收。https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583",
       "acceptance_status": "NOT_EXECUTED，本CR登记不替代各原范围验收",
       "limitations": "不批准DEC04/05/06新应用实现、业务默认、账本能力、合main或发布；AC27暂定30秒不能通过改预算降低标准。",
       "code_sha": null,
@@ -1076,6 +1116,26 @@
           "pm_owner": "APS-PM（登记与包启动）",
           "new_increment_state": "ORIGINAL_PROPOSAL_FLOW_WAIT_APPROVAL_AND_START",
           "resume_condition": "沿原B02提案登记/流转，明确账本能力批准范围后由PM按对应包启动；本CR不批准。"
+        }
+      ],
+      "pm_processing_events": [
+        {
+          "events": [
+            "dlv_a1ccdb55-d45a-428e-bb9c-a4dfd93fcae3:r1",
+            "dlv_e18bc633-e1cc-497c-9775-bbface55f331:r1"
+          ],
+          "state": "PROCESSED",
+          "sha": "80841247ac91cae193a452325097234f31e6609e",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540240583",
+          "project_status": "In review",
+          "qa_delivery": "dlv_88fa9322-c89c-4e9b-93cb-8edc04134201",
+          "qa_state": "SENT",
+          "qa_key": "uat07:qa-joint-complete:8084124:20261031:r1",
+          "repair_round_increment": 0,
+          "at": "2026-10-31T14:46:37.723315+08:00",
+          "event_key": "dlv_a1ccdb55-d45a-428e-bb9c-a4dfd93fcae3:r1",
+          "previous_implementation_status": "REGISTERED_TRACKING_ONLY；已有沿原授权继续；新增未开工增量WAIT_START；当前UAT07 #34不改序",
+          "previous_acceptance_result": "NOT_EXECUTED：本次仅登记关联；不新增产品/QA结论"
         }
       ]
     },
