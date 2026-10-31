@@ -588,6 +588,20 @@
           "date": "2026-10-29",
           "event_key": "USER-DECISIONS-20261029-R1:fr-013",
           "event": "用户确认本CR增量，原卡仍In progress/NOT_READY；待实现与独立验收"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_3ce06cd4-8d72-4980-b830-c9eb0f53f808:r1",
+          "event": "QA fixed a786ee304003cfa45f2e2d60b6bf535cc328ebee legacy v1 migration/no-op/frozen-history slice: independent 18/18 PASS; repository v1-specific 7/7 PASS with overlapping coverage; no new product FAIL or repair round. Full FR013/effective CR NOT_READY; complete UAT unsigned.",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6528290528",
+          "evidence": "APS-QA/Issue4-FR013-V1-a786ee30-QA-r1-REPORT.md (SHA256 affc0c4da45b57b4436ca08516376928ac482398544c03c520d87a0cbb4ff589)"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_deda4264-6544-428f-8f1f-6122d5d01826:r1",
+          "event": "APS-Test fixed b1a4863c from 116eb5d4, legacy v1 migration/no-op/explicit version/Worker/React bounded developer selftest 28/28 PASS plus independent CSV parse 8/8 PASS; no product source diff, no new FAIL or repair round; full FR013/effective CR NOT_READY, UAT unsigned.",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6528710360",
+          "evidence": "APS-Test/Issue4-FR013-V1-MIGRATION-116eb5-APS-Test-r1-REPORT.md (SHA256 fe1054346d2c78b9573fa62e6aadacb6763ab7b2fa0abeacc9b115fb1e8d826a)"
         }
       ],
       "dev_delivery": "dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1",
