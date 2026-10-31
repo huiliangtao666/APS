@@ -1,3 +1,4 @@
+import {packTimeFields} from './lib/pack-batch.mjs';
 import {stageMappingDef} from './lib/stage-bindings.mjs';
 import {minuteValidityFields} from './lib/minute-validity.mjs';
 import {originalStageDefs} from './lib/original-stage-data.mjs';
@@ -21,10 +22,10 @@ export const defs: TableDef[] = [stageMappingDef,
   { key: 'supplyUses', label: '计划供给引用', file: '22_计划供给引用.csv', fields: ['引用编号','订单编号','工序编号','供给编号','使用数量'] },
   { key: 'inventory', label: '库存批次', file: '09_库存批次.csv', fields: ['批次编号','物料编号','账面数量','已占用数量','有效期','位置','质量状态','预计可用时间',...minuteValidityFields] },
   { key: 'orders', label: '订单与交期', file: '17_生产订单与交期.csv', fields: ['订单编号','产品编号','产线编号','合格需求','数量单位','要求可交付分钟','优先顺序','是否允许拆分','需求类型','订单状态','已完成合格数量'] },
-  { key: 'bom', label: 'BOM 与包装用量', file: '09_BOM与包装用量.csv', fields: ['版本编号','产品编号','生效日期','投料工序编号','用量类型','物料编号','配置用量','用量单位','用量基准','收率/损耗口径备注','损坏比例'] },
+  { key: 'bom', label: 'BOM 与包装用量', file: '09_BOM与包装用量.csv', fields: ['版本编号','产品编号','生效日期','投料工序编号','用量类型','物料编号','配置用量','用量单位','用量基准','收率/损耗口径备注','损坏比例','最小包装单位'] },
   { key: 'routes', label: '工艺路线', file: '10_工艺路线配置.csv', fields: ['产品编号','工序编号','工序名称','前序工序','最大等待分钟','程序编号'] },
-  { key: 'times', label: '工序工时', file: '11_工序工时配置.csv', fields: ['产品编号','工序编号','计算方式','固定分钟','速度支每分钟'] },
-  { key: 'machines', label: '设备资源', file: '03_设备资源配置.csv', fields: ['设备编号','设备名称','产线编号','工序编号','日历编号','最小装载kg','最大装载kg','装载计量基准'] },
+  { key: 'times', label: '工序工时', file: '11_工序工时配置.csv', fields: ['产品编号','工序编号','计算方式','固定分钟','速度支每分钟',...packTimeFields] },
+  { key: 'machines', label: '设备资源', file: '03_设备资源配置.csv', fields: ['设备编号','设备名称','产线编号','工序编号','日历编号','最小装载kg','最大装载kg','装载计量基准','不足批处理'] },
   { key: 'tools', label: '工装配置', file: '18_工装配置.csv', fields: ['工装编码','工装名称','适用任务','可用数量','每任务需求数量','提前占用分钟','后延占用分钟','是否启用','说明','可用起始分钟','可用结束分钟'] },
   { key: 'deliveryConditions', label: '订单模拟交付条件', file: '24_订单模拟交付条件.csv', fields: ['订单编号','模拟质量状态','模拟质量可用时间','模拟有效期截止时间','要求剩余有效分钟'] },
   { key: 'resourceClaims', label: '显式逐生产批占用声明', file: '23_资源占用声明.csv', fields: ['声明编号','订单编号','工序编号','资源类型','资源编号','需求数量','单位','提前占用分钟','后延占用分钟','占用口径','窗口开始偏移分钟','窗口结束偏移分钟','参数来源'] },

@@ -64,8 +64,9 @@ export function calculateMaterialDemand(data,order,operation,minute,remainingKg,
    if(b['用量基准']!=='每袋'||b['用量单位']!=='个'||b['收率/损耗口径备注']?.trim()||!String(b['损坏比例']??'').trim())fail('包材仅支持每袋/个及显式领用量中损坏比例；其他口径未定义');
    const loss=q(b['损坏比例']);if(cmp(loss,one)>=0)fail('包材损坏比例须小于1');
    const pieces=div(kg,weight),bags=div(pieces,bag);
-   if(pieces.n%pieces.d!==0n||bags.n%bags.d!==0n)fail('支/袋不是整数；基线未声明中间取整规则');
-   amount=ceil(div(mul(bags,q(b['配置用量'])),sub(one,loss)));formula='向上取整（余量kg ÷ 单支净重 ÷ 每袋支数 × 定额 ÷ (1−损坏比例)）';
+   if(!b['最小包装单位']&&(pieces.n%pieces.d!==0n||bags.n%bags.d!==0n))fail('支/袋不是整数；基线未声明中间取整规则');
+   const minimum=b['最小包装单位']?q(b['最小包装单位']):one;if(cmp(minimum,zero)<=0)fail('最小包装单位须为正数');
+   amount=mul(ceil(div(div(mul(bags,q(b['配置用量'])),sub(one,loss)),minimum)),minimum);formula='向上取整（余量kg ÷ 单支净重 ÷ 每袋支数 × 定额 ÷ (1−损坏比例)）';
   }
   if(!Number.isFinite(num(amount)))fail('需求超出数值范围');
   return {orderId:order['订单编号'],productId:order['产品编号'],operation,taskId:`${order['订单编号']}-${operation}`,materialId:b['物料编号'],unit:b['用量单位'],version:b['版本编号'],effective:b['生效日期'],feedMinute:minute,feedAt:feedTime(minute),remainingKg:num(kg),quantity:num(amount),exactQuantity:exact(amount),formula};

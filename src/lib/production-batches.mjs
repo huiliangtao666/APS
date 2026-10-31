@@ -1,3 +1,4 @@
+import {partialAllowed} from './pack-batch.mjs';
 import {sourceRefs} from './problem-records.mjs';
 import {quantityMath as Q, calculateMaterialDemand} from './material-allocation.mjs';
 import {claimsFor,previewResources,jointFlags} from './joint-resources.mjs';
@@ -42,7 +43,7 @@ export function prepareProductionBatches(source,orders,minute,at=new Date().toIS
     trace('batchResources',batch?[batch]:[]);
     if(batch&&(!op['程序编号']?.trim()||!batch['允许程序'].split(';').includes(op['程序编号'])))throw Error(`工序 ${op['工序编号']} 缺少设备允许的显式程序；不能推断兼容`);
     const factor=machine['装载计量基准']==='合格产出'?Q.q(product['总收率']):Q.q('1');
-    return {machine,low:Q.div(low,factor),high:Q.div(high,factor),nodeLow:low,nodeHigh:high,factor,batch};
+    return {machine,low:partialAllowed(machine)?Q.zero:Q.div(low,factor),high:Q.div(high,factor),nodeLow:low,nodeHigh:high,factor,batch};
    });
    let high=machines[0].high,low=machines[0].low;
    for(const m of machines){high=Q.min(high,m.high);if(Q.cmp(m.low,low)>0n)low=m.low;}

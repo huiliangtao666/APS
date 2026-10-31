@@ -1,3 +1,4 @@
+import {partialAllowed} from './pack-batch.mjs';
 import {quantityMath as Q} from './material-allocation.mjs';
 import {inheritedCalendarId} from './factory-lines.mjs';
 import {allowedWindows} from './working-windows.mjs';
@@ -41,7 +42,7 @@ export function prepareCoolingMembers({data,productionBatches,upstreamTasks,star
    };
    const hm=machineFor(heat),cm=machineFor(cool);
    if(hm['装载计量基准']!=='BOM总投入'||cm['装载计量基准']!=='合格产出')throw Error('仅v0.3加工总投入/冷却合格产出节点；其他装载节点待决');
-   if(Q.cmp(output,Q.q(cm['最小装载kg']))<0n||Q.cmp(output,Q.q(cm['最大装载kg']))>0n)throw Error('冷却工位产出装载不满足上下限');
+   if(!partialAllowed(cm)&&Q.cmp(output,Q.q(cm['最小装载kg']))<0n||Q.cmp(output,Q.q(cm['最大装载kg']))>0n)throw Error('冷却工位产出装载不满足上下限');
    const batch=one((data.batchResources||[]).filter(r=>r['资源编号']===hm['设备编号']&&r['资源类型']==='批处理装载'),'加工资源批配置');
    if(batch['单位']!=='kg'||Q.cmp(Q.q(batch['容量']),Q.q(hm['最大装载kg']))!==0n)throw Error('加工容量单位或表03/15容量冲突');
    if(!heat['程序编号']||!String(batch['允许程序']).split(';').includes(heat['程序编号']))throw Error('加工程序不在显式允许清单');
@@ -64,7 +65,7 @@ export function prepareCoolingMembers({data,productionBatches,upstreamTasks,star
    const hw=allowedWindows(data,inheritedCalendarId(data,hm),'设备',hm['设备编号'],startMinute,endMinute);
    const cw=allowedWindows(data,inheritedCalendarId(data,cm),'设备',cm['设备编号'],startMinute,endMinute);
    const sw=allowedWindows(data,inheritedCalendarId(data,cm),'空间',space['资源编号'],startMinute,endMinute);
-   members.push({id:b.id,orderId:b.orderId,productId:order['产品编号'],recipeKey:JSON.stringify(current),routeKey:JSON.stringify(route),program:heat['程序编号'],heatOperation:heat['工序编号'],coolOperation:cool['工序编号'],heatMachine:hm['设备编号'],coolMachine:cm['设备编号'],spaceId:space['资源编号'],inputKg:b.inputKg,outputKg:b.qualifiedKg,minimumInputKg:hm['最小装载kg'],maximumInputKg:hm['最大装载kg'],spaceCapacityKg:space['容量'],heatDuration:duration(heat),coolDuration:duration(cool),readyMinute:ready,maxWait:n(cool,'最大等待分钟'),heatWindows:hw,coolWindows:intersect(cw,sw),predecessorTaskId:prior?.id||'',sourceRefs:{order:b.orderId,route:[heat['工序编号'],cool['工序编号']],batch:hm['设备编号'],space:space['资源编号'],bomVersion:current[0]['版本编号']}});
+   members.push({id:b.id,orderId:b.orderId,productId:order['产品编号'],recipeKey:JSON.stringify(current),routeKey:JSON.stringify(route),program:heat['程序编号'],heatOperation:heat['工序编号'],coolOperation:cool['工序编号'],heatMachine:hm['设备编号'],coolMachine:cm['设备编号'],spaceId:space['资源编号'],inputKg:b.inputKg,outputKg:b.qualifiedKg,minimumInputKg:partialAllowed(hm)?'0':hm['最小装载kg'],maximumInputKg:hm['最大装载kg'],spaceCapacityKg:space['容量'],heatDuration:duration(heat),coolDuration:duration(cool),readyMinute:ready,maxWait:n(cool,'最大等待分钟'),heatWindows:hw,coolWindows:intersect(cw,sw),predecessorTaskId:prior?.id||'',sourceRefs:{order:b.orderId,route:[heat['工序编号'],cool['工序编号']],batch:hm['设备编号'],space:space['资源编号'],bomVersion:current[0]['版本编号']}});
   }catch(e){findings.push({code:'BLOCKED / PROCESS_COOLING_ADAPTER',memberIds:[b.id],message:e.message});}
  }
  return {members,findings};

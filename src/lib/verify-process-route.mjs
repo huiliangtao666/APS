@@ -1,3 +1,4 @@
+import {verifyPackMinutes} from './verify-pack-batch.mjs';
 import {sourceRefs} from './problem-records.mjs';
 import {quantityMath as Q,feedTime} from './material-allocation.mjs';
 import {inventoryBusinessDate} from './inventory.mjs';
@@ -23,10 +24,11 @@ export function verifyProcessRoute(plan,data,conditions={}){
  try{
   if(!data||!conditions.ruleEvaluationAt)throw Error('缺少冻结源或规则判定时间');
   if(!['orders','products','routes','times','machines','dependencies','bom','inventory','supplies','supplyUses','supplyDelays','resourceClaims','batchResources','tools','personnelGroups','skillSubstitutions','calendars','downtime','resourceStops'].every(k=>Array.isArray(data[k])))throw Error('冻结源表不完整');
+  if(data.times.some(t=>t['包装作业边界'])&&(plan.packBatchContract!=='CR-PACK-BATCH-20261031-v1'||conditions.packBatchContract!==plan.packBatchContract))add('缺少包装作业冻结契约');
   if(plan.processRouteContract!=='R4-kg-fixed-pair-v1')add('缺少服务端完整路线契约');
   if(!plan.batchChecked||!plan.materialChecked)add('生产批/物料采用标志缺失');
   if(conditions.jointConditionsContract!=='FR022-joint-v1'||conditions.workingWindowsContract!=='P06-windows-v1')add('缺少完整联合资源/工作窗口冻结契约');
-  if(!['MATERIAL','CAPACITY','PROGRAM','MAX_LAG','STORAGE','CALENDAR','MACHINE','PRECEDENCE'].every(id=>active(id)&&conditions.enabledRuleIds?.includes(id)))add('完整配对所需规则未全部采用并生效');
+  if(!['MATERIAL','CAPACITY','CALENDAR','MACHINE','PRECEDENCE',...(data.routes.some(r=>r['最大等待分钟'])?['PROGRAM','MAX_LAG','STORAGE']:[])].every(id=>active(id)&&conditions.enabledRuleIds?.includes(id)))add('完整配对所需规则未全部采用并生效');
   for(const order of data.orders.filter(o=>o['需求类型']!=='预测'&&o['订单状态']==='有效')){
    const oid=order['订单编号'],pid=order['产品编号'],product=only(data.products.filter(p=>p['产品编号']===pid),'产品');
    if(order['数量单位']!=='kg')throw Error('非kg生产身份未定义');
@@ -44,7 +46,7 @@ export function verifyProcessRoute(plan,data,conditions={}){
     const dep=only(data.dependencies.filter(d=>d['订单编号']===oid&&d['工序编号']===op['工序编号']&&d['资源类型']==='设备'),'设备依赖'),m=only(data.machines.filter(m=>m['设备编号']===dep['资源编号']&&m['工序编号']===op['工序编号']),'设备');
     if(dep['需求数量']!=='1'||dep['提前占用分钟']!=='0'||dep['后延占用分钟']!=='0')add(`${oid}/${op['工序编号']} 设备数量/偏移不受支持`);
     const basis=m['装载计量基准'];
-    if(basis!=='BOM总投入'&&!(cool&&ordered.indexOf(op)>=ordered.indexOf(cool)&&basis==='合格产出'))add(`${oid}/${op['工序编号']} 未批准的装载节点`);
+    if(basis!=='BOM总投入'&&!((cool&&ordered.indexOf(op)>=ordered.indexOf(cool)||data.times.some(t=>t['产品编号']===pid&&t['工序编号']===op['工序编号']&&t['包装作业边界']))&&basis==='合格产出'))add(`${oid}/${op['工序编号']} 未批准的装载节点`);
     if(op===heat&&basis!=='BOM总投入'||op===cool&&basis!=='合格产出')add(`${oid} 加工/冷却口径不符`);
     const cap=Q.q(m['最大装载kg']),output=basis==='BOM总投入'?Q.mul(cap,yieldRate):cap;maxOutput=maxOutput?Q.min(maxOutput,output):output;machines.set(op['工序编号'],m);
    }
@@ -63,7 +65,8 @@ export function verifyProcessRoute(plan,data,conditions={}){
      if(matches.length!==1){add(`${id} 工序重复`);continue;}const t=matches[0],m=machines.get(op['工序编号']);
      const time=only(data.times.filter(r=>r['产品编号']===pid&&r['工序编号']===op['工序编号']),'固定工时');
      if(t.orderId!==oid||t.productId!==pid||t.productionBatchId!==bid||t.productionBatchIndex!==index||t.operation!==op['工序编号']||t.quantityUnit!=='kg'||!eq(t.exactQuantity,Q.exact(qualified))||t.quantity!==Q.num(qualified)||t.machine!==m['设备编号'])add(`${id} 任务身份/数量/设备不符`);
-     if(time['计算方式']!=='固定'||!(Number(time['固定分钟'])>0)||t.duration!==Number(time['固定分钟'])||!Number.isSafeInteger(t.start)||!Number.isSafeInteger(t.end)||t.end!==t.start+t.duration||t.start<(conditions.startMinute??0)||conditions.endMinute!=null&&t.end>conditions.endMinute)add(`${id} 完整固定工时/范围不符`);
+     const workQuantity=time['包装作业边界']==='同订单合并'?Q.exact(remaining):Q.exact(qualified);
+     if(!['固定','包装速率'].includes(time['计算方式'])||t.duration!==verifyPackMinutes(data,time,workQuantity)||!Number.isSafeInteger(t.start)||!Number.isSafeInteger(t.end)||t.end!==t.start+t.duration||t.start<(conditions.startMinute??0)||conditions.endMinute!=null&&t.end>conditions.endMinute)add(`${id} 完整固定工时/范围不符`);
      const pred=op['前序工序']?JSON.stringify([oid,index,op['前序工序']]):'',prior=tasks.find(t=>t.id===pred);
      if(t.predecessor!==pred||pred&&(!prior||t.start<prior.end))add(`${id} 真实前序缺失/顺序错误`);
      if(op===cool&&(!prior||!/^\d+$/.test(String(op['最大等待分钟']))||t.start-prior.end>Number(op['最大等待分钟'])))add(`${id} 最大等待超限/未配置`);
@@ -83,7 +86,9 @@ export function verifyProcessRoute(plan,data,conditions={}){
   for(const [id,members]of groups){
    const first=members[0],isHeat=first.op===first.heat;
    context={orderId:first.t.orderId,productionBatchId:first.bid,operation:first.t.operation,taskIds:members.map(x=>x.t.id),members:members.map(x=>({orderId:x.t.orderId,operation:x.t.operation}))};
-   if(!isHeat&&members.length!==1)add(`${id} 非加工工序非法共享资源批`);
+   const pack=data.times.find(t=>t['产品编号']===first.t.productId&&t['工序编号']===first.t.operation),packMerged=pack?.['包装作业边界']==='同订单合并';
+   if(packMerged){const all=tasks.filter(t=>t.orderId===first.t.orderId&&t.operation===first.t.operation);if(!same(members.map(x=>x.t.id),all.map(t=>t.id))||members.some(x=>x.t.orderId!==first.t.orderId))add(`${id} 同订单合并包装作业成员覆盖不完整`);}
+   if(!isHeat&&!packMerged&&members.length!==1)add(`${id} 非加工工序非法共享资源批`);
    const compatibility=x=>{
     const info=expected.get(x.bid),upstream=info.route.slice(0,info.route.indexOf(info.heat)).flatMap(op=>{
      const task=tasks.find(t=>t.productionBatchId===x.bid&&t.operation===op['工序编号']);
@@ -99,7 +104,7 @@ export function verifyProcessRoute(plan,data,conditions={}){
    }
    if(members.some(x=>x.t.machine!==first.t.machine||x.t.start!==first.t.start||x.t.end!==first.t.end||x.t.operation!==first.t.operation))add(`${id} 资源组成员区间/机器/工序不一致`);
    const load=members.reduce((s,x)=>Q.add(s,x.load),Q.zero),min=Q.q(first.m['最小装载kg']),max=Q.q(first.m['最大装载kg']);
-   if(Q.cmp(load,min)<0n||Q.cmp(load,max)>0n)add(`${id} 资源装载超出源上下限`);
+   if(first.m['不足批处理']!=='允许实际量'&&Q.cmp(load,min)<0n||Q.cmp(load,max)>0n)add(`${id} 资源装载超出源上下限`);
    const saved=(plan.resourceBatches||[]).filter(r=>r.id===id),summary=saved[0];
    if(saved.length!==1||!same(summary.members,members.map(x=>x.bid))||summary.operation!==first.t.operation||summary.machine!==first.t.machine||summary.basis!==first.m['装载计量基准']||!eq(summary.exactLoadKg,Q.exact(load))||summary.loadKg!==Q.num(load)||summary.minimum!==Q.num(min)||summary.maximum!==Q.num(max)||summary.status!=='scheduled')add(`${id} 资源批摘要/覆盖不符`);
    if(summary)seenSummaries.add(summary);

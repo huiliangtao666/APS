@@ -1,3 +1,4 @@
+import {operationDuration,timeFor,partialAllowed} from './pack-batch.mjs';
 import {quantityMath as Q,createMaterialAllocator,materialPolicy} from './material-allocation.mjs';
 import {claimsFor,previewResources,jointFlags} from './joint-resources.mjs';
 import {effectivePersonnelRequirements,allocatePersonnel} from './staffing.mjs';
@@ -22,10 +23,10 @@ export function scheduleProcessRoute(data,orders,at,conditions){
  const newCandidate=()=>({tasks:[],reservations:[],materials:allocator.begin()});
  function previewOperation(candidate,members,op,startMinute,resourceBatchId){
   const first=members[0],context=contexts.get(first.orderId),machine=operationMachine(data,first.orderId,op['工序编号']);
-  const time=data.times.find(t=>t['产品编号']===first.order['产品编号']&&t['工序编号']===op['工序编号']),duration=Number(time['固定分钟']),finish=startMinute+duration;
+  const time=data.times.find(t=>t['产品编号']===first.order['产品编号']&&t['工序编号']===op['工序编号']),duration=operationDuration(data,first.order['产品编号'],op['工序编号'],Q.exact(members.reduce((s,b)=>Q.add(s,Q.fromExact(b.qualifiedKg)),Q.zero))),finish=startMinute+duration;
   const all=[...reservations,...candidate.reservations],taskIds=members.map(b=>idFor(b,op['工序编号']));
   const fail=(reason,next,kind)=>({ok:false,reason,next,kind,operation:op['工序编号'],memberIds:members.map(b=>b.id),start:startMinute});
-  if(time['计算方式']!=='固定'||!Number.isSafeInteger(duration)||duration<=0)return fail('仅支持显式正整数固定工时；产品速度/单位语义未采用',undefined,'TIME_CONFIG');
+  if(!['固定','包装速率'].includes(time['计算方式'])||!Number.isSafeInteger(duration)||duration<=0)return fail('仅支持显式正整数固定工时；产品速度/单位语义未采用',undefined,'TIME_CONFIG');
   if(finish>end)return fail('完整工序超出计划范围',undefined,'HORIZON');
   const windows=allowedWindows(data,inheritedCalendarId(data,machine),'设备',machine['设备编号'],start,end),fit=windowFit(windows,startMinute,finish);
   if(!fit.ok)return fail('机器完整区间不在工厂/停机窗口',fit.nextStart,'CALENDAR');
@@ -33,8 +34,8 @@ export function scheduleProcessRoute(data,orders,at,conditions){
   if(conflict)return fail('设备已有占用',conflict.end,'MACHINE');
   const isHeat=op===context.heat,basis=machine['装载计量基准'];
   const load=members.reduce((s,b)=>Q.add(s,Q.fromExact(basis==='合格产出'?b.qualifiedKg:b.inputKg)),Q.zero);
-  if(Q.cmp(load,Q.q(machine['最小装载kg']))<0n||Q.cmp(load,Q.q(machine['最大装载kg']))>0n)return fail('装载不在上下限；不自动超产',undefined,'LOAD');
-  if(members.length>1&&!isHeat)return fail('仅加工资源批允许合炉',undefined,'GROUP');
+  if(!partialAllowed(machine)&&Q.cmp(load,Q.q(machine['最小装载kg']))<0n||Q.cmp(load,Q.q(machine['最大装载kg']))>0n)return fail('装载不在上下限；不自动超产',undefined,'LOAD');
+  if(members.length>1&&!isHeat&&!(time['包装作业边界']==='同订单合并'&&members.every(b=>b.orderId===first.orderId)))return fail('仅加工资源批允许合炉',undefined,'GROUP');
   const calendarId=inheritedCalendarId(data,machine);
   let claims=claimsFor(data,members,op['工序编号'],flags).map(c=>c.type==='工装'?{...c,allowedWindows:allowedWindows(data,calendarId,c.type,c.resourceId,c.availableFrom,c.availableUntil)}:c);
   // The declared cooling space uses the production member's qualified output.
@@ -83,20 +84,21 @@ export function scheduleProcessRoute(data,orders,at,conditions){
   }
   return {tasks,findings,resourceReservations:reservations,materialDemands,jointAttempts:attempts,productionBatches:records.map(({order,...b})=>b),resourceBatches:groups,batchChecked:true,materialChecked:true,jointResourceChecks:flags,processRouteContract,positionContract:'existing-batch-members-fixed-v1'};
  }
- function individual(b,op){
+ function individual(b,op,members=[b]){
   const previous=op['前序工序']?tasks.find(t=>t.id===idFor(b,op['前序工序'])):null;
-  if(op['前序工序']&&!previous){issue(b,[op['工序编号']],'实际前序未排；未占用任何候选');return false;}
-  let minute=Math.max(start,previous?.end??start);
+  if(op['前序工序']&&!previous){for(const m of members)issue(m,[op['工序编号']],'实际前序未排；未占用任何候选');return false;}
+  const priorMembers=members.map(m=>op['前序工序']?tasks.find(t=>t.id===idFor(m,op['前序工序'])):null);if(op['前序工序']&&priorMembers.some(t=>!t)){for(const m of members)issue(m,[op['工序编号']],'合并包装有成员前序未排，整作业不占料');return false;}
+  let minute=Math.max(start,...priorMembers.map(t=>t?.end??start));
   for(let i=0;i<1000;i++){
-   const c=newCandidate();let checked;try{checked=previewOperation(c,[b],op,minute,JSON.stringify([b.id,op['工序编号']]));}catch(e){checked={ok:false,reason:e.message};}
+   const c=newCandidate();let checked;try{checked=previewOperation(c,members,op,minute,JSON.stringify([timeFor(data,b.order['产品编号'],op['工序编号'])?.['包装作业边界']==='同订单合并'?b.orderId:b.id,op['工序编号']]));}catch(e){checked={ok:false,reason:e.message};}
    attempts.push({stage:'individual',taskIds:[idFor(b,op['工序编号'])],candidate:minute,...checked});
    if(checked.ok){accept(c);return true;}c.materials.rollback();
-   if(checked.next>minute){minute=checked.next;continue;}issue(b,[op['工序编号']],checked.reason);return false;
+   if(checked.next>minute){minute=checked.next;continue;}for(const m of members)issue(m,[op['工序编号']],checked.reason);return false;
   }
-  issue(b,[op['工序编号']],'候选达到1000次边界；不表示全局无解');return false;
+  for(const m of members)issue(m,[op['工序编号']],'候选达到1000次边界；不表示全局无解');return false;
  }
  // Actual upstream operations, one immutable production identity at a time.
- for(const b of records){const ctx=contexts.get(b.orderId),prefix=ctx.heat?ctx.route.slice(0,ctx.heatIndex):ctx.route;for(const op of prefix)individual(b,op);}
+ for(const b of records){const ctx=contexts.get(b.orderId),prefix=ctx.heat?ctx.route.slice(0,ctx.heatIndex):ctx.route;for(const op of prefix)if(!timeFor(data,b.order['产品编号'],op['工序编号'])?.['包装作业边界'])individual(b,op);}
  const paired=records.filter(b=>contexts.get(b.orderId).heat);
  const prepared=prepareCoolingMembers({data,productionBatches:paired,upstreamTasks:tasks,startMinute:start,endMinute:end});
  for(const f of prepared.findings)for(const memberId of f.memberIds){const b=byId.get(memberId),ctx=contexts.get(b.orderId);issue(b,[ctx.heat['工序编号'],ctx.cool['工序编号']],f.message);}
@@ -152,8 +154,12 @@ export function scheduleProcessRoute(data,orders,at,conditions){
   }
  }
  // Downstream starts only after the whole pair was committed.
- for(const b of records){const ctx=contexts.get(b.orderId);if(ctx.cool)for(const op of ctx.route.slice(ctx.coolIndex+1))individual(b,op);}
+ const donePack=new Set();
+ for(const b of records){const ctx=contexts.get(b.orderId);for(const op of (ctx.cool?ctx.route.slice(ctx.coolIndex+1):ctx.route.filter(op=>timeFor(data,b.order['产品编号'],op['工序编号'])?.['包装作业边界']))){
+  const time=timeFor(data,b.order['产品编号'],op['工序编号']),key=JSON.stringify([b.orderId,op['工序编号']]);
+  if(time?.['包装作业边界']==='同订单合并'){if(donePack.has(key))continue;donePack.add(key);individual(b,op,records.filter(m=>m.orderId===b.orderId));}else individual(b,op);
+ }}
  // Include individual operation groups as well; only heat groups have >1 member.
- for(const t of tasks.filter(t=>!groups.some(g=>g.id===t.resourceBatchId))){const m=operationMachine(data,t.orderId,t.operation);groups.push({id:t.resourceBatchId,groupId:t.resourceBatchId,operation:t.operation,machine:t.machine,members:[t.productionBatchId],loadKg:t.loadKg,exactLoadKg:t.exactLoadKg,minimum:Number(m['最小装载kg']),maximum:Number(m['最大装载kg']),basis:t.loadBasis,status:'scheduled'});}
+ for(const t of tasks){if(groups.some(g=>g.id===t.resourceBatchId))continue;const m=operationMachine(data,t.orderId,t.operation);groups.push({id:t.resourceBatchId,groupId:t.resourceBatchId,operation:t.operation,machine:t.machine,members:tasks.filter(x=>x.resourceBatchId===t.resourceBatchId).map(x=>x.productionBatchId),loadKg:Q.num(tasks.filter(x=>x.resourceBatchId===t.resourceBatchId).reduce((s,x)=>Q.add(s,Q.fromExact(x.exactLoadKg)),Q.zero)),exactLoadKg:Q.exact(tasks.filter(x=>x.resourceBatchId===t.resourceBatchId).reduce((s,x)=>Q.add(s,Q.fromExact(x.exactLoadKg)),Q.zero)),minimum:Number(m['最小装载kg']),maximum:Number(m['最大装载kg']),basis:t.loadBasis,status:'scheduled'});}
  return {tasks,findings,resourceReservations:reservations,materialDemands,jointAttempts:attempts.map(a=>({...a,taskIds:a.taskIds||records.filter(b=>(a.memberIds||[a.memberId]).includes(b.id)).flatMap(b=>{const ctx=contexts.get(b.orderId);return ctx.heat?[idFor(b,ctx.heat['工序编号']),idFor(b,ctx.cool['工序编号'])]:[];})})),productionBatches:records.map(({order,...b})=>b),resourceBatches:groups,batchChecked:true,materialChecked:true,jointResourceChecks:flags,processRouteContract};
 }

@@ -1,0 +1,2 @@
+export const packTimeFields:string[];export const packNote:string;export function packRequested(data:any):boolean;export function operationDuration(data:any,product:string,operation:string,kg:any):number;export function validatePackBatch(data:any):any[];export function partialAllowed(m:any):boolean;export function timeFor(data:any,product:string,op:string):any;
+export function packTransition(before:any,after:any,records?:any[]):any[];

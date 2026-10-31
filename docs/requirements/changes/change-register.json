@@ -3283,13 +3283,15 @@
       },
       "configuration_defaults": "具体真实工时/速率/包装单位可先显式可替换mock，非现场批准默认；沿用已批准配置保存/版本/冻结原则",
       "business_gate": "本三项READY；不再以固定PACK50只mock、尾批必须满批、合并未许可阻塞明确开发",
-      "implementation_status": "NOT_DISPATCHED_AS_NEW_ROLE_TASK；拟追加现有APS-Dev B12串行范围，Test在途BOM损耗不重复派",
+      "implementation_status": "Dev本原包限定kg顺序路线包装、最小单位和实际量尾批/兼容合炉已实现并自测；完整FR/CR/UAT及其他原包范围不由本记录关闭",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/39",
       "related_issue_urls": [
         "https://github.com/huiliangtao666/APS/issues/40"
       ],
       "product_sha": null,
-      "acceptance_result": "NOT_EXECUTED新范围；旧UAT PASS保留原SHA"
+      "acceptance_result": "本次限定开发自测PASS；完整原包NOT_READY；QA NOT_EXECUTED；历史PASS保留原SHA",
+      "implementation_delivery": "dlv_62208099-c50f-484c-92a6-1e3cbbdc89f3",
+      "implementation_evidence": "docs/pack-batch-integration.md；固定产品SHA与原件hash随同delivery:r1交付；本记录不以治理SHA替产品SHA"
     }
   ]
 }

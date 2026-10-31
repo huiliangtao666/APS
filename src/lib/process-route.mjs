@@ -1,3 +1,4 @@
+import {operationDuration,timeFor} from './pack-batch.mjs';
 import {inheritedCalendarId} from './factory-lines.mjs';
 import {sourceRefs} from './problem-records.mjs';
 import {quantityMath as Q,calculateMaterialDemand,feedTime} from './material-allocation.mjs';
@@ -43,7 +44,7 @@ export function establishProcessProduction(data,orders){
   let outputMax=null;
   for(const [i,op]of route.entries()){
    const m=operationMachine(data,order['订单编号'],op['工序编号']),basis=m['装载计量基准'];
-   if(basis!=='BOM总投入'&&!(cool&&i>=ci&&basis==='合格产出'))throw Error('仅支持加工总投入和冷却起合格产出；任意装载节点未决定');
+   if(basis!=='BOM总投入'&&!((cool&&i>=ci||timeFor(data,order['产品编号'],op['工序编号'])?.['包装作业边界'])&&basis==='合格产出'))throw Error('仅支持加工总投入和冷却起合格产出；任意装载节点未决定');
    if(cool&&(i===hi&&basis!=='BOM总投入'||i===ci&&basis!=='合格产出'))throw Error('加工/冷却装载口径不符');
    const min=Q.q(m['最小装载kg']),max=Q.q(m['最大装载kg']);if(Q.cmp(max,Q.zero)<=0n||Q.cmp(min,max)>0n)throw Error('装载上下限无效');
    const limit=basis==='BOM总投入'?Q.mul(max,yieldRate):max;outputMax=outputMax?Q.min(outputMax,limit):limit;
@@ -61,8 +62,13 @@ export function establishProcessProduction(data,orders){
  return {records,contexts};
 }
 export function processDemands(data,b,operation,minute){
- const whole=calculateMaterialDemand(data,b.order,operation,minute),part=calculateMaterialDemand(data,b.order,operation,minute,b.qualifiedKg);
- if(part.some((d,i)=>Q.cmp(Q.mul(Q.fromExact(d.exactQuantity),Q.q(b.count)),Q.fromExact(whole[i].exactQuantity))!==0n))throw Error('跨生产批包材取整分配未决定；不改变总需求');
+ const whole=calculateMaterialDemand(data,b.order,operation,minute);let part=calculateMaterialDemand(data,b.order,operation,minute,b.qualifiedKg);
+ const time=timeFor(data,b.order['产品编号'],operation);
+ if(time?.['包装作业边界']==='同订单合并'){
+  const kg=Q.fromExact(b.qualifiedKg),current=calculateMaterialDemand(data,b.order,operation,minute,Q.exact(Q.mul(kg,Q.q(b.index)))),prior=b.index>1?calculateMaterialDemand(data,b.order,operation,minute,Q.exact(Q.mul(kg,Q.q(b.index-1)))):null;
+  part=part.map((d,i)=>{if(d.unit==='kg')return d;const amount=Q.sub(Q.fromExact(current[i].exactQuantity),prior?Q.fromExact(prior[i].exactQuantity):Q.zero);return {...d,quantity:Q.num(amount),exactQuantity:Q.exact(amount),formula:d.formula+'；同订单合并作业累计取整差额（技术拆批不重复取整）',packBoundary:'同订单合并',packWorkId:JSON.stringify([b.orderId,operation])};});
+ }else if(time?.['包装作业边界'])part=part.map(d=>({...d,packBoundary:'逐生产批',packWorkId:JSON.stringify([b.orderId,b.index,operation])}));
+ if(!timeFor(data,b.order['产品编号'],operation)?.['包装作业边界']&&part.some((d,i)=>Q.cmp(Q.mul(Q.fromExact(d.exactQuantity),Q.q(b.count)),Q.fromExact(whole[i].exactQuantity))!==0n))throw Error('跨生产批包材取整分配未决定；不改变总需求');
  const all=orderedOperations(data,b.order['产品编号']).flatMap(op=>calculateMaterialDemand(data,b.order,op['工序编号'],minute,b.qualifiedKg)).filter(d=>d.unit==='kg');
  if(Q.cmp(all.reduce((s,d)=>Q.add(s,Q.fromExact(d.exactQuantity)),Q.zero),Q.fromExact(b.inputKg))!==0n)throw Error('完整原料BOM与生产批总投入不守恒');
  return part.map(d=>({...d,taskId:JSON.stringify([b.orderId,b.index,operation]),productionBatchId:b.id}));
@@ -77,7 +83,7 @@ export function validateProcessPairConfiguration(data,at){
   const {records,contexts}=establishProcessProduction(data,data.orders.filter(o=>o['需求类型']!=='预测'));
   for(const b of records){const ctx=contexts.get(b.orderId);if(!ctx.cool)continue;
    integer(ctx.cool['最大等待分钟'],'最大等待分钟');
-   for(const op of ctx.route){const t=one(data.times.filter(t=>t['产品编号']===b.order['产品编号']&&t['工序编号']===op['工序编号']),'固定工时');if(t['计算方式']!=='固定'||integer(t['固定分钟'],'固定分钟')===0)throw Error('仅支持显式正整数固定工时；PACK速度不推断');}
+   for(const op of ctx.route){const t=one(data.times.filter(t=>t['产品编号']===b.order['产品编号']&&t['工序编号']===op['工序编号']),'固定工时');const duration=operationDuration(data,b.order['产品编号'],op['工序编号'],t['包装作业边界']==='同订单合并'?Q.exact(Q.mul(Q.fromExact(b.qualifiedKg),Q.q(b.count))):b.qualifiedKg);if(!Number.isSafeInteger(duration)||duration<=0)throw Error('完整路线须为正整数分钟；不自动舍入');}
    const dep=one(data.dependencies.filter(d=>d['订单编号']===b.orderId&&d['工序编号']===ctx.cool['工序编号']&&d['资源类型']==='空间'),'冷却空间依赖');
    const space=one(data.batchResources.filter(r=>r['资源编号']===dep['资源编号']&&r['资源类型']==='共享冷却空间'),'共享冷却空间');
    const claim=one(data.resourceClaims.filter(c=>c['订单编号']===b.orderId&&c['工序编号']===ctx.cool['工序编号']&&c['资源类型']==='空间'&&c['资源编号']===dep['资源编号']),'冷却空间声明');

@@ -34,7 +34,7 @@ export function verifyBatchWait(plan,data,conditions=plan.conditions){
    const key=node==='合格产出'?'qualifiedKg':'inputKg';
    const weight=members.reduce((s,m)=>Q.add(s,Q.fromExact(m[key])),Q.zero);
    if(g.basis!==node||Q.cmp(Q.fromExact(g.exactLoadKg),weight)!==0n||g.loadKg!==Q.num(weight))add('VERIFY / BATCH_LOAD',`${g.id} 资源批重量与冻结设备 ${node} 不一致`,linked.map(t=>t.id));
-   if(g.status==='scheduled'&&(Q.cmp(weight,Q.q(machine['最小装载kg']))<0n||Q.cmp(weight,Q.q(machine['最大装载kg']))>0n||linked.length!==members.length))add('VERIFY / BATCH_LOAD',`${g.id} 已排重量超设备上下限或覆盖缺失`,linked.map(t=>t.id));
+   if(g.status==='scheduled'&&(machine['不足批处理']!=='允许实际量'&&Q.cmp(weight,Q.q(machine['最小装载kg']))<0n||Q.cmp(weight,Q.q(machine['最大装载kg']))>0n||linked.length!==members.length))add('VERIFY / BATCH_LOAD',`${g.id} 已排重量超设备上下限或覆盖缺失`,linked.map(t=>t.id));
    for(const t of linked){const m=members.find(m=>m.id===t.productionBatchId);if(!m||Q.cmp(Q.fromExact(t.exactLoadKg),Q.fromExact(m[key]))!==0n||t.loadKg!==Q.num(Q.fromExact(m[key])))add('VERIFY / BATCH_LOAD',`${t.id} 任务装载与冻结设备节点不一致`,[t.id]);}
   }
  }

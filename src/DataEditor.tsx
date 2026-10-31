@@ -1,3 +1,4 @@
+import {packNote} from './lib/pack-batch.mjs';
 import {stageMappingNote} from './lib/stage-bindings.mjs';
 import {originalStageDefs,originalStageNote} from './lib/original-stage-data.mjs';
 import {ResourceWorkbench} from './ResourceWorkbench';
@@ -50,6 +51,7 @@ export function DataEditor({initialRecord,identityContext,data={},def,rows,revis
  async function save(){if(!draft)return;setSaving(true);setError('');try{const result=await onSave(drafts,base,operation);setSaved(result?.unchanged?'内容相同，未新增版本或操作记录。':'保存完成，当前输入已更新；原方案及其输入保留。');setDrafts({});setSelected([]);}catch(e){setError(e instanceof Error?e.message:'保存失败');setIssues((e as any)?.detail?.issues||[]);}finally{setSaving(false);}}
  return <section aria-label="模拟记录编辑">
   {(Object.prototype.hasOwnProperty.call(resourceTables,def.key)||Object.prototype.hasOwnProperty.call(materialTables,def.key))&&<ResourceWorkbench data={data} revision={revision} reason={reason} canWrite={canWrite} busy={busy} draftPending={draft} onLocate={onLocate}/>}
+  {['times','bom','machines'].includes(def.key)&&<aside aria-label="包装与不足批配置说明">{packNote}</aside>}
   {def.key==='stageMappings'&&<aside aria-label="原来源运行绑定"><p>{stageMappingNote}</p><label>绑定预览起始分钟（显式填写）<input aria-label="绑定预览起始分钟" type="number" min="0" max="525600" value={stageStart} onChange={e=>{setStageStart(e.target.value);setPreviewed('');}}/></label><button disabled={disabled||!onPolicyPreview||!draft} onClick={async()=>{try{if(!stageStart||!Number.isFinite(Number(stageStart)))throw Error('请显式填写绑定预览起始分钟');const result=await onPolicyPreview!(drafts,base,{startMinute:Number(stageStart),mode:'supported'});if(!result.valid)throw Error('绑定预览未通过');setPreviewed(draftKey);setSaved('绑定预览通过，可以保存当前草稿。');setError('');}catch(e){setError(e instanceof Error?e.message:String(e));setIssues((e as any)?.detail?.issues||[]);}}}>预览原来源绑定（零写入）</button></aside>}
   <p>可跨类别暂存修改，全部草稿一起保存；新增工艺路线和工时等关联数据须一起保存。离开数据页将丢弃草稿。修改先保存在本页草稿，点击“保存修改”后由服务端检查；取消不会写入。复制后请填写新的唯一编号。删除仅影响新输入版本，已保存方案保留原输入。质量状态均为模拟状态。</p>
   {def.key==='originalResourceEvents'&&<p role="note">N06 本阶段仅MOCK资源取得、归还、释放账，原账编号须以 MOCK: 开头，所有来源标明确模拟并填写来源域、版本、行键、保管位置和SHA256。原任务/批、资源采用集合、历史规则和物理映射须完整。事件仅追加；未知释放或草稿可保留但阻断运行。完成任务不代表归还，禁止把计划结束当实际释放。不接纳真实现场账，不能据此声称现场验证或QA UAT通过。</p>}
