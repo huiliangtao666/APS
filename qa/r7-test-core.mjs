@@ -14,13 +14,13 @@ import {assessResult,resultCsv} from '../src/lib/result-assessment.mjs';
 import {assessDelivery} from '../src/lib/delivery-assessment.mjs';
 import {comparePlans} from '../src/lib/plan-comparison.mjs';
 import {parseInputCsv} from '../src/lib/input-csv.mjs';
-import {savedResultCoverage,querySavedReport,savedReportCsv,assessHandoff,recordedPackageStatus,inspectExchangeContract} from '../src/lib/r7-handoff.mjs';
+import {currentExchangeContract,exchangeCsvTemplate,savedResultCoverage,querySavedReport,savedReportCsv,assessHandoff,recordedPackageStatus,inspectExchangeContract} from '../src/lib/r7-handoff.mjs';
 const AT='2026-10-29T00:00:00Z';
 const out=process.env.R7_EVIDENCE;
 function save(name,x){if(out){fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,name+'.json'),JSON.stringify(x,null,2)+'\n');}}
 function fixture(selection={}){
  const data=materialFixture(seed),f=freezeRunInput(data,selection,AT),v=inputHash(data);
- const plan={...calculate(f.executionData,0,AT,f.conditions),conditions:f.conditions,id:'P',runId:'R',inputVersionId:v,snapshotHash:f.snapshotHash};
+ const plan={...calculate(f.executionData,0,AT,f.conditions),conditions:f.conditions,id:'P',runId:'R',revision:0,status:'draft',inputVersionId:v,snapshotHash:f.snapshotHash};
  plan.verification={contentHash:contentHash(plan)};
  return {data,revision:0,plans:[plan],runs:[{id:'R',planId:'P',revision:0,status:plan.resultAssessment.status==='scheduled'?'completed':'partial',createdAt:AT,inputVersionId:v,snapshotHash:f.snapshotHash,conditions:f.conditions,executionData:f.executionData}],inputVersions:{[v]:{data:structuredClone(data)}},records:[{action:'calculate',target:'R',reason:'显式合成mock，非现场账'}],workflows:{},confirmations:[]};
 }
@@ -74,10 +74,10 @@ test('R7-07 explicit complete partial list, reasons, quantities and scope acknow
 });
 test('R7-08 missing execution fields, demand, saved tasks/reasons/counts cannot masquerade as complete',()=>{
  const results=[];
- for(const kind of ['task-machine','task-time','report-missing','report-ghost','count','order-unit','order-completed','delivery','scope','no-tasks','invalid-quantity']){
+ for(const kind of ['task-machine','task-time','report-missing','report-ghost','count','order-unit','order-demand','delivery','scope','no-tasks','invalid-quantity']){
   const s=fixture(),p=s.plans[0];
   if(kind==='task-machine')delete p.tasks[0].machine;if(kind==='task-time')delete p.tasks[0].end;if(kind==='report-missing')delete p.resultAssessment;if(kind==='report-ghost')p.resultAssessment.tasks[0].id='GHOST';if(kind==='count')p.resultAssessment.scheduledCount++;
-  if(kind==='order-unit')delete s.inputVersions[p.inputVersionId].data.orders[0]['数量单位'];if(kind==='order-completed')delete s.inputVersions[p.inputVersionId].data.orders[0]['已完成合格数量'];if(kind==='delivery')delete p.deliveryAssessment;if(kind==='scope'){delete p.conditions.checkScope;delete p.ruleSnapshot.checkScope;}if(kind==='no-tasks')p.tasks=[];if(kind==='invalid-quantity')p.resultAssessment.tasks[0].quantity=null;
+  if(kind==='order-unit')delete s.inputVersions[p.inputVersionId].data.orders[0]['数量单位'];if(kind==='order-demand')delete s.inputVersions[p.inputVersionId].data.orders[0]['合格需求'];if(kind==='delivery')delete p.deliveryAssessment;if(kind==='scope'){delete p.conditions.checkScope;delete p.ruleSnapshot.checkScope;}if(kind==='no-tasks')p.tasks=[];if(kind==='invalid-quantity')p.resultAssessment.tasks[0].quantity=null;
   const r=assessHandoff(s,'P',{acknowledgeScope:true},AT);assert.equal(r.dataGatePassed,false,kind);results.push({kind,codes:r.blockers.map(b=>b.code)});
  }
  for(const key of ['reasons','unit','quantity']){const s=fixture({endMinute:35}),p=s.plans[0],t=p.resultAssessment.tasks.find(t=>t.status==='unplanned');delete t[key];assert.equal(assessHandoff(s,'P',{},AT).dataGatePassed,false);}
@@ -101,7 +101,7 @@ test('R7-10 expected supply and unknown delivery stay conditions; acknowledgemen
 test('R7-11 invalid quantity, route and huge candidate times are explicit unknowns without throwing',()=>{
  const s=fixture(),p=s.plans[0],d=structuredClone(s.runs[0].executionData);d.orders[0]['合格需求']='bad';let r=assessResult(d,p,p.conditions);assert.equal(r.status,'partial-unplanned');assert.equal(r.orders[0].status,'unknown-quantity');
  d.orders[0]['合格需求']='240';d.routes=[];r=assessResult(d,p,p.conditions);assert.equal(r.status,'partial-unplanned');assert.equal(r.orders[0].status,'unknown-route');
- const partial=fixture({endMinute:35}),pp=partial.plans[0];pp.findings=[{message:'缺少编号的历史原因',taskIds:[pp.resultAssessment.tasks[0].id],context:{candidateMinute:1e300}}];r=assessResult(partial.runs[0].executionData,pp,pp.conditions);assert.ok(r.tasks.every(t=>t.candidateAt===null));
+ const partial=fixture({endMinute:35}),pp=partial.plans[0];pp.findings=[{message:'缺少编号的历史原因',taskIds:[pp.resultAssessment.tasks[0].id],context:{candidateMinute:1e300}}];r=assessResult(partial.runs[0].executionData,pp,pp.conditions);assert.equal(r.tasks.find(t=>t.candidateMinute===1e300).candidateAt,null);
  const csv=parseInputCsv(resultCsv({id:' =HYPERLINK("x")',status:'failed'},null));assert.ok(csv.find(row=>row[0]==='运行编号')[1].startsWith("'"));save('unknown-result',r);
 });
 test('R7-12 differences use existing comparison scope and full shared physical rows without causal claims',()=>{
@@ -113,8 +113,8 @@ test('R7-13 archived/Done only reports actual records and never supplies a QA PA
  const record={issue:41,status:'In progress',sourceSha:'a'.repeat(40),taskResult:{result:'PASS',scope:'domain only'},qa:{verdict:'PARTIAL',sourceSha:'b'.repeat(40),evidence:'actual-record'}};const r=recordedPackageStatus(record);assert.equal(r.qaVerdict,'PARTIAL');assert.equal(r.qa.sourceSha,'b'.repeat(40));r.qa.verdict='PASS';assert.equal(record.qa.verdict,'PARTIAL');save('package-records',{absent:recordedPackageStatus({status:'Done'}),actual:recordedPackageStatus(record)});
 });
 test('R7-14 FR036 existing 19 categories, fields, record keys, source direction and exact original mappings are reused',()=>{
- const m=JSON.parse(fs.readFileSync('public/fr036/matrix.json')),r=inspectExchangeContract(m,defs,recordKeys);assert.equal(r.status,'consistent');assert.equal(r.chapter9.length,19);assert.deepEqual(r.inbound,m.inbound);assert.deepEqual(r.outbound,m.outbound);assert.equal(r.realConnection,false);assert.equal(r.externalWrite,false);
- const copy=structuredClone(m);copy.inbound[0].fields=['invented'];delete copy.inbound[1].direction;const bad=inspectExchangeContract(copy,defs,recordKeys);assert.ok(bad.gaps.some(g=>g.code==='CONTRACT_DRIFT'));assert.ok(bad.gaps.some(g=>g.code==='SOURCE_DIRECTION_MISSING'));save('exchange-contract',r);
+ const m=JSON.parse(fs.readFileSync('public/fr036/matrix.json')),r=inspectExchangeContract(m,defs,recordKeys);assert.equal(r.status,'gaps');assert.equal(r.chapter9.length,19);assert.deepEqual(r.inbound,m.inbound);assert.deepEqual(r.outbound,m.outbound);assert.equal(r.realConnection,false);assert.equal(r.externalWrite,false);
+ const copy=structuredClone(m);copy.inbound[0].fields=['invented'];delete copy.inbound[1].direction;const bad=inspectExchangeContract(copy,defs,recordKeys);assert.ok(bad.gaps.some(g=>g.code==='CONTRACT_DRIFT'));assert.ok(bad.gaps.some(g=>g.code==='SOURCE_DIRECTION_MISSING'));const current=currentExchangeContract(m,defs,recordKeys);assert.equal(current.currentSchemaStatus,'complete');assert.equal(current.inbound.length,defs.length);for(const def of defs){const row=current.inbound.find(r=>r.key===def.key);assert.deepEqual(row.fields,def.fields);assert.deepEqual(row.uniqueKey,recordKeys[def.key]);assert.deepEqual(parseInputCsv(exchangeCsvTemplate(current,def.key))[0],def.fields);}save('exchange-contract',{historical:r,current});
 });
 test('R7-15 explicit one-line mock query profile reports elapsed environment only, with no AC27 threshold',()=>{
  const s=fixture(),n=100,start=performance.now();let rows=0;for(let i=0;i<n;i++)rows+=querySavedReport(s,q('tasks')).rows.length;

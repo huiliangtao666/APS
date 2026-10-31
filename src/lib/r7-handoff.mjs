@@ -58,7 +58,7 @@ export function assessHandoff(state,planId,decision={},now=new Date().toISOStrin
  if(!Array.isArray(selected)||!selected.length||new Set(selected).size!==selected.length)add('ORDER_SCOPE_UNKNOWN','运行订单范围缺失或重复。');
  for(const id of selected||[]){
   const order=original?.orders?.find(o=>o['订单编号']===id);
-  if(!order||['产品编号','产线编号','数量单位','合格需求','已完成合格数量'].some(k=>!known(order[k])))add('EXECUTION_INPUT_MISSING','所选订单执行关键数据缺失，不能用默认值确认。');
+  if(!order||['产品编号','产线编号','数量单位','合格需求'].some(k=>!known(order[k])))add('EXECUTION_INPUT_MISSING','所选订单执行关键数据缺失，不能用默认值确认。');
   const assessed=plan.resultAssessment?.orders?.find(o=>o.orderId===id);
   if(!assessed)add('ORDER_ASSESSMENT_MISSING','所选订单缺少保存的需求覆盖记录。');
   if(!plan.deliveryAssessment?.orders?.some(o=>o.orderId===id))add('DELIVERY_ASSESSMENT_MISSING','所选订单缺少保存的交付判断；未知不能假报可交付。');
@@ -77,7 +77,7 @@ export function assessHandoff(state,planId,decision={},now=new Date().toISOStrin
  if(conditionalSupply.length&&decision.acceptConditionalSupply!==true)add('CONDITIONAL_SUPPLY_ACK_REQUIRED','须明确告知并确认预计供给仍为条件。');
  if(decision.acknowledgeScope!==true)add('SCOPE_ACK_REQUIRED','须确认本方案检查范围和尚未检查项。');
  const hash=contentHash(plan),submission=state.workflows?.[planId]?.submission;
- const requiresResubmission=!!submission&&(submission.contentHash!==hash||submission.inputVersionId!==plan.inputVersionId);
+ const requiresResubmission=!!submission&&(submission.contentHash!==hash||submission.inputVersionId!==plan.inputVersionId||blockers.some(b=>['stale_input','changed_conditions','rule_effectivity_changed'].includes(b.code)));
  if(requiresResubmission)add('RESUBMISSION_REQUIRED','方案或输入变化后须重新提交。');
  const result={version:'R7-handoff-data-v1',planId,contentHash:hash,inputVersionId:plan.inputVersionId,snapshotHash:plan.snapshotHash,coverage,blockers,notices,unplanned,conditionalSupply,delivery:clone(plan.deliveryAssessment??null),ruleChecks:clone(plan.ruleSnapshot??null),independentChecks:clone(checks??null),changeReasons:clone(review.changeReasons||[]),requiresResubmission,dataGatePassed:blockers.length===0,finalIndependentReviewRequired:true,workflowActionPerformed:false,limits:['仅本系统模拟数据；不写入外部系统，不推断质量放行。','数据判定不能替代最终独立资源复核、实际角色校验和审计事务。','未排需求、预计供给、未知交付与未检查范围须完整告知。']};
  return {...result,reviewHash:inputHash(result)};
@@ -95,4 +95,18 @@ export function inspectExchangeContract(matrix,defs,recordKeys){
   if(m&&(!m.sourceOwner||!m.direction||!m.systems?.length))gaps.push({table:def.key,code:'SOURCE_DIRECTION_MISSING'});
  }
  return {version:'R7-csv-simulation-v1',status:gaps.length?'gaps':'consistent',gaps,chapter9:clone(matrix.chapter9||[]),inbound:clone(matrix.inbound||[]),outbound:clone(matrix.outbound||[]),realConnection:false,externalWrite:false};
+}
+// Supplemental current runtime contract: do not overwrite historical chapter
+// mapping or claim old static templates match newly added schema fields.
+export function currentExchangeContract(matrix,defs,recordKeys){
+ const audit=inspectExchangeContract(matrix,defs,recordKeys);
+ const inbound=defs.map(def=>{
+  const prior=matrix.inbound?.find(x=>x.key===def.key),same=prior&&JSON.stringify(prior.fields)===JSON.stringify(def.fields);
+  return {...clone(prior||{}),...clone(def),uniqueKey:clone(recordKeys[def.key]||[]),systems:clone(prior?.systems||['APS']),sourceOwner:prior?.sourceOwner||'APS模拟输入文件；现场数据所有者未指定',direction:'inbound-simulation',template:same?prior.template:null,templateStatus:same?'existing-header-matches':'generate-from-current-fields',mappingStatus:prior?'existing-category':'current-simulation-extension',schemaSource:'server/planner.ts#defs',identitySource:'server/input-validation.mjs#recordKeys'};
+ });
+ return {...audit,inbound,currentSchemaStatus:inbound.every(r=>r.uniqueKey.length&&r.fields.length)?'complete':'gaps',staticDocumentationStatus:audit.status,limits:['原第9章类别与原字面映射保留；扩展表不替换原编号。','新增字段的当前CSV头由实际defs生成；旧静态模板和页面说明须Dev接入更新。','systems仅为可能对应系统；没有连接、真实账号或实际现场来源认定。']};
+}
+export function exchangeCsvTemplate(contract,key){
+ const row=contract.inbound.find(x=>x.key===key);if(!row)throw Error('unknown_table');
+ return '\ufeff'+row.fields.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')+'\r\n';
 }

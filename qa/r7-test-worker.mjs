@@ -14,7 +14,7 @@ await w.terminate();
 const expected=calculate(f.executionData,0,at,f.conditions);assert.equal(msg.kind,'result',JSON.stringify(msg));
 const raw=msg.result??msg.plan;assert.ok(raw,JSON.stringify(msg));
 for(const k of ['tasks','resultAssessment','deliveryAssessment','materialDemands','resourceReservations'])assert.deepEqual(raw[k],expected[k],k);
-const p={...raw,id:'P',runId:'R',conditions:f.conditions,inputVersionId:inputHash(data),snapshotHash:f.snapshotHash};p.verification={contentHash:contentHash(p)};
+const p={...raw,id:'P',runId:'R',revision:0,status:'draft',conditions:f.conditions,inputVersionId:inputHash(data),snapshotHash:f.snapshotHash};p.verification={contentHash:contentHash(p)};
 const state={data,revision:0,plans:[p],runs:[{id:'R',planId:'P',revision:0,status:'completed',createdAt:at,conditions:f.conditions,executionData:f.executionData,inputVersionId:p.inputVersionId,snapshotHash:p.snapshotHash}],inputVersions:{[p.inputVersionId]:{data}},records:[],workflows:{}};
 const reopened=JSON.parse(JSON.stringify(state));const query={kind:'tasks',planId:'P',start:0,end:120};assert.deepEqual(querySavedReport(reopened,query),querySavedReport(state,query));
 const gate=assessHandoff(reopened,'P',{acknowledgeScope:true,allowPartial:true,unplannedIds:p.resultAssessment.tasks.filter(t=>t.status==='unplanned').map(t=>t.id),acceptConditionalSupply:true},at);assert.deepEqual(gate.blockers,[]);
