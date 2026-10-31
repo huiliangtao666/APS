@@ -15,7 +15,7 @@ import {migratePolicies} from '../src/lib/resource-policies.mjs';
 import {inspectCsvBatch,batchKeys} from './csv-batch.mjs';
 import {adaptOriginalDependencies} from '../src/lib/original-dependencies.mjs';
 import {taskPosition,movableTask,positionGuard,positionToken,freezePositions,evaluatePosition} from './trial-positions.mjs';
-import {scopedReport,reportCsv} from './scoped-report.mjs';
+import {querySavedReport,savedReportCsv,assessHandoff} from '../src/lib/r7-handoff.mjs';
 import {resourceLoad,loadCsv} from '../src/lib/resource-load.mjs';
 import {validInterval} from '../src/lib/timetable.mjs';
 import {reviewPlan,contentHash,validConfirmation} from './confirmation.mjs';
@@ -615,7 +615,10 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const s=read(),p=s.plans.find(p=>p.id===req.params.id);if(!p)return res.status(404).json({error:'plan_not_found'});
     const confirmation=s.confirmations?.find(c=>c.planId===p.id)||null;
     if(confirmation&&!validConfirmation(confirmation))return res.status(409).json({error:'protected_history_unavailable'});
-    res.json({...reviewPlan(s,p),workflow:s.workflows?.[p.id]||{revision:0,state:p.status,events:[]},confirmation});
+    const review=reviewPlan(s,p),handoff=assessHandoff(s,p.id);
+    const acknowledgements=new Set(['PARTIAL_LIST_REQUIRED','CONDITIONAL_SUPPLY_ACK_REQUIRED','SCOPE_ACK_REQUIRED']);
+    const blockers=[...review.blockers];for(const b of handoff.blockers)if(!acknowledgements.has(b.code)&&!blockers.some(x=>x.code===b.code))blockers.push(b);
+    res.json({...review,blockers,handoff,workflow:s.workflows?.[p.id]||{revision:0,state:p.status,events:[]},confirmation});
   });
   router.get('/confirmations',permission('read'),(_req,res)=>{
     const confirmations=read().confirmations||[];
@@ -643,17 +646,23 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
       if(review.conditionalSupply.length&&req.body.acceptConditionalSupply!==true)return res.status(400).json({error:'conditional_supply_ack_required'});
       if(req.body.acknowledgeScope!==true)return res.status(400).json({error:'check_scope_ack_required'});
     }
+    // This data gate is additional to the fresh reviewPlan above. It never authorizes a write.
+    let handoff=null;
+    if(['submit','confirm'].includes(action)){
+      handoff=assessHandoff(s,p.id,{allowPartial:req.body.acceptPartial,unplannedIds:req.body.unplannedIds,acceptConditionalSupply:req.body.acceptConditionalSupply,acknowledgeScope:req.body.acknowledgeScope});
+      if(!handoff.dataGatePassed)return res.status(409).json({error:'handoff_data_blocked',blockers:handoff.blockers});
+    }
     const at=new Date().toISOString(),actor=actorKey(req);
     const event={id:randomUUID(),action,at,actor,role:req.member.role,reason:req.body.reason.trim(),requestId:requestId(req),reviewHash:review.reviewHash,contentHash:contentHash(p)};
     if(action==='submit'){
       if(!p.verification||p.verification.contentHash!==contentHash(p))return res.status(409).json({error:'verification_required'});
-      w.submission={...event,id:randomUUID(),inputVersionId:p.inputVersionId,contentHash:contentHash(p),review};
+      w.submission={...event,id:randomUUID(),inputVersionId:p.inputVersionId,contentHash:contentHash(p),review,handoff,decision:{allowPartial:req.body.acceptPartial===true,unplannedIds:[...req.body.unplannedIds],acceptConditionalSupply:req.body.acceptConditionalSupply===true,acknowledgeScope:req.body.acknowledgeScope===true}};
       w.submissions??=[];w.submissions.push(structuredClone(w.submission));
       w.state='submitted';p.status='submitted';
     }else if(action==='return'){w.state='returned';p.status='draft';}
     else if(action==='confirm'){
       p.status='confirmed';w.state='confirmed';
-      const snapshot=structuredClone({plan:p,originalInput:inputs(s,p).data,run:s.runs.find(r=>r.id===p.runId),submission:w.submission,review,decision:event});
+      const snapshot=structuredClone({plan:p,originalInput:inputs(s,p).data,run:s.runs.find(r=>r.id===p.runId),submission:w.submission,review,handoff,decision:event});
       const c={id:randomUUID(),planId:p.id,createdAt:at,actor,snapshot,snapshotHash:inputHash(snapshot)};
       s.confirmations??=[];s.confirmations.push(c);w.confirmationId=c.id;
     }else{
@@ -666,19 +675,22 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     record(s,req,action,p.id,{workflowRevision:w.revision,submissionId:w.submission?.id,confirmationId:w.confirmationId,reviewHash:review.reviewHash,inputVersionId:p.inputVersionId,snapshotHash:p.snapshotHash});write(s);res.json({plan:p,workflow:w});
   });
   router.get('/reports',permission('read'),(req,res)=>{
-    try{res.json(scopedReport(read(),JSON.parse(req.query.query)));}
+    try{res.json(querySavedReport(read(),JSON.parse(req.query.query)));}
     catch(e){res.status(e.status||400).json({error:e.status?e.message:'invalid_report_query'});}
   });
   router.post('/export',permission('export'),(req,res)=>{
     const s=read();let csv,target;
     if(req.body.report){
       try{
-        if(Object.keys(req.body).some(k=>!['report','viewId','reason'].includes(k)))return res.status(400).json({error:'invalid_report_export'});
-        const r=scopedReport(s,req.body.report);
+        if(Object.keys(req.body).some(k=>!['report','reportSnapshot','viewId','reason'].includes(k)))return res.status(400).json({error:'invalid_report_export'});
+        const current=querySavedReport(s,req.body.report),r=req.body.reportSnapshot??current;
+        // Check the entire object shown by React, then compare it with the current saved view.
+        const nativeCsv=savedReportCsv(r);
+        if(r.viewId!==current.viewId)return res.status(409).json({error:'stale_report',message:'查询快照已变化，请重新查询后导出'});
         if(req.body.viewId!==r.viewId)return res.status(409).json({error:'stale_report',message:'查询快照已变化，请重新查询后导出'});
         record(s,req,'export',r.provenance.planId,{query:r.query,viewId:r.viewId,inputVersionId:r.provenance.inputVersionId,snapshotHash:r.provenance.snapshotHash});write(s);
-        return res.set('Content-Disposition','attachment; filename="FR035.csv"').type('text/csv').send('\ufeff'+reportCsv(r));
-      }catch(e){return res.status(e.status||400).json({error:e.status?e.message:'invalid_report_query'});}
+        return res.set('Content-Disposition','attachment; filename="FR035.csv"').type('text/csv').send('\ufeff'+nativeCsv);
+      }catch(e){return res.status(e.message==='report_changed'?409:e.status||400).json({error:e.message==='report_changed'?'report_changed':e.status?e.message:'invalid_report_query'});}
     }
     if(req.body.confirmationId){
       const c=s.confirmations?.find(c=>c.id===req.body.confirmationId);if(!c)return res.status(404).json({error:'confirmation_not_found'});

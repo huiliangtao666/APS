@@ -1,5 +1,5 @@
 {
-  "version": "FR036-v1",
+  "version": "FR036-v2",
   "baseSHA": "9082e3d82a11f00947d82f1f672c51fb08f3536a",
   "classification": {
     "data": "D1/D2 CSV simulation; D3 deferred",
@@ -972,7 +972,11 @@
         "人员参与阶段",
         "人员开始偏移",
         "人员结束偏移",
-        "窗口外释放"
+        "窗口外释放",
+        "人员占用基准",
+        "人员检查顺序",
+        "人员配置来源",
+        "人员配置版本"
       ],
       "systems": [
         "PLM",
@@ -1453,6 +1457,72 @@
       "uniqueKey": [
         "poolId"
       ]
+    },
+    {
+      "key": "originalResourceEvents",
+      "label": "MOCK资源取得归还释放账（追加事件）",
+      "file": "37_MOCK资源事实账.csv",
+      "fields": [
+        "事件编号",
+        "原账编号",
+        "前事件编号",
+        "事件类型",
+        "原账JSON"
+      ],
+      "systems": [
+        "MES",
+        "APS"
+      ],
+      "sourceOwner": "显式模拟执行事实来源方；不推定现场实账",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "事件编号"
+      ],
+      "references": "原账编号/前事件编号→追加事件链；原账JSON须按原事实账契约；不替换已有历史",
+      "units": "由原账JSON的显式数量及单位保留，不换算",
+      "dates": [],
+      "version": "N06原事实账追加事件契约；服务端revision/输入哈希与审计；确认历史不变",
+      "validation": [
+        "server/input-validation.mjs#validateInputs",
+        "src/lib/execution-resource-ledger.mjs#originalIssues"
+      ],
+      "template": "templates/37_MOCK资源事实账.csv"
+    },
+    {
+      "key": "originalDependencies",
+      "label": "原12 资源与物料依赖（原文及运行核对）",
+      "file": "12_原始工序资源与物料依赖.csv",
+      "fields": [
+        "订单编号",
+        "工序编号",
+        "资源类型",
+        "资源编号",
+        "需求数量",
+        "提前占用分钟",
+        "后延占用分钟",
+        "所需技能"
+      ],
+      "systems": [
+        "PLM",
+        "APS"
+      ],
+      "sourceOwner": "原第9章12依赖CSV模拟提供方；客户规则含义由批准映射明确",
+      "direction": "inbound-simulation",
+      "uniqueKey": [
+        "订单编号",
+        "工序编号",
+        "资源类型",
+        "资源编号"
+      ],
+      "references": "订单→orders；产品工序→routes；依赖适配仅采用已有明确映射，物料“由BOM计算”等未知运行绑定继续显式阻断",
+      "units": "需求数量保留原字面；禁止把文字表达式推断为数值或新增公式",
+      "dates": [],
+      "version": "原12八列保真契约；与当前规范化dependencies并存，不替换原编号",
+      "validation": [
+        "server/input-validation.mjs#validateInputs",
+        "src/lib/original-dependencies.mjs#adaptOriginalDependencies"
+      ],
+      "template": "templates/12_原始工序资源与物料依赖.csv"
     }
   ],
   "outbound": [
@@ -1642,5 +1712,6 @@
     "P1多线、预测去重补库、复杂分支返工",
     "MES外部稳定任务ID协商、更新顺序/频率/权限/冲突解决均待D3批准"
   ],
-  "metadataConvention": "来源方是模拟责任划分，非已连接或已认证来源；额外元数据写sidecar，不加未知CSV列；模版仅表头不能直接导入；示例必须在声明的fixture上下文使用"
+  "metadataConvention": "来源方是模拟责任划分，非已连接或已认证来源；额外元数据写sidecar，不加未知CSV列；模版仅表头不能直接导入；示例必须在声明的fixture上下文使用",
+  "schemaRevision": "R7 verified source integration; literal 19 categories preserved; 38 current tables"
 }

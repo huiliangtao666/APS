@@ -9,7 +9,7 @@ export function ConfirmationPanel({plans,role,busy,reason,api,refresh,onExport}:
  return <section className="panel"><h2>主管确认、内部发布与归档</h2><p>仅在本系统生效，可查询和导出。输入变化后须按当前事实重算、复核并重新提交；确认副本保存原输入、规则、运行结果和决定。</p>
  <select aria-label="主管确认方案" value={id} onChange={e=>{setId(e.target.value);setError('');}}><option value="">选择待确认或历史方案</option>{plans.map(p=><option key={p.id} value={p.id}>{p.name} · {p.id.slice(0,8)}</option>)}</select>
  {error&&<p role="alert">{error}</p>}{review&&<><h3>{labels[state]||state}</h3><p>提交编号：{review.submissionId||'尚未提交'} · 原始输入：{review.inputVersionId}</p><p>{review.scope}</p>
- <h3>规则检查与当前输入复查</h3>{review.blockers.length?<ul>{review.blockers.map((b:any,i:number)=><li key={i}>{b.message}</li>)}</ul>:<p>本次已有支持范围检查通过。</p>}
+ {review.handoff&&<p>保存结果完整性：{review.handoff.coverage.status==='complete'?'记录完整':'存在缺项'}。提交与确认时服务端将再次核对最新输入、资源和物料；当前查看未执行流程操作。</p>}<h3>规则检查与当前输入复查</h3>{review.blockers.length?<ul>{review.blockers.map((b:any,i:number)=><li key={i}>{b.message}</li>)}</ul>:<p>本次已有支持范围检查通过。</p>}
  <details><summary>采用规则与独立复核明细</summary><pre>{JSON.stringify({rules:review.ruleChecks,independent:review.independentChecks},null,2)}</pre></details><p>尚未检查：{review.limits.join('；')}</p>
  <h3>未排需求（{review.unplanned.length}）</h3>{review.unplanned.map((t:any)=><label key={t.id} style={{display:'block'}}><input type="checkbox" checked={listed.includes(t.id)} onChange={e=>setListed(old=>e.target.checked?[...old,t.id]:old.filter(x=>x!==t.id))}/>{t.orderId} / {t.operation}：{t.quantity} {t.unit}；{t.reasons.map((r:any)=>r.message).join('；')}</label>)}
  {!!review.unplanned.length&&<label><input type="checkbox" checked={partial} onChange={e=>setPartial(e.target.checked)}/>明确接受已排部分，上列未排需求仍未满足</label>}

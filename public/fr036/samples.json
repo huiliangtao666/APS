@@ -1,5 +1,5 @@
 {
-  "version": "FR036-v1",
+  "version": "FR036-v2",
   "fixtureSource": "server/planner.ts#seed",
   "metadataPolicy": "sidecar-only; do not append unsupported CSV columns",
   "samples": [
@@ -240,7 +240,7 @@
       "contract": "main-header-only",
       "expected": "fill-before-import",
       "simulation": true,
-      "sha256": "5b0cd0c2236136769d6d71589e45d525d785c2bd50849b19f2595a846e9cef07"
+      "sha256": "d408203338e36e6afdb6f09805627c72cdfc2622be51366b63d7ad9064c589a8"
     },
     {
       "file": "templates/19_人员组与可用时间.csv",
@@ -436,6 +436,22 @@
       "expected": "source import; runtime mapping pending",
       "simulation": true,
       "sha256": "21b29ec7d05f2ab01176a6f608b0062a0ed56712b9238e962de989a1c5cf894a"
+    },
+    {
+      "file": "templates/12_原始工序资源与物料依赖.csv",
+      "table": "originalDependencies",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "f332bd396d09e5d1a96c4192c92ccbc1eef1f6117d915a68a52de78d4c90b92d"
+    },
+    {
+      "file": "templates/37_MOCK资源事实账.csv",
+      "table": "originalResourceEvents",
+      "contract": "main-header-only",
+      "expected": "fill-before-import",
+      "simulation": true,
+      "sha256": "8be03e592d53261b1840057193f35d4c0317fe1314d359695c9c5a85b14688ab"
     }
   ]
 }
