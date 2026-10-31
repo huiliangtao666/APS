@@ -30,6 +30,11 @@ export function resourceTaskSources(view,taskIds){
  // explicit structured context; never parse an identifier or translated text.
  const contexts=(view.findings||[]).filter(f=>(f.taskIds||[]).some(id=>taskIds.includes(id))&&f.context?.orderId&&f.context?.operation).map(f=>({orderId:f.context.orderId,operation:f.context.operation,machine:f.context.machineId}));
  const selected=[...tasks,...contexts],same=r=>selected.some(t=>t.orderId===r['订单编号']&&t.operation===r['工序编号']);
+ const sameProductOperation=r=>selected.some(t=>{
+  const orders=(input.orders||[]).filter(o=>o['订单编号']===t.orderId);
+  const product=t.productId||(orders.length===1?orders[0]['产品编号']:null);
+  return product&&product===r['产品编号']&&t.operation===r['工序编号'];
+ });
  const dependencies=(input.dependencies||[]).filter(same);
  const originalDependencies=(input.originalDependencies||[]).filter(same);
  const claims=(input.resourceClaims||[]).filter(same);
@@ -46,7 +51,7 @@ export function resourceTaskSources(view,taskIds){
  const calendars=new Set(machines.map(m=>m['日历编号']?.trim()||input.calendars?.[0]?.['日历编号']));
  const skillSubstitutions=(input.skillSubstitutions||[]).filter(s=>dependencies.some(d=>d['资源类型']==='人员技能'&&d['所需技能']===s['所需技能']&&(s['适用工序']==='*'||s['适用工序']===d['工序编号'])&&personnelGroups.some(g=>personnelCandidates(d).includes(g['人员组编号'])&&skillsOf(g['技能']).includes(s['可提供技能']))));
  const originalResourceEvents=(input.originalResourceEvents||[]).filter(r=>{try{const doc=JSON.parse(r['原账JSON']);return (doc.facts||[]).some(f=>same(f.snapshot||{}))||(doc.identities||[]).some(i=>i.type==='人员'&&poolIds.has(i.currentId)||i.type==='工装'&&toolIds.has(i.currentId));}catch{return false;}});
- const tables={originalDependencies,dependencies,resourceClaims:claims,originalTools,originalPersonnel,resourceMappings,tools:(input.tools||[]).filter(t=>toolIds.has(t['工装编码'])),personnelGroups,personnelPools:(input.personnelPools||[]).filter(p=>poolIds.has(p.poolId)),skillSubstitutions,machines,calendars:(input.calendars||[]).filter(r=>calendars.has(r['日历编号'])),resourceStops:(input.resourceStops||[]).filter(r=>r['资源类型']==='人员'?personnelIds.has(r['资源编号']):r['资源类型']==='工装'&&toolIds.has(r['资源编号'])),originalResourceEvents};
+ const tables={routes:(input.routes||[]).filter(sameProductOperation),times:(input.times||[]).filter(sameProductOperation),originalDependencies,dependencies,resourceClaims:claims,originalTools,originalPersonnel,resourceMappings,tools:(input.tools||[]).filter(t=>toolIds.has(t['工装编码'])),personnelGroups,personnelPools:(input.personnelPools||[]).filter(p=>poolIds.has(p.poolId)),skillSubstitutions,machines,calendars:(input.calendars||[]).filter(r=>calendars.has(r['日历编号'])),resourceStops:(input.resourceStops||[]).filter(r=>r['资源类型']==='人员'?personnelIds.has(r['资源编号']):r['资源类型']==='工装'&&toolIds.has(r['资源编号'])),originalResourceEvents};
  for(const [table,rows] of Object.entries(tables))for(const row of rows){
   const index=input[table].indexOf(row),source=view.plan.inputCsvSources?.[table];
   // Preserve frozen logical positions when no independently matching CSV row exists.
