@@ -1,0 +1,11 @@
+import fs from 'node:fs';import os from 'node:os';import path from 'node:path';import {createHash} from 'node:crypto';import assert from 'node:assert/strict';import {b2Host} from './b2-host.mjs';
+const out=process.env.UAT05_OUT,sha='96a9dae3ff13d3254c091567fa57cad5d8f37279',hash=b=>createHash('sha256').update(b).digest('hex');
+const manifest=JSON.parse(fs.readFileSync(out+'/source-manifest.json'));assert.equal(manifest.productSha,sha);for(const [p,h]of Object.entries(manifest.files))assert.equal(hash(fs.readFileSync(p)),h,p);
+const walk=p=>fs.readdirSync(p,{withFileTypes:true}).flatMap(d=>d.isDirectory()?walk(path.join(p,d.name)):[path.join(p,d.name)]);
+const versions={};for(const name of ['express','react','react-dom','vite','typescript','playwright'])versions[name]=JSON.parse(fs.readFileSync('node_modules/'+name+'/package.json')).version;
+const dir=fs.mkdtempSync(path.join(os.tmpdir(),'uat05-build-fingerprint-')),f=await b2Host({dir,browser:true});
+try{
+ const productionBuild=Object.fromEntries(walk('dist').map(p=>[p,hash(fs.readFileSync(p))]));const uiBuild=Object.fromEntries(walk(dir+'/dist').map(p=>[path.relative(dir+'/dist',p),hash(fs.readFileSync(p))]));
+ const data={productSha:sha,sourceFilesVerified:Object.keys(manifest.files).length,sourceManifestSha256:hash(fs.readFileSync(out+'/source-manifest.json')),runtime:'official app-exec isolated standalone QA project',node:process.version,platform:process.platform,arch:process.arch,os:fs.readFileSync('/etc/os-release','utf8'),dependencies:versions,sdk:Object.fromEntries(['lite-app-runtime','lite-app-server'].map(n=>[n,hash(fs.readFileSync('/workspace/.praetor/sdk/'+n+'.tgz'))])),productionBuild,productionBuildFingerprint:hash(JSON.stringify(productionBuild)),uiBuild,uiBuildFingerprint:hash(JSON.stringify(uiBuild)),uiBuildRelationship:'Same fixed product source and b2Host synthetic-runtime alias as executed UAT05 browser fixture; emitted asset names match browser logs. Supplemental fingerprint, no persistent endpoint.',identity:'explicit synthetic planner/supervisor/query; no customer SSO',data:'disposable QA-only stores; no live/shared data writes'};
+ fs.writeFileSync(out+'/runtime-environment.json',JSON.stringify(data,null,2));
+}finally{await f.close();fs.rmSync(dir,{recursive:true,force:true});}
