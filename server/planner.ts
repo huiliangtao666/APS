@@ -1,3 +1,5 @@
+import {stageMappingDef} from '../src/lib/stage-bindings.mjs';
+import {minuteValidityFields} from '../src/lib/minute-validity.mjs';
 import {originalProtection,originalSchedulingReservations} from '../src/lib/execution-resource-ledger.mjs';
 import {protectCalculatedTasks} from './trial-protection.mjs';
 import {scheduleProcessRoute} from '../src/lib/process-route-planner.mjs';
@@ -41,7 +43,7 @@ type Finding = { code: string; message: string; taskIds: string[]; context?:any;
 type StoredVerificationReport = VerificationReport & { inputFingerprint?: string };
 type Plan = { id: string; name: string; createdAt: string; tasks: Task[]; findings: Finding[]; rules: string[]; inputVersion: string; verification?: StoredVerificationReport; supplyConditions?: SupplyCondition[]; supplyInput?: string; materialDemands?:MaterialDemandRow[]; materialChecked?:boolean; ruleSnapshot?: RuleSnapshot };
 
-export const defs: TableDef[] = [
+export const defs: TableDef[] = [stageMappingDef,
   {key:'originalResourceEvents',label:'MOCK资源取得归还释放账（追加事件）',file:'37_MOCK资源事实账.csv',fields:['事件编号','原账编号','前事件编号','事件类型','原账JSON']},
   { key: 'factoryLines', label: '工厂与产线', file: '01_工厂与产线配置.csv', fields: ['工厂编号','工厂名称','产线编号','产线名称','时区'] },
   { key: 'simulationEvents', label: '模拟异常事件（先更新时点事实）', file: '28_模拟异常事件.csv', fields: ['事件编号','事件分钟','保护截止分钟','保护策略','事件类型','参数JSON','原因','需处理事实JSON'] },
@@ -51,10 +53,10 @@ export const defs: TableDef[] = [
 
   { key: 'products', label: '产品与包装规格', file: '07_产品与包装规格.csv', fields: ['产品编号','产品名称','单支净重kg','每袋支数','总收率','模拟交付等待分钟'] },
   { key: 'materials', label: '物料主数据', file: '08_物料主数据.csv', fields: ['物料编号','物料名称','单位','类别'] },
-  { key: 'supplies', label: '预计到料', file: '20_预计到料.csv', fields: ['供给编号','物料编号','批次编号','预计数量','预计到达时间','预计可用时间','质量状态','有效期'] },
+  { key: 'supplies', label: '预计到料', file: '20_预计到料.csv', fields: ['供给编号','物料编号','批次编号','预计数量','预计到达时间','预计可用时间','质量状态','有效期','已占用数量',...minuteValidityFields] },
   { key: 'supplyDelays', label: '延期模拟记录', file: '21_延期模拟记录.csv', fields: ['记录编号','供给编号','记录时间','调整后到达时间','调整后可用时间','原因'] },
   { key: 'supplyUses', label: '计划供给引用', file: '22_计划供给引用.csv', fields: ['引用编号','订单编号','工序编号','供给编号','使用数量'] },
-  { key: 'inventory', label: '库存批次', file: '09_库存批次.csv', fields: ['批次编号','物料编号','账面数量','已占用数量','有效期','位置','质量状态','预计可用时间'] },
+  { key: 'inventory', label: '库存批次', file: '09_库存批次.csv', fields: ['批次编号','物料编号','账面数量','已占用数量','有效期','位置','质量状态','预计可用时间',...minuteValidityFields] },
   { key: 'orders', label: '订单与交期', file: '17_生产订单与交期.csv', fields: ['订单编号','产品编号','产线编号','合格需求','数量单位','要求可交付分钟','优先顺序','是否允许拆分','需求类型','订单状态','已完成合格数量'] },
   { key: 'bom', label: 'BOM 与包装用量', file: '09_BOM与包装用量.csv', fields: ['版本编号','产品编号','生效日期','投料工序编号','用量类型','物料编号','配置用量','用量单位','用量基准','收率/损耗口径备注','损坏比例'] },
   { key: 'routes', label: '工艺路线', file: '10_工艺路线配置.csv', fields: ['产品编号','工序编号','工序名称','前序工序','最大等待分钟','程序编号'] },
@@ -81,7 +83,7 @@ export const defs: TableDef[] = [
 export const seed: Record<string, Row[]> = {
   originalDependencies: [],
   resourceMappings: [],
-  originalInventory: [], originalSupply: [], originalProgress: [], originalEvents: [],
+  stageMappings: [], originalInventory: [], originalSupply: [], originalProgress: [], originalEvents: [],
   originalBom: [], originalTools: [], originalPersonnel: [],
   originalResourceEvents: [], simulationEvents: [], executionFacts: [], executionMaterials: [], executionSources: [],
   products: [

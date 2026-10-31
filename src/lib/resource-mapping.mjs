@@ -1,3 +1,4 @@
+import {declaredHeadcount} from './simulation-events.mjs';
 import {originalResourceDefs} from './original-resources.mjs';
 export const resourceMappingDef={key:'resourceMappings',label:'原05/06 显式运行映射',file:'31_原05与06运行映射.csv',fields:['配置编号','配置版本','合同版本','状态','来源类别','来源编号','源记录JSON','运行编号','运行记录JSON','别名','映射模式','源类型','共享范围原文','适用产线','范围模式','容量单位','时间单位','释放策略','配置依据','字段权威JSON']};
 export const mappingOptions={'合同版本':['FR013-resource-map-v1','FR013-resource-map-v2'],'状态':['NOT_READY_CONFIG','READY'],'来源类别':['originalTools','originalPersonnel'],'映射模式':['DIRECT_IDENTITY','EXPLICIT_SAME_ENTITY'],'范围模式':['全局唯一池'],'容量单位':['套','人'],'时间单位':['分钟'],'释放策略':['半开端点释放']};
@@ -46,7 +47,7 @@ export function validateResourceMappings(d,{forRun=false,at=new Date().toISOStri
   if(!['全工厂','*'].includes(s['共享范围'].trim()))fail('范围模式','当前仅支持显式全工厂/*至全局唯一容量；产线/工序局部共享合同未启用');
   const capacity=tool?'可用数量':'可用人数',targetCapacity=tool?'可用数量':'人员数量',start=tool?'最早可用分钟':'起始分钟',end=tool?'最晚可用分钟':'结束分钟';
   const a=tool?'可用起始分钟':'可用起始分钟',b=tool?'可用结束分钟':'可用结束分钟';
-  if(!positive(s[capacity]?.trim())||Number(t[targetCapacity])!==Number(s[capacity]))fail('运行记录JSON','来源容量须为正整数且与运行工装容量/组资格人数相等；0容量运行语义未启用');
+  if(!positive(s[capacity]?.trim())||Number(t[targetCapacity])!==Number(s[capacity])&&(tool||!declaredHeadcount(d,t['人员组编号'],s[capacity],t[targetCapacity])))fail('运行记录JSON','来源容量须为正整数且与运行工装容量/组资格人数相等；0容量运行语义未启用');
   if(!minute(s[start])||!minute(s[end])||Number(s[end])<=Number(s[start])||Number(t[a])!==Number(s[start])||Number(t[b])!==Number(s[end]))fail('时间单位','源窗口须为0–525600整数分钟且逐值等于运行窗口；小数/日期/小时转换未启用');
   if(tool){
    for(const c of (d.resourceClaims||[]).filter(c=>c['资源类型']==='工装'&&c['资源编号']===m['运行编号']))for(const field of ['单位','占用口径','窗口开始偏移分钟','窗口结束偏移分钟','参数来源'])if(!c[field]?.trim())fail('运行编号',`表23 ${c['声明编号']} 缺显式${field}；不补默认`);

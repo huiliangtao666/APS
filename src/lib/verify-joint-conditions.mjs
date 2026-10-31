@@ -1,5 +1,6 @@
 import {verifyWorkingWindows} from './verify-working-windows.mjs';
 import {quantityMath as Q,calculateMaterialDemand,remainingExecutionDemand,feedTime} from './material-allocation.mjs';
+import {minuteMode,minuteInstant,validateMinuteValidity} from './minute-validity.mjs';
 import {inventoryBusinessDate} from './inventory.mjs';
 import {resolveExpectedSupply} from './expected-supply.mjs';
 // Fixed-output verification: no planner, preview, allocator or candidate search.
@@ -66,7 +67,7 @@ function verifyFixed(plan,data,conditions){
      const key=(a.conditional?'supply:':'inventory:')+(a.conditional?a.supplyId:a.lotId);
      const source=a.conditional?supplies.find(s=>s['供给编号']===a.supplyId):(data.inventory||[]).find(s=>s['批次编号']===a.lotId);
      const date=inventoryBusinessDate(feedTime(task.start));
-     if(!source||source['物料编号']!==demand.materialId||source['批次编号']!==a.lotId||source['有效期']<date){add(`${task.id}/${a.lotId} 分配来源/效期不符`);continue;}
+     if(!source||source['物料编号']!==demand.materialId||source['批次编号']!==a.lotId||(!minuteMode(source)?source['有效期']<date:validateMinuteValidity(source).length>0||Date.parse(feedTime(task.start))>Date.parse(minuteInstant(source['时间原点'],source['到期分钟']))||Date.parse(feedTime(task.start))===Date.parse(minuteInstant(source['时间原点'],source['到期分钟']))&&source['到期边界']==='截止前')){add(`${task.id}/${a.lotId} 分配来源/效期不符`);continue;}
      if(a.conditional){
       if(!policy['允许预计供给']||!policy['预计状态'].includes(source['质量状态'])||Date.parse(source['生效可用时间'])>Date.parse(feedTime(task.start)))add(`${task.id}/${a.lotId} 条件供给未就绪`);
       const candidates=(data.supplyUses||[]).filter(u=>u['订单编号']===task.orderId&&u['工序编号']===task.operation&&u['供给编号']===a.supplyId);
@@ -74,7 +75,7 @@ function verifyFixed(plan,data,conditions){
       if(!candidates.length||Q.cmp(uses.get(useKey),limit)>0n)add(`${task.id}/${a.lotId} 超出显式供给引用量`);
      }else if(!policy['可用状态'].includes(source['质量状态'])||source['预计可用时间']&&Date.parse(source['预计可用时间'])>Date.parse(feedTime(task.start)))add(`${task.id}/${a.lotId} 库存质量/就绪时点不满足`);
      sum(used,key,amount);
-     const capacity=a.conditional?Q.q(source['预计数量']):Q.sub(Q.q(source['账面数量']),Q.q(source['已占用数量']));
+     const capacity=a.conditional?Q.sub(Q.q(source['预计数量']),Q.q(source['已占用数量']||'0')):Q.sub(Q.q(source['账面数量']),Q.q(source['已占用数量']));
      if(Q.cmp(used.get(key),capacity)>0n)add(`${a.lotId} 累计分配超出冻结可用量`);
     }
     if(Q.cmp(allocated,Q.fromExact(demand.exactQuantity))!==0n)add(`${task.id}/${demand.materialId} 需求与分配不守恒`);

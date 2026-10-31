@@ -1,13 +1,14 @@
+import {checkStageBindings,stageMappingNote} from './stage-bindings.mjs';
 import {sourceRefs} from './problem-records.mjs';
 // Literal v0.3 source records. These schemas do not invent runtime identities,
 // date origins, material-unit conversions, fact allocation or event effects.
 export const originalStageDefs=[
- {key:'originalInventory',label:'原13 库存来源（待运行映射）',file:'13_物料库存批次.csv',fields:['批次编号','物料编号','库存kg或个','已占用kg或个','到达分钟','最早可用分钟','质量状态','到期分钟','共享范围']},
- {key:'originalSupply',label:'原14 到料来源（待运行映射）',file:'14_预计到料与可用时间.csv',fields:['批次编号','物料编号','到料kg或个','已占用kg或个','到达分钟','最早可用分钟','质量状态','到期分钟','共享范围']},
- {key:'originalProgress',label:'原18 进度来源（待事实对账）',file:'18_模拟执行进度.csv',fields:['任务编号','状态','实际开始分钟','实际结束分钟','已用投入kg','说明']},
- {key:'originalEvents',label:'原19 变更来源（待事件映射）',file:'19_模拟异常与条件变更.csv',fields:['事件编号','发生分钟','对象编号','变更字段','原值','新值','说明']},
+ {key:'originalInventory',label:'原13 库存来源（原文与显式绑定）',file:'13_物料库存批次.csv',fields:['批次编号','物料编号','库存kg或个','已占用kg或个','到达分钟','最早可用分钟','质量状态','到期分钟','共享范围']},
+ {key:'originalSupply',label:'原14 到料来源（原文与显式绑定）',file:'14_预计到料与可用时间.csv',fields:['批次编号','物料编号','到料kg或个','已占用kg或个','到达分钟','最早可用分钟','质量状态','到期分钟','共享范围']},
+ {key:'originalProgress',label:'原18 进度来源（原文与事实对账）',file:'18_模拟执行进度.csv',fields:['任务编号','状态','实际开始分钟','实际结束分钟','已用投入kg','说明']},
+ {key:'originalEvents',label:'原19 变更来源（原文与事件绑定）',file:'19_模拟异常与条件变更.csv',fields:['事件编号','发生分钟','对象编号','变更字段','原值','新值','说明']},
 ];
-export const originalStageNote='原13/14/18/19按原始列保存，原文不换算、不生成运行记录。原库存/到料须补齐显式单位、日期基准、位置/供给身份和适用范围；原进度须对账任务、产出及批次耗料；原事件须明确对象、保护时点和效果。非空进度/事件来源会阻止新计算；非空库存/到料来源在启用物料约束时阻止新计算；可查询、修正、导出，旧方案保持原输入。';
+export const originalStageNote=stageMappingNote;
 export function validateOriginalStage(data){
  const issues=[];
  for(const def of originalStageDefs)(data[def.key]||[]).forEach((row,index)=>{
@@ -25,4 +26,8 @@ export function validateOriginalStage(data){
  });
  return issues;
 }
-export function unmappedStageSources(data){return originalStageDefs.filter(def=>(data[def.key]||[]).length&&(!['originalInventory','originalSupply'].includes(def.key)||(data.rules||[]).some(r=>r['规则编号']==='MATERIAL'&&r['是否启用']==='是'))).map(def=>({code:'NOT_READY_CONFIG',table:def.key,file:def.file,row:0,field:'运行映射',message:def.label+'尚未提供批准的显式运行映射；只保存来源不等于已参与计算',relatedRecords:sourceRefs(def.key,data[def.key],data[def.key])}));}
+export function unmappedStageSources(data){
+ const enabled=(data.rules||[]).some(r=>r['规则编号']==='MATERIAL'&&r['是否启用']==='是');
+ const checked=enabled?data:{...data,originalInventory:[],originalSupply:[],stageMappings:(data.stageMappings||[]).filter(m=>!['originalInventory','originalSupply'].includes(m['来源类别']))};
+ return checkStageBindings(checked,{forRun:true,startMinute:525600}).issues;
+}

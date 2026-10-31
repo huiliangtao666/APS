@@ -4,4 +4,4 @@ export function queryInventoryAvailability(batches?: Record<string, string>[], o
 
 export function inventoryBusinessDate(raw:string):string;
 
-export function inventoryEligibility(batch:Record<string,string>,asOf:string,usableStatuses:string[]):{eligible:boolean;reasons:string[]};
+export function inventoryEligibility(batch:Record<string,string>,asOf:string,usableStatuses:string[], options?:{readyAt?:string}):{eligible:boolean;reasons:string[]};

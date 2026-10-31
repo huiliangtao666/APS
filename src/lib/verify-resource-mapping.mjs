@@ -14,7 +14,8 @@ export function verifyResourceMappingSnapshot(d,conditions){
   if(m['适用产线']!==conditions.lineId)problems.push(`${m['配置编号']} 运行产线不属于显式映射范围`);
   if(source['共享范围']!==m['共享范围原文']||!['全工厂','*'].includes(source['共享范围'].trim()))problems.push(`${m['配置编号']} 共享范围不一致`);
   const keys=tool?[['可用数量','可用数量'],['最早可用分钟','可用起始分钟'],['最晚可用分钟','可用结束分钟']]:[['可用人数','人员数量'],['起始分钟','可用起始分钟'],['结束分钟','可用结束分钟']];
-  if(keys.some(([s,t])=>Number(source[s])!==Number(target[t])))problems.push(`${m['配置编号']} 原数量/窗口未被运行目标采用`);
+  const changedCount=!tool&&(d.simulationEvents||[]).some(e=>{try{const p=JSON.parse(e['参数JSON']);return e['事件类型']==='人员数量变化'&&p.scope==='事件起新运行'&&p.groupId===target['人员组编号']&&p.poolId===target.poolId&&p.beforeCount===source['可用人数']&&p.afterCount===target['人员数量']&&Number(conditions.startMinute)>=Number(e['事件分钟'])&&(d.personnelPools||[]).filter(x=>x.poolId===p.poolId&&x['总人数']===p.afterCount).length===1;}catch{return false;}});
+  if(keys.some(([s,t])=>!(s==='可用人数'&&changedCount)&&Number(source[s])!==Number(target[t])))problems.push(`${m['配置编号']} 原数量/窗口未被运行目标采用`);
   if(!tool&&(source['技能']!==target['技能']||!(d.personnelPools||[]).some(p=>p.poolId===target.poolId)))problems.push(`${m['配置编号']} 人员技能/物理池不一致`);
  }
  // Independently reconstruct identity membership and per-field versioned authority.

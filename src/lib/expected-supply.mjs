@@ -1,3 +1,4 @@
+import {minuteMode,validateMinuteValidity} from './minute-validity.mjs';
 import {sourceRefs} from './problem-records.mjs';
 /** FR-011: simulated supply never becomes on-hand stock or a receipt confirmation. */
 export const PLAN_TIME_ORIGIN = '2026-11-02T08:00:00+08:00';
@@ -8,13 +9,14 @@ const exactDecimal = raw => {
   const [whole, fraction=''] = raw.split('.');
   return {n:BigInt((whole||'0')+fraction),scale:fraction.length};
 };
+const exceedsDecimal=(a,b)=>{const x=exactDecimal(a),y=exactDecimal(b),scale=Math.max(x.scale,y.scale);return x.n*10n**BigInt(scale-x.scale)>y.n*10n**BigInt(scale-y.scale);};
 const addDecimal = (a,b) => {
   const scale=Math.max(a.scale,b.scale);
   return {n:a.n*10n**BigInt(scale-a.scale)+b.n*10n**BigInt(scale-b.scale),scale};
 };
 // Require an explicit offset so browser locale cannot change imported business time.
 export function validSupplyTime(raw) {
-  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?(?:Z|[+-]\d{2}:\d{2})$/.test(raw)) return false;
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{3})?)?(?:Z|[+-]\d{2}:\d{2})$/.test(raw)) return false;
   const [date, time] = raw.split('T');
   const [year, month, day] = date.split('-').map(Number);
   const calendar = new Date(Date.UTC(year, month - 1, day));
@@ -43,7 +45,9 @@ export function validateExpectedSupply({ supplies = [], delays = [], uses = [], 
     unique(id, ids, '供给编号',r=>value(r,'供给编号'),'供给编号');
     unique(`${value(row, '物料编号')}/${value(row, '批次编号')}`, lots, '物料/批次',r=>`${value(r,'物料编号')}/${value(r,'批次编号')}`,'物料编号 / 批次编号');
     if (!materialIds.has(value(row, '物料编号'))) add('MATERIAL', `${label}引用未配置物料`,undefined,'物料编号',{table:'materials',key:value(row,'物料编号')});
-    if(value(row,'有效期')){const d=new Date(row['有效期']+'T00:00:00Z');if(!/^\d{4}-\d{2}-\d{2}$/.test(row['有效期'])||!Number.isFinite(d.getTime())||d.toISOString().slice(0,10)!==row['有效期'])add('EXPIRY',label+'有效期须为有效日历日期',undefined,'有效期');}
+    for(const message of validateMinuteValidity(row))add('EXPIRY',message,undefined,'分钟时效');
+    if(value(row,'已占用数量')&&(!decimal(value(row,'已占用数量'))||decimal(value(row,'预计数量'))&&exceedsDecimal(value(row,'已占用数量'),value(row,'预计数量'))))add('QUANTITY','供给已占用数量须为0至预计数量');
+    if(!minuteMode(row)&&value(row,'有效期')){const d=new Date(row['有效期']+'T00:00:00Z');if(!/^\d{4}-\d{2}-\d{2}$/.test(row['有效期'])||!Number.isFinite(d.getTime())||d.toISOString().slice(0,10)!==row['有效期'])add('EXPIRY',label+'有效期须为有效日历日期',undefined,'有效期');}
     positive(value(row, '预计数量'), label + '预计数量');
     times(row, '预计到达时间', '预计可用时间', label);
   });
@@ -86,8 +90,9 @@ export function validateExpectedSupply({ supplies = [], delays = [], uses = [], 
   totals.forEach((amount, id) => {
     const raw=value(byId.get(id)||{},'预计数量');
     if(!decimal(raw))return; // Missing/invalid sources already have their own findings.
-    const capacity=exactDecimal(raw),scale=Math.max(amount.scale,capacity.scale);
-    if(amount.n*10n**BigInt(scale-amount.scale)>capacity.n*10n**BigInt(scale-capacity.scale)){
+    if(!decimal(value(byId.get(id)||{},'已占用数量')||'0'))return;
+    const capacity=exactDecimal(raw),reserved=exactDecimal(value(byId.get(id)||{},'已占用数量')||'0'),combined=addDecimal(amount,reserved),scale=Math.max(combined.scale,capacity.scale);
+    if(combined.n*10n**BigInt(scale-combined.scale)>capacity.n*10n**BigInt(scale-capacity.scale)){
       table='supplies';current=byId.get(id);add('OVERALLOCATED', `供给 ${id} 计划使用总量超过预计数量`,[...refs('supplies',[current]),...refs('supplyUses',members.get(id))],'预计数量 / 使用数量');
     }
   });
