@@ -1,3 +1,4 @@
+import {verifyOriginalResources} from './verify-execution-resource-ledger.mjs';
 import {verifyResourceMappingSnapshot} from './verify-resource-mapping.mjs';
 import {verifyOriginalDependencies} from './verify-original-dependencies.mjs';
 import {verifyJointConditions} from './verify-joint-conditions.mjs';
@@ -33,6 +34,7 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
  };
  const seen=new Set(),expectedReservations=new Set();
  for(const task of tasks){
+  if(conditions?.executionResourceContract==='N06-finite-v1'&&(data.executionFacts||[]).some(f=>f['订单编号']===task.orderId&&f['工序编号']===task.operation&&f['状态']==='已完成'))continue;
   // One resource-batch leader represents personnel; tooling declarations remain per production batch.
   const personnelKey=task.resourceBatchId||task.id;
   if(!seen.has(personnelKey)){
@@ -50,7 +52,10 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
     const key=JSON.stringify([[...ids].sort(),d['所需技能']||'',d['所需班次']||'',d.__policyRoleSource,...(d['人员岗位编号']?.trim()?['岗位',d['人员岗位编号'].trim()]:[d['人员参与阶段']?'窗口集合':index])]);
     const pool=(data.personnelPools||[]).find(p=>data.personnelGroups.some(g=>ids.includes(g['人员组编号'])&&g.poolId===p.poolId));
     const retain=d['窗口外释放']==='否'||pool?.['占用策略']==='全工序保留';
-    const start=retain?task.start:task.start+num(d,'人员开始偏移'),end=retain?task.end:task.end-num(d,'人员结束偏移');
+    const configured=['人员占用基准','人员检查顺序','人员配置来源','人员配置版本'].some(k=>String(d[k]??'').trim())||['提前占用分钟','后延占用分钟'].some(k=>d[k]!==undefined&&d[k]!==''&&d[k]!=='0');
+    if(configured&&(!['参与窗口','完整工序'].includes(d['人员占用基准'])||!['先扩展占用再检查可用性','先检查可用性再扩展占用'].includes(d['人员检查顺序'])||!d['人员配置来源']?.trim()||!d['人员配置版本']?.trim()||['提前占用分钟','后延占用分钟'].some(k=>typeof d[k]!=='string'||!/^\d+$/.test(d[k])||Number(d[k])>525600)))add(`${task.id} H-P04 冻结配置不完整，禁止默认占用范围/顺序/分钟`);
+    const whole=retain||d['人员占用基准']==='完整工序';
+    const start=(whole?task.start:task.start+num(d,'人员开始偏移'))-(configured?num(d,'提前占用分钟'):0),end=(whole?task.end:task.end-num(d,'人员结束偏移'))+(configured?num(d,'后延占用分钟'):0);
     if(!(end>start))add(`${task.id} 人员窗口超出实际工序`);
     return {d,ids,key,start,end,count:num(d,'需求数量')};
    });
@@ -127,6 +132,7 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
   }
  }
  if(conditions?.jointConditionsContract){if(plan.jointConditionsContract!==conditions.jointConditionsContract)add('联合条件冻结契约缺失/不符');for(const message of verifyJointConditions(plan,data,conditions))add(message);}
+ const original=verifyOriginalResources(plan,data,conditions||{});if(original?.status==='problem')for(const message of original.details)add(message);
  const findings=resourceConflicts(plan,data,conditions);
  const hasPolicy=enabled('MOLD')||enabled('STORAGE')||(data.dependencies||[]).some(d=>d['资源类型']==='人员技能');
  return {diagnostics,findings,status:problems.length?'problem':tasks.length&&hasPolicy?'pass':'not_checked',details:problems.length?problems:[`工装 ${enabled('MOLD')?'已启用':'未检查（未启用）'}；空间 ${enabled('STORAGE')?'已启用':'未检查（未启用）'}；人员按已配置依赖检查。`,tasks.length&&hasPolicy?'按冻结配置重建已采用的工装/人员窗口、覆盖人数、单向替代、可用期与同池总容量；相邻释放合法。':'没有已排任务或已采用的资源配置可复核。']};

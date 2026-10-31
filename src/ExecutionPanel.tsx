@@ -1,10 +1,11 @@
+import {MockLedger} from './MockLedger';
 import {executionInventory} from './lib/material-allocation.mjs';
 import {executionSummary} from './lib/execution-facts.mjs';
 type Row=Record<string,string>;
 export function ExecutionPanel({data,operations,historical}:{data:Record<string,Row[]>;operations:any[];historical?:any}){
- const summary=executionSummary(data),history=operations.filter(r=>!r.trialId&&['executionFacts','executionMaterials','executionSources','simulationEvents'].includes(r.target));
+ const summary=executionSummary(data),history=operations.filter(r=>!r.trialId&&['originalResourceEvents','executionFacts','executionMaterials','executionSources','simulationEvents'].includes(r.target));
  return <section aria-label="模拟执行事实与历史"><h2>模拟执行事实 / R5</h2><p>所有记录均为离线模拟输入。工序产出不代表质量合格或真实车间执行，不跨工序累加。已耗材料从扣耗前账面中一次扣除；重算只分配余料，不写库存、不入完成量。</p>
- <h3>异常事件与保护时段</h3><p>事件表支持插单、设备故障、人员缺勤、到料延期及物料状态变化。先在同一批输入更新全部在制任务的事件时点累计事实，再接纳事件，最后从当前版本重算。保护策略“禁止未开始任务开工”：保护区间内只保留已有事实/未受影响的显式剩余工作，未开始任务最早在保护截止开工；不承诺冻结旧方案的未执行任务位置。恢复、撤销、转机与自动判合格不支持。</p><p>最近事件分钟 {summary.events.eventMinute} · 未开始任务保护截止 {summary.events.protectionUntil}</p><pre>{JSON.stringify(summary.events.rows,null,2)}</pre>
+ <MockLedger data={data}/><h3>异常事件与保护时段</h3><p>事件表支持插单、设备故障、人员缺勤、到料延期及物料状态变化。先在同一批输入更新全部在制任务的事件时点累计事实，再接纳事件，最后从当前版本重算。保护策略“禁止未开始任务开工”：保护区间内只保留已有事实/未受影响的显式剩余工作，未开始任务最早在保护截止开工；不承诺冻结旧方案的未执行任务位置。恢复、撤销、转机与自动判合格不支持。</p><p>最近事件分钟 {summary.events.eventMinute} · 未开始任务保护截止 {summary.events.protectionUntil}</p><pre>{JSON.stringify(summary.events.rows,null,2)}</pre>
  <p>事实 {summary.facts.length} 条 · 累计耗料 {summary.consumption.length} 条。查询页可按订单、状态、分钟查询两表；数据页可导入模板/示例及编辑。开始/完成原记录、历次修改及操作原因保留。</p>
  {summary.risks.map((risk:any)=><p role="alert" key={(risk.eventId||'current')+risk.factId+risk.message}>{risk.message}</p>)}
  <table><thead><tr><th>模拟事实</th><th>订单 / 工序</th><th>状态</th><th>工序余量</th><th>累计报废</th><th>补做口径</th><th>剩余分钟</th><th>当前设备</th><th>暂停原因</th></tr></thead><tbody>{summary.remaining.map((x:any)=>{const f=summary.facts.find((f:Row)=>f['事实编号']===x.factId);return <tr key={x.factId}><td>{x.factId}</td><td>{x.orderId} / {x.operation}</td><td>{f['状态']}</td><td>{x.remainingQuantity??'未知'} {x.unit}</td><td>{x.scrapQuantity} {x.unit}</td><td>{x.scrapPolicy}</td><td>{x.remainingMinutes}</td><td>{f['当前设备']}</td><td>{f['暂停原因']||'—'}</td></tr>;})}</tbody></table>

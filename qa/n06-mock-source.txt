@@ -1,0 +1,18 @@
+N06 EXPLICIT SYNTHETIC SOURCE — NOT CUSTOMER RECORDS
+Maker: APS-Dev; purpose: implement the fixed ea1338 N06 contract, not supply field facts.
+All records use the existing minute origin 2026-11-02 08:00 +08:00.
+Record s1: original task TASK-A / batch BATCH-A / execution RECORD-A / cumulative F-A.
+Order A MIX output 100kg at minute30; physical tooling one set, space600kg, personnel one person.
+Actual resource windows [0,40); old tool rule post10, current rule may differ.
+Old personnel group old-A / physical old-P, skill A, shift S [0,60), explicit current aliases A / P.
+Tool OLD-T / G40, space OLD-S / SPACE; adopting all three types is explicitly declared.
+Two-member variants explicitly split A 50kg+50kg, with either one shared acquisition or separate acquisitions as labelled.
+Unknown variant: no tooling return known at observation40; task completion is not release evidence.
+Record release: whole tooling return at40, referring to the s1 unknown variant.
+Record correct: original mock recorder corrects erroneous tooling quantity2 to1, not a physical return.
+Record correction: original mock recorder corrects tooling quantity1 to2 after confirmation.
+Record new-actual: same correction1 to2, received while confirmation pending.
+Record ui-correction: same correction1 to2, entered through React after a saved run (confirmation variants are separate).
+Negative variants intentionally remove sources/quantity/adoption/mapping or forge output and must fail closed.
+Historical excess variants retain actual1200kg; the independent replay600+600 in [30,40) exceeds supply1000 by200.
+These records are simulated acceptance inputs. They establish no real customer release, authority, default or UAT sign-off.

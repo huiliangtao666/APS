@@ -5,6 +5,7 @@ import {resourceMappingDef} from './lib/resource-mapping.mjs';
 import {originalResourceDefs} from './lib/original-resources.mjs';
 export type TableDef = { key:string; label:string; file:string; fields:string[] };
 export const defs: TableDef[] = [
+  {key:'originalResourceEvents',label:'MOCK资源取得归还释放账（追加事件）',file:'37_MOCK资源事实账.csv',fields:['事件编号','原账编号','前事件编号','事件类型','原账JSON']},
   { key: 'factoryLines', label: '工厂与产线', file: '01_工厂与产线配置.csv', fields: ['工厂编号','工厂名称','产线编号','产线名称','时区'] },
   { key: 'simulationEvents', label: '模拟异常事件（先更新时点事实）', file: '28_模拟异常事件.csv', fields: ['事件编号','事件分钟','保护截止分钟','保护策略','事件类型','参数JSON','原因','需处理事实JSON'] },
   { key: 'executionSources', label: '模拟进度来源对账（显式映射）', file: '27_模拟进度来源对账.csv', fields: ['来源编号','原始任务编号','事实编号','原始汇总耗料','耗料单位','来源说明','原始分配JSON'] },
@@ -29,7 +30,7 @@ export const defs: TableDef[] = [
   { key: 'calendars', label: '工厂工作日历', file: '02_工厂工作日历.csv', fields: ['日历编号','工厂编号','起始分钟','结束分钟','是否工作','说明'] },
   { key: 'resourceStops', label: '人员与工装停用例外', file: '31_人员与工装停用例外.csv', fields: ['例外编号','资源类型','资源编号','起始分钟','结束分钟','原因'] },
   { key: 'downtime', label: '设备停机例外', file: '04_设备停机与例外日历.csv', fields: ['设备编号','起始分钟','结束分钟','原因'] },
-  { key: 'dependencies', label: '工序资源依赖', file: '12_工序资源与物料依赖.csv', fields: ['订单编号','工序编号','资源类型','资源编号','需求数量','提前占用分钟','后延占用分钟','所需技能','所需班次','候选人员组','人员岗位编号','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'] },
+  { key: 'dependencies', label: '工序资源依赖', file: '12_工序资源与物料依赖.csv', fields: ['订单编号','工序编号','资源类型','资源编号','需求数量','提前占用分钟','后延占用分钟','所需技能','所需班次','候选人员组','人员岗位编号','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放','人员占用基准','人员检查顺序','人员配置来源','人员配置版本'] },
   { key: 'skillSubstitutions', label: '有向技能替代', file: '29_有向技能替代.csv', fields: ['关系编号','可提供技能','所需技能','是否启用','适用工序','说明'] },
   { key: 'personnelPools', label: '物理人员池（P10核心）', file: '30_物理人员池.csv', fields: ['poolId','池名称','总人数','是否启用','允许共用','容量来源','适用范围','生效时间','交接设置','策略版本','策略来源','互斥粒度','交接模式','交接起始分钟','交接结束分钟','交接容量人数','占用策略','释放策略'] },
   { key: 'personnelGroups', label: '人员组与可用时间', file: '19_人员组与可用时间.csv', fields: ['人员组编号','人员组名称','人员数量','技能','班次','可用起始分钟','可用结束分钟','poolId'] },

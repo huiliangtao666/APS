@@ -1,7 +1,7 @@
 import {verifyResourcePolicies} from './verify-resource-policies.mjs';
 import {resourceLoad} from './resource-load.mjs';
 
-export const resourceTables={tools:'工装与套数',resourceClaims:'取得与归还窗口',personnelPools:'共享人员池',personnelGroups:'人数、技能与班次',dependencies:'任务人数与参与窗口',skillSubstitutions:'有向技能替代',rules:'资源规则启用'};
+export const resourceTables={originalResourceEvents:'MOCK取得归还释放账',tools:'工装与套数',resourceClaims:'取得与归还窗口',personnelPools:'共享人员池',personnelGroups:'人数、技能与班次',dependencies:'任务人数与参与窗口',skillSubstitutions:'有向技能替代',rules:'资源规则启用'};
 export const terminalResourceRun=run=>['completed','partial','failed','cancelled','timed_out'].includes(run.status);
 
 // Presentation uses a single saved run and its own immutable input, never today's configuration.
