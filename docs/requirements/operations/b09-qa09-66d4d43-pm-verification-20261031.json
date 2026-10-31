@@ -1,0 +1,220 @@
+{
+  "event_key": "dlv_b807aad3-e1c7-48d4-b5e8-7e872911465b:r1",
+  "inbox_delivery": "dlv_2f5a1e1c-e243-4646-9339-3ef81a282d6c",
+  "receipt": "PROCESSED",
+  "product_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+  "qa_verdict": "PASS complete dispatched UAT09 normalized explicit simulation only",
+  "project_status": "In review",
+  "whole_bundle": "NOT_READY",
+  "verification": {
+    "outer_files_verified": 6,
+    "zip_crc": "PASS",
+    "internal_hashes_verified": 170,
+    "matrix_counts": {
+      "PASS": 23,
+      "PARTIAL": 2,
+      "BLOCKED": 3
+    },
+    "closure_rows": 15,
+    "source_review": "reviewed QA GitHub2086 / runtime2086 evidence; PM did not rebuild or rerun QA"
+  },
+  "qa_artifacts": {
+    "event_key": "dlv_b807aad3-e1c7-48d4-b5e8-7e872911465b:r1",
+    "product_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+    "verdict": "PASS dispatched UAT09 normalized explicit simulation; Issue38 NOT_READY; UAT10/11 not executed",
+    "files": {
+      "B09-UAT09-66d4d43-QA-r1-REPORT.md": {
+        "bytes": 7709,
+        "sha256": "f3c25fd6e966b11e3952ed6158f80976bd061cb3e5a69990ec35405a53b95507"
+      },
+      "B09-UAT09-66d4d43-QA-r1-MATRIX.csv": {
+        "bytes": 7057,
+        "sha256": "f034b4e81a464b3c5ab94197a5e205a85b6441c38300b5c958d9b233bec43931"
+      },
+      "B09-UAT09-66d4d43-QA-r1-CLOSURE.csv": {
+        "bytes": 9018,
+        "sha256": "a95780fa99b99f44572c5260fa781d8f88cbdbc1634a703a571aff381a4cd688"
+      },
+      "B09-UAT09-66d4d43-QA-r1-ENVIRONMENT.json": {
+        "bytes": 87008,
+        "sha256": "1901a7a4657ed1acfa3675bae2d2fac456e7550434cc6a4fb66645e65377e1f9"
+      },
+      "B09-UAT09-66d4d43-QA-r1-ISSUE-LOGS.json": {
+        "bytes": 616,
+        "sha256": "2eb365ff1708e83fccce83cec12d39a6739ca1705caf5e066afa599320070447"
+      },
+      "B09-UAT09-66d4d43-QA-r1-EVIDENCE.zip": {
+        "bytes": 3484839,
+        "sha256": "45174274ed2a33067cf74ba1d747df15304a38687062edc7e12f123c187a38e2"
+      }
+    },
+    "zip_crc": "PASS",
+    "internal_files_hashed": 170,
+    "internal_files_plus_index": 171
+  },
+  "closure": [
+    {
+      "FR_BR_Issue": "FR-002",
+      "approved_scope": "产品/物料、已支持单位和规范化BOM输入",
+      "historical_evidence": "UAT05 96a9dae3ff13d3254c091567fa57cad5d8f37279 #30；UAT07 80841247ac91cae193a452325097234f31e6609e #34；UAT08 12d453d7cb03829dc609115e48c5e4c19af4a6ec #37；保留各原结论，不迁签",
+      "qa_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+      "qa09_contribution": "UAT09适用责任PASS，见QA09-01..23；不签完整FR/其他UAT",
+      "remaining": "本次UAT09责任已通过；10/11及完整FR/原Issue其余责任沿原Dev CLOSURE，未知公式另WAIT_APPROVAL",
+      "owner": "APS-PM统筹；QA仅具体后续派工；未知语义PM→用户",
+      "next_action": "保留原Issue38/唯一原卡，不重开旧卡，不迁签历史PASS"
+    },
+    {
+      "FR_BR_Issue": "FR-009",
+      "approved_scope": "订单数量/需求来源、修改历史及物料联动",
+      "historical_evidence": "UAT05 96a9dae3ff13d3254c091567fa57cad5d8f37279 #30；UAT07 80841247ac91cae193a452325097234f31e6609e #34；UAT08 12d453d7cb03829dc609115e48c5e4c19af4a6ec #37；保留各原结论，不迁签",
+      "qa_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+      "qa09_contribution": "UAT09适用责任PASS，见QA09-01..23；不签完整FR/其他UAT",
+      "remaining": "本次UAT09责任已通过；10/11及完整FR/原Issue其余责任沿原Dev CLOSURE，未知公式另WAIT_APPROVAL",
+      "owner": "APS-PM统筹；QA仅具体后续派工；未知语义PM→用户",
+      "next_action": "保留原Issue38/唯一原卡，不重开旧卡，不迁签历史PASS"
+    },
+    {
+      "FR_BR_Issue": "FR-010",
+      "approved_scope": "库存已有占用/质量/效期/净量",
+      "historical_evidence": "UAT05 96a9dae3ff13d3254c091567fa57cad5d8f37279 #30；UAT07 80841247ac91cae193a452325097234f31e6609e #34；UAT08 12d453d7cb03829dc609115e48c5e4c19af4a6ec #37；保留各原结论，不迁签",
+      "qa_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+      "qa09_contribution": "UAT09适用责任PASS，见QA09-01..23；不签完整FR/其他UAT",
+      "remaining": "本次UAT09责任已通过；10/11及完整FR/原Issue其余责任沿原Dev CLOSURE，未知公式另WAIT_APPROVAL",
+      "owner": "APS-PM统筹；QA仅具体后续派工；未知语义PM→用户",
+      "next_action": "保留原Issue38/唯一原卡，不重开旧卡，不迁签历史PASS"
+    },
+    {
+      "FR_BR_Issue": "FR-011",
+      "approved_scope": "到达≠可用、模拟延期、条件供给",
+      "historical_evidence": "UAT05 96a9dae3ff13d3254c091567fa57cad5d8f37279 #30；UAT07 80841247ac91cae193a452325097234f31e6609e #34；UAT08 12d453d7cb03829dc609115e48c5e4c19af4a6ec #37；保留各原结论，不迁签",
+      "qa_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+      "qa09_contribution": "UAT09无预计供给；完整FR011未本轮复验；保留原05证据",
+      "remaining": "到达≠可用、延期及条件供给的剩余具体责任按原CLOSURE与后续派工；非本09阻断",
+      "owner": "APS-PM统筹；QA仅具体后续派工；未知语义PM→用户",
+      "next_action": "保留原Issue38/唯一原卡，不重开旧卡，不迁签历史PASS"
+    },
+    {
+      "FR_BR_Issue": "BR-08",
+      "approved_scope": "状态与可用时点",
+      "historical_evidence": "UAT05 96a9dae3ff13d3254c091567fa57cad5d8f37279 #30；UAT07 80841247ac91cae193a452325097234f31e6609e #34；UAT08 12d453d7cb03829dc609115e48c5e4c19af4a6ec #37；保留各原结论，不迁签",
+      "qa_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+      "qa09_contribution": "UAT09适用责任PASS，见QA09-01..23；不签完整FR/其他UAT",
+      "remaining": "本次UAT09责任已通过；10/11及完整FR/原Issue其余责任沿原Dev CLOSURE，未知公式另WAIT_APPROVAL",
+      "owner": "APS-PM统筹；QA仅具体后续派工；未知语义PM→用户",
+      "next_action": "保留原Issue38/唯一原卡，不重开旧卡，不迁签历史PASS"
+    },
+    {
+      "FR_BR_Issue": "BR-09",
+      "approved_scope": "FEFO、扣已有占用、投料工序开始检查",
+      "historical_evidence": "UAT05 96a9dae3ff13d3254c091567fa57cad5d8f37279 #30；UAT07 80841247ac91cae193a452325097234f31e6609e #34；UAT08 12d453d7cb03829dc609115e48c5e4c19af4a6ec #37；保留各原结论，不迁签",
+      "qa_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+      "qa09_contribution": "UAT09适用责任PASS，见QA09-01..23；不签完整FR/其他UAT",
+      "remaining": "本次UAT09责任已通过；10/11及完整FR/原Issue其余责任沿原Dev CLOSURE，未知公式另WAIT_APPROVAL",
+      "owner": "APS-PM统筹；QA仅具体后续派工；未知语义PM→用户",
+      "next_action": "保留原Issue38/唯一原卡，不重开旧卡，不迁签历史PASS"
+    },
+    {
+      "FR_BR_Issue": "BR-18",
+      "approved_scope": "精确量/展示分离、原值不反算",
+      "historical_evidence": "UAT05 96a9dae3ff13d3254c091567fa57cad5d8f37279 #30；UAT07 80841247ac91cae193a452325097234f31e6609e #34；UAT08 12d453d7cb03829dc609115e48c5e4c19af4a6ec #37；保留各原结论，不迁签",
+      "qa_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+      "qa09_contribution": "UAT09适用责任PASS，见QA09-01..23；不签完整FR/其他UAT",
+      "remaining": "本次UAT09责任已通过；10/11及完整FR/原Issue其余责任沿原Dev CLOSURE，未知公式另WAIT_APPROVAL",
+      "owner": "APS-PM统筹；QA仅具体后续派工；未知语义PM→用户",
+      "next_action": "保留原Issue38/唯一原卡，不重开旧卡，不迁签历史PASS"
+    },
+    {
+      "FR_BR_Issue": "FR-003",
+      "approved_scope": "现行已支持规范化配方校验，原09字面来源",
+      "historical_evidence": "UAT05 96a9dae3ff13d3254c091567fa57cad5d8f37279 #30；UAT07 80841247ac91cae193a452325097234f31e6609e #34；UAT08 12d453d7cb03829dc609115e48c5e4c19af4a6ec #37；保留各原结论，不迁签",
+      "qa_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+      "qa09_contribution": "UAT09适用责任PASS，见QA09-01..23；不签完整FR/其他UAT",
+      "remaining": "本次UAT09责任已通过；10/11及完整FR/原Issue其余责任沿原Dev CLOSURE，未知公式另WAIT_APPROVAL",
+      "owner": "APS-PM统筹；QA仅具体后续派工；未知语义PM→用户",
+      "next_action": "保留原Issue38/唯一原卡，不重开旧卡，不迁签历史PASS"
+    },
+    {
+      "FR_BR_Issue": "FR-013/014/015/016",
+      "approved_scope": "导入、维护、查询、定位、错误原子拒绝",
+      "historical_evidence": "UAT05 96a9dae3ff13d3254c091567fa57cad5d8f37279 #30；UAT07 80841247ac91cae193a452325097234f31e6609e #34；UAT08 12d453d7cb03829dc609115e48c5e4c19af4a6ec #37；保留各原结论，不迁签",
+      "qa_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+      "qa09_contribution": "UAT09适用责任PASS，见QA09-01..23；不签完整FR/其他UAT",
+      "remaining": "本次UAT09责任已通过；10/11及完整FR/原Issue其余责任沿原Dev CLOSURE，未知公式另WAIT_APPROVAL",
+      "owner": "APS-PM统筹；QA仅具体后续派工；未知语义PM→用户",
+      "next_action": "保留原Issue38/唯一原卡，不重开旧卡，不迁签历史PASS"
+    },
+    {
+      "FR_BR_Issue": "FR-017/018/020/024",
+      "approved_scope": "启用范围、真实Worker、精确齐套/缺口及未排保留",
+      "historical_evidence": "UAT05 96a9dae3ff13d3254c091567fa57cad5d8f37279 #30；UAT07 80841247ac91cae193a452325097234f31e6609e #34；UAT08 12d453d7cb03829dc609115e48c5e4c19af4a6ec #37；保留各原结论，不迁签",
+      "qa_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+      "qa09_contribution": "UAT09适用责任PASS，见QA09-01..23；不签完整FR/其他UAT",
+      "remaining": "本次UAT09责任已通过；10/11及完整FR/原Issue其余责任沿原Dev CLOSURE，未知公式另WAIT_APPROVAL",
+      "owner": "APS-PM统筹；QA仅具体后续派工；未知语义PM→用户",
+      "next_action": "保留原Issue38/唯一原卡，不重开旧卡，不迁签历史PASS"
+    },
+    {
+      "FR_BR_Issue": "FR-025/032/034/035",
+      "approved_scope": "解释、任务/冻结来源联动、库存视图和原生导出",
+      "historical_evidence": "UAT05 96a9dae3ff13d3254c091567fa57cad5d8f37279 #30；UAT07 80841247ac91cae193a452325097234f31e6609e #34；UAT08 12d453d7cb03829dc609115e48c5e4c19af4a6ec #37；保留各原结论，不迁签",
+      "qa_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+      "qa09_contribution": "UAT09适用责任PASS，见QA09-01..23；不签完整FR/其他UAT",
+      "remaining": "本次UAT09责任已通过；10/11及完整FR/原Issue其余责任沿原Dev CLOSURE，未知公式另WAIT_APPROVAL",
+      "owner": "APS-PM统筹；QA仅具体后续派工；未知语义PM→用户",
+      "next_action": "保留原Issue38/唯一原卡，不重开旧卡，不迁签历史PASS"
+    },
+    {
+      "FR_BR_Issue": "AC-22",
+      "approved_scope": "物料缺口下未排及主管部分确认责任",
+      "historical_evidence": "UAT05 96a9dae3ff13d3254c091567fa57cad5d8f37279 #30；UAT07 80841247ac91cae193a452325097234f31e6609e #34；UAT08 12d453d7cb03829dc609115e48c5e4c19af4a6ec #37；保留各原结论，不迁签",
+      "qa_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+      "qa09_contribution": "本09全排无部分确认；未执行10/确认生命周期",
+      "remaining": "UAT10/后续R7主管确认按PM入口另派，不发布",
+      "owner": "APS-PM统筹；QA仅具体后续派工；未知语义PM→用户",
+      "next_action": "保留原Issue38/唯一原卡，不重开旧卡，不迁签历史PASS"
+    },
+    {
+      "FR_BR_Issue": "Issue38（关联4/8/9/25/30/35）",
+      "approved_scope": "唯一联合包，整合互斥模块与证据",
+      "historical_evidence": "UAT05 96a9dae3ff13d3254c091567fa57cad5d8f37279 #30；UAT07 80841247ac91cae193a452325097234f31e6609e #34；UAT08 12d453d7cb03829dc609115e48c5e4c19af4a6ec #37；保留各原结论，不迁签",
+      "qa_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+      "qa09_contribution": "完整本次受派UAT09 PASS；整包NOT_READY",
+      "remaining": "QA10精确0.1kg/未排/无负库存及适用确认；QA11四错误同时定位/原子零写/修正重导。需PM另派；#39开发/main整合已授权，不叫停，不迁签本09结论",
+      "owner": "APS-PM统筹；QA仅具体后续派工；未知语义PM→用户",
+      "next_action": "保留原Issue38/唯一原卡，不重开旧卡，不迁签历史PASS"
+    },
+    {
+      "FR_BR_Issue": "CR-DEC04/05/06",
+      "approved_scope": "仅批准设计/mock，应用实现未授权",
+      "historical_evidence": "UAT05 96a9dae3ff13d3254c091567fa57cad5d8f37279 #30；UAT07 80841247ac91cae193a452325097234f31e6609e #34；UAT08 12d453d7cb03829dc609115e48c5e4c19af4a6ec #37；保留各原结论，不迁签",
+      "qa_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+      "qa09_contribution": "仅保留授权边界，无新增实现验收",
+      "remaining": "APS-PM→用户；原Issue25；WAIT_APPROVAL",
+      "owner": "APS-PM统筹；QA仅具体后续派工；未知语义PM→用户",
+      "next_action": "保留原Issue38/唯一原卡，不重开旧卡，不迁签历史PASS"
+    },
+    {
+      "FR_BR_Issue": "CR-FR010020-RESERVATION",
+      "approved_scope": "effective=false",
+      "historical_evidence": "UAT05 96a9dae3ff13d3254c091567fa57cad5d8f37279 #30；UAT07 80841247ac91cae193a452325097234f31e6609e #34；UAT08 12d453d7cb03829dc609115e48c5e4c19af4a6ec #37；保留各原结论，不迁签",
+      "qa_sha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+      "qa09_contribution": "仅保留授权边界，无新增实现验收",
+      "remaining": "APS-PM→用户；原CR；不新建任务",
+      "owner": "APS-PM统筹；QA仅具体后续派工；未知语义PM→用户",
+      "next_action": "保留原Issue38/唯一原卡，不重开旧卡，不迁签历史PASS"
+    }
+  ],
+  "qa_main_sha": "a0b846e5b7aba5ee165b8d12fabfe8896fbc4ff2",
+  "qa_main_delivery": "dlv_a3864855-314f-4e3a-9896-e005abc15db1",
+  "qa_main_platform_status": "executing",
+  "qa10_11": "NOT_DISPATCHED / NOT_EXECUTED",
+  "next_action": "Wait for already executing final-main UAT09 result, verify each fixed-SHA UAT10/11 entry, then dispatch; no duplicate task",
+  "new_product_fail": 0,
+  "new_issue_logs": 0,
+  "repair_round_increment": 0,
+  "qa_logs_closed": 0,
+  "publication": false,
+  "pm_entry": "https://github.com/huiliangtao666/APS/issues/38#issuecomment-6542168713",
+  "receipt_delivery_mechanism": "one-shot final hook only; no ACK send",
+  "at": "2026-10-31T18:21:30.887980+08:00"
+}
