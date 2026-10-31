@@ -488,6 +488,59 @@
           "project_status": "In progress",
           "uat": "FAIL_OPEN_PENDING_FIX_AND_QA_RETEST",
           "cr_approval_unchanged": true
+        },
+        {
+          "event_key": "b08:qa-uat08:979da18:20261031:r1",
+          "source_delivery": "dlv_2d3e5944-36bb-493d-9965-6592a3be9de4",
+          "product_sha": "979da1827d7190024621e0438a8c0055fed44ad8",
+          "scope": "B08/UAT08 AC07/15/17 personnel slice",
+          "qa_verdict": "FAIL / 退回",
+          "issue_verdict": "NOT_READY",
+          "matrix": {
+            "PASS": 39,
+            "FAIL": 2,
+            "PARTIAL": 1
+          },
+          "verification": {
+            "outer_files": 7,
+            "crc": "PASS",
+            "internal_hashes": 178,
+            "matrix_hashes": 42,
+            "verdict": {
+              "PASS": 39,
+              "FAIL": 2,
+              "PARTIAL": 1
+            },
+            "closure_rows": 18,
+            "closure_verdict": {
+              "PARTIAL": 4,
+              "PASS": 8,
+              "FAIL": 6
+            }
+          },
+          "project_status": "In progress",
+          "qa_result": "https://github.com/huiliangtao666/APS/issues/37#issuecomment-6540837572",
+          "open_product_defects": [
+            "B08-QA-AC17-01",
+            "B08-QA-AC15-02"
+          ],
+          "repair_increment": 0,
+          "existing_delivery_status": {
+            "dlv_352b72b2-e1b9-47a5-aefe-d96bbc204065": "executing",
+            "dlv_6f9e8158-9e70-455d-bfe9-bcae1451e686": "waiting",
+            "dlv_9d041148-0fc2-47ee-9076-70f1f0c05041": "completed"
+          },
+          "new_dispatches": 0,
+          "next": "APS-Dev one fixed non-main candidate and applicable selftest; PM verifies; APS-QA affected retest before Log closure",
+          "remaining_by_package": {
+            "37": "AC17 diagnostic COPY rendering/source navigation and AC15 native export wording; affected retest",
+            "38": "materials unchanged/unstarted",
+            "39": "full process unchanged/unstarted",
+            "40": "progress/adjustment unchanged/unstarted",
+            "41": "whole-line confirmation/report unchanged/unstarted"
+          },
+          "cr_approval_unchanged": true,
+          "no_whole_fr_cr_signoff": true
         }
       ]
     },
@@ -1428,6 +1481,59 @@
           "project_status": "In progress",
           "uat": "FAIL_OPEN_PENDING_FIX_AND_QA_RETEST",
           "cr_approval_unchanged": true
+        },
+        {
+          "event_key": "b08:qa-uat08:979da18:20261031:r1",
+          "source_delivery": "dlv_2d3e5944-36bb-493d-9965-6592a3be9de4",
+          "product_sha": "979da1827d7190024621e0438a8c0055fed44ad8",
+          "scope": "B08/UAT08 AC07/15/17 personnel slice",
+          "qa_verdict": "FAIL / 退回",
+          "issue_verdict": "NOT_READY",
+          "matrix": {
+            "PASS": 39,
+            "FAIL": 2,
+            "PARTIAL": 1
+          },
+          "verification": {
+            "outer_files": 7,
+            "crc": "PASS",
+            "internal_hashes": 178,
+            "matrix_hashes": 42,
+            "verdict": {
+              "PASS": 39,
+              "FAIL": 2,
+              "PARTIAL": 1
+            },
+            "closure_rows": 18,
+            "closure_verdict": {
+              "PARTIAL": 4,
+              "PASS": 8,
+              "FAIL": 6
+            }
+          },
+          "project_status": "In progress",
+          "qa_result": "https://github.com/huiliangtao666/APS/issues/37#issuecomment-6540837572",
+          "open_product_defects": [
+            "B08-QA-AC17-01",
+            "B08-QA-AC15-02"
+          ],
+          "repair_increment": 0,
+          "existing_delivery_status": {
+            "dlv_352b72b2-e1b9-47a5-aefe-d96bbc204065": "executing",
+            "dlv_6f9e8158-9e70-455d-bfe9-bcae1451e686": "waiting",
+            "dlv_9d041148-0fc2-47ee-9076-70f1f0c05041": "completed"
+          },
+          "new_dispatches": 0,
+          "next": "APS-Dev one fixed non-main candidate and applicable selftest; PM verifies; APS-QA affected retest before Log closure",
+          "remaining_by_package": {
+            "37": "AC17 diagnostic COPY rendering/source navigation and AC15 native export wording; affected retest",
+            "38": "materials unchanged/unstarted",
+            "39": "full process unchanged/unstarted",
+            "40": "progress/adjustment unchanged/unstarted",
+            "41": "whole-line confirmation/report unchanged/unstarted"
+          },
+          "cr_approval_unchanged": true,
+          "no_whole_fr_cr_signoff": true
         }
       ]
     },
