@@ -102,7 +102,7 @@
         "originalBom",
         "bom"
       ],
-      "limitation": "original09 six-column source records are separate from versioned calculation BOM and inventory original13"
+      "limitation": "原09六列来源独立保存；运行BOM版本/单位/基准组合须显式批准，不推定映射"
     },
     {
       "number": 10,
@@ -133,19 +133,21 @@
       "number": 13,
       "category": "物料库存批次",
       "tables": [
+        "originalInventory",
         "inventory"
       ],
-      "limitation": "原13现09_库存批次"
+      "limitation": "原列来源保真导入；运行映射未获唯一契约，非空来源阻止新计算；原现行模型继续独立维护"
     },
     {
       "number": 14,
       "category": "预计到料与可用时间",
       "tables": [
+        "originalSupply",
         "supplies",
         "supplyDelays",
         "supplyUses"
       ],
-      "limitation": "原14拆20/21/22"
+      "limitation": "原列来源保真导入；运行映射未获唯一契约，非空来源阻止新计算；原现行模型继续独立维护"
     },
     {
       "number": 15,
@@ -175,19 +177,21 @@
       "number": 18,
       "category": "模拟执行进度",
       "tables": [
+        "originalProgress",
         "executionFacts",
         "executionMaterials",
         "executionSources"
       ],
-      "limitation": "原18拆25/26/27；与18工装区分"
+      "limitation": "原列来源保真导入；运行映射未获唯一契约，非空来源阻止新计算；原现行模型继续独立维护"
     },
     {
       "number": 19,
       "category": "模拟异常与条件变更",
       "tables": [
+        "originalEvents",
         "simulationEvents"
       ],
-      "limitation": "原19现28；19现为人员组"
+      "limitation": "原列来源保真导入；运行映射未获唯一契约，非空来源阻止新计算；原现行模型继续独立维护"
     }
   ],
   "inbound": [
@@ -394,7 +398,7 @@
         "server/input-validation.mjs#validateInputs"
       ],
       "template": "templates/07_产品与包装规格.csv",
-      "approved_validation": "CR-FR013-VALIDATION-20261029: 单支净重kg>0；每袋支数为正整数(支/袋)，不取整；总收率为比例0<值≤1(1=100%)；模拟交付等待分钟显式非负；缺值阻断，无业务默认。"
+      "approved_validation": "CR-FR013-VALIDATION-20261029: 每袋支数为正整数(支/袋)，不取整；总收率为比例0<值≤1(1=100%)；字段显式配置，无新默认。"
     },
     {
       "key": "materials",
@@ -423,8 +427,7 @@
         "src/App.tsx#importCsv",
         "server/input-validation.mjs#validateInputs"
       ],
-      "template": "templates/08_物料主数据.csv",
-      "approved_validation": "CR-FR013-VALIDATION-20261029: 物料单位/类别为必填自定义文本，无固定枚举、不自动换算；沿用关联单位匹配约束。"
+      "template": "templates/08_物料主数据.csv"
     },
     {
       "key": "supplies",
@@ -1206,7 +1209,7 @@
       "validation": [
         "src/lib/resource-mapping.mjs#validateResourceMappings"
       ],
-      "limitations": "READY显式绑定原资料与运行资源；v2同实体多来源须逐字段指定权威，不重复增加容量；草稿或未支持组合阻断"
+      "limitations": "READY只支持DIRECT_IDENTITY、全工厂/*→当前单产线的全局唯一容量；多别名合并、局部/跨线、多窗口、未知公式/单位拒绝；草稿禁止运行"
     },
     {
       "key": "originalBom",
@@ -1243,38 +1246,159 @@
       "limitations": "source persistence does not approve calculation basis/unit/yield/loss/rounding combinations"
     },
     {
-      "key": "originalResourceEvents",
-      "label": "原始资源事实账（追加事件）",
-      "file": "32_原始资源事实账.csv",
+      "key": "originalInventory",
+      "label": "13_物料库存批次.csv",
+      "file": "13_物料库存批次.csv",
       "fields": [
-        "事件编号",
-        "原账编号",
-        "前事件编号",
-        "事件类型",
-        "原账JSON"
+        "批次编号",
+        "物料编号",
+        "库存kg或个",
+        "已占用kg或个",
+        "到达分钟",
+        "最早可用分钟",
+        "质量状态",
+        "到期分钟",
+        "共享范围"
       ],
+      "template": "templates/13_物料库存批次.csv",
+      "example": "examples/13_物料库存批次.csv",
       "uniqueKey": [
-        "事件编号"
+        "批次编号"
       ],
-      "references": "只追加的历史资源账事件；保留来源hash、实际采用清单、原任务及物理身份映射",
-      "units": "原账JSON中的明确单位及实际分钟；未知释放为null",
+      "limitations": "source-only; no inferred runtime values; blocks new calculation pending explicit mapping",
+      "sourceOwner": "v0.3 original CSV provider",
+      "references": "Literal source identity; material references where supplied; runtime mapping pending",
+      "version": "revision + immutable input version + audit; new calculations only after explicit runtime mapping",
       "systems": [
         "APS"
       ],
-      "sourceOwner": "有权原始资源账提供方",
       "direction": "inbound-simulation",
-      "template": "templates/32_原始资源事实账.csv",
+      "units": "Literal source kg-or-count/minute fields; no inferred unit or date conversion",
       "dates": [],
-      "version": "固定输入版本与原始来源；按相应契约保存",
       "validation": [
-        "src/lib/original-resources.mjs#originalIssues"
+        "src/lib/original-stage-data.mjs#validateOriginalStage",
+        "server/input-validation.mjs#validateInputs"
+      ]
+    },
+    {
+      "key": "originalSupply",
+      "label": "14_预计到料与可用时间.csv",
+      "file": "14_预计到料与可用时间.csv",
+      "fields": [
+        "批次编号",
+        "物料编号",
+        "到料kg或个",
+        "已占用kg或个",
+        "到达分钟",
+        "最早可用分钟",
+        "质量状态",
+        "到期分钟",
+        "共享范围"
       ],
-      "limitations": "仅当前显式契约；字段缺失或未知组合阻断，不生成现场默认值"
+      "template": "templates/14_预计到料与可用时间.csv",
+      "example": "examples/14_预计到料与可用时间.csv",
+      "uniqueKey": [
+        "批次编号"
+      ],
+      "limitations": "source-only; no inferred runtime values; blocks new calculation pending explicit mapping",
+      "sourceOwner": "v0.3 original CSV provider",
+      "references": "Literal source identity; material references where supplied; runtime mapping pending",
+      "version": "revision + immutable input version + audit; new calculations only after explicit runtime mapping",
+      "systems": [
+        "APS"
+      ],
+      "direction": "inbound-simulation",
+      "units": "Literal source kg-or-count/minute fields; no inferred unit or date conversion",
+      "dates": [],
+      "validation": [
+        "src/lib/original-stage-data.mjs#validateOriginalStage",
+        "server/input-validation.mjs#validateInputs"
+      ]
+    },
+    {
+      "key": "originalProgress",
+      "label": "18_模拟执行进度.csv",
+      "file": "18_模拟执行进度.csv",
+      "fields": [
+        "任务编号",
+        "状态",
+        "实际开始分钟",
+        "实际结束分钟",
+        "已用投入kg",
+        "说明"
+      ],
+      "template": "templates/18_模拟执行进度.csv",
+      "example": "examples/18_模拟执行进度.csv",
+      "uniqueKey": [
+        "任务编号"
+      ],
+      "limitations": "source-only; no inferred runtime values; blocks new calculation pending explicit mapping",
+      "sourceOwner": "v0.3 original CSV provider",
+      "references": "Literal source identity; material references where supplied; runtime mapping pending",
+      "version": "revision + immutable input version + audit; new calculations only after explicit runtime mapping",
+      "systems": [
+        "APS"
+      ],
+      "direction": "inbound-simulation",
+      "units": "Literal source kg-or-count/minute fields; no inferred unit or date conversion",
+      "dates": [],
+      "validation": [
+        "src/lib/original-stage-data.mjs#validateOriginalStage",
+        "server/input-validation.mjs#validateInputs"
+      ]
+    },
+    {
+      "key": "originalEvents",
+      "label": "19_模拟异常与条件变更.csv",
+      "file": "19_模拟异常与条件变更.csv",
+      "fields": [
+        "事件编号",
+        "发生分钟",
+        "对象编号",
+        "变更字段",
+        "原值",
+        "新值",
+        "说明"
+      ],
+      "template": "templates/19_模拟异常与条件变更.csv",
+      "example": "examples/19_模拟异常与条件变更.csv",
+      "uniqueKey": [
+        "事件编号"
+      ],
+      "limitations": "source-only; no inferred runtime values; blocks new calculation pending explicit mapping",
+      "sourceOwner": "v0.3 original CSV provider",
+      "references": "Literal source identity; material references where supplied; runtime mapping pending",
+      "version": "revision + immutable input version + audit; new calculations only after explicit runtime mapping",
+      "systems": [
+        "APS"
+      ],
+      "direction": "inbound-simulation",
+      "units": "Literal source kg-or-count/minute fields; no inferred unit or date conversion",
+      "dates": [],
+      "validation": [
+        "src/lib/original-stage-data.mjs#validateOriginalStage",
+        "server/input-validation.mjs#validateInputs"
+      ]
     },
     {
       "key": "resourceStops",
       "label": "人员与工装停用例外",
       "file": "31_人员与工装停用例外.csv",
+      "template": "templates/31_人员与工装停用例外.csv",
+      "example": "templates/31_人员与工装停用例外.csv",
+      "sourceOwner": "authorized resource configuration owner",
+      "references": "Explicit existing resource-policy contract; no inferred values",
+      "version": "revision + policy version + immutable run input",
+      "systems": [
+        "APS"
+      ],
+      "direction": "inbound-simulation",
+      "units": "Explicit 人/分钟 and policy fields as declared; no default values",
+      "dates": [],
+      "validation": [
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "limitations": "Header template is empty; populate explicit approved configuration before enabling",
       "fields": [
         "例外编号",
         "资源类型",
@@ -1285,26 +1409,27 @@
       ],
       "uniqueKey": [
         "例外编号"
-      ],
-      "references": "人员组或工装停用例外；按显式资源类型与编号关联现有资源",
-      "units": "分钟；0=2026-11-02T08:00:00+08:00",
-      "systems": [
-        "APS"
-      ],
-      "sourceOwner": "授权日历配置维护人",
-      "direction": "inbound-simulation",
-      "template": "templates/31_人员与工装停用例外.csv",
-      "dates": [],
-      "version": "固定输入版本与原始来源；按相应契约保存",
-      "validation": [
-        "src/lib/working-windows.mjs"
-      ],
-      "limitations": "仅当前显式契约；字段缺失或未知组合阻断，不生成现场默认值"
+      ]
     },
     {
       "key": "personnelPools",
       "label": "物理人员池（P10核心）",
       "file": "30_物理人员池.csv",
+      "template": "templates/30_物理人员池.csv",
+      "example": "templates/30_物理人员池.csv",
+      "sourceOwner": "authorized resource configuration owner",
+      "references": "Explicit existing resource-policy contract; no inferred values",
+      "version": "revision + policy version + immutable run input",
+      "systems": [
+        "APS"
+      ],
+      "direction": "inbound-simulation",
+      "units": "Explicit 人/分钟 and policy fields as declared; no default values",
+      "dates": [],
+      "validation": [
+        "server/input-validation.mjs#validateInputs"
+      ],
+      "limitations": "Header template is empty; populate explicit approved configuration before enabling",
       "fields": [
         "poolId",
         "池名称",
@@ -1327,21 +1452,7 @@
       ],
       "uniqueKey": [
         "poolId"
-      ],
-      "references": "人员物理池与显式共享/交接策略；组通过poolId引用；策略版本及来源须显式保存",
-      "units": "人数为安全整数；时间为半开分钟区间",
-      "systems": [
-        "APS"
-      ],
-      "sourceOwner": "授权资源配置维护人",
-      "direction": "inbound-simulation",
-      "template": "templates/30_物理人员池.csv",
-      "dates": [],
-      "version": "固定输入版本与原始来源；按相应契约保存",
-      "validation": [
-        "src/lib/physical-pools.mjs#validatePhysicalPools"
-      ],
-      "limitations": "仅当前显式契约；字段缺失或未知组合阻断，不生成现场默认值"
+      ]
     }
   ],
   "outbound": [

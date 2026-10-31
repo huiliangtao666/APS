@@ -6,7 +6,21 @@ const editor=()=>page.getByRole('region',{name:'模拟记录编辑',exact:true})
 const field=(key,i,k)=>editor().getByLabel(`${defs.find(d=>d.key===key).label} ${i+1} ${k}`,{exact:true});
 async function category(key){await page.getByRole('button',{name:'数据与 CSV',exact:true}).click();await page.locator('.data-tabs').getByRole('button',{name:defs.find(d=>d.key===key).label,exact:false}).click();}
 async function load(){await page.goto(f.url);await page.getByLabel('操作原因',{exact:true}).fill('P06显式合成输入，非现场默认值');}
-async function save(status=200){const before=f.bytes(),wait=page.waitForResponse(r=>r.url().endsWith('/api/inputs')&&r.request().method()==='POST');await editor().getByRole('button',{name:'保存修改',exact:true}).click();const r=await wait,body=await r.json();assert.equal(r.status(),status,JSON.stringify(body));if(status!==200)assert.equal(f.bytes(),before);else await editor().getByRole('status').filter({hasText:/保存完成|内容相同/}).waitFor();return {status,body,beforeHash:hash(before),afterHash:hash(f.bytes())};}
+async function save(status=200){
+ if(status===200&&!await editor().getByRole('button',{name:'保存修改',exact:true}).isEnabled()){
+  // P10 explicit policies require a zero-write draft preview before saving.
+  const before=f.bytes();
+  await editor().getByLabel('预览订单',{exact:true}).selectOption('A');
+  await editor().getByLabel('预览工序',{exact:true}).fill('MIX');
+  await editor().getByLabel('候选开始分钟',{exact:true}).fill('0');
+  await editor().getByLabel('候选结束分钟',{exact:true}).fill('30');
+  const pending=page.waitForResponse(r=>r.url().endsWith('/api/inputs/resource-policy-preview'));
+  await editor().getByRole('button',{name:'预览人员策略影响',exact:true}).click();
+  const response=await pending;assert.equal(response.status(),200,JSON.stringify(await response.json()));
+  await editor().getByLabel('联合排程影响预览',{exact:true}).waitFor();
+  assert.equal(f.bytes(),before);report.guards.push({label:'required P10 draft preview is zero-write'});
+ }
+ const before=f.bytes(),wait=page.waitForResponse(r=>r.url().endsWith('/api/inputs')&&r.request().method()==='POST');await editor().getByRole('button',{name:'保存修改',exact:true}).click();const r=await wait,body=await r.json();assert.equal(r.status(),status,JSON.stringify(body));if(status!==200)assert.equal(f.bytes(),before);else await editor().getByRole('status').filter({hasText:/保存完成|内容相同/}).waitFor();return {status,body,beforeHash:hash(before),afterHash:hash(f.bytes())};}
 async function change(key,i,k,v){await category(key);await field(key,i,k).fill(v);const s=await save();await page.reload();await page.getByLabel('操作原因',{exact:true}).fill('P06保存后刷新');await category(key);assert.equal(await field(key,i,k).inputValue(),v);report.guards.push({label:`UI save/reload ${key}[${i}].${k}=${v}`,s});}
 async function worker(label,count){
  await page.getByRole('button',{name:'排程工作台',exact:true}).click();

@@ -1,11 +1,13 @@
+import {originalStageDefs,originalStageNote} from './lib/original-stage-data.mjs';
 import {originalBomNote} from './lib/original-bom.mjs';
+import type {CsvProblem,CheckedCsvInput,OpenCsvProblem} from './lib/problem-records.mjs';
 import {MasterDataContract} from './MasterDataContract';
 import {useEffect,useRef,useState} from 'react';
 type Row=Record<string,string>;
-type Issue={file:string;row:number;field:string;reason?:string;message?:string};
-type Preview={id?:string;valid:boolean;issues:Issue[];tables:Record<string,Row[]>;sources:Record<string,{lines:number[];headers:string[]}>};
+type Issue=CsvProblem;
+type Preview={checkedInput?:CheckedCsvInput;id?:string;valid:boolean;issues:Issue[];tables:Record<string,Row[]>;sources:Record<string,{lines:number[];headers:string[]}>};
 const errors:Record<string,string>={stale_preview:'预览后数据或历史记录已变化，请重新选择文件预览。',stale_input:'输入版本已变化，请刷新后重新预览。',preview_expired_or_unowned:'预览已过期或身份已变化，请重新预览。',forbidden:'当前角色没有导入权限。',reason_required:'请填写操作原因。'};
-export function SingleCsvPanel({table,rows,revision,canWrite,busy,api,refresh}:{table:{key:string;label:string;fields:string[]};rows:Row[];revision:number;canWrite:boolean;busy:boolean;api:(path:string,body:object)=>Promise<any>;refresh:()=>Promise<void>}){
+export function SingleCsvPanel({table,rows,revision,canWrite,busy,api,refresh,onProblem}:{table:{key:string;label:string;fields:string[]};rows:Row[];revision:number;canWrite:boolean;busy:boolean;api:(path:string,body:object)=>Promise<any>;refresh:()=>Promise<void>;onProblem:OpenCsvProblem}){
  const [preview,setPreview]=useState<Preview|null>(null),[pending,setPending]=useState(false),[message,setMessage]=useState(''),[name,setName]=useState('');
  const generation=useRef(0),editor=useRef<HTMLTextAreaElement>(null),[text,setText]=useState('');
  useEffect(()=>()=>{generation.current++;},[]);
@@ -26,11 +28,12 @@ export function SingleCsvPanel({table,rows,revision,canWrite,busy,api,refresh}:{
   catch(e:any){if(run===generation.current){setPreview(null);setMessage(errors[e.detail?.error]||e.message);}}
   finally{if(run===generation.current)setPending(false);}
  }
- function locate(issue:Issue){const el=editor.current;if(!el)return;const text=el.value,lines=[0];for(let i=0;i<text.length;i++){if(text[i]==='\r'){if(text[i+1]==='\n')i++;lines.push(i+1);}else if(text[i]==='\n')lines.push(i+1);}el.focus();el.setSelectionRange(lines[Math.max(0,issue.row-1)]??0,lines[issue.row]??text.length);}
+ function locate(issue:Issue){onProblem(issue,preview?.checkedInput);const el=editor.current;if(!el)return;const text=el.value,lines=[0];for(let i=0;i<text.length;i++){if(text[i]==='\r'){if(text[i+1]==='\n')i++;lines.push(i+1);}else if(text[i]==='\n')lines.push(i+1);}el.focus();el.setSelectionRange(lines[Math.max(0,issue.row-1)]??0,lines[issue.row]??text.length);}
  const proposed=preview?.tables[table.key],disabled=!canWrite||busy||pending;
  return <section data-csv-single aria-label="单表 CSV 导入"><h3>单表 CSV 导入 · {table.label}</h3>
- { table.key==='originalBom'&&<p data-original-bom-contract>{originalBomNote}</p>}
- <MasterDataContract table={table.key}/>
+  {originalStageDefs.some(d=>d.key===table.key)&&<p>{originalStageNote}</p>}
+ {table.key==='originalBom'&&<p data-original-bom-contract>{originalBomNote}</p>}
+<MasterDataContract table={table.key}/>
  <label className="upload">导入 CSV<input aria-label="导入单表 CSV" type="file" accept=".csv,text/csv" disabled={disabled} onChange={e=>{const file=e.target.files?.[0];e.target.value='';if(file)void inspect(file);}}/></label>
  <p role="status">{message}</p>
  {name&&<div role="region" aria-label="单表导入预览"><h4>{name} · 导入前检查与变更预览</h4>

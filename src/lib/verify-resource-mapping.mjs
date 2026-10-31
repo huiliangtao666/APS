@@ -49,6 +49,12 @@ export function verifyResourceMappingSnapshot(d,conditions){
   }
  }
  if(conditions.originalResourceContract==='FR013-resource-map-v2'&&conditions.originalResourceEntities?.length!==identities.size)problems.push('冻结实体数量与唯一运行身份不一致');
- for(const [key,id] of [['originalTools','资源编号'],['originalPersonnel','人员组编号']])for(const s of d[key]||[])if(d.resourceMappings.filter(m=>m['来源类别']===key&&m['来源编号']===s[id]&&m['状态']==='READY').length!==1)problems.push(`${s[id]} 原记录缺唯一READY映射`);
+ for(const [key,id] of [['originalTools','资源编号'],['originalPersonnel','人员组编号']])for(const s of d[key]||[]){
+  if((d.originalDependencies||[]).length){const types=key==='originalTools'?['模具','工具']:['人员'],rule=key==='originalTools'?'MOLD':'LABOR';
+   const enabled=(d.rules||[]).some(r=>r['规则编号']===rule&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(conditions.ruleEvaluationAt)));
+   if(!enabled||!d.originalDependencies.some(r=>types.includes(r['资源类型'])&&r['资源编号']===s[id]))continue;
+  }
+  if(d.resourceMappings.filter(m=>m['来源类别']===key&&m['来源编号']===s[id]&&m['状态']==='READY').length!==1)problems.push(`${s[id]} 原记录缺唯一READY映射`);
+ }
  return problems;
 }

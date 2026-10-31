@@ -14,11 +14,11 @@ export function validateJointResources(data,at){
  const issues=[],flags=jointFlags(data,at),claims=data.resourceClaims||[];
  const refs=(table,rows)=>sourceRefs(table,rows,data[table]||[]);
  const add=(message,table='resourceClaims',row=0,relatedRecords=[],extra={})=>issues.push({code:'INPUT / JOINT_RESOURCE',message,table,row,relatedRecords,...extra});
- const toolRows=data.tools||[],toolSources=sourceRefs('tools',toolRows,toolRows);
- issues.push(...validateToolRows(toolRows).map(issue=>({...issue,relatedRecords:issue.field==='工装编码'&&toolRows[issue.row-2]?.['工装编码']?.trim()?toolSources.filter((source,index)=>toolRows[index]['工装编码']?.trim()===toolRows[issue.row-2]['工装编码'].trim()):toolSources.slice(issue.row-2,issue.row-1)})));
- for(const [index,tool] of toolRows.entries())for(const field of ['可用数量','每任务需求数量']){
-  if((!decimal(tool[field])||!Number.isSafeInteger(Number(tool[field]))||Number(tool[field])<1)&&!issues.some(issue=>issue.table==='tools'&&issue.row===index+2&&issue.field===field))
-   add(`工装 ${tool['工装编码']} ${field} 须为安全正整数套，不支持科学计数或其他单位`,'tools',index+2,toolSources.slice(index,index+1),{file:'18_工装配置.csv',field});
+ issues.push(...validateToolRows(data.tools||[]).map(issue=>({...issue,relatedRecords:refs('tools',issue.field==='工装编码'&&(data.tools||[])[issue.row-2]?.['工装编码']?(data.tools||[]).filter(t=>t['工装编码']===(data.tools||[])[issue.row-2]['工装编码']):[(data.tools||[])[issue.row-2]]).map(ref=>({...ref,field:issue.field}))})));
+ for(const [i,t] of (data.tools||[]).entries())for(const k of ['可用数量','每任务需求数量']){
+  // Keep the stricter safe/decimal contract, without duplicating an existing field error.
+  if((!decimal(t[k])||!Number.isSafeInteger(Number(t[k]))||Number(t[k])<1)&&!issues.some(issue=>issue.table==='tools'&&issue.row===i+2&&issue.field===k))
+   issues.push({code:'INPUT / JOINT_RESOURCE',message:`工装 ${t['工装编码']} ${k} 须为安全正整数套，不支持科学计数或其他单位`,table:'tools',file:'18_工装配置.csv',row:i+2,field:k});
  }
  const seen=new Set();
  for(const [i,raw] of claims.entries()){

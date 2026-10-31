@@ -1,7 +1,8 @@
-import {sourceRefs} from './problem-records.mjs';
 import {verifyResourceMappingSnapshot} from './verify-resource-mapping.mjs';
+import {verifyOriginalDependencies} from './verify-original-dependencies.mjs';
 import {verifyJointConditions} from './verify-joint-conditions.mjs';
 import {hasPhysicalPools,validatePhysicalPools} from './physical-pools.mjs';
+import {sourceRefs} from './problem-records.mjs';
 import {resourceConflicts} from './resource-conflicts.mjs';
 import {quantityMath as Q} from './material-allocation.mjs';
 // Fixed-output checker: rebuild expected windows from frozen inputs, never call
@@ -16,7 +17,7 @@ export function verifyResourcePolicies(plan,data,conditions=plan.conditions){
  if(!['resourceClaims','tools','dependencies','personnelGroups','batchResources','skillSubstitutions'].every(k=>Array.isArray(data[k])))return unchecked('冻结资源配置不完整，无法重建需求；未检查。');
  if(['P10-core-v1','P10-explicit-v2'].includes(conditions?.personnelPoolContract)&&(!Array.isArray(data.personnelPools)||!data.personnelPools.length))return {status:'problem',details:['P10冻结契约缺少物理池表，禁止降级按组容量复核']};
  if(data.personnelPools!==undefined&&!Array.isArray(data.personnelPools))return {status:'problem',details:['冻结物理池表结构无效']};
- const problems=verifyResourceMappingSnapshot(data,conditions),reservations=plan.resourceReservations||[],tasks=plan.tasks||[];
+ const problems=[...verifyResourceMappingSnapshot(data,conditions),...verifyOriginalDependencies(data,conditions)],reservations=plan.resourceReservations||[],tasks=plan.tasks||[];
  let context=[];const diagnostics=[];const refs=(table,rows)=>sourceRefs(table,rows,data[table]||[]);
  const add=(m,relatedRecords=context)=>{problems.push(m);diagnostics.push({code:'VERIFY / RESOURCE_POLICY',message:m,taskIds:[],relatedRecords,sourceRead:'frozen resource policy checker',...(!relatedRecords.length?{associationGap:'复核实际结果未提供可定位的输入记录；保留结果诊断，不从任务或文本推断来源。'}:{})});},num=(r,k,fallback=0)=>Number(r[k]??fallback);
  const enabled=id=>(data.rules||[]).some(r=>r['规则编号']===id&&r['是否启用']==='是'&&(!conditions?.enabledRuleIds||conditions.enabledRuleIds.includes(id))&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at)));

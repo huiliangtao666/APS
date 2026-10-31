@@ -32,9 +32,9 @@ export function bindProblemSource(finding, source, original, sourceMap, csvSourc
   }
   if(ref.sourceContext==='executionContext'&&(!original?.[ref.table]?.[occurrence.index]||JSON.stringify(original[ref.table][occurrence.index])!==JSON.stringify(ref.row)))return {...ref,origin:undefined};
   const csv=csvSources?.[ref.table],index=occurrence.index;
-  const same=csv?.canonicalRows?.[index]&&JSON.stringify(csv.canonicalRows[index])===JSON.stringify(ref.row);
-  const mapping=csv?.mappings?.find(m=>m.quantityField===ref.field||m.unitField===ref.field);
-  const field=ref.field||'',sourceField=mapping?.sourceField||field;
+  const same=Number.isInteger(csv?.lines?.[index])&&csv.lines[index]>0&&csv.sha256&&csv?.canonicalRows?.[index]&&JSON.stringify(csv.canonicalRows[index])===JSON.stringify(ref.row);
+  const mapping=csv?.mappings?.find(m=>m.quantityField===(ref.field||finding.field)||m.unitField===(ref.field||finding.field));
+  const field=ref.field||finding.field||'',sourceField=mapping?.sourceField||field;
   return {...ref,origin:{...source,occurrence},...(same?{csv:{file:csv.file,physicalRow:csv.lines[index],field,sourceField,occurrence:index,sha256:csv.sha256,originalValue:csv.records?.[index]?.values?.[sourceField]??null,mapping:mapping||null,repair:csv.repairs?.find(r=>r.row===csv.lines[index]&&r.field===field)||null}}:{associationGap:'该冻结记录没有可验证的CSV物理行来源；仅保留逻辑发生位置，不猜测当前同行。'})};
  })};
 }

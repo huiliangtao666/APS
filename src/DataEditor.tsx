@@ -1,23 +1,26 @@
+import {originalStageDefs,originalStageNote} from './lib/original-stage-data.mjs';
+import {ResourceWorkbench} from './ResourceWorkbench';
+import {resourceTables} from './lib/resource-workbench.mjs';
 import {originalBomNote} from './lib/original-bom.mjs';
-import {currentRecord,type IdentityContext,type RecordRef} from './lib/problem-records.mjs';
 import {MasterDataContract} from './MasterDataContract';
 import {OriginalResourceConfig} from './OriginalResourceConfig';
 import {PersonnelPolicyTrial} from './PersonnelPolicyTrial';
 import {PolicyPreview,policyOptions,policyInputSpec} from './PolicyPreview';
+import {currentRecord,type IdentityContext,type RecordRef} from './lib/problem-records.mjs';
 import {useEffect,useState} from 'react';
 import {recordIdentity} from './lib/record-identity.mjs';
 import {StructuredValue,fieldLabel} from './StructuredValue';
 import {type TableDef} from './data-defs';
 type Row=Record<string,string>;
-export type EditProps={identityContext?:IdentityContext;initialRecord?:RecordRef|null;data?:Record<string,Row[]>;def:TableDef;rows:Row[];revision:number;canWrite:boolean;busy:boolean;reason:string;onPolicyPreview?:(tables:Record<string,Row[]>,revision:number)=>Promise<any>;onLocate?:(table:string)=>void;onSave:(tables:Record<string,Row[]>,revision:number,operation:string)=>Promise<void|{unchanged?:boolean;revision?:number}>};
+export type EditProps={identityContext?:IdentityContext;initialRecord?:RecordRef|null;data?:Record<string,Row[]>;def:TableDef;rows:Row[];revision:number;canWrite:boolean;busy:boolean;reason:string;onLocate?:(table:string)=>void;onPolicyPreview?:(tables:Record<string,Row[]>,revision:number)=>Promise<any>;onSave:(tables:Record<string,Row[]>,revision:number,operation:string)=>Promise<void|{unchanged?:boolean;revision?:number}>};
 export function DataEditor({initialRecord,identityContext,data={},def,rows,revision,canWrite,busy,reason,onSave,onLocate,onPolicyPreview}:EditProps){
  const [drafts,setDrafts]=useState<Record<string,Row[]>>({});
  const draft=Object.keys(drafts).length>0;
- useEffect(()=>{const target=initialRecord?.table===def.key?currentRecord(initialRecord,data,identityContext):null;setSelected(target?[target.index]:[]);if(target)document.getElementById(`edit-${def.key}-${target.index}-${def.fields[0]}`)?.scrollIntoView({block:'center'});},[def.key,initialRecord,revision]);
  const [previewed,setPreviewed]=useState('');
  const policyDraft=['personnelPools','personnelGroups','dependencies'].some(k=>drafts[k]);
  const draftKey=JSON.stringify(drafts);
  const needsPreview=!!drafts.resourceMappings?.some(m=>m['状态']==='READY')||policyDraft&&(drafts.personnelPools||data.personnelPools||[]).some(p=>p['策略版本']==='P10-explicit-v2'&&p['是否启用']==='是');
+ useEffect(()=>{const target=initialRecord?.table===def.key?currentRecord(initialRecord,data,identityContext):null;setSelected(target?[target.index]:[]);if(target)document.getElementById(`edit-${def.key}-${target.index}-${def.fields[0]}`)?.scrollIntoView({block:'center'});},[def.key,initialRecord,revision]);
  const [base,setBase]=useState(revision);
  const [selected,setSelected]=useState<number[]>([]);
  const [operation,setOperation]=useState('edit');
@@ -39,14 +42,16 @@ export function DataEditor({initialRecord,identityContext,data={},def,rows,revis
  function change(next:Row[],op='edit'){if(!draft)setBase(revision);setDrafts({...drafts,[def.key]:next});setOperation(op);setSaved('');setError('');setIssues([]);}
  async function save(){if(!draft)return;setSaving(true);setError('');try{const result=await onSave(drafts,base,operation);setSaved(result?.unchanged?'内容相同，未新增版本或操作记录。':'保存完成，当前输入已更新；原方案及其输入保留。');setDrafts({});setSelected([]);}catch(e){setError(e instanceof Error?e.message:'保存失败');setIssues((e as any)?.detail?.issues||[]);}finally{setSaving(false);}}
  return <section aria-label="模拟记录编辑">
+  {Object.prototype.hasOwnProperty.call(resourceTables,def.key)&&<ResourceWorkbench data={data} revision={revision} reason={reason} canWrite={canWrite} busy={busy} draftPending={draft} onLocate={onLocate}/>}
   <p>可跨类别暂存修改，全部草稿一起保存；新增工艺路线和工时等关联数据须一起保存。离开数据页将丢弃草稿。修改先保存在本页草稿，点击“保存修改”后由服务端检查；取消不会写入。复制后请填写新的唯一编号。删除仅影响新输入版本，已保存方案保留原输入。质量状态均为模拟状态。</p>
   {def.key==='factoryLines'&&<p>五字段须显式填写，时区使用 IANA 名称（如 Asia/Shanghai）；不自动填充值。首次配置须覆盖现有机器、订单的产线及日历的工厂引用。可维护未投入排程的产线记录，R1 仍只允许一条排程产线。修改保存为新输入版本，已确认方案的原始输入保留。</p>}
   {def.key==='simulationEvents'&&<p>FR029：先更新全部在制任务观测分钟为事件时点，再保存完整事件集合；可跨表暂存后一并保存。保护策略仅支持“禁止未开始任务开工”，需处理事实JSON留空由服务器判定。故障/耗料影响事实永久保留待处理；恢复、转机、撤销及旧方案未执行任务锁定未定。模拟物料状态不代表QA在线放行。</p>}
   {["executionFacts","executionMaterials","executionSources"].includes(def.key)&&<p>FR031 模拟累计口径：可用产出与报废分开，不跨工序累加；空报废按零处理。正报废量须明确“按本工序BOM补做”或“待核对”；工时独立填写。来源汇总缺少显式物料/批次分配时阻断，不自动分批。已开始/完成事实、已耗批次、原始来源不允许删除或覆盖。</p>}
- { def.key==='originalBom'&&<p data-original-bom-contract>{originalBomNote}</p>}
- <MasterDataContract table={def.key}/>
   {['tools','resourceClaims'].includes(def.key)&&<p role="note">建议初始值 / 请核对实际业务。新建工装：可用套数1、每任务需求套数1、提前取得0分钟、后延归还0分钟；新建占用声明：完整工序（显式逐生产批完整区间），窗口偏移0。仅点击“保存修改”后生效，未保存不作用新试算。来源：2026-10-30用户授权的建议，不是客户现场事实。工装编码、适用工序、真实可用起止及共享范围须按实际业务或明确CSV来源填写；同一实体请使用同一编号共享容量，不能按设备复制容量。表23仍须显式填写资源身份、订单/工序、单位及参数来源；选择“工装配置”采用表18套数/提前/后延时，表23对应三个字段须留空。时间为半开区间。已有记录、复制及CSV/API不补建议值。</p>}
-  {def.key==='originalResourceEvents'&&<p>N06：原账只追加事件，不编辑或删除已有行。登记/草稿须有来源；释放/纠正填写前事件编号和独立原件。原账JSON包含原事实修订、原任务批清册、实际采用/未采用清单、历史规则、身份映射、逐资源实际量/单位/取得/释放及提供方。只支持每资源单连续窗口及一次全部释放。未知释放显示阻断，不能填计划结束。合成数据须标明确模拟，真实原件须由有权提供方核对。</p>}
+  {originalStageDefs.some(d=>d.key===def.key)&&<p>{originalStageNote}</p>}
+  {def.key==='originalDependencies'&&<p>原12八列按原文保存，包括“由BOM计算”。设备按原编号映射；启用工装须配置原05运行绑定及表23声明，启用人员须配置原06绑定、班次、物理池和参与窗。关闭或未生效类别仅保留来源；启用但缺映射或物料计算合同则整批拒绝。运行依赖补充CSV使用32_运行工序资源依赖.csv，禁止用规范化值覆盖原文。</p>}
+ {def.key==='originalBom'&&<p data-original-bom-contract>{originalBomNote}</p>}
+<MasterDataContract table={def.key}/>
   {['resourceMappings','originalTools','originalPersonnel'].includes(def.key)&&<OriginalResourceConfig key={draftKey} data={{...data,...drafts}} disabled={disabled} onDraft={rows=>{if(!draft)setBase(revision);setDrafts({...drafts,resourceMappings:rows});setSaved('');}} onPreview={onPolicyPreview?async()=>{const result=await onPolicyPreview(Object.keys(drafts).length?drafts:{resourceMappings:data.resourceMappings||[]},base);setPreviewed(draftKey);return result;}:undefined}/>}
   <PolicyPreview table={def.key} data={{...data,...drafts}} revision={revision}/>
   {['personnelPools','personnelGroups','dependencies'].includes(def.key)&&<PersonnelPolicyTrial key={draftKey} data={{...data,...drafts}} saved={data} schedulePreview={onPolicyPreview?()=>onPolicyPreview(Object.keys(drafts).length?drafts:{personnelPools:data.personnelPools||[]},base):undefined} onPreview={()=>setPreviewed(draftKey)}/>}

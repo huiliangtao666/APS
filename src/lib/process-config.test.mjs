@@ -62,7 +62,9 @@ test('FR-005 validates unique machine identifiers and supported operation applic
     {'设备编号':'M3','工序编号':''},
   ]});
   assert.ok(issues.some(x => x.code === 'INPUT / MACHINE_DUPLICATE'));
-  assert.ok(issues.some(x => x.code === 'INPUT / MACHINE_OPERATION_REFERENCE'));
+  assert.ok(!issues.some(x => x.code === 'INPUT / MACHINE_OPERATION_REFERENCE'));
+  const referenced={...base,machines:[{'设备编号':'UNUSED','工序编号':'NOPE'}],dependencies:[{...base.dependencies?.[0], '订单编号':'A','工序编号':'OP-A','资源类型':'设备','资源编号':'UNUSED'}]};
+  assert.ok(validateProcessConfig(referenced).some(x=>x.code==='INPUT / MACHINE_OPERATION_REFERENCE'));
   assert.ok(issues.some(x => x.code === 'INPUT / MACHINE_OPERATION_REQUIRED'));
 });
 

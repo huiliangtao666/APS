@@ -71,13 +71,20 @@ export function calculateMaterialDemand(data,order,operation,minute,remainingKg,
  });
 }
 export function createMaterialAllocator(data,policy) {
- const used=new Map();let generation=0;
+ const used=new Map();
  for(const c of data.executionMaterials||[]){const key="inventory:"+c["批次编号"];used.set(key,add(used.get(key)||zero,q(c["累计已用数量"])));}
  const resolved=resolveExpectedSupply(data.supplies||[],data.supplyDelays||[]);
  const collisions=resolved.filter(s=>(data.inventory||[]).some(b=>b['批次编号']===s['批次编号']));
  const futureMinutes=[...(data.inventory||[]).map(b=>b['预计可用时间']),...resolved.map(s=>s['生效可用时间'])].filter(Boolean).map(t=>(Date.parse(t)-Date.parse(PLAN_TIME_ORIGIN))/60000).filter(Number.isFinite).sort((a,b)=>a-b);
- return {
+ const ledger=used=>{let generation=0;return {
   futureMinutes,
+  begin(){
+   const base=generation,privateUsed=new Map(used),local=ledger(privateUsed),rows=[];let closed=false;
+   const open=()=>{if(closed)throw Error('分配事务已结束');};
+   return {stage(demands,minute,trace=()=>{}){open();const p=local.preview(demands,minute,trace);if(p.ok)p.commit();p.rows.forEach(r=>r.committed=false);rows.push(...p.rows);return {ok:p.ok,rows:p.rows};},
+    commit(){open();if(base!==generation)throw Error('过期事务；须重新检查全部候选');if(rows.some(r=>r.exactShortage.numerator!=='0'))throw Error('缺料事务不能提交');for(const [k,v]of privateUsed)used.set(k,v);rows.forEach(r=>r.committed=true);generation++;closed=true;},
+    rollback(){open();closed=true;},rows};
+  },
   preview(demands,minute,trace=()=>{}){
    if(collisions.length){
     // Resolve preserves supply occurrence order; trace original inputs, never the derived rows.
@@ -88,7 +95,9 @@ export function createMaterialAllocator(data,policy) {
    const baseGeneration=generation;let committed=false;const staged=new Map(used),rows=[];
    for(const demand of demands){
     let left=fromExact(demand.exactQuantity);const allocations=[];
-    const inventory=(data.inventory||[]).filter(b=>b['物料编号']===demand.materialId&&inventoryEligibility(b,feedTime(minute),policy['可用状态']).eligible).sort((a,b)=>a['有效期'].localeCompare(b['有效期'])||a['批次编号'].localeCompare(b['批次编号']));
+    const lotChecks=(data.inventory||[]).filter(b=>b['物料编号']===demand.materialId).map(b=>({b,state:inventoryEligibility(b,feedTime(minute),policy['可用状态'])}));
+    const excludedLots=lotChecks.filter(x=>!x.state.eligible).map(({b,state})=>({lotId:b['批次编号'],bookQuantity:b['账面数量'],occupiedQuantity:b['已占用数量'],quality:b['质量状态'],expiry:b['有效期'],readyAt:b['预计可用时间']||'',reasons:state.reasons}));
+    const inventory=lotChecks.filter(x=>x.state.eligible).map(x=>x.b).sort((a,b)=>a['有效期'].localeCompare(b['有效期'])||a['批次编号'].localeCompare(b['批次编号']));
     const candidates=inventory.map(b=>({key:'inventory:'+b['批次编号'],lotId:b['批次编号'],capacity:sub(q(b['账面数量']),q(b['已占用数量'])),expiry:b['有效期'],quality:b['质量状态'],readyAt:b['预计可用时间']||'',conditional:false}));
     if(policy['允许预计供给'])for(const use of data.supplyUses||[]){
      if(use['订单编号']!==demand.orderId||use['工序编号']!==demand.operation)continue;
@@ -104,14 +113,14 @@ export function createMaterialAllocator(data,policy) {
      if(c.useKey)available=min(available,sub(c.limit,staged.get(c.useKey)||zero));
      if(cmp(available,zero)<=0)continue;
      const amount=min(left,available);staged.set(c.key,add(staged.get(c.key)||zero,amount));if(c.useKey)staged.set(c.useKey,add(staged.get(c.useKey)||zero,amount));left=sub(left,amount);
-     allocations.push({lotId:c.lotId,supplyId:c.supplyId||'',quantity:num(amount),exactQuantity:exact(amount),conditional:c.conditional,expiry:c.expiry,quality:c.quality,readyAt:c.readyAt,remaining:num(sub(c.capacity,staged.get(c.key))),source:c.conditional?'条件性预计供给；须按期到达且质量/效期成立，未确认到货':'模拟库存（扣除已有占用及本方案分配）'});
+     allocations.push({lotId:c.lotId,supplyId:c.supplyId||'',quantity:num(amount),exactQuantity:exact(amount),conditional:c.conditional,expiry:c.expiry,quality:c.quality,readyAt:c.readyAt,remaining:num(sub(c.capacity,staged.get(c.key))),exactRemaining:exact(sub(c.capacity,staged.get(c.key))),occupiedQuantity:c.conditional?'0':inventory.find(b=>b['批次编号']===c.lotId)['已占用数量'],source:c.conditional?'条件性预计供给；须按期到达且质量/效期成立，未确认到货':'模拟库存（扣除已有占用及本方案分配）'});
     }
-    rows.push({...demand,allocations,shortage:num(left),exactShortage:exact(left),committed:false,suggestion:cmp(left,zero)>0?'建议采购/备料或推迟；不生成采购单、不确认到货':''});
+    rows.push({...demand,allocations,excludedLots,shortage:num(left),exactShortage:exact(left),committed:false,suggestion:cmp(left,zero)>0?'建议采购/备料或推迟；不生成采购单、不确认到货':''});
    }
    const ok=rows.every(r=>r.exactShortage.numerator==='0');
    return {ok,rows,commit(){if(committed)return;if(!ok)throw Error('缺料候选不能提交');if(baseGeneration!==generation)throw Error('过期候选分配；须重新检查可用量');for(const [key,value]of staged)used.set(key,value);rows.forEach(r=>r.committed=true);committed=true;generation++;}};
   }
- };
+ };};return ledger(used);
 }
 
 // Shared exact arithmetic for FR021; values remain rational until display.

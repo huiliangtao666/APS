@@ -240,7 +240,7 @@
       "contract": "main-header-only",
       "expected": "fill-before-import",
       "simulation": true,
-      "sha256": "94336b3c3922b467136b07e231bc68d6d354f8de447aecdf0a8356b359646bf0"
+      "sha256": "5b0cd0c2236136769d6d71589e45d525d785c2bd50849b19f2595a846e9cef07"
     },
     {
       "file": "templates/19_人员组与可用时间.csv",
@@ -248,7 +248,7 @@
       "contract": "main-header-only",
       "expected": "fill-before-import",
       "simulation": true,
-      "sha256": "454573c979e7c89aad7eda1b78d6e6845ccdccfc32672a37c5f03408e3b187ce"
+      "sha256": "d1dd25ebf698290d2a0d21cbe3673986b29f0082cc64ba9065321f1025e77acf"
     },
     {
       "file": "templates/16_排程规则配置.csv",
@@ -406,68 +406,36 @@
       "context": "受控v0.3八行；UTF-8 BOM及物理CRLF与原件字节一致；不可当计算BOM"
     },
     {
-      "file": "templates/01_工厂与产线配置.csv",
-      "table": "factoryLines",
-      "contract": "main-header-only",
-      "expected": "fill-before-import",
+      "file": "examples/13_物料库存批次.csv",
+      "table": "originalInventory",
+      "contract": "v0.3-literal-source-only",
+      "expected": "source import; runtime mapping pending",
       "simulation": true,
-      "sha256": "ba485f65709d09f73523f5cd7577f89fc72a4f23d290314f314c185ca6620b34"
+      "sha256": "d3f4d18ba355e64c368fd9223dfde52241f757bff492536baa3ca139f408866a"
     },
     {
-      "file": "templates/05_模具与工具配置.csv",
-      "table": "originalTools",
-      "contract": "main-header-only",
-      "expected": "fill-before-import",
+      "file": "examples/14_预计到料与可用时间.csv",
+      "table": "originalSupply",
+      "contract": "v0.3-literal-source-only",
+      "expected": "source import; runtime mapping pending",
       "simulation": true,
-      "sha256": "9e4ec402983db38ef4eccf4a34ad0dc117898cdf01279d9ae8a9ebc4bacd9ffb"
+      "sha256": "35243a0effa70a65a62c1c185c5437f64706399b398ff8bc3da3200268afe907"
     },
     {
-      "file": "templates/06_人员技能与班次.csv",
-      "table": "originalPersonnel",
-      "contract": "main-header-only",
-      "expected": "fill-before-import",
+      "file": "examples/18_模拟执行进度.csv",
+      "table": "originalProgress",
+      "contract": "v0.3-literal-source-only",
+      "expected": "source import; runtime mapping pending",
       "simulation": true,
-      "sha256": "862b513eb449a97643cb73d9c714031b05d8e275c8b52d13fc0bc9d0a3df5a2c"
+      "sha256": "b7354be8eb2dfdb2ea2b54582434b5b0c561057d4aa4746c227def78a5ab5f50"
     },
     {
-      "file": "templates/31_原05与06运行映射.csv",
-      "table": "resourceMappings",
-      "contract": "main-header-only",
-      "expected": "fill-before-import",
+      "file": "examples/19_模拟异常与条件变更.csv",
+      "table": "originalEvents",
+      "contract": "v0.3-literal-source-only",
+      "expected": "source import; runtime mapping pending",
       "simulation": true,
-      "sha256": "a1f31ec4aacb251a13c67b20acca2ca73f0c41d58e02969fd906f52264c5d769"
-    },
-    {
-      "file": "templates/09_物料BOM配置.csv",
-      "table": "originalBom",
-      "contract": "main-header-only",
-      "expected": "fill-before-import",
-      "simulation": true,
-      "sha256": "c2f6abfab98bf0d5533b0406a1808afe6e9628ebd94e7ff2140725665f255583"
-    },
-    {
-      "file": "templates/32_原始资源事实账.csv",
-      "table": "originalResourceEvents",
-      "contract": "main-header-only",
-      "expected": "fill-before-import",
-      "simulation": true,
-      "sha256": "961ede4d659a12f6546e8c0630acafff74a71269f5d20f47f37daf22c99e377a"
-    },
-    {
-      "file": "templates/31_人员与工装停用例外.csv",
-      "table": "resourceStops",
-      "contract": "main-header-only",
-      "expected": "fill-before-import",
-      "simulation": true,
-      "sha256": "d74450f3d872e3edefc97e4248c1e6a16cdad5d7ecbd178745ded2294bbd0399"
-    },
-    {
-      "file": "templates/30_物理人员池.csv",
-      "table": "personnelPools",
-      "contract": "main-header-only",
-      "expected": "fill-before-import",
-      "simulation": true,
-      "sha256": "ce391e75a9d298faaa1f5c20bdd7a9ab30117a41a44e09492d64f623b5d06096"
+      "sha256": "21b29ec7d05f2ab01176a6f608b0062a0ed56712b9238e962de989a1c5cf894a"
     }
   ]
 }

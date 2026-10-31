@@ -4,7 +4,7 @@ const E=process.env.ISSUE6_EVIDENCE_DIR||'/evidence';fs.mkdirSync(E,{recursive:t
 const f=await fixture(null,{browser:true}),browser=await chromium.launch({headless:true,args:['--no-sandbox']}),page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[],results=[];
 page.on('pageerror',e=>errors.push(String(e)));page.setDefaultTimeout(15000);
 try{
- const {files,repairs,originals}=stageInput(process.env.ISSUE6_INPUT_DIR||'/inputs',{selectApplicableMachines:true,calendarOnlyDependencies:true});dump('input.json',{files,repairs,originals});
+ const {files,repairs,originals}=stageInput(process.env.ISSUE6_INPUT_DIR||'/inputs');dump('input.json',{files,repairs,originals});
  await page.goto(f.url);await page.getByLabel('操作原因',{exact:true}).fill('Issue6 Dev synthetic operator');await page.getByRole('button',{name:'数据与 CSV',exact:true}).click();
  await page.locator('[data-csv-batch]').getByLabel('选择批量 CSV',{exact:true}).setInputFiles(files.map(x=>({name:x.name,mimeType:'text/csv',buffer:Buffer.from(x.text)})));
  await page.getByRole('status').filter({hasText:'已读取文件'}).waitFor();
@@ -13,7 +13,7 @@ try{
  for(const row of [2,3])for(const [field,value] of [['是否允许拆分','否'],['需求类型','正式订单'],['订单状态','有效']])await page.getByLabel(`补录 第${row}行 ${field}`,{exact:true}).selectOption(value);
  const checked=await preview();assert.equal(checked.valid,true,JSON.stringify(checked));dump('preview.json',checked);await page.screenshot({path:E+'/01-preview.png',fullPage:true});
  const committed=page.waitForResponse(r=>r.url().endsWith('/api/imports/commit'));await page.getByRole('button',{name:'确认整批导入',exact:true}).click();assert.equal((await committed).status(),200);await page.getByRole('status').filter({hasText:'整批导入成功'}).waitFor();
- results.push({id:'UI-10-TABLES',status:'PASS',scope:'10 selected files, explicit six software selections; original03 subset, not full original acceptance'});
+ results.push({id:'UI-10-TABLES',status:'PASS',scope:'10 selected files, explicit six software selections; all original03 rows, including unused devices, retained under CR D01'});
  await page.reload();await page.getByLabel('操作原因',{exact:true}).fill('Issue6 Dev synthetic operator');await page.getByRole('button',{name:'同步计算全部（无取消）',exact:true}).click();
  await page.getByText('当前方案运行编号：',{exact:false}).waitFor();const plans=await f.ok('/plans'),p=plans[0];assert.equal(p.tasks.find(t=>t.id==='B-MIX').start,15);
  await page.getByRole('button',{name:'独立复核',exact:true}).click();await page.locator('.verification-check.pass').filter({hasText:'工厂日历 / 设备停机'}).waitFor();await page.screenshot({path:E+'/02-legal.png',fullPage:true});results.push({id:'UI-LEGAL-15',status:'PASS'});

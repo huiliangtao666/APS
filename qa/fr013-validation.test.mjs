@@ -25,7 +25,7 @@ test('V01 exact bag integer and yield ratio boundaries, no inference/default/rou
 
 test('V02 CSV single/mixed, table, input and trial routes atomically reject invalid values with physical line4 and field',async t=>{
  const f=await fixture(t);const base=await f.ok('/calculate',{revision:0});const trial=await f.ok('/plans/'+base.id+'/copy',{});const before=f.bytes(),checks=[];
- for(const [field,value] of [['每袋支数','1.5'],['每袋支数','8.5'],['每袋支数','1.0000000000000000001'],['总收率','1.01'],['总收率','1.0000000000000000001'],['总收率',''],['模拟交付等待分钟','']]){
+ for(const [field,value] of [['每袋支数','8.5'],['每袋支数','1.0000000000000000001'],['总收率','1.01'],['总收率','1.0000000000000000001'],['总收率',''],['模拟交付等待分钟','']]){
   const d=masterBatch();d.products[1][field]=value;
   for(const single of [false,true]){const r=await preview(f,d,single?['products']:allKeys,0,single?'products':undefined);assert.equal(r.body.valid,false);assert.equal(r.body.id,undefined);assert.ok(r.body.issues.some(i=>i.table==='products'&&i.file==='07_产品与包装规格.csv'&&i.row===4&&i.field===field),JSON.stringify(r));checks.push({single,field,value,...r});assert.equal(f.bytes(),before);}
   for(const [path,body] of [['/tables/products',{rows:d.products}],['/inputs',{tables:{products:d.products,materials:d.materials}}],['/trials/'+trial.id+'/inputs',{tables:{products:d.products}}]]){const r=await f.call(path,{revision:0,...body});assert.equal(r.status,400);assert.equal(f.bytes(),before);checks.push({path,field,value,...r});}

@@ -1,4 +1,4 @@
-export type ResultPlan={id:string;runId?:string;inputVersionId?:string;snapshotHash?:string;resultAssessment?:any;verification?:any;findings?:any[];jointAttempts?:any[]};
+export type ResultPlan={id:string;runId?:string;inputVersionId?:string;snapshotHash?:string;resultAssessment?:any;jointAttempts?:any[];verification?:any;findings?:any[]};
 const show=(v:unknown)=>v==null?'未知':String(v);
 export function ResultPanel({plan,onTask,onInput,onProblem}:{plan:ResultPlan;onProblem?:(finding:any)=>void;onTask:(id:string)=>void;onInput:(table:string,row:Record<string,string>,taskId?:string)=>void}){
  const r=plan.resultAssessment;
