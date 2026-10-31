@@ -515,7 +515,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR013受影响需求增量；不等于已实现或UAT通过",
-      "implementation_status": "Dev fixed 0dfcfe7c assigned scope selftest Done; B1 UAT01/02 shared wiring ongoing; full FR/CR NOT_READY",
+      "implementation_status": "B1 integrated candidate 98347f8 Dev task-level Done; QA simulated UAT01/02 PASS at same SHA; original FR/CR remaining facts and scope NOT_READY",
       "primary_requirements": [
         "FR-013"
       ],
@@ -533,7 +533,7 @@
       "acceptance_delta": "CSV模板/预览/导入按批准配置校验：小数袋支拒绝，总收率>100%拒绝；合法配置保存刷新后生效，非法/越权整批零写入；保留旧确认/历史。",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6500755006",
       "related_issue_urls": [],
-      "acceptance_result": "Dev limited selftest PASS; full FR013/016 and CR NOT_READY, QA UAT not executed; original inventory locator round 2 selftest PASS, no third round",
+      "acceptance_result": "QA simulation UAT01/02 scoped PASS, 32 PASS/6 BLOCKED/4 NOT_EXECUTED; full FR/CR NOT_READY, no product FAIL or new repair round",
       "limitations": "无默认值或测试规模推定；无产品FAIL或修复轮次",
       "history": [
         {
@@ -609,6 +609,18 @@
           "event_key": "dlv_c828f195-4e75-4d7d-9536-d0642403c5a2:r1",
           "event": "Dev 0dfcfe7c selftest 305 PASS/7 BLOCKED/5 NOT_EXECUTED; FR013/016/Issue4 NOT_READY; B1 integrated UAT01/02 task dispatched; no new product FAIL",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6537352084"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_b71a615a-dcab-4186-bb5b-ba9be619d6b7:r1",
+          "event": "B1 fixed 98347f8 Dev assigned scope selftest 62 PASS/6 BLOCKED/5 NOT_EXECUTED; original FR/CR NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6537563857"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_58477f06-4245-4c62-97b5-a30c89ffa1f6:r1",
+          "event": "QA simulated UAT01/02 at fixed 98347f8: 32 PASS/6 BLOCKED/4 NOT_EXECUTED, no product FAIL; only these explicit simulation scenarios accepted; full FR/CR NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6537678865"
         }
       ],
       "dev_delivery": "dlv_f8e143db-f33c-4b02-bed6-43722e9889ef:r1",
@@ -692,7 +704,7 @@
       "approved_on": "2026-10-31（未补造精确时刻）",
       "effective": true,
       "effective_scope": "R2.1 当前 UAT02/AC05/15/17；账号控制豁免仅限 UAT 全部完成前的测试入口，不等于生产永久取消权限",
-      "implementation_status": "APS-Test fixed d6fd003 R2.1-only config/isolated host 23 PASS/3 PARTIAL/2 BLOCKED/2 NOT_EXECUTED; D01/D02 shared production wiring and QA endpoint pending; full CR NOT_READY",
+      "implementation_status": "B1 integrated candidate 98347f8 Dev task-level Done; QA simulated UAT01/02 PASS at same SHA; original FR/CR remaining facts and scope NOT_READY",
       "primary_requirements": [
         "FR-008",
         "FR-013",
@@ -730,9 +742,21 @@
           "event_key": "dlv_43c056c6-d661-43c1-984c-97a49395bd2b:r1",
           "event": "APS-Test R2.1限定开发自测23 PASS/3 PARTIAL/2 BLOCKED/2未执行；D01/D02生产接线待Dev共享文件交接；QA UAT未执行；产品FAIL0/轮次+0",
           "issue_comment": "https://github.com/huiliangtao666/APS/issues/6#issuecomment-6537294963"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_b71a615a-dcab-4186-bb5b-ba9be619d6b7:r1",
+          "event": "B1 fixed 98347f8 Dev assigned scope selftest 62 PASS/6 BLOCKED/5 NOT_EXECUTED; original FR/CR NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6537563857"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_58477f06-4245-4c62-97b5-a30c89ffa1f6:r1",
+          "event": "QA simulated UAT01/02 at fixed 98347f8: 32 PASS/6 BLOCKED/4 NOT_EXECUTED, no product FAIL; only these explicit simulation scenarios accepted; full FR/CR NOT_READY",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6537678865"
         }
       ],
-      "acceptance_result": "APS-Test任务级PARTIAL；整卡/完整UAT02 NOT_READY；0产品FAIL/修复轮次+0",
+      "acceptance_result": "QA simulation UAT01/02 scoped PASS, 32 PASS/6 BLOCKED/4 NOT_EXECUTED; full FR/CR NOT_READY, no product FAIL or new repair round",
       "acceptance_status": "部分实现和自测；D01/D02生产接线与QA UAT未完成",
       "code_sha": "d6fd0034a4a50441d3e6384959f998873fcb955c",
       "dev_delivery": "dlv_43c056c6-d661-43c1-984c-97a49395bd2b",
