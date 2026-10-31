@@ -680,7 +680,7 @@
       "approved_on": "2026-10-31（未补造精确时刻）",
       "effective": true,
       "effective_scope": "R2.1 当前 UAT02/AC05/15/17；账号控制豁免仅限 UAT 全部完成前的测试入口，不等于生产永久取消权限",
-      "implementation_status": "待 APS-Test 开发及任务级自测；QA UAT 尚未执行",
+      "implementation_status": "APS-Test fixed d6fd003 R2.1-only config/isolated host 23 PASS/3 PARTIAL/2 BLOCKED/2 NOT_EXECUTED; D01/D02 shared production wiring and QA endpoint pending; full CR NOT_READY",
       "primary_requirements": [
         "FR-008",
         "FR-013",
@@ -712,15 +712,22 @@
           "date": "2026-10-31",
           "event_key": "issue6:r21:uat02:user-decisions:20261031:r1",
           "event": "用户三项R2.1裁决登记；待实现及UAT，不新增产品修复轮次"
+        },
+        {
+          "date": "2026-10-31",
+          "event_key": "dlv_43c056c6-d661-43c1-984c-97a49395bd2b:r1",
+          "event": "APS-Test R2.1限定开发自测23 PASS/3 PARTIAL/2 BLOCKED/2未执行；D01/D02生产接线待Dev共享文件交接；QA UAT未执行；产品FAIL0/轮次+0",
+          "issue_comment": "https://github.com/huiliangtao666/APS/issues/6#issuecomment-6537294963"
         }
       ],
-      "acceptance_result": "用户裁决已登记；APS-Test开发自测EXECUTING；完整R2.1/UAT02尚未签收",
-      "acceptance_status": "本CR专项验收未完成；固定SHA及QA UAT待证据",
-      "code_sha": "",
+      "acceptance_result": "APS-Test任务级PARTIAL；整卡/完整UAT02 NOT_READY；0产品FAIL/修复轮次+0",
+      "acceptance_status": "部分实现和自测；D01/D02生产接线与QA UAT未完成",
+      "code_sha": "d6fd0034a4a50441d3e6384959f998873fcb955c",
       "dev_delivery": "dlv_43c056c6-d661-43c1-984c-97a49395bd2b",
       "product_test_delivery": "",
       "design_detail_status": "六字段真实客户值未给出；允许带明显simulation标记的部分模拟初值，后续可配置替换；不要求正式权限账号作UAT门槛",
-      "limitations": "不以模拟值判定客户业务真值；不永久取消生产权限；不合main/不发布"
+      "limitations": "不以模拟值判定客户业务真值；不永久取消生产权限；不合main/不发布",
+      "code_branch": "test/issue6-uat02-decisions-20261031"
     }
   ]
 }
