@@ -1,0 +1,73 @@
+{
+  "b15": {
+    "outer_files_hashed": 5,
+    "internal_files_hashed": 202,
+    "matrix_rows": 26,
+    "counts": {
+      "PASS": 21,
+      "NOT_EXECUTED_APP": 2,
+      "AWAITING_DEV_INTEGRATION": 1,
+      "NOT_EXECUTED_UAT": 1,
+      "OUTSIDE_DOMAIN_MOCK": 1
+    },
+    "closure_rows": 33,
+    "zip_crc": "PASS",
+    "repair_increment": 0,
+    "source_hashes": 596,
+    "source": "68cea51e9be162797776bf2da84c1492d9c61494",
+    "parent": "b3b80e07083cb31d75ec522847f2c328c45cd112",
+    "event_key": "dlv_586f8017-7984-445c-865d-f73cbd231c6f:r1",
+    "notification_missing": true,
+    "qa": "NOT_EXECUTED",
+    "tests": {
+      "new_directed_groups": 15,
+      "related_regressions": 75,
+      "total": 90,
+      "passed": 90,
+      "independent_checks": 34,
+      "original_files_bytes_verified": 153,
+      "runtime_files_bytes_hash_verified": 17
+    },
+    "files": [
+      "qa/b15-test-INTEGRATION.md",
+      "qa/b15-test-baseline-plan-comparison.mjs",
+      "qa/b15-test-baseline-repro.mjs",
+      "qa/b15-test-baseline-simulation-events.mjs",
+      "qa/b15-test-core.test.mjs",
+      "qa/b15-test-export.mjs",
+      "qa/b15-test-fixture.mjs",
+      "qa/b15-test-run.sh",
+      "qa/b15-test-seams.test.mjs",
+      "qa/b15-test-worker.mjs",
+      "src/lib/b15-protection.d.mts",
+      "src/lib/b15-protection.mjs",
+      "src/lib/plan-comparison.mjs",
+      "src/lib/simulation-events.mjs"
+    ]
+  },
+  "qa09": {
+    "outer_files_hashed": 6,
+    "internal_files_hashed": 224,
+    "matrix_rows": 34,
+    "counts": {
+      "PASS": 30,
+      "PARTIAL": 1,
+      "BLOCKED": 1,
+      "NOT_EXECUTED": 2
+    },
+    "closure_rows": 15,
+    "zip_crc": "PASS",
+    "repair_increment": 0,
+    "source": "a0b846e5b7aba5ee165b8d12fabfe8896fbc4ff2",
+    "event_key": "dlv_a3864855-314f-4e3a-9896-e005abc15db1:r1",
+    "notification_missing": true,
+    "accepted_scope": "QA UAT09 explicit normalized simulation + main impacts only",
+    "verdict": "PASS",
+    "oracle": "Python3.9 standard-library Fraction, file-only on host; 87 assertions per managed/shared baseline; no product imports"
+  },
+  "continuation": {
+    "Test": "dlv_e35a72db-7415-42e8-969e-268408d33a15",
+    "QA_next": "UAT10 readiness verified; not yet dispatched",
+    "Dev": "dlv_095eca3c-c1c4-4882-97cb-3cdf82e8f2b8 executing B12 integration"
+  }
+}

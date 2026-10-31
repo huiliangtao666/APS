@@ -1,0 +1,32 @@
+{
+  "type": "design_asset_checks_only",
+  "status": "PASS",
+  "count": 21,
+  "checks": [
+    "initial missing reason / master / transaction blocks",
+    "unready navigation returns readiness with reason",
+    "master and order save preserve range and selection",
+    "saved supplemental config still blocked until applied",
+    "apply then recheck permits configuration",
+    "submit immediate feedback and duplicate lock",
+    "manual status sequence receives queued running completed",
+    "unselected higher constraints are unchecked",
+    "result and source return retain same selected task/filter",
+    "save immutable history independent of current configuration",
+    "old result remains accessible after current edit",
+    "new run scope differs and old frozen scope preserved",
+    "csv and json downloads are design-only frozen objects",
+    "partial includes unscheduled with null times",
+    "zero tasks has no gantt bars and retains reasons",
+    "failure has no new result",
+    "timeout retains distinct status",
+    "unknown recovers same run without resubmit",
+    "cancel awaits confirmation before cancelled",
+    "unsupported fixture range blocks instead of inventing result",
+    "all main and later screens render"
+  ],
+  "product_sha": null,
+  "product_tests": "NOT_EXECUTED",
+  "browser_visual_keyboard_screenreader": "NOT_EXECUTED; requires actual product candidate/browser; layout & native controls specified",
+  "method": "Node syntax check + isolated VM DOM stub for offline state/markup interaction invariants; no dependencies installed; no product process or environment touched"
+}

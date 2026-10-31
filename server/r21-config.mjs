@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { Router } from 'express';
+import { isTrustedWrite } from './write-request.mjs';
 import { partialR21Seed, validateR21Config, configuredR21Orders, r21DeviceUsage } from '../src/lib/r21-stage-config.mjs';
 const hash = x => createHash('sha256').update(JSON.stringify(x)).digest('hex');
 export function openR21Config(dataDir) {
@@ -20,8 +21,7 @@ export function createR21ConfigRouter({ dataDir, authorize, readInput, saveOrder
   router.use(authorize);
   router.use((req, res, next) => {
     if (req.method !== 'GET') {
-      let bad = false; try { if (req.get('origin')) bad = new URL(req.get('origin')).host !== req.get('host'); } catch { bad = true; }
-      if (bad || req.get('sec-fetch-site') && !['same-origin', 'none'].includes(req.get('sec-fetch-site'))) return res.status(403).json({ error: 'csrf' });
+      if (!isTrustedWrite(req)) return res.status(403).json({ error: 'csrf' });
       if (typeof req.body?.reason !== 'string' || !req.body.reason.trim() || req.body.reason.length > 1000) return res.status(400).json({ error: 'reason_required' });
     }
     next();

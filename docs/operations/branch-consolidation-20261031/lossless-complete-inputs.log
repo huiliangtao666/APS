@@ -1,0 +1,223 @@
+TAP version 13
+# Subtest: atomic source binding refusal unit
+ok 1 - atomic source binding refusal unit
+  ---
+  duration_ms: 174.067627
+  type: 'test'
+  ...
+# Subtest: atomic source binding refusal expiry-boundary-missing
+ok 2 - atomic source binding refusal expiry-boundary-missing
+  ---
+  duration_ms: 57.097311
+  type: 'test'
+  ...
+# Subtest: atomic source binding refusal wrong-origin
+ok 3 - atomic source binding refusal wrong-origin
+  ---
+  duration_ms: 38.022624
+  type: 'test'
+  ...
+# Subtest: atomic source binding refusal quality-not-matching
+ok 4 - atomic source binding refusal quality-not-matching
+  ---
+  duration_ms: 35.60293
+  type: 'test'
+  ...
+# Subtest: atomic source binding refusal date-truncation
+ok 5 - atomic source binding refusal date-truncation
+  ---
+  duration_ms: 37.110671
+  type: 'test'
+  ...
+# Subtest: atomic source binding refusal runtime-minutes-loss
+ok 6 - atomic source binding refusal runtime-minutes-loss
+  ---
+  duration_ms: 39.928614
+  type: 'test'
+  ...
+# Subtest: atomic source binding refusal source-snapshot-stale
+ok 7 - atomic source binding refusal source-snapshot-stale
+  ---
+  duration_ms: 41.585397
+  type: 'test'
+  ...
+# Subtest: atomic source binding refusal mapping-version-reuse
+ok 8 - atomic source binding refusal mapping-version-reuse
+  ---
+  duration_ms: 40.870609
+  type: 'test'
+  ...
+# Subtest: atomic source binding refusal duplicate-source-map
+ok 9 - atomic source binding refusal duplicate-source-map
+  ---
+  duration_ms: 38.577497
+  type: 'test'
+  ...
+# Subtest: atomic source binding refusal duplicate-target
+ok 10 - atomic source binding refusal duplicate-target
+  ---
+  duration_ms: 30.062501
+  type: 'test'
+  ...
+# Subtest: atomic source binding refusal target-missing
+ok 11 - atomic source binding refusal target-missing
+  ---
+  duration_ms: 34.744309
+  type: 'test'
+  ...
+# Subtest: atomic source binding refusal over-reserved
+ok 12 - atomic source binding refusal over-reserved
+  ---
+  duration_ms: 28.906799
+  type: 'test'
+  ...
+# Subtest: atomic source binding refusal unknown-location
+ok 13 - atomic source binding refusal unknown-location
+  ---
+  duration_ms: 37.165754
+  type: 'test'
+  ...
+# Subtest: UAT15 atomic fact/event/supply refusal supply-order-reference
+ok 14 - UAT15 atomic fact/event/supply refusal supply-order-reference
+  ---
+  duration_ms: 48.093194
+  type: 'test'
+  ...
+# Subtest: UAT15 atomic fact/event/supply refusal supply-reference-amount
+ok 15 - UAT15 atomic fact/event/supply refusal supply-reference-amount
+  ---
+  duration_ms: 33.824981
+  type: 'test'
+  ...
+# Subtest: UAT15 atomic fact/event/supply refusal supply-double-booked
+ok 16 - UAT15 atomic fact/event/supply refusal supply-double-booked
+  ---
+  duration_ms: 38.088374
+  type: 'test'
+  ...
+# Subtest: UAT15 atomic fact/event/supply refusal fact-output-guessed-from-input
+ok 17 - UAT15 atomic fact/event/supply refusal fact-output-guessed-from-input
+  ---
+  duration_ms: 32.624779
+  type: 'test'
+  ...
+# Subtest: UAT15 atomic fact/event/supply refusal source-consumption-mismatch
+ok 18 - UAT15 atomic fact/event/supply refusal source-consumption-mismatch
+  ---
+  duration_ms: 34.353728
+  type: 'test'
+  ...
+# Subtest: UAT15 atomic fact/event/supply refusal source-allocation-missing
+ok 19 - UAT15 atomic fact/event/supply refusal source-allocation-missing
+  ---
+  duration_ms: 34.235895
+  type: 'test'
+  ...
+# Subtest: UAT15 atomic fact/event/supply refusal event-old-count
+ok 20 - UAT15 atomic fact/event/supply refusal event-old-count
+  ---
+  duration_ms: 33.708815
+  type: 'test'
+  ...
+# Subtest: UAT15 atomic fact/event/supply refusal event-double-pool
+ok 21 - UAT15 atomic fact/event/supply refusal event-double-pool
+  ---
+  duration_ms: 32.70307
+  type: 'test'
+  ...
+# Subtest: UAT15 atomic fact/event/supply refusal event-pool-capacity-missing
+ok 22 - UAT15 atomic fact/event/supply refusal event-pool-capacity-missing
+  ---
+  duration_ms: 28.731342
+  type: 'test'
+  ...
+# Subtest: UAT15 atomic fact/event/supply refusal historical-ledger-rewrite
+ok 23 - UAT15 atomic fact/event/supply refusal historical-ledger-rewrite
+  ---
+  duration_ms: 32.864444
+  type: 'test'
+  ...
+# {"action":"edit","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# {"action":"calculate","decision":"deny","requestId":"fr027-synthetic","actor":"test\#query"}
+# Subtest: missing mappings, stale revision, readonly role and malformed headcount event cannot create partial input/run writes
+ok 24 - missing mappings, stale revision, readonly role and malformed headcount event cannot create partial input/run writes
+  ---
+  duration_ms: 69.439868
+  type: 'test'
+  ...
+# Subtest: independent checker rejects altered binding, expiry, consumption, event and unique pool snapshots
+ok 25 - independent checker rejects altered binding, expiry, consumption, event and unique pool snapshots
+  ---
+  duration_ms: 219.598752
+  type: 'test'
+  ...
+# Subtest: expired minute stock cannot be allocated; failed material candidates reserve no other lots
+ok 26 - expired minute stock cannot be allocated; failed material candidates reserve no other lots
+  ---
+  duration_ms: 17.078198
+  type: 'test'
+  ...
+# Subtest: lossless original13 12 and UAT15 original14/18/19 use actual Worker and independent fixed-source verification
+ok 27 - lossless original13 12 and UAT15 original14/18/19 use actual Worker and independent fixed-source verification
+  ---
+  duration_ms: 441.815489
+  type: 'test'
+  ...
+# Subtest: lossless original13 13 and UAT15 original14/18/19 use actual Worker and independent fixed-source verification
+ok 28 - lossless original13 13 and UAT15 original14/18/19 use actual Worker and independent fixed-source verification
+  ---
+  duration_ms: 457.963651
+  type: 'test'
+  ...
+# Subtest: lossless original13 14 and UAT15 original14/18/19 use actual Worker and independent fixed-source verification
+ok 29 - lossless original13 14 and UAT15 original14/18/19 use actual Worker and independent fixed-source verification
+  ---
+  duration_ms: 469.807877
+  type: 'test'
+  ...
+# Subtest: lossless original13 15 and UAT15 original14/18/19 use actual Worker and independent fixed-source verification
+ok 30 - lossless original13 15 and UAT15 original14/18/19 use actual Worker and independent fixed-source verification
+  ---
+  duration_ms: 361.766554
+  type: 'test'
+  ...
+# Subtest: lossless original13 17 and UAT15 original14/18/19 use actual Worker and independent fixed-source verification
+ok 31 - lossless original13 17 and UAT15 original14/18/19 use actual Worker and independent fixed-source verification
+  ---
+  duration_ms: 323.95922
+  type: 'test'
+  ...
+# Subtest: lossless original13 18 and UAT15 original14/18/19 use actual Worker and independent fixed-source verification
+ok 32 - lossless original13 18 and UAT15 original14/18/19 use actual Worker and independent fixed-source verification
+  ---
+  duration_ms: 243.624953
+  type: 'test'
+  ...
+# Subtest: configured expiry has exact next-day08:00 boundary; no date truncation, locale or silent rounding
+ok 33 - configured expiry has exact next-day08:00 boundary; no date truncation, locale or silent rounding
+  ---
+  duration_ms: 5.333971
+  type: 'test'
+  ...
+# Subtest: mapping edit preview is zero-write, save adopts next version, old run and confirmation stay immutable
+ok 34 - mapping edit preview is zero-write, save adopts next version, old run and confirmation stay immutable
+  ---
+  duration_ms: 1336.726781
+  type: 'test'
+  ...
+# Subtest: minute precision enters runtime without rounding and delayed conditional supply respects original minute expiry
+ok 35 - minute precision enters runtime without rounding and delayed conditional supply respects original minute expiry
+  ---
+  duration_ms: 514.506548
+  type: 'test'
+  ...
+1..35
+# tests 35
+# suites 0
+# pass 35
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5939.605993
+

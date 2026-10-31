@@ -6,7 +6,7 @@ export function R21ConfigurationPanel({canWrite=true,onApplied,inputRevision}:{c
   const [config, setConfig] = useState<Config | null>(null), [message, setMessage] = useState(''), [busy, setBusy] = useState(false), [dirty, setDirty] = useState(false);
   const [devices, setDevices] = useState<any[]>([]);
   async function api(p: string, body?: object) {
-    const r = await fetch('/api/r21' + p, body ? { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) } : { cache: 'no-store' });
+    const r = await fetch('/api/r21' + p, body ? { method: 'POST', headers: { 'content-type': 'application/json', 'X-APS-Request': 'workbench' }, body: JSON.stringify(body) } : { cache: 'no-store' });
     const x = await r.json(); if (!r.ok) throw Error(`${x.error} ${JSON.stringify(x.issues || [])}`); return x;
   }
   async function load() { const [s, d] = await Promise.all([api('/config'), api('/devices')]); setConfig(s.config); setDevices(d.devices); setDirty(false); }

@@ -1,0 +1,491 @@
+TAP version 13
+# Subtest: MAXLAG-C01 old six identities have no declared wait; activation exposes explicit rejection, never PASS
+ok 1 - MAXLAG-C01 old six identities have no declared wait; activation exposes explicit rejection, never PASS
+  ---
+  duration_ms: 41.238222
+  type: 'test'
+  ...
+# Subtest: MAXLAG-C02 full five operations retain every enabled resource, fixed durations and quantities from source
+ok 2 - MAXLAG-C02 full five operations retain every enabled resource, fixed durations and quantities from source
+  ---
+  duration_ms: 31.480267
+  type: 'test'
+  ...
+# Subtest: MAXLAG-W0 fixed output wait0 is legal
+ok 3 - MAXLAG-W0 fixed output wait0 is legal
+  ---
+  duration_ms: 14.722639
+  type: 'test'
+  ...
+# Subtest: MAXLAG-W10 fixed output wait10 is legal
+ok 4 - MAXLAG-W10 fixed output wait10 is legal
+  ---
+  duration_ms: 10.898907
+  type: 'test'
+  ...
+# Subtest: MAXLAG-W11 fixed output wait11 is illegal
+ok 5 - MAXLAG-W11 fixed output wait11 is illegal
+  ---
+  duration_ms: 12.251817
+  type: 'test'
+  ...
+# Subtest: MAXLAG-W30 fixed output wait30 is illegal
+ok 6 - MAXLAG-W30 fixed output wait30 is illegal
+  ---
+  duration_ms: 11.140614
+  type: 'test'
+  ...
+# Subtest: MAXLAG-C03 explicit zero max is legal and enforced without inventing a missing default
+ok 7 - MAXLAG-C03 explicit zero max is legal and enforced without inventing a missing default
+  ---
+  duration_ms: 8.351669
+  type: 'test'
+  ...
+# Subtest: MAXLAG-N missing-pair rejects explicitly and atomically
+ok 8 - MAXLAG-N missing-pair rejects explicitly and atomically
+  ---
+  duration_ms: 2.677654
+  type: 'test'
+  ...
+# Subtest: MAXLAG-N missing-predecessor rejects explicitly and atomically
+ok 9 - MAXLAG-N missing-predecessor rejects explicitly and atomically
+  ---
+  duration_ms: 2.651529
+  type: 'test'
+  ...
+# Subtest: MAXLAG-N wrong-predecessor rejects explicitly and atomically
+ok 10 - MAXLAG-N wrong-predecessor rejects explicitly and atomically
+  ---
+  duration_ms: 6.38747
+  type: 'test'
+  ...
+# Subtest: MAXLAG-N missing-cold-claim rejects explicitly and atomically
+ok 11 - MAXLAG-N missing-cold-claim rejects explicitly and atomically
+  ---
+  duration_ms: 4.782436
+  type: 'test'
+  ...
+# Subtest: MAXLAG-N wrong-cold-quantity rejects explicitly and atomically
+ok 12 - MAXLAG-N wrong-cold-quantity rejects explicitly and atomically
+  ---
+  duration_ms: 2.37378
+  type: 'test'
+  ...
+# Subtest: MAXLAG-N invalid-max-negative rejects explicitly and atomically
+ok 13 - MAXLAG-N invalid-max-negative rejects explicitly and atomically
+  ---
+  duration_ms: 2.039991
+  type: 'test'
+  ...
+# Subtest: MAXLAG-N invalid-max-nan rejects explicitly and atomically
+ok 14 - MAXLAG-N invalid-max-nan rejects explicitly and atomically
+  ---
+  duration_ms: 2.325447
+  type: 'test'
+  ...
+# Subtest: MAXLAG-N invalid-max-json rejects explicitly and atomically
+ok 15 - MAXLAG-N invalid-max-json rejects explicitly and atomically
+  ---
+  duration_ms: 2.324072
+  type: 'test'
+  ...
+# Subtest: MAXLAG-N unsupported-max-parameter rejects explicitly and atomically
+ok 16 - MAXLAG-N unsupported-max-parameter rejects explicitly and atomically
+  ---
+  duration_ms: 2.900444
+  type: 'test'
+  ...
+# Subtest: MAXLAG-N missing-required-MATERIAL rejects explicitly and atomically
+ok 17 - MAXLAG-N missing-required-MATERIAL rejects explicitly and atomically
+  ---
+  duration_ms: 2.290489
+  type: 'test'
+  ...
+# Subtest: MAXLAG-N missing-required-CAPACITY rejects explicitly and atomically
+ok 18 - MAXLAG-N missing-required-CAPACITY rejects explicitly and atomically
+  ---
+  duration_ms: 3.529067
+  type: 'test'
+  ...
+# Subtest: MAXLAG-N missing-required-PROGRAM rejects explicitly and atomically
+ok 19 - MAXLAG-N missing-required-PROGRAM rejects explicitly and atomically
+  ---
+  duration_ms: 2.045573
+  type: 'test'
+  ...
+# Subtest: MAXLAG-N missing-required-STORAGE rejects explicitly and atomically
+ok 20 - MAXLAG-N missing-required-STORAGE rejects explicitly and atomically
+  ---
+  duration_ms: 3.902856
+  type: 'test'
+  ...
+# Subtest: MAXLAG-N missing-required-CALENDAR rejects explicitly and atomically
+ok 21 - MAXLAG-N missing-required-CALENDAR rejects explicitly and atomically
+  ---
+  duration_ms: 4.073689
+  type: 'test'
+  ...
+# Subtest: MAXLAG-S disabled never reports max wait PASS
+ok 22 - MAXLAG-S disabled never reports max wait PASS
+  ---
+  duration_ms: 8.694209
+  type: 'test'
+  ...
+# Subtest: MAXLAG-S future never reports max wait PASS
+ok 23 - MAXLAG-S future never reports max wait PASS
+  ---
+  duration_ms: 6.484553
+  type: 'test'
+  ...
+# Subtest: MAXLAG-S missing never reports max wait PASS
+ok 24 - MAXLAG-S missing never reports max wait PASS
+  ---
+  duration_ms: 7.399423
+  type: 'test'
+  ...
+# Subtest: MAXLAG-S minimal never reports max wait PASS
+ok 25 - MAXLAG-S minimal never reports max wait PASS
+  ---
+  duration_ms: 2.088115
+  type: 'test'
+  ...
+# Subtest: FR022 two sets permit two of three simultaneous machines, release boundary is reusable
+ok 26 - FR022 two sets permit two of three simultaneous machines, release boundary is reusable
+  ---
+  duration_ms: 28.804447
+  type: 'test'
+  ...
+# Subtest: FR022 one set covers before acquisition and 10-minute delayed release with exact touching
+ok 27 - FR022 one set covers before acquisition and 10-minute delayed release with exact touching
+  ---
+  duration_ms: 5.524933
+  type: 'test'
+  ...
+# Subtest: FR022 cooling 600+600 cannot share1000kg; full delayed release shifts the other task
+ok 28 - FR022 cooling 600+600 cannot share1000kg; full delayed release shifts the other task
+  ---
+  duration_ms: 2.971902
+  type: 'test'
+  ...
+# Subtest: FR022 space locations require integers and explicit same units; no kg inference from notes
+ok 29 - FR022 space locations require integers and explicit same units; no kg inference from notes
+  ---
+  duration_ms: 6.220178
+  type: 'test'
+  ...
+# Subtest: FR022 exact decimal capacity never uses epsilon and adjacent disjoint claims use peak
+ok 30 - FR022 exact decimal capacity never uses epsilon and adjacent disjoint claims use peak
+  ---
+  duration_ms: 0.201832
+  type: 'test'
+  ...
+# Subtest: FR022 personnel event sweep uses simultaneous peak rather than summing disjoint intervals
+ok 31 - FR022 personnel event sweep uses simultaneous peak rather than summing disjoint intervals
+  ---
+  duration_ms: 0.981912
+  type: 'test'
+  ...
+# Subtest: FR022 joint retry rechecks machine downtime, personnel arrival/participation and tooling release
+ok 32 - FR022 joint retry rechecks machine downtime, personnel arrival/participation and tooling release
+  ---
+  duration_ms: 3.346026
+  type: 'test'
+  ...
+# Subtest: FR022 missing policy/units/intervals or dependency release declaration blocks actionable findings
+ok 33 - FR022 missing policy/units/intervals or dependency release declaration blocks actionable findings
+  ---
+  duration_ms: 8.299628
+  type: 'test'
+  ...
+# Subtest: FR022 minimal/future remain unchecked; MAX_LAG rejects undeclared pairs and checks explicit full routes
+ok 34 - FR022 minimal/future remain unchecked; MAX_LAG rejects undeclared pairs and checks explicit full routes
+  ---
+  duration_ms: 27.807826
+  type: 'test'
+  ...
+# Subtest: FR022 resource shortage rolls back whole FR021 member cycle, material ledger and reservations
+ok 35 - FR022 resource shortage rolls back whole FR021 member cycle, material ledger and reservations
+  ---
+  duration_ms: 14.184016
+  type: 'test'
+  ...
+# Subtest: FR022 horizon shortage leaves no ghost reservation and exported saved occupancy is task-linked
+ok 36 - FR022 horizon shortage leaves no ghost reservation and exported saved occupancy is task-linked
+  ---
+  duration_ms: 4.944727
+  type: 'test'
+  ...
+# Subtest: FR022 declared dependency quantity/offset conflicts and dynamic release semantics block instead of picking precedence
+ok 37 - FR022 declared dependency quantity/offset conflicts and dynamic release semantics block instead of picking precedence
+  ---
+  duration_ms: 5.360016
+  type: 'test'
+  ...
+# Subtest: FR022 explicit per-production-batch space quantity repeats without inferred scaling and retains each original member link
+ok 38 - FR022 explicit per-production-batch space quantity repeats without inferred scaling and retains each original member link
+  ---
+  duration_ms: 10.385034
+  type: 'test'
+  ...
+# Subtest: FR022 unsupported machine multiplicity and unsafe tooling capacities fail closed
+ok 39 - FR022 unsupported machine multiplicity and unsafe tooling capacities fail closed
+  ---
+  duration_ms: 6.712468
+  type: 'test'
+  ...
+# Subtest: all chapter7 categories described; unknown and unimplemented enablement rejected even with valid JSON
+ok 40 - all chapter7 categories described; unknown and unimplemented enablement rejected even with valid JSON
+  ---
+  duration_ms: 11.55057
+  type: 'test'
+  ...
+# Subtest: necessary constraints cannot be deleted, disabled, narrowed or deferred
+ok 41 - necessary constraints cannot be deleted, disabled, narrowed or deferred
+  ---
+  duration_ms: 4.511771
+  type: 'test'
+  ...
+# Subtest: activation requires data and parameter schema; future unsupported stays rejected
+ok 42 - activation requires data and parameter schema; future unsupported stays rejected
+  ---
+  duration_ms: 0.65408
+  type: 'test'
+  ...
+# Subtest: effective time uses exact instant including offset and refuses impossible dates or clocks
+ok 43 - effective time uses exact instant including offset and refuses impossible dates or clocks
+  ---
+  duration_ms: 0.314416
+  type: 'test'
+  ...
+# Subtest: inventory configured statuses honor material scope, effective time and explicit disabling
+ok 44 - inventory configured statuses honor material scope, effective time and explicit disabling
+  ---
+  duration_ms: 19.501449
+  type: 'test'
+  ...
+# Subtest: valid fields and references accepted; arrival alone does not permit use
+ok 45 - valid fields and references accepted; arrival alone does not permit use
+  ---
+  duration_ms: 4.938893
+  type: 'test'
+  ...
+# Subtest: late simulation preserves original record and uses revised availability
+ok 46 - late simulation preserves original record and uses revised availability
+  ---
+  duration_ms: 3.617649
+  type: 'test'
+  ...
+# Subtest: delay history resolves by event time independent of CSV order
+ok 47 - delay history resolves by event time independent of CSV order
+  ---
+  duration_ms: 0.596456
+  type: 'test'
+  ...
+# Subtest: strict timestamps reject impossible, timezone-free and reversed availability
+ok 48 - strict timestamps reject impossible, timezone-free and reversed availability
+  ---
+  duration_ms: 0.331706
+  type: 'test'
+  ...
+# Subtest: required identifiers, quantities and empty/invalid material references fail closed
+ok 49 - required identifiers, quantities and empty/invalid material references fail closed
+  ---
+  duration_ms: 0.854746
+  type: 'test'
+  ...
+# Subtest: delay and plan references reject unknown supply/order/route and duplicate IDs
+ok 50 - delay and plan references reject unknown supply/order/route and duplicate IDs
+  ---
+  duration_ms: 0.341498
+  type: 'test'
+  ...
+# Subtest: allocation is summed across orders and rejects oversubscription
+ok 51 - allocation is summed across orders and rejects oversubscription
+  ---
+  duration_ms: 5.244933
+  type: 'test'
+  ...
+# Subtest: conditions survive snapshot round trip and CSV export even when supply is in the past
+ok 52 - conditions survive snapshot round trip and CSV export even when supply is in the past
+  ---
+  duration_ms: 0.558622
+  type: 'test'
+  ...
+# Subtest: trimmed identifiers cannot silently bypass supply waiting or conditions
+ok 53 - trimmed identifiers cannot silently bypass supply waiting or conditions
+  ---
+  duration_ms: 4.96356
+  type: 'test'
+  ...
+# Subtest: multiple supplies wait for the latest ready instant and round seconds upward
+ok 54 - multiple supplies wait for the latest ready instant and round seconds upward
+  ---
+  duration_ms: 0.473415
+  type: 'test'
+  ...
+# Subtest: passes single-line, half-open machine, and precedence checks
+ok 55 - passes single-line, half-open machine, and precedence checks
+  ---
+  duration_ms: 5.916139
+  type: 'test'
+  ...
+# Subtest: reports multiple lines, machine overlaps, and early successors as problems
+ok 56 - reports multiple lines, machine overlaps, and early successors as problems
+  ---
+  duration_ms: 2.51278
+  type: 'test'
+  ...
+# Subtest: marks checks not checked when there are no relevant records
+ok 57 - marks checks not checked when there are no relevant records
+  ---
+  duration_ms: 0.526456
+  type: 'test'
+  ...
+# Subtest: does not run disabled confirmed-rule checks
+ok 58 - does not run disabled confirmed-rule checks
+  ---
+  duration_ms: 1.395868
+  type: 'test'
+  ...
+# Subtest: detects an omitted predecessor from the route input
+ok 59 - detects an omitted predecessor from the route input
+  ---
+  duration_ms: 0.574206
+  type: 'test'
+  ...
+# Subtest: FR019 independent anomalies expose both task IDs, exact overlap interval and precedence shortfall for UI linkage
+ok 60 - FR019 independent anomalies expose both task IDs, exact overlap interval and precedence shortfall for UI linkage
+  ---
+  duration_ms: 1.176078
+  type: 'test'
+  ...
+# Subtest: available quantity subtracts reservations while preserving book quantity
+ok 61 - available quantity subtracts reservations while preserving book quantity
+  ---
+  duration_ms: 1.267785
+  type: 'test'
+  ...
+# Subtest: default quality policy excludes pending, frozen, and rejected batches
+ok 62 - default quality policy excludes pending, frozen, and rejected batches
+  ---
+  duration_ms: 0.605497
+  type: 'test'
+  ...
+# Subtest: future-ready and expired lots are unavailable at the query time
+ok 63 - future-ready and expired lots are unavailable at the query time
+  ---
+  duration_ms: 0.203249
+  type: 'test'
+  ...
+# Subtest: quality availability is configurable through the inventory rule
+ok 64 - quality availability is configurable through the inventory rule
+  ---
+  duration_ms: 0.198457
+  type: 'test'
+  ...
+# Subtest: batch validation catches missing identifiers, invalid amounts, over-reservation, and malformed dates
+ok 65 - batch validation catches missing identifiers, invalid amounts, over-reservation, and malformed dates
+  ---
+  duration_ms: 0.378039
+  type: 'test'
+  ...
+# Subtest: query can filter by material
+ok 66 - query can filter by material
+  ---
+  duration_ms: 0.200999
+  type: 'test'
+  ...
+# Subtest: FR-010 D1 rejects material references when the material master is empty
+ok 67 - FR-010 D1 rejects material references when the material master is empty
+  ---
+  duration_ms: 0.187041
+  type: 'test'
+  ...
+# Subtest: FR-010 D2 rejects impossible expiry dates including non-leap February
+ok 68 - FR-010 D2 rejects impossible expiry dates including non-leap February
+  ---
+  duration_ms: 0.471873
+  type: 'test'
+  ...
+# Subtest: FR-010 D2 query never reports positive availability for impossible expiry
+ok 69 - FR-010 D2 query never reports positive availability for impossible expiry
+  ---
+  duration_ms: 0.488622
+  type: 'test'
+  ...
+# Subtest: FR020 integrated expiry uses factory+08 day at midnight rather than the previous UTC date
+ok 70 - FR020 integrated expiry uses factory+08 day at midnight rather than the previous UTC date
+  ---
+  duration_ms: 0.504539
+  type: 'test'
+  ...
+# Subtest: FR020 AC08/09 exact only-loss recipe, both specifications and packaging damaged-share formula
+ok 71 - FR020 AC08/09 exact only-loss recipe, both specifications and packaging damaged-share formula
+  ---
+  duration_ms: 2.21399
+  type: 'test'
+  ...
+# Subtest: FR020 AC10 325kg demand,400 stock,100 occupied leaves25 shortage and no committed deduction
+ok 72 - FR020 AC10 325kg demand,400 stock,100 occupied leaves25 shortage and no committed deduction
+  ---
+  duration_ms: 1.593659
+  type: 'test'
+  ...
+# Subtest: FR020 FEFO checks expiry/status/time/quantity together, excludes frozen,pending,rejected and over-occupied
+ok 73 - FR020 FEFO checks expiry/status/time/quantity together, excludes frozen,pending,rejected and over-occupied
+  ---
+  duration_ms: 30.799937
+  type: 'test'
+  ...
+# Subtest: FR020 shared lot ledger and exact decimal deductions never double consume; aborted attempts are free
+ok 74 - FR020 shared lot ledger and exact decimal deductions never double consume; aborted attempts are free
+  ---
+  duration_ms: 2.072657
+  type: 'test'
+  ...
+# Subtest: FR020 unsupported units, ambiguous versions, incomplete recipes, free-text loss and fractional packaging block
+ok 75 - FR020 unsupported units, ambiguous versions, incomplete recipes, free-text loss and fractional packaging block
+  ---
+  duration_ms: 1.454035
+  type: 'test'
+  ...
+# Subtest: FR020 expected supply is explicit, conditional, delayed, qualified, FEFO and capped by use and supply
+ok 76 - FR020 expected supply is explicit, conditional, delayed, qualified, FEFO and capped by use and supply
+  ---
+  duration_ms: 1.456118
+  type: 'test'
+  ...
+# Subtest: FR020 exact0.1kg shortage is not forgiven and waiting/expired expected lots cannot be consumed
+ok 77 - FR020 exact0.1kg shortage is not forgiven and waiting/expired expected lots cannot be consumed
+  ---
+  duration_ms: 2.703196
+  type: 'test'
+  ...
+# Subtest: FR020 shortage commit rejected, repeat commit idempotent and stale candidate cannot overwrite later allocations
+ok 78 - FR020 shortage commit rejected, repeat commit idempotent and stale candidate cannot overwrite later allocations
+  ---
+  duration_ms: 0.505622
+  type: 'test'
+  ...
+# Subtest: FR020 feed-date expiry and BOM effective date share the v0.3 factory midnight boundary
+ok 79 - FR020 feed-date expiry and BOM effective date share the v0.3 factory midnight boundary
+  ---
+  duration_ms: 0.818705
+  type: 'test'
+  ...
+# Subtest: FR016 P29 collision trace retains every actual original occurrence and excludes unrelated rows
+ok 80 - FR016 P29 collision trace retains every actual original occurrence and excludes unrelated rows
+  ---
+  duration_ms: 0.979245
+  type: 'test'
+  ...
+1..80
+# tests 80
+# suites 0
+# pass 80
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 518.078133
+

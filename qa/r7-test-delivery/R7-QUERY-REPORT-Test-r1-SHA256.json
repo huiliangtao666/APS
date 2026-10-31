@@ -1,0 +1,25 @@
+{
+  "source_sha": "3b26b5cce5e4a7118337cad06f33899e7b2b0dc0",
+  "files": {
+    "R7-QUERY-REPORT-Test-r1-REPORT.html": {
+      "bytes": 22966,
+      "sha256": "364304c0e64851e8d710aaf5d2586525a9bcb00fec34e7134f9bcf10447c7eae"
+    },
+    "R7-QUERY-REPORT-Test-r1-MATRIX.csv": {
+      "bytes": 9240,
+      "sha256": "22276b0ccbfd980b108cccd771e33a3919396f060c2901e28720f0e9e922bf26"
+    },
+    "R7-QUERY-REPORT-Test-r1-CLOSURE.csv": {
+      "bytes": 13948,
+      "sha256": "7419ad59e08299c78d9130ec56a8c58e62b8edabab7aa16f855aef05e6fcb31a"
+    },
+    "R7-QUERY-REPORT-Test-r1-HANDOFF.json": {
+      "bytes": 5824,
+      "sha256": "8ae5885823876eebf3f4a45cef58cbd911d6d5e41f149725cf0192fc35d91367"
+    },
+    "R7-QUERY-REPORT-Test-r1-EVIDENCE.zip": {
+      "bytes": 2051194,
+      "sha256": "9a8b29b2bbd26166d2cf4e8037202e41325878d48dc76c5cde69435b72c4bede"
+    }
+  }
+}

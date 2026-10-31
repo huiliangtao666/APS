@@ -1,0 +1,690 @@
+{
+  "source_zip": "APS测试数据_v0.3_约束场景与配置数据.zip",
+  "sha256": "01aa86f90d257e3e6c948531f1010d0a0fdf502a68266176991dc0fb8f107759",
+  "files": [
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/01_工厂与产线配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/01_工厂与产线配置.csv",
+      "bytes": 130,
+      "sha256": "5ab9e0a4d1f8d432b8bcb2375449d4af285b3c55a2313aa83ca9420e136e1089"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/02_工厂工作日历.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/02_工厂工作日历.csv",
+      "bytes": 139,
+      "sha256": "d01e60d53e5acd10008cb7afac46b8f6b64df775cd1c30a74d4d5594e2a503a2"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/03_设备资源配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/03_设备资源配置.csv",
+      "bytes": 677,
+      "sha256": "78d7557d0d7e3fe1ab4abe3c0a372c545b8ee3b5b5ff18e0ce0bbc7bb437ad52"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/04_设备停机与例外日历.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/04_设备停机与例外日历.csv",
+      "bytes": 95,
+      "sha256": "8f5877461e92412cb3fb2b6bb4b2bc7ca2cbb950e1ee648d9489a88f9cde0e86"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/05_模具与工具配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/05_模具与工具配置.csv",
+      "bytes": 266,
+      "sha256": "3d9363c7af74899c20fb743f5228dec448e5b70aa7acffa75880ae3beb0a1171"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/06_人员技能与班次.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/06_人员技能与班次.csv",
+      "bytes": 160,
+      "sha256": "fb1a1a5c07ab5adeab29c06afcc0502e9d1b01504ad75b77bbd5cd61e517178a"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/07_产品与包装规格.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/07_产品与包装规格.csv",
+      "bytes": 175,
+      "sha256": "efad6d105b297a99691cc2af8086b984d77afda40d3307a5a25aa06d265d9cc0"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/08_物料主数据.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/08_物料主数据.csv",
+      "bytes": 203,
+      "sha256": "3cda8f510ba4c58cccd34710b3604682b746f43f0ca18f87e356d299780df2bd"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/09_物料BOM配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/09_物料BOM配置.csv",
+      "bytes": 444,
+      "sha256": "bdbf2fcbacafadfe3bb4eb9be5ae5fef3a89925531238466190adb5ff89c4d23"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/10_工艺路线配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/10_工艺路线配置.csv",
+      "bytes": 350,
+      "sha256": "7169fc9451e0a24f5e776ace1de62d9b31dfa291ef6673711542d3a0d83d2505"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/11_工序工时配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/11_工序工时配置.csv",
+      "bytes": 329,
+      "sha256": "9f0e32d1a771f369eda39e9e97e9f78970e35a7b490917034a29e18bc979805c"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/12_工序资源与物料依赖.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/12_工序资源与物料依赖.csv",
+      "bytes": 660,
+      "sha256": "3e75f68c295dfddfccaccd358de2a1fb997dd6c3c471eee47c94d9a806cb61f7"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/13_物料库存批次.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/13_物料库存批次.csv",
+      "bytes": 381,
+      "sha256": "d3f4d18ba355e64c368fd9223dfde52241f757bff492536baa3ca139f408866a"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/14_预计到料与可用时间.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/14_预计到料与可用时间.csv",
+      "bytes": 134,
+      "sha256": "65e650a8d1cd7debe1110f1ab95b78746f60919e3777cf2e36e326fbeaa45291"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/15_空间与组批规则配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/15_空间与组批规则配置.csv",
+      "bytes": 227,
+      "sha256": "c70f1d81667236d7ccbc7bf4c3bf32e3b8de0c826a4c3ec3e73231d7f1393400"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/16_排程规则配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/16_排程规则配置.csv",
+      "bytes": 654,
+      "sha256": "8aff7de258118d9a909d393761d347945d3c4e35c4cd575a27187592649a0d28"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/17_生产订单与交期.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/17_生产订单与交期.csv",
+      "bytes": 115,
+      "sha256": "af442b33df81bf452b554f91b21cdc0987608ba221184673d5d46b657d21ad70"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/18_模拟执行进度.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/18_模拟执行进度.csv",
+      "bytes": 84,
+      "sha256": "21b35b7c8302116167076f057066bd3e30337d0ef204875f7c2a29fd5405dd14"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-12_完整路线与冷却等待窗联合排程/本阶段导入数据/19_模拟异常与条件变更.csv",
+      "path": "temp/main-r7/regression-originals/UAT-12/19_模拟异常与条件变更.csv",
+      "bytes": 77,
+      "sha256": "8d83b95e40b70b63a70dfa0e49279b5d0a3011a3750a3949ee38159a13827836"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/01_工厂与产线配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/01_工厂与产线配置.csv",
+      "bytes": 130,
+      "sha256": "5ab9e0a4d1f8d432b8bcb2375449d4af285b3c55a2313aa83ca9420e136e1089"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/02_工厂工作日历.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/02_工厂工作日历.csv",
+      "bytes": 139,
+      "sha256": "d01e60d53e5acd10008cb7afac46b8f6b64df775cd1c30a74d4d5594e2a503a2"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/03_设备资源配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/03_设备资源配置.csv",
+      "bytes": 677,
+      "sha256": "78d7557d0d7e3fe1ab4abe3c0a372c545b8ee3b5b5ff18e0ce0bbc7bb437ad52"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/04_设备停机与例外日历.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/04_设备停机与例外日历.csv",
+      "bytes": 50,
+      "sha256": "5c3543dc5e6c0a86ad266e150a550b257b6e55b2c3d8bd3caadfcfec5822e974"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/05_模具与工具配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/05_模具与工具配置.csv",
+      "bytes": 266,
+      "sha256": "3d9363c7af74899c20fb743f5228dec448e5b70aa7acffa75880ae3beb0a1171"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/06_人员技能与班次.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/06_人员技能与班次.csv",
+      "bytes": 160,
+      "sha256": "fb1a1a5c07ab5adeab29c06afcc0502e9d1b01504ad75b77bbd5cd61e517178a"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/07_产品与包装规格.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/07_产品与包装规格.csv",
+      "bytes": 175,
+      "sha256": "efad6d105b297a99691cc2af8086b984d77afda40d3307a5a25aa06d265d9cc0"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/08_物料主数据.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/08_物料主数据.csv",
+      "bytes": 203,
+      "sha256": "3cda8f510ba4c58cccd34710b3604682b746f43f0ca18f87e356d299780df2bd"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/09_物料BOM配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/09_物料BOM配置.csv",
+      "bytes": 444,
+      "sha256": "bdbf2fcbacafadfe3bb4eb9be5ae5fef3a89925531238466190adb5ff89c4d23"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/10_工艺路线配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/10_工艺路线配置.csv",
+      "bytes": 350,
+      "sha256": "7169fc9451e0a24f5e776ace1de62d9b31dfa291ef6673711542d3a0d83d2505"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/11_工序工时配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/11_工序工时配置.csv",
+      "bytes": 329,
+      "sha256": "9f0e32d1a771f369eda39e9e97e9f78970e35a7b490917034a29e18bc979805c"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/12_工序资源与物料依赖.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/12_工序资源与物料依赖.csv",
+      "bytes": 1200,
+      "sha256": "89cab17edd64252194eb1ebc2f1e272e1b48e3e37a6f84c9906fe68795614c9d"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/13_物料库存批次.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/13_物料库存批次.csv",
+      "bytes": 381,
+      "sha256": "d3f4d18ba355e64c368fd9223dfde52241f757bff492536baa3ca139f408866a"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/14_预计到料与可用时间.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/14_预计到料与可用时间.csv",
+      "bytes": 134,
+      "sha256": "65e650a8d1cd7debe1110f1ab95b78746f60919e3777cf2e36e326fbeaa45291"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/15_空间与组批规则配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/15_空间与组批规则配置.csv",
+      "bytes": 227,
+      "sha256": "c70f1d81667236d7ccbc7bf4c3bf32e3b8de0c826a4c3ec3e73231d7f1393400"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/16_排程规则配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/16_排程规则配置.csv",
+      "bytes": 654,
+      "sha256": "8aff7de258118d9a909d393761d347945d3c4e35c4cd575a27187592649a0d28"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/17_生产订单与交期.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/17_生产订单与交期.csv",
+      "bytes": 137,
+      "sha256": "524be056428c56fe37e13702867411c2b97390fe6015dba75f4a32e4a04da46a"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/18_模拟执行进度.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/18_模拟执行进度.csv",
+      "bytes": 84,
+      "sha256": "21b35b7c8302116167076f057066bd3e30337d0ef204875f7c2a29fd5405dd14"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-13_合炉500kg与冷却480kg恰好满足/本阶段导入数据/19_模拟异常与条件变更.csv",
+      "path": "temp/main-r7/regression-originals/UAT-13/19_模拟异常与条件变更.csv",
+      "bytes": 77,
+      "sha256": "8d83b95e40b70b63a70dfa0e49279b5d0a3011a3750a3949ee38159a13827836"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/01_工厂与产线配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/01_工厂与产线配置.csv",
+      "bytes": 130,
+      "sha256": "5ab9e0a4d1f8d432b8bcb2375449d4af285b3c55a2313aa83ca9420e136e1089"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/02_工厂工作日历.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/02_工厂工作日历.csv",
+      "bytes": 139,
+      "sha256": "d01e60d53e5acd10008cb7afac46b8f6b64df775cd1c30a74d4d5594e2a503a2"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/03_设备资源配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/03_设备资源配置.csv",
+      "bytes": 677,
+      "sha256": "78d7557d0d7e3fe1ab4abe3c0a372c545b8ee3b5b5ff18e0ce0bbc7bb437ad52"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/04_设备停机与例外日历.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/04_设备停机与例外日历.csv",
+      "bytes": 50,
+      "sha256": "5c3543dc5e6c0a86ad266e150a550b257b6e55b2c3d8bd3caadfcfec5822e974"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/05_模具与工具配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/05_模具与工具配置.csv",
+      "bytes": 266,
+      "sha256": "3d9363c7af74899c20fb743f5228dec448e5b70aa7acffa75880ae3beb0a1171"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/06_人员技能与班次.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/06_人员技能与班次.csv",
+      "bytes": 160,
+      "sha256": "fb1a1a5c07ab5adeab29c06afcc0502e9d1b01504ad75b77bbd5cd61e517178a"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/07_产品与包装规格.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/07_产品与包装规格.csv",
+      "bytes": 175,
+      "sha256": "efad6d105b297a99691cc2af8086b984d77afda40d3307a5a25aa06d265d9cc0"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/08_物料主数据.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/08_物料主数据.csv",
+      "bytes": 203,
+      "sha256": "3cda8f510ba4c58cccd34710b3604682b746f43f0ca18f87e356d299780df2bd"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/09_物料BOM配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/09_物料BOM配置.csv",
+      "bytes": 444,
+      "sha256": "bdbf2fcbacafadfe3bb4eb9be5ae5fef3a89925531238466190adb5ff89c4d23"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/10_工艺路线配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/10_工艺路线配置.csv",
+      "bytes": 350,
+      "sha256": "7169fc9451e0a24f5e776ace1de62d9b31dfa291ef6673711542d3a0d83d2505"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/11_工序工时配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/11_工序工时配置.csv",
+      "bytes": 329,
+      "sha256": "9f0e32d1a771f369eda39e9e97e9f78970e35a7b490917034a29e18bc979805c"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/12_工序资源与物料依赖.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/12_工序资源与物料依赖.csv",
+      "bytes": 1200,
+      "sha256": "89cab17edd64252194eb1ebc2f1e272e1b48e3e37a6f84c9906fe68795614c9d"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/13_物料库存批次.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/13_物料库存批次.csv",
+      "bytes": 381,
+      "sha256": "d3f4d18ba355e64c368fd9223dfde52241f757bff492536baa3ca139f408866a"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/14_预计到料与可用时间.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/14_预计到料与可用时间.csv",
+      "bytes": 134,
+      "sha256": "65e650a8d1cd7debe1110f1ab95b78746f60919e3777cf2e36e326fbeaa45291"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/15_空间与组批规则配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/15_空间与组批规则配置.csv",
+      "bytes": 227,
+      "sha256": "fd35e6802f0c9f59d1d3dd02b014718c3aa9c3427329e6ea7f0bb259db6fd4d6"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/16_排程规则配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/16_排程规则配置.csv",
+      "bytes": 654,
+      "sha256": "8aff7de258118d9a909d393761d347945d3c4e35c4cd575a27187592649a0d28"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/17_生产订单与交期.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/17_生产订单与交期.csv",
+      "bytes": 137,
+      "sha256": "524be056428c56fe37e13702867411c2b97390fe6015dba75f4a32e4a04da46a"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/18_模拟执行进度.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/18_模拟执行进度.csv",
+      "bytes": 84,
+      "sha256": "21b35b7c8302116167076f057066bd3e30337d0ef204875f7c2a29fd5405dd14"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-14_合炉后冷却不足必须联动拆炉/本阶段导入数据/19_模拟异常与条件变更.csv",
+      "path": "temp/main-r7/regression-originals/UAT-14/19_模拟异常与条件变更.csv",
+      "bytes": 77,
+      "sha256": "8d83b95e40b70b63a70dfa0e49279b5d0a3011a3750a3949ee38159a13827836"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/01_工厂与产线配置.csv",
+      "path": "temp/main-b15/originals/UAT-15/01_工厂与产线配置.csv",
+      "bytes": 130,
+      "sha256": "5ab9e0a4d1f8d432b8bcb2375449d4af285b3c55a2313aa83ca9420e136e1089"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/02_工厂工作日历.csv",
+      "path": "temp/main-b15/originals/UAT-15/02_工厂工作日历.csv",
+      "bytes": 139,
+      "sha256": "d01e60d53e5acd10008cb7afac46b8f6b64df775cd1c30a74d4d5594e2a503a2"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/03_设备资源配置.csv",
+      "path": "temp/main-b15/originals/UAT-15/03_设备资源配置.csv",
+      "bytes": 677,
+      "sha256": "78d7557d0d7e3fe1ab4abe3c0a372c545b8ee3b5b5ff18e0ce0bbc7bb437ad52"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/04_设备停机与例外日历.csv",
+      "path": "temp/main-b15/originals/UAT-15/04_设备停机与例外日历.csv",
+      "bytes": 81,
+      "sha256": "072185d2f9625d68f6e081e2c9f4d4e806de72bed802d597e1bbf1611f51578e"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/05_模具与工具配置.csv",
+      "path": "temp/main-b15/originals/UAT-15/05_模具与工具配置.csv",
+      "bytes": 266,
+      "sha256": "3d9363c7af74899c20fb743f5228dec448e5b70aa7acffa75880ae3beb0a1171"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/06_人员技能与班次.csv",
+      "path": "temp/main-b15/originals/UAT-15/06_人员技能与班次.csv",
+      "bytes": 160,
+      "sha256": "fb1a1a5c07ab5adeab29c06afcc0502e9d1b01504ad75b77bbd5cd61e517178a"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/07_产品与包装规格.csv",
+      "path": "temp/main-b15/originals/UAT-15/07_产品与包装规格.csv",
+      "bytes": 173,
+      "sha256": "299afcb5bc575927751621af5c1f65c0fe34ac6082c2fc715eb64c31c714a420"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/08_物料主数据.csv",
+      "path": "temp/main-b15/originals/UAT-15/08_物料主数据.csv",
+      "bytes": 203,
+      "sha256": "3cda8f510ba4c58cccd34710b3604682b746f43f0ca18f87e356d299780df2bd"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/09_物料BOM配置.csv",
+      "path": "temp/main-b15/originals/UAT-15/09_物料BOM配置.csv",
+      "bytes": 374,
+      "sha256": "8e7ba0b451aa8b7415f4a65ef4be2e3b77eeb23dd8a0e9fba15883dd94f121eb"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/10_工艺路线配置.csv",
+      "path": "temp/main-b15/originals/UAT-15/10_工艺路线配置.csv",
+      "bytes": 176,
+      "sha256": "400d01fb11e23784338c9e52f0fb591e8046b8b4f147992fe2e1f2b256ce1af8"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/11_工序工时配置.csv",
+      "path": "temp/main-b15/originals/UAT-15/11_工序工时配置.csv",
+      "bytes": 173,
+      "sha256": "4838e7ad58e023be86ba474cdb32f84b73c6cd61863100b042ad7ee1779e43e2"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/12_工序资源与物料依赖.csv",
+      "path": "temp/main-b15/originals/UAT-15/12_工序资源与物料依赖.csv",
+      "bytes": 788,
+      "sha256": "056de11c269c960ef34a7264b4bd693d516665e9787b3ce5622acbf009367359"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/13_物料库存批次.csv",
+      "path": "temp/main-b15/originals/UAT-15/13_物料库存批次.csv",
+      "bytes": 381,
+      "sha256": "4c1950a0c3ea7bbe3cb1e73b30a5ed4ada6209b39709fcbb7d33214f6691f8b0"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/14_预计到料与可用时间.csv",
+      "path": "temp/main-b15/originals/UAT-15/14_预计到料与可用时间.csv",
+      "bytes": 194,
+      "sha256": "35243a0effa70a65a62c1c185c5437f64706399b398ff8bc3da3200268afe907"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/15_空间与组批规则配置.csv",
+      "path": "temp/main-b15/originals/UAT-15/15_空间与组批规则配置.csv",
+      "bytes": 64,
+      "sha256": "c03753b5cd8492edb04540fdcb274aa550fe6d84b006a005ef4c9ee66079ef38"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/16_排程规则配置.csv",
+      "path": "temp/main-b15/originals/UAT-15/16_排程规则配置.csv",
+      "bytes": 654,
+      "sha256": "dd807e693591739cdcb61f6f0a33e0f1fe76804d66b75308e8a6bb7459742ae1"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/17_生产订单与交期.csv",
+      "path": "temp/main-b15/originals/UAT-15/17_生产订单与交期.csv",
+      "bytes": 137,
+      "sha256": "3ea103baf777ca5a423329348b474c86a8038b4d9db55b2711fb4963f4424e66"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/18_模拟执行进度.csv",
+      "path": "temp/main-b15/originals/UAT-15/18_模拟执行进度.csv",
+      "bytes": 192,
+      "sha256": "b7354be8eb2dfdb2ea2b54582434b5b0c561057d4aa4746c227def78a5ab5f50"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-15_已执行保护及增人无交期改善试算/本阶段导入数据/19_模拟异常与条件变更.csv",
+      "path": "temp/main-b15/originals/UAT-15/19_模拟异常与条件变更.csv",
+      "bytes": 141,
+      "sha256": "21b29ec7d05f2ab01176a6f608b0062a0ed56712b9238e962de989a1c5cf894a"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/01_工厂与产线配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/01_工厂与产线配置.csv",
+      "bytes": 130,
+      "sha256": "5ab9e0a4d1f8d432b8bcb2375449d4af285b3c55a2313aa83ca9420e136e1089"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/02_工厂工作日历.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/02_工厂工作日历.csv",
+      "bytes": 139,
+      "sha256": "d01e60d53e5acd10008cb7afac46b8f6b64df775cd1c30a74d4d5594e2a503a2"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/03_设备资源配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/03_设备资源配置.csv",
+      "bytes": 677,
+      "sha256": "78d7557d0d7e3fe1ab4abe3c0a372c545b8ee3b5b5ff18e0ce0bbc7bb437ad52"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/04_设备停机与例外日历.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/04_设备停机与例外日历.csv",
+      "bytes": 50,
+      "sha256": "5c3543dc5e6c0a86ad266e150a550b257b6e55b2c3d8bd3caadfcfec5822e974"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/05_模具与工具配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/05_模具与工具配置.csv",
+      "bytes": 266,
+      "sha256": "3d9363c7af74899c20fb743f5228dec448e5b70aa7acffa75880ae3beb0a1171"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/06_人员技能与班次.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/06_人员技能与班次.csv",
+      "bytes": 160,
+      "sha256": "a4cc777bdefc88fb05cda0565d2aee28beca092f4a55f099e83479c0be0d900d"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/07_产品与包装规格.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/07_产品与包装规格.csv",
+      "bytes": 175,
+      "sha256": "efad6d105b297a99691cc2af8086b984d77afda40d3307a5a25aa06d265d9cc0"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/08_物料主数据.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/08_物料主数据.csv",
+      "bytes": 203,
+      "sha256": "3cda8f510ba4c58cccd34710b3604682b746f43f0ca18f87e356d299780df2bd"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/09_物料BOM配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/09_物料BOM配置.csv",
+      "bytes": 444,
+      "sha256": "bdbf2fcbacafadfe3bb4eb9be5ae5fef3a89925531238466190adb5ff89c4d23"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/10_工艺路线配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/10_工艺路线配置.csv",
+      "bytes": 350,
+      "sha256": "7169fc9451e0a24f5e776ace1de62d9b31dfa291ef6673711542d3a0d83d2505"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/11_工序工时配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/11_工序工时配置.csv",
+      "bytes": 329,
+      "sha256": "9f0e32d1a771f369eda39e9e97e9f78970e35a7b490917034a29e18bc979805c"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/12_工序资源与物料依赖.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/12_工序资源与物料依赖.csv",
+      "bytes": 660,
+      "sha256": "3e75f68c295dfddfccaccd358de2a1fb997dd6c3c471eee47c94d9a806cb61f7"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/13_物料库存批次.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/13_物料库存批次.csv",
+      "bytes": 381,
+      "sha256": "d3f4d18ba355e64c368fd9223dfde52241f757bff492536baa3ca139f408866a"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/14_预计到料与可用时间.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/14_预计到料与可用时间.csv",
+      "bytes": 134,
+      "sha256": "65e650a8d1cd7debe1110f1ab95b78746f60919e3777cf2e36e326fbeaa45291"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/15_空间与组批规则配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/15_空间与组批规则配置.csv",
+      "bytes": 227,
+      "sha256": "c70f1d81667236d7ccbc7bf4c3bf32e3b8de0c826a4c3ec3e73231d7f1393400"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/16_排程规则配置.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/16_排程规则配置.csv",
+      "bytes": 654,
+      "sha256": "8aff7de258118d9a909d393761d347945d3c4e35c4cd575a27187592649a0d28"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/17_生产订单与交期.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/17_生产订单与交期.csv",
+      "bytes": 114,
+      "sha256": "c21870440d1a0a8dcfd039b4f71f3740d05045d6b6b117d8ec5be84acb740fb6"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/18_模拟执行进度.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/18_模拟执行进度.csv",
+      "bytes": 84,
+      "sha256": "21b35b7c8302116167076f057066bd3e30337d0ef204875f7c2a29fd5405dd14"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-17_完整工艺下原交期不可能满足/本阶段导入数据/19_模拟异常与条件变更.csv",
+      "path": "temp/main-r7/regression-originals/UAT-17/19_模拟异常与条件变更.csv",
+      "bytes": 77,
+      "sha256": "8d83b95e40b70b63a70dfa0e49279b5d0a3011a3750a3949ee38159a13827836"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/01_工厂与产线配置.csv",
+      "path": "temp/main-b15/originals/UAT-18/01_工厂与产线配置.csv",
+      "bytes": 130,
+      "sha256": "5ab9e0a4d1f8d432b8bcb2375449d4af285b3c55a2313aa83ca9420e136e1089"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/02_工厂工作日历.csv",
+      "path": "temp/main-b15/originals/UAT-18/02_工厂工作日历.csv",
+      "bytes": 159,
+      "sha256": "7f68ccbfab4eb3d1eda611f29e7d66364cf785ae929adf5f17cccb1646d7cf03"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/03_设备资源配置.csv",
+      "path": "temp/main-b15/originals/UAT-18/03_设备资源配置.csv",
+      "bytes": 677,
+      "sha256": "78d7557d0d7e3fe1ab4abe3c0a372c545b8ee3b5b5ff18e0ce0bbc7bb437ad52"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/04_设备停机与例外日历.csv",
+      "path": "temp/main-b15/originals/UAT-18/04_设备停机与例外日历.csv",
+      "bytes": 50,
+      "sha256": "5c3543dc5e6c0a86ad266e150a550b257b6e55b2c3d8bd3caadfcfec5822e974"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/05_模具与工具配置.csv",
+      "path": "temp/main-b15/originals/UAT-18/05_模具与工具配置.csv",
+      "bytes": 268,
+      "sha256": "0c001d292ed35fcdc18ed983817ebc404c0851d36d7c0040beaced9b61c1d701"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/06_人员技能与班次.csv",
+      "path": "temp/main-b15/originals/UAT-18/06_人员技能与班次.csv",
+      "bytes": 160,
+      "sha256": "a4cc777bdefc88fb05cda0565d2aee28beca092f4a55f099e83479c0be0d900d"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/07_产品与包装规格.csv",
+      "path": "temp/main-b15/originals/UAT-18/07_产品与包装规格.csv",
+      "bytes": 173,
+      "sha256": "299afcb5bc575927751621af5c1f65c0fe34ac6082c2fc715eb64c31c714a420"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/08_物料主数据.csv",
+      "path": "temp/main-b15/originals/UAT-18/08_物料主数据.csv",
+      "bytes": 203,
+      "sha256": "3cda8f510ba4c58cccd34710b3604682b746f43f0ca18f87e356d299780df2bd"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/09_物料BOM配置.csv",
+      "path": "temp/main-b15/originals/UAT-18/09_物料BOM配置.csv",
+      "bytes": 374,
+      "sha256": "c99d26dc4d73c953dcba5c11727c49547322427418a1f4edd3108e86e23b69e1"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/10_工艺路线配置.csv",
+      "path": "temp/main-b15/originals/UAT-18/10_工艺路线配置.csv",
+      "bytes": 176,
+      "sha256": "400d01fb11e23784338c9e52f0fb591e8046b8b4f147992fe2e1f2b256ce1af8"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/11_工序工时配置.csv",
+      "path": "temp/main-b15/originals/UAT-18/11_工序工时配置.csv",
+      "bytes": 173,
+      "sha256": "9085c5e3d05cbd6ffe3b654fbd839a51d910846ef28c41810da69a47e4e81a18"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/12_工序资源与物料依赖.csv",
+      "path": "temp/main-b15/originals/UAT-18/12_工序资源与物料依赖.csv",
+      "bytes": 454,
+      "sha256": "a53704e712f961c5233523db8c3fcd074c25368be8e4be405e15037c49e285f1"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/13_物料库存批次.csv",
+      "path": "temp/main-b15/originals/UAT-18/13_物料库存批次.csv",
+      "bytes": 381,
+      "sha256": "d3f4d18ba355e64c368fd9223dfde52241f757bff492536baa3ca139f408866a"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/14_预计到料与可用时间.csv",
+      "path": "temp/main-b15/originals/UAT-18/14_预计到料与可用时间.csv",
+      "bytes": 134,
+      "sha256": "65e650a8d1cd7debe1110f1ab95b78746f60919e3777cf2e36e326fbeaa45291"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/15_空间与组批规则配置.csv",
+      "path": "temp/main-b15/originals/UAT-18/15_空间与组批规则配置.csv",
+      "bytes": 64,
+      "sha256": "c03753b5cd8492edb04540fdcb274aa550fe6d84b006a005ef4c9ee66079ef38"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/16_排程规则配置.csv",
+      "path": "temp/main-b15/originals/UAT-18/16_排程规则配置.csv",
+      "bytes": 654,
+      "sha256": "d87d2a906ae0e1b7855d9c0eb889e290509cfcca279d819b38e23ba85469ef4d"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/17_生产订单与交期.csv",
+      "path": "temp/main-b15/originals/UAT-18/17_生产订单与交期.csv",
+      "bytes": 115,
+      "sha256": "af442b33df81bf452b554f91b21cdc0987608ba221184673d5d46b657d21ad70"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/18_模拟执行进度.csv",
+      "path": "temp/main-b15/originals/UAT-18/18_模拟执行进度.csv",
+      "bytes": 84,
+      "sha256": "21b35b7c8302116167076f057066bd3e30337d0ef204875f7c2a29fd5405dd14"
+    },
+    {
+      "source": "APS测试数据_v0.3/场景数据/UAT-18_配置修改后联动重算并保留原方案/本阶段导入数据/19_模拟异常与条件变更.csv",
+      "path": "temp/main-b15/originals/UAT-18/19_模拟异常与条件变更.csv",
+      "bytes": 77,
+      "sha256": "8d83b95e40b70b63a70dfa0e49279b5d0a3011a3750a3949ee38159a13827836"
+    }
+  ]
+}

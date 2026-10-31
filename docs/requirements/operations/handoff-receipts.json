@@ -1880,6 +1880,31 @@
       ],
       "repair_rounds_added": 0,
       "uat": "WAITING_DEPENDENCIES"
+    },
+    {
+      "event_key": "dlv_deda4264-6544-428f-8f1f-6122d5d01826:r1",
+      "type": "DEV_DELIVERED",
+      "state": "PROCESSED",
+      "source": "APS-Test Inbox dlv_73f4b790-0fac-4172-a076-5bfac501bf6a",
+      "processed_at": "2026-10-31T01:11:00+08:00",
+      "requirement": "FR-013 v0.3+CR-FR013-VALIDATION-20261029 / Issue4",
+      "product_sha": "b1a4863c6e899274ef32b0fd7cdfb26e8c673cb5",
+      "result": "APS-Test developer selftest 28/28 PASS, CSV 8/8 PASS; bounded task Done; full FR013/CR NOT_READY",
+      "external_hashes": {
+        "REPORT.md": "fe1054346d2c78b9573fa62e6aadacb6763ab7b2fa0abeacc9b115fb1e8d826a",
+        "MATRIX.csv": "70a48d30ffe2c9df181bb6f5eca4ea115261274f0647e8b7cbaa3214f63cd03c",
+        "EVIDENCE.zip": "d0827ee965b7a9916de8b7a48928ca1a969ce4b8b941a10ce2be26955fe6cda8",
+        "SHA256.json": "89dd840642d62cc8fc5c2b80eaf442d1aba44b354a79dcf6ba140cf8d6e1b2f8"
+      },
+      "evidence_note": "ZIP Files API 504 twice; exact APS-Test workspace file read-only hash/CRC/298 manifest checked",
+      "matrix_rows_verified": 28,
+      "issue_comment": "https://github.com/huiliangtao666/APS/issues/4#issuecomment-6528710360",
+      "project_status": {
+        "FR-013": "In progress"
+      },
+      "repair_rounds_added": 0,
+      "uat": "WAITING_DEPENDENCIES",
+      "next_dispatch": "dlv_2a2832da-d3ff-4d36-9542-f775d303f3ca"
     }
   ]
 }

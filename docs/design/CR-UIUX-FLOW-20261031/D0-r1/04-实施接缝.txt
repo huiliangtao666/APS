@@ -1,0 +1,32 @@
+D0 r1 · 给APS-PM的首批落地建议（业务接缝；具体技术选择和文件锁由PM/Dev核定）
+产品SHA=null；本文件不是给Dev/Test的新派工。不改变B08原delivery、不接触QA未提交补丁。
+
+1 S1 / S2互斥建议
+S1 owner APS-Dev：流程容器、路标、选择/表单、维护定位返回与当前草稿；共享App、Worker、API只有Dev一个写入人。
+建议新增专属路径：src/uiux-flow/FlowShell.tsx、SelectionStep.tsx、ReadinessStep.tsx、ConstraintStep.tsx、MaintenanceReturn.tsx（路径仅建议，当前尚不存在，不由Design创建产品文件）。
+S2 owner APS-Test（依本CR同包开发授权）：独立运行状态/结果入口/甘特问题联动呈现/保存导出组件与自测。
+建议新增专属路径：src/uiux-flow/RunFeedback.tsx、ResultWorkspace.tsx、TaskProblemLinks.tsx、SaveExportStep.tsx；需要共享状态读写由Dev整合人接入，S2不改App/Worker/API。
+开工前由PM确认一次文件表；共同类型/公用样式/状态转换由Dev唯一写；S2通过只读props/事件业务语义对接。既有src/TimelinePanel.tsx、TaskLinkage.tsx、RunPanel.tsx、ResultPanel.tsx、DataEditor.tsx、R21ConfigurationPanel.tsx若复用或修改，明确单一owner；不可双写。样式限定本区域，避免牵连旧页面。其他现有路径、算法、存储和接口由Dev检查实际版本决定。
+当前只读观察main=c48d214f8197d1346eccbb8886bb7138eb263d56；联合卡通知main=aff693e826fd9d3d8346b738a6fb81db58a59ee2；两者都不是指定候选。候选须等待B08共享文件释放、QA未提交补丁独立非main保护（源SHA、diff/新增文件、hash、普通push）后，由PM协调Dev选择统一非main分支。
+
+2 业务数据接缝
+共享工作台状态：所选产线/订单、起止分钟、操作原因、模式、排序、规则草稿、当前源数据revision、已保存/已应用配置版本、准备检查版本、当前run/plan、焦点与筛选锚点。维护返回定位必须包含表、记录身份、字段、来源版本与返回锚点。页面间传递业务状态，不假定通过重新读取全局最新数据可恢复冻结来源。
+运行只读取现有业务记录字段：id、status、phase、createdAt、finishedAt、durationMs、outcome、retryOf、planId、inputVersionId、snapshotHash、conditions（mode/checkScope/orderIds/lineId/startMinute/endMinute/priority/enabledRuleIds/timeOrigin）、failure、resultState。此目录来自当前RunPanel.tsx，只作业务对接依据，最终数据契约由Dev确认。
+真实状态依据：现Worker发progress phase=计算中，然后result或failure；没有“机器检查20%/物料80%”事件。UI不得自行细化为已发生阶段。submitting是请求客户端状态；queued/running由服务端记录；completed/partial取实际记录和结果，不能看到HTTP200便写成功。有planId才出现结果入口。若产品状态服务暂不可读，显示未知/最后更新时间，保留runId恢复，不自动新建重复计算。
+计算checked/unchecked与独立verification检查集合分别显示；未知scope不补当前范围。run.status、resultState、任务覆盖、未排、问题是相关但不等价的业务维度。实际采用范围以冻结conditions.checkScope及规则生效信息为准。
+维护保存/应用与重算：源数据保存成功后更新当前输入revision并失效准备检查；R2.1六项配置单独保存，显式应用产生新当前输入；冻结历史不改。409保留草稿与差异；400字段定位；403访问/环境解释；技术内部详情藏在可展开诊断，不暴露凭据。
+
+3 S3与验收证据（由PM安排）
+统一固定40位产品SHA，父SHA/合入来源、变更断言、运行环境/构建部署标识、数据配置与文件指纹、同一候选的UI/API/Worker/保存重开/原生导出实际路径。旧PASS留原SHA；构建或合并不代替UAT。
+任务级自测分工去重：S1负责UX02维护返回/准备/禁用/共享冲突；S2负责UX03状态/任务问题双向定位/零任务和过滤零条/键盘窄屏；整合人负责UX01完整小闭环和UX04改配置新运行、旧冻结来源/导出不变；UX05由本设计目录与最终版本证据共同验证。自测必须覆盖负面和边界；合并接缝按影响核验，不两人盲跑全套。QA入口满足且PM调度后独立受影响UAT；Design本轮不执行产品测试。
+
+4 首批落地所需决定及当前建议
+D-01 首批断言集：建议UAT01/02基础闭环必选（见05逐行）；工装/人员/normalized物料为条件扩展，逐项复现后可在同包开放。决定人PM核范围；Dev/Test提供同候选证据。不依赖用户重复授权本CR。
+D-02 统一候选和文件责任：PM/Dev确认B08释放、QA补丁已保护、父SHA和唯一写文件表；未完成前产品仍WAIT_CANDIDATE。Design设计分支不是产品候选。
+D-03 现有数据/规则参数是否可用：复用已批准和实际采用契约；遇到新增业务含义或默认值由有权业务决定人裁决，Design提出，PM流转。未知保持null/需补，不选现场默认。
+D-04 首批命名保存与原生导出：复用既有保存/导出对象与字段，保证相同冻结输入；若现实现无法原子保存或导出缺trace，由Dev报告具体缺口，PM按已有UX范围处理。离线原型JSON格式不要求成为产品新格式。
+D-05 高级/后续占位：PM按06映射回原包；DEC04–06新增应用、B02、真实D3仍WAIT_APPROVAL。比较拖拽重排审批不因UI入口存在就加入首批。
+以上决定不要求Design提前改变产品、开新任务、审批默认值或发布。
+
+5 参数目录的解释
+02c沿用20261031参数提案索引，只为就近帮助定位。记录“MOCK_ONLY/候选/待批”的项保持原性质；不得将历史仿真值预填成现场默认。38张表字段目录是当前只读源码词汇表，字段被列出不表示本CR批准其全功能或其当前实现已验收。CSV文件序号存在原始与normalized同号；始终用tableKey+模板文件+输入版本识别，禁止只凭09/18/19/31号跳转。

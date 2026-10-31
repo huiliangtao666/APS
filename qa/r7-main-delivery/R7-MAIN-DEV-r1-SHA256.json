@@ -1,0 +1,27 @@
+{
+  "productSha": "7fd9683291607b65e8fbf52f633fcbc9d88254e7",
+  "event_key": "dlv_16b0f1de-32f3-4ce0-a436-df42b8d25d43:r1",
+  "internalFileHashes": 750,
+  "files": {
+    "R7-MAIN-DEV-r1-REPORT.md": {
+      "bytes": 8045,
+      "sha256": "d7ee89438cdb8db115e9eb3cf98e3957ede03a5b521854aac8e5bc6f68bc57bd"
+    },
+    "R7-MAIN-DEV-r1-MATRIX.csv": {
+      "bytes": 5702,
+      "sha256": "bf87a5d2e81c1f2b4f2d5b351968d2e15f7c2a58a10308df3a3e64d765deeff6"
+    },
+    "R7-MAIN-DEV-r1-CLOSURE.csv": {
+      "bytes": 24086,
+      "sha256": "8a43338e0f21be985661df67c5e2fb25fbe4471b80ca647b392d76d8a511fd97"
+    },
+    "R7-MAIN-DEV-r1-ENVIRONMENT.json": {
+      "bytes": 75756,
+      "sha256": "8f58b75e6a203daa4ab5d2573cf67e10a564808b3387507b645e5b2a5cb4f856"
+    },
+    "R7-MAIN-DEV-r1-EVIDENCE.zip": {
+      "bytes": 6252999,
+      "sha256": "18230b3f1a1f3038703f3e36670d8f1e7cc09fcf23da636d8fff6da03e088353"
+    }
+  }
+}

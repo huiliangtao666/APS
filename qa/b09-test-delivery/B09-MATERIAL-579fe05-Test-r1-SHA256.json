@@ -1,0 +1,27 @@
+{
+  "code_sha": "579fe0589757154857c519e4968dee1e288ca9a0",
+  "direct_parent": "12d453d7cb03829dc609115e48c5e4c19af4a6ec",
+  "event_key": "dlv_f32dfc1f-287a-49ea-8db1-65995e8030fb:r1",
+  "files": [
+    {
+      "path": "B09-MATERIAL-579fe05-Test-r1-REPORT.html",
+      "bytes": 8263,
+      "sha256": "13dd4ce6c52b6d72148e8366a863b7ee69fe0bcf4d8d0c3b20b04224ea7d4919"
+    },
+    {
+      "path": "B09-MATERIAL-579fe05-Test-r1-MATRIX.csv",
+      "bytes": 8558,
+      "sha256": "58b1fb68fc7b96784abd95d48b76ffc0cc21003ea3d4e5f665136f2a61e7cbe6"
+    },
+    {
+      "path": "B09-MATERIAL-579fe05-Test-r1-CLOSURE.csv",
+      "bytes": 4594,
+      "sha256": "a9747c12fb36d133e720503ce7c82d01091f51bc550ee2582e1260a4082e5fbd"
+    },
+    {
+      "path": "B09-MATERIAL-579fe05-Test-r1-EVIDENCE.zip",
+      "bytes": 1464256,
+      "sha256": "74c4f0211a5e0a1ff58f77efafa80e5f91693b92ce7b043234543e6c5eae2577"
+    }
+  ]
+}

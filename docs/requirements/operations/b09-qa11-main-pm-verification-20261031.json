@@ -1,0 +1,30 @@
+{
+  "outer_hashes": 6,
+  "internal_hashes": 339,
+  "zip_crc": "PASS",
+  "matrix": {
+    "PASS": 25,
+    "NOT_EXECUTED": 1,
+    "PARTIAL": 1,
+    "BLOCKED": 1
+  },
+  "closure_rows": 15,
+  "qa_independent_checks": 73,
+  "pm_role": "Evidence verification; no QA rerun or independent build",
+  "event_key": "dlv_b6300a48-b757-47a3-b31f-da50dafe224f:r1",
+  "inbox_delivery": "dlv_dca74620-a610-46ba-a2df-d06bd104a47c",
+  "product_sha": "a0b846e5b7aba5ee165b8d12fabfe8896fbc4ff2",
+  "qa_original_status": "completed",
+  "whole_bundle": "NOT_READY",
+  "project_status": "In review",
+  "qa_verdict": "PASS dispatched complete explicit normalized UAT11",
+  "product_fail_increment": 0,
+  "repair_round_increment": 0,
+  "closed_old_logs": 0,
+  "live_probe": "18184 connection refused at PM processing; final-build artifacts verified, no current-live claim",
+  "publication": false,
+  "patrol": "paused",
+  "next": "QA idle until a distinct complete entrance is ready; FR011 approved expected-supply and AC22 partial submit/return/confirm remain, no duplicate09/10/11 dispatch",
+  "receipt_mechanism": "one-shot result hook; no separate ACK",
+  "at": "2026-10-31T19:04:44.630156+08:00"
+}
