@@ -1451,9 +1451,7 @@
       },
       "calculation_contract_status": "现有同基准kg生产损耗模型明确，可据受控公式开发自测；原料运输损耗上游应用环节待明确。非同单位/非质量守恒/新增工序加料不自动扩围。",
       "implementation_status": "NOT_DISPATCHED新公式：先将已确认投入/产出边界固化为受控验收依据；未确定部分不擅定公式，不改变历史固定SHA证据",
-      "business_questions": [
-        "原料和运输损耗具体减少哪个阶段的可用数量/用于哪一备料量基数，运输发生于原料还是成品环节？"
-      ],
+      "business_questions": [],
       "original_bom_example_evidence": {
         "sha": "172b415122472b933fc9935b5537697ebc03ccfc",
         "path": "public/fr036/examples/09_物料BOM配置.csv",
@@ -1488,6 +1486,11 @@
           "event_key": "user:bom-per-material-production-loss:20261031:r1",
           "quote": "各物料生产损耗不同",
           "decision": "每物料损耗分别生效；在现有同基准kg质量守恒模型内汇总剩余产出，派生配方加权生产收率"
+        },
+        {
+          "event_key": "user:b09-business-ready:20261031:r1",
+          "quote": "B09没有业务问题了，B12有什么吗",
+          "decision": "B09业务澄清完成；已确认投入定额/逐物料生产损耗及默认继承作为开发依据，不再以原09/总收率业务待确认阻塞B09。未额外授权尚未明确的上游运输消耗算法。"
         }
       ],
       "normalized_mass_model": {
@@ -1500,7 +1503,9 @@
         "target_output_scale": "目标合格产出/O",
         "required_material_input": "q_i*目标合格产出/O",
         "no_double_count": "产品总收率从各物料生产损耗派生，不再并用旧固定总收率重复扣损耗；原料与运输损耗不纳入此生产收率"
-      }
+      },
+      "b09_business_gate": "READY_USER_CONFIRMED；剩余开发自测/FR011/AC22/适用QA由团队执行，不等业务方重复解释",
+      "nonblocking_future_details": "若另行实现原料/运输损耗上游消耗的特殊环节/数量基数，再按明确配置合同处理；不再列为当前B09业务验收前置，不擅自推三类相加或连乘。"
     }
   ]
 }
