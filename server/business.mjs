@@ -224,7 +224,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
       const issues=[...validateInputs(defs,data,{at,checkPolicyExecution:false}),...executionAdmission(frozen.executionData,frozen.conditions),...assessRules(frozen.executionData,at,true,frozen.conditions.mode).issues];
       if(issues.length)return {status:'blocked',issues};
       const plan=calculate(frozen.executionData,state.revision,at,frozen.conditions);
-      return {status:'preview',snapshotHash:frozen.snapshotHash,conditions:frozen.conditions,tasks:plan.tasks,resourceReservations:plan.resourceReservations,findings:plan.findings,resourceVerification:verifyResourcePolicies(plan,frozen.executionData,frozen.conditions)};
+      return {status:'preview',snapshotHash:frozen.snapshotHash,conditions:frozen.conditions,tasks:plan.tasks,resourceReservations:plan.resourceReservations,materialChecked:plan.materialChecked,materialDemands:plan.materialDemands,findings:plan.findings,resourceVerification:verifyResourcePolicies(plan,frozen.executionData,frozen.conditions)};
     }
     try{
       const proposed=evaluate(candidate);if(proposed.status==='blocked')return res.status(422).json({error:'preview_blocked',issues:proposed.issues});
