@@ -29,7 +29,9 @@ export function resourceTaskSources(view,taskIds){
  const originalDependencies=(input.originalDependencies||[]).filter(r=>tasks.some(t=>t.orderId===r['订单编号']&&t.operation===r['工序编号']));
  const claims=(input.resourceClaims||[]).filter(r=>tasks.some(t=>t.orderId===r['订单编号']&&t.operation===r['工序编号']));
  const reservations=view.reservations.filter(r=>(r.taskIds||[r.taskId]).some(id=>taskIds.includes(id)));
- for(const [table,rows] of Object.entries({originalDependencies,dependencies,resourceClaims:claims,tools:(input.tools||[]).filter(t=>reservations.some(r=>r.type==='工装'&&r.resourceId===t['工装编码'])),personnelGroups:(input.personnelGroups||[]).filter(g=>reservations.some(r=>r.type==='人员'&&r.resourceId===g['人员组编号'])),personnelPools:(input.personnelPools||[]).filter(p=>reservations.some(r=>r.poolId===p.poolId))}))for(const row of rows){
+ const resourceMappings=(input.resourceMappings||[]).filter(m=>m['来源类别']==='originalTools'&&reservations.some(r=>r.type==='工装'&&r.resourceId===m['运行编号']));
+ const originalTools=(input.originalTools||[]).filter(t=>resourceMappings.some(m=>m['来源编号']===t['资源编号']));
+ for(const [table,rows] of Object.entries({originalDependencies,dependencies,resourceClaims:claims,originalTools,resourceMappings,tools:(input.tools||[]).filter(t=>reservations.some(r=>r.type==='工装'&&r.resourceId===t['工装编码'])),personnelGroups:(input.personnelGroups||[]).filter(g=>reservations.some(r=>r.type==='人员'&&r.resourceId===g['人员组编号'])),personnelPools:(input.personnelPools||[]).filter(p=>reservations.some(r=>r.poolId===p.poolId))}))for(const row of rows){
   const index=input[table].indexOf(row),source=view.plan.inputCsvSources?.[table];
   refs.push({table,index,physicalRow:source?.records?.[index]?.line??null,canonicalRow:index+2,file:source?.file??null,sourceSha256:source?.sha256??null,inputVersionId:view.run.inputVersionId,row});
  }
