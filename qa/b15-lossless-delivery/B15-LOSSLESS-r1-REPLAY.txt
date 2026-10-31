@@ -1,0 +1,22 @@
+Fixed product: e603e8fc342d8d1e1f02b9ed8444aef1d9879463
+Parent: 172b415122472b933fc9935b5537697ebc03ccfc
+Original delivery: dlv_44957cda-4ca5-41d8-a44e-ddc3cbca11e6
+Event: dlv_44957cda-4ca5-41d8-a44e-ddc3cbca11e6:r1
+
+取得代码：从GitHub APS的上述完整产品SHA检出。EVIDENCE/source只是审查/复演子集，完整3424文件清单另附；不要把源码子集当完整仓库。
+运行必须在独立Linux应用容器，Node22.23.2，与已有QA环境分开。使用workspace-app-builder的app-exec.sh执行npm ci / 构建 / 有限测试；勿在VM宿主安装依赖或启动应用。平台SDK两个本地tgz依赖由工作区提供，见package-lock；依赖不可取得时如实记录环境阻断。
+标准构建：NODE_OPTIONS=--max-old-space-size=280 npm run build。
+本次固定构建包含TypeScript/Vite/API/calculation Worker，17项直接依赖符合lock；不用旧dist覆盖固定源码。
+
+六场景输入在INPUTS.zip的UAT-12/13/14/15/17/18。每个独立状态从空开始；IMPORT-REQUEST.json含文件字节文本与原17显式补录；PROFILE.json含明确模拟性质、完整数据与运行选择。所有数据是可替换工程模拟，不替代客户权威，不实施新CR-BOM-LOSS公式。
+进入数据与CSV，填写操作原因，上传本场景39份CSV，按IMPORT-REQUEST逐物理行补原17三个选项，整批预览后提交。UAT15运行开始分钟60，其余0；结束600，已有支持模式，采用文件中启用规则。应得5/10/10/4/5/2任务；UAT15 A0–30/30–60，B180–210/210–240。原09字面与legacy规范化计算BOM分列。
+同一状态不要直接拿另一场景低版本配置覆盖：修改后的配置必须升版本，历史版本不能复用。独立场景使用独立状态；旧状态/方案不删除来绕过保护。
+
+绑定编辑：选择“原13/14/18/19 显式运行绑定”。修改配置必须递增版本；改位置/质量/单位/时效等时，在对应目标表一起暂存一致的显式值。返回绑定页，明确填写预览起始分钟（UAT15=60），预览原来源绑定，业务存储零写；保存后新Worker采用新版本。旧运行、原CSV物理行/hash及确认副本不变。
+结果中查看“原13/14/18/19冻结绑定与数据性质”，执行独立复核，导出原生CSV，检查配置版本及原文件物理行/hash。查询角色不能编辑/保存。每个失败按MATRIX及selftest的具体原因核对零写。
+
+任务级检查：node --experimental-strip-types --test --test-concurrency=1 qa/b15-lossless*.test.mjs（35项）。夹具生成使用原始场景目录：本次默认/workspace/temp/main-r7/regression-originals和/workspace/temp/main-b15/originals；跨工作区可按EVIDENCE/source与INPUTS改路径或直接提交IMPORT-REQUEST，勿冒称本地scratch是共享挂载。旧residual自测可通过B4_INPUTS/B15_ORIGINALS指定原目录。
+独立oracle：oracle.py仅用Python CSV/hashlib/datetime/Fraction读取selftest原输出，不调用产品JS；404项。人数前后实际事务补证：headcount-transition.mjs；其中事件前06=1是明确派生模拟，原上传06=2单独保留，不能混签。
+真实浏览器脚本/截图/原生CSV在browser/；私有runtime和UI-build helper仅验证角色seam，不用于发布。本次两个服务已停，未生成长期公开QA入口。PM可核适用模型和来源性质后，安排QA在其隔离环境重建；不需要恢复Test2/巡检或覆盖18173/18178/18210–12。
+
+当前B09业务已明确，新CR由Test新域→Dev共享接入后另验新增影响，不是继续等用户重批。PACK/扩展批A01/A02及BR13具名残余见REPORT/CLOSURE；Dev此次完成不代签整个UAT/Issue Done。
