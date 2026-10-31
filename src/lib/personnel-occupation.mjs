@@ -20,3 +20,31 @@ export function occupationInterval(r,start,end){
  const baseStart=whole?start:start+Number(r['人员开始偏移']||0),baseEnd=whole?end:end-Number(r['人员结束偏移']||0);
  return {baseStart,baseEnd,start:baseStart-(configured?Number(r['提前占用分钟']):0),end:baseEnd+(configured?Number(r['后延占用分钟']):0),configured};
 }
+
+// Saved-result diagnostics, independent of allocation and occupationInterval.
+// Validate the actual full ledger window even for availability-before-extension.
+// No candidate search and no reconstruction of an alternative schedule.
+export function personnelWindowFindings(plan,data,conditions){
+ const findings=[],tasks=plan.tasks||[];
+ const refs=(table,rows)=>rows.map(row=>({table,row:{...row},occurrence:{index:(data[table]||[]).indexOf(row),logicalRow:(data[table]||[]).indexOf(row)+2}}));
+ for(const r of (plan.resourceReservations||[]).filter(r=>r.type==='人员')){
+  if(!Number.isFinite(r.start)||!Number.isFinite(r.end)||r.end<=r.start)continue;
+  const linked=tasks.filter(t=>(r.taskIds||[r.taskId]).includes(t.id));
+  const g=(data.personnelGroups||[]).find(g=>g['人员组编号']===r.resourceId);if(!g||!linked.length)continue;
+  for(const task of linked){
+   const dependencies=(data.dependencies||[]).filter(d=>d['资源类型']==='人员技能'&&d['订单编号']===task.orderId&&d['工序编号']===task.operation&&(d['候选人员组']?.trim()?d['候选人员组'].split(/[,，]/).map(s=>s.trim()):[d['资源编号']]).includes(r.resourceId)&&d['所需技能']===r.requiredSkill);
+   const machine=(data.machines||[]).find(m=>m['设备编号']===task.machine),calendarId=machine?.['日历编号']?.trim()||data.calendars?.[0]?.['日历编号'];
+   const calendar=(data.calendars||[]).filter(c=>c['日历编号']===calendarId),stops=(data.resourceStops||[]).filter(s=>s['资源类型']==='人员'&&s['资源编号']===r.resourceId);
+   const sources=[...refs('dependencies',dependencies),...refs('personnelGroups',[g]),...refs('machines',machine?[machine]:[])];
+   const add=(reason,rows=[])=>findings.push({code:'VERIFY / PERSONNEL_WINDOW',message:`${task.id} 人员 ${r.resourceId} 完整实际占用 [${r.start},${r.end})：${reason}`,taskIds:[task.id],relatedRecords:[...sources,...rows],interval:{kind:'personnel-window',type:'人员',resourceId:r.resourceId,start:r.start,end:r.end,demand:Number(r.quantity),unit:'人',taskIds:[task.id]},evidence:{ledger:r,ruleEvaluationAt:conditions.ruleEvaluationAt,inputVersionId:plan.inputVersionId??null,snapshotHash:plan.snapshotHash??null,basis:'直接复核冻结配置与完整实际占用；两种H-P04处理顺序均不豁免最终可用性/班次检查'}});
+   if(r.start<Number(g['可用起始分钟'])||r.end>Number(g['可用结束分钟']))add(`超出可用期 [${g['可用起始分钟']},${g['可用结束分钟']})`);
+   if(dependencies.some(d=>d['所需班次']&&d['所需班次']!==g['班次']))add(`所需班次与组班次 ${g['班次']} 不符`);
+   if(conditions.workingWindowsContract==='P06-windows-v1'){
+    if(!calendar.some(c=>c['是否工作']==='是'&&Number(c['起始分钟'])<=r.start&&Number(c['结束分钟'])>=r.end))add('未落在单个工厂工作窗口，禁止机器自动运行时段推定人员跨班',refs('calendars',calendar));
+    const blocked=[...calendar.filter(c=>c['是否工作']!=='是'),...stops].filter(s=>Number(s['起始分钟'])<r.end&&Number(s['结束分钟'])>r.start);
+    if(blocked.length)add('与冻结非工作/人员停用例外重叠',[...refs('calendars',blocked.filter(s=>calendar.includes(s))),...refs('resourceStops',blocked.filter(s=>stops.includes(s)))]);
+   }
+  }
+ }
+ return findings;
+}
