@@ -1,14 +1,10 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express from 'express';
-import { createLiteAppServer, praetorActor, sendActorError } from '@praetor/lite-app-server';
-import { openStore } from './auth/store.mjs';
-import { createAuthRouter } from './auth/routes.mjs';
+import { createLiteAppServer } from '@praetor/lite-app-server';
 import { createBusinessRouter } from './business.mjs';
 const __dirname=path.dirname(fileURLToPath(import.meta.url));
 const {app,listen,dataDir}=createLiteAppServer({port:3000,apiPort:3001,distDir:path.join(__dirname,'..','dist')});
 app.use(express.json({limit:'2mb'}));
-const {router,requireMember}=createAuthRouter({actorMiddleware:praetorActor(),sendActorError,store:openStore(dataDir)});
-app.use('/api/auth',router);
-app.use('/api',createBusinessRouter({dataDir,actorMiddleware:praetorActor(),requireMember}));
+app.use('/api',createBusinessRouter({dataDir,accessMode:'shared'}));
 listen();

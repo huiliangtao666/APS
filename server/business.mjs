@@ -42,7 +42,7 @@ import { independentlyVerifyPlan } from '../src/lib/independent-verification.mjs
 
 // One local application process; mutation + audit are one atomic rename.
 // No request body can supply identity, audit fields, or plan status.
-export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, runTimeoutMs = 30000, workerFactory = workerData => new Worker(new URL('./calculation-worker.mjs',import.meta.url),{workerData}) }) {
+export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, accessMode = 'managed', runTimeoutMs = 30000, workerFactory = workerData => new Worker(new URL('./calculation-worker.mjs',import.meta.url),{workerData}) }) {
   fs.mkdirSync(dataDir, { recursive: true });
   const file=path.join(dataDir,'business.json');
   const read=()=>{try{const s=JSON.parse(fs.readFileSync(file,'utf8'));s.data.simulationEvents??=[];s.data.executionFacts??=[];s.data.executionMaterials??=[];s.data.executionSources??=[];s.data=migratePolicies(s.data);s.data.personnelPools??=[];return s;}catch(e){if(e.code!=='ENOENT')throw e;let legacy=[];try{legacy=JSON.parse(fs.readFileSync(path.join(dataDir,'plans.json'),'utf8'));}catch(old){if(old.code!=='ENOENT')throw old;}return {data:structuredClone(seed),revision:0,plans:legacy.map(p=>({...p,status:'legacy'})),records:[]};}};
@@ -63,11 +63,23 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   if(changed)write(recovered);
   const router=Router();
   router.use((_req,res,next)=>{res.set('Cache-Control','no-store');next();});
-  router.use(actorMiddleware,requireMember(['planner','supervisor','query']));
+  if (accessMode === 'shared') {
+    router.use((req, _res, next) => {
+      req.businessAccess = { actor: 'shared-workbench', requestId: randomUUID() };
+      req.member = { role: 'supervisor', canExport: true };
+      next();
+    });
+  } else if (accessMode === 'managed') {
+    router.use(actorMiddleware,requireMember(['planner','supervisor','query']));
+  } else {
+    throw new Error('unsupported business access mode');
+  }
+  const actorKey = req => req.businessAccess?.actor ?? subjectKey(req.praetorActor);
+  const requestId = req => req.businessAccess?.requestId ?? req.praetorActor.requestId;
   const permission=(action)=> (req,res,next)=>{
     const m=req.member;
     const allowed= action==='read' || (action==='export' ? m.role!=='query'||m.canExport===true : ['confirm','return','release','archive'].includes(action) ? m.role==='supervisor' : ['planner','supervisor'].includes(m.role));
-    if(!allowed){console.info(JSON.stringify({action,decision:'deny',requestId:req.praetorActor.requestId,actor:subjectKey(req.praetorActor)}));return res.status(403).json({error:'forbidden'});}
+    if(!allowed){console.info(JSON.stringify({action,decision:'deny',requestId:requestId(req),actor:actorKey(req)}));return res.status(403).json({error:'forbidden'});}
     if(req.method!=='GET'){
       const site=req.get('sec-fetch-site');const origin=req.get('origin');
       let badOrigin=false;try{if(origin){const parsed=new URL(origin);badOrigin=!['http:','https:'].includes(parsed.protocol)||parsed.host!==req.get('host');}}catch{badOrigin=true;}
@@ -76,13 +88,13 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     }
     next();
   };
-  const record=(s,req,action,target,details={})=>s.records.push({id:randomUUID(),action,target,actor:subjectKey(req.praetorActor),role:req.member.role,at:new Date().toISOString(),reason:req.body.reason.trim(),requestId:req.praetorActor.requestId,...details});
+  const record=(s,req,action,target,details={})=>s.records.push({id:randomUUID(),action,target,actor:actorKey(req),role:req.member.role,at:new Date().toISOString(),reason:req.body.reason.trim(),requestId:requestId(req),...details});
   router.get('/meta',permission('read'),(_req,res)=>res.json({release:'R1 prototype + FR-037 supported-flow slice',baseline:'APS v0.3 review draft',supportedRules:['BR-02 precedence','BR-03 exclusive machine overlap','FR-008 calendar','FR-007 personnel','FR-022 explicit joint occupancy'],timeOrigin:'2026-11-02T08:00:00+08:00',interval:'[start,end)',unsupportedWorkflows:['external-dispatch'],confirmation:'FR030-v1 internal only'}));
   router.get('/rules/preview',permission('read'),(_req,res)=>{const s=read();res.json({revision:s.revision,...configurationPreview(s.data)});});
   router.get('/rules/capabilities',permission('read'),(_req,res)=>res.json(ruleCatalog));
-  router.get('/session',permission('read'),(req,res)=>res.json({role:req.member.role,canWrite:['planner','supervisor'].includes(req.member.role),canExport:req.member.role!=='query'||req.member.canExport===true}));
+  router.get('/session',permission('read'),(req,res)=>res.json({accessMode,role:req.member.role,canWrite:['planner','supervisor'].includes(req.member.role),canExport:req.member.role!=='query'||req.member.canExport===true}));
   const r21State=s=>s.r21 || {config:partialR21Seed(),history:[],applications:[]};
-  router.use('/r21',createR21ConfigRouter({dataDir,authorize:(req,res,next)=>{req.r21Actor=subjectKey(req.praetorActor);return permission(req.method==='GET'?'read':'edit')(req,res,next);},
+  router.use('/r21',createR21ConfigRouter({dataDir,authorize:(req,res,next)=>{req.r21Actor=actorKey(req);return permission(req.method==='GET'?'read':'edit')(req,res,next);},
     integratedStore:{read:()=>r21State(read()),write:(value,req)=>{const s=read();s.r21=value;record(s,req,'r21_config_saved',String(value.config.revision),{configFingerprint:inputHash(value.config)});write(s);}},
     readInput:()=>{const s=read();return {data:s.data,revision:s.revision,csvSources:s.csvSources};},saveOrders:()=>{throw Error('atomic_transaction_required');},
     applyTransaction:({req,input,config,proposed})=>{
@@ -163,7 +175,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     for(const key of new Set([...changes,...Object.keys(req.csvSources||{})])){delete target.csvSources[key];if(req.csvSources?.[key])target.csvSources[key]={...structuredClone(req.csvSources[key]),sha256:createHash('sha256').update(req.csvSources[key].originalText).digest('hex'),canonicalRows:structuredClone(proposed[key])};}
     if(req.r21Application&&!req.csvSources?.orders&&target.csvSources.orders){target.csvSources.orders={...structuredClone(target.csvSources.orders),canonicalRows:structuredClone(proposed.orders),r21Configuration:structuredClone(proposed.r21OrderConfiguration)};}
     const toVersion=preserve(s,target);
-    if(req.r21Application){const state=r21State(s),applied=proposed.r21OrderConfiguration;s.r21={...state,applications:[...state.applications,{id:applied.applicationId,config:applied.config,configFingerprint:applied.configFingerprint,beforeInputRevision:revision,afterInputRevision:target.revision,inputVersionId:toVersion,at:new Date().toISOString(),reason:req.body.reason.trim(),actor:subjectKey(req.praetorActor)}]};record(s,req,'r21_applied',applied.applicationId,{configFingerprint:applied.configFingerprint,fromVersion,toVersion});}
+    if(req.r21Application){const state=r21State(s),applied=proposed.r21OrderConfiguration;s.r21={...state,applications:[...state.applications,{id:applied.applicationId,config:applied.config,configFingerprint:applied.configFingerprint,beforeInputRevision:revision,afterInputRevision:target.revision,inputVersionId:toVersion,at:new Date().toISOString(),reason:req.body.reason.trim(),actor:actorKey(req)}]};record(s,req,'r21_applied',applied.applicationId,{configFingerprint:applied.configFingerprint,fromVersion,toVersion});}
     const batchId=randomUUID();
     for(const key of changes)record(s,req,operation||'edit',key,{before:before[key],after:proposed[key],fromVersion,toVersion,fromRevision:target.revision-1,toRevision:target.revision,batchId,...(req.csvEvidence?.[key]?{csvSource:req.csvEvidence[key]}:{}),trialId:trialId||null,...(req.csvSources?{csvSources:{[key]:req.csvSources[key]}}:{})});
     write(s);res.json({data:target.data,revision:target.revision,inputVersionId:toVersion});
@@ -198,12 +210,12 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(checked.status!==200)return res.status(checked.status).json({...base,valid:false,...checked.body});
     for(const [id,p] of csvPreviews)if(Date.now()-p.createdAt>15*60*1000)csvPreviews.delete(id);
     if(csvPreviews.size>=100)return res.status(429).json({error:'preview_capacity'});
-    const id=randomUUID();csvPreviews.set(id,{owner:subjectKey(req.praetorActor),createdAt:Date.now(),stateHash:contentHash(s),revision,table,files:structuredClone(files),repairs:structuredClone(repairs),r21Config:structuredClone(r21Config),inputStage,resourceRuleBinding:structuredClone(resourceRuleBinding)});
+    const id=randomUUID();csvPreviews.set(id,{owner:actorKey(req),createdAt:Date.now(),stateHash:contentHash(s),revision,table,files:structuredClone(files),repairs:structuredClone(repairs),r21Config:structuredClone(r21Config),inputStage,resourceRuleBinding:structuredClone(resourceRuleBinding)});
     res.json({...base,id,valid:true,issues:[],devices:r21DeviceUsage({...s.data,...inspection.tables},inspection.sources.machines||s.csvSources?.machines)});
   });
   router.post('/imports/commit',permission('edit'),(req,res)=>{
     const p=csvPreviews.get(req.body.previewId),s=read();
-    if(!p||p.owner!==subjectKey(req.praetorActor)||Date.now()-p.createdAt>15*60*1000)return res.status(409).json({error:'preview_expired_or_unowned'});
+    if(!p||p.owner!==actorKey(req)||Date.now()-p.createdAt>15*60*1000)return res.status(409).json({error:'preview_expired_or_unowned'});
     if(p.revision!==s.revision||p.stateHash!==contentHash(s))return res.status(409).json({error:'stale_preview'});
     // Ignore caller-supplied tables/actor/revision; reparse the server-owned original files.
     const inspection=p.table?inspectSingleCsv(p.files[0],defs.find(d=>d.key===p.table)):inspectCsvBatch(p.files,defs,p.repairs,p.r21Config,p.resourceRuleBinding??null);
@@ -235,7 +247,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     try{
       const proposed=evaluate(candidate);if(proposed.status==='blocked')return res.status(422).json({error:'preview_blocked',issues:proposed.issues});
       let before;try{before=evaluate(state.data);}catch(e){before={status:'blocked',message:e.message};}
-      return res.json({valid:true,persisted:false,revision:state.revision,actor:subjectKey(req.praetorActor),role:req.member.role,configurationHash:inputHash(candidate),before,candidate:proposed});
+      return res.json({valid:true,persisted:false,revision:state.revision,actor:actorKey(req),role:req.member.role,configurationHash:inputHash(candidate),before,candidate:proposed});
     }catch(e){return res.status(400).json({error:'preview_blocked',message:e.message});}
   });
   router.post('/inputs',permission('edit'),(req,res)=>saveInputs(req,res,req.body.tables));
@@ -252,7 +264,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const id=randomUUID(),now=new Date().toISOString();
     const copy={...structuredClone(p),id:randomUUID(),status:'draft',revision:0,sourceRevision:p.revision,trialId:id,sourcePlanId:p.id,sourceRunId:p.runId,sourceCreatedAt:p.createdAt,sourceVerification:p.verification??null,createdAt:now,name:p.name+' · 独立试算',copiedResult:true};
     delete copy.verification;
-    const trial={id,status:'active',revision:0,locks:structuredClone(p.lockSnapshot||{}),createdAt:now,actor:subjectKey(req.praetorActor),sourcePlanId:p.id,sourceRunId:p.runId,sourceInputVersionId:p.inputVersionId,sourceSnapshotHash:p.snapshotHash,basePlanId:copy.id,latestPlanId:copy.id,data:structuredClone(inputs(s,p).data),selection:Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds'].map(k=>[k,structuredClone(p.conditions[k])]))};
+    const trial={id,status:'active',revision:0,locks:structuredClone(p.lockSnapshot||{}),createdAt:now,actor:actorKey(req),sourcePlanId:p.id,sourceRunId:p.runId,sourceInputVersionId:p.inputVersionId,sourceSnapshotHash:p.snapshotHash,basePlanId:copy.id,latestPlanId:copy.id,data:structuredClone(inputs(s,p).data),selection:Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds'].map(k=>[k,structuredClone(p.conditions[k])]))};
     s.trials??=[];s.trials.unshift(trial);s.plans.unshift(copy);record(s,req,'trial_created',id,{sourcePlanId:p.id,planId:copy.id,inputVersionId:p.inputVersionId,snapshotHash:p.snapshotHash});write(s);res.status(201).json(trial);
   });
   // Preview transactions are ephemeral and never mutate saved plans, inputs or audit.
@@ -279,14 +291,14 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     // Bounded, short-lived, actor-scoped tokens; no client-supplied plan/quantity accepted.
     for(const [id,p] of positionPreviews)if(Date.now()-p.createdAt>15*60*1000)positionPreviews.delete(id);
     if(positionPreviews.size>=100)return res.status(429).json({error:'preview_capacity'});
-    const preview={id:randomUUID(),trialId:trial.id,planId:plan.id,kind,taskId:task.id,owner:subjectKey(req.praetorActor),token:positionToken(s,trial,plan),createdAt:Date.now(),positions,locks,checked:false};positionPreviews.set(preview.id,preview);
+    const preview={id:randomUUID(),trialId:trial.id,planId:plan.id,kind,taskId:task.id,owner:actorKey(req),token:positionToken(s,trial,plan),createdAt:Date.now(),positions,locks,checked:false};positionPreviews.set(preview.id,preview);
     res.status(201).json({id:preview.id,kind,taskId:task.id,before:taskPosition(task),after:positions[task.id],locks,valid:false,checked:false,message:'仅预览，尚未独立复核；没有写入方案或输入'});
   }
   router.post('/trials/:id/move-preview',permission('edit'),(req,res)=>createPositionPreview(req,res,'move'));
   router.post('/trials/:id/lock-preview',permission('edit'),(req,res)=>createPositionPreview(req,res,'lock'));
   function ownedPreview(req,res){
     const preview=positionPreviews.get(req.params.previewId);
-    if(!preview||preview.trialId!==req.params.id||preview.owner!==subjectKey(req.praetorActor)||Date.now()-preview.createdAt>15*60*1000){res.status(409).json({error:'preview_expired_or_unowned'});return;}
+    if(!preview||preview.trialId!==req.params.id||preview.owner!==actorKey(req)||Date.now()-preview.createdAt>15*60*1000){res.status(409).json({error:'preview_expired_or_unowned'});return;}
     return preview;
   }
   function checkedPreview(req,res){
@@ -311,7 +323,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const x=checkedPreview(req,res);if(!x)return;
     if(!x.valid){x.preview.valid=false;return res.status(409).json({error:'position_conflict',check:x.check});}
     const {s,trial,plan,frozen,result}=x;trial.revision++;trial.locks=structuredClone(preview.locks);
-    const run={id:randomUUID(),status:'completed',phase:'试算位置独立复核完成',createdAt:frozen.conditions.ruleEvaluationAt,finishedAt:new Date().toISOString(),revision:trial.revision,trialId:trial.id,sourcePlanId:plan.id,inputVersionId:preserve(s,trial),...frozen,lockSnapshot:structuredClone(trial.locks),actor:subjectKey(req.praetorActor),reason:req.body.reason.trim(),requestId:req.praetorActor.requestId,positionEdit:{kind:preview.kind,taskId:preview.taskId,sourcePlanId:plan.id,sourceContentHash:contentHash(plan),before:taskPosition(plan.tasks.find(t=>t.id===preview.taskId)),after:preview.positions[preview.taskId],source:plan.tasks.find(t=>t.id===preview.taskId).source}};
+    const run={id:randomUUID(),status:'completed',phase:'试算位置独立复核完成',createdAt:frozen.conditions.ruleEvaluationAt,finishedAt:new Date().toISOString(),revision:trial.revision,trialId:trial.id,sourcePlanId:plan.id,inputVersionId:preserve(s,trial),...frozen,lockSnapshot:structuredClone(trial.locks),actor:actorKey(req),reason:req.body.reason.trim(),requestId:requestId(req),positionEdit:{kind:preview.kind,taskId:preview.taskId,sourcePlanId:plan.id,sourceContentHash:contentHash(plan),before:taskPosition(plan.tasks.find(t=>t.id===preview.taskId)),after:preview.positions[preview.taskId],source:plan.tasks.find(t=>t.id===preview.taskId).source}};
     const next=makePlan(result,run);next.positionEdit=structuredClone(run.positionEdit);next.positionCheck=x.check;
     // Additional provenance is recorded outside calculated content so replay remains exact.
     run.planId=next.id;s.runs??=[];s.runs.unshift(run);s.plans.unshift(next);trial.latestPlanId=next.id;
@@ -334,7 +346,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const comparison=comparePlans(source,inputs(s,source).data,plan,inputs(s,plan).data);
     if(inputHash(executionState(trial.data))!==inputHash(executionState(s.data)))return res.status(409).json({error:'current_execution_changed'});
     const protectedIssues=executionTrialIssues(s.data,trial.data);if(protectedIssues.length)return res.status(409).json({error:'execution_reconciliation_required',...transitionEvidence(protectedIssues,s.data,trial.data,s.revision)});
-    const retained={id:randomUUID(),planId:plan.id,runId:plan.runId,inputVersionId:plan.inputVersionId,snapshotHash:plan.snapshotHash,trialRevision:trial.revision,at:new Date().toISOString(),actor:subjectKey(req.praetorActor),comparison};
+    const retained={id:randomUUID(),planId:plan.id,runId:plan.runId,inputVersionId:plan.inputVersionId,snapshotHash:plan.snapshotHash,trialRevision:trial.revision,at:new Date().toISOString(),actor:actorKey(req),comparison};
     trial.retainedSnapshots??=[];trial.retainedSnapshots.push(retained);
     record(s,req,'trial_retained',trial.id,{retainedId:retained.id,planId:plan.id,runId:plan.runId,inputVersionId:plan.inputVersionId,snapshotHash:plan.snapshotHash,sourcePlanId:source.id});write(s);
     res.status(201).json(retained);
@@ -409,7 +421,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(issues.length)return restoreError(res,'restore_blocked','当前模拟输入、执行或物料来源需核对，未保存恢复版本。',{issues});
     let result;pendingRestores++;try{result=await restoreCalculation(frozen,s.revision);}catch(e){return restoreError(res,'restore_blocked',e.message);}finally{pendingRestores--;}
     if(contentHash(read())!==token)return restoreError(res,'stale_restore','预检期间当前输入、确认或业务记录已变化，请重新检查。');
-    const run={id:randomUUID(),status:'completed',createdAt:at,finishedAt:new Date().toISOString(),revision:s.revision,trialId:null,sourcePlanId:p.id,inputVersionId:versionId(s.data),...frozen,lockSnapshot:structuredClone(p.lockSnapshot||{}),actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim(),restoreSourcePlanId:p.id};
+    const run={id:randomUUID(),status:'completed',createdAt:at,finishedAt:new Date().toISOString(),revision:s.revision,trialId:null,sourcePlanId:p.id,inputVersionId:versionId(s.data),...frozen,lockSnapshot:structuredClone(p.lockSnapshot||{}),actor:actorKey(req),requestId:requestId(req),reason:req.body.reason.trim(),restoreSourcePlanId:p.id};
     const plan=makePlan(result,run);run.planId=plan.id;
     plan.verification={...independentlyVerifyPlan(plan,frozen.executionData.orders,frozen.executionData.routes,plan.rules,at,frozen.executionData,frozen.conditions),contentHash:contentHash(plan)};
     const candidate=structuredClone(s);preserve(candidate);candidate.runs??=[];candidate.runs.unshift(run);candidate.plans.unshift(plan);
@@ -420,7 +432,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(blockers.length)return restoreError(res,'restore_blocked','当前事实下未通过恢复检查；原方案与全部业务数据保持原值。',{blockers});
     const id=randomUUID(),comparison=comparePlans(p,inputs(s,p).data,plan,s.data);
     const provenance={sourcePlanId:p.id,sourceRunId:p.runId,sourceInputVersionId:p.inputVersionId,currentInputVersionId:run.inputVersionId,currentProgressVersion:frozen.conditions.executionFactsVersion,confirmationReferences:(s.confirmations||[]).map(c=>({id:c.id,snapshotHash:c.snapshotHash})),policy:'旧计算条件＋当前全部输入/事实；新草稿不替换确认计划',limits:review.limits};
-    restorePreviews.set(id,{owner:subjectKey(req.praetorActor),createdAt:Date.now(),token,sourcePlanId:p.id,run,plan,provenance});
+    restorePreviews.set(id,{owner:actorKey(req),createdAt:Date.now(),token,sourcePlanId:p.id,run,plan,provenance});
     res.json({id,revision:s.revision,plan,comparison,provenance,message:'已按当前事实、累计耗料与启用规则重算并复核；核对变化后可保存新草稿。原确认继续保留，真实Gateway及完整业务保护未在此证明。'});
   }catch(e){next(e);}});
   router.post('/plans/:id/restore',permission('edit'),(req,res)=>{
@@ -428,7 +440,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(req.body.revision!==s.revision)return restoreError(res,'stale_input','当前输入已变化，请刷新后重新检查。');
     const v=restorePreviews.get(req.body.previewId);
     if(!v)return res.status(409).json({error:'restore_blocked',...restoreBlockers(s,p)});
-    if(v.owner!==subjectKey(req.praetorActor)||v.sourcePlanId!==p.id||Date.now()-v.createdAt>15*60*1000)return restoreError(res,'restore_preview_invalid','恢复预检已过期或不属于当前用户/方案，请重新检查。');
+    if(v.owner!==actorKey(req)||v.sourcePlanId!==p.id||Date.now()-v.createdAt>15*60*1000)return restoreError(res,'restore_preview_invalid','恢复预检已过期或不属于当前用户/方案，请重新检查。');
     if(v.token!==contentHash(s))return restoreError(res,'stale_restore','预检后输入、执行事实、确认或业务记录已变化，请重新检查。');
     const sourceIssue=restoreSource(s,p);if(sourceIssue)return restoreError(res,'restore_blocked',sourceIssue);
     preserve(s);s.runs??=[];s.runs.unshift(v.run);s.plans.unshift(v.plan);
@@ -467,7 +479,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const issues=[...native,...scoped];
     const findings=[...native.map(i=>withSource(i,target.data,{...source,scope:'complete saved input validation'})),...scoped.map(i=>withSource(i,frozen.executionData,{...source,executionVersionId:inputHash(frozen.executionData),scope:frozen.conditions},frozen.sourceMap))];
     if(issues.length){res.status(422).json({error:'rule_configuration_blocked',issues,checkedInput:{data:target.data,inputVersionId:source.inputVersionId},findings:findings.map(f=>({...f,sourceRevision:target.revision}))});return;}
-    const run={id:randomUUID(),status:'queued',phase:'等待计算线程',createdAt:calculatedAt,revision:target.revision,trialId:trial?.id||null,sourcePlanId:trial?.sourcePlanId||null,inputVersionId:preserve(s,target),...frozen,lockSnapshot:structuredClone(trial?.locks||{}),actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim(),timeoutMs:runTimeoutMs};
+    const run={id:randomUUID(),status:'queued',phase:'等待计算线程',createdAt:calculatedAt,revision:target.revision,trialId:trial?.id||null,sourcePlanId:trial?.sourcePlanId||null,inputVersionId:preserve(s,target),...frozen,lockSnapshot:structuredClone(trial?.locks||{}),actor:actorKey(req),requestId:requestId(req),reason:req.body.reason.trim(),timeoutMs:runTimeoutMs};
     s.runs??=[];s.runs.unshift(run);return {s,run};
   }
   const publicRun=run=>{const {executionData,...summary}=run;const plan=run.planId?read().plans.find(p=>p.id===run.planId):null;return {...summary,durationMs:run.durationMs??Math.max(0,Date.parse(run.finishedAt||new Date().toISOString())-Date.parse(run.createdAt)),outcome:run.outcome??({completed:'succeeded',partial:'succeeded',timed_out:'timed_out'}[run.status]||run.status),resultState:resultState(run,plan?.resultAssessment)};};
@@ -537,7 +549,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(old.trialId&&s.trials?.find(t=>t.id===old.trialId)?.status!=='active')return res.status(409).json({error:'trial_discarded'});
     if(old.trialId){const t=s.trials.find(t=>t.id===old.trialId);if(old.revision!==t.revision||inputHash(old.conditions.taskPositions||{})!==inputHash(t.locks||{}))return res.status(409).json({error:'stale_trial_positions'});}
     if(old.conditions.executionFactsVersion!==inputHash(executionState(s.data)))return res.status(409).json({error:'current_execution_changed',message:'当前执行事实已变化；请从当前事实另开计算，原记录保留。'});
-    const run={id:randomUUID(),retryOf:old.id,status:'queued',phase:'等待计算线程',createdAt:new Date().toISOString(),revision:old.revision,trialId:old.trialId,sourcePlanId:old.sourcePlanId,lockSnapshot:structuredClone(old.lockSnapshot||{}),inputVersionId:old.inputVersionId,executionData:structuredClone(old.executionData),sourceMap:structuredClone(old.sourceMap||{}),conditions:structuredClone(old.conditions),snapshotHash:old.snapshotHash,timeoutMs:runTimeoutMs,actor:subjectKey(req.praetorActor),requestId:req.praetorActor.requestId,reason:req.body.reason.trim()};
+    const run={id:randomUUID(),retryOf:old.id,status:'queued',phase:'等待计算线程',createdAt:new Date().toISOString(),revision:old.revision,trialId:old.trialId,sourcePlanId:old.sourcePlanId,lockSnapshot:structuredClone(old.lockSnapshot||{}),inputVersionId:old.inputVersionId,executionData:structuredClone(old.executionData),sourceMap:structuredClone(old.sourceMap||{}),conditions:structuredClone(old.conditions),snapshotHash:old.snapshotHash,timeoutMs:runTimeoutMs,actor:actorKey(req),requestId:requestId(req),reason:req.body.reason.trim()};
     s.runs.unshift(run);record(s,req,'run_created',run.id,{retryOf:old.id,inputVersionId:run.inputVersionId,snapshotHash:run.snapshotHash});write(s);launch(req,run);res.status(202).json(publicRun(read().runs.find(r=>r.id===run.id)));
   });
   router.post('/runs/:id/cancel',permission('calculate'),async(req,res,next)=>{try{
@@ -612,8 +624,8 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
       if(review.conditionalSupply.length&&req.body.acceptConditionalSupply!==true)return res.status(400).json({error:'conditional_supply_ack_required'});
       if(req.body.acknowledgeScope!==true)return res.status(400).json({error:'check_scope_ack_required'});
     }
-    const at=new Date().toISOString(),actor=subjectKey(req.praetorActor);
-    const event={id:randomUUID(),action,at,actor,role:req.member.role,reason:req.body.reason.trim(),requestId:req.praetorActor.requestId,reviewHash:review.reviewHash,contentHash:contentHash(p)};
+    const at=new Date().toISOString(),actor=actorKey(req);
+    const event={id:randomUUID(),action,at,actor,role:req.member.role,reason:req.body.reason.trim(),requestId:requestId(req),reviewHash:review.reviewHash,contentHash:contentHash(p)};
     if(action==='submit'){
       if(!p.verification||p.verification.contentHash!==contentHash(p))return res.status(409).json({error:'verification_required'});
       w.submission={...event,id:randomUUID(),inputVersionId:p.inputVersionId,contentHash:contentHash(p),review};

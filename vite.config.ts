@@ -1,5 +1,9 @@
 import { definePraetorConfig } from '@praetor/lite-app-runtime/vite';
 import react from '@vitejs/plugin-react';
+import { build } from 'esbuild';
+
+let workerRoot = '';
+let workerOutDir = 'dist';
 
 // The edge-routing contract — Vite `base`, `server.hmr`, and the
 // `${base}api` proxy, all driven by the PRAETOR_APP_BASE / PRAETOR_EDGE_PORT /
@@ -17,7 +21,25 @@ import react from '@vitejs/plugin-react';
 // All three env vars default to "standalone, no edge" (base `/`, Vite's own
 // HMR detection), so a plain `npm run dev` outside a container still works.
 export default definePraetorConfig({
-  plugins: [react()],
+  plugins: [react(), {
+    name: 'aps-calculation-worker',
+    apply: 'build',
+    configResolved(config) {
+      workerRoot = config.root;
+      workerOutDir = config.build.outDir;
+    },
+    async closeBundle() {
+      await build({
+        absWorkingDir: workerRoot,
+        entryPoints: ['server/calculation-worker.mjs'],
+        outfile: `${workerOutDir}/calculation-worker.mjs`,
+        bundle: true,
+        platform: 'node',
+        format: 'esm',
+        packages: 'external',
+      });
+    },
+  }],
   // Express dev port. Vite proxies `${base}api/*` here; Express binds it.
   apiPort: 3001,
   // Exposed Vite dev port (host 0.0.0.0 + strictPort are contract-owned).

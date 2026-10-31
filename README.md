@@ -12,6 +12,16 @@
 
 remote-VM 工作区的依赖安装/构建等有限命令使用 `workspace-app-builder/scripts/app-exec.sh --cwd /workspace/apps/aps-r1 '<command>'`；不要在 VM 宿主安装依赖或启动应用。已绑定的 Vite 预览用 `lite-app-scaffold/scripts/dev-preview.sh`（无端口参数）请求平台起独立预览容器；不手动占用绑定端口。服务代码/环境变化需重启时按 WAB skill 使用 `app-restart.sh --dev`。
 
+## 当前访问方式（2026-10-31）
+
+当前应用采用共享工作台，不要求应用账号、托管登录或业务成员审批。前端不显示登录/退出入口，服务端不挂载 `/api/auth/*`；应用启动直接使用共享业务权限。
+
+所有可访问此应用的人共用数据，可编辑、计算、保存、导出及执行支持范围内的确认动作。操作记录统一标记 `shared-workbench`，不能作为个人身份、职责分离或独立审批的证明。操作原因、跨站写入防护、版本冲突和业务校验仍保留。历史成员文件不删除、不参与当前运行。
+
+这不自动改变 Praetor 平台自身的访问级别；平台入口仍按发布面板控制。不要把未审查的生产数据或此共享入口开放到公网。
+
+验证：`npm run test:shared`；生产计算线程验证：构建后执行 `node --experimental-strip-types --test qa/production-worker.test.mjs`。Vite 构建同时打包该线程，适用于平台标准发布流程。
+
 ## R1 已实现
 
 - 订单、工艺路线、工序工时、设备、工序设备依赖、规则配置及 R2.1 工厂日历/停机例外共 8 类 CSV 导入/导出和单表查询、编辑、新增、删除。

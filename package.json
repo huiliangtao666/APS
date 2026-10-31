@@ -11,6 +11,7 @@
     "start": "NODE_ENV=production node dist/server.mjs",
     "preview": "vite preview",
     "test:auth": "node --test server/auth/auth.test.mjs",
+    "test:shared": "node --experimental-strip-types --test server/shared-access.test.mjs",
     "test:query-ui": "esbuild src/query-ui.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-query-ui.cjs && node --test .qa-query-ui.cjs"
   },
   "dependencies": {
@@ -28,6 +29,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "concurrently": "^9.1.0",
+    "esbuild": "^0.21.5",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.2",
