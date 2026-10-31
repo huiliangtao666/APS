@@ -1,0 +1,35 @@
+{
+  "delivery_id": "dlv_c4e9faac-8753-4adf-900c-d4a09fbdd9d0",
+  "event_key": "dlv_c4e9faac-8753-4adf-900c-d4a09fbdd9d0:r1",
+  "source_event_key": "aps:user-cr:uiux-flow-design-high-priority:20261031:r1",
+  "cr": "CR-UIUX-FLOW-20261031",
+  "authority": "https://github.com/huiliangtao666/APS/issues/45",
+  "read_at": "2026-10-31T07:27:01.196816+00:00",
+  "observed_main": "c48d214f8197d1346eccbb8886bb7138eb263d56",
+  "product_sha": null,
+  "design_sha": "see external DELIVERY.json after git commit",
+  "role": "APS-Design",
+  "result": "DESIGN_DELIVERED; product verification NOT_EXECUTED",
+  "acquisition": {
+    "files_api": "HTTP403 on APS-QA/APS-排程快速用户手册.html; APS-QA/CR-UIUX-FLOW-20261031-request.json; APS-PM/temp/uiux-flow/manual.html; APS-PM/temp/uiux-flow/request.json",
+    "fallback": "read-only same-node APS-QA originals; copied to Design deliverable sources; not a native shared volume; manual/request hashes match Issue45 byte-for-byte",
+    "manual_sha256": "6ddf3e5bf53889d90009aa67e5f94c62966b821988d40db13676816aee2a398c",
+    "request_sha256": "58a2f9bbb2dfe1bda8032b3a3b181248ffb83b1ca02057399ff18f5cdd0b7d04"
+  },
+  "provenance_note": "Source copies are evidence snapshots only, not implementation status registers. Git branch will exclude sources originals; zip/Files API preserves them.",
+  "source_read_hashes": {
+    "server/calculation-worker.mjs": "25619d27957b1f6074b03282b2da38e4bfed0e7f1b0327b46b8dff994907cf21",
+    "server/run-input.mjs": "20ba25f9c0884b03c05e66c09c98a872b08051ff1ad187f1872680e3747dccb6",
+    "server/index.mjs": "a420d2a56591767e8359d09836657d786f2a02982cb98e45ebdf16858e2c38cd",
+    "src/RunPanel.tsx": "5bcbeaf482f8828af770ce2810d21ba3d458c65815a1371b214144ddf0efcbda",
+    "src/App.tsx": "771446db68ef4de6bc143eb3f19f323876c1db25260f8445ff73172406bf195a",
+    "src/ResultPanel.tsx": "1b0a5fe42f4a0fb8abaa3d2d315d73e9ce09aab5efa5b3a96fe939b6a04d0c54",
+    "src/TaskLinkage.tsx": "a840061ee10b8d55cb7e1d1e0492a419c1c806ec9e39ddb81aadab516ab1b340",
+    "src/data-defs.ts": "1e13088a21723b7020c0df263857c0cd9d40c8c1637c3ccd99c1a86d1b8f1841",
+    "src/lib/original-stage-data.mjs": "f45a45ddb605dcc4631567d8f6b3d19245b5f8171b9402681bd7821cbbd29ba3",
+    "src/lib/original-resources.mjs": "19497f5f8884a114b8e28369723f1208331bc9692c14e19fbbaa521f8253a55b",
+    "src/lib/resource-mapping.mjs": "12e6f2e2668b40c52b6bbeb8dc7992c29583ff43f5795c630e0190be36395e51",
+    "src/lib/original-dependencies.mjs": "c546c3d4bb1984eb7124fbd431fbcd4b793cd6a4553ae5904dff6853054182a5",
+    "src/lib/original-bom.mjs": "bddef997d827e5a24f5dc33d2567f61e7fea7525b0e051d7d296d25f25ae0f88"
+  }
+}
