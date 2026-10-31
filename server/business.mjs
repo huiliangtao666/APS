@@ -1,4 +1,5 @@
 import {createR21ConfigRouter} from './r21-config.mjs';
+import {isTrustedWrite} from './write-request.mjs';
 import {partialR21Seed,r21DeviceUsage} from '../src/lib/r21-stage-config.mjs';
 import {unmappedStageSources} from '../src/lib/original-stage-data.mjs';
 import {checkedCsvSources,csvProblemEvidence} from './csv-problems.mjs';
@@ -84,9 +85,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const allowed= action==='read' || (action==='export' ? m.role!=='query'||m.canExport===true : ['confirm','return','release','archive'].includes(action) ? m.role==='supervisor' : ['planner','supervisor'].includes(m.role));
     if(!allowed){console.info(JSON.stringify({action,decision:'deny',requestId:requestId(req),actor:actorKey(req)}));return res.status(403).json({error:'forbidden'});}
     if(req.method!=='GET'){
-      const site=req.get('sec-fetch-site');const origin=req.get('origin');
-      let badOrigin=false;try{if(origin){const parsed=new URL(origin);badOrigin=!['http:','https:'].includes(parsed.protocol)||parsed.host!==req.get('host');}}catch{badOrigin=true;}
-      if((site&&!['same-origin','none'].includes(site))||badOrigin)return res.status(403).json({error:'csrf'});
+      if(!isTrustedWrite(req))return res.status(403).json({error:'csrf'});
       if(typeof req.body?.reason!=='string'||!req.body.reason.trim()||req.body.reason.length>1000)return res.status(400).json({error:'reason_required'});
     }
     next();
