@@ -1,10 +1,12 @@
 import {useState} from 'react';
+import {personnelProfileDraft,personnelProfileFields} from './lib/b08-personnel-config.mjs';
 import {allocatePersonnel} from './lib/staffing.mjs';
 import {validatePhysicalPools} from './lib/physical-pools.mjs';
 type Row=Record<string,string>;
 // Pure local candidate evaluation: no persistence, worker, confirmation or facts.
-export function PersonnelPolicyTrial({data,saved,onPreview,schedulePreview}:{data:Record<string,Row[]>;saved:Record<string,Row[]>;onPreview:()=>void;schedulePreview?:()=>Promise<any>}){
+export function PersonnelPolicyTrial({data,saved,onPreview,schedulePreview,onDraft,disabled=false}:{data:Record<string,Row[]>;saved:Record<string,Row[]>;onPreview:()=>void;schedulePreview?:()=>Promise<any>;onDraft?:(tables:Record<string,Row[]>)=>void;disabled?:boolean}){
  const [order,setOrder]=useState(''),[operation,setOperation]=useState(''),[start,setStart]=useState(''),[end,setEnd]=useState('');
+ const [profile,setProfile]=useState<Row>(Object.fromEntries(personnelProfileFields.map(f=>[f,'']))),[profileRows,setProfileRows]=useState<number[]>([]),[profileMessage,setProfileMessage]=useState('');
  const [result,setResult]=useState<any>(null);
  async function preview(){
   const errors:any[]=validatePhysicalPools(data,{forRun:true});
@@ -14,11 +16,12 @@ export function PersonnelPolicyTrial({data,saved,onPreview,schedulePreview}:{dat
   try{const schedule=schedulePreview?await schedulePreview():null;const candidate=run(data);setResult({candidate,before:run(saved),schedule});onPreview();}catch(e){setResult({errors:(e as any)?.detail?.issues||[{message:e instanceof Error?e.message:'联合预览失败'}]});}
  }
  return <aside aria-label="采用前人员条件预览" className="hint-box"><b>采用前人员条件预览（零写入）</b><p>显式选择候选工序窗口，比较已保存配置和当前草稿。仅检验此工序人员、技能、组/池容量、共享互斥、交接上限与占用释放；没有已有任务预占，不检查其他工序、工厂日历、设备或物料，也不证明最终排程可行。点击预览还会按当前订单和草稿，在服务端零写入计算完整联合排程，展示保存前后任务时点、资源声明和独立复核。预览不启用或保存输入；保存后新Worker仍冻结当时版本，数据变化须重新预览。</p>
+ {onDraft&&<fieldset disabled={disabled} aria-label="显式人员占用配置"><legend>H-P04 可修改配置profile</legend><p>选择适用人员依赖，显式填写全部字段后仅生成草稿；先预览，再保存。没有预填默认值。两种顺序最终均检查完整实际占用窗口，机器自动运行不表示人员跨班可用。人数/技能/班次、定向替代及物理池请在各自表维护。</p>{(data.dependencies||[]).map((r,i)=>r['资源类型']==='人员技能'&&<label key={i}><input type="checkbox" aria-label={`profile依赖 ${r['订单编号']}/${r['工序编号']}/${r['人员岗位编号']||i}`} checked={profileRows.includes(i)} onChange={e=>setProfileRows(e.target.checked?[...profileRows,i]:profileRows.filter(n=>n!==i))}/>{r['订单编号']}/{r['工序编号']} · {r['需求数量']}人 · {r['所需技能']} · 原12/运行依赖第{i+2}行</label>)}{personnelProfileFields.map(f=><label key={f}>{f}{f==='人员占用基准'||f==='人员检查顺序'?<select aria-label={'profile '+f} value={profile[f]} onChange={e=>setProfile({...profile,[f]:e.target.value})}><option value="">请选择</option>{(f==='人员占用基准'?['参与窗口','完整工序']:['先扩展占用再检查可用性','先检查可用性再扩展占用']).map(v=><option key={v}>{v}</option>)}</select>:<input aria-label={'profile '+f} value={profile[f]} type={f.endsWith('分钟')?'number':'text'} min={f.endsWith('分钟')?0:undefined} max={f.endsWith('分钟')?525600:undefined} step={f.endsWith('分钟')?1:undefined} onChange={e=>setProfile({...profile,[f]:e.target.value})}/>}</label>)}<button onClick={()=>{try{onDraft(personnelProfileDraft(data,profileRows,profile));setProfileMessage('显式profile已加入草稿；尚未保存，请预览。');}catch(e){setProfileMessage(e instanceof Error?e.message:String(e));}}}>应用人员profile到所选草稿</button>{profileMessage&&<p role="status">{profileMessage}</p>}</fieldset>}
  <label>预览订单<select aria-label="预览订单" value={order} onChange={e=>{setOrder(e.target.value);setResult(null);}}><option value="">请选择</option>{(data.orders||[]).map(o=><option key={o['订单编号']}>{o['订单编号']}</option>)}</select></label>
  <label>预览工序<input aria-label="预览工序" value={operation} onChange={e=>{setOperation(e.target.value);setResult(null);}}/></label>
  <label>候选开始分钟<input aria-label="候选开始分钟" type="number" min="0" max="525600" step="1" value={start} onChange={e=>{setStart(e.target.value);setResult(null);}}/></label>
  <label>候选结束分钟<input aria-label="候选结束分钟" type="number" min="0" max="525600" step="1" value={end} onChange={e=>{setEnd(e.target.value);setResult(null);}}/></label>
- <button onClick={preview}>预览人员策略影响</button>
+ <button disabled={disabled} onClick={preview}>预览人员策略影响</button>
  {result&&<div role="status">{result.errors?result.errors.map((e:any,i:number)=><p key={i}>{e.file}:{e.row}:{e.field} {e.message}</p>):<><p>已保存配置：{result.before.ok?'此时点人员可分配':'此时点人员不可分配'}。草稿：{result.candidate.ok?'此时点人员可分配':'此时点人员不可分配，需顺延或调整配置'}。</p><p>{result.candidate.reason}</p>{result.schedule&&<div aria-label="联合排程影响预览"><p>联合预览 · 基于版本 {result.schedule.revision} · 可信角色 {result.schedule.role} · 配置指纹 {result.schedule.configurationHash} · 未写入</p><p>已保存配置：{result.schedule.before.status==='blocked'?'阻断：'+(result.schedule.before.message||JSON.stringify(result.schedule.before.issues)):result.schedule.before.tasks.map((t:any)=>`${t.id} [${t.start},${t.end})`).join('；')}</p><p>草稿排程：{result.schedule.candidate.tasks.map((t:any)=>`${t.id} [${t.start},${t.end})`).join('；')||'无已排任务'}；独立资源复核 {result.schedule.candidate.resourceVerification.status}</p>{result.schedule.candidate.resourceReservations?.filter((r:any)=>r.type==='人员').map((r:any,i:number)=><p key={i}>联合资源声明 {r.taskId} / 池 {r.poolId} / 组 {r.resourceId} · {r.quantity} 人 · [{r.start},{r.end})</p>)}{result.schedule.candidate.findings.map((f:any,i:number)=><p key={i}>{f.code}：{f.message}</p>)}</div>}{result.candidate.allocations?.map((a:any,i:number)=><p key={i}>资源声明：池 {a.poolId} / 组 {a.groupId} / 岗位 {a.postId} · {a.count} 人 · [{a.start},{a.end}) · {a.reason}</p>)}</>}</div>}
  </aside>;
 }
