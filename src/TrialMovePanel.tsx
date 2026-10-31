@@ -1,12 +1,12 @@
 import {useEffect,useRef,useState} from 'react';
 type Task={id:string;orderId:string;operation:string;machine:string;start:number;end:number;duration:number;source:string;movable:boolean;allowedMachines:string[]};
 type State={planId:string;planHash:string;revision:number;blocked?:string;locks:Record<string,unknown>;tasks:Task[];limits:string[]};
-type Props={trialId:string;revision:number;canWrite:boolean;disabled:boolean;api:(path:string,body?:object)=>Promise<any>;refresh:()=>Promise<void>;onResult:(id:string)=>void};
+type Props={trialId:string;latestPlanId:string;revision:number;canWrite:boolean;disabled:boolean;api:(path:string,body?:object)=>Promise<any>;refresh:()=>Promise<void>;onResult:(id:string)=>void};
 export function TrialMovePanel(p:Props){
  const [state,setState]=useState<State|null>(null),[taskId,setTaskId]=useState(''),[start,setStart]=useState('0'),[machine,setMachine]=useState(''),[preview,setPreview]=useState<any>(null),[error,setError]=useState(''),[working,setWorking]=useState(false);
  const drag=useRef<{taskId:string;x:number;y:number;machine:string;start:number;pointer:number}|null>(null),epoch=useRef(0);
  const root='/trials/'+p.trialId,task=state?.tasks.find(t=>t.id===taskId),blocked=p.disabled||working||!p.canWrite||!!state?.blocked;
- useEffect(()=>{const n=++epoch.current;setPreview(null);setState(null);setError('');p.api(root+'/positions').then(x=>{if(n===epoch.current){if(!Array.isArray(x?.tasks)||!x.locks)throw Error('试算任务数据不完整，请刷新后重试');setState(x);}}).catch(e=>{if(n===epoch.current)setError(e.message);});return()=>{epoch.current++;};},[p.trialId,p.revision,p.canWrite]);
+ useEffect(()=>{const n=++epoch.current;setPreview(null);setState(null);setError('');p.api(root+'/positions').then(x=>{if(n===epoch.current){if(!Array.isArray(x?.tasks)||!x.locks)throw Error('试算任务数据不完整，请刷新后重试');setState(x);}}).catch(e=>{if(n===epoch.current)setError(e.message);});return()=>{epoch.current++;};},[p.trialId,p.latestPlanId,p.revision,p.canWrite]);
  function select(t:Task){setTaskId(t.id);setStart(String(t.start));setMachine(t.machine);}
  async function act(fn:()=>Promise<void>){const n=epoch.current;setWorking(true);setError('');try{await fn();}catch(e){if(n===epoch.current){setError(e instanceof Error?e.message:'操作失败');setPreview((old:any)=>old?{...old,valid:false,checked:false}:old);}}finally{setWorking(false);}}
  async function create(t:Task,minute:number,target:string,locked?:boolean){if(!state)return;const n=epoch.current;const x=await p.api(root+(locked===undefined?'/move-preview':'/lock-preview'),{revision:state.revision,planId:state.planId,planHash:state.planHash,taskId:t.id,...(locked===undefined?{start:minute,machine:target}:{locked})});if(n===epoch.current)setPreview(x);}
