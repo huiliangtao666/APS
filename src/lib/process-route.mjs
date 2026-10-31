@@ -1,3 +1,5 @@
+import {inheritedCalendarId} from './factory-lines.mjs';
+import {sourceRefs} from './problem-records.mjs';
 import {quantityMath as Q,calculateMaterialDemand,feedTime} from './material-allocation.mjs';
 import {inventoryBusinessDate} from './inventory.mjs';
 import {isOrderSchedulable} from './orders.mjs';
@@ -34,7 +36,7 @@ export function establishProcessProduction(data,orders){
   if(order['数量单位']!=='kg')throw Error('配对路线仅支持显式kg；其他粒度未决定');
   const product=one(data.products.filter(p=>p['产品编号']===order['产品编号']),'产品'),yieldRate=Q.q(product['总收率']);
   if(Q.cmp(yieldRate,Q.zero)<=0n||Q.cmp(yieldRate,Q.one)>0n)throw Error('总收率须在(0,1]');
-  const remaining=Q.sub(Q.q(order['合格需求']),Q.q(order['已完成合格数量']||'0'));if(Q.cmp(remaining,Q.zero)===0n)continue;
+  const remaining=Q.sub(Q.q(order['合格需求']),Q.q(order['已完成合格数量']||'0'));if(Q.cmp(remaining,Q.zero)<0n)throw Error('订单已完成数量超过合格需求');if(Q.cmp(remaining,Q.zero)===0n)continue;
   const route=orderedOperations(data,order['产品编号']),cools=route.filter(r=>String(r['最大等待分钟']??'').trim()!=='');
   if(cools.length>1)throw Error('仅支持一个显式加工/冷却配对');
   const cool=cools[0],heat=cool?one(route.filter(r=>r['工序编号']===cool['前序工序']),'加工前序'):null,hi=route.indexOf(heat),ci=route.indexOf(cool);
@@ -83,4 +85,28 @@ export function validateProcessPairConfiguration(data,at){
   }
   return [];
  }catch(e){return [{table:'rules',field:'是否启用',code:'INPUT / PROCESS_PAIR',message:e.message,taskIds:[]}];}
+}
+
+// Domain-owned frozen row associations. The UI owner may bind these occurrences
+// to input versions/CSV physical rows; this layer never guesses original lines.
+export function processTaskSources(data,orderId,operations,minute){
+ const refs=[];const take=(table,predicate)=>{const rows=data[table]||[];refs.push(...sourceRefs(table,rows.filter(predicate),rows));};
+ const order=(data.orders||[]).find(o=>o['订单编号']===orderId),product=order?.['产品编号'];
+ const opIds=new Set(operations),deps=(data.dependencies||[]).filter(d=>d['订单编号']===orderId&&opIds.has(d['工序编号']));
+ const machineIds=new Set(deps.filter(d=>d['资源类型']==='设备').map(d=>d['资源编号']));
+ const claims=(data.resourceClaims||[]).filter(c=>c['订单编号']===orderId&&opIds.has(c['工序编号']));
+ const ids=new Set([...deps,...claims].map(d=>d['资源编号']));
+ take('orders',o=>o['订单编号']===orderId);take('products',p=>p['产品编号']===product);
+ take('routes',r=>r['产品编号']===product&&opIds.has(r['工序编号']));take('times',r=>r['产品编号']===product&&opIds.has(r['工序编号']));
+ take('dependencies',d=>deps.includes(d));take('machines',m=>machineIds.has(m['设备编号']));
+ take('resourceClaims',c=>claims.includes(c));take('batchResources',r=>ids.has(r['资源编号']));
+ take('tools',t=>ids.has(t['工装编码']));
+ const personnel=(data.personnelGroups||[]).filter(g=>deps.some(d=>d['资源类型']==='人员技能'&&(d['资源编号']===g['人员组编号']||(d['候选人员组']||'').split(';').includes(g['人员组编号']))));
+ take('personnelGroups',g=>personnel.includes(g));take('personnelPools',p=>personnel.some(g=>g.poolId===p.poolId));
+ const calendars=new Set((data.machines||[]).filter(m=>machineIds.has(m['设备编号'])).map(m=>inheritedCalendarId(data,m)));
+ take('factoryLines',l=>l['产线编号']===order?.['产线编号']);take('calendars',c=>calendars.has(c['日历编号']));
+ take('downtime',d=>machineIds.has(d['设备编号']));take('resourceStops',d=>ids.has(d['资源编号']));
+ take('rules',()=>true);
+ if(Number.isSafeInteger(minute)){const selected=selectedRecipe(data,product,minute);take('bom',b=>selected.includes(b));}
+ return refs;
 }
