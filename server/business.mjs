@@ -116,7 +116,8 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     if(operation!==undefined&&!['import','edit','add','copy','delete','restore'].includes(operation))return res.status(400).json({error:'invalid_operation'});
     if(!tables||typeof tables!=='object'||Array.isArray(tables)||!Object.keys(tables).length)return res.status(400).json({error:'invalid_tables'});
     let proposed=structuredClone(target.data);
-    if(req.inputStage){proposed.inputStage=req.inputStage;}
+    if(req.inputStage==='minimal-r1')proposed.inputStage='minimal-r1';
+    else if(req.inputStage==='supported')delete proposed.inputStage;
     for(const [key,rows] of Object.entries(tables)){
       const def=defs.find(d=>d.key===key);if(!def)return res.status(404).json({error:'unknown_table'});
       if(!Array.isArray(rows)||rows.length>10000||rows.some(r=>!r||typeof r!=='object'||Array.isArray(r)||Object.values(r).some(v=>typeof v!=='string')))return res.status(400).json({error:'invalid_rows'});
