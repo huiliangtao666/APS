@@ -358,6 +358,22 @@
           "previous_implementation_status": "P10 fixed42a35d07 Test1 S-P01..10 PASS; Test2 H first six PASS, R2 H-P06 PASS/H-P04 PARTIAL. H-P08/10 Test1 verdict awaits PM review; H-P04 personnel early/late formula awaits user decision. N06 and other scope open; full CR NOT_READY. | 2026-10-31 UAT06限定G01/FILL=2模拟QA PASS，26PASS/1范围外BLOCKED/1可选未执行，执行#33 Done；0产品FAIL/修复+0；完整CR NOT_READY。详见 https://github.com/huiliangtao666/APS/issues/3#issuecomment-6539962572",
           "previous_acceptance_result": "P10 fixed42a35d07 independent S-P01..10 PASS; H-P01/02/03/05/06/07/08/09/10 PASS, H-P04 PARTIAL pending personnel outside-task early/late rule; 0 new product FAIL, +0 repair. Full FR007/022/CR and UAT NOT_READY. | 2026-10-31 UAT06限定G01/FILL=2模拟QA PASS，26PASS/1范围外BLOCKED/1可选未执行，执行#33 Done；0产品FAIL/修复+0；完整CR NOT_READY。详见 https://github.com/huiliangtao666/APS/issues/3#issuecomment-6539962572"
         }
+      ],
+      "scoped_execution_events": [
+        {
+          "event_key": "dlv_4a1d1bb6-e0a9-4a48-ab70-05561aac3b60:r1",
+          "scope": "B08/UAT08 AC07/15/17 H-P04/N06 personnel slice",
+          "product_sha": "979da1827d7190024621e0438a8c0055fed44ad8",
+          "development_selftest": "PM_VERIFIED_PASS",
+          "uat": "NOT_EXECUTED",
+          "qa_delivery": "dlv_9d041148-0fc2-47ee-9076-70f1f0c05041",
+          "qa_dispatch_status": "SENT",
+          "project_status": "In review",
+          "issue": "https://github.com/huiliangtao666/APS/issues/37#issuecomment-6540733675",
+          "product_fail": 0,
+          "repair_increment": 0,
+          "remaining": "QA UAT08 #37; broader approved scope #38/#39/#40/#41; no whole CR acceptance"
+        }
       ]
     },
     {
@@ -1136,6 +1152,22 @@
           "event_key": "dlv_a1ccdb55-d45a-428e-bb9c-a4dfd93fcae3:r1",
           "previous_implementation_status": "REGISTERED_TRACKING_ONLY；已有沿原授权继续；新增未开工增量WAIT_START；当前UAT07 #34不改序",
           "previous_acceptance_result": "NOT_EXECUTED：本次仅登记关联；不新增产品/QA结论"
+        }
+      ],
+      "scoped_execution_events": [
+        {
+          "event_key": "dlv_4a1d1bb6-e0a9-4a48-ab70-05561aac3b60:r1",
+          "scope": "B08/UAT08 AC07/15/17 H-P04/N06 personnel slice",
+          "product_sha": "979da1827d7190024621e0438a8c0055fed44ad8",
+          "development_selftest": "PM_VERIFIED_PASS",
+          "uat": "NOT_EXECUTED",
+          "qa_delivery": "dlv_9d041148-0fc2-47ee-9076-70f1f0c05041",
+          "qa_dispatch_status": "SENT",
+          "project_status": "In review",
+          "issue": "https://github.com/huiliangtao666/APS/issues/37#issuecomment-6540733675",
+          "product_fail": 0,
+          "repair_increment": 0,
+          "remaining": "QA UAT08 #37; broader approved scope #38/#39/#40/#41; no whole CR acceptance"
         }
       ]
     },
