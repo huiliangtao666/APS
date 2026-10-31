@@ -3319,7 +3319,7 @@
         41
       ],
       "registration_status": "APPROVED_FOR_IMPLEMENTATION",
-      "implementation_status": "ENGINEERING_CANDIDATE_BLOCKED_AT_COMPLETE_35_ASSERTION_VALIDATION",
+      "implementation_status": "CORE_FLOW_SELFTEST_PARTIAL_REMAINING_35_ASSERTION_VALIDATION_BLOCKED",
       "product_sha": null,
       "design_document_sha": "13e2eeed4438cb0b200db9c4de3781c7f1248be3",
       "affected_requirements": [
@@ -3425,7 +3425,7 @@
       "pm_registration": "https://github.com/huiliangtao666/APS/issues/45#issuecomment-6543859215",
       "implementation_owner": "APS-Dev",
       "effective_scope_record": "Issue45 latest PM input and #38 residual transfer; older rows remain historical",
-      "acceptance_result": "NOT_READY: full workbook chain not yet verified; observed Docker VM memory pressure/OOM in import validation; no product/UAT PASS claim",
+      "acceptance_result": "PARTIAL / NOT_READY: four-category real UI save/reopen and 700-demand real Worker slice verified; complete 35-assertion same-candidate import-to-export chain and independent Test/UAT remain unverified; consecutive negative imports hit observed VM OOM",
       "next_owner": "APS-PM coordinate sufficient isolated validation capacity; APS-Dev continues the same original package after resource recovery",
       "implementation_evidence": "docs/workbook-input-integration.md; fixed SHA, parent, 35-row matrix, 27-row closure, raw bytes/hash and actual runtime fingerprint in delivery handoff"
     }
