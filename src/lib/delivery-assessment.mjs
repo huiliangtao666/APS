@@ -1,3 +1,4 @@
+import {verifyProcessRoute} from './verify-process-route.mjs';
 import {quantityMath as Q} from './material-allocation.mjs';
 import {PLAN_TIME_ORIGIN} from './expected-supply.mjs';
 import {deliveryActive,validateDelivery} from './delivery-policy.mjs';
@@ -8,6 +9,7 @@ const number=raw=>String(raw??'').trim()!==''&&Number.isFinite(Number(raw))?Numb
 export function assessDelivery(data,plan,at,conditions={}){
  const minimal=conditions.mode==='minimal-r1',active=!minimal&&deliveryActive(data,at);
  const scope=plan.ruleSnapshot?.checkScope;
+ const routeCheck=(data.routes||[]).some(r=>String(r['最大等待分钟']??'').trim()!=='')?verifyProcessRoute(plan,data,{...conditions,ruleEvaluationAt:at,enabledRuleIds:plan.rules||[],jointConditionsContract:'FR022-joint-v1',workingWindowsContract:'P06-windows-v1'}):null;
  const orders=(data.orders||[]).filter(o=>o['需求类型']==='正式订单'&&o['订单状态']==='有效').map(order=>{
   const orderId=order['订单编号'],unit=order['数量单位'],product=(data.products||[]).find(p=>p['产品编号']===order['产品编号']);
   const tasks=plan.tasks.filter(t=>t.orderId===orderId),route=(data.routes||[]).filter(r=>r['产品编号']===order['产品编号']);
@@ -39,7 +41,7 @@ export function assessDelivery(data,plan,at,conditions={}){
    else reasons.push({code:'INCOMPLETE',message:'未排、缺工序或无剩余工作；订单完成/可交付时间及全量延后未知'});
    if(!active)reasons.push({code:minimal?'MINIMAL_UNCHECKED':'DELIVERY_UNCHECKED',message:minimal?'R1最小模式不检查物料/质量/交付条件':'DELIVERY未启用或未生效，交付与延后未知'});
    if(!plan.materialChecked||!plan.batchChecked)reasons.push({code:'SCOPE_INCOMPLETE',message:'缺少物料齐套或拆合批/容量检查；不推断可交付或零延后'});
-   if(route.some(r=>r['最大等待分钟']?.trim()))reasons.push({code:'MAX_WAIT_UNRESOLVED',message:'路线声明最大等待；最大等待/上游调整未实现，不能输出可交付结论'});
+   if(route.some(r=>r['最大等待分钟']?.trim())&&routeCheck?.orders.find(o=>o.orderId===orderId)?.status!=='pass')reasons.push({code:'MAX_WAIT_UNRESOLVED',message:'路线声明最大等待；尚未通过服务端冻结源完整路线复核，不能输出可交付结论'});
    for(const [type,flag]of [['工装','MOLD'],['空间','STORAGE']])if(!plan.jointResourceChecks?.[flag]&&[...(data.resourceClaims||[]),...(data.dependencies||[])].some(r=>r['订单编号']===orderId&&r['资源类型']===type))reasons.push({code:'JOINT_SCOPE_UNCHECKED',message:`订单声明${type}条件，但本方案未检查，交付未知`});
    const wait=number(product?.['模拟交付等待分钟']);
    if(wait===null||wait<0||!Number.isSafeInteger(wait))reasons.push({code:'WAIT_UNKNOWN',message:'产品模拟交付等待须显式配置非负整数分钟'});

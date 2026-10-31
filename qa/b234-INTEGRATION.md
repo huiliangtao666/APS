@@ -1,5 +1,10 @@
 # Fixed B2+B3+B4 integration checkpoint
 
+Historical checkpoint at `833b3d56929f88c9521cb64765066eece9f83879`.
+The R4 engineering continuation and its current scope are documented in
+[r4-INTEGRATION.md](r4-INTEGRATION.md). Statements below remain the original
+source-SHA assessment, not the current branch's capability report.
+
 Authorized delivery `dlv_cd8fda2f-fd66-4947-83b1-8f03d883695b`, revision r1.
 This branch integrates the fixed B4 source (which already contains fixed B2 and
 B1) with FINAL B3 `9805bb5fbc82d8a0335c3125497b9a2727a2ddc7`. The actual merge

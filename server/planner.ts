@@ -1,3 +1,6 @@
+import {scheduleProcessRoute} from '../src/lib/process-route-planner.mjs';
+import {processRequested} from '../src/lib/process-route.mjs';
+import {verifyProcessRoute} from '../src/lib/verify-process-route.mjs';
 import {originalStageDefs,unmappedStageSources} from '../src/lib/original-stage-data.mjs';
 import {originalDependencyDef} from '../src/lib/original-dependencies.mjs';
 import {originalBomDef} from '../src/lib/original-bom.mjs';
@@ -206,6 +209,18 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
     }
     if(Object.keys(positions).length&&(minimal||activeBatchRule(data,calculatedAt))){
       setActivePlan({id:uid(),name:'固定位置检查受阻',createdAt:calculatedAt,tasks:[],findings:[{code:'POSITION / UNSUPPORTED',message:'最小模式或生产批/合批位置语义未支持；保留锁定，不推断可行',taskIds:Object.keys(positions)}],rules:enabledRules,inputVersion:`v${inputVersion}`});return;
+    }
+    if(!minimal&&processRequested(sourceData)&&ruleSnapshot.settings.some(r=>r.id==='MAX_LAG'&&r.active)){
+     try{
+      const route=scheduleProcessRoute(sourceData,sorted,calculatedAt,conditions);
+      const frozen={...conditions,ruleEvaluationAt:calculatedAt,enabledRuleIds:ruleSnapshot.settings.filter(r=>r.active).map(r=>r.id),jointConditionsContract:'FR022-joint-v1',workingWindowsContract:'P06-windows-v1'};
+      const plan:any={id:uid(),name:'加工冷却完整路线',createdAt:calculatedAt,inputVersion:`v${inputVersion}`,...route,rules:frozen.enabledRuleIds,ruleSnapshot,resourcePolicyContract:'CR-DEC02-03-v1',jointConditionsContract:frozen.jointConditionsContract,workingWindowsContract:frozen.workingWindowsContract,supplyInput,supplyConditions:buildSupplyConditions(route.tasks,resolvedSupplies,route.materialDemands.filter((r:any)=>r.committed).flatMap((r:any)=>r.allocations.filter((a:any)=>a.conditional).map((a:any,i:number)=>({'引用编号':`FR020-${r.taskId}-${r.materialId}-${i}`,'订单编号':r.orderId,'工序编号':r.operation,'供给编号':a.supplyId,'使用数量':String(a.quantity)}))))};
+      plan.processRouteVerification=verifyProcessRoute(plan,sourceData,frozen);
+      if(plan.processRouteVerification.status==='problem')plan.findings.push(...plan.processRouteVerification.problems.map((message:string)=>({code:'VERIFY / PROCESS_ROUTE',message,taskIds:[]})));
+      plan.findings=plan.findings.map((f:any)=>attachProblemRecords(f,sourceData));
+      result=plan;
+     }catch(e){setActivePlan({id:uid(),name:'加工冷却配置受阻',createdAt:calculatedAt,tasks:[],findings:[{code:'BLOCKED / PROCESS_ROUTE',message:e instanceof Error?e.message:String(e),taskIds:[]}],rules:enabledRules,inputVersion:`v${inputVersion}`});}
+     return;
     }
     if(!minimal&&activeBatchRule(data,calculatedAt)){
      batches=prepareProductionBatches(data,sorted,conditions.startMinute??0);findings.push(...batches.findings);data=batches.data;sorted=batches.orders;

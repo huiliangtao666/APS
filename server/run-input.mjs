@@ -1,3 +1,4 @@
+import {adoptProcessScope} from '../src/lib/process-route.mjs';
 import {validateResourceMappings,mappingFingerprintInput,freezeResourceEntities} from '../src/lib/resource-mapping.mjs';
 import {adaptOriginalDependencies} from '../src/lib/original-dependencies.mjs';
 import {hasPhysicalPools,validatePhysicalPools} from '../src/lib/physical-pools.mjs';
@@ -48,6 +49,7 @@ export function freezeRunInput(data, selection = {}, calculatedAt = new Date().t
   if(hasMappings&&!intake.contract&&(data.resourceMappings||[]).some(m=>m['来源类别']==='originalTools')&&!executionData.rules.some(r=>r['规则编号']==='MOLD'&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(calculatedAt))))throw Error('NOT_READY_CONFIG 运行选择未采用MOLD或尚未生效，不能忽略原05资源');
   if(executionData.executionContext)executionData.executionContext.rules=structuredClone(executionData.rules);
   checkScope=schedulingScope(checkScope.mode,executionData.rules.some(r=>r['规则编号']==='MATERIAL'&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(calculatedAt))),activeBatchRule(executionData,calculatedAt),jointFlags(executionData,calculatedAt),deliveryActive(executionData,calculatedAt));
+  checkScope=adoptProcessScope(checkScope,executionData,calculatedAt);
   if((data.executionFacts||[]).length){checkScope.checked.push('模拟累计执行事实、原始保护区间与剩余工时/耗料（支持口径）');checkScope.unchecked=checkScope.unchecked.map(x=>x==='执行事实与主管确认'?'真实执行/质量确认、FR031事件恢复/转机/冲销':x);}
   if((data.simulationEvents||[]).length)checkScope.checked.push('FR029事件时点累计事实、不可改写事件历史、禁止未开始任务开工保护窗口与需处理阻断；不含恢复/转机/撤销');
   if(hasMappings)checkScope.checked.push(`原05/06 ${mappingContract} 显式来源/运行绑定；全局唯一容量、套/人、半开分钟区间`);

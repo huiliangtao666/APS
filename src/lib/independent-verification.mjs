@@ -1,3 +1,4 @@
+import {verifyProcessRoute} from './verify-process-route.mjs';
 import {verifyJointConditions} from './verify-joint-conditions.mjs';
 import {ruleCatalog} from './business-rules.mjs';
 import {verifyCalendar} from './verify-calendar.mjs';
@@ -124,9 +125,14 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
   }
   details.calendar=verifyCalendar(plan,frozenData,frozenConditions,enabledRules);
   findings.push(...details.calendar.findings);
+  if((frozenData?.routes||[]).some(r=>String(r['最大等待分钟']??'').trim()!=='')){
+    const check=verifyProcessRoute(plan,frozenData,frozenConditions||{});
+    details.processRoute=result(check.status==='pass'?'pass':'problem',check.status==='pass'?['从冻结订单重建生产身份、完整工序覆盖、实际投料BOM兼容、加工单次占用、等待窗、产出空间及全资源/物料守恒。']:[...check.problems,...check.missing.map(id=>'完整路线缺少 '+id)]);
+    if(check.status!=='pass')findings.push(...details.processRoute.details.map(message=>({code:'VERIFY / PROCESS_ROUTE',message,taskIds:[]})));
+  }
   const ruleStatuses=(frozenData?.rules||[]).map(row=>{
     const id=row['规则编号'],catalog=ruleCatalog.find(c=>c.id===id),enabled=row['是否启用']==='是';
-    const check={MACHINE:details.machineOverlap,PRECEDENCE:details.precedence,CALENDAR:details.calendar,MOLD:details.resourcePolicies,STORAGE:details.resourcePolicies,LABOR:details.resourcePolicies}[id];
+    const check={MAX_LAG:details.processRoute,MACHINE:details.machineOverlap,PRECEDENCE:details.precedence,CALENDAR:details.calendar,MOLD:details.resourcePolicies,STORAGE:details.resourcePolicies,LABOR:details.resourcePolicies}[id];
     return {id,enabled,supported:!!catalog?.supported,adopted:enabledRules.includes(id),status:enabled&&catalog?.supported&&enabledRules.includes(id)&&check?check.status:'not_checked',reason:!catalog?.supported?'未知或未支持规则；未检查':!enabled?'冻结配置已关闭':!enabledRules.includes(id)?'本次未采用或未生效':check?'见对应独立检查':'未提供该规则的独立复核；不宣称通过'};
   });
   return { ruleStatuses, checkedAt, planId: plan?.id ?? '', findings, scopeNote:'独立复核检查单线、机器不重叠、工序先后、冻结日历与停机，以及有完整冻结配置的新契约资源窗口、技能资格与容量；未检查项另列，不代表完整业务可执行。', checks: details };

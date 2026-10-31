@@ -17,10 +17,10 @@ test('B4-A01 real API guards unchanged: original19 refused with no token or busi
  fs.writeFileSync(path.join(process.env.B4_EVIDENCE,'b4-admission.json'),JSON.stringify(results,null,2));
 });
 
-test('B4-A02 enabling MAX_LAG still refuses atomically until the shared planner is integrated',async t=>{
+test('B4-A02 MAX_LAG refuses atomically without explicit source-derived kg pair configuration',async t=>{
  const f=await fixture(t);await f.ok('/calculate',{revision:0});const state=await f.ok('/state'),before=f.bytes();
  const rules=state.data.rules.map(r=>r['规则编号']==='MAX_LAG'?{...r,'是否启用':'是','参数JSON':'{}'}:r);
  const response=await f.call('/inputs',{revision:state.revision,tables:{rules}});
  assert.equal(response.status,400);assert.equal(f.bytes(),before);
- fs.writeFileSync(path.join(process.env.B4_EVIDENCE,'b4-max-lag-guard.json'),JSON.stringify({response,atomicUnchanged:true,classification:'Shared rule capability intentionally not enabled by unintegrated B4 module'},null,2));
+ fs.writeFileSync(path.join(process.env.B4_EVIDENCE,'b4-max-lag-guard.json'),JSON.stringify({response,atomicUnchanged:true,classification:'Incomplete source configuration cannot enable MAX_LAG; pure module output is not admission authority'},null,2));
 });

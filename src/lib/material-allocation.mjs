@@ -71,13 +71,20 @@ export function calculateMaterialDemand(data,order,operation,minute,remainingKg,
  });
 }
 export function createMaterialAllocator(data,policy) {
- const used=new Map();let generation=0;
+ const used=new Map();
  for(const c of data.executionMaterials||[]){const key="inventory:"+c["批次编号"];used.set(key,add(used.get(key)||zero,q(c["累计已用数量"])));}
  const resolved=resolveExpectedSupply(data.supplies||[],data.supplyDelays||[]);
  const collisions=resolved.filter(s=>(data.inventory||[]).some(b=>b['批次编号']===s['批次编号']));
  const futureMinutes=[...(data.inventory||[]).map(b=>b['预计可用时间']),...resolved.map(s=>s['生效可用时间'])].filter(Boolean).map(t=>(Date.parse(t)-Date.parse(PLAN_TIME_ORIGIN))/60000).filter(Number.isFinite).sort((a,b)=>a-b);
- return {
+ const ledger=used=>{let generation=0;return {
   futureMinutes,
+  begin(){
+   const base=generation,privateUsed=new Map(used),local=ledger(privateUsed),rows=[];let closed=false;
+   const open=()=>{if(closed)throw Error('分配事务已结束');};
+   return {stage(demands,minute,trace=()=>{}){open();const p=local.preview(demands,minute,trace);if(p.ok)p.commit();p.rows.forEach(r=>r.committed=false);rows.push(...p.rows);return {ok:p.ok,rows:p.rows};},
+    commit(){open();if(base!==generation)throw Error('过期事务；须重新检查全部候选');if(rows.some(r=>r.exactShortage.numerator!=='0'))throw Error('缺料事务不能提交');for(const [k,v]of privateUsed)used.set(k,v);rows.forEach(r=>r.committed=true);generation++;closed=true;},
+    rollback(){open();closed=true;},rows};
+  },
   preview(demands,minute,trace=()=>{}){
    if(collisions.length){
     // Resolve preserves supply occurrence order; trace original inputs, never the derived rows.
@@ -113,7 +120,7 @@ export function createMaterialAllocator(data,policy) {
    const ok=rows.every(r=>r.exactShortage.numerator==='0');
    return {ok,rows,commit(){if(committed)return;if(!ok)throw Error('缺料候选不能提交');if(baseGeneration!==generation)throw Error('过期候选分配；须重新检查可用量');for(const [key,value]of staged)used.set(key,value);rows.forEach(r=>r.committed=true);committed=true;generation++;}};
   }
- };
+ };};return ledger(used);
 }
 
 // Shared exact arithmetic for FR021; values remain rational until display.

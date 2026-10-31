@@ -1,3 +1,4 @@
+import {adoptProcessScope,validateProcessPairConfiguration} from './process-route.mjs';
 import {inheritedCalendarId} from './factory-lines.mjs';
 import {sourceRefs} from './problem-records.mjs';
 import {validatePolicies} from './resource-policies.mjs';
@@ -19,6 +20,7 @@ ruleCatalog.push({id:'MATERIAL',category:'BR-09',name:'BOM需求与批次分配'
 for(const c of ruleCatalog.filter(c=>['CAPACITY','PROGRAM'].includes(c.id))){c.supported=true;c.scope='全部订单；同产品/BOM/整条路线/程序/给定设备的保守资源批';c.parameters=JSON.stringify(c.id==='CAPACITY'?batchParameters:{兼容条件:batchParameters.合批条件});c.range='显式配置必填；非kg订单及其他装载节点阻断';}
 for(const c of ruleCatalog.filter(c=>['MOLD','STORAGE'].includes(c.id))){c.supported=true;c.parameters=JSON.stringify(jointParameters);c.scope='显式逐生产批整工序或明确分钟窗口；工装套数/空间kg或位置；单一参数来源';c.range='须填表23及明确的数量、单位、起止偏移；未声明语义阻断';}
 Object.assign(ruleCatalog.find(c=>c.id==='DELIVERY'),{supported:true,parameters:JSON.stringify(deliveryParameters),scope:'显式模拟交付等待/质量/余保；附条件，不作承诺',range:'须采用物料和批次检查；缺条件保留未知'});
+Object.assign(ruleCatalog.find(c=>c.id==='MAX_LAG'),{supported:true,parameters:'{}',scope:'仅显式kg固定程序加工/冷却配对；真实上游/下游、全资源及物料事务、冻结源独立复核',range:'须同时采用MATERIAL/CAPACITY/PROGRAM/STORAGE；缺配置拒绝启用，不接受client能力提示'});
 Object.assign(ruleCatalog.find(c=>c.id==='PROGRESS'),{supported:true,parameters:'{}',scope:'模拟累计事实原始时段、显式剩余分钟与耗料；即使关闭也不解除事实保护',range:'支持累计报废、显式本工序BOM补做及来源汇总映射；暂停/冲销/转机与批次/质量协调未定时阻断；不确认真实执行或质量'});
 export function validRuleTime(value) {
  if(!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?(?:Z|[+-]\d{2}:\d{2})$/.test(value))return false;
@@ -28,9 +30,10 @@ export function validRuleTime(value) {
 }
 export function assessRules(data, at=new Date().toISOString(), checkCoverage=false, mode='supported', checkPolicyExecution=true) {
  const material=(data.rules||[]).some(r=>r['规则编号']==='MATERIAL'&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(at)));
- const checkScope=schedulingScope(mode,material,activeBatchRule(data,at),jointFlags(data,at),deliveryActive(data,at)), minimal=mode==='minimal-r1';
+ const checkScope=adoptProcessScope(schedulingScope(mode,material,activeBatchRule(data,at),jointFlags(data,at),deliveryActive(data,at)),data,at), minimal=mode==='minimal-r1';
  const issues=validateBatchResources(data).map(f=>({...f,table:'batchResources',file:'15_空间与组批规则配置.csv',row:f.row||0,field:'关联配置'})),settings=[];const rows=data.rules||[];
  issues.push(...validateJointResources(data,at).map(f=>({...f,table:f.table||'resourceClaims',file:f.table==='tools'?'18_工装配置.csv':f.table==='dependencies'?'12_工序资源与物料依赖.csv':f.table==='rules'?'16_排程规则配置.csv':'23_资源占用声明.csv',row:f.row||0,field:f.field||'关联配置'})));
+ issues.push(...validateProcessPairConfiguration(data,at));
  issues.push(...validateDelivery(data),...validatePolicies(data,at,mode,checkPolicyExecution).map(f=>f.table==='tools'?{...f,file:'18_工装配置.csv'}:f));
  const refs=(table,rows)=>sourceRefs(table,rows,data[table]||[]);
  const add=(index,field,message,relatedRecords=refs('rules',index<0?[]:[rows[index]]),missingTarget)=>issues.push({table:'rules',file:'16_排程规则配置.csv',row:index<0?0:index+2,field,message,relatedRecords,...(missingTarget?{missingTarget}:{}),...(index<0&&!relatedRecords.length?{associationState:'known-absent',associationGap:'必要规则记录不存在；本次检查没有现存触发记录，不生成虚构记录。'}:{})});
@@ -91,5 +94,5 @@ export function assessRules(data, at=new Date().toISOString(), checkCoverage=fal
   }
  }
  if((data.executionFacts||[]).length){checkScope.checked.push('模拟累计执行事实、原始保护区间与剩余工时/耗料（支持口径）');checkScope.unchecked=checkScope.unchecked.map(x=>x==='执行事实与主管确认'?'真实执行/质量确认、FR031事件恢复/转机/冲销':x);}
- return {checkScope,capabilityVersion:(data.simulationEvents||[]).length?'FR029-v1':(data.executionSources||[]).length||(data.executionFacts||[]).some(f=>Number(f['累计报废数量']||0)>0)?'FR031-v1':(data.executionFacts||[]).length?'FR012-v1':minimal?'FR019-minimal-v1':deliveryActive(data,at)?'FR023-v1':Object.values(jointFlags(data,at)).some(Boolean)?'FR022-v1':activeBatchRule(data,at)?'FR021-v1':'FR020-v1',at,settings,issues,intrinsicChecks:minimal?checkScope.checked:['单产线','机器不重叠','工序先后与固定工时','日历与停机','已配置人员依赖（即使 LABOR 开关关闭也保留）','显式预计供给引用可用时点',...(material?['已声明口径的BOM需求、库存及条件供给分配']:[]),...(jointFlags(data,at).MOLD?['显式逐生产批工装完整占用与释放容量']:[]),...(jointFlags(data,at).STORAGE?['显式逐生产批空间kg/位置完整占用与释放容量']:[]),...(activeBatchRule(data,at)?['BOM总投入装载、均分、同产品同版本同路线同程序资源批']:[])],independentChecks:['单产线','机器不重叠','工序先后','冻结工厂日历与设备停机'],note:checkScope.note+' 规则采用不等于独立复核通过；INVENTORY 用于可用量查询；MATERIAL 启用时使用其独立显式状态规则分配，仅覆盖声明的BOM口径。生效时间按服务端计算发起时刻判断，不是任务分钟轴。'};
+ return {checkScope,capabilityVersion:(data.simulationEvents||[]).length?'FR029-v1':(data.executionSources||[]).length||(data.executionFacts||[]).some(f=>Number(f['累计报废数量']||0)>0)?'FR031-v1':(data.executionFacts||[]).length?'FR012-v1':minimal?'FR019-minimal-v1':checkScope.checked.some(s=>s.startsWith('显式kg固定程序'))?'R4-pair-v1':deliveryActive(data,at)?'FR023-v1':Object.values(jointFlags(data,at)).some(Boolean)?'FR022-v1':activeBatchRule(data,at)?'FR021-v1':'FR020-v1',at,settings,issues,intrinsicChecks:minimal?checkScope.checked:['单产线','机器不重叠','工序先后与固定工时','日历与停机','已配置人员依赖（即使 LABOR 开关关闭也保留）','显式预计供给引用可用时点',...(material?['已声明口径的BOM需求、库存及条件供给分配']:[]),...(jointFlags(data,at).MOLD?['显式逐生产批工装完整占用与释放容量']:[]),...(jointFlags(data,at).STORAGE?['显式逐生产批空间kg/位置完整占用与释放容量']:[]),...(activeBatchRule(data,at)?['BOM总投入装载、均分、同产品同版本同路线同程序资源批']:[])],independentChecks:['单产线','机器不重叠','工序先后','冻结工厂日历与设备停机'],note:checkScope.note+' 规则采用不等于独立复核通过；INVENTORY 用于可用量查询；MATERIAL 启用时使用其独立显式状态规则分配，仅覆盖声明的BOM口径。生效时间按服务端计算发起时刻判断，不是任务分钟轴。'};
 }
