@@ -20,3 +20,5 @@ python3 qa/uat07-bundle-oracle.py .../inputs/raw/UAT-07 ...
 ```
 
 UAT07_CASES resumes only selected API cases; preserve original output SHA. The capacity2 case expects B45 due to literal original04 downtime, not B30. Synthetic QA roles are explicit; the host fixture does not validate production SSO. No UAT06 results transfer, UAT08+, main merge or publication. QA UAT07 is separately dispatched by PM after the integrated candidate is ready.
+
+The resource workspace also follows explicit saved mappings back to original05 capacity rows; identity is never guessed from a matching code. `uat07-bundle-contract.json` separates original facts and supplementary settings. Five focused regressions cover boundary diagnostics, deduplication and raw05 trace. Run `uat07-bundle-finding-browser.mjs` after the full browser flow with UAT07_REPLAY_STORE pointing to its business-final.json and UAT07_CORE to its core.json. This deliberately illegal replay fixture checks an independent-checker-only finding -> both tasks -> original12 row10 and original05 row2 -> same frozen input.
