@@ -1,14 +1,21 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {calculate} from '../server/planner.ts';
+import {calculate,defs} from '../server/planner.ts';
+import {batchKeys} from '../src/lib/csv-contract.mjs';
 import {freezeRunInput} from '../server/run-input.mjs';
-import {verifyOriginalResources} from '../src/lib/verify-original-resources.mjs';
+import {verifyOriginalResources} from '../src/lib/verify-execution-resource-ledger.mjs';
 import {verifyResourceMappingSnapshot} from '../src/lib/verify-resource-mapping.mjs';
 import {n06Fixture,selection} from './n06-fixture.mjs';
 import {configFixture,mapping} from './fr013-config-fixture.mjs';
 import {jointEnabledFixture} from './r01r02-fixture.mjs';
 
 const evaluationAt='2026-10-30T00:00:00Z';
+
+test('integrated table registry has unique identities and complete batch coverage',()=>{
+ assert.equal(new Set(defs.map(def=>def.key)).size,defs.length);
+ assert.equal(new Set(defs.map(def=>def.file)).size,defs.length);
+ assert.deepEqual([...batchKeys].sort(),defs.map(def=>def.key).sort());
+});
 
 function combinedInput(){
  const data=n06Fixture(),tool=data.tools[0];
@@ -31,7 +38,7 @@ test('original resource ledger and CSV runtime mapping retain separate frozen co
 test('tampering either frozen resource contract cannot be hidden by the other contract',()=>{
  const frozen=freezeRunInput(combinedInput(),selection,evaluationAt);
  const plan=calculate(frozen.executionData,0,evaluationAt,frozen.conditions);
- const badLedger={...frozen.conditions,originalLedgerContract:'unknown-ledger'};
+ const badLedger={...frozen.conditions,executionResourceContract:'unknown-ledger'};
  assert.equal(verifyOriginalResources(plan,frozen.executionData,badLedger).status,'problem');
  assert.deepEqual(verifyResourceMappingSnapshot(frozen.executionData,badLedger),[]);
  const badMapping={...frozen.conditions,originalResourceContract:'unknown-mapping'};
