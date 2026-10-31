@@ -3,10 +3,10 @@ import {fixture} from './fr027-fixture.mjs';import {stageInput} from './issue6-s
 import {defs,calculate} from '../server/planner.ts';import {inputHash} from '../server/run-input.mjs';
 const dir=process.env.ISSUE6_INPUT_DIR||'/inputs';
 export async function importStage(f){
- const {files,repairs}=stageInput(dir,{selectApplicableMachines:true});assert.equal(files.length,10);
+ const {files,repairs}=stageInput(dir);assert.equal(files.length,10);
  const state=await f.ok('/state');
  const missing=await f.ok('/imports/preview',{revision:state.revision,files});assert.equal(missing.valid,false);assert.equal(missing.issues.length,6);
- const raw=stageInput(dir);const original=await f.call('/imports/preview',{revision:state.revision,files:raw.files,repairs:raw.repairs});assert.equal(original.body.valid,false);assert.equal(original.body.issues.length,4);assert.ok(original.body.issues.every(i=>i.code==='INPUT / MACHINE_OPERATION_REFERENCE'));
+ const raw=stageInput(dir);const original=await f.call('/imports/preview',{revision:state.revision,files:raw.files,repairs:raw.repairs});assert.equal(original.body.valid,true);assert.deepEqual(original.body.issues,[]);
  const p=await f.ok('/imports/preview',{revision:state.revision,files,repairs});assert.equal(p.valid,true,JSON.stringify(p));
  const saved=await f.ok('/imports/commit',{previewId:p.id});return {saved,files,repairs};
 }

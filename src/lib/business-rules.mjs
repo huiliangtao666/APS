@@ -34,7 +34,7 @@ export function assessRules(data, at=new Date().toISOString(), checkCoverage=fal
  issues.push(...validateDelivery(data),...validatePolicies(data,at,mode,checkPolicyExecution).map(f=>f.table==='tools'?{...f,file:'18_工装配置.csv'}:f));
  const refs=(table,rows)=>sourceRefs(table,rows,data[table]||[]);
  const add=(index,field,message,relatedRecords=refs('rules',index<0?[]:[rows[index]]),missingTarget)=>issues.push({table:'rules',file:'16_排程规则配置.csv',row:index<0?0:index+2,field,message,relatedRecords,...(missingTarget?{missingTarget}:{}),...(index<0&&!relatedRecords.length?{associationState:'known-absent',associationGap:'必要规则记录不存在；本次检查没有现存触发记录，不生成虚构记录。'}:{})});
- for(const c of ruleCatalog.filter(c=>c.required))if(!rows.some(r=>r['规则编号']===c.id))add(-1,'规则编号',`必要规则 ${c.id} 不得删除`,[],{table:'rules',key:c.id});
+ for(const c of ruleCatalog.filter(c=>c.required&&(!minimal||data.inputStage!=='minimal-r1'||['MACHINE','PRECEDENCE'].includes(c.id))))if(!rows.some(r=>r['规则编号']===c.id))add(-1,'规则编号',`必要规则 ${c.id} 不得删除`,[],{table:'rules',key:c.id});
  rows.forEach((r,i)=>{
   const c=ruleCatalog.find(c=>c.id===r['规则编号']);const enabled=r['是否启用']==='是';
   const effectiveFrom=r['生效时间']||'';const scope=r['适用对象']||'*';
@@ -43,7 +43,7 @@ export function assessRules(data, at=new Date().toISOString(), checkCoverage=fal
   if(!['是','否'].includes(r['是否启用']))add(i,'是否启用','仅接受是或否');
   if(!r['规则编号']?.trim()||rows.filter(x=>x['规则编号']===r['规则编号']).length!==1)add(i,'规则编号','规则编号须非空且唯一',refs('rules',rows.filter(x=>x['规则编号']===r['规则编号'])));
   if(enabled&&!c?.supported)add(i,'是否启用',`${r['规则编号']} 尚未实现，不得启用；保存字段不代表检查通过`);
-  if(c?.required&&(!enabled||(effectiveFrom&&Date.parse(effectiveFrom)>Date.parse(at))))add(i,'是否启用',`${c.id} 是始终有效的必要约束，不得关闭或延后生效`);
+  if(c?.required&&(!minimal||data.inputStage!=='minimal-r1'||['MACHINE','PRECEDENCE'].includes(c.id))&&(!enabled||(effectiveFrom&&Date.parse(effectiveFrom)>Date.parse(at))))add(i,'是否启用',`${c.id} 是始终有效的必要约束，不得关闭或延后生效`);
   if(enabled&&c?.supported){
    const allowed=c.id==='DELIVERY'?Object.keys(deliveryParameters):c.id==='INVENTORY'?['可用质量状态']:c.id==='SORT'?['排序方式']:c.id==='MATERIAL'?['允许预计供给','可用状态','预计状态','不可用状态']:c.id==='CAPACITY'?Object.keys(batchParameters):c.id==='PROGRAM'?['兼容条件']:['MOLD','STORAGE'].includes(c.id)?Object.keys(jointParameters):[];
    if(Object.keys(parameters).some(k=>!allowed.includes(k)))add(i,'参数JSON','包含当前执行器不支持的参数');

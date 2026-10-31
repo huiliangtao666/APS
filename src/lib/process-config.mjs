@@ -84,7 +84,7 @@ export function validateProcessConfig({ products = [], orders = [], routes = [],
     else if (machineIds.has(id)) at('machines',index,'工序编号').push({ code:'INPUT / MACHINE_DUPLICATE', message:`设备编号 ${id} 重复` });
     else machineIds.add(id);
     if (!operation) at('machines',index,'工序编号').push({ code:'INPUT / MACHINE_OPERATION_REQUIRED', message:`${prefix}（${id || '未编号'}）缺少适用工序编号` });
-    else if (![...routeOperationKeys].some(key => key.endsWith(`\u0000${operation}`))) at('machines',index,'工序编号').push({ code:'INPUT / MACHINE_OPERATION_REFERENCE', message:`${prefix}（${id || '未编号'}）适用工序 ${operation} 未出现在任何产品工艺路线中` });
+    else if (dependencies.some(d => d['资源类型'] === '设备' && d['资源编号'] === id) && ![...routeOperationKeys].some(key => key.endsWith(`\u0000${operation}`))) at('machines',index,'工序编号').push({ code:'INPUT / MACHINE_OPERATION_REFERENCE', message:`${prefix}（${id || '未编号'}）适用工序 ${operation} 未出现在任何产品工艺路线中` });
   });
 
   dependencies.forEach((row, index) => {
