@@ -5,7 +5,7 @@ import {resourceClient,resourceTaskSources} from '../src/lib/resource-workbench.
 import {verifyResourcePolicies} from '../src/lib/verify-resource-policies.mjs';
 async function isolated(t){const f=await fixture(t),bytes=f.bytes;f.bytes=()=>fs.existsSync(path.join(f.dir,'business.json'))?bytes():null;return f;}
 const hash=x=>createHash('sha256').update(typeof x==='string'?x:JSON.stringify(x)).digest('hex');
-const save=(name,data)=>{fs.mkdirSync(process.env.B2_EVIDENCE,{recursive:true});fs.writeFileSync(path.join(process.env.B2_EVIDENCE,name+'.json'),JSON.stringify(data,null,2));};
+const save=(name,data)=>{fs.mkdirSync(process.env.B2_EVIDENCE,{recursive:true});fs.writeFileSync(path.join(process.env.B2_EVIDENCE,'B231-'+name+'.json'),JSON.stringify(data,null,2));};
 for(const id of ['03','04','06','07','08'])test('B231 literal UAT-'+id+' stage and all19 batches refuse unconfigured resources atomically with exact source rows',async t=>{
  const f=await isolated(t);await f.ok('/state');const results=[];
  for(const all of [false,true]){const batch=originalBatch(id,all),before=f.bytes(),r=await f.call('/imports/preview',{revision:0,files:batch.files,repairs:batch.repairs,...(batch.resourceRuleBinding?{resourceRuleBinding:batch.resourceRuleBinding}:{})});
