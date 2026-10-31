@@ -17,7 +17,7 @@ main完整SHA：5bdf8287778e5b0e98c33b512da4ed0f724785f7
 
 变更与保留
 
-仅新增10个契约内文件：src/lib/b16-sharing.*及qa/b16-test-*。本次无文本冲突，无依赖修正；所有3385个原main文件blob保持原样，B09/B12/B15/R7、治理、原CSV、P0守卫均未覆盖。与最新main增量的源文件及递归依赖交集均为空。PM原记录34个域依赖；本次递归遍历还包括测试入口，共36个外部本地依赖（另含qa/joint-fixture.mjs及src/lib/personnel-occupation.mjs），全部blob相等；完整列表见ENVIRONMENT。
+仅新增10个契约内文件：src/lib/b16-sharing.*及qa/b16-test-*。本次无文本冲突，无依赖修正；所有3385个原main文件blob保持原样，B09/B12/B15/R7、治理、原CSV、P0守卫均未覆盖。与最新main增量的源文件及递归依赖交集均为空。PM原记录34个域文件含b16-sharing.mjs本身；本次统计排除本域新增文件，并递归展开测试入口，共36个外部本地依赖，比原列表另含qa/joint-fixture.mjs、src/lib/joint-resources.mjs、src/lib/working-windows.mjs，全部blob相等；完整列表见ENVIRONMENT。
 
 隔离验证
 
