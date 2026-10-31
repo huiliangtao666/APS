@@ -541,6 +541,39 @@
           },
           "cr_approval_unchanged": true,
           "no_whole_fr_cr_signoff": true
+        },
+        {
+          "event_key": "dlv_352b72b2-e1b9-47a5-aefe-d96bbc204065:r1",
+          "product_sha": "78a99625793cb07202aaabb8fc2b1aafad9c8c5c",
+          "outer_files": 4,
+          "zip_crc": "PASS",
+          "internal_hashes": 89,
+          "matrix_pass_rows": 15,
+          "matrix_evidence_hashes": "PASS",
+          "originals_vs_prior": 25,
+          "github_parent_branch_files": "PASS",
+          "live_build_and_asset_hashes": "PASS",
+          "dev_selftest": "PM_VERIFIED_PASS",
+          "qa": "NOT_DISPATCHED_WAIT_AC15_JOINT_CANDIDATE",
+          "whole_card": "NOT_READY",
+          "status": "In progress",
+          "repair_round": 1,
+          "processing_increment": 0,
+          "production_files": [
+            "src/ResourceFindingSource.tsx",
+            "src/ResourceWorkbench.tsx"
+          ],
+          "source_notification": "dlv_e7647f0b-daf0-45f3-9209-a06045cee13c",
+          "processing": "PROCESSED",
+          "defect": "B08-QA-AC17-01",
+          "defect_status": "FIX_DELIVERED",
+          "qa_retest": "WAIT_AC15_JOINT_FIXED_SHA",
+          "ac15_delivery": "dlv_6f9e8158-9e70-455d-bfe9-bcae1451e686",
+          "ac15_actual_status": "executing",
+          "cr_approval_unchanged": true,
+          "next_owner": "APS-Dev continue existing AC15 task, integrate AC17 and hand off one final candidate; PM verify then QA affected AC17+AC15 retest",
+          "evidence_files_api": "APS-Dev root B08-AC17-REACT31-DEV-FIX-r1-*; PM verified copies APS-PM temp/b08-ac17-fix/",
+          "design_document_sha": "c48d214f8197d1346eccbb8886bb7138eb263d56"
         }
       ]
     },
@@ -1534,6 +1567,39 @@
           },
           "cr_approval_unchanged": true,
           "no_whole_fr_cr_signoff": true
+        },
+        {
+          "event_key": "dlv_352b72b2-e1b9-47a5-aefe-d96bbc204065:r1",
+          "product_sha": "78a99625793cb07202aaabb8fc2b1aafad9c8c5c",
+          "outer_files": 4,
+          "zip_crc": "PASS",
+          "internal_hashes": 89,
+          "matrix_pass_rows": 15,
+          "matrix_evidence_hashes": "PASS",
+          "originals_vs_prior": 25,
+          "github_parent_branch_files": "PASS",
+          "live_build_and_asset_hashes": "PASS",
+          "dev_selftest": "PM_VERIFIED_PASS",
+          "qa": "NOT_DISPATCHED_WAIT_AC15_JOINT_CANDIDATE",
+          "whole_card": "NOT_READY",
+          "status": "In progress",
+          "repair_round": 1,
+          "processing_increment": 0,
+          "production_files": [
+            "src/ResourceFindingSource.tsx",
+            "src/ResourceWorkbench.tsx"
+          ],
+          "source_notification": "dlv_e7647f0b-daf0-45f3-9209-a06045cee13c",
+          "processing": "PROCESSED",
+          "defect": "B08-QA-AC17-01",
+          "defect_status": "FIX_DELIVERED",
+          "qa_retest": "WAIT_AC15_JOINT_FIXED_SHA",
+          "ac15_delivery": "dlv_6f9e8158-9e70-455d-bfe9-bcae1451e686",
+          "ac15_actual_status": "executing",
+          "cr_approval_unchanged": true,
+          "next_owner": "APS-Dev continue existing AC15 task, integrate AC17 and hand off one final candidate; PM verify then QA affected AC17+AC15 retest",
+          "evidence_files_api": "APS-Dev root B08-AC17-REACT31-DEV-FIX-r1-*; PM verified copies APS-PM temp/b08-ac17-fix/",
+          "design_document_sha": "c48d214f8197d1346eccbb8886bb7138eb263d56"
         }
       ]
     },
