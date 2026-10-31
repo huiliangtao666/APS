@@ -4,6 +4,7 @@ import {resourceTables} from './lib/resource-workbench.mjs';
 import {originalBomNote} from './lib/original-bom.mjs';
 import {MasterDataContract} from './MasterDataContract';
 import {OriginalResourceConfig} from './OriginalResourceConfig';
+import {toolMappingDraft} from './lib/tool-mapping-draft.mjs';
 import {PersonnelPolicyTrial} from './PersonnelPolicyTrial';
 import {PolicyPreview,policyOptions,policyInputSpec} from './PolicyPreview';
 import {currentRecord,type IdentityContext,type RecordRef} from './lib/problem-records.mjs';
@@ -27,6 +28,7 @@ export function DataEditor({initialRecord,identityContext,data={},def,rows,revis
  const [error,setError]=useState('');
  const [saved,setSaved]=useState('');
  const [saving,setSaving]=useState(false);
+ const [toolSimulation,setToolSimulation]=useState(false);
  const [issues,setIssues]=useState<{table:string;row:number;field:string;message:string;file?:string}[]>([]);
  const [target,setTarget]=useState<{table:string;row:number;field:string}|null>(null);
  useEffect(()=>{if(!target||target.table!==def.key)return;const field=def.fields.find(f=>target.field.split(' + ').includes(f))||def.fields[0];const node=document.getElementById(`edit-${def.key}-${Math.max(0,target.row-2)}-${field}`);if(node){((node.querySelector('input:not([type="hidden"]),select') as HTMLElement)||node).focus();node.scrollIntoView({block:'center'});}setTarget(null);},[def.key,target]);
@@ -49,6 +51,7 @@ export function DataEditor({initialRecord,identityContext,data={},def,rows,revis
   {def.key==='simulationEvents'&&<p>FR029：先更新全部在制任务观测分钟为事件时点，再保存完整事件集合；可跨表暂存后一并保存。保护策略仅支持“禁止未开始任务开工”，需处理事实JSON留空由服务器判定。故障/耗料影响事实永久保留待处理；恢复、转机、撤销及旧方案未执行任务锁定未定。模拟物料状态不代表QA在线放行。</p>}
   {["executionFacts","executionMaterials","executionSources"].includes(def.key)&&<p>FR031 模拟累计口径：可用产出与报废分开，不跨工序累加；空报废按零处理。正报废量须明确“按本工序BOM补做”或“待核对”；工时独立填写。来源汇总缺少显式物料/批次分配时阻断，不自动分批。已开始/完成事实、已耗批次、原始来源不允许删除或覆盖。</p>}
   {['tools','resourceClaims'].includes(def.key)&&<p role="note">建议初始值 / 请核对实际业务。新建工装：可用套数1、每任务需求套数1、提前取得0分钟、后延归还0分钟；新建占用声明：完整工序（显式逐生产批完整区间），窗口偏移0。仅点击“保存修改”后生效，未保存不作用新试算。来源：2026-10-30用户授权的建议，不是客户现场事实。工装编码、适用工序、真实可用起止及共享范围须按实际业务或明确CSV来源填写；同一实体请使用同一编号共享容量，不能按设备复制容量。表23仍须显式填写资源身份、订单/工序、单位及参数来源；选择“工装配置”采用表18套数/提前/后延时，表23对应三个字段须留空。时间为半开区间。已有记录、复制及CSV/API不补建议值。</p>}
+  {def.key==='tools'&&(data.resourceMappings||[]).some(m=>m['来源类别']==='originalTools'&&m['状态']==='READY')&&<aside aria-label="工装映射草稿更新" className="hint-box"><b>工装修改与来源映射一起保存</b><p>编辑下方工装后，更新映射快照和配置版本，无需手工修改JSON。容量及可用期默认必须与原来源一致。仅在明确模拟时勾选下项，将草稿容量/可用期采用为可替换模拟来源；原CSV字节、旧输入和方案保持可追溯。随后先预览，确认后保存；不会自动写入。</p><label><input type="checkbox" disabled={disabled} checked={toolSimulation} onChange={e=>setToolSimulation(e.target.checked)}/>本次容量及可用期为可替换模拟配置（非客户事实）</label><button disabled={disabled||!draft} onClick={()=>{try{const result=toolMappingDraft({...data,...drafts},data,{simulation:toolSimulation});if(!draft)setBase(revision);setDrafts({...drafts,...result.tables});setSaved('映射草稿已更新，请预览后保存。');setError('');}catch(e){setError(e instanceof Error?e.message:String(e));}}}>更新工装映射草稿</button><button disabled={disabled||!onPolicyPreview||!drafts.resourceMappings} onClick={async()=>{try{const result=await onPolicyPreview!(drafts,base);if(!result.valid)throw Error('预览未通过，请核对配置问题');setPreviewed(draftKey);setSaved('联合预览通过，可以保存当前草稿。');setError('');}catch(e){setError(e instanceof Error?e.message:String(e));setIssues((e as any)?.detail?.issues||[]);}}}>预览工装修改（零写入）</button></aside>}
   {originalStageDefs.some(d=>d.key===def.key)&&<p>{originalStageNote}</p>}
   {def.key==='originalDependencies'&&<p>原12八列按原文保存，包括“由BOM计算”。设备按原编号映射；启用工装须配置原05运行绑定及表23声明，启用人员须配置原06绑定、班次、物理池和参与窗。关闭或未生效类别仅保留来源；启用但缺映射或物料计算合同则整批拒绝。运行依赖补充CSV使用32_运行工序资源依赖.csv，禁止用规范化值覆盖原文。</p>}
  {def.key==='originalBom'&&<p data-original-bom-contract>{originalBomNote}</p>}
