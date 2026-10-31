@@ -7,12 +7,16 @@
       "sha256": "4a6c7810faa30f107091774b8170a70209071c2e3296916e6dc6934ec68b3a2e"
     },
     "B12-MAIN-b8512a3-DEV-r1-EVIDENCE.zip": {
-      "bytes": 8187389,
-      "sha256": "90cb1404e7fe15e207fa02350c7287b87858485c0d279bd90c9c160de4bb19da"
+      "bytes": 8186665,
+      "sha256": "ea081f0402f30942a7fcc4f7bbc3b6c2821d07756107e6bd6d6b1c5418d0f10a"
     },
     "B12-MAIN-b8512a3-DEV-r1-MATRIX.csv": {
       "bytes": 4812,
       "sha256": "746610db2aac0dd187e45cfeb260dc546e76d6df73e98c99be1c41a79cc46c3a"
+    },
+    "B12-MAIN-b8512a3-DEV-r1-PARTS.json": {
+      "bytes": 567,
+      "sha256": "ca923bf3f0bac9f328aa4c5dec5901b525fb37c248d012de8a6748cd40ac6450"
     },
     "B12-MAIN-b8512a3-DEV-r1-REPORT.md": {
       "bytes": 8275,
