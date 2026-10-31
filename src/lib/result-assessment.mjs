@@ -1,6 +1,6 @@
 import {inheritedCalendarId} from './factory-lines.mjs';
 import {PLAN_TIME_ORIGIN} from './expected-supply.mjs';
-const date=m=>Number.isFinite(m)?new Date(Date.parse(PLAN_TIME_ORIGIN)+m*60000).toISOString():null;
+const date=m=>{if(!Number.isFinite(m))return null;const d=new Date(Date.parse(PLAN_TIME_ORIGIN)+m*60000);return Number.isFinite(d.getTime())?d.toISOString():null;};
 const ref=(table,row)=>({table,row:structuredClone(row)});
 const suggestion=(kind,message)=>({kind,message,guaranteed:false,requiresNewRun:true});
 export function resultState(run,report){
@@ -20,7 +20,7 @@ export function assessResult(data,plan,conditions={}){
   const route=(data.routes||[]).filter(r=>r['产品编号']===productId);
   const batches=plan.batchChecked?(plan.productionBatches||[]).filter(b=>b.orderId===orderId):[];
   const units=batches.length?batches:[null];
-  orders.push({orderId,status:route.length?'evaluated':'unknown-route',remainingQuantity:Number.isFinite(remaining)?remaining:null,unit:order['数量单位']});
+  orders.push({orderId,status:!Number.isFinite(remaining)||remaining<0?'unknown-quantity':!route.length?'unknown-route':plan.batchChecked&&!batches.length?'unknown-batches':'evaluated',remainingQuantity:Number.isFinite(remaining)?remaining:null,unit:order['数量单位']});
   for(const b of units)for(const op of route){
    const operation=op['工序编号'],id=b?JSON.stringify([orderId,b.index,operation]):`${orderId}-${operation}`;
    const actual=(plan.tasks||[]).find(t=>t.id===id);
@@ -31,7 +31,7 @@ export function assessResult(data,plan,conditions={}){
    const materials=(plan.materialDemands||[]).filter(r=>r.taskId===id);
    const time=(data.times||[]).find(r=>r['产品编号']===productId&&r['工序编号']===operation);
    const candidate=linked.find(f=>f.context?.candidateMinute!=null)?.context.candidateMinute??materials[0]?.feedMinute??null;
-   const reasons=linked.map(f=>({...structuredClone(f),classification:/未决定|未配置.*口径|未批准|未实现/.test(f.message)?'unresolved':f.code.includes('PREDECESSOR')?'blocked-predecessor':/CONFIG|INPUT|RULE/.test(f.code)?'data-repair':'observed-blocker'}));
+   const reasons=linked.map(f=>({...structuredClone(f),classification:/未决定|未配置.*口径|未批准|未实现/.test(f.message)?'unresolved':String(f.code||'').includes('PREDECESSOR')?'blocked-predecessor':/CONFIG|INPUT|RULE/.test(f.code)?'data-repair':'observed-blocker'}));
    if(!actual&&!reasons.length)reasons.push({code:'UNKNOWN_TASK_CAUSE',classification:'unknown',message:'本任务未排；没有可验证的逐任务原因。请核对本次全局问题，不推断具体瓶颈。',taskIds:[id]});
    const codes=linked.map(f=>f.code).join(' '),suggestions=[];
    if(reasons.some(r=>r.classification==='data-repair'))suggestions.push(suggestion('data-repair','核对关联输入的引用、单位、工时及规则参数，修复后另开计算。'));
@@ -60,10 +60,10 @@ export function assessResult(data,plan,conditions={}){
   }
  }
  const missing=tasks.filter(t=>t.status==='unplanned').length;
- return {version:'FR024-v1',status:missing||findings.length||orders.some(o=>o.status==='unknown-route')?'partial-unplanned':'scheduled',globalFeasibility:'unknown',scheduledCount:tasks.length-missing,unplannedCount:missing,orders,tasks,globalFindings:structuredClone(findings.filter(f=>!f.taskIds?.length)),scope:structuredClone(plan.ruleSnapshot?.checkScope||conditions.checkScope||null),unknown:tasks.filter(t=>t.reasons.some(r=>r.classification==='unknown')).map(t=>t.id),unresolved:['最大等待、动态释放、跨批取整及未批准的阶段语义'],unsupported:['模拟执行事实与原始保护时段见execution报告；AC21完整事件重排/恢复待FR031，无产品质量事实推断'],limits:['未排与构造搜索失败不代表全局业务无解','候选日期不是已安排日期；缺失数量/日期保持未知','建议需修改模拟输入并另开计算，不保证得到可行结果','完成、可交付与附条件质量/效期评估分别见保存的交付报告']};
+ return {version:'FR024-v1',status:missing||findings.length||orders.some(o=>o.status.startsWith('unknown-'))?'partial-unplanned':'scheduled',globalFeasibility:'unknown',scheduledCount:tasks.length-missing,unplannedCount:missing,orders,tasks,globalFindings:structuredClone(findings.filter(f=>!f.taskIds?.length)),scope:structuredClone(plan.ruleSnapshot?.checkScope||conditions.checkScope||null),unknown:tasks.filter(t=>t.reasons.some(r=>r.classification==='unknown')).map(t=>t.id),unresolved:['最大等待、动态释放、跨批取整及未批准的阶段语义'],unsupported:['模拟执行事实与原始保护时段见execution报告；AC21完整事件重排/恢复待FR031，无产品质量事实推断'],limits:['未排与构造搜索失败不代表全局业务无解','候选日期不是已安排日期；缺失数量/日期保持未知','建议需修改模拟输入并另开计算，不保证得到可行结果','完成、可交付与附条件质量/效期评估分别见保存的交付报告']};
 }
 export function resultCsv(run,plan){
  const report=plan?.resultAssessment;
  const rows=[['R2.1六字段配置与来源',JSON.stringify((run?.conditions||plan?.conditions)?.r21OrderConfiguration??null)],['独立复核',JSON.stringify(plan?.verification??null)],['模拟执行事实版本',plan?.conditions?.executionFactsVersion||'历史未记录'],['模拟执行快照',JSON.stringify(plan?.execution??null)],['FR024 运行结果与原因'],['试算编号',plan?.trialId||run?.trialId||'非试算'],['源方案',plan?.sourcePlanId||run?.sourcePlanId||'原始方案'],['结果来源',plan?.copiedResult?'复制保存的原结果；尚未重算':'服务端运行记录'],['原运行',plan?.sourceRunId||'不适用'],['运行编号',run?.id||plan?.runId||'未知'],['输入版本',run?.inputVersionId||plan?.inputVersionId||'未知'],['快照',run?.snapshotHash||plan?.snapshotHash||'未知'],['运行状态',JSON.stringify(resultState(run||{status:'unknown'},report))],['结果报告',report?JSON.stringify(report):run&&!run.planId?'本次无已保存结果；未使用当前输入生成任务或补算原因':'历史结果原因未知；未使用当前输入补算'],['交付评估',plan?.deliveryAssessment?JSON.stringify(plan.deliveryAssessment):'未知']];
- return rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+ return rows.map(row=>row.map(v=>'"'+String(v).replace(/^[\s]*[=+@-]/,"'$&").replace(/^[\t\r\n]/,"'$&").replace(/"/g,'""')+'"').join(',')).join('\r\n');
 }
