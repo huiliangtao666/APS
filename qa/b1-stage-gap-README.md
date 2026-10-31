@@ -1,0 +1,11 @@
+# R1 / R2.1 current-stage AC evidence supplement
+
+Task `dlv_f901c08a-b8dc-4bce-95d7-228583424576:r1`. Product under test remains `98347f800c77c0468af3ae293d1dd852af5c207f`; this commit adds QA artifacts only. Parent is that fixed B1 commit. No App/planner/import/run-source changes; no B2–B5 integration, main merge or publication.
+
+Run the harness inside an isolated application container containing this product source, existing dependencies, Chromium and Playwright (verified image `aps-b1-uat:98347f8`). Set `EVIDENCE_DIR` to a writable evidence directory and invoke `node --experimental-strip-types qa/b1-stage-gap-checks.mjs`. For the recorded supplement, query keys are factoryLines/products/orders/routes/times/machines/dependencies/rules/calendars/downtime; `UI_KEYS` can explicitly select missing query categories. `STAGE_RESUME=1` retains completed rows. `QUERY_ONLY=1` skips edits and terminal projections; `LINK_ONLY=1` checks only machine-overlap and precedence navigation; `ADMISSION_ONLY=1` checks only L02 CSV/run admission. These modes allow resuming without repeating successful assertions.
+
+The seed, explicit factory/line/stop labels and fault Workers are software simulation inputs. Diagnostic saved-plan mutations intentionally introduce overlap/precedence; the corrupted legacy input intentionally tests admission. They are not scheduler-generated defects or customer facts. All run/status checks use real Express, worker_threads, persistence and the built React app, with an explicitly synthetic planner identity; no formal SSO verdict.
+
+The Python oracle uses stdlib csv/Decimal/datetime without product parsers. Set `B1_STAGE_EVIDENCE` to the supplement bundle root containing evidence/ and prior/qa/; run `python3 qa/b1-stage-independent-oracle.py`. Its QA artifact consistency assertions add quantity/unit/export evidence without re-executing UAT scenarios.
+
+The original Dev 62 PASS and QA 32 PASS remain on their original SHA/event keys. Final report and matrices are delivered as workspace attachments, with SHA256 manifests and preserved source evidence. Future categories, production identity and missing authenticated/customer facts retain their separate applicability/status.
