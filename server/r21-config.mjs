@@ -13,9 +13,9 @@ export function openR21Config(dataDir) {
 }
 // Caller supplies the same authorization middleware as its business API.
 // QA synthetic identity is supplied only by qa/r21-uat-server.mjs.
-export function createR21ConfigRouter({ dataDir, authorize, readInput, saveOrders }) {
+export function createR21ConfigRouter({ dataDir, authorize, readInput, saveOrders, integratedStore, applyTransaction }) {
   if (typeof authorize !== 'function' || typeof readInput !== 'function' || typeof saveOrders !== 'function') throw Error('r21_integration_callbacks_required');
-  const store = openR21Config(dataDir), router = Router();
+  const store = integratedStore || openR21Config(dataDir), router = Router();
   router.use((_req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
   router.use(authorize);
   router.use((req, res, next) => {
@@ -36,7 +36,7 @@ export function createR21ConfigRouter({ dataDir, authorize, readInput, saveOrder
       const issues = validateR21Config(config);
       if (issues.length) return res.status(400).json({ error: 'invalid_r21_config', issues });
       const after = { ...before, config, history: [...before.history, { before: before.config, after: config, at: new Date().toISOString(), reason: req.body.reason.trim(), actor: req.r21Actor || 'authorized-caller' }] };
-      store.write(after); res.json(view(after));
+      store.write(after, req); res.json(view(after));
     } catch (e) { next(e); }
   });
   router.post('/apply', async (req, res, next) => {
@@ -48,6 +48,10 @@ export function createR21ConfigRouter({ dataDir, authorize, readInput, saveOrder
       const proposed = configuredR21Orders(input.data.orders, config);
       if (!proposed.valid) return res.status(400).json({ error: 'incomplete_r21_config', issues: proposed.issues });
       // Callback MUST use the normal validated business save, never direct store writes.
+      if (applyTransaction) {
+        const result = applyTransaction({ req, input, config, proposed });
+        return res.status(result.status).json(result.body);
+      }
       const saved = await saveOrders({ revision: input.revision, orders: proposed.orders, reason: req.body.reason });
       const state = store.read();
       const application = { id: randomUUID(), config: structuredClone(config), configFingerprint: hash(config), beforeInputRevision: input.revision, afterInputRevision: saved.revision, inputVersionId: saved.inputVersionId, at: new Date().toISOString(), reason: req.body.reason.trim(), actor: req.r21Actor || 'authorized-caller' };

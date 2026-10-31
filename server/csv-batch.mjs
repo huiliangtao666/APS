@@ -1,10 +1,11 @@
+import {validateR21Config,r21OrderIds} from '../src/lib/r21-stage-config.mjs';
 import {parseInputCsvRecords} from '../src/lib/input-csv.mjs';
 // The isolated prototype used these same table keys, but older field shapes.
 // Reuse physical-record parsing/inspection; actual runtime defs are authoritative.
 import {batchKeys} from '../src/lib/csv-contract.mjs';
 export {batchKeys};
 export const optionalFields={resourceMappings:['字段权威JSON'],personnelGroups:['poolId'],orders:['已完成合格数量'],dependencies:['人员岗位编号','候选人员组','所需班次','人员参与阶段','人员开始偏移','人员结束偏移','窗口外释放'],rules:['适用对象','生效时间']};
-export function inspectCsvBatch(files,defs,repairs=[]){
+export function inspectCsvBatch(files,defs,repairs=[],r21Config=null){
  const tables={},sources={},issues=[],seen=new Set(),used=new Set();
  const entryFields=['是否允许拆分','需求类型','订单状态'];
  if(!Array.isArray(repairs)||repairs.length>30000)return {tables,sources,issues:[{file:'17_生产订单与交期.csv',row:1,field:'补录',reason:'补录格式无效',severity:'error'}]};
@@ -22,6 +23,15 @@ export function inspectCsvBatch(files,defs,repairs=[]){
   def.fields.filter(f=>!(legacy&&['合格需求','数量单位',...entryFields].includes(f))&&!(optionalFields[def.key]||[]).includes(f)&&!headers.includes(f)).forEach(f=>add(file.name,headerLine,f,'缺少契约字段'));
   if(issues.length!==before)continue;
   sources[def.key]={file:file.name,lines:raw.slice(1).map(r=>r.line),headers,originalText:file.text,records:raw.slice(1).map(r=>({line:r.line,values:Object.fromEntries(headers.map((h,i)=>[h,r.cells[i]??'']))})),mappings:legacy?[{sourceField:'合格需求kg',quantityField:'合格需求',unitField:'数量单位',unit:'kg'}]:[],repairs:[]};
+  if(r21Config&&def.key==='orders'){
+   const configIssues=validateR21Config(r21Config,{complete:true});
+   for(const f of configIssues)add(file.name,1,f.field||'六项配置',f.message||f.code);
+   const ids=raw.slice(1).map(r=>r.cells[headers.indexOf('订单编号')]);
+   if(ids.length!==2||r21OrderIds.some(id=>ids.filter(x=>x===id).length!==1))add(file.name,1,'订单编号','配置补录须精确包含唯一 A/B 订单，不接受未知或重复身份');
+   if(!legacy||entryFields.some(f=>headers.includes(f))||repairs.some(e=>e?.file===file.name))add(file.name,1,'补录','六项配置只用于原17缺失列；禁止与现行值或手工补录混用');
+   if(issues.length!==before)continue;
+   sources[def.key].r21Configuration=structuredClone(r21Config);
+  }
   tables[def.key]=raw.slice(1).map(({cells,line},index)=>{
    if(cells.length!==headers.length)add(file.name,line,'整行',`列数 ${cells.length} 与表头 ${headers.length} 不一致`,{table:def.key,index});
    const row=Object.fromEntries(def.fields.map(f=>[f,headers.includes(f)?(['originalInventory','originalSupply','originalProgress','originalEvents','originalBom','originalTools','originalPersonnel','resourceMappings'].includes(def.key)?(cells[headers.indexOf(f)]||''):(cells[headers.indexOf(f)]||'').trim()):'']));
@@ -30,6 +40,7 @@ export function inspectCsvBatch(files,defs,repairs=[]){
     if(sources[def.key].repairs.some(p=>p.row===line&&p.field===e.field)){add(file.name,line,e.field,'重复补录',{table:def.key,index});continue;}
     row[e.field]=e.value.trim();used.add(n);sources[def.key].repairs.push({row:line,field:e.field,value:e.value});
    }}
+   if(r21Config&&def.key==='orders'){for(const f of entryFields){const entry=r21Config.values[row['订单编号']][f];row[f]=entry.value;sources[def.key].repairs.push({row:line,field:f,value:entry.value,source:structuredClone(entry.source),configRevision:r21Config.revision});}}
    if(legacy)for(const f of entryFields)if(!row[f])add(file.name,line,f,'必填：请逐行显式补录后重新预览；原文件未提供，不设默认值',{table:def.key,index});
    const required=def.key==='orders'?['合格需求']:def.key==='times'&&row['计算方式']==='固定'?['固定分钟']:def.key==='rules'?['是否启用']:[];
    for(const f of required)if(!row[f])add(file.name,line,f,'必填，待补充；不把空白值视为 0',{table:def.key,index});

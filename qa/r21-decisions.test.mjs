@@ -60,11 +60,11 @@ test('D02 API atomic negative/stale/CSRF/missing source; save and process reopen
   const first = await f.call('/r21/config'); assert.equal(first.validation.length, 4);
   assert.equal((await request(f, '/r21/apply', { configRevision: 0, inputRevision: 0, reason })).status, 400);
   const saved = await f.call('/r21/config', configBody(c)); assert.equal(saved.config.revision, 1);
-  const bytes = fs.readFileSync(path.join(f.dir, 'r21-config.json'), 'utf8');
+  const bytes = fs.readFileSync(path.join(f.dir, 'business.json'), 'utf8');
   const invalid = structuredClone(saved.config); invalid.values.B['订单状态'].source.reference = '';
   for (const [body, headers, status] of [[configBody(c), {}, 409], [configBody(invalid), {}, 400], [{ ...configBody(saved.config), reason: '' }, {}, 400], [configBody(saved.config), { origin: 'https://elsewhere.invalid' }, 403]]) assert.equal((await request(f, '/r21/config', body, headers)).status, status);
-  assert.equal(fs.readFileSync(path.join(f.dir, 'r21-config.json'), 'utf8'), bytes);
-  assert.deepEqual(openR21Config(f.dir).read().config, saved.config);
+  assert.equal(fs.readFileSync(path.join(f.dir, 'business.json'), 'utf8'), bytes);
+  assert.deepEqual(JSON.parse(bytes).r21.config, saved.config); assert.ok(!fs.existsSync(path.join(f.dir,'r21-config.json')));
   const second = await startR21Uat({ isolated: true, dataDir: f.dir }); t.after(second.close);
   assert.deepEqual((await second.call('/r21/config')).config, saved.config);
   dump('config-save-reopen.json', { first, saved, reopened: await second.call('/r21/config') });
@@ -109,7 +109,7 @@ test('D01 original03 policy preserves all rows and byte-traceable unused devices
   const { files, repairs } = stageInput(process.env.ISSUE6_INPUT_DIR), inspected = inspectCsvBatch(files, defs, repairs);
   assert.deepEqual(inspected.issues, []); const data = { ...structuredClone(seed), ...inspected.tables };
   const before = JSON.stringify(data), findings = validateInputs(defs, data), policy = r21DevicePolicy(findings, data);
-  assert.equal(policy.permitted.length, 4); assert.deepEqual(policy.blocking, []);
+  assert.equal(policy.permitted.length, 0); assert.deepEqual(policy.blocking, []);
   const source = inspected.sources.machines; source.sha256 = createHash('sha256').update(source.originalText).digest('hex');
   const devices = r21DeviceUsage(data, source);
   assert.deepEqual(devices.filter(m => m.usage === 'unused').map(m => m.machineId).sort(), ['COOL01', 'COOL02', 'FILL03', 'HEAT01', 'MIX03', 'PACK01']);
@@ -122,9 +122,9 @@ test('D01 original03 policy preserves all rows and byte-traceable unused devices
   assert.ok(r21DevicePolicy(validateInputs(defs, bound), bound).blocking.length > 0);
   dump('D01-policy-original03.json', { files: files.map(f => ({ name: f.name, sha256: createHash('sha256').update(f.text).digest('hex') })), policy, devices });
 });
-test('integration gap evidence: unchanged shared business import still blocks original03; this is NOT D01 product PASS', { skip: !process.env.ISSUE6_INPUT_DIR }, async t => {
+test('D01 integrated shared business import permits all original03 rows under effective CR', { skip: !process.env.ISSUE6_INPUT_DIR }, async t => {
   const f = await fixture(t), { files, repairs } = stageInput(process.env.ISSUE6_INPUT_DIR);
   const preview = await request(f, '/imports/preview', { revision: 0, files, repairs, reason });
-  assert.equal(preview.body.valid, false); assert.equal(preview.body.issues.filter(i => i.code === 'INPUT / MACHINE_OPERATION_REFERENCE').length, 4);
-  dump('D01-unwired-import-BLOCKED.json', { assertionResult: 'BLOCKED', category: 'shared integration seam', preview });
+  assert.equal(preview.body.valid, true); assert.deepEqual(preview.body.issues, []);
+  dump('D01-integrated-import-PASS.json', { assertionResult: 'PASS', category: 'CR D01 complete stage import', preview });
 });

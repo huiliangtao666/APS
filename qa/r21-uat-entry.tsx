@@ -1,5 +1,5 @@
-import React from 'react';
+import React, {useEffect,useState} from 'react';
 import { createRoot } from 'react-dom/client';
 import App from '../src/App';
-import { R21ConfigurationPanel } from '../src/R21ConfigurationPanel';
-createRoot(document.getElementById('root')!).render(<React.StrictMode><aside role="note" style={{ padding: 20, background: '#fff3c4', color: '#382b00' }}><h1>R2.1 隔离 UAT 演练 · 模拟操作人</h1><p>无需正式账号、邀请或成员设置。此入口使用隔离测试身份，不证明真实身份或 QA UAT 已通过。六项配置可保存/应用；完整原03导入仍等待共享校验集成，不能将演练切片视为完整导入通过。</p></aside><R21ConfigurationPanel /><App /></React.StrictMode>);
+function Candidate(){const [build,setBuild]=useState<any>(null);useEffect(()=>{fetch('/api/uat-build').then(r=>r.json()).then(setBuild);},[]);return <><aside role="note" style={{padding:20,background:'#fff3c4',color:'#382b00'}}><h1>B1 · UAT01 / UAT02 隔离候选</h1><p>当前使用模拟操作人，无需正式账号。六字段的模拟值均明确标记，可在“数据与 CSV”维护；不是客户事实或 QA UAT 签收。</p><p><a href="/fixtures/B1-UAT01-02-INPUTS.zip" download>下载 UAT01/02 原阶段输入与明确标记的模拟配置样例</a></p><details><summary>构建、环境与初始数据指纹</summary><pre>{JSON.stringify(build,null,2)}</pre></details></aside><App/></>;}
+createRoot(document.getElementById('root')!).render(<React.StrictMode><Candidate/></React.StrictMode>);

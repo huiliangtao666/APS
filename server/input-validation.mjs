@@ -19,7 +19,7 @@ import {validateEvents} from '../src/lib/simulation-events.mjs';
 import {recordKeys as keys} from '../src/lib/record-identity.mjs';
 export {recordKeys} from '../src/lib/record-identity.mjs';
 // Both imports and edits validate the complete proposed state, before any write.
-export function validateInputs(defs,data,{at=new Date().toISOString(),checkPolicyExecution=true}={}){
+export function validateInputs(defs,data,{at=new Date().toISOString(),checkPolicyExecution=true,mode=data.inputStage||'supported'}={}){
  const issues=[...validateOriginalStage(data),...validateOriginalBom(data),...validateOriginalResources(data),...validateResourceMappings(data),...validateEvents(data),...validateFactoryLines(data)];
  const add=(table,index,field,message,rows=[data[table][index]])=>issues.push({relatedRecords:sourceRefs(table,rows,data[table]),table,file:defs.find(d=>d.key===table).file,row:index+2,field,message});
  for(const def of defs){
@@ -78,6 +78,6 @@ export function validateInputs(defs,data,{at=new Date().toISOString(),checkPolic
  collect('supplies',validateExpectedSupply({supplies:data.supplies,delays:data.supplyDelays,uses:data.supplyUses,materials:data.materials,orders:data.orders,routes:data.routes}));
  collect('batchResources',validateBatchResources(data));
  issues.push(...validateExecution(data));
- issues.push(...assessRules(data,at,false,'supported',checkPolicyExecution).issues);
+ issues.push(...assessRules(data,at,false,mode,checkPolicyExecution).issues);
  return issues;
 }

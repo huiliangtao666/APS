@@ -5,9 +5,10 @@ import os from 'node:os';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import express from 'express';
 import { createBusinessRouter } from '../server/business.mjs';
-import { createR21ConfigRouter } from '../server/r21-config.mjs';
+import {partialR21Seed} from '../src/lib/r21-stage-config.mjs';
+import {createHash} from 'node:crypto';
 import { seed } from '../server/planner.ts';
-export async function startR21Uat({ dataDir, port = 0, browser = false, isolated = false } = {}) {
+export async function startR21Uat({ dataDir, port = 0, browser = false, isolated = false, host = '127.0.0.1' } = {}) {
   if (!isolated || process.env.NODE_ENV === 'production') throw Error('explicit_isolated_nonproduction_uat_required');
   const dir = dataDir || fs.mkdtempSync(path.join(os.tmpdir(), 'aps-r21-uat-'));
   fs.mkdirSync(dir, { recursive: true });
@@ -28,12 +29,9 @@ export async function startR21Uat({ dataDir, port = 0, browser = false, isolated
     const r = await fetch(url + '/api' + endpoint, { method: body ? 'POST' : 'GET', headers: { 'content-type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
     const x = await r.json(); if (!r.ok) throw Object.assign(Error(x.error), { status: r.status, body: x }); return x;
   }
-  const readInput = async () => { const s = await call('/state'); let csvSources = {}; try { csvSources = JSON.parse(fs.readFileSync(path.join(dir, 'business.json'), 'utf8')).csvSources || {}; } catch (e) { if (e.code !== 'ENOENT') throw e; } return { ...s, csvSources }; };
-  app.use('/api/r21', createR21ConfigRouter({ dataDir: dir, authorize: actor, readInput, saveOrders: async ({ revision, orders, reason }) => {
-    const saved = await call('/inputs', { revision, tables: { orders }, reason });
-    return { ...saved, inputVersionId: saved.inputVersionId || (await call('/state')).inputVersionId };
-  } }));
   app.use('/api', createBusinessRouter({ dataDir: dir, actorMiddleware: actor, requireMember: member }));
+  app.get('/api/uat-build', (_req,res) => {const state=JSON.parse(fs.readFileSync(path.join(dir,'business.json'),'utf8'));const hash=x=>createHash('sha256').update(JSON.stringify(x)).digest('hex');res.json({productSha:process.env.B1_BUILD_SHA||null,environment:'B1 isolated UAT candidate',formalAccountRequired:false,identity:'synthetic-planner; not customer SSO',requirements:['APS-BL-001-v0.3','CR-FR013-VALIDATION-20261029','CR-R21-UAT02-20261031'],inputRevision:state.revision,dataFingerprint:hash(state.data),configFingerprint:hash(state.r21?.config||partialR21Seed()),node:process.version});});
+  if(process.env.B1_UAT_FIXTURES)app.use('/fixtures',express.static(process.env.B1_UAT_FIXTURES,{index:false,dotfiles:'deny'}));
   if (browser) {
     const { build } = await import('vite');
     const react = (await import('@vitejs/plugin-react')).default;
@@ -42,11 +40,11 @@ export async function startR21Uat({ dataDir, port = 0, browser = false, isolated
     app.use(express.static(dist)); app.get('*', (_req, res) => res.sendFile(path.join(dist, 'qa/r21-uat.html')));
   }
   app.use((e, _req, res, _next) => res.status(500).json({ error: e.message }));
-  const server = app.listen(port, '127.0.0.1'); await new Promise((resolve, reject) => { server.once('listening', resolve); server.once('error', reject); });
+  const server = app.listen(port, host); await new Promise((resolve, reject) => { server.once('listening', resolve); server.once('error', reject); });
   url = `http://127.0.0.1:${server.address().port}`;
   return { app, server, url, dir, call, close: () => new Promise(resolve => server.close(resolve)) };
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const f = await startR21Uat({ isolated: process.env.APS_R21_UAT_ISOLATED === '1', dataDir: process.env.R21_UAT_DATA_DIR, port: Number(process.env.PORT || 0), browser: true });
+  const f = await startR21Uat({ isolated: process.env.APS_R21_UAT_ISOLATED === '1', dataDir: process.env.R21_UAT_DATA_DIR, port: Number(process.env.PORT || 0), browser: true, host: process.env.B1_UAT_HOST || '127.0.0.1' });
   console.log(JSON.stringify({ url: f.url, dataDir: f.dir, identity: 'isolated synthetic operator', formalAccountRequired: false }));
 }
