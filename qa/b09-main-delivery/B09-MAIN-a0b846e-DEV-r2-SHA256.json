@@ -1,0 +1,22 @@
+{
+  "B09-MAIN-a0b846e-DEV-r2-REPORT.md": {
+    "bytes": 6477,
+    "sha256": "add6254c20ca8f25567d2ee708659773bd31164d91d6c07fd3fa9d6c10b2de71"
+  },
+  "B09-MAIN-a0b846e-DEV-r2-MATRIX.csv": {
+    "bytes": 9998,
+    "sha256": "9fd39728e3045a89fa19eb685c09f957a13b190f53a7091dd50f95b07c2bceb2"
+  },
+  "B09-MAIN-a0b846e-DEV-r2-CLOSURE.csv": {
+    "bytes": 11356,
+    "sha256": "fec9b002787b9b08f48680377a3be74ef2e471c7b3932afb0be1bb105ac4eb04"
+  },
+  "B09-MAIN-a0b846e-DEV-r2-ENVIRONMENT.json": {
+    "bytes": 61730,
+    "sha256": "d56823f9a55a2acc2ddef02da1865af4e1173c042094a9c5c4132063829ba343"
+  },
+  "B09-MAIN-a0b846e-DEV-r2-EVIDENCE.zip": {
+    "bytes": 8993184,
+    "sha256": "94799edfcae4f398fce5477ad0cfa7c78e942fb9d1aa55ea377ea989bea86dc8"
+  }
+}
