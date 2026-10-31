@@ -38,5 +38,22 @@ export function validateBomConfig({ products = [], materials = [], routes = [], 
     const lineKey = `${product}\u0000${version}\u0000${operation}\u0000${material}`;
     if (product && version && operation && material) { if (lines.has(lineKey)) add({code:'INPUT / BOM_LINE_DUPLICATE',message:`${prefix}产品/版本/工序/物料组合重复`}, '产品编号 / 版本编号 / 投料工序编号 / 物料编号', bom.filter(r=>[r['产品编号'],r['版本编号'],r['投料工序编号'],r['物料编号']].map(v=>(v||'').trim()).join('\u0000')===lineKey)); lines.add(lineKey); }
   });
+  // Only the already supported, explicit kg input basis has a known total.
+  // Group the complete version across feeding operations, never normalise ratios.
+  const groups = new Map();
+  for (const row of bom.filter(r => r['用量类型'] === 'BOM物料')) {
+    const key = JSON.stringify([row['产品编号'], row['版本编号']]);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(row);
+  }
+  for (const rows of groups.values()) {
+    if (!rows.every(r => r['用量基准'] === '每1000kg投入' && r['用量单位'] === 'kg' && /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(r['配置用量'] || ''))) continue;
+    const scale = Math.max(...rows.map(r => (r['配置用量'].split('.')[1] || '').length));
+    const total = rows.reduce((sum, r) => { const [whole, fraction = ''] = r['配置用量'].split('.'); return sum + BigInt(whole + fraction.padEnd(scale, '0')); }, 0n);
+    if (total === 1000n * 10n ** BigInt(scale)) continue;
+    for (const row of rows) findings.push({code:'INPUT / BOM_TOTAL', table:'bom', row:bom.indexOf(row)+2, field:'配置用量',
+      message:`产品 ${row['产品编号']} / BOM ${row['版本编号']}：每1000kg投入的完整原料配方合计须精确为1000kg；请核对全部原料行，不自动归一化或舍入`,
+      relatedRecords:sourceRefs('bom', rows, bom)});
+  }
   return findings;
 }
