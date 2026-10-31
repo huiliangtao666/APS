@@ -1,0 +1,5 @@
+import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';
+import {jointMaterialScenario,shiftedBomScenario} from './b234-fixture.mjs';import {scenarioFiles} from './b3-material-fixture.mjs';
+const out=process.argv[2];if(!out)throw Error('Explicit fixture directory required');const manifest={seed:'B234-20261031-v1',classification:'explicit synthetic supplementary facts; not raw original CSV or customer defaults',choices:['B3 material formula and original v0.3 162.5kg boundary','single tool and staff for integration simulation','tool stops180-210/250-280; staff210-240/280-300; machine240-250/300-310','next-day supply11:00; explicitly simulated next-day BOM640/160 instead of650/150'],files:{}};
+for(const [id,data]of [['joint',jointMaterialScenario()],['next-day-bom',shiftedBomScenario()]]){const dir=path.join(out,id);fs.mkdirSync(dir,{recursive:true});for(const f of scenarioFiles(data)){fs.writeFileSync(path.join(dir,f.name),f.text);manifest.files[id+'/'+f.name]=createHash('sha256').update(f.text).digest('hex');}}
+fs.writeFileSync(path.join(out,'PROVENANCE.json'),JSON.stringify(manifest,null,2));

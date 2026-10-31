@@ -1,0 +1,7 @@
+import {fork} from 'node:child_process';import fs from 'node:fs';import path from 'node:path';
+export async function hostProcess(dir,{browser=false}={}){
+ const child=fork(new URL('./b234-host.mjs',import.meta.url),[],{env:{...process.env,B234_DISPOSABLE_QA:'1',B234_HOST_DATA:dir,B234_BROWSER:browser?'1':'0'},stdio:['ignore','pipe','pipe','ipc']});let log='';child.stdout.on('data',b=>log+=b);child.stderr.on('data',b=>log+=b);
+ const ready=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>{child.kill();reject(Error('QA host startup timeout '+log));},60000);child.once('message',x=>{clearTimeout(timer);resolve(x);});child.once('exit',code=>{clearTimeout(timer);reject(Error('QA host exited '+code+' '+log));});});
+ const call=async(endpoint,body,role='planner')=>{const r=await fetch(ready.url+'/api'+endpoint,{method:body?'POST':'GET',headers:{'content-type':'application/json','test-sub':role},body:body?JSON.stringify({reason:'B234 explicit integration simulation',...body}):undefined});return {status:r.status,body:r.headers.get('content-type')?.includes('json')?await r.json():await r.text()};};
+ return {...ready,dir,pid:child.pid,call,bytes:()=>fs.readFileSync(path.join(dir,'business.json'),'utf8'),ok:async(...args)=>{const r=await call(...args);if(r.status>=300)throw Error(JSON.stringify(r));return r.body;},close:async()=>{if(child.exitCode===null){await new Promise(resolve=>{child.once('exit',resolve);child.kill('SIGTERM');});}return log;}};
+}
