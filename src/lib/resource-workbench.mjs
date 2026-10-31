@@ -9,11 +9,18 @@ export function resourceRunView(run,snapshot,plan){
  if(!run||!snapshot||snapshot.runId!==run.id||snapshot.snapshotHash!==run.snapshotHash||snapshot.inputVersionId!==run.inputVersionId)throw Error('运行与冻结输入版本不一致，请重新读取');
  if(!plan||plan.id!==run.planId||plan.runId!==run.id||plan.snapshotHash!==run.snapshotHash||plan.inputVersionId!==run.inputVersionId)throw Error('方案与运行版本不一致，请重新读取');
  const data=snapshot.executionData,conditions=snapshot.conditions;
- const verification=verifyResourcePolicies(plan,data,conditions);
- const load=resourceLoad({...plan,inputSnapshot:snapshot.originalInput},{start:conditions.startMinute,end:conditions.endMinute??525600});
- return {run,plan,snapshot,verification,load,version:conditions.resourcePolicyVersion,
+  const verification=verifyResourcePolicies(plan,data,conditions);
+  const load=resourceLoad({...plan,inputSnapshot:snapshot.originalInput},{start:conditions.startMinute,end:conditions.endMinute??525600});
+  const findings=[],seen=new Set();
+  // A reopened result can contain conflicts found only by the independent checker.
+  // Keep their task/source references available to the same finding navigation.
+  for(const finding of [...(plan.findings||[]),...(verification.findings||[])]){
+    const key=JSON.stringify([finding.code,finding.message,[...(finding.taskIds||[])].sort()]);
+    if(!seen.has(key)){seen.add(key);findings.push(finding);}
+  }
+  return {run,plan,snapshot,verification,load,version:conditions.resourcePolicyVersion,
   provenance:{runId:run.id,planId:plan.id,inputVersionId:run.inputVersionId,snapshotHash:run.snapshotHash,resourcePolicyVersion:conditions.resourcePolicyVersion},
-  findings:plan.findings||[],reservations:plan.resourceReservations||[]};
+  findings,reservations:plan.resourceReservations||[]};
 }
 
 export function resourceTaskSources(view,taskIds){
