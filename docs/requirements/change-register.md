@@ -1,6 +1,6 @@
 # 已纳入的需求变更
 
-当前登记4项CR；逐项记录批准边界、设计/实现/验收阶段。缺陷修复、交付故障、验收缺口和调度政策不计作产品需求变更。
+当前登记5项CR；逐项记录批准边界、设计/实现/验收阶段。缺陷修复、交付故障、验收缺口和调度政策不计作产品需求变更。
 
 | CR | 名称 | 批准状态 | 影响FR/BR | 实施状态 | 验收结论 |
 | --- | --- | --- | --- | --- | --- |
@@ -8,6 +8,7 @@
 | CR-DEC04-05-06-20261029 | DEC-04/05/06数量、质量可用性与工艺参数的需求设计深化及mock | 已批准需求设计深化、参数化及mock准备；应用实现未派发，具体业务值未批准 | FR-002、FR-003、FR-004、FR-005、FR-010、FR-011、FR-017、FR-020、FR-021、FR-022、FR-023、BR-02、BR-04、BR-08、BR-09、BR-10、BR-11、BR-12、BR-13、BR-14、BR-18 | 独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发 | 独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。 |
 | CR-FR013-VALIDATION-20261029 | FR013袋支/收率及字段可配置校验 | 已批准具体校验与可配置方向；具体其他业务默认值未批准 | FR-013 | FR013 original05/06 a49edb1d legacy v1 no-op repair delivered and independently passed; R-C08/09 same defect closed round1. Other original categories, R-C03 positive, FR016 shared duties and full FR013/CR remain NOT_READY. APS-Test b1a4863c QA-only selftest files added on 116eb5d4; no product source changes; bounded task Done, full scope open. Integrated cd105607 bounded Dev task PASS; full FR013/effective CR NOT_READY. | a49edb1d DEF-V1-NOOP-01 round1 independent 25/25 PASS on legacy v1 no-op and impacted regression; R-C08/09 same defect closed. Prior bd6f9fab and c70d6607 conclusions remain on original SHAs; no full CR acceptance, FR013 NOT_READY, UAT01/11 WAITING_DEPENDENCIES. QA a786ee30 v1 migration/no-op/frozen-history bounded slice 18/18 PASS; v1-specific repository 7/7 overlapping; full CR NOT_READY and UAT unsigned. APS-Test b1a4863c bounded v1 migration developer selftest 28/28 PASS and CSV 8/8 PASS on 116eb5d4 base; no product source diff or repair round; full CR/FR013 NOT_READY, UAT unsigned. Integrated cd105607 106 matrix PASS/4 BLOCKED/1 NOT_EXECUTED, Dev task Done only; QA overall UAT unsigned; no new product FAIL or repair round. |
 | CR-FR038-PERF-20261029 | FR038排程时间暂定目标 | 已批准暂定30秒目标；AC27规模/规则/环境仍待确认 | FR-038 | 8741bf0a exploratory Test2 18 tiers/62 Worker runs and C2 count correction; Test1 React full-chain 8/128 orders <1.3s and 512 cancellation, fixed SHA; formal spec pending | Exploration only: no formal AC27 30s PASS/FAIL; C1 task-count wording corrected by C2, 4096=3993+53+50; formal scale/rules/environment/timing boundary pending |
+| CR-R21-UAT02-20261031 | R2.1 UAT02 阶段未用设备、A/B 六字段配置及临时账号门槛裁决 | 已批准：用户明确授权本增量；实现和UAT尚未验收 | FR-008、FR-013、FR-016 | 待 APS-Test 开发及任务级自测；QA UAT 尚未执行 | 用户裁决已登记；APS-Test开发自测EXECUTING；完整R2.1/UAT02尚未签收 |
 
 ## CR-DEC02-03-20261029
 
@@ -107,3 +108,27 @@
 **主跟踪记录**：
 
 **交付与审查追踪**：Dev 未派发应用实现；设计/契约审查 未派发；产品Test 未派发。代码SHA：无本CR应用交付；设计文档提交：见主Issue及受控目录。
+
+## CR-R21-UAT02-20261031
+
+**授权原话**：当前阶段未使用的设备允许保留导入；A、B两组各缺允许拆分、需求类型、状态，共六个值及来源，做成可配置项并默认部分模拟数据；UAT全部完成之前不要使用权限账号控制。
+
+**变更前**：原03未使用设备是否保留导入未决；A/B各三字段无真实值及来源；正式Portal账号/成员权限被列为UAT入口阻塞。
+
+**批准增量**：当前阶段未使用设备允许保留原始导入，但须保留未使用标记、来源和查询可追溯，不因未引用而拒绝整批。A、B两组的允许拆分、需求类型、状态分别提供可维护配置及来源/版本，可用部分模拟数据预填并明显标记模拟，不将模拟值冒充客户事实或业务验收真值。UAT全部完成前不要求正式Portal登录或成员权限账号控制；可用隔离测试身份/可访问环境运行场景，账号权限不再阻断UAT02入口。
+
+**专项验收**：未使用设备导入保留且可查；六字段逐组配置、来源、版本及保存重开正确，非法/缺失值按既有明确规则处理、无静默0；模拟数据清晰标识且可替换。固定SHA完成受影响核心/边界/负面/持久化/UI/API/Worker自测后，PM核可运行QA环境和映射再派UAT02。正式账号/成员权限证明不作为本阶段UAT入口或结论门槛。
+
+**设计细化与默认值**：六字段真实客户值未给出；允许带明显simulation标记的部分模拟初值，后续可配置替换；不要求正式权限账号作UAT门槛
+
+**影响**：阶段设备导入、A/B字段配置UI/API/保存重开/排程输入、模拟种子来源标识及UAT入口；不授权主干合并/发布/永久关闭生产安全控制
+
+**计划影响**：R2.1及Issue6按新条件复核；其余已批准范围不自动通过
+
+**工作量评估**：未登记工时或预算
+
+**交付限制**：不以模拟值判定客户业务真值；不永久取消生产权限；不合main/不发布
+
+**主跟踪记录**：https://github.com/huiliangtao666/APS/issues/6
+
+**交付与审查追踪**：Dev dlv_43c056c6-d661-43c1-984c-97a49395bd2b；设计/契约审查 未派发；产品Test 未派发。代码SHA：无本CR应用交付；设计文档提交：见主Issue及受控目录。

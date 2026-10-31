@@ -675,7 +675,7 @@
       "requested_by": "项目用户（本会话）",
       "requested_on": "2026-10-31",
       "request_quote": "当前阶段未使用的设备允许保留导入；A、B两组各缺允许拆分、需求类型、状态，共六个值及来源，做成可配置项并默认部分模拟数据；UAT全部完成之前不要使用权限账号控制。",
-      "approval_status": "用户已明确批准本增量；实现和UAT尚未验收",
+      "approval_status": "已批准：用户明确授权本增量；实现和UAT尚未验收",
       "approved_by": "项目用户（本会话；未补造实名签批）",
       "approved_on": "2026-10-31（未补造精确时刻）",
       "effective": true,
@@ -713,7 +713,14 @@
           "event_key": "issue6:r21:uat02:user-decisions:20261031:r1",
           "event": "用户三项R2.1裁决登记；待实现及UAT，不新增产品修复轮次"
         }
-      ]
+      ],
+      "acceptance_result": "用户裁决已登记；APS-Test开发自测EXECUTING；完整R2.1/UAT02尚未签收",
+      "acceptance_status": "本CR专项验收未完成；固定SHA及QA UAT待证据",
+      "code_sha": "",
+      "dev_delivery": "dlv_43c056c6-d661-43c1-984c-97a49395bd2b",
+      "product_test_delivery": "",
+      "design_detail_status": "六字段真实客户值未给出；允许带明显simulation标记的部分模拟初值，后续可配置替换；不要求正式权限账号作UAT门槛",
+      "limitations": "不以模拟值判定客户业务真值；不永久取消生产权限；不合main/不发布"
     }
   ]
 }
