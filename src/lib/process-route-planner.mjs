@@ -5,7 +5,7 @@ import {allowedWindows,windowFit} from './working-windows.mjs';
 import {inheritedCalendarId} from './factory-lines.mjs';
 import {prepareCoolingMembers} from './process-cooling-adapter.mjs';
 import {scheduleCoolingPairs} from './process-cooling.mjs';
-import {establishProcessProduction,operationMachine,processDemands,selectedRecipe,processRouteContract} from './process-route.mjs';
+import {establishProcessProduction,operationMachine,processDemands,selectedRecipe,processRouteContract,processTaskSources} from './process-route.mjs';
 
 // Server-owned constructive path for the bounded kg/fixed-program pair. A private
 // candidate contains all resource ledgers and multi-time material deductions.
@@ -17,7 +17,7 @@ export function scheduleProcessRoute(data,orders,at,conditions){
  if(!Number.isSafeInteger(start)||!Number.isSafeInteger(end)||end<=start)throw Error('配对须有合法整数计划区间');
  if((data.executionFacts||[]).length||(data.simulationEvents||[]).length||Object.keys(conditions.taskPositions||{}).length)throw Error('配对路线尚不支持执行事实/事件恢复或固定位置组合；未释放保护');
  const idFor=(b,op)=>JSON.stringify([b.orderId,b.index,op]);
- const issue=(b,operations,message,code='UNPLANNED / PROCESS_PAIR')=>findings.push({code,message,taskIds:operations.map(op=>idFor(b,op)),context:{productionBatchId:b.id}});
+ const issue=(b,operations,message,code='UNPLANNED / PROCESS_PAIR')=>{for(const operation of operations)findings.push({code,message,taskIds:[idFor(b,operation)],relatedRecords:processTaskSources(data,b.orderId,[operation]),sourceRead:'frozen-calendar-v1',context:{orderId:b.orderId,productionBatchId:b.id,operation,machineId:operationMachine(data,b.orderId,operation)['设备编号']}});};
  const materialNext=minute=>allocator.futureMinutes.find(t=>t>minute);
  const newCandidate=()=>({tasks:[],reservations:[],materials:allocator.begin()});
  function previewOperation(candidate,members,op,startMinute,resourceBatchId){
@@ -25,6 +25,7 @@ export function scheduleProcessRoute(data,orders,at,conditions){
   const time=data.times.find(t=>t['产品编号']===first.order['产品编号']&&t['工序编号']===op['工序编号']),duration=Number(time['固定分钟']),finish=startMinute+duration;
   const all=[...reservations,...candidate.reservations],taskIds=members.map(b=>idFor(b,op['工序编号']));
   const fail=(reason,next,kind)=>({ok:false,reason,next,kind,operation:op['工序编号'],memberIds:members.map(b=>b.id),start:startMinute});
+  if(time['计算方式']!=='固定'||!Number.isSafeInteger(duration)||duration<=0)return fail('仅支持显式正整数固定工时；产品速度/单位语义未采用',undefined,'TIME_CONFIG');
   if(finish>end)return fail('完整工序超出计划范围',undefined,'HORIZON');
   const windows=allowedWindows(data,inheritedCalendarId(data,machine),'设备',machine['设备编号'],start,end),fit=windowFit(windows,startMinute,finish);
   if(!fit.ok)return fail('机器完整区间不在工厂/停机窗口',fit.nextStart,'CALENDAR');
@@ -53,7 +54,7 @@ export function scheduleProcessRoute(data,orders,at,conditions){
   for(const b of members){
    const prior=op['前序工序']?idFor(b,op['前序工序']):'',actual=[...tasks,...candidate.tasks].find(t=>t.id===prior);
    if(prior&&(!actual||actual.end>startMinute))return fail('实际前序缺失/尚未完成',undefined,'PREDECESSOR');
-   candidate.tasks.push({id:idFor(b,op['工序编号']),orderId:b.orderId,productId:b.order['产品编号'],productionBatchId:b.id,productionBatchIndex:b.index,resourceBatchId,batchGroupId:resourceBatchId,operation:op['工序编号'],label:op['工序名称'],machine:machine['设备编号'],start:startMinute,end:finish,duration,predecessor:prior,quantity:b.quantity,exactQuantity:b.qualifiedKg,quantityUnit:'kg',loadKg:Q.num(Q.fromExact(basis==='合格产出'?b.qualifiedKg:b.inputKg)),exactLoadKg:basis==='合格产出'?b.qualifiedKg:b.inputKg,loadBasis:basis,program:op['程序编号']||'',source:processRouteContract+' · 实际前序/完整联合候选',timingReasons:[]});
+   candidate.tasks.push({id:idFor(b,op['工序编号']),orderId:b.orderId,productId:b.order['产品编号'],productionBatchId:b.id,productionBatchIndex:b.index,resourceBatchId,batchGroupId:resourceBatchId,operation:op['工序编号'],label:op['工序名称'],machine:machine['设备编号'],start:startMinute,end:finish,duration,predecessor:prior,quantity:b.quantity,exactQuantity:b.qualifiedKg,quantityUnit:'kg',loadKg:Q.num(Q.fromExact(basis==='合格产出'?b.qualifiedKg:b.inputKg)),exactLoadKg:basis==='合格产出'?b.qualifiedKg:b.inputKg,loadBasis:basis,program:op['程序编号']||'',source:processRouteContract+' · 实际前序/完整联合候选',processSources:processTaskSources(data,b.orderId,[op['工序编号']],startMinute),timingReasons:[]});
   }
   return {ok:true};
  }

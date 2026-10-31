@@ -16,6 +16,7 @@ const over = (a,b) => Q.cmp(a,b)>0n;
 const signature = m => JSON.stringify([m.productId,m.recipeKey,m.routeKey,m.program,m.heatOperation,m.coolOperation,m.heatMachine,m.heatDuration,m.minimumInputKg,m.maximumInputKg]);
 const inside = (windows,start,end) => windows.some(([a,b])=>a<=start&&end<=b);
 const overlap = (a,b) => a.start<b.end && b.start<a.end;
+const intersect = (a,b) => a.flatMap(([s,e])=>b.map(([x,y])=>[Math.max(s,x),Math.min(e,y)]).filter(([x,y])=>y>x));
 
 function validate(m) {
  for(const k of ['id','orderId','productId','recipeKey','routeKey','program','heatOperation','coolOperation','heatMachine','coolMachine','spaceId'])if(typeof m[k]!=='string'||!m[k].trim())throw Error(`缺少 ${k}`);
@@ -48,6 +49,9 @@ function slot(windows,earliest,duration,resource,quantity,capacity,reservations,
 
 function place(group,reservations,horizon,attempts) {
  const first=group[0],input=sum(group,'inputKg');
+ // Search the complete common window, including a later intersection. Rejecting
+ // the first member's earliest slot can lose a feasible under-min combined load.
+ const heatWindows=group.reduce((windows,m)=>intersect(windows,m.heatWindows),first.heatWindows);
  if(over(input,qty(first.maximumInputKg))||over(qty(first.minimumInputKg),input))return {ok:false,code:'HEAT_LOAD',message:'资源批投入超出显式装载上下限；未超产补满'};
  // If all cooling intervals must overlap even at maximum permitted staggering,
  // this group cannot fit. Split the heat resource batch, retain production IDs.
@@ -59,7 +63,7 @@ function place(group,reservations,horizon,attempts) {
  }
  let candidate=Math.max(...group.map(m=>m.readyMinute));
  for(let attempt=0;attempt<1000;attempt++){
-  const heat=slot(first.heatWindows,candidate,first.heatDuration,'machine:'+first.heatMachine,Q.q('1'),Q.q('1'),reservations,horizon);
+  const heat=slot(heatWindows,candidate,first.heatDuration,'machine:'+first.heatMachine,Q.q('1'),Q.q('1'),reservations,horizon);
   if(!heat.ok)return heat;
   if(group.some(m=>!inside(m.heatWindows,heat.start,heat.end)))return {ok:false,code:'GROUP_WINDOWS',message:'合炉成员没有共同完整加工窗口；保留单批候选'};
   const local=[],cools=[];let shift=0;
@@ -128,7 +132,7 @@ export function scheduleCoolingPairs({members,reservations=[],endMinute}) {
    const common={orderId:m.orderId,productId:m.productId,productionBatchId:m.id,quantity:Q.num(qty(m.outputKg)),quantityUnit:'kg',exactQuantity:Q.exact(qty(m.outputKg)),exactLoadKg:Q.exact(qty(m.inputKg)),source:coolingContract};
    const heatId=JSON.stringify([m.id,m.heatOperation]);
    tasks.push({...common,id:heatId,operation:m.heatOperation,machine:m.heatMachine,start:result.heat.start,end:result.heat.end,duration:m.heatDuration,resourceBatchId:heatResourceBatchId,predecessor:m.predecessorTaskId||'',program:m.program,loadBasis:'BOM总投入'},
-    {...common,id:JSON.stringify([m.id,m.coolOperation]),operation:m.coolOperation,machine:m.coolMachine,start:c.start,end:c.end,duration:m.coolDuration,resourceBatchId:JSON.stringify([m.id,m.coolOperation]),predecessor:heatId,loadBasis:'合格产出',maxWait:m.maxWait,spaceId:m.spaceId});
+    {...common,id:JSON.stringify([m.id,m.coolOperation]),operation:m.coolOperation,machine:m.coolMachine,start:c.start,end:c.end,duration:m.coolDuration,resourceBatchId:JSON.stringify([m.id,m.coolOperation]),predecessor:heatId,exactLoadKg:Q.exact(qty(m.outputKg)),loadBasis:'合格产出',maxWait:m.maxWait,spaceId:m.spaceId});
   }
   busy.push(...result.reservations.map(r=>({...r,resourceBatchId:r.memberId?JSON.stringify([r.memberId,r.operation]):heatResourceBatchId,taskIds:r.memberId?[JSON.stringify([r.memberId,r.operation])]:group.map(m=>JSON.stringify([m.id,m.heatOperation]))})));for(const m of group)pending.splice(pending.indexOf(m),1);
  }

@@ -1,0 +1,43 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {Worker} from 'node:worker_threads';
+import {r4Scenario,at} from './r4-fixture.mjs';import {freezeRunInput} from '../server/run-input.mjs';import {scheduleProcessRoute} from '../src/lib/process-route-planner.mjs';
+import {verifyProcessRoute} from '../src/lib/verify-process-route.mjs';import {establishProcessProduction} from '../src/lib/process-route.mjs';import {prepareCoolingMembers,proposeProcessCooling} from '../src/lib/process-cooling-adapter.mjs';import {scheduleCoolingPairs} from '../src/lib/process-cooling.mjs';import {b4Fixture} from './b4-fixture.mjs';import {checkCooling} from './b4-oracle.mjs';import {enableJoint,claim} from './joint-fixture.mjs';
+const output=[];const save=(id,r)=>output.push({id,...r});
+const run=(d,selection={})=>{const input=freezeRunInput(d,selection,at),plan={...scheduleProcessRoute(input.executionData,input.executionData.orders,at,input.conditions),rules:input.conditions.enabledRuleIds,jointConditionsContract:input.conditions.jointConditionsContract,workingWindowsContract:input.conditions.workingWindowsContract};return {data:d,input,plan};};
+const check=r=>{const v=verifyProcessRoute(r.plan,r.input.executionData,r.input.conditions);assert.equal(v.status,'pass',JSON.stringify(v));assert.deepEqual(r.plan.findings,[]);return v;};
+const task=(r,op,o='A')=>r.plan.tasks.find(t=>t.operation===op&&t.orderId===o);
+test('B12-01 full 5-operation routes / original demand preserved / 500 input vs480 cooling',()=>{
+ for(const id of ['12','13','14']){const d=r4Scenario(id),before=JSON.stringify(d),r=run(d);check(r);assert.equal(JSON.stringify(d),before);assert.equal(r.plan.tasks.length,id==='12'?5:10);assert.equal(r.plan.productionBatches.reduce((n,b)=>n+b.quantity,0),id==='12'?240:480);assert.ok(r.plan.tasks.filter(t=>t.operation==='HEAT').every(t=>t.duration===120));assert.equal(new Set(r.plan.tasks.filter(t=>t.operation==='HEAT').map(t=>t.resourceBatchId)).size,id==='14'?2:1);if(id==='12'){assert.ok(task(r,'HEAT').start>60);assert.ok(task(r,'COOL').start>=210);}if(id==='13'){assert.equal(r.plan.resourceBatches.find(g=>g.operation==='HEAT').loadKg,500);assert.ok(r.plan.tasks.filter(t=>t.operation==='COOL').every(t=>t.loadKg===240));}save('full-'+id,r);}
+});
+test('B12-02 independent wait checker accepts0/10 rejects11/30 with consistent heat ledger',()=>{
+ const r=run(r4Scenario('12'));check(r);
+ for(const wait of [0,10,11,30]){const p=structuredClone(r.plan),h=p.tasks.find(t=>t.operation==='HEAT'),c=p.tasks.find(t=>t.operation==='COOL');h.end=c.start-wait;h.start=h.end-h.duration;const ledger=p.resourceReservations.find(l=>l.type==='设备'&&l.taskIds.includes(h.id));ledger.start=h.start;ledger.end=h.end;const v=verifyProcessRoute(p,r.input.executionData,r.input.conditions);assert.equal(v.status,wait<=10?'pass':'problem');if(wait>10)assert.ok(v.findings.some(f=>f.taskIds.includes(c.id)&&f.relatedRecords.some(s=>s.table==='routes')));save('wait-'+wait,{input:r.input,plan:p,verdict:v});}
+});
+test('B12-03 exact capacity grid including unplanned-with-reasons and under-min tails',()=>{
+ for(const cap of ['239.999999999999999999','240','400','479.999999999999999999','480']){const d=r4Scenario('13');d.batchResources.find(r=>r['资源编号']==='COLD')['容量']=cap;const r=run(d),v=verifyProcessRoute(r.plan,r.input.executionData,r.input.conditions);if(cap.startsWith('239')){assert.equal(v.status,'partial');assert.equal(r.plan.tasks.filter(t=>['HEAT','COOL'].includes(t.operation)).length,0);for(const id of v.missing)assert.ok(r.plan.findings.some(f=>f.taskIds.includes(id)&&f.message&&f.relatedRecords.length));const noReason=structuredClone(r.plan);noReason.findings=[];assert.equal(verifyProcessRoute(noReason,r.input.executionData,r.input.conditions).status,'problem');}else check(r);save('capacity-'+cap,r);}
+ const d=r4Scenario('14');d.machines.find(m=>m['设备编号']==='HEAT01')['最小装载kg']='300';const r=run(d);assert.equal(r.plan.tasks.filter(t=>t.operation==='HEAT').length,0);assert.ok(r.plan.productionBatches.every(b=>b.load===250));save('under-min',r);
+});
+test('B12-04 common full heat window found later; under-min members combine without losing feasible work',()=>{
+ const f=b4Fixture('13'),members=prepareCoolingMembers(f).members;for(const m of members)m.minimumInputKg='300';members[0].heatWindows=[[0,120],[180,600]];members[1].heatWindows=[[90,600]];const p=scheduleCoolingPairs({members,endMinute:600});assert.deepEqual(p.findings,[]);assert.equal(p.groups.length,1);assert.equal(p.groups[0].heatStart,180);assert.deepEqual(checkCooling(members,p),[]);save('common-window',{members,proposal:p});
+});
+test('B12-05 proposal cooling exposes output load; independent of heat input and serialization',()=>{
+ for(const id of ['12','13','14']){const f=b4Fixture(id),p=proposeProcessCooling(f);for(const t of p.tasks){assert.equal(t.exactLoadKg.numerator,t.loadBasis==='合格产出'?'240':'250');}assert.deepEqual(JSON.parse(JSON.stringify(p)),p);save('proposal-'+id,{fixture:f,proposal:p});}
+});
+test('B12-06 split remaining demand and no invention of unsupported units/pack rounding/speed',()=>{
+ const d=r4Scenario('12');d.orders[0]['合格需求']='960';d.orders[0]['已完成合格数量']='480';d.orders[0]['是否允许拆分']='是';const r=run(d);check(r);assert.equal(r.plan.productionBatches.length,2);assert.equal(r.plan.productionBatches.reduce((s,b)=>s+b.quantity,0),480);save('split-remaining',r);
+ for(const change of [x=>x.orders[0]['数量单位']='袋',x=>x.machines.find(m=>m['设备编号']==='HEAT01')['装载计量基准']='任意节点',x=>x.orders[0]['已完成合格数量']='241']){const x=r4Scenario('12');change(x);assert.throws(()=>establishProcessProduction(x,x.orders));}
+ const speed=r4Scenario('12');speed.times.find(t=>t['工序编号']==='PACK')['计算方式']='按支数';const blocked=run(speed);assert.ok(blocked.plan.findings.length);save('speed-unsupported',blocked);
+});
+test('B12-07 scheduled and missing task rows retain frozen source occurrences; no invented CSV lines',()=>{
+ const r=run(r4Scenario('13'));check(r);for(const t of r.plan.tasks){assert.ok(t.processSources.some(s=>s.table==='orders'));assert.ok(t.processSources.some(s=>s.table==='times'));for(const s of t.processSources){assert.ok(s.occurrence.index>=0);assert.deepEqual(s.row,r.input.executionData[s.table][s.occurrence.index]);assert.equal(s.csv,undefined);}}
+ const p=structuredClone(r.plan);p.tasks.find(t=>t.operation==='HEAT').duration=119;const v=verifyProcessRoute(p,r.input.executionData,r.input.conditions);assert.ok(v.findings.some(f=>f.context.operation==='HEAT'&&f.relatedRecords.some(s=>s.table==='times')));save('source-diagnostics',{input:r.input,plan:p,verdict:v});
+});
+test('B12-08 no resources disabled to pass; shifted personnel/tool/material/calendar constraints remain adopted',()=>{
+ const d=r4Scenario('12');d.tools=[{'工装编码':'B12-T','工装名称':'模拟工装','适用任务':'HEAT|COOL','可用数量':'1','每任务需求数量':'1','提前占用分钟':'0','后延占用分钟':'0','是否启用':'是','说明':'B12显式mock','可用起始分钟':'0','可用结束分钟':'600'}];d.resourceClaims.push(claim('B12-HT','A','HEAT','B12-T'));enableJoint(d,'MOLD');d.resourceStops=[{'例外编号':'T','资源类型':'工装','资源编号':'B12-T','起始分钟':'60','结束分钟':'180','原因':'B12mock'}];const enabled=d.rules.filter(r=>r['是否启用']==='是').map(r=>r['规则编号']);const r=run(d);check(r);assert.ok(task(r,'HEAT').start>=180);assert.deepEqual(r.data.rules.filter(r=>r['是否启用']==='是').map(r=>r['规则编号']),enabled);assert.ok(task(r,'HEAT').processSources.some(s=>s.table==='tools'));save('enabled-resources',r);
+});
+test('B12-09 complete domain Worker returns identical fixed-source route and structured diagnostics',async()=>{
+ for(const id of ['12','13','14']){const r=run(r4Scenario(id)),worker=new Worker(new URL('./b12-test-worker.mjs',import.meta.url),{workerData:{data:r.input.executionData,conditions:r.input.conditions,at}});const result=await new Promise((resolve,reject)=>{worker.once('message',resolve);worker.once('error',reject);});assert.deepEqual(result.plan,r.plan);assert.equal(result.verdict.status,'pass');save('worker-'+id,{...r,worker:result});}
+});
+test('B12-10 undeclared wait/space refuse without any tasks or resource allocation',async()=>{
+ const {calculate,seed}=await import('../server/planner.ts');const {batchFixture}=await import('./batch-fixture.mjs');for(const id of ['MAX_LAG','STORAGE']){const d=batchFixture(seed);d.rules.find(r=>r['规则编号']===id)['是否启用']='是';const p=calculate(d,1,at);assert.equal(p.tasks.length,0);assert.ok(p.findings.some(f=>/显式|缺少/.test(f.message)));assert.equal((p.resourceReservations||[]).length,0);save('undeclared-'+id,{plan:p});}
+});
+test.after(()=>{if(process.env.B12_OUT){fs.mkdirSync(process.env.B12_OUT,{recursive:true});fs.writeFileSync(process.env.B12_OUT+'/b12-results.json',JSON.stringify(output,null,2));}});

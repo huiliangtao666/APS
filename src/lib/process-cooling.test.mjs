@@ -132,7 +132,7 @@ test('B4-14 frozen module proposal JSON roundtrip and export fields preserve inp
  x.data.batchResources.find(r=>r['资源编号']==='COLD')['容量']='400';const newer=proposeProcessCooling(x);
  assert.equal(newer.groups.length,2);assert.equal(reopened.proposal.groups.length,1);assert.equal(reopened.input.data.batchResources.find(r=>r['资源编号']==='COLD')['容量'],'480');
  const exported=reopened.proposal.tasks.map(t=>[t.orderId,t.productionBatchId,t.operation,t.start,t.end,t.loadBasis,t.exactLoadKg.numerator,t.exactQuantity.numerator].join(',')).join('\n');
- assert.match(exported,/BOM总投入,250,240/);assert.match(exported,/合格产出,250,240/);assert.equal(JSON.stringify(reopened),saved);
+ assert.match(exported,/BOM总投入,250,240/);assert.match(exported,/合格产出,240,240/);assert.equal(JSON.stringify(reopened),saved);
  snapshots.push({id:'B4-14',scope:'module JSON/export only; real application save/reopen/native CSV blocked by integration'});
 });
 

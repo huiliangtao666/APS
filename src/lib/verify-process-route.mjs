@@ -1,3 +1,4 @@
+import {sourceRefs} from './problem-records.mjs';
 import {quantityMath as Q,feedTime} from './material-allocation.mjs';
 import {inventoryBusinessDate} from './inventory.mjs';
 import {verifyResourcePolicies} from './verify-resource-policies.mjs';
@@ -8,7 +9,13 @@ import {verifyJointConditions} from './verify-joint-conditions.mjs';
 // shared occupancy: compatible source members, exact loads and ledger coverage do.
 export function verifyProcessRoute(plan,data,conditions={}){
  const problems=[],missing=[],orders=[],expected=new Map(),groups=new Map(),tasks=plan.tasks||[];
- const add=m=>problems.push(m),same=(a,b)=>JSON.stringify([...a].sort())===JSON.stringify([...b].sort());
+ const findings=[];let context=null;
+ const add=m=>{problems.push(m);const refs=[];
+  if(context)for(const member of context.members||[context]){const product=data.orders.find(o=>o['订单编号']===member.orderId)?.['产品编号'];
+   for(const [table,predicate]of [['orders',r=>r['订单编号']===member.orderId],['routes',r=>r['产品编号']===product&&r['工序编号']===member.operation],['times',r=>r['产品编号']===product&&r['工序编号']===member.operation],['dependencies',r=>r['订单编号']===member.orderId&&r['工序编号']===member.operation]])refs.push(...sourceRefs(table,data[table].filter(predicate),data[table]));
+  }
+  findings.push({code:'VERIFY / PROCESS_ROUTE',message:m,taskIds:context?.taskIds||[],relatedRecords:refs,context:context?{...context}:undefined,sourceRead:'frozen-calendar-v1'});
+ };const same=(a,b)=>JSON.stringify([...a].sort())===JSON.stringify([...b].sort());
  const only=(rows,label)=>{if(rows.length!==1)throw Error(label+' 必须唯一');return rows[0];};
  const eq=(a,b)=>a&&b&&Q.cmp(Q.fromExact(a),Q.fromExact(b))===0n;
  const active=id=>data.rules.some(r=>r['规则编号']===id&&r['是否启用']==='是'&&(!r['生效时间']||Date.parse(r['生效时间'])<=Date.parse(conditions.ruleEvaluationAt)));
@@ -24,6 +31,7 @@ export function verifyProcessRoute(plan,data,conditions={}){
    const oid=order['订单编号'],pid=order['产品编号'],product=only(data.products.filter(p=>p['产品编号']===pid),'产品');
    if(order['数量单位']!=='kg')throw Error('非kg生产身份未定义');
    const yieldRate=Q.q(product['总收率']),remaining=Q.sub(Q.q(order['合格需求']),Q.q(order['已完成合格数量']||'0'));
+   if(Q.cmp(yieldRate,Q.zero)<=0n||Q.cmp(yieldRate,Q.one)>0n||Q.cmp(remaining,Q.zero)<0n)throw Error('冻结订单余量/总收率无效');
    if(Q.cmp(remaining,Q.zero)===0n)continue;
    const route=data.routes.filter(r=>r['产品编号']===pid),coolRows=route.filter(r=>String(r['最大等待分钟']??'').trim()!=='');
    if(coolRows.length>1)throw Error('超出一个显式配对的范围');
@@ -50,7 +58,8 @@ export function verifyProcessRoute(plan,data,conditions={}){
     if(record.length!==1||b.index!==index||b.count!==count||b.unit!=='kg'||!eq(b.qualifiedKg,Q.exact(qualified))||!eq(b.inputKg,Q.exact(input))||b.quantity!==Q.num(qualified)||b.load!==Q.num(input))add(`${bid} 生产身份/数量与冻结订单不符`);
     for(const op of route){
      const id=JSON.stringify([oid,index,op['工序编号']]),matches=tasks.filter(t=>t.id===id);
-     if(!matches.length){missing.push(id);localMissing.push(id);continue;}
+     context={orderId:oid,productionBatchId:bid,operation:op['工序编号'],taskIds:[id]};
+     if(!matches.length){missing.push(id);localMissing.push(id);if(!(plan.findings||[]).some(f=>f.taskIds?.includes(id)&&typeof f.message==='string'&&f.message.trim()))add(`${id} 未排任务缺少明确原因`);continue;}
      if(matches.length!==1){add(`${id} 工序重复`);continue;}const t=matches[0],m=machines.get(op['工序编号']);
      const time=only(data.times.filter(r=>r['产品编号']===pid&&r['工序编号']===op['工序编号']),'固定工时');
      if(t.orderId!==oid||t.productId!==pid||t.productionBatchId!==bid||t.productionBatchIndex!==index||t.operation!==op['工序编号']||t.quantityUnit!=='kg'||!eq(t.exactQuantity,Q.exact(qualified))||t.quantity!==Q.num(qualified)||t.machine!==m['设备编号'])add(`${id} 任务身份/数量/设备不符`);
@@ -65,7 +74,7 @@ export function verifyProcessRoute(plan,data,conditions={}){
      const group=groups.get(t.resourceBatchId)||[];group.push({t,op,m,load,qualified,bid,heat,cool});groups.set(t.resourceBatchId,group);
     }
    }
-   orders.push({orderId:oid,status:localMissing.length?'partial':'pass',missing:localMissing});
+   context=null;orders.push({orderId:oid,status:localMissing.length?'partial':'pass',missing:localMissing});
   }
   if(!expected.size)add('冻结源没有可复核的待排生产身份');
   if((plan.productionBatches||[]).some(b=>!expected.has(b.id)))add('存在无冻结订单依据的生产身份');
@@ -73,6 +82,7 @@ export function verifyProcessRoute(plan,data,conditions={}){
   const machineRows=(plan.resourceReservations||[]).filter(r=>r.type==='设备'),seenMachines=new Set(),seenSummaries=new Set();
   for(const [id,members]of groups){
    const first=members[0],isHeat=first.op===first.heat;
+   context={orderId:first.t.orderId,productionBatchId:first.bid,operation:first.t.operation,taskIds:members.map(x=>x.t.id),members:members.map(x=>({orderId:x.t.orderId,operation:x.t.operation}))};
    if(!isHeat&&members.length!==1)add(`${id} 非加工工序非法共享资源批`);
    const compatibility=x=>{
     const info=expected.get(x.bid),upstream=info.route.slice(0,info.route.indexOf(info.heat)).flatMap(op=>{
@@ -103,11 +113,12 @@ export function verifyProcessRoute(plan,data,conditions={}){
     if(space['单位']!=='kg'||claim['单位']!=='kg'||claim['占用口径']!=='显式逐生产批完整区间'||dep['提前占用分钟']!=='0'||dep['后延占用分钟']!=='0'||claim['提前占用分钟']!=='0'||claim['后延占用分钟']!=='0'||Q.cmp(Q.q(claim['需求数量']),x.qualified)!==0n||Q.cmp(Q.q(dep['需求数量']),x.qualified)!==0n)add(`${x.t.id} 冷却须按合格产出完整区间占用kg`);
    }
   }
+  context=null;
   if(machineRows.some(r=>!seenMachines.has(r))||(plan.resourceBatches||[]).some(r=>!seenSummaries.has(r)))add('存在无真实工序来源的机器占用或资源组摘要');
   const unique=[...groups.values()].map(m=>m[0].t);
   for(let i=0;i<unique.length;i++)for(let j=i+1;j<unique.length;j++)if(unique[i].machine===unique[j].machine&&unique[i].start<unique[j].end&&unique[j].start<unique[i].end)add(`${unique[i].id}/${unique[j].id} 独占机器重叠`);
   problems.push(...verifyJointConditions(plan,data,conditions));
   const resource=verifyResourcePolicies(plan,data,conditions);if(resource.status==='problem')problems.push(...resource.details);
  }catch(e){add('冻结完整路线无法复核：'+e.message);}
- return {status:problems.length?'problem':missing.length?'partial':'pass',problems,missing,orders:orders.map(o=>({...o,status:problems.length?'problem':o.status})),source:'frozen-source-full-route-v1'};
+ return {status:problems.length?'problem':missing.length?'partial':'pass',problems,findings,missing,orders:orders.map(o=>({...o,status:problems.length?'problem':o.status})),source:'frozen-source-full-route-v1'};
 }
