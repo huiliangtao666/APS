@@ -1,0 +1,27 @@
+{
+  "source": "GitHub Project #2 / Issue45；派生交接快照，不替代原卡",
+  "event_key": "aps:user-cr:uiux-flow-design-high-priority:20261031:r1",
+  "issue_url": "https://github.com/huiliangtao666/APS/issues/45",
+  "project_item_id": "PVTI_lAHOFM9WU84BpE1czhE8v2M",
+  "status": "In progress",
+  "priority": "P1",
+  "owner": "APS-PM / APS-Design",
+  "design_delivery": "dlv_c4e9faac-8753-4adf-900c-d4a09fbdd9d0",
+  "development_status": "WAIT_DESIGN/WAIT_CANDIDATE",
+  "dispatches": {
+    "design": "dlv_c4e9faac-8753-4adf-900c-d4a09fbdd9d0",
+    "dev_coordination": "dlv_a0729164-52bf-46ad-97b8-520a591971e4",
+    "test_coordination": "dlv_f375d73b-b241-4f2f-a6b6-0eaf72a7ee06"
+  },
+  "product_sha": null,
+  "qa_status": "NOT_DISPATCHED",
+  "historical_evidence_sources": [
+    "https://github.com/huiliangtao666/APS/issues/27",
+    "https://github.com/huiliangtao666/APS/issues/28",
+    "https://github.com/huiliangtao666/APS/issues/29",
+    "https://github.com/huiliangtao666/APS/issues/30"
+  ],
+  "phase_1": "完整基础闭环；工装/人员/normalized物料按新候选可复现已验断言择入",
+  "phase_2": "详见原卡下一阶段及#38–44；待批业务维持原授权",
+  "qa_patch": "保护协调已派，未声称补丁已提交或吸收"
+}
