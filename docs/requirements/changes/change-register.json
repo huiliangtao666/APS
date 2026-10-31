@@ -574,6 +574,40 @@
           "next_owner": "APS-Dev continue existing AC15 task, integrate AC17 and hand off one final candidate; PM verify then QA affected AC17+AC15 retest",
           "evidence_files_api": "APS-Dev root B08-AC17-REACT31-DEV-FIX-r1-*; PM verified copies APS-PM temp/b08-ac17-fix/",
           "design_document_sha": "c48d214f8197d1346eccbb8886bb7138eb263d56"
+        },
+        {
+          "event_key": "dlv_6f9e8158-9e70-455d-bfe9-bcae1451e686:r1",
+          "product_sha": "12d453d7cb03829dc609115e48c5e4c19af4a6ec",
+          "outer_hashes": 7,
+          "zip_crc": "PASS",
+          "internal_hashes": 110,
+          "matrix_evidence_hashes": 18,
+          "frozen_run_plan_snapshot_equality": "PASS",
+          "old_csv_only_changed_physical_row": 4,
+          "restart_csv_bytes": "PASS",
+          "originals_and_live_zip": 25,
+          "github_parent_branch_and_two_files": "PASS",
+          "production_except_loadLimits": "IDENTICAL",
+          "live_build_and_assets": "PASS",
+          "dev_selftest": "PM_VERIFIED_PASS",
+          "qa": "PENDING_AFFECTED_RETEST",
+          "repair_rounds": "AC15 r1/2; AC17 r1/2; increment0",
+          "processing": "PROCESSED",
+          "source_notification": "dlv_0aed6193-a379-4615-94a7-3adcd68bc702",
+          "qa_delivery": "dlv_40f55184-197e-4c3d-aa44-750b0d9e3f2d",
+          "qa_dispatch": "SENT",
+          "project_status": "In review",
+          "whole_card": "NOT_READY",
+          "defects": {
+            "B08-QA-AC15-02": "QA_RETEST",
+            "B08-QA-AC17-01": "QA_RETEST"
+          },
+          "issue": "https://github.com/huiliangtao666/APS/issues/37#issuecomment-6541085276",
+          "cr_approval_unchanged": true,
+          "next_owner": "APS-QA",
+          "idle_conditions": "#38+ wait B08 QA; #45 protection continues existing dlv_5ebaa70d-f22b-4e45-ad50-bb055cba0ae2; Test2 paused",
+          "evidence": "APS-Dev root originals; independently verified APS-PM temp/b08-joint-fix/ copies",
+          "receipt_channel": "one-shot delivery result hook; no separate ACK delivery"
         }
       ]
     },
@@ -1600,6 +1634,40 @@
           "next_owner": "APS-Dev continue existing AC15 task, integrate AC17 and hand off one final candidate; PM verify then QA affected AC17+AC15 retest",
           "evidence_files_api": "APS-Dev root B08-AC17-REACT31-DEV-FIX-r1-*; PM verified copies APS-PM temp/b08-ac17-fix/",
           "design_document_sha": "c48d214f8197d1346eccbb8886bb7138eb263d56"
+        },
+        {
+          "event_key": "dlv_6f9e8158-9e70-455d-bfe9-bcae1451e686:r1",
+          "product_sha": "12d453d7cb03829dc609115e48c5e4c19af4a6ec",
+          "outer_hashes": 7,
+          "zip_crc": "PASS",
+          "internal_hashes": 110,
+          "matrix_evidence_hashes": 18,
+          "frozen_run_plan_snapshot_equality": "PASS",
+          "old_csv_only_changed_physical_row": 4,
+          "restart_csv_bytes": "PASS",
+          "originals_and_live_zip": 25,
+          "github_parent_branch_and_two_files": "PASS",
+          "production_except_loadLimits": "IDENTICAL",
+          "live_build_and_assets": "PASS",
+          "dev_selftest": "PM_VERIFIED_PASS",
+          "qa": "PENDING_AFFECTED_RETEST",
+          "repair_rounds": "AC15 r1/2; AC17 r1/2; increment0",
+          "processing": "PROCESSED",
+          "source_notification": "dlv_0aed6193-a379-4615-94a7-3adcd68bc702",
+          "qa_delivery": "dlv_40f55184-197e-4c3d-aa44-750b0d9e3f2d",
+          "qa_dispatch": "SENT",
+          "project_status": "In review",
+          "whole_card": "NOT_READY",
+          "defects": {
+            "B08-QA-AC15-02": "QA_RETEST",
+            "B08-QA-AC17-01": "QA_RETEST"
+          },
+          "issue": "https://github.com/huiliangtao666/APS/issues/37#issuecomment-6541085276",
+          "cr_approval_unchanged": true,
+          "next_owner": "APS-QA",
+          "idle_conditions": "#38+ wait B08 QA; #45 protection continues existing dlv_5ebaa70d-f22b-4e45-ad50-bb055cba0ae2; Test2 paused",
+          "evidence": "APS-Dev root originals; independently verified APS-PM temp/b08-joint-fix/ copies",
+          "receipt_channel": "one-shot delivery result hook; no separate ACK delivery"
         }
       ]
     },
