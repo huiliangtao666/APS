@@ -1,3 +1,4 @@
+import {supplyReadiness} from './workbook-supply.mjs';
 import {gzipSync,gunzipSync} from 'node:zlib';
 import {registerWorkbookRuns} from './workbook-runtime.mjs';
 import fs from 'node:fs';
@@ -19,7 +20,7 @@ export function createWorkbookRouter({dataDir,permission,actorKey,requestId,work
  const tableRefs=(d,ref)=>{const refs={};for(const [table,values]of Object.entries(d.tables)){const file=ref+'.'+hash(table).slice(0,16)+'.gz';fs.writeFileSync(path.join(dir,file),gzipSync(Buffer.from(JSON.stringify(values))),{flag:'wx',mode:0o600});refs[table]=file;}return refs;};
  const meta=(s,id,v)=>{const set=s.datasets.find(d=>d.id===id);return v?set?.versions.find(d=>d.version===Number(v)):set?.versions.at(-1);};
  const dataset=(s,id,v)=>{const set=s.datasets.find(d=>d.id===id),entry=v?set?.versions.find(d=>d.version===Number(v)):set?.versions.at(-1);return entry?snapshot(entry.ref):undefined;};
- const summary=d=>({classification:d.classification,warnings:d.warnings,drafts:d.drafts||[],bomLossProfiles:d.bomLossProfiles||[],id:d.id,name:d.name,version:d.version,fileHash:d.fileHash,profile:d.profile,createdAt:d.createdAt,mappingVersion:d.mapping?.version,readiness:workbookReadiness(d)});
+ const summary=d=>({classification:d.classification,warnings:d.warnings,drafts:d.drafts||[],bomLossProfiles:d.bomLossProfiles||[],id:d.id,name:d.name,version:d.version,fileHash:d.fileHash,profile:d.profile,createdAt:d.createdAt,mappingVersion:d.mapping?.version,readiness:supplyReadiness(d)});
  const handle=fn=>(req,res,next)=>{Promise.resolve().then(()=>fn(req,res)).catch(e=>{if(res.headersSent)return next(e);res.status(422).json({error:'workbook_invalid',message:e.message});});};
  let importBusy=false;
  const inspect=data=>new Promise((resolve,reject)=>{const child=fork(new URL('./workbook-import-worker.mjs',import.meta.url),[],{execArgv:['--max-old-space-size='+importHeapMiB],stdio:['ignore','ignore','ignore','ipc']});let message;const timer=setTimeout(()=>{child.kill('SIGKILL');reject(Error('整本解析超时；未提交数据'));},60000);child.once('message',m=>message=m);child.once('error',e=>{clearTimeout(timer);reject(Error('解析进程失败：'+e.message));});child.once('exit',code=>{clearTimeout(timer);if(code===0&&message?.kind==='result')resolve(message.summary);else reject(Error(message?.message||'解析进程中断；未提交数据'));});child.send(data);});
