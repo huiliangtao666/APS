@@ -8,15 +8,26 @@ export function baselineHtml(){
   if(location.pathname!==prefix+'/ui')throw Error('explicit baseline UI path required');
   document.documentElement.dataset.b15Simulation=id;
   const originalFetch=window.fetch.bind(window);
-  window.fetch=(input,init)=>{
-   const request=new Request(input,init),url=new URL(request.url);
-   if(url.origin!==location.origin)return originalFetch(request);
+  window.fetch=async(input,init)=>{
+   const url=new URL(input instanceof Request?input.url:input,location.href);
+   if(url.origin!==location.origin)return originalFetch(input,init);
    if(url.pathname==='/api'||url.pathname.startsWith('/api/'))url.pathname=prefix+url.pathname;
    if(url.pathname===prefix+'/api'||url.pathname.startsWith(prefix+'/api/')){
-    const headers=new Headers(request.headers);headers.set('X-B15-Simulation',id);
-    return originalFetch(new Request(url.href,new Request(request,{headers})));
+    const request=new Request(input,init),headers=new Headers(request.headers);
+    headers.set('X-B15-Simulation',id);
+    // Request.body is a ReadableStream even when the caller supplied JSON text.
+    // Forwarding it as RequestInit turns a buffered POST into a streaming upload,
+    // which Chromium refuses on HTTP/1. Buffer only this explicit QA API domain.
+    const body=['GET','HEAD'].includes(request.method)?undefined:await request.arrayBuffer();
+    return originalFetch(url.href,{
+     method:request.method,headers,body,signal:request.signal,
+     mode:request.mode,credentials:request.credentials,cache:request.cache,
+     redirect:request.redirect,referrer:request.referrer,
+     referrerPolicy:request.referrerPolicy,integrity:request.integrity,
+     keepalive:request.keepalive
+    });
    }
-   return originalFetch(request);
+   return originalFetch(input,init);
   };
  })();`;
  const banner='<aside aria-label="独立模拟域" style="padding:12px;background:#fff3c4">'+
