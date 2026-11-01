@@ -1,3 +1,4 @@
+import {validateP1Inputs} from '../src/lib/p1-topics-contract.mjs';
 import {validateB16Configuration} from '../src/lib/b16-application.mjs';
 import {validatePackBatch} from '../src/lib/pack-batch.mjs';
 import {checkStageBindings} from '../src/lib/stage-bindings.mjs';
@@ -26,7 +27,7 @@ export {recordKeys} from '../src/lib/record-identity.mjs';
 // Both imports and edits validate the complete proposed state, before any write.
 export function validateInputs(defs,data,{at=new Date().toISOString(),checkPolicyExecution=true,mode=data.inputStage||'supported'}={}){
  const intake=adaptOriginalDependencies(data,{at});
- const issues=[...validateB16Configuration(data),...validatePackBatch(data),...checkStageBindings(data).issues,...originalIssues(data),...intake.issues,...validateOriginalStage(data),...validateOriginalBom(data),...validateOriginalResources(data),...validateResourceMappings(data),...validateEvents(data),...validateFactoryLines(data)];
+ const issues=[...validateP1Inputs(data),...validateB16Configuration(data),...validatePackBatch(data),...checkStageBindings(data).issues,...originalIssues(data),...intake.issues,...validateOriginalStage(data),...validateOriginalBom(data),...validateOriginalResources(data),...validateResourceMappings(data),...validateEvents(data),...validateFactoryLines(data)];
  data=intake.data;
  const add=(table,index,field,message,rows=[data[table][index]])=>issues.push({relatedRecords:sourceRefs(table,rows,data[table]),table,file:defs.find(d=>d.key===table).file,row:index+2,field,message});
  for(const def of defs){

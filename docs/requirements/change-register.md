@@ -1,5 +1,29 @@
 # 已纳入的需求变更
 
+当前登记12项CR。当前执行归属来自 [PM逐CR矩阵](https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620)；阶段Done不等于wholeCR PASS。历史source/event/SHA与原验收结论保留在受控JSON；实时Issue/Project2是状态主账，本文不反写旧状态。B02仍未生效，未知公式不因一般实施授权获准。
+
+| CR | 当前主入口 | 关联包 | 当前阶段/未验边界 |
+|---|---|---|---|
+| CR-DEC02-03-20261029 | [#37](https://github.com/huiliangtao666/APS/issues/37) | #34, #41, #42 | 工装/人员参数化；按各包既有固定SHA保留限定PASS，完整CR未全验 |
+| CR-DEC04-05-06-20261029 | [#43](https://github.com/huiliangtao666/APS/issues/43) | #45, #39 | 43一般实施已授权；本次独立模拟/能力拒绝。已批BOM归45、PACK归39；未知公式仍未批准 |
+| CR-FR013-VALIDATION-20261029 | [#45](https://github.com/huiliangtao666/APS/issues/45) | #34 | 34旧验保留；新输入残余归45，不重开源4 |
+| CR-FR038-PERF-20261029 | [#41](https://github.com/huiliangtao666/APS/issues/41) |  | 暂定30秒目标；规模/规则/环境未全验，保留用户验证边界 |
+| CR-R21-UAT02-20261031 | [#27](https://github.com/huiliangtao666/APS/issues/27) | #45 | 27历史UAT01/02限定PASS保留；新输入影响归45 |
+| CR-SCHED-CONFIG-20261031 | [#45](https://github.com/huiliangtao666/APS/issues/45) | #34, #37, #39, #41, #42, #43 | 总配置归45、按模块执行；可配置原则不批准未知业务值或公式 |
+| CR-FR010020-RESERVATION-20261029 | [#41](https://github.com/huiliangtao666/APS/issues/41) |  | B02提案effective=false，未批准实施；一般43/44授权不扩展预占 |
+| CR-UIUX-FLOW-20261031 | [#45](https://github.com/huiliangtao666/APS/issues/45) | #41, #43, #44 | 41/45阶段按原结果；43/44新专题界面随各自包，不签完整体验通过 |
+| CR-BOM-LOSS-20261031 | [#45](https://github.com/huiliangtao666/APS/issues/45) | #39 | 38移交45，39已验限定范围；未知上游原料/运输公式不默扩 |
+| CR-PACK-BATCH-20261031 | [#39](https://github.com/huiliangtao666/APS/issues/39) | #45 | 39已验阶段保留；输入残余归45，非全部FR/CR全验 |
+| CR-INPUT-DATA-20261031 | [#45](https://github.com/huiliangtao666/APS/issues/45) | #41 | 45负责29 IN、41负责6 IN；35责任保留，阶段Done不清空未验 |
+| CR-PARAM-UI-20261101 | [#45](https://github.com/huiliangtao666/APS/issues/45) |  | 20 PCU/双入口/参数维护阶段Done；d1dd源已合未部署；完整CR/现场口径未全验 |
+
+[完整受控记录及历史证据](changes/change-register.json)。本次P1实现范围见 [专题基础说明](../P1-TOPICS-FOUNDATION.md)，未部署及用户最终UAT的事实另列交付记录。
+
+<details>
+<summary>历史派生快照（原文只读追溯，当前执行以页首12项及PM矩阵为准）</summary>
+
+# 已纳入的需求变更
+
 当前登记7项CR；逐项记录批准边界、设计/实现/验收阶段。缺陷修复、交付故障、验收缺口和调度政策不计作产品需求变更。
 
 | CR | 名称 | 批准状态 | 影响FR/BR | 实施状态 | 验收结论 |
@@ -182,3 +206,5 @@
 **主跟踪记录**：https://github.com/huiliangtao666/APS/issues/9
 
 **交付与审查追踪**：Dev 未派发应用实现；设计/契约审查 未派发；产品Test 未派发。代码SHA：无本CR应用交付；设计文档提交：见主Issue及受控目录。
+
+</details>

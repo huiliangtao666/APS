@@ -13,11 +13,12 @@ export function validConfirmation(c){
   && typeof c.snapshotHash==='string' && inputHash(c.snapshot)===c.snapshotHash;
 }
 export const contentHash=p=>inputHash(Object.fromEntries(Object.entries(p).filter(([k])=>!['status','verification'].includes(k))));
-const selection=c=>Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds','capability','profileId'].map(k=>[k,c[k]]));
+const selection=c=>Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds','capability','profileId','p1ProfileId'].map(k=>[k,c[k]]));
 // A replay checks the supported scheduler contract, not an independent proof of
 // all business rules. Independently recheck the three available R1 invariants.
 export function reviewPlan(s,p,now=new Date().toISOString()){
  const blockers=[],add=(code,message)=>blockers.push({code,message});
+ if(p.conditions?.p1Topic)add('p1_simulation_only','独立预测模拟仅供保存、查询与导出，不进入正式订单提交确认。');
  const run=s.runs?.find(r=>r.id===p.runId),trial=p.trialId?s.trials?.find(t=>t.id===p.trialId):null;
  const original=s.inputVersions?.[p.inputVersionId];
  if(!run||!['completed','partial'].includes(run.status)||run.planId!==p.id||p.copiedResult)add('invalid_run','只接受本方案已完成的服务端运行结果，复制后须重新计算');

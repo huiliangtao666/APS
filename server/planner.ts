@@ -1,3 +1,4 @@
+import {p1Defs,verifyP1Snapshot} from '../src/lib/p1-topics-contract.mjs';
 import {b16Defs,b16Capability,applicationProfile,assignmentCandidates,resolveAssignment,checkB16Plan,validateB16Scope} from '../src/lib/b16-application.mjs';
 import {packTimeFields,packRequested,operationDuration} from '../src/lib/pack-batch.mjs';
 import {stageMappingDef} from '../src/lib/stage-bindings.mjs';
@@ -45,7 +46,7 @@ type Finding = { code: string; message: string; taskIds: string[]; context?:any;
 type StoredVerificationReport = VerificationReport & { inputFingerprint?: string };
 type Plan = { id: string; name: string; createdAt: string; tasks: Task[]; findings: Finding[]; rules: string[]; inputVersion: string; verification?: StoredVerificationReport; supplyConditions?: SupplyCondition[]; supplyInput?: string; materialDemands?:MaterialDemandRow[]; materialChecked?:boolean; ruleSnapshot?: RuleSnapshot };
 
-export const defs: TableDef[] = [stageMappingDef,...b16Defs,
+export const defs: TableDef[] = [...p1Defs,stageMappingDef,...b16Defs,
   {key:'originalResourceEvents',label:'MOCK资源取得归还释放账（追加事件）',file:'37_MOCK资源事实账.csv',fields:['事件编号','原账编号','前事件编号','事件类型','原账JSON']},
   { key: 'factoryLines', label: '工厂与产线', file: '01_工厂与产线配置.csv', fields: ['工厂编号','工厂名称','产线编号','产线名称','时区'] },
   { key: 'simulationEvents', label: '模拟异常事件（先更新时点事实）', file: '28_模拟异常事件.csv', fields: ['事件编号','事件分钟','保护截止分钟','保护策略','事件类型','参数JSON','原因','需处理事实JSON'] },
@@ -166,6 +167,7 @@ function validate(tasks: Task[]): Finding[] {
 }
 
 export function calculate(data:Record<string,Row[]>, inputVersion:number, calculatedAt=new Date().toISOString(), conditions:{startMinute?:number;endMinute?:number|null;priority?:string;mode?:string;taskPositions?:Record<string,any>}={}, changeoverOrder:string[]|null=null) {
+ const topicErrors=verifyP1Snapshot(data,conditions);if(topicErrors.length)throw Error('P1_CAPABILITY_REJECTED '+topicErrors.join('；'));
  if((conditions as any).capability===b16Capability&&!(conditions as any).b16Resolved){
   const profile=(conditions as any).b16Profile||applicationProfile(data,(conditions as any).profileId);
   const candidates=assignmentCandidates(profile,data);const attempts:any[]=[];let rejected:any=null;
@@ -175,7 +177,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
    candidate.id='B16-source-'+inputVersion+'-'+calculatedAt;candidate.lineAssignments=assignment;candidate.resolvedDependencies=resolved.dependencies.filter((d:any)=>d['资源类型']==='设备');candidate.capability=b16Capability;candidate.tasks=candidate.tasks.map((t:any)=>{const order=data.orders.find(o=>o['订单编号']===t.orderId)!;const remaining=Q.sub(Q.q(order['合格需求']),Q.q(order['已完成合格数量']||'0'));return {...t,lineId:assignment[t.orderId],quantity:t.quantity??Q.num(remaining),exactQuantity:t.exactQuantity??Q.exact(remaining),unit:order['数量单位']};});
    const review=checkB16Plan(candidate,data,{...conditions,b16Profile:profile},calculatedAt);
    candidate.b16Verification=review;candidate.ruleSnapshot.checkScope=structuredClone((conditions as any).checkScope||candidate.ruleSnapshot.checkScope);attempts.push({assignment,status:review.status,findings:review.findings});
-   if(review.status==='pass'&&!candidate.findings.length){candidate.name='B16 同厂多线计算';candidate.lineSelection={...candidates,assignments:undefined,attempts,selected:assignment};candidate.materialTransaction={scope:'all-plan',status:'committed',persistentReservation:false};return candidate;}
+   if(review.status==='pass'&&!candidate.findings.length){candidate.name=(conditions as any).p1Topic?'P1 独立模拟 · B16 同厂多线':'B16 同厂多线计算';candidate.lineSelection={...candidates,assignments:undefined,attempts,selected:assignment};candidate.materialTransaction={scope:'all-plan',status:'committed',persistentReservation:false};return candidate;}
    rejected=candidate;
   }
   const failed=rejected;failed.name='B16 多线候选未通过（全计划回滚）';failed.lineSelection={...candidates,assignments:undefined,attempts,selected:null};failed.materialTransaction={scope:'all-plan',status:'rolled_back',persistentReservation:false};
@@ -193,7 +195,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
  const ruleSnapshot=assessRules(data,calculatedAt,true,conditions.mode);
  let result:Plan|null=null;
  const setActivePlan=(p:Plan)=>{result={...p,findings:p.findings.map(f=>attachProblemRecords(f,sourceData)),...((conditions as any).workingWindowsContract?{workingWindowsContract:(conditions as any).workingWindowsContract}:{}),...((conditions as any).jointConditionsContract?{jointConditionsContract:(conditions as any).jointConditionsContract,jointAttempts}:{}),...((sourceData.originalResourceEvents||[]).length?{originalResourceProtection:originalProtection(sourceData)}:{}),resourcePolicyContract:'CR-DEC02-03-v1',execution:{...executionSummary((sourceData as any).executionContext||sourceData,calculatedAt),projectedTasks:p.tasks.map(t=>({taskId:t.id,orderId:t.orderId,operation:t.operation,start:t.start,end:t.end})),blockedTasks:p.findings.map(f=>({code:f.code,taskIds:f.taskIds,message:f.message}))},jointResourceChecks:flags,resourceReservations:resourceReservations.map(r=>({...r,taskIds:batches?(r.productionBatchId?p.tasks.filter((t:any)=>t.productionBatchId===r.productionBatchId&&t.operation===r.operation).map(t=>t.id):batches.taskIds(r.taskId)):[r.taskId]})),materialChecked:!!policy,materialDemands,...(batches?{batchChecked:true,...batchSummary(batches,p.tasks)}:{batchChecked:false}),ruleSnapshot,rules:ruleSnapshot.settings.filter(r=>r.active).map(r=>r.id)};};
- const finishDelivery=()=>{if(result){(result as any).deliveryAssessment=assessDelivery(sourceData,result,calculatedAt,conditions);(result as any).resultAssessment=assessResult(sourceData,result,conditions);}};
+ const finishDelivery=()=>{if(result){if((conditions as any).p1Topic){result.name='P1 独立模拟（非正式订单）';(result as any).p1Topic=structuredClone((conditions as any).p1Topic);}(result as any).deliveryAssessment=assessDelivery(sourceData,result,calculatedAt,conditions);(result as any).resultAssessment=assessResult(sourceData,result,conditions);}};
  const setIssues=(_x:Finding[])=>{}; const setVerification=(_x:null)=>{};const setMessage=(_x:string)=>{};
  const enabledRules=(data.rules||[]).filter(r=>r['是否启用']==='是').map(r=>r['规则编号']);
  const supplyInput=JSON.stringify({supplies:data.supplies||[],delays:data.supplyDelays||[],uses:data.supplyUses||[],materials:data.materials||[],orders:data.orders||[],routes:data.routes||[]});

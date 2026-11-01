@@ -1,3 +1,4 @@
+import {p1Defs} from './lib/p1-topics-contract.mjs';
 import {b16Defs} from './lib/b16-application.mjs';
 import {packTimeFields} from './lib/pack-batch.mjs';
 import {stageMappingDef} from './lib/stage-bindings.mjs';
@@ -8,7 +9,7 @@ import {originalBomDef} from './lib/original-bom.mjs';
 import {resourceMappingDef} from './lib/resource-mapping.mjs';
 import {originalResourceDefs} from './lib/original-resources.mjs';
 export type TableDef = { key:string; label:string; file:string; fields:string[] };
-export const defs: TableDef[] = [stageMappingDef,...b16Defs,
+export const defs: TableDef[] = [...p1Defs,stageMappingDef,...b16Defs,
   {key:'originalResourceEvents',label:'MOCK资源取得归还释放账（追加事件）',file:'37_MOCK资源事实账.csv',fields:['事件编号','原账编号','前事件编号','事件类型','原账JSON']},
   { key: 'factoryLines', label: '工厂与产线', file: '01_工厂与产线配置.csv', fields: ['工厂编号','工厂名称','产线编号','产线名称','时区'] },
   { key: 'simulationEvents', label: '模拟异常事件（先更新时点事实）', file: '28_模拟异常事件.csv', fields: ['事件编号','事件分钟','保护截止分钟','保护策略','事件类型','参数JSON','原因','需处理事实JSON'] },

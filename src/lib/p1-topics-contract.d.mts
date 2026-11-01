@@ -1,0 +1,9 @@
+export const p1Contract:string;
+export const p1Defs:{key:string;label:string;file:string;fields:string[]}[];
+export const p1Capabilities:{id:string;label:string;status:string;detail:string}[];
+export const p1InitialStrategies:Record<string,string>;
+export function checkP1Strategies(raw:any):string[];
+export function validateP1Inputs(data:any):any[];
+export function p1EligibleOrders(data:any,profileId:string):Record<string,string>[];
+export function freezeP1Topic(data:any,profileId:string):any;
+export function verifyP1Snapshot(data:any,conditions:any):string[];

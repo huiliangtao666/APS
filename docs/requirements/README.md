@@ -64,3 +64,5 @@ python3 tools/requirements/sync_project.py
 ## B16应用实现入口
 
 [#42多线MVP的配置、三步样例与验证边界](../b16/APPLICATION-MVP.md)。该文档随真实源码维护，不替代GitHub原卡状态或QA/用户UAT结论。
+
+本轮已批准专题基础能力与未启用边界：[P1 独立模拟首版](../P1-TOPICS-FOUNDATION.md)。十二CR当前业务包去向见[变更台账](change-register.md)和PM矩阵；原基线与历史证据不改写。

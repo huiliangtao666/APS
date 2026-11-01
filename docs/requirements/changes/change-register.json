@@ -16,7 +16,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求；不等于代码已发布或完整验收",
-      "implementation_status": "当前：UAT07联合包#34固定80841247ac91cae193a452325097234f31e6609e，Dev/Test开发自测已核；整包In review，QA已派dlv_88fa9322-c89c-4e9b-93cb-8edc04134201。仅本场景增量；其余具体责任见#34收口表。历史状态保留pm_processing_events，不据旧字段恢复已解除的mock/账号/业务裁决等待。",
+      "implementation_status": "按当前业务包追踪：#37；工装/人员参数化；按各包既有固定SHA保留限定PASS，完整CR未全验。实时状态以原Issue/Project2为准。",
       "primary_requirements": [
         "FR-006",
         "FR-007",
@@ -1198,7 +1198,25 @@
           "next_condition": "#38 B08 prerequisite cleared; not dispatched: verify approved material calculation contract excluding unapproved DEC04-06, frozen candidate/profile and file partition before dispatch. #45 D0/design mapping and reproducible unified nonmain candidate/file partition still missing; protection complete. QA idle; Test2 and patrol remain paused.",
           "receipt_channel": "one-shot final hook only"
         }
-      ]
+      ],
+      "implementation_status_before_package_mapping": "当前：UAT07联合包#34固定80841247ac91cae193a452325097234f31e6609e，Dev/Test开发自测已核；整包In review，QA已派dlv_88fa9322-c89c-4e9b-93cb-8edc04134201。仅本场景增量；其余具体责任见#34收口表。历史状态保留pm_processing_events，不据旧字段恢复已解除的mock/账号/业务裁决等待。",
+      "primary_tracking_issue": 37,
+      "primary_tracking_url": "https://github.com/huiliangtao666/APS/issues/37",
+      "current_related_tracking_issues": [
+        34,
+        41,
+        42
+      ],
+      "current_tracking_authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+      "merged_transfer_to": "https://github.com/huiliangtao666/APS/issues/37",
+      "execution_stage": {
+        "scope": "PACKAGE_SCOPED_USER_HANDOFF",
+        "authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+        "boundary": "工装/人员参数化；按各包既有固定SHA保留限定PASS，完整CR未全验",
+        "whole_cr_acceptance": "NOT_ASSERTED",
+        "user_final_uat": "NOT_SIGNED_BY_DEV"
+      },
+      "unverified_scope": "工装/人员参数化；按各包既有固定SHA保留限定PASS，完整CR未全验"
     },
     {
       "id": "CR-DEC04-05-06-20261029",
@@ -1215,7 +1233,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前目标需求的设计增量；不是应用实现/发布或UAT通过",
-      "implementation_status": "独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发",
+      "implementation_status": "按当前业务包追踪：#43；43一般实施已授权；本次独立模拟/能力拒绝。已批BOM归45、PACK归39；未知公式仍未批准。实时状态以原Issue/Project2为准。",
       "primary_requirements": [
         "FR-002",
         "FR-003",
@@ -1386,7 +1404,24 @@
           "issue_url": "https://github.com/huiliangtao666/APS/issues/35",
           "scope": "共同原则/索引复用；本CR原身份、批准边界、SHA与验收范围保留。"
         }
-      ]
+      ],
+      "implementation_status_before_package_mapping": "独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发",
+      "primary_tracking_issue": 43,
+      "primary_tracking_url": "https://github.com/huiliangtao666/APS/issues/43",
+      "current_related_tracking_issues": [
+        45,
+        39
+      ],
+      "current_tracking_authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+      "merged_transfer_to": "https://github.com/huiliangtao666/APS/issues/43",
+      "execution_stage": {
+        "scope": "PACKAGE_SCOPED_USER_HANDOFF",
+        "authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+        "boundary": "43一般实施已授权；本次独立模拟/能力拒绝。已批BOM归45、PACK归39；未知公式仍未批准",
+        "whole_cr_acceptance": "NOT_ASSERTED",
+        "user_final_uat": "NOT_SIGNED_BY_DEV"
+      },
+      "unverified_scope": "43一般实施已授权；本次独立模拟/能力拒绝。已批BOM归45、PACK归39；未知公式仍未批准"
     },
     {
       "id": "CR-FR013-VALIDATION-20261029",
@@ -1403,7 +1438,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR013受影响需求增量；不等于已实现或UAT通过",
-      "implementation_status": "当前：UAT07联合包#34固定80841247ac91cae193a452325097234f31e6609e，Dev/Test开发自测已核；整包In review，QA已派dlv_88fa9322-c89c-4e9b-93cb-8edc04134201。仅本场景增量；其余具体责任见#34收口表。历史状态保留pm_processing_events，不据旧字段恢复已解除的mock/账号/业务裁决等待。",
+      "implementation_status": "按当前业务包追踪：#45；34旧验保留；新输入残余归45，不重开源4。实时状态以原Issue/Project2为准。",
       "primary_requirements": [
         "FR-013"
       ],
@@ -1534,7 +1569,23 @@
           ],
           "whole_cr_accepted": false
         }
-      ]
+      ],
+      "implementation_status_before_package_mapping": "当前：UAT07联合包#34固定80841247ac91cae193a452325097234f31e6609e，Dev/Test开发自测已核；整包In review，QA已派dlv_88fa9322-c89c-4e9b-93cb-8edc04134201。仅本场景增量；其余具体责任见#34收口表。历史状态保留pm_processing_events，不据旧字段恢复已解除的mock/账号/业务裁决等待。",
+      "primary_tracking_issue": 45,
+      "primary_tracking_url": "https://github.com/huiliangtao666/APS/issues/45",
+      "current_related_tracking_issues": [
+        34
+      ],
+      "current_tracking_authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+      "merged_transfer_to": "https://github.com/huiliangtao666/APS/issues/45",
+      "execution_stage": {
+        "scope": "PACKAGE_SCOPED_USER_HANDOFF",
+        "authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+        "boundary": "34旧验保留；新输入残余归45，不重开源4",
+        "whole_cr_acceptance": "NOT_ASSERTED",
+        "user_final_uat": "NOT_SIGNED_BY_DEV"
+      },
+      "unverified_scope": "34旧验保留；新输入残余归45，不重开源4"
     },
     {
       "id": "CR-FR038-PERF-20261029",
@@ -1551,7 +1602,7 @@
       "approved_on": "2026-10-29（未补造精确时刻）",
       "effective": true,
       "effective_scope": "当前FR038性能目标暂定；须补齐测试负载与环境才可验收",
-      "implementation_status": "8741bf0a exploratory Test2 18 tiers/62 Worker runs and C2 count correction; Test1 React full-chain 8/128 orders <1.3s and 512 cancellation, fixed SHA; formal spec pending",
+      "implementation_status": "按当前业务包追踪：#41；暂定30秒目标；规模/规则/环境未全验，保留用户验证边界。实时状态以原Issue/Project2为准。",
       "primary_requirements": [
         "FR-038"
       ],
@@ -1597,7 +1648,21 @@
           "issue_url": "https://github.com/huiliangtao666/APS/issues/35",
           "scope": "共同原则/索引复用；本CR原身份、批准边界、SHA与验收范围保留。"
         }
-      ]
+      ],
+      "implementation_status_before_package_mapping": "8741bf0a exploratory Test2 18 tiers/62 Worker runs and C2 count correction; Test1 React full-chain 8/128 orders <1.3s and 512 cancellation, fixed SHA; formal spec pending",
+      "primary_tracking_issue": 41,
+      "primary_tracking_url": "https://github.com/huiliangtao666/APS/issues/41",
+      "current_related_tracking_issues": [],
+      "current_tracking_authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+      "merged_transfer_to": "https://github.com/huiliangtao666/APS/issues/41",
+      "execution_stage": {
+        "scope": "PACKAGE_SCOPED_USER_HANDOFF",
+        "authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+        "boundary": "暂定30秒目标；规模/规则/环境未全验，保留用户验证边界",
+        "whole_cr_acceptance": "NOT_ASSERTED",
+        "user_final_uat": "NOT_SIGNED_BY_DEV"
+      },
+      "unverified_scope": "暂定30秒目标；规模/规则/环境未全验，保留用户验证边界"
     },
     {
       "id": "CR-R21-UAT02-20261031",
@@ -1614,7 +1679,7 @@
       "approved_on": "2026-10-31（未补造精确时刻）",
       "effective": true,
       "effective_scope": "R2.1 当前 UAT02/AC05/15/17；账号控制豁免仅限 UAT 全部完成前的测试入口，不等于生产永久取消权限",
-      "implementation_status": "B1 integrated candidate 98347f8 Dev task-level Done; QA simulated UAT01/02 PASS at same SHA; original FR/CR remaining facts and scope NOT_READY",
+      "implementation_status": "按当前业务包追踪：#27；27历史UAT01/02限定PASS保留；新输入影响归45。实时状态以原Issue/Project2为准。",
       "primary_requirements": [
         "FR-008",
         "FR-013",
@@ -1681,7 +1746,23 @@
           "issue_url": "https://github.com/huiliangtao666/APS/issues/35",
           "scope": "共同原则/索引复用；本CR原身份、批准边界、SHA与验收范围保留。"
         }
-      ]
+      ],
+      "implementation_status_before_package_mapping": "B1 integrated candidate 98347f8 Dev task-level Done; QA simulated UAT01/02 PASS at same SHA; original FR/CR remaining facts and scope NOT_READY",
+      "primary_tracking_issue": 27,
+      "primary_tracking_url": "https://github.com/huiliangtao666/APS/issues/27",
+      "current_related_tracking_issues": [
+        45
+      ],
+      "current_tracking_authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+      "merged_transfer_to": "https://github.com/huiliangtao666/APS/issues/27",
+      "execution_stage": {
+        "scope": "PACKAGE_SCOPED_USER_HANDOFF",
+        "authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+        "boundary": "27历史UAT01/02限定PASS保留；新输入影响归45",
+        "whole_cr_acceptance": "NOT_ASSERTED",
+        "user_final_uat": "NOT_SIGNED_BY_DEV"
+      },
+      "unverified_scope": "27历史UAT01/02限定PASS保留；新输入影响归45"
     },
     {
       "dev_delivery": "",
@@ -1706,7 +1787,7 @@
       "approved_on": "2026-10-31",
       "effective": true,
       "effective_scope": "共同原则及未覆盖增量追踪；具体实施仍按原CR/对应包授权",
-      "implementation_status": "当前：UAT07联合包#34固定80841247ac91cae193a452325097234f31e6609e，Dev/Test开发自测已核；整包In review，QA已派dlv_88fa9322-c89c-4e9b-93cb-8edc04134201。仅本场景增量；其余具体责任见#34收口表。历史状态保留pm_processing_events，不据旧字段恢复已解除的mock/账号/业务裁决等待。",
+      "implementation_status": "按当前业务包追踪：#45；总配置归45、按模块执行；可配置原则不批准未知业务值或公式。实时状态以原Issue/Project2为准。",
       "primary_requirements": [
         "FR-002",
         "FR-003",
@@ -2847,7 +2928,28 @@
           "next_condition": "#38 B08 prerequisite cleared; not dispatched: verify approved material calculation contract excluding unapproved DEC04-06, frozen candidate/profile and file partition before dispatch. #45 D0/design mapping and reproducible unified nonmain candidate/file partition still missing; protection complete. QA idle; Test2 and patrol remain paused.",
           "receipt_channel": "one-shot final hook only"
         }
-      ]
+      ],
+      "implementation_status_before_package_mapping": "当前：UAT07联合包#34固定80841247ac91cae193a452325097234f31e6609e，Dev/Test开发自测已核；整包In review，QA已派dlv_88fa9322-c89c-4e9b-93cb-8edc04134201。仅本场景增量；其余具体责任见#34收口表。历史状态保留pm_processing_events，不据旧字段恢复已解除的mock/账号/业务裁决等待。",
+      "primary_tracking_issue": 45,
+      "primary_tracking_url": "https://github.com/huiliangtao666/APS/issues/45",
+      "current_related_tracking_issues": [
+        34,
+        37,
+        39,
+        41,
+        42,
+        43
+      ],
+      "current_tracking_authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+      "merged_transfer_to": "https://github.com/huiliangtao666/APS/issues/45",
+      "execution_stage": {
+        "scope": "PACKAGE_SCOPED_USER_HANDOFF",
+        "authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+        "boundary": "总配置归45、按模块执行；可配置原则不批准未知业务值或公式",
+        "whole_cr_acceptance": "NOT_ASSERTED",
+        "user_final_uat": "NOT_SIGNED_BY_DEV"
+      },
+      "unverified_scope": "总配置归45、按模块执行；可配置原则不批准未知业务值或公式"
     },
     {
       "dev_delivery": "",
@@ -2873,7 +2975,7 @@
       "approved_on": "",
       "effective": false,
       "implementation_authorized": false,
-      "implementation_status": "WAIT_APPROVAL / WAIT_START；原B02流程，不新增同义CR或执行任务",
+      "implementation_status": "按当前业务包追踪：#41；B02提案effective=false，未批准实施；一般43/44授权不扩展预占。实时状态以原Issue/Project2为准。",
       "primary_requirements": [
         "FR-010",
         "FR-020"
@@ -2923,7 +3025,21 @@
           "event_key": "design:scheduling-config-cr:20261031:r1",
           "event": "本次沿原编号正式登记待审提案，effective=false，不代批，不另建Issue/CR。"
         }
-      ]
+      ],
+      "implementation_status_before_package_mapping": "WAIT_APPROVAL / WAIT_START；原B02流程，不新增同义CR或执行任务",
+      "primary_tracking_issue": 41,
+      "primary_tracking_url": "https://github.com/huiliangtao666/APS/issues/41",
+      "current_related_tracking_issues": [],
+      "current_tracking_authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+      "merged_transfer_to": "https://github.com/huiliangtao666/APS/issues/41",
+      "execution_stage": {
+        "scope": "PACKAGE_SCOPED_USER_HANDOFF",
+        "authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+        "boundary": "B02提案effective=false，未批准实施；一般43/44授权不扩展预占",
+        "whole_cr_acceptance": "NOT_ASSERTED",
+        "user_final_uat": "NOT_SIGNED_BY_DEV"
+      },
+      "unverified_scope": "B02提案effective=false，未批准实施；一般43/44授权不扩展预占"
     },
     {
       "id": "CR-UIUX-FLOW-20261031",
@@ -2940,7 +3056,7 @@
       "approved_on": "2026-10-31",
       "effective": true,
       "implementation_authorized": true,
-      "implementation_status": "D0总体设计待交；QA补丁保护完成；S1/S2 WAIT_DESIGN/WAIT_CANDIDATE",
+      "implementation_status": "按当前业务包追踪：#45；41/45阶段按原结果；43/44新专题界面随各自包，不签完整体验通过。实时状态以原Issue/Project2为准。",
       "registration_status": "REGISTERED",
       "event_key": "aps:user-cr:uiux-flow-design-high-priority:20261031:r1",
       "source_delivery": "dlv_b09b63c9-ef7c-4e7d-8442-ffb4eb879198",
@@ -3107,7 +3223,25 @@
         "unified_candidate_sha": null,
         "product_test_verdict": "NOT_EXECUTED_PROTECTION_ONLY",
         "new_uat_verdict": "NOT_EXECUTED"
-      }
+      },
+      "implementation_status_before_package_mapping": "D0总体设计待交；QA补丁保护完成；S1/S2 WAIT_DESIGN/WAIT_CANDIDATE",
+      "primary_tracking_issue": 45,
+      "primary_tracking_url": "https://github.com/huiliangtao666/APS/issues/45",
+      "current_related_tracking_issues": [
+        41,
+        43,
+        44
+      ],
+      "current_tracking_authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+      "merged_transfer_to": "https://github.com/huiliangtao666/APS/issues/45",
+      "execution_stage": {
+        "scope": "PACKAGE_SCOPED_USER_HANDOFF",
+        "authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+        "boundary": "41/45阶段按原结果；43/44新专题界面随各自包，不签完整体验通过",
+        "whole_cr_acceptance": "NOT_ASSERTED",
+        "user_final_uat": "NOT_SIGNED_BY_DEV"
+      },
+      "unverified_scope": "41/45阶段按原结果；43/44新专题界面随各自包，不签完整体验通过"
     },
     {
       "id": "CR-BOM-LOSS-20261031",
@@ -3160,7 +3294,7 @@
         "explicit_zero_override_distinct_from_inherit": true
       },
       "calculation_contract_status": "现有同基准kg生产损耗模型明确，可据受控公式开发自测；原料运输损耗上游应用环节待明确。非同单位/非质量守恒/新增工序加料不自动扩围。",
-      "implementation_status": "SENT：APS-Test组件/域实现自测；APS-Dev主应用接入；尚无产品交付/QA结论",
+      "implementation_status": "按当前业务包追踪：#45；38移交45，39已验限定范围；未知上游原料/运输公式不默扩。实时状态以原Issue/Project2为准。",
       "business_questions": [],
       "original_bom_example_evidence": {
         "sha": "172b415122472b933fc9935b5537697ebc03ccfc",
@@ -3234,7 +3368,23 @@
         "status": "main application config/API/Worker/save/reopen/native CSV integration; fixed validation and SHA in handoff",
         "legacy_source_model_preserved": true,
         "excel_qualified_output_profile_separate": true
-      }
+      },
+      "implementation_status_before_package_mapping": "SENT：APS-Test组件/域实现自测；APS-Dev主应用接入；尚无产品交付/QA结论",
+      "primary_tracking_issue": 45,
+      "primary_tracking_url": "https://github.com/huiliangtao666/APS/issues/45",
+      "current_related_tracking_issues": [
+        39
+      ],
+      "current_tracking_authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+      "merged_transfer_to": "https://github.com/huiliangtao666/APS/issues/45",
+      "execution_stage": {
+        "scope": "PACKAGE_SCOPED_USER_HANDOFF",
+        "authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+        "boundary": "38移交45，39已验限定范围；未知上游原料/运输公式不默扩",
+        "whole_cr_acceptance": "NOT_ASSERTED",
+        "user_final_uat": "NOT_SIGNED_BY_DEV"
+      },
+      "unverified_scope": "38移交45，39已验限定范围；未知上游原料/运输公式不默扩"
     },
     {
       "id": "CR-PACK-BATCH-20261031",
@@ -3291,7 +3441,7 @@
       },
       "configuration_defaults": "具体真实工时/速率/包装单位可先显式可替换mock，非现场批准默认；沿用已批准配置保存/版本/冻结原则",
       "business_gate": "本三项READY；不再以固定PACK50只mock、尾批必须满批、合并未许可阻塞明确开发",
-      "implementation_status": "Dev本原包限定kg顺序路线包装、最小单位和实际量尾批/兼容合炉已实现并自测；完整FR/CR/UAT及其他原包范围不由本记录关闭",
+      "implementation_status": "按当前业务包追踪：#39；39已验阶段保留；输入残余归45，非全部FR/CR全验。实时状态以原Issue/Project2为准。",
       "issue_url": "https://github.com/huiliangtao666/APS/issues/39",
       "related_issue_urls": [
         "https://github.com/huiliangtao666/APS/issues/40"
@@ -3299,7 +3449,23 @@
       "product_sha": null,
       "acceptance_result": "本次限定开发自测PASS；完整原包NOT_READY；QA NOT_EXECUTED；历史PASS保留原SHA",
       "implementation_delivery": "dlv_62208099-c50f-484c-92a6-1e3cbbdc89f3",
-      "implementation_evidence": "docs/pack-batch-integration.md；固定产品SHA与原件hash随同delivery:r1交付；本记录不以治理SHA替产品SHA"
+      "implementation_evidence": "docs/pack-batch-integration.md；固定产品SHA与原件hash随同delivery:r1交付；本记录不以治理SHA替产品SHA",
+      "implementation_status_before_package_mapping": "Dev本原包限定kg顺序路线包装、最小单位和实际量尾批/兼容合炉已实现并自测；完整FR/CR/UAT及其他原包范围不由本记录关闭",
+      "primary_tracking_issue": 39,
+      "primary_tracking_url": "https://github.com/huiliangtao666/APS/issues/39",
+      "current_related_tracking_issues": [
+        45
+      ],
+      "current_tracking_authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+      "merged_transfer_to": "https://github.com/huiliangtao666/APS/issues/39",
+      "execution_stage": {
+        "scope": "PACKAGE_SCOPED_USER_HANDOFF",
+        "authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+        "boundary": "39已验阶段保留；输入残余归45，非全部FR/CR全验",
+        "whole_cr_acceptance": "NOT_ASSERTED",
+        "user_final_uat": "NOT_SIGNED_BY_DEV"
+      },
+      "unverified_scope": "39已验阶段保留；输入残余归45，非全部FR/CR全验"
     },
     {
       "id": "CR-INPUT-DATA-20261031",
@@ -3319,7 +3485,7 @@
         41
       ],
       "registration_status": "APPROVED_FOR_IMPLEMENTATION",
-      "implementation_status": "CORE_FLOW_SELFTEST_PARTIAL_REMAINING_35_ASSERTION_VALIDATION_BLOCKED",
+      "implementation_status": "按当前业务包追踪：#45；45负责29 IN、41负责6 IN；35责任保留，阶段Done不清空未验。实时状态以原Issue/Project2为准。",
       "product_sha": null,
       "design_document_sha": "13e2eeed4438cb0b200db9c4de3781c7f1248be3",
       "affected_requirements": [
@@ -3427,7 +3593,22 @@
       "effective_scope_record": "Issue45 latest PM input and #38 residual transfer; older rows remain historical",
       "acceptance_result": "PARTIAL / NOT_READY: four-category real UI save/reopen and 700-demand real Worker slice verified; complete 35-assertion same-candidate import-to-export chain and independent Test/UAT remain unverified; consecutive negative imports hit observed VM OOM",
       "next_owner": "APS-PM coordinate sufficient isolated validation capacity; APS-Dev continues the same original package after resource recovery",
-      "implementation_evidence": "docs/workbook-input-integration.md; fixed SHA, parent, 35-row matrix, 27-row closure, raw bytes/hash and actual runtime fingerprint in delivery handoff"
+      "implementation_evidence": "docs/workbook-input-integration.md; fixed SHA, parent, 35-row matrix, 27-row closure, raw bytes/hash and actual runtime fingerprint in delivery handoff",
+      "implementation_status_before_package_mapping": "CORE_FLOW_SELFTEST_PARTIAL_REMAINING_35_ASSERTION_VALIDATION_BLOCKED",
+      "primary_tracking_url": "https://github.com/huiliangtao666/APS/issues/45",
+      "current_related_tracking_issues": [
+        41
+      ],
+      "current_tracking_authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+      "merged_transfer_to": "https://github.com/huiliangtao666/APS/issues/45",
+      "execution_stage": {
+        "scope": "PACKAGE_SCOPED_USER_HANDOFF",
+        "authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+        "boundary": "45负责29 IN、41负责6 IN；35责任保留，阶段Done不清空未验",
+        "whole_cr_acceptance": "NOT_ASSERTED",
+        "user_final_uat": "NOT_SIGNED_BY_DEV"
+      },
+      "unverified_scope": "45负责29 IN、41负责6 IN；35责任保留，阶段Done不清空未验"
     },
     {
       "id": "CR-PARAM-UI-20261101",
@@ -3482,7 +3663,7 @@
       ],
       "implementation_delivery": "dlv_ff9a5ac0-63af-4363-b60e-3ec23f492725",
       "implementation_owner": "APS-Dev",
-      "implementation_status": "SOURCE_CANDIDATE_LIGHT_SELFTEST_PASSED_FULL_FLOW_BLOCKED",
+      "implementation_status": "按当前业务包追踪：#45；20 PCU/双入口/参数维护阶段Done；d1dd源已合未部署；完整CR/现场口径未全验。实时状态以原Issue/Project2为准。",
       "product_sha": null,
       "product_sha_binding": "Full source→main SHA is resolved after the containing engineering commit and recorded in PARAM-UI-Dev-r1-RECORD.json; no design SHA is used as product SHA.",
       "implementation_evidence": "docs/parameter-dual-entry.md; qa/parameter-ui-*; root PARAM-UI-Dev-r1-{REPORT.md,MATRIX.csv,RECORD.json,EVIDENCE.zip,SHA256.json}",
@@ -3496,7 +3677,20 @@
       "acceptance_result": "PARTIAL / NOT_READY: source and bounded domain/in-process route checks only; actual UI/HTTP/Worker/persisted frozen-run export, standard build and complete original Excel are not executed in the reserved #40 window. Full package QA not dispatched.",
       "qa_result": "NOT_EXECUTED",
       "new_product_failure_rounds": 0,
-      "next_owner": "APS-PM coordinate explicit #40 release and stable512MiB build/>=1GiB complete Excel; APS-Dev complete applicable selftest on same #45 package; APS-QA only after gate"
+      "next_owner": "APS-PM coordinate explicit #40 release and stable512MiB build/>=1GiB complete Excel; APS-Dev complete applicable selftest on same #45 package; APS-QA only after gate",
+      "implementation_status_before_package_mapping": "SOURCE_CANDIDATE_LIGHT_SELFTEST_PASSED_FULL_FLOW_BLOCKED",
+      "primary_tracking_url": "https://github.com/huiliangtao666/APS/issues/45",
+      "current_related_tracking_issues": [],
+      "current_tracking_authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+      "merged_transfer_to": "https://github.com/huiliangtao666/APS/issues/45",
+      "execution_stage": {
+        "scope": "PACKAGE_SCOPED_USER_HANDOFF",
+        "authority": "https://github.com/huiliangtao666/APS/issues/36#issuecomment-6560047620",
+        "boundary": "20 PCU/双入口/参数维护阶段Done；d1dd源已合未部署；完整CR/现场口径未全验",
+        "whole_cr_acceptance": "NOT_ASSERTED",
+        "user_final_uat": "NOT_SIGNED_BY_DEV"
+      },
+      "unverified_scope": "20 PCU/双入口/参数维护阶段Done；d1dd源已合未部署；完整CR/现场口径未全验"
     }
   ]
 }

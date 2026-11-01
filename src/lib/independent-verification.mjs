@@ -1,3 +1,4 @@
+import {verifyP1Snapshot} from './p1-topics-contract.mjs';
 import {b16Capability,validateB16PlanScope,resolveAssignment} from './b16-application.mjs';
 import {verifyStageBindings} from './verify-stage-bindings.mjs';
 import {verifyOriginalResources as verifyExecutionResources} from './verify-execution-resource-ledger.mjs';
@@ -31,6 +32,7 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
   const orderLines = new Map(orderRows.map((order) => [String(order['订单编号'] ?? '').trim(), String(order['产线编号'] ?? '').trim()]));
   const details = {};
   const findings = [];
+  if(frozenConditions?.p1Topic){const errors=verifyP1Snapshot(frozenData||{orders:orderRows},frozenConditions);details.p1Isolation=result(errors.length?'problem':'pass',errors.length?errors:['独立预测来源/数量/profile版本与适配一致；未叠加正式订单，未启用自动公式']);for(const message of errors)findings.push({code:'P1_ISOLATION',message,taskIds:[]});}
 
   const missingLineOrders = orderRows
     .filter((order) => !String(order['产线编号'] ?? '').trim())

@@ -32,7 +32,7 @@ export function positionGuard(s,trial,plan){
  return null;
 }
 export const positionToken=(s,t,p)=>inputHash({revision:t.revision,latest:t.latestPlanId,plan:p,data:t.data,currentFacts:executionState(s.data),locks:t.locks||{}});
-const selection=c=>Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds'].map(k=>[k,c[k]]));
+const selection=c=>Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds','capability','profileId','p1ProfileId'].map(k=>[k,c[k]]));
 export function freezePositions(data,conditions,positions,at){
  const f=freezeRunInput(data,selection(conditions),at);
  if(Object.keys(positions).length)f.conditions.taskPositions=structuredClone(positions);
