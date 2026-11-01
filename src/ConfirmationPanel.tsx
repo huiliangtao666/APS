@@ -1,6 +1,7 @@
 import {useEffect,useState} from 'react';
 const labels:Record<string,string>={draft:'待核对',returned:'已退回',submitted:'待主管确认',confirmed:'已确认',released:'已内部发布',archived:'已归档'};
 const actions:Record<string,string>={submit:'提交主管',confirm:'确认已排部分 / 全部',return:'退回',release:'内部发布',archive:'归档'};
+export function ProcessCoverage({check}:any){return check?.coverage==='known-partial'?<p role="status">已排部分的工序与资源复核通过；完整路线仍有 {check.unplannedTaskIds.length} 道未排工序，须逐项接受，不能作为全部完成。</p>:null;}
 export function ConfirmationPanel({plans,role,busy,reason,api,refresh,onExport}:{plans:{id:string;name:string}[];role?:string;busy:boolean;reason:string;api:(path:string,body?:object)=>Promise<any>;refresh:()=>Promise<void>;onExport?:(id:string)=>void}){
  const [id,setId]=useState(''),[review,setReview]=useState<any>(null),[error,setError]=useState(''),[working,setWorking]=useState(false),[scope,setScope]=useState(false),[conditional,setConditional]=useState(false),[partial,setPartial]=useState(false),[listed,setListed]=useState<string[]>([]);
  useEffect(()=>{let live=true;setReview(null);setListed([]);setScope(false);setPartial(false);setConditional(false);if(id)api('/plans/'+id+'/review').then(r=>{if(live)setReview(r);}).catch(e=>{if(live)setError(e.message);});return()=>{live=false;};},[id,plans]);
@@ -10,6 +11,7 @@ export function ConfirmationPanel({plans,role,busy,reason,api,refresh,onExport}:
  <select aria-label="主管确认方案" value={id} onChange={e=>{setId(e.target.value);setError('');}}><option value="">选择待确认或历史方案</option>{plans.map(p=><option key={p.id} value={p.id}>{p.name} · {p.id.slice(0,8)}</option>)}</select>
  {error&&<p role="alert">{error}</p>}{review&&<><h3>{labels[state]||state}</h3><p>提交编号：{review.submissionId||'尚未提交'} · 原始输入：{review.inputVersionId}</p><p>{review.scope}</p>
  {review.handoff&&<p>保存结果完整性：{review.handoff.coverage.status==='complete'?'记录完整':'存在缺项'}。提交与确认时服务端将再次核对最新输入、资源和物料；当前查看未执行流程操作。</p>}<h3>规则检查与当前输入复查</h3>{review.blockers.length?<ul>{review.blockers.map((b:any,i:number)=><li key={i}>{b.message}</li>)}</ul>:<p>本次已有支持范围检查通过。</p>}
+ <ProcessCoverage check={review.independentChecks?.checks?.processRoute}/>
  <details><summary>采用规则与独立复核明细</summary><pre>{JSON.stringify({rules:review.ruleChecks,independent:review.independentChecks},null,2)}</pre></details><p>尚未检查：{review.limits.join('；')}</p>
  <h3>未排需求（{review.unplanned.length}）</h3>{review.unplanned.map((t:any)=><label key={t.id} style={{display:'block'}}><input type="checkbox" checked={listed.includes(t.id)} onChange={e=>setListed(old=>e.target.checked?[...old,t.id]:old.filter(x=>x!==t.id))}/>{t.orderId} / {t.operation}：{t.quantity} {t.unit}；{t.reasons.map((r:any)=>r.message).join('；')}</label>)}
  {!!review.unplanned.length&&<label><input type="checkbox" checked={partial} onChange={e=>setPartial(e.target.checked)}/>明确接受已排部分，上列未排需求仍未满足</label>}
