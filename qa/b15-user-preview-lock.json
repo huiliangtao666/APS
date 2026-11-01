@@ -123,5 +123,20 @@
     "17/02_工厂工作日历.csv": "da20ee23ba39c16398926144f9c30fd35419ce10dfb569ed813bd4b63122afbb",
     "17/19_人员组与可用时间.csv": "4f6c8e92066a0e392beae0c4d2c7449f237168e6264d0fb7ef3ff78d990ea434"
   },
-  "seedPlanId": "54be2e2b-af50-4a80-973d-4f02784f68e9"
+  "seedPlanId": "54be2e2b-af50-4a80-973d-4f02784f68e9",
+  "candidates": {
+    "integrated0afa": {
+      "productSha": "0afa7a85dc17a856f11568de8886ab1e32f78d6f",
+      "parent": "92bb1b4bda644b7a6f1d9f1d0fab5ab0c2002d3b",
+      "sourceManifestSha256": "9e8c4b9c16c8d3b6501743b05cb924c697ec150158db7da87dd2f4fadbc14c77",
+      "adapterSha256": "df34f9d4ae3cee32a0ceba697f707a65db10e632f21f9a66f64ef0d02ffdee97",
+      "fingerprintPath": "/api/parameter-ui-deployment",
+      "upstream": "http://host.docker.internal:18302",
+      "seedPlanId": "1ab5af9a-d5c4-4ce4-beef-c4e7fe04e779",
+      "uiFiles": {},
+      "profileFiles": {},
+      "evidence": "https://github.com/huiliangtao666/APS/issues/41#issuecomment-6558273715",
+      "scope": "copy fixed archived R7 sample to new trial; edit own trial, serial calculate, save/read/export own results; planner mock; no workflow approval/global inputs/role switch"
+    }
+  }
 }

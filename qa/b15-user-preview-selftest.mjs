@@ -7,9 +7,10 @@ import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { Readable } from 'node:stream';
 import { createPreview, httpTransport, LOCK, localPath } from './b15-user-preview-core.mjs';
-import { createHandler } from './b15-user-preview-server.mjs';
+import { createHandler, configuration } from './b15-user-preview-server.mjs';
 import * as sdk from '@praetor/lite-app-server';
 
+if (process.argv.includes('--incremental')) { await incremental(); } else {
 const sha = b => createHash('sha256').update(b).digest('hex');
 const base = '/praetor-app/777/dev/', origin = 'https://preview.invalid';
 const actor = { kind: 'user', issuer: 'synthetic-routing-fixture', sub: 'existing-member' };
@@ -196,7 +197,7 @@ try {
   await check('executable binding and rollback plan: original app id, no data restore/publish/stop', async () => {
     const r = spawnSync('python3', [new URL('./b15-user-preview-control.py', import.meta.url).pathname, 'plan', '--wab-dir', '/skills/workspace-app-builder'], { encoding: 'utf8' });
     assert.equal(r.status, 0, r.stderr); const p = JSON.parse(r.stdout);
-    assert.deepEqual(p.bind.slice(1), ['container', 'qa-fr006-main-3d164d5', '/workspace/apps/qa17-48e-user-entry', '4318', 'python', 'python3 b15-user-preview-launch.py']);
+    assert.deepEqual(p.bind.slice(1), ['container', 'qa-fr006-main-3d164d5', '/workspace/apps/qa17-0afa-user-entry', '4318', 'python', 'python3 b15-user-preview-launch.py']);
     assert.deepEqual(p.rollback.slice(1), ['container', 'qa-fr006-main-3d164d5', '/workspace/apps/qa-fr006-main-3d164d5', '3000', 'vite', 'npm run dev']);
     assert.match(p.rollback_data_policy, /Keep new user data/); assert.ok(!p.bind.includes('publish')); assert.equal(p.preview[0], '/skills/lite-app-scaffold/scripts/dev-preview.sh');
   });
@@ -230,3 +231,110 @@ print('synthetic snapshot exact/private/refusal PASS; scratch removed')`;
   });
 } finally { await new Promise(resolve => fake.close(resolve)); }
 console.log(JSON.stringify({ kind: 'TOOL_SELFTEST_ONLY', checks: count, productSmoke: 'NOT_EXECUTED', userURL: null }));
+
+}
+
+// r3 changes only. No legacy suite, product HTTP, SDK signature minting or real server listener.
+async function incremental() {
+  const hash = b => createHash('sha256').update(b).digest('hex');
+  const base = '/deployment/praetor-app/22924/dev/', origin = 'https://preview.invalid';
+  const policy = LOCK.candidates.integrated0afa;
+  const html = '<html><head><script type="module" src="/assets/app.js"></script></head><body></body></html>';
+  const assets = { 'index.html': html, 'assets/app.js': '/* synthetic */' };
+  const metadata = { ...policy, build: { source_sha: policy.productSha,
+    files: Object.entries(assets).map(([path, bytes]) => ({ path, sha256: hash(bytes) })) } };
+  let drift = false, assetDrift = false, serial = 0;
+  const calls = [], trials = [], runs = [], plans = [{ id: policy.seedPlanId }, { id: 'protected-old' }];
+  const transport = async (method, target, headers, bytes) => {
+    calls.push({ method, target, headers });
+    const data = bytes && JSON.parse(bytes);
+    let body = {};
+    if (target === policy.fingerprintPath) body = { ...metadata, ...(drift ? { adapterSha256: 'bad' } : {}) };
+    else if (method === 'GET' && target === '/api/plans') body = plans;
+    else if (method === 'GET' && target === '/api/trials') body = trials;
+    else if (method === 'GET' && target === '/api/runs') body = runs;
+    else if (method === 'GET' && assets[target.slice(1)]) body = assets[target.slice(1)] + (assetDrift ? 'drift' : '');
+    else if (method === 'POST' && target === `/api/plans/${policy.seedPlanId}/copy`) {
+      serial++; body = { id: `new-trial-${serial}`, basePlanId: `new-plan-${serial}`, sourcePlanId: policy.seedPlanId };
+      trials.push(body); plans.push({ id: body.basePlanId });
+    } else if (method === 'POST' && target === '/api/runs') {
+      body = { id: `new-run-${serial}`, trialId: data.trialId, status: 'completed', planId: `result-${serial}` }; runs.push(body);
+    }
+    return { status: 200, headers: { 'content-type': 'application/json', 'set-cookie': 'parameter-ui-role=supervisor' },
+      body: Buffer.from(typeof body === 'string' ? body : JSON.stringify(body)) };
+  };
+  const preview = createPreview({ base, origin, members: [], mode: 'workspace-preview', policy,
+    transport, clientScript: fs.readFileSync(new URL('./b15-user-preview-client.js', import.meta.url), 'utf8') });
+  const cfg = { mode: 'workspace-preview', preview, scopes: new Map(), base };
+  const handler = createHandler(cfg);
+  async function request(target, body, cookie, extra = {}) {
+    const req = Readable.from(body ? [Buffer.from(JSON.stringify({ reason: 'synthetic copy', ...body }))] : []);
+    Object.assign(req, { method: body ? 'POST' : 'GET', url: base + target.replace(/^\//, ''),
+      headers: { origin, 'x-aps-request': 'workbench', 'content-type': 'application/json', ...(cookie ? { cookie } : {}), ...extra } });
+    const result = { headers: {} };
+    const res = { setHeader(k, v) { result.headers[k] = v; }, writeHead(status, headers) { result.status = status; Object.assign(result.headers, headers); }, end(body) { result.body = Buffer.from(body || ''); } };
+    await handler(req, res); return result;
+  }
+  let checks = 0;
+  async function check(name, fn) { await fn(); checks++; console.log(`PASS ${checks}: ${name}`); }
+  let cookieA, cookieB;
+  await check('workspace mode remains closed without actual gate record; no SDK requirement added', async () => {
+    const env = { PRAETOR_WORKSPACE_ID: 'APS-Test' };
+    const deployment = { mode: 'workspace-preview', base, origin, candidate: 'integrated0afa', workspaceId: 'APS-Test', unpublished: true,
+      ingress: 'platform-workspace-session-only', platformGateVerified: true, gateEvidence: 'SYNTHETIC fixture; never deployment proof' };
+    for (const [key, value] of [['platformGateVerified', false], ['unpublished', false], ['ingress', 'public'], ['workspaceId', 'other']]) {
+      await assert.rejects(configuration(env, { ...deployment, [key]: value }), /workspace_gate_required/);
+    }
+    const configured = await configuration(env, deployment); assert.equal(configured.mode, 'workspace-preview'); assert.equal(configured.sdk, undefined);
+    await assert.rejects(configuration(env, { ...deployment, mode: 'unknown' }), /explicit_preview_mode/);
+  });
+  await check('0afa dialect pins source/parent/adapter/build and adapts verified asset bytes', async () => {
+    const a = await request('/'); assert.equal(a.status, 200); assert.match(a.body.toString(), /固定0afa7a8/);
+    assert.match(a.body.toString(), /deployment\/praetor-app\/22924\/dev\/assets\/app.js/);
+    cookieA = a.headers['set-cookie'].split(';')[0]; assert.match(cookieA, /^__Secure-b15-scope=[a-f0-9]{48}$/);
+    const b = await request('/'); cookieB = b.headers['set-cookie'].split(';')[0]; assert.notEqual(cookieA, cookieB);
+    for (const key of ['productSha', 'parent', 'sourceManifestSha256', 'adapterSha256']) {
+      const old = metadata[key]; metadata[key] = 'bad'; assert.equal((await request('/api/state', undefined, cookieA)).status, 503); metadata[key] = old;
+    }
+    metadata.build.source_sha = 'bad'; assert.equal((await request('/api/state', undefined, cookieA)).status, 503); metadata.build.source_sha = policy.productSha;
+    assetDrift = true; assert.equal((await request('/assets/app.js', undefined, cookieA)).status, 503); assetDrift = false;
+  });
+  await check('external role inputs denied; only internal explicit planner cookie reaches 0afa', async () => {
+    for (const headers of [{ cookie: 'parameter-ui-role=supervisor' }, { 'test-sub': 'supervisor' }, { 'x-praetor-user-id': 'owner' }])
+      assert.equal((await request('/api/state', undefined, cookieA, headers)).status, 400);
+    for (const path of ['/__qa/role/planner', '/api/auth/members', '/%5f%5fqa/role/query', '/api/state?role=supervisor', '/api/state?parameter-ui-role=supervisor'])
+      assert.ok([400, 403].includes((await request(path, undefined, cookieA)).status));
+    assert.equal((await request('/api/state', undefined, cookieA, { authorization: 'discard', 'x-praetor-app-context': 'discard' })).status, 200);
+    const c = calls.at(-1); assert.deepEqual(c.headers, { cookie: 'parameter-ui-role=planner' });
+    assert.equal((await request('/api/inputs', { tables: {} }, cookieA)).status, 403);
+  });
+  await check('fresh browser scopes isolate copies; forged/expired cookie cannot claim prior trial', async () => {
+    const copy = `/api/plans/${policy.seedPlanId}/copy`;
+    assert.equal((await request(copy, {}, cookieA)).status, 200);
+    assert.equal((await request('/api/trials/new-trial-1/inputs', { tables: {} }, cookieB)).status, 403);
+    assert.equal((await request('/api/trials/new-trial-1/inputs', { tables: {} }, '__Secure-b15-scope=' + 'a'.repeat(48))).status, 401);
+    assert.equal((await request('/api/trials/new-trial-1/inputs', { tables: {} }, cookieA)).status, 200);
+    assert.equal((await request('/api/plans', { id: 'protected-old' }, cookieA)).status, 403);
+    assert.equal((await request('/api/plans', { id: 'new-plan-1' }, cookieA)).status, 200);
+  });
+  await check('CSRF/action/reason guards and own-trial serial run/result/save remain enforced', async () => {
+    assert.equal((await request('/api/runs', { trialId: 'new-trial-1' }, cookieA, { origin: 'https://foreign.invalid' })).status, 403);
+    assert.equal((await request('/api/runs', { trialId: 'new-trial-1' }, cookieA, { 'x-aps-request': '' })).status, 403);
+    assert.equal((await request('/api/runs', { trialId: 'new-trial-1', reason: '' }, cookieA)).status, 400);
+    assert.equal((await request('/api/runs', { trialId: 'new-trial-1' }, cookieA)).status, 200);
+    assert.equal((await request('/api/runs', undefined, cookieA)).status, 200);
+    assert.equal((await request('/api/plans', { id: 'result-1' }, cookieB)).status, 403);
+    assert.equal((await request('/api/plans', { id: 'result-1' }, cookieA)).status, 200);
+    drift = true; assert.equal((await request('/api/plans', { id: 'result-1' }, cookieA)).status, 503); drift = false;
+    cfg.scopes.set(cookieA.split('=')[1], 0);
+    assert.equal((await request('/api/plans', { id: 'result-1' }, cookieA)).status, 401);
+  });
+  await check('managed mode still invokes official verifier and fails closed with unsupported config', async () => {
+    const req = Readable.from([]); Object.assign(req, { method: 'GET', url: '/', headers: { cookie: cookieA, origin } });
+    let status, entered = false;
+    await createHandler({ sdk, identity: sdk.readPraetorIdentityConfig({}), preview() { entered = true; } })(req,
+      { setHeader() {}, writeHead(s) { status = s; }, end() {} });
+    assert.equal(status, 503); assert.equal(entered, false);
+  });
+  console.log(JSON.stringify({ kind: 'R3_INCREMENTAL_SYNTHETIC_ONLY', checks, productHTTP: 'NOT_EXECUTED', productBrowser: 'NOT_EXECUTED', activation: 'NOT_EXECUTED' }));
+}

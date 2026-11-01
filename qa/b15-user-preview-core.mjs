@@ -10,7 +10,7 @@ const entry = (map, key) => Object.hasOwn(map, key) ? map[key] : undefined;
 const failure = (status, error) => ({ status, headers: { 'content-type': 'application/json' }, body: Buffer.from(JSON.stringify({ error })) });
 const json = r => JSON.parse(r.body.toString('utf8'));
 const idPattern = '[a-zA-Z0-9-]+';
-const identityName = /^(?:test-sub|b15role|role|sub|actor|x-role|x-user.*|x-praetor-(?!app-context$).*)$/i;
+const identityName = /^(?:test-sub|b15role|parameter-ui-role|parametertestrole|role|sub|actor|x-role|x-aps-role|x-user.*|x-praetor-(?!app-context$).*)$/i;
 
 export function localPath(target, base) {
   if (typeof target !== 'string' || !target.startsWith('/') || target.startsWith('//') || /[\\\x00-\x20\x7f#]/.test(target)) throw Error('path');
@@ -48,17 +48,33 @@ export function httpTransport(upstream = UPSTREAM) {
   });
 }
 
-export function createPreview({ base, origin, members, transport = httpTransport(), policy = LOCK, clientScript }) {
+export function createPreview({ base, origin, members, transport = httpTransport(), policy = LOCK, clientScript, mode = 'managed-identity' }) {
   validateBase(base);
+  if (!['managed-identity', 'workspace-preview'].includes(mode)) throw Error('explicit_preview_mode_required');
   if (new URL(origin).origin !== origin || !origin.startsWith('https://')) throw Error('exact_https_origin_required');
   if (!Array.isArray(members) || members.some(x => typeof x !== 'string' || !/^[^#]+#[^#]+$/.test(x))) throw Error('member_keys_required');
   const admitted = new Set(members), trials = new Map(), runs = new Map(), plans = new Map();
   let queue = Promise.resolve(), protectedIds;
-  const internalHeaders = { 'test-sub': 'planner' };
+  const internalHeaders = policy.fingerprintPath ? { cookie: 'parameter-ui-role=planner' } : { 'test-sub': 'planner' };
+  let uiFiles = policy.uiFiles;
   async function pinned() {
-    const response = await transport('GET', '/api/uat-build', internalHeaders);
+    const response = await transport('GET', policy.fingerprintPath || '/api/uat-build', internalHeaders);
     if (response.status !== 200) throw Error('version');
     const m = json(response);
+    if (policy.fingerprintPath) {
+      if (m.productSha !== policy.productSha || m.parent !== policy.parent ||
+          m.sourceManifestSha256 !== policy.sourceManifestSha256 || m.adapterSha256 !== policy.adapterSha256 ||
+          m.build?.source_sha !== policy.productSha || !Array.isArray(m.build.files) || !m.build.files.length) throw Error('version');
+      // The recorded adapter verifies these build bytes at startup; assets are hashed again here.
+      const files = {};
+      for (const f of m.build.files) {
+        if (typeof f.path !== 'string' || !f.path || f.path.startsWith('/') || /[\\%?#\x00-\x20]/.test(f.path) || f.path.split('/').some(p => !p || p === '.' || p === '..') || /^(?:api|__qa|_praetor)(?:\/|$)/.test(f.path) || !/^[a-f0-9]{64}$/.test(f.sha256) || Object.hasOwn(files, f.path)) throw Error('build_manifest');
+        files[f.path] = f.sha256;
+      }
+      if (!files['index.html']) throw Error('build_manifest');
+      if (Object.keys(uiFiles).length && JSON.stringify(uiFiles) !== JSON.stringify(files)) throw Error('build_changed');
+      uiFiles = files; return m;
+    }
     if (m.productSha !== policy.productSha || m.parent !== policy.parent || m.buildSource !== policy.productSha ||
         m.sourceManifestSha256 !== policy.sourceManifestSha256 || m.profileFiles?.['17/PROFILE.json'] !== policy.profileSha256) throw Error('version');
     for (const [p, h] of Object.entries(policy.uiFiles)) if (m.uiFiles?.[p] !== h) throw Error('version');
@@ -66,15 +82,26 @@ export function createPreview({ base, origin, members, transport = httpTransport
   }
   async function forward(request) {
     const headers = Object.fromEntries(Object.entries(request.headers || {}).map(([k, v]) => [k.toLowerCase(), v]));
-    if (Object.keys(headers).some(k => identityName.test(k)) || /(?:^|;)\s*b15Role\s*=/i.test(headers.cookie || '')) return failure(400, 'identity_input_forbidden');
+    if (Object.keys(headers).some(k => identityName.test(k)) || /(?:^|;)\s*(?:b15Role|parameter-ui-role)\s*=/i.test(headers.cookie || '')) return failure(400, 'identity_input_forbidden');
     let route;
     try { route = localPath(request.target, base); } catch { return failure(400, 'noncanonical_path_or_identity'); }
     const { path, query } = route;
     if (path.startsWith('/__qa') || path.startsWith('/api/auth') || path.startsWith('/_praetor')) return failure(403, 'management_forbidden');
     const actor = request.actor;
-    if (!actor || actor.kind !== 'user' || !actor.issuer || !actor.sub) return failure(401, 'verified_human_required');
-    const owner = actor.issuer + '#' + actor.sub;
-    if (!admitted.has(owner)) return failure(403, 'existing_preview_member_required');
+    let owner;
+    if (mode === 'workspace-preview') {
+      // Opaque browser scope is minted by the guarded listener, never a user identity.
+      if (!/^[a-f0-9]{48}$/.test(request.workspaceScope || '')) return failure(401, 'workspace_scope_required');
+      owner = request.workspaceScope;
+    } else {
+      if (!actor || actor.kind !== 'user' || !actor.issuer || !actor.sub) return failure(401, 'verified_human_required');
+      owner = actor.issuer + '#' + actor.sub;
+      if (!admitted.has(owner)) return failure(403, 'existing_preview_member_required');
+    }
+    let metadata;
+    if (policy.fingerprintPath) {
+      try { metadata = await pinned(); } catch { return failure(503, 'fixed_candidate_unverified'); }
+    }
     if (!['GET', 'POST'].includes(request.method)) return failure(405, 'method_forbidden');
     const own = (map, id) => typeof id === 'string' && map.get(id) === owner;
     let body, kind, match;
@@ -101,11 +128,10 @@ export function createPreview({ base, origin, members, transport = httpTransport
     } else {
       const staticKey = path === '/' || path === '/index.html' ? 'index.html' : path.slice(1);
       const allowedApi = /^\/api\/(?:uat-build|meta|session|state|operations|plans(?:\/[a-zA-Z0-9-]+\/(?:inputs|compare\/[a-zA-Z0-9-]+))?|trials|runs(?:\/[a-zA-Z0-9-]+(?:\/inputs)?)?|rules\/(?:preview|capabilities)|reports|r21\/(?:config|devices))$/;
-      if (!allowedApi.test(path) && path !== '/b15-user-preview-client.js' && !entry(policy.uiFiles, staticKey) && !(path.startsWith('/fixtures/17/') && entry(policy.profileFiles, path.slice('/fixtures/'.length)))) return failure(404, 'route_forbidden');
+      if (path !== policy.fingerprintPath && !allowedApi.test(path) && path !== '/b15-user-preview-client.js' && !entry(uiFiles, staticKey) && !(path.startsWith('/fixtures/17/') && entry(policy.profileFiles, path.slice('/fixtures/'.length)))) return failure(404, 'route_forbidden');
       if (path.startsWith('/fixtures/') && !path.startsWith('/fixtures/17/')) return failure(403, 'scene_forbidden');
     }
-    let metadata;
-    try { metadata = await pinned(); } catch { return failure(503, 'fixed_candidate_unverified'); }
+    try { metadata ||= await pinned(); } catch { return failure(503, 'fixed_candidate_unverified'); }
     if (!protectedIds) {
       protectedIds = new Set([policy.seedPlanId]);
       for (const name of ['plans', 'trials', 'runs']) {
@@ -153,16 +179,20 @@ export function createPreview({ base, origin, members, transport = httpTransport
           }
         }
       }
-      const expected = entry(policy.uiFiles, staticKey) || (path.startsWith('/fixtures/17/') && entry(policy.profileFiles, path.slice('/fixtures/'.length)));
+      const expected = entry(uiFiles, staticKey) || (path.startsWith('/fixtures/17/') && entry(policy.profileFiles, path.slice('/fixtures/'.length)));
       if (expected && digest(r.body) !== expected) return failure(503, 'fixed_asset_drift');
       if (staticKey === 'index.html') {
         let html = r.body.toString('utf8');
         html = html.replace(/(src|href)=(['"])\/(?!\/)/g, `$1=$2${base}`);
         html = html.replace('<head>', `<head><base href="${base}"><script src="${base}b15-user-preview-client.js"></script>`);
-        html = html.replace('<body>', '<body><aside>固定48e · 场景17 · 现有授权预览成员 · 明确模拟 planner；仅复制原样例后计算、保存新副本。原历史和原始输入保留。</aside>');
+        html = html.replace('<body>', `<body><aside>固定${policy.productSha.slice(0, 7)} · ${mode} · 明确模拟 planner；仅复制原样例后计算、保存本浏览器新副本。原历史和原始输入保留。</aside>`);
         r.body = Buffer.from(html);
       }
-      if (path === '/api/uat-build') r.body = Buffer.from(JSON.stringify({ productSha: metadata.productSha, parent: metadata.parent, scene: 17, mock: true, role: 'planner', published: false }));
+      if (path === (policy.fingerprintPath || '/api/uat-build')) r.body = Buffer.from(JSON.stringify({
+        productSha: metadata.productSha, parent: metadata.parent,
+        ...(policy.fingerprintPath ? { candidate: 'integrated0afa', sample: 'R7-MVP', buildSource: metadata.build.source_sha,
+          sourceManifestSha256: metadata.sourceManifestSha256, adapterSha256: metadata.adapterSha256 } : { scene: 17 }),
+        mode, mock: true, role: 'planner', published: false }));
     }
     // Build a fresh header set. Never relay Set-Cookie, CORS, redirect, lengths or ETags.
     return { status: r.status, headers: { 'content-type': r.headers['content-type'] || 'application/octet-stream',
