@@ -14,7 +14,6 @@ export function changeDraft(d,body,run){
  const source=run?.result?.suggestions.find(s=>s.id===body.suggestionId);
  if(!prior&&(!source||run.datasetId!==d.id||!['completed','partial'].includes(run.status)))throw Error('需先选择本数据集冻结运行产生的参考采购建议');
  if(!prior&&body.action)throw Error('需先复制为模拟草稿，再显式采用');
- if(prior?.status==='void')throw Error('作废草稿不可再采用或修改；请重新建立草稿');
  const draft=structuredClone(prior||{id:randomUUID(),status:'draft',sourceRun:run.id,suggestionId:source.id,sourceVersion:run.version,netGap:source.netGap,needDay:source.needDay,materialId:source.materialId,unit:source.unit,quantity:source.quantity,relationId:source.relationId,orderDay:source.orderDay,availableDay:source.availableDay,expiryDay:source.availableDay+Number(rows(d,'物料主数据').find(m=>m['物料编号']===source.materialId)?.['保质天数'])});
  if(body.action==='void'){draft.status='void';}else{
   if(!numeric(body.currentDay)||!Number.isInteger(Number(body.currentDay))||Number(body.currentDay)<0||Number(body.currentDay)>43)throw Error('需显式给出模拟当前日，不猜默认');

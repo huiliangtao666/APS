@@ -48,7 +48,7 @@ test('IN28 pure state edits are explicit, numeric/MOQ/date failures never change
  changeDraft(d,{id:draft.id,action:'adopt',currentDay:1});assert.equal(supplyLots(d).filter(l=>l.id===draft.supplyIdentity).length,1);
  changeDraft(d,{id:draft.id,changes:{quantity:'110'},currentDay:1});assert.equal(d.drafts[0].status,'draft');assert.ok(!supplyLots(d).some(l=>l.id===draft.supplyIdentity));
  for(const body of [{action:'unknown'},{changes:{quantity:''}},{changes:{quantity:-1}},{changes:{quantity:Infinity}},{changes:{orderDay:0}},{changes:{expiryDay:6}},{changes:{relationId:'missing'}},{changes:{status:'adopted'}},{action:'adopt',changes:{quantity:100}},{action:'adopt'}]){const old=hash(d);assert.throws(()=>changeDraft(d,{id:draft.id,currentDay:1,...body,...(body.action==='adopt'&&!body.changes?{currentDay:undefined}:{})}));assert.equal(hash(d),old);}
- changeDraft(d,{id:draft.id,action:'void'});assert.equal(d.drafts[0].status,'void');assert.throws(()=>changeDraft(d,{id:draft.id,action:'adopt',currentDay:1}));out('in28-pure',d.drafts);
+ changeDraft(d,{id:draft.id,action:'void'});assert.equal(d.drafts[0].status,'void');changeDraft(d,{id:draft.id,changes:{quantity:120},currentDay:1});assert.equal(d.drafts[0].status,'draft');out('in28-pure',d.drafts);
 });
 
 test('independent verification rejects early, excessive and wrong-material supply allocations',()=>{

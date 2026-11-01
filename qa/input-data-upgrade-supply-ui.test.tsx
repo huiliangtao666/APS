@@ -5,8 +5,8 @@ const text=(x:any):string=>Array.isArray(x)?x.map(text).join(''):x&&typeof x==='
 function nodes(x:any):any[]{if(Array.isArray(x))return x.flatMap(nodes);return x&&typeof x==='object'?[x,...nodes(x.props?.children)]:[];}
 const button=(tree:any,label:string)=>nodes(tree).find(n=>n.type==='button'&&text(n.props.children)===label);
 function setup(extra:any={}){const calls:any[]=[],edits:any[]=[];let saved=0;const props={drafts:[record],draftEdit:null,canWrite:true,datasetId:'SET',version:7,currentDay:1,api:async(path:string,body:object)=>{calls.push({path,body});return {};},perform:(fn:any)=>fn(),onEdit:(d:any)=>edits.push(d),onSaved:async()=>{saved++;},...extra};return {props,calls,edits,saved:()=>saved,tree:()=>WorkbookDrafts(props)};}
-test('actual draft view renders business states and explicitly disables adopted/void actions',()=>{
- for(const [status,label]of [['draft','模拟草稿（未采用）'],['adopted','已纳入本次试算'],['void','作废']]){const f=setup({drafts:[{...record,status}]}),tree=f.tree(),markup=renderToStaticMarkup(tree);assert.ok(markup.includes(label));assert.equal(button(tree,'纳入试算').props.disabled,status!=='draft');assert.equal(button(tree,'维护草稿').props.disabled,status==='void');assert.ok(markup.includes('没有向供应商外发'));}
+test('actual draft view renders business states and preserves existing editing and disables duplicate transitions',()=>{
+ for(const [status,label]of [['draft','模拟草稿（未采用）'],['adopted','已纳入本次试算'],['void','作废']]){const f=setup({drafts:[{...record,status}]}),tree=f.tree(),markup=renderToStaticMarkup(tree);assert.ok(markup.includes(label));assert.equal(button(tree,'纳入试算').props.disabled,status==='adopted');assert.equal(button(tree,'维护草稿').props.disabled,false);assert.ok(markup.includes('没有向供应商外发'));}
 });
 test('actual edit/cancel handlers preserve original values and whitelist versioned save payload',async()=>{
  const f=setup(),before=JSON.stringify(record);button(f.tree(),'维护草稿').props.onClick();assert.deepEqual(f.edits[0],record);assert.notEqual(f.edits[0],record);
