@@ -65,6 +65,33 @@ const check=(name,value)=>{assert.ok(value,name);report.checks.push({name,result
  await page.goto(base+'/main-guard');check('adapter refuses injection on main path',report.errors.some(e=>e.includes('explicit baseline UI path required'))&&await page.evaluate(()=>!document.documentElement.dataset.b15Simulation));
  const requests=(await(await context.request.get(base+'/__fixture/requests')).json()).slice(requestOffset);report.httpRequests=requests;
  if(process.env.B15_REPRO_BEFORE==='1')check('old failed POST never reached server',requests.filter(r=>r.path===prefix+'/api/plans/fixture/copy'&&r.method==='POST').length===2);
+ // Prove a no-server-restart loading option: the old inline adapter captures
+ // this reviewed, buffered fetch as its originalFetch in a NEW browser context.
+ // Extract only our fixed setup from the private fixture, never from live 18251.
+ const candidateHtml=await(await context.request.get(base+prefix+'/ui')).text();
+ const setup=candidateHtml.match(/<head><script>([\s\S]*?)<\/script>/)?.[1];
+ assert.ok(setup,'candidate baseline setup found');
+ // addInitScript runs before <html> exists. Leave the banner/dataset assignment
+ // to the original page's adapter; install only the transport at this phase.
+ const decoration='document.documentElement.dataset.b15Simulation=id;';
+ assert.ok(setup.includes(decoration),'known decoration assignment');
+ const bootstrap=`(()=>{if(location.pathname!==${JSON.stringify(prefix+'/ui')})return;\n${setup.replace(decoration,'')}\n})();`;
+ fs.writeFileSync(out+'/browser-init.js',bootstrap);
+ await context.close();
+ const compat=await browser.newContext();await compat.addInitScript({content:bootstrap});
+ const compatPage=await compat.newPage();compatPage.setDefaultTimeout(10000);
+ await compatPage.goto(base+prefix+'/role/planner?version=before');await compatPage.click('#copy');
+ await compatPage.waitForFunction(()=>document.querySelector('#result').textContent);
+ report.oldUiWithBootstrap=JSON.parse(await compatPage.locator('#result').textContent());
+ const patched=report.oldUiWithBootstrap;
+ check('no-restart preload + old inline adapter real UI POST',patched.status===200&&patched.reply.httpVersion==='1.1'&&patched.reply.path===prefix+'/api/plans/fixture/copy'&&patched.reply.body===ui.reply.body&&patched.reply.headers['x-b15-simulation']===id&&patched.reply.headers['x-aps-request']==='workbench'&&patched.reply.headers.cookie.includes('b15Role=planner'));
+ await compatPage.screenshot({path:out+'/old-ui-with-bootstrap.png'});
+ await compatPage.goto(base+prefix+'/role/query?version=before');await compatPage.click('#copy');await compatPage.waitForFunction(()=>document.querySelector('#result').textContent);
+ check('preload + old inline adapter preserves query rejection',JSON.parse(await compatPage.locator('#result').textContent()).status===403);
+ await compatPage.goto(base+'/');await compatPage.click('#copy');await compatPage.waitForFunction(()=>document.querySelector('#result').textContent);
+ check('preload leaves main page unactivated and POST rejected',await compatPage.evaluate(()=>!document.documentElement.dataset.b15Simulation)&&JSON.parse(await compatPage.locator('#result').textContent()).status===405);
+ report.bootstrapHttpRequests=(await(await compat.request.get(base+'/__fixture/requests')).json()).slice(requestOffset+requests.length);
+ await compat.close();
  report.result='PASS';report.peakFixtureBodyBytes=128*1024;console.log(JSON.stringify({result:report.result,checks:report.checks.length,browser:report.browser,before:report.beforeUi}));
  }finally{await browser.close();fs.writeFileSync(out+'/browser.json',JSON.stringify(report,null,2));}
 })().catch(e=>{console.error(e);process.exitCode=1;});
