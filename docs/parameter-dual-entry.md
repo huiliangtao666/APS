@@ -75,8 +75,10 @@ The following are still engineering coverage gaps, not new business approval req
 - CP091 composite rate/efficiency and compound controls not represented by current workbook
   atomic fields remain candidate records; their existing non-workbook engines are not unified
   by this source candidate. Arbitrary scalar activation is rejected.
-- Factory/crew calendar source rows are both retained and queryable. Their complete inherited
-  date-exception model is not added by this candidate; existing calendar behavior continues.
+- Factory and crew rows remain distinct sources. New-contract daily availability intersects
+  factory actual/standard counts with the crew's weekday/Sunday ratio, without multiplying
+  the same ratio twice. A factory date exception or crew actual0 closes its availability;
+  neither changes a positive standard denominator. Real UI/Worker verification remains pending.
 - A single frozen run currently resolves parameter versions at its selected effective/start
   day. Automatic changes inside that run across another parameter period are not implemented.
   Cross-period new runs can select the corresponding version. Do not describe this as full

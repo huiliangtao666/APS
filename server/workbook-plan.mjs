@@ -1,4 +1,4 @@
-import {effectiveParameters} from './parameter-contract.mjs';
+import {effectiveParameters,parameterDayRatio} from './parameter-contract.mjs';
 import {supplyReadiness,supplyLots} from './workbook-supply.mjs';
 import {rows,index,dayMinute,procurement,refreshDerived,PROFILE,hash} from './workbook-model.mjs';
 import {quantityMath as Q} from '../src/lib/material-allocation.mjs';
@@ -28,7 +28,7 @@ export function calculateWorkbook(data,selection) {
   let left=qty,cursor=earliest,last=previous,firstStart;
   while(left>1e-9){let chosen;
    for(let day=Math.max(start,Math.floor(cursor));day<end&&!chosen;day++){
-    const c=calendar.get(String(day));if(!c)continue;const ratio=Number(c['日产能分子'])/Number(c['日产能分母']);if(ratio<=0)continue;
+    const c=calendar.get(String(day));if(!c)continue;const ratio=parameterDayRatio(d,c,crew,day);if(ratio<=0)continue;
     for(const r of candidates){const id=r['资源编号'];if(activeStops.some(s=>s['资源编号']===id&&Number(s['开始日'])<=day&&day<Number(s['结束日'])))continue;
      const toolCaps=pool.map(t=>Number(resources.find(x=>x['资源编号']===t)?.['单次批量上限千克'])).filter(n=>n>0).sort((a,b)=>b-a);const toolLimit=d.parameterContract&&toolCount&&toolCaps.length===pool.length?toolCaps.slice(0,toolCount).reduce((n,c)=>n+c,0):Infinity;
      const capacity=Number(r['标准日产能千克'])*ratio,key=id+'|'+day,available=capacity-(daily.get(key)||0),batch=Math.min(left,Number(r['单次批量上限千克']),available,Number(r['同时占位上限千克'])||Infinity,toolLimit,standardBatch);if(!(batch>0)||!(capacity>0))continue;
@@ -95,12 +95,13 @@ export function verifyWorkbookPlan(d,plan) {
  for(let i=0;i<tasks.length;i++){const t=tasks[i],r=resources.get(t.machine);if(!(t.end>t.start)||!r)issues.push('无效占用 '+t.id);if(t.quantity>Number(r?.['单次批量上限千克']))issues.push('超单批 '+t.id);if(tasks.slice(0,i).some(o=>o.machine===t.machine&&overlap(o,t)))issues.push('设备重叠 '+t.id);
   const previous=tasks.find(o=>o.id===t.predecessor);if(previous&&previous.end>t.start+1e-9)issues.push('前序未完成 '+t.id);
   const k=t.machine+'|'+Math.floor(t.start);capacity.set(k,(capacity.get(k)||0)+t.quantity);
-  const crew=crews.get(t.crew);for(const point of [t.start,...tasks.filter(o=>o.crew===t.crew&&overlap(o,t)).map(o=>o.start).filter(n=>n>=t.start&&n<t.end)])if(tasks.filter(o=>o.crew===t.crew&&o.start<=point&&point<o.end).reduce((n,o)=>n+o.people,0)>Number(crew?.['每班可用人数']))issues.push('人员超占 '+t.id);
+  const crew=crews.get(t.crew);if(d.parameterContract&&crew){const day=Math.floor(t.start),ratio=parameterDayRatio(d,calendar.get(String(day)),crew,day),used=tasks.filter(o=>o.machine===t.machine&&o.crew===t.crew&&Math.floor(o.start)===day).reduce((n,o)=>n+o.quantity,0);if(!(ratio>0)||used>Number(r?.['标准日产能千克'])*ratio+1e-7)issues.push('工厂/班组日历容量超限 '+t.id);}
+  for(const point of [t.start,...tasks.filter(o=>o.crew===t.crew&&overlap(o,t)).map(o=>o.start).filter(n=>n>=t.start&&n<t.end)])if(tasks.filter(o=>o.crew===t.crew&&o.start<=point&&point<o.end).reduce((n,o)=>n+o.people,0)>Number(crew?.['每班可用人数']))issues.push('人员超占 '+t.id);
   if(d.parameterContract&&t.tools?.some(id=>{const cap=Number(resources.get(id)?.['单次批量上限千克']);return cap>0&&t.quantity>cap*t.tools.length+1e-9;}))issues.push('工装批容量超限 '+t.id);
   if(tasks.some(o=>o!==t&&overlap(o,t)&&o.tools.some(tool=>t.tools.includes(tool))))issues.push('工装重叠 '+t.id);
   if(rows(d,'停机安排').some(s=>Number(s['可知日'])<=plan.conditions.currentDay&&s['资源编号']===t.machine&&overlap(t,{start:Number(s['开始日']),end:Number(s['结束日'])})))issues.push('停机占用 '+t.id);
  }
- for(const [k,used]of capacity){const [id,day]=k.split('|'),c=calendar.get(day),r=resources.get(id);if(used>Number(r['标准日产能千克'])*Number(c['日产能分子'])/Number(c['日产能分母'])+1e-7)issues.push('超日产能 '+k);}
+ for(const [k,used]of capacity){const [id,day]=k.split('|'),c=calendar.get(day),r=resources.get(id);if(used>Number(r['标准日产能千克'])*Number(d.parameterContract?c['生产班次数']:c['日产能分子'])/Number(c['日产能分母'])+1e-7)issues.push('超日产能 '+k);}
  const ids=new Set();for(const r of plan.demandResults||[]){if(ids.has(r.id))issues.push('重复需求 '+r.id);ids.add(r.id);}
  const selected=rows(d,'每日需求').filter(r=>Number(r['需求日'])>=plan.conditions.startDay&&Number(r['需求日'])<plan.conditions.endDay&&(!plan.conditions.demandIds||plan.conditions.demandIds.includes(r['需求编号'])));if(!selected.length||selected.length!==ids.size||selected.some(r=>!ids.has(r['需求编号'])))issues.push('需求覆盖不守恒');
  for(const r of plan.demandResults||[]){const source=selected.find(s=>s['需求编号']===r.id);if(!source||r.productId!==source['成品编号']||r.unit!=='千克'||!Number.isFinite(r.quantity)||r.quantity!==Number(source['需求千克'])||!['scheduled','unplanned'].includes(r.status))issues.push('需求身份/数量/状态不符 '+r.id);}

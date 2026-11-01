@@ -103,3 +103,12 @@ export function changeParameter(d,body,actor){
  d.parameterContract='CR-PARAM-UI-20261101:r1';d.checkedAt=null;d.checksInvalidated=true;
  return {changedRecord:p['参数编号'],checksInvalidated:true,scope,entry:c['中文配置项']};
 }
+// Resource windows intersect factory availability and the crew's own calendar;
+// ratios are never multiplied twice. Standard counts are denominators, actual0 closes.
+export function parameterDayRatio(d,calendar,crew,day){
+ if(!calendar)return 0;
+ if(!d.parameterContract)return Number(calendar['日产能分子'])/Number(calendar['日产能分母']);
+ const denominator=finiteNumber(calendar['日产能分母']),actual=finiteNumber(calendar['生产班次数']);if(!(denominator>0)||actual<0)throw Error('工厂标准班次须>0，实际班次须非负');
+ const standard=finiteNumber(crew['标准日班次数']);if(!(standard>0))throw Error('班组标准班次须>0');const sunday=new Date(Date.UTC(2026,9,31)+day*86400000).getUTCDay()===0;
+ const crewActual=sunday?finiteNumber(crew['周日班次数']):standard;if(crewActual<0)throw Error('班组实际班次须非负');return Math.min(actual/denominator,crewActual/standard);
+}

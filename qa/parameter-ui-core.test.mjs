@@ -62,3 +62,8 @@ test('PCU01/04/09/11: genuine OOXML template and filtered export preserve scope,
  const restored=integrateParameterImport(parsed,d,{id:d.id,name:d.name,expectedVersion:d.version,fileHash:'export-hash',adoptParameters:true,actor:'userA'});assert.equal(restored.issues.length,0);assert.equal(restored.d.tables['配置参数'].length,1);assert.equal(restored.d.tables['配置参数'][0]['参数编号'],'P1');assert.equal(restored.d.tables['配置参数'][0]['单位'],'天');assert.equal(restored.d.tables['配置参数'][0]._scope,'dataset');
  assert.equal(parseWorkbook(parameterWorkbook(),workbookSchema).issues.length,0);
 });
+
+test('PCU17 calendar source adoption: Sunday1/standard2 yields one-half once; actual0 closes without a zero denominator',async()=>{
+ const {parameterDayRatio}=await import('../server/parameter-contract.mjs');const d={parameterContract:'CR-PARAM-UI-20261101:r1'},c={'生产班次数':'1','日产能分子':'1','日产能分母':'2'},crew={'标准日班次数':'2','周日班次数':'1'};
+ assert.equal(parameterDayRatio(d,c,crew,1),0.5);crew['周日班次数']='0';assert.equal(parameterDayRatio(d,c,crew,1),0);assert.equal(crew['标准日班次数'],'2');crew['周日班次数']='1';c['生产班次数']='0';assert.equal(parameterDayRatio(d,c,crew,1),0);c['日产能分母']='0';assert.throws(()=>parameterDayRatio(d,c,crew,1),/标准班次/);
+});
