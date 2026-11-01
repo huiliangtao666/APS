@@ -149,3 +149,38 @@ It must be run only inside an explicitly coordinated window, using an owned isol
 directory. Its shared-access checks prove shared access and CSRF behavior; they do not
 establish a named human role or managed deployment identity. Browser dual-entry operation,
 standard build, full private workbooks and package acceptance remain separately required.
+
+### Isolated browser candidate
+
+`qa/parameter-ui-runtime.mjs` is an explicit test entry, separate from production
+`server/index.mjs`. It requires `PARAMETER_UI_ISOLATED=1`, the owned `/state` mount,
+an exact source manifest, and matching previously built asset hashes in
+`/control/build.json`. Mount the fixed source, existing dependencies and dist read-only;
+create the adapter file mountpoint before mounting a read-only source directory.
+The authorized temporary candidate uses only host loopback `18302` to container `4317`.
+It must not replace a Portal binding, an existing deployment, or another role's state.
+
+The adapter supplies explicitly labelled replaceable mock actors, then calls the existing
+production membership, action-permission and CSRF middleware. Its default mock supervisor
+is not a signed platform identity. The test-only `parameter-ui-role` cookie selects
+`planner`, `supervisor`, `query`, `anonymous`, or the actual existing `shared` access mode.
+No production default or business rule is changed. Deployment metadata includes the exact
+product SHA, source/build/adapter fingerprints and active/finished calculation Worker counts.
+
+`qa/parameter-ui-browser.cjs` requires a fresh local admission record for the current
+QA17 and Test48 releases. It opens one active browser/context, executes reviewed files
+from its owned `commands` directory, and saves actual requests, assertions, screenshots
+and closure evidence. Publish each `command-request.json` atomically after checking its
+JavaScript syntax. The controller uses owned files because noninteractive exec stdin can
+already be at EOF. Actions wait for actual request completion and a quiet React update;
+response matching must include the intended query, not only the endpoint prefix.
+An error ends that attempt and closes its context; preserve the failure and any completed
+checks, diagnose and change the runner before a fresh guarded continuation. Do not repeat
+already passed pagination, imports, builds or Worker scenarios.
+
+Candidate and host-browser budgets are separate observations. A container limit is not
+a reservation. Check fresh available memory against the combined actual budget, monitor
+the attributed browser process tree and protected container identity/files, serialize
+Workers, and stop on the first anomaly. Compare mount arrays by destination: Docker may
+return the same mounts in a different order. A final release requires reaped transient
+children, zero pending Workers and an explicit candidate lifecycle if it remains for QA.
