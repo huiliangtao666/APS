@@ -63,7 +63,7 @@ const receipt = await adapter.execute(envelope);
 
 mock `retry` 必须显式声明来源，maxReadAttempts 为1至3；仅重试 GET `/session` 的合成 disconnect/timeout。preview、commit、export 和 mock 目标均一次调用，自动写重试恒为0。真实策略未配置，不使用任何现场重试默认。
 
-`faults: [{step:'/imports/commit',phase:'after',code:'timeout'}]` 显式模拟“业务已写、应答丢失”；code 可为 disconnect/timeout，phase 为 before/after。回执含 correlationId、contentHash、失败 step/phase/source、已完成调用 trace。任何变更调用不确定结果保留 `UNKNOWN/requiresReconciliation`，重复请求只取 UNKNOWN，绝不再次写入。写之前的可判定 API 拒绝保留 REJECTED/实际 HTTP 状态和原错误；整批格式/映射错误无部分写入。模拟时序错误是 fault 注入，不宣称测过真实网络超时/取消或对方重试。
+`faults: [{step:'/imports/commit',phase:'after',code:'timeout'}]` 显式模拟“业务已写、应答丢失”；code 可为 disconnect/timeout，phase 为 before/after。回执含 correlationId、contentHash、失败 step/phase/source、已完成调用 trace。任何变更调用不确定结果（含5xx应答）保留 `UNKNOWN/requiresReconciliation`，重复请求只取 UNKNOWN，绝不再次写入。写之前的可判定 API 拒绝保留 REJECTED/实际 HTTP 状态和原错误；整批格式/映射错误无部分写入。模拟时序错误是 fault 注入，不宣称测过真实网络超时/取消或对方重试。导出只接受现有CSV选项，含 ruleSettings；confirmationId 的 JSON 导出不属于此CSV边界。mock目标保留原CSV及回执便于离线核对。
 
 成功导入预期改变自有 fixture 的当前输入、revision、CSV provenance、inputVersions 与 import audit。导出预期追加现有 export audit，输入与冻结版本不变。除这些明确合成副作用外，旧实例/state/native/frozen/history/用户副本和外部系统没有调用。断连后的 UNKNOWN 可能已有一次合法 mock 写入，此事实明确保留，不谎称全部错误零写入。
 

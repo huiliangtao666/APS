@@ -32,7 +32,7 @@ function checked(e) {
         !Array.isArray(e.payload.files) || !e.payload.files.length || e.payload.files.some(f=>!f||Object.keys(f).sort().join()!=='name,text'||typeof f.name!=='string'||typeof f.text!=='string')) throw new Error('invalid_import_payload');
   }
   if (e.direction==='export') {
-    const allowed=['table','planId','query','reason','report','reportSnapshot','viewId','confirmationId','resourceLoad','runId','kind'];
+    const allowed=['table','planId','query','reason','report','reportSnapshot','viewId','resourceLoad','runId','ruleSettings'];
     if (Object.keys(e.payload).some(k=>!allowed.includes(k))) throw new Error('invalid_export_payload');
   }
   return clone(e);
@@ -105,9 +105,10 @@ export function createExchangeAdapter({transport,scope,journal=new Map()}={}) {
     } catch(error) {
       // A transport failure after dispatch may have committed. Retain UNKNOWN,
       // including on explicit repeat; never transparently replay a write.
-      const receipt={...base,status:mutatingStep&&!error.status?'UNKNOWN':'REJECTED',code:error.code||error.message,
+      const uncertain=!!mutatingStep&&(!error.status||error.status>=500);
+      const receipt={...base,status:uncertain?'UNKNOWN':'REJECTED',code:error.code||error.message,
         httpStatus:error.status??null,details:error.details??null,step:mutatingStep||'preview',automaticWriteRetries:0,
-        requiresReconciliation:!!mutatingStep&&!error.status,
+        requiresReconciliation:uncertain,
         transportFailure:error.mockFault??null,trace};
       resolve(clone(receipt)); return receipt;
     }

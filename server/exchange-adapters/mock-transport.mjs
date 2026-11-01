@@ -31,8 +31,8 @@ export function createMockTransport({dispatch,faults=[],retry,destination=new Ma
       if(contentHash(csv)!==hash)throw Error('mock_target_hash_mismatch');
       const old=destination.get(deliveryKey);
       if(old&&old.contentHash!==hash)throw Error('mock_target_conflict');
-      const receipt=old||{status:'ACKNOWLEDGED',target:'explicit-local-mock',receiptId:contentHash(deliveryKey),contentHash:hash,bytes:Buffer.byteLength(csv),correlationId};
-      if(!old)destination.set(deliveryKey,receipt);
+      const receipt=old?.receipt||{status:'ACKNOWLEDGED',target:'explicit-local-mock',receiptId:contentHash(deliveryKey),contentHash:hash,bytes:Buffer.byteLength(csv),correlationId};
+      if(!old)destination.set(deliveryKey,{contentHash:hash,csv,receipt});
       fault('mock-target','after');return structuredClone(receipt);
     }
   });

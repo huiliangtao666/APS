@@ -95,6 +95,19 @@ test('existing CSV export to mock target gives hash receipt, dedupes export audi
   assert.ok(a.target.bytes>0);const once=f.bytes();assert.equal((await f.adapter.execute(e)).duplicate,true);assert.equal(f.bytes(),once);
   const after=JSON.parse(once);assert.deepEqual(after.data,before.data);assert.deepEqual(after.inputVersions,before.inputVersions);assert.equal(after.records.length,before.records.length+1);
   assert.equal(f.transport.destination.size,1);assert.equal(f.transport.calls.filter(c=>c.path==='/export').length,1);
+  const artifact=[...f.transport.destination.values()][0];assert.ok(artifact.csv.includes('"241"'));assert.equal(contentHash(artifact.csv),a.target.contentHash);
+  assert.throws(()=>makeEnvelope({...e,payload:{confirmationId:'json-is-not-csv',reason:'mock'}}),/invalid_export_payload/);
+  assert.equal(makeEnvelope({...e,payload:{planId:'existing-plan-id',ruleSettings:true,reason:'mock'}}).payload.ruleSettings,true);
+});
+test('ambiguous 5xx after real commit is UNKNOWN, never automatically or explicitly replayed',async t=>{
+  const f=setup(t),e=await importEnvelope(f);
+  const transport=createMockTransport({retry:{maxReadAttempts:1,source:'explicit mock 503 after atomic commit'},dispatch:async(m,p,b)=>{
+    const r=await f.dispatch(m,p,b);return p==='/imports/commit'?{status:503,body:{error:'mock_response_unavailable'}}:r;
+  }});
+  const adapter=createExchangeAdapter({transport,scope:'synthetic:mock#planner'}),r=await adapter.execute(e);
+  assert.equal(r.status,'UNKNOWN');assert.equal(r.requiresReconciliation,true);assert.equal(r.httpStatus,503);
+  const before=f.bytes();assert.equal(JSON.parse(before).revision,1);assert.equal((await adapter.execute(e)).duplicate,true);
+  assert.equal(f.bytes(),before);assert.equal(transport.calls.filter(c=>c.path==='/imports/commit').length,1);
 });
 test('lost mock target ACK and lost export response remain UNKNOWN without second export or delivery',async t=>{
   for(const step of ['mock-target','/export']) {
