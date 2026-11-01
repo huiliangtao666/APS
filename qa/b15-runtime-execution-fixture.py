@@ -22,7 +22,7 @@ def make_fixture(seed):
     d['bom'] = [{'版本编号': 'MOCK-EXEC48-v1', '产品编号': 'HC40', '生效日期': '2026-01-01',
                  '投料工序编号': 'MIX', '用量类型': 'BOM物料', '物料编号': 'LEAN',
                  '配置用量': '1000', '用量单位': 'kg', '用量基准': '每1000kg投入',
-                 '收率/损耗口径备注': '显式MOCK收率1；非现场默认', '损坏比例': '0'}]
+                 '收率/损耗口径备注': '', '损坏比例': '0'}]
     d['inventory'] = [{'批次编号': 'MOCK-EXEC48-LOT', '物料编号': 'LEAN', '账面数量': '300',
                        '已占用数量': '10', '有效期': '2026-12-31', '位置': '明确模拟',
                        '质量状态': '合格', '预计可用时间': ''}]
@@ -53,6 +53,7 @@ def make_fixture(seed):
                                          '预计状态': ['预计可用'], '不可用状态': ['待检', '冻结', '不合格']}, ensure_ascii=False)
     return {'productSha': PRODUCT, 'kind': 'EXPLICIT_REPLACEABLE_MOCK_NOT_CUSTOMER_FACT',
             'source': 'fixed48e normalized seed + qa/execution-fixture.mjs field contract; Issue48 authorization6556235075',
+            'mockChoices': 'yield1, explicit100kg orders, LEAN1000kg per1000kg input, no additive/loss-note semantic; all replaceable, not customer defaults',
             'data': d, 'selection': {'orderIds': ['A', 'B'], 'startMinute': 30, 'endMinute': 600,
                                     'priority': '规则设置', 'enabledRuleIds': enabled, 'mode': 'supported'},
             'independentExpected': {'A-MIX': [30, 50], 'B-MIX': [0, 30],

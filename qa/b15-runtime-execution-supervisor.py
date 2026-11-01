@@ -113,7 +113,8 @@ def run_worker(state, selection, trial=None):
 
 
 def main():
-    resume_created = '--resume-created' in sys.argv
+    resume_created = '--resume-created' in sys.argv or '--resume-empty' in sys.argv
+    previous_attempt = 'attempt2' if '--resume-empty' in sys.argv else 'attempt1'
     if (E / 'ATTEMPT').exists():
         raise RuntimeError('one invocation only; no unchanged retry')
     # Re-read the actual QA17 round and all later comments before runtime access.
@@ -159,11 +160,20 @@ def main():
     if resume_created:
         # The only allowed recovery is a changed host tool following the initial
         # GET-only logger failure; no second container, lifecycle call or store edit.
-        prior = json.loads((E / 'attempt1/window-release.json').read_text())
-        previous = json.loads((E / 'attempt1/candidate-inspect-before.json').read_text())
+        prior = json.loads((E / previous_attempt / 'window-release.json').read_text())
+        previous = json.loads((E / previous_attempt / 'candidate-inspect-before.json').read_text())
         current = inspect(F.CONTAINER)
-        if prior.get('error') != 'AttributeError("\'Request\' object has no attribute \'method\'")':
-            raise RuntimeError('resume only addresses the observed logger exception')
+        if previous_attempt == 'attempt1':
+            if prior.get('error') != 'AttributeError("\'Request\' object has no attribute \'method\'")':
+                raise RuntimeError('resume only addresses the observed logger exception')
+        else:
+            requests = [json.loads(line) for line in (E / previous_attempt / 'http.jsonl').read_text().splitlines()]
+            mutations = [r for r in requests if r['method'] != 'GET']
+            if len(mutations) != 1 or mutations[0]['path'] != '/inputs' or mutations[0]['status'] != 400:
+                raise RuntimeError('resume requires only the known rejected initial fixture')
+            issues = mutations[0]['response']['issues']
+            if not issues or any(i['table'] != 'executionMaterials' or i['field'] != '累计已用数量' or i['message'] != '模拟事实须核对：BOM/耗料口径未明确，禁止推断剩余物料' for i in issues):
+                raise RuntimeError('fixture rejection changed; inspect before continuing')
         if prior.get('pending') or not prior.get('oldFilesUnchanged') or (state / 'business.json').exists():
             raise RuntimeError('resume requires previous zero business writes and terminal release')
         if F.identity(previous) != F.identity(current) or current['Image'] != F.IMAGE:
@@ -172,7 +182,7 @@ def main():
             raise RuntimeError('created candidate isolation drift')
         if sorted((m['Source'], m['Destination'], m['RW']) for m in current['Mounts']) != sorted([(str(state), '/state', True), (str(fixture_dir), '/fixtures/execution', False)]):
             raise RuntimeError('created candidate mount boundary changed')
-        save('resume-created-admission.json', {'reason': 'changed logger get_method contract; no business writes on first attempt',
+        save('resume-created-admission.json', {'reason': 'changed owned tool/fixture; prior first-stop proof and no business writes',
              'sameIdentity': True, 'noLifecycleCall': True, 'utc': utc()})
     else:
         save('empty-state.json', {'path': str(state), 'entries': [], 'mode': oct(state.stat().st_mode & 0o777), 'utc': utc()})
@@ -255,6 +265,15 @@ console.log(JSON.stringify({allMatch:true,counts}));"""
         (fixture_dir / 'PROFILE.json').write_text(json.dumps(fixture, ensure_ascii=False, indent=2))
         fixture_hash = digest(fixture_dir / 'PROFILE.json')
         save('fixture-fingerprint.json', fixture_hash)
+        pure_check = """import fs from 'node:fs';import{defs,calculate}from'./server/planner.ts';import{validateInputs}from'./server/input-validation.mjs';import{freezeRunInput}from'./server/run-input.mjs';
+const f=JSON.parse(fs.readFileSync(0,'utf8')),issues=validateInputs(defs,f.data),frozen=freezeRunInput(f.data,f.selection,new Date().toISOString()),p=calculate(frozen.executionData,0,new Date().toISOString(),frozen.conditions);
+console.log(JSON.stringify({issues,findings:p.findings,tasks:p.tasks.map(t=>({id:t.id,start:t.start,end:t.end})),materialDemands:p.materialDemands}));if(issues.length||p.findings.length)process.exitCode=1;"""
+        check = subprocess.run(['docker', 'exec', '-i', F.CONTAINER, 'node', '--experimental-strip-types', '--input-type=module', '-e', pure_check],
+                               input=json.dumps(fixture, ensure_ascii=False).encode(), stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30)
+        (E / 'fixture-offline-validation.json').write_bytes(check.stdout)
+        (E / 'fixture-offline-validation.stderr').write_bytes(check.stderr)
+        if check.returncode:
+            raise RuntimeError('fixed-module fixture validation failed before any business write')
         # Real /inputs gate performs full normalized validation and transition checks.
         saved = api('/inputs', {'revision': seed['revision'], 'operation': 'import', 'tables': fixture['data']})
         baseline_run = run_worker(saved, fixture['selection'])
