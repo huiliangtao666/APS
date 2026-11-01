@@ -184,3 +184,18 @@ the attributed browser process tree and protected container identity/files, seri
 Workers, and stop on the first anomaly. Compare mount arrays by destination: Docker may
 return the same mounts in a different order. A final release requires reaped transient
 children, zero pending Workers and an explicit candidate lifecycle if it remains for QA.
+
+### Category selection follow-up (UI-CATEGORY-TABLE-01)
+
+After successfully copying a procurement suggestion, InputData now uses the same
+category navigation as the manual category button: category, target business table,
+query and pagination move together. A failed copy retains the previous selection.
+The draft request, quantity, source/version and permission checks are unchanged.
+
+`node --max-old-space-size=128 --test qa/parameter-ui-category-table.test.mjs`
+checks the actual InputData callbacks with an offline hook/element harness and
+the repository schema, including table columns, row-query arguments, four source
+categories, conflict behavior and disabled read-only copy buttons. Imported child
+components are stubs; this is not a React DOM/browser, HTTP, Worker or build check.
+The fixed 0afa/18302 candidate and its previous PASS evidence remain unchanged;
+this source fix is not deployed there and does not close a QA log.
