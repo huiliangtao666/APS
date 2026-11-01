@@ -1,3 +1,4 @@
+import {parseParameterSheets} from './parameter-import.mjs';
 import {inflateRawSync} from 'node:zlib';
 import {quantityMath as Q} from '../src/lib/material-allocation.mjs';
 // OOXML values are data. No eval, shell, macro, external connection or general formula VM.
@@ -24,6 +25,7 @@ export function parseWorkbook(buffer,schema){
   for(const c of xml(paths.get(name)).matchAll(/<c\b([^>]*)(?:\/>|>([\s\S]*?)<\/c>)/g)){if(++count>800000)throw Error('单表单元格超限');const ca=attrs(c[1]),body=c[2]||'',v=body.match(/<v(?:\s[^>]*)?>([\s\S]*?)<\/v>/)?.[1]||'',f=/<f(?:\s[^>]*)?(?:\/?>)/.test(body)?(body.match(/<f(?:\s[^>]*)?>([\s\S]*?)<\/f>/)?.[1]??''):undefined;if(ca.t==='s'&&!strings[Number(v)]&&strings[Number(v)]!=='')throw Error('共享字符串索引无效');map.set(ca.r,{value:ca.t==='s'?strings[Number(v)]:ca.t==='inlineStr'?text(body):unescape(v),formula:f===undefined?null:unescape(f)});}
   cells.set(name,map);return map;
  }
+ if(names.includes('参数清单')||names.includes('仿真参数实例'))return parseParameterSheets(names,getCells);
  // Resolve parameter identity by Chinese headers, independently of sheet/column order.
  const headerCache=new Map();
  function headersFor(sheet){if(headerCache.has(sheet))return headerCache.get(sheet);const h=new Map();for(const [a,c]of getCells(sheet))if(a.match(/\d+$/)?.[0]==='2')h.set(a.replace(/\d/g,''),c.value);headerCache.set(sheet,h);return h;}

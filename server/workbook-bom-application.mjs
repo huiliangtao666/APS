@@ -11,3 +11,17 @@ export function saveBomApplication(data,productId,version,config,revision) {
  const p=bomApplication(data,productId,version);p.config=normalizeBomLossConfig({...config,source:p.recipe.source+'；服务端保存版本'+revision,version:String(revision)});calculateBomLoss(p.recipe,p.config);
  return {...p,adopted:true};
 }
+// Both parameter entry points reuse the existing standard-input source, including
+// an explicitly selected existing plan trial. This never writes an Excel profile.
+export function bomScope(state,trialId,actor){
+ if(trialId===undefined||trialId==='')return {target:state,scope:'standard-input:shared'};
+ if(typeof trialId!=='string')throw Error('试算编号无效');const trial=(state.trials||[]).find(t=>t.id===trialId);
+ if(!trial||trial.status!=='active'||trial.actor!==actor)throw Error('试算不存在、已结束或不属于当前访问主体');
+ return {target:trial,scope:'trial:'+trial.id};
+}
+export function changeScopedBomApplication(state,body,actor){
+ const {target,scope}=bomScope(state,body.trialId,actor);if(body.revision!==target.revision)return {conflict:true,revision:target.revision};
+ const p=saveBomApplication(target.data,body.productId,body.version,body.config,target.revision+1);
+ target.data.bomLossProfiles=[...(target.data.bomLossProfiles||[]).filter(old=>old.productId!==p.productId||old.recipe.version!==p.recipe.version),p];target.revision++;
+ return {...p,revision:target.revision,scope};
+}

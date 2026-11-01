@@ -1,0 +1,36 @@
+// In-process registered route execution: no HTTP listener, Worker, or deployed instance.
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {gzipSync} from 'node:zlib';
+import {createWorkbookRouter} from '../server/workbook-router.mjs';import {parseWorkbook} from '../server/workbook-parse.mjs';import {workbookSchema,refreshDerived,hash} from '../server/workbook-model.mjs';
+const base=process.env.PARAMETER_FIXTURE;if(!base)throw Error('PARAMETER_FIXTURE required');
+function fixture(){const dir=fs.mkdtempSync(path.join(base,'routes-')),store=path.join(dir,'workbooks');fs.mkdirSync(store);let d=parseWorkbook(fs.readFileSync(base+'/supply/small.xlsx'),workbookSchema);d=refreshDerived({...d,id:'MOCK',name:'isolated route fixture',version:1,fileHash:'business-source',profile:'excel-qualified-output-202611-r1',mapping:JSON.parse(fs.readFileSync(base+'/supply/mapping.json')),parameterContract:'CR-PARAM-UI-20261101:r1',createdAt:'2026-11-01'});
+ fs.writeFileSync(store+'/input.gz',gzipSync(JSON.stringify(d)));const statePath=store+'/state.json';fs.writeFileSync(statePath,JSON.stringify({datasets:[{id:'MOCK',versions:[{id:'MOCK',name:d.name,version:1,fileHash:d.fileHash,ref:'input.gz'}],imports:[]}],runs:[],previews:[],records:[]}));
+ const permission=action=>(req,res,next)=>{if(req.role==='query'&&action!=='read')return res.status(403).json({error:'forbidden'});if(req.method==='POST'&&!req.body.reason?.trim())return res.status(400).json({error:'reason_required'});next();};
+ const router=createWorkbookRouter({dataDir:dir,permission,actorKey:req=>req.actor,requestId:()=> 'in-process-test',workerFactory:()=>{throw Error('NO_WORKER_WINDOW');}});
+ async function call(method,route,body={},query={},role='planner',actor='A'){
+  const layer=router.stack.find(l=>l.route?.path===route&&l.route.methods[method.toLowerCase()]);assert.ok(layer,route);let at=0;return await new Promise((resolve,reject)=>{const req={method,body:{reason:'explicit synthetic test',...body},params:{id:'MOCK'},query,role,actor},res={statusCode:200,status(n){this.statusCode=n;return this;},json(value){resolve({status:this.statusCode,value});return this;},send(value){resolve({status:this.statusCode,value});return this;},end(){resolve({status:this.statusCode});},type(){return this;},attachment(){return this;}};const next=e=>{if(e)return reject(e);try{const l=layer.route.stack[at++];if(!l)return reject(Error('route did not return'));l.handle(req,res,next);}catch(e){reject(e);}};next();});
+ }
+ return {dir,statePath,call,bytes:()=>fs.readFileSync(statePath),version:()=>JSON.parse(fs.readFileSync(statePath)).datasets[0].versions.at(-1).version};}
+const edit=(version,extra={})=>({expectedVersion:version,cp:'CP074',objectId:'MOCK-SUP',field:'检验天数',value:'2',unit:'天',from:0,to:44,scope:'dataset',...extra});
+
+test('PCU06/07/10/19 registered query/save: persisted reverse reads, stale conflict and all denied writes preserve bytes',async()=>{
+ const f=fixture(),first=await f.call('POST','/datasets/:id/parameters',edit(1));assert.equal(first.status,200,JSON.stringify(first));assert.equal(first.value.version,2);
+ const step=await f.call('GET','/datasets/:id/parameters',{}, {cp:'CP063',step:'A3',day:1});assert.equal(step.status,200);assert.equal(step.value.records[0]['参数值'],'2');const id=step.value.records[0]['参数编号'];
+ const before=f.bytes();for(const body of [edit(1,{id,value:'3'}),edit(1,{id,value:'4'})]){const r=await f.call('POST','/datasets/:id/parameters',body);assert.equal(r.status,409);assert.deepEqual(f.bytes(),before);}
+ for(const body of [edit(2,{id,value:''}),edit(2,{id,value:'illegal'}),edit(2,{id,value:'-1'}),edit(2,{id,value:'2',unit:'kg'}),edit(2,{cp:'CP147',field:'版本指纹',value:'1'})]){const r=await f.call('POST','/datasets/:id/parameters',body);assert.equal(r.status,422,JSON.stringify(r));assert.deepEqual(f.bytes(),before);}
+ const denied=await f.call('POST','/datasets/:id/parameters',edit(2,{id,value:'4'}),{},'query');assert.equal(denied.status,403);assert.deepEqual(f.bytes(),before);
+ const saved=await f.call('POST','/datasets/:id/parameters',edit(2,{id,value:'3'}));assert.equal(saved.status,200);const central=await f.call('GET','/datasets/:id/parameters',{}, {cp:'CP074',day:1});assert.equal(central.value.version,3);assert.equal(central.value.records[0]['参数值'],'3');
+ const reopened=createWorkbookRouter({dataDir:f.dir,permission:()=> (_req,_res,next)=>next(),actorKey:()=> 'A',requestId:()=> 'reopen',workerFactory:()=>{throw Error('NO_WORKER_WINDOW');}});assert.ok(reopened.stack.length>0);assert.equal(JSON.parse(f.bytes()).datasets[0].versions.length,3);
+ const native=await f.call('GET','/datasets/:id/parameters/export',{}, {day:1});assert.equal(native.status,200);assert.match(native.value,/CP074/);assert.match(native.value,/dataset/); // Configuration CSV, not frozen-run native export.
+});
+
+test('PCU09/12/19: registered isolated trials inherit zero correctly and reject another actor',async()=>{
+ const f=fixture();await f.call('POST','/datasets/:id/parameters',edit(1));const trial=await f.call('POST','/datasets/:id/parameter-trials',{expectedVersion:2,name:'independent local scope'});assert.equal(trial.status,200);const scope='trial:'+trial.value.trial.id;
+ const local=await f.call('POST','/datasets/:id/parameters',edit(3,{scope,value:'0'}));assert.equal(local.status,200,JSON.stringify(local));const step=await f.call('GET','/datasets/:id/parameters',{}, {scope,cp:'CP074',day:1});assert.equal(step.value.records.find(p=>p.scope===scope)['参数值'],'0');const shared=await f.call('GET','/datasets/:id/parameters',{}, {cp:'CP074',day:1});assert.equal(shared.value.records[0]['参数值'],'2');
+ const before=f.bytes();const other=await f.call('POST','/datasets/:id/parameters',edit(4,{scope,value:'1'}),{},'planner','OTHER');assert.equal(other.status,422);assert.deepEqual(f.bytes(),before);
+ const override=step.value.records.find(p=>p.scope===scope);const clear=await f.call('POST','/datasets/:id/parameters',edit(4,{scope,id:override['参数编号'],operation:'inherit'}));assert.equal(clear.status,200);const result=await f.call('GET','/datasets/:id/parameters',{}, {scope,cp:'CP074',day:1});assert.equal(result.value.records[0].effectiveValue,'2');
+});
+
+test('PCU04: actual registered commit idempotency, fingerprint validation and stale precheck',async()=>{
+ const f=fixture(),state=JSON.parse(f.bytes());state.previews.push({id:'P',datasetId:'MOCK',fileHash:'PARAM-HASH',sourceFileHash:'business-source',expectedVersion:1,sourceProfile:'excel-qualified-output-202611-r1',profile:'excel-qualified-output-202611-r1',dataRef:'input.gz',issues:[],importKey:'MODE-1',readiness:{ready:true},tableRefs:{}});fs.writeFileSync(f.statePath,JSON.stringify(state));
+ const req={previewId:'P',fileHash:'PARAM-HASH',expectedVersion:1},first=await f.call('POST','/commit',req);assert.equal(first.status,200);const bytes=f.bytes(),retry=await f.call('POST','/commit',req);assert.equal(retry.value.idempotent,true);assert.deepEqual(f.bytes(),bytes);const wrong=await f.call('POST','/commit',{...req,fileHash:'WRONG'});assert.equal(wrong.status,409);assert.deepEqual(f.bytes(),bytes);assert.equal(JSON.parse(bytes).datasets[0].versions.at(-1).fileHash,'business-source');
+});

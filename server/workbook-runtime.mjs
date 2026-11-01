@@ -1,3 +1,4 @@
+import {scopeFor,effectiveParameters,scopeOf} from './parameter-contract.mjs';
 import {supplyReadiness} from './workbook-supply.mjs';
 import {changeDraft,validateDraftRequest} from './workbook-drafts.mjs';
 import {randomUUID} from 'node:crypto';
@@ -21,15 +22,18 @@ export function registerWorkbookRuns(router,ctx) {
  router.get('/runs/:id/inputs',permission('read'),(req,res)=>{const r=read().runs.find(r=>r.id===req.params.id);if(!r)return res.status(404).json({error:'run_not_found'});if(hash(inputOf(r))!==r.inputHash)return res.status(409).json({error:'frozen_input_corrupt'});res.json({runId:r.id,input:inputOf(r),inputHash:r.inputHash,selection:r.selection});});
  router.post('/datasets/:id/run',permission('calculate'),handle((req,res)=>{
   if(!Number.isSafeInteger(req.body.version)||req.body.version<1)return res.status(400).json({error:'explicit_version_required'});
-  const s=read(),d=dataset(s,req.params.id,req.body.version);if(!d)return res.status(404).json({error:'dataset_not_found'});
-  if(workers.size>=2)return res.status(429).json({error:'run_capacity'});const ready=supplyReadiness(d);if(!ready.ready)return res.status(422).json({error:'not_ready',issues:ready.issues});
+  const s=read();let d=dataset(s,req.params.id,req.body.version);if(!d)return res.status(404).json({error:'dataset_not_found'});
+  if(workers.size>=2)return res.status(429).json({error:'run_capacity'});
   const selection=req.body.selection??{};if(!selection||typeof selection!=='object'||Array.isArray(selection)||Object.keys(selection).some(k=>!['startDay','endDay','currentDay','demandIds'].includes(k)))throw Error('运行选择包含未知字段');
-  const start=selection.startDay??1,end=selection.endDay??start+14,current=selection.currentDay??start;
+  const scope=scopeFor(d,req.body.parameterScope,ctx.actorKey(req));const globals=d.parameterContract?effectiveParameters(d,selection.startDay??0,scope):[];const global=n=>globals.find(p=>p['对象编号']==='GLOBAL'&&p['参数名称']===n)?.['参数值'];
+  const start=selection.startDay??Number(global('计划起始日')??1),end=selection.endDay??start+Number(global('窗口天数')??14),current=selection.currentDay??start;
   if(![start,end,current].every(Number.isInteger)||start<current||current<0||end<=start||end>44)throw Error('日窗口无效');
+  if(d.parameterContract){d=structuredClone(d);d.tables['配置参数']=rows(d,'配置参数').filter(p=>scopeOf(p)==='dataset'||scopeOf(p)===scope);d.parameterContext={scope,effectiveDay:start};delete d.parameterCandidates;delete d.parameterTrials;refreshDerived(d,start);}
+  const ready=supplyReadiness(d);if(!ready.ready)return res.status(422).json({error:'not_ready',issues:ready.issues});
   const inWindow=rows(d,'每日需求').filter(r=>Number(r['需求日'])>=start&&Number(r['需求日'])<end);
   if(Object.hasOwn(selection,'demandIds')&&(!Array.isArray(selection.demandIds)||!selection.demandIds.length||new Set(selection.demandIds).size!==selection.demandIds.length||selection.demandIds.some(id=>typeof id!=='string'||!inWindow.some(r=>r['需求编号']===id))))throw Error('需求选择须唯一且属于所选半开日窗');
   if(!inWindow.length)return res.status(422).json({error:'empty_demand_selection',message:'所选日窗没有需求，未创建成功运行'});
-  const run={id:randomUUID(),status:'queued',createdAt:new Date().toISOString(),inputRef:ctx.persist(d),inputHash:hash(d),datasetId:d.id,version:d.version,selection:{...selection,startDay:start,endDay:end,currentDay:current},provenance:{profile:d.profile,fileHash:d.fileHash,mappingHash:hash(d.mapping),parameterHash:hash(rows(d,'配置参数')),mappingVersion:d.mapping?.version,timeUnit:'day',dayZero:dayDate(0),minuteOrigin:'2026-11-02T08:00:00+08:00',startDate:dayDate(start),endDate:dayDate(end),startMinute:dayMinute(start),endMinute:dayMinute(end),interval:'[start,end)'},result:null};s.runs.unshift(run);audit(s,req,'workbook_run_created',{runId:run.id,inputHash:run.inputHash});write(s);
+  const run={id:randomUUID(),status:'queued',createdAt:new Date().toISOString(),inputRef:ctx.persist(d),inputHash:hash(d),datasetId:d.id,version:d.version,selection:{...selection,startDay:start,endDay:end,currentDay:current},provenance:{profile:d.profile,fileHash:d.fileHash,mappingHash:hash(d.mapping),parameterHash:hash(rows(d,'配置参数')),mappingVersion:d.mapping?.version,...(d.parameterContract?{parameterContract:d.parameterContract,parameterScope:scope,effectiveParameters:d.effectiveParameters}:{}),timeUnit:'day',dayZero:dayDate(0),minuteOrigin:'2026-11-02T08:00:00+08:00',startDate:dayDate(start),endDate:dayDate(end),startMinute:dayMinute(start),endMinute:dayMinute(end),interval:'[start,end)'},result:null};s.runs.unshift(run);audit(s,req,'workbook_run_created',{runId:run.id,inputHash:run.inputHash});write(s);
   let timer;
   const finish=(status,result,failure)=>{const state=read(),r=state.runs.find(r=>r.id===run.id);if(!r||!['queued','running'].includes(r.status))return;Object.assign(r,{status,result,resultHash:result?hash(result):null,failure,finishedAt:new Date().toISOString()});audit(state,req,'workbook_run_'+status,{runId:r.id,inputHash:r.inputHash});write(state);clearTimeout(timer);const w=workers.get(run.id);workers.delete(run.id);w?.terminate();};
   try{const executionData={...d,tables:Object.fromEntries(Object.entries(d.tables).filter(([table])=>workbookSchema.tables[table]?.kind==='输入')),referenceSource:{frozenInputHash:run.inputHash,meaning:'参考试算原文保留在冻结对象，不重复进入业务计算'}};const worker=workerFactory({workbookData:executionData,selection:run.selection});workers.set(run.id,worker);timer=setTimeout(()=>finish('failed',null,'计算超时；冻结输入保留，不代表无解'),90000);
@@ -52,6 +56,7 @@ export function registerWorkbookRuns(router,ctx) {
   // Legacy runs retain their existing native format. New metadata belongs only
   // to runs created with this contract; never backfill historical artifacts.
   if(r.provenance){put('冻结来源','',JSON.stringify(r.provenance),'','','',r.selection);put('运行状态','',r.status,'','','',r.resultHash);}
+  if(exportInput.parameterContract)for(const p of exportInput.effectiveParameters?.values||[])put('冻结采用参数',p.id,p.value,'',p.from,p.to,p);
   for(const p of exportInput.bomLossProfiles||[])put('标准投入逐物料损耗',p.productId,JSON.stringify(p.config),'%','','',p.recipe);
   res.type('text/csv; charset=utf-8').attachment('排程冻结结果-'+r.id+'.csv').send('\ufeff'+body.map(row=>row.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\r\n'));
  }));

@@ -3428,6 +3428,75 @@
       "acceptance_result": "PARTIAL / NOT_READY: four-category real UI save/reopen and 700-demand real Worker slice verified; complete 35-assertion same-candidate import-to-export chain and independent Test/UAT remain unverified; consecutive negative imports hit observed VM OOM",
       "next_owner": "APS-PM coordinate sufficient isolated validation capacity; APS-Dev continues the same original package after resource recovery",
       "implementation_evidence": "docs/workbook-input-integration.md; fixed SHA, parent, 35-row matrix, 27-row closure, raw bytes/hash and actual runtime fingerprint in delivery handoff"
+    },
+    {
+      "id": "CR-PARAM-UI-20261101",
+      "event_key": "design:parameter-import-dual-entry:20261101:r1",
+      "title": "配置参数整本导入、查询编辑与统一/步骤双入口同效",
+      "requested_on": "2026-11-01",
+      "source_quote": "配置参数部分我做了一些更新，请作为需求变更，配置参数可以导入、查询和编辑；之前设计的配置参数相关的UI与此对应上（一方面有统一页面，分页签可以配置配查询；一方面关键配置在相应流程步骤的页面也可以配置，方面便操作边优化。两个方法同样有效）。",
+      "requester": "当前用户明确授权，经APS-PM正式登记",
+      "registration_status": "APPROVED_FOR_IMPLEMENTATION",
+      "pm_registration": "https://github.com/huiliangtao666/APS/issues/45#issuecomment-6552599688",
+      "primary_tracking_issue": 45,
+      "affected_requirements": [
+        "FR-013",
+        "FR-014",
+        "FR-015",
+        "FR-016",
+        "FR-017",
+        "FR-018"
+      ],
+      "design_document_sha": "b13860914439c43801eab1e10b42a5552821afe1",
+      "design_assets": "https://github.com/huiliangtao666/APS/tree/b13860914439c43801eab1e10b42a5552821afe1/docs/requirements/proposals/CR-PARAM-UI-20261101/r1",
+      "source_sha256": "e8b73e882e66b2e19ab7cb639c7a17e8830d08c0f485667484141837794f4d24",
+      "source_bytes": 247518,
+      "parent_changes": [
+        "CR-INPUT-DATA-20261031",
+        "CR-UIUX-FLOW-20261031",
+        "CR-SCHED-CONFIG-20261031",
+        "CR-BOM-LOSS-20261031",
+        "CR-PACK-BATCH-20261031"
+      ],
+      "new_assertion_ids": [
+        "PCU-01",
+        "PCU-02",
+        "PCU-03",
+        "PCU-04",
+        "PCU-05",
+        "PCU-06",
+        "PCU-07",
+        "PCU-08",
+        "PCU-09",
+        "PCU-10",
+        "PCU-11",
+        "PCU-12",
+        "PCU-13",
+        "PCU-14",
+        "PCU-15",
+        "PCU-16",
+        "PCU-17",
+        "PCU-18",
+        "PCU-19",
+        "PCU-20"
+      ],
+      "implementation_delivery": "dlv_ff9a5ac0-63af-4363-b60e-3ec23f492725",
+      "implementation_owner": "APS-Dev",
+      "implementation_status": "SOURCE_CANDIDATE_LIGHT_SELFTEST_PASSED_FULL_FLOW_BLOCKED",
+      "product_sha": null,
+      "product_sha_binding": "Full source→main SHA is resolved after the containing engineering commit and recorded in PARAM-UI-Dev-r1-RECORD.json; no design SHA is used as product SHA.",
+      "implementation_evidence": "docs/parameter-dual-entry.md; qa/parameter-ui-*; root PARAM-UI-Dev-r1-{REPORT.md,MATRIX.csv,RECORD.json,EVIDENCE.zip,SHA256.json}",
+      "approval_boundary": "用户导入/查询/编辑/双入口/实际采用范围已批准，无需重新索批。K–O仍保留建议性质；D14–19未明新公式/成品放行天数/自动选商不发明；P1/D3/B02/DEC04–06不扩启。",
+      "scope": [
+        "11sheet CP/SP/PA/D/Q分层，原子版本保护及幂等",
+        "9主题/16领域查询与同真源双入口维护",
+        "显式共享/试算、有效期与并发保护、候选拒假启用",
+        "主程序冻结采用/历史保护/原生导出及原29IN残余同包"
+      ],
+      "acceptance_result": "PARTIAL / NOT_READY: source and bounded domain/in-process route checks only; actual UI/HTTP/Worker/persisted frozen-run export, standard build and complete original Excel are not executed in the reserved #40 window. Full package QA not dispatched.",
+      "qa_result": "NOT_EXECUTED",
+      "new_product_failure_rounds": 0,
+      "next_owner": "APS-PM coordinate explicit #40 release and stable512MiB build/>=1GiB complete Excel; APS-Dev complete applicable selftest on same #45 package; APS-QA only after gate"
     }
   ]
 }

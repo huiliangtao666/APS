@@ -1,3 +1,4 @@
+import {applyParameters,parameterIssues,scopeOf} from './parameter-contract.mjs';
 import {validateBomRelations} from './workbook-relation-validation.mjs';
 import {createHash} from 'node:crypto';
 import fs from 'node:fs';
@@ -11,8 +12,8 @@ export const index=(d,t,k)=>new Map(rows(d,t).map(r=>[r[k],r]));
 const numeric=v=>v!==''&&v!==undefined&&Number.isFinite(Number(v));
 export function problem(sheet,row,field,message,code='INPUT_INVALID') {return {code,severity:'error',sheet,row:row?._row??0,record:row?.[workbookSchema.tables[sheet]?.key]||'',field,cell:row?._cells?.[field]||'',message,remedy:'打开该记录更正并重新检查'};}
 export function refreshDerived(d,atDay=0) {
- const params=index(d,'配置参数','参数编号');
- for(const b of d.bindings||[]){const row=rows(d,b.sheet).find(r=>b.recordKey?(b.sheet==='单位换算'?[r['物料编号'],r['换算前单位'],r['换算后单位']].join('|'):r[workbookSchema.tables[b.sheet].key])===b.recordKey:r._row===b.row),original=params.get(b.parameterId),p=original&&rows(d,'配置参数').find(p=>p['对象编号']===original['对象编号']&&p['参数名称']===original['参数名称']&&Number(p['生效日'])<=atDay&&atDay<Number(p['失效日']));if(row&&p)row[b.field]=p['参数值'];}
+ const active=d.parameterContract?applyParameters(d,atDay):null,params=index(d,'配置参数','参数编号');
+ for(const b of d.bindings||[]){const row=rows(d,b.sheet).find(r=>b.recordKey?(b.sheet==='单位换算'?[r['物料编号'],r['换算前单位'],r['换算后单位']].join('|'):r[workbookSchema.tables[b.sheet].key])===b.recordKey:r._row===b.row),original=params.get(b.parameterId),p=original&&(active||rows(d,'配置参数')).find(p=>p['对象编号']===original['对象编号']&&p['参数名称']===original['参数名称']&&Number(p['生效日'])<=atDay&&atDay<Number(p['失效日']));if(row&&p)row[b.field]=p['参数值'];}
  const materials=index(d,'物料主数据','物料编号'),suppliers=index(d,'供应商与供货条件','供货关系编号');
  const children=new Map();for(const b of rows(d,'物料清单')){if(!children.has(b['父项编号']))children.set(b['父项编号'],[]);children.get(b['父项编号']).push(b);}
  const memo=new Map(),visiting=new Set();
@@ -60,7 +61,8 @@ export function validateWorkbook(d) {
   if(mats.has(c)&&b['数量单位']!==mats.get(c)['基础单位'])add('物料清单',b,'数量单位','子件数量单位必须与SKU基础单位一致');
  }
 
- const scopes=new Map();for(const p of rows(d,'配置参数')){const key=p['对象编号']+'|'+p['参数名称'];if(Object.hasOwn(p._formulas||{},'参数值')||!numeric(p['参数值']))add('配置参数',p,'参数值','参数值须为有限数字字面值');for(const old of scopes.get(key)||[])if(Number(p['生效日'])<Number(old['失效日'])&&Number(old['生效日'])<Number(p['失效日']))add('配置参数',p,'生效日','对象同义参数有效期重叠','PARAMETER_OVERLAP');scopes.set(key,[...(scopes.get(key)||[]),p]);}
+ if(d.parameterContract)for(const m of mats.values()){const box=Number(m['每箱净重千克']),piece=Number(m['每件净重千克']);if(box>0&&piece>0&&Math.abs(box/piece-Math.round(box/piece))>1e-9)add('物料主数据',m,'每箱件数','箱净重/件净重须为正整数，不可四舍五入','PACKAGING_RATIO');}
+ const scopes=new Map();for(const p of rows(d,'配置参数')){const key=scopeOf(p)+'|'+p['对象编号']+'|'+p['参数名称'];if(Object.hasOwn(p._formulas||{},'参数值')||!numeric(p['参数值']))add('配置参数',p,'参数值','参数值须为有限数字字面值');for(const old of scopes.get(key)||[])if(Number(p['生效日'])<Number(old['失效日'])&&Number(old['生效日'])<Number(p['失效日']))add('配置参数',p,'生效日','对象同义参数有效期重叠','PARAMETER_OVERLAP');scopes.set(key,[...(scopes.get(key)||[]),p]);}
  for(const r of rows(d,'期初库存')){
   if(Number(r['当前数量'])<Number(r['期初已占用量']))add('期初库存',r,'期初已占用量','占用量超过实物数量');const m=mats.get(r['物料编号']),l=locations.get(r['库位编号']);
   if(m&&l&&m['储存环境']!==l['储存环境'])add('期初库存',r,'库位编号','物料环境与库位环境不符','STORAGE_ENVIRONMENT');
@@ -74,6 +76,7 @@ export function validateWorkbook(d) {
  for(const r of rows(d,'每日需求'))if(!Number.isInteger(Number(r['需求日']))||Number(r['需求日'])<1||Number(r['需求日'])>43||!(Number(r['需求箱数'])>0))add('每日需求',r,'需求箱数','本profile需求日须1～43且需求箱数为正');
  for(const t of ['配置参数','物料清单'])for(const r of rows(d,t))if(!numeric(r['生效日'])||!numeric(r['失效日'])||!(Number(r['失效日'])>Number(r['生效日'])))add(t,r,'失效日','有效区间须为非空半开区间');
  for(const r of rows(d,'物料主数据'))if(!['千克','个'].includes(r['基础单位']))add('物料主数据',r,'基础单位','本来源profile只支持食品千克、包装个数，不能猜测换算');
+ if(d.parameterContract)issues.push(...parameterIssues(d));
  return issues;
 }
 export function workbookReadiness(d) {

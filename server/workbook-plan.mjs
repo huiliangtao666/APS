@@ -1,3 +1,4 @@
+import {effectiveParameters} from './parameter-contract.mjs';
 import {supplyReadiness,supplyLots} from './workbook-supply.mjs';
 import {rows,index,dayMinute,procurement,refreshDerived,PROFILE,hash} from './workbook-model.mjs';
 import {quantityMath as Q} from '../src/lib/material-allocation.mjs';
@@ -11,6 +12,7 @@ export function calculateWorkbook(data,selection) {
  const mats=index(d,'物料主数据','物料编号'),customers=index(d,'客户与交付','客户编号'),calendar=index(d,'工厂日历','日序');
  const routes=[...rows(d,'工艺路线'),...d.mapping.sfRoutes],resources=rows(d,'设备与工装').map(r=>({...r}));
  for(const r of d.mapping.resources||[])if(!resources.some(s=>s['资源编号']===r.id))resources.push({'资源编号':r.id,'资源类别':r.kind,'资源组编号':r.group,'可用数量':r.units,'单次批量上限千克':r.batch_kg,'标准日产能千克':r.daily_kg,'同时占位上限千克':r.occupancy_kg||''});
+ const standardBatch=d.parameterContract?Number(effectiveParameters(d,start,d.parameterContext?.scope).find(p=>p['对象编号']==='GLOBAL'&&p['参数名称']==='标准生产批量千克')?.['参数值']??Infinity):Infinity;
  const tasks=[],allocations=[],shortages=[],suggestions=[],findings=[],occupancy=[],daily=new Map(),lots=[];let serial=0;
  const activeStops=rows(d,'停机安排').filter(r=>Number(r['可知日'])<=current);
  lots.push(...supplyLots(d));
@@ -28,7 +30,8 @@ export function calculateWorkbook(data,selection) {
    for(let day=Math.max(start,Math.floor(cursor));day<end&&!chosen;day++){
     const c=calendar.get(String(day));if(!c)continue;const ratio=Number(c['日产能分子'])/Number(c['日产能分母']);if(ratio<=0)continue;
     for(const r of candidates){const id=r['资源编号'];if(activeStops.some(s=>s['资源编号']===id&&Number(s['开始日'])<=day&&day<Number(s['结束日'])))continue;
-     const capacity=Number(r['标准日产能千克'])*ratio,key=id+'|'+day,available=capacity-(daily.get(key)||0),batch=Math.min(left,Number(r['单次批量上限千克']),available,Number(r['同时占位上限千克'])||Infinity);if(!(batch>0)||!(capacity>0))continue;
+     const toolCaps=pool.map(t=>Number(resources.find(x=>x['资源编号']===t)?.['单次批量上限千克'])).filter(n=>n>0).sort((a,b)=>b-a);const toolLimit=d.parameterContract&&toolCount&&toolCaps.length===pool.length?toolCaps.slice(0,toolCount).reduce((n,c)=>n+c,0):Infinity;
+     const capacity=Number(r['标准日产能千克'])*ratio,key=id+'|'+day,available=capacity-(daily.get(key)||0),batch=Math.min(left,Number(r['单次批量上限千克']),available,Number(r['同时占位上限千克'])||Infinity,toolLimit,standardBatch);if(!(batch>0)||!(capacity>0))continue;
      const span=Number(route['跨日历时天数']),duration=span>0?span:Math.max(1/1440,Math.ceil(batch/capacity*1440)/1440);
      let at=Math.max(day,cursor);const relevant=occupancy.filter(x=>x.end>at);
      const points=[at,...relevant.map(o=>o.end).filter(t=>t>=at&&t<day+1)].sort((a,b)=>a-b);
@@ -37,7 +40,7 @@ export function calculateWorkbook(data,selection) {
       if(span>0&&Array.from({length:Math.ceil(until)-Math.floor(at)},(_,i)=>calendar.get(String(Math.floor(at)+i))).some(c=>!c||Number(c['生产班次数'])<=0))continue;
       const conflict=relevant.filter(o=>overlap(o,job));if(conflict.some(o=>o.resource===id))continue;
       const times=[at,...conflict.map(o=>o.start).filter(t=>t>=at&&t<until)];if(times.some(t=>people+conflict.filter(o=>o.crew===crew['班组编号']&&o.start<=t&&t<o.end).reduce((n,o)=>n+o.people,0)>Number(crew['每班可用人数'])))continue;
-      const tools=pool.filter(t=>!conflict.some(o=>o.tools.includes(t))).slice(0,toolCount);if(tools.length<toolCount)continue;
+      const tools=pool.filter(t=>!conflict.some(o=>o.tools.includes(t))&&(!d.parameterContract||!Number(resources.find(x=>x['资源编号']===t)?.['单次批量上限千克'])||batch<=Number(resources.find(x=>x['资源编号']===t)['单次批量上限千克'])*toolCount)).slice(0,toolCount);if(tools.length<toolCount)continue;
       chosen={...job,resource:id,crew:crew['班组编号'],people,tools,quantity:batch,key,route};break;
      }if(chosen)break;
     }
@@ -57,7 +60,7 @@ export function calculateWorkbook(data,selection) {
   const rs=routes.filter(r=>r['成品编号']===id).sort((a,b)=>Number(a['工序顺序'])-Number(b['工序顺序']));let at=start,prev='',okay=true;
   for(const route of rs){const feedConsumer=callId+'|'+route['路线工序编号'];const feed=rows(d,'物料清单').filter(b=>b['父项编号']===id&&Number(b['生效日'])<=Math.floor(at)&&Math.floor(at)<Number(b['失效日'])&&d.mapping.feed_mappings.some(f=>f.bom_id===b['用量关系编号']&&f.route_step_id===route['路线工序编号']));
    for(const b of feed){const n=number(workbookNeed(b,remaining)),child=produce(b['子项编号'],n,Math.floor(at),need,depth+1,feedConsumer);if(!child.ok)okay=false;else at=Math.max(at,child.ready);}
-   if(!okay)break;const job=resourceJobs(route,remaining,at,prev,need,id,callId);if(!job){findings.push({code:'FINITE_CAPACITY',message:'有限资源/日容量/窗口不能安排 '+id+' '+route['工序名称'],need,routeStepId:route['路线工序编号'],sheet:'工艺路线',row:route._row,field:'设备组编号',cell:route._cells?.['设备组编号']||''});okay=false;break;}if(prev&&Math.floor(job.start)-Math.floor(at)>Number(route['最大等待天数'])){okay=false;findings.push({code:'MAX_WAIT',message:'前序完成后的等待超过配置上限，候选已撤销',need,sheet:'工艺路线',row:route._row,field:'最大等待天数',cell:route._cells?.['最大等待天数']});break;}const consumption=allocations.filter(a=>a.consumer===feedConsumer);for(const a of consumption){const supply=lots.find(l=>l.id===a.supplyId);if(supply&&(!(supply.ready<=Math.floor(job.start))||!(Math.floor(job.start)<supply.expiry))){okay=false;findings.push({code:'MATERIAL_AT_ACTUAL_FEED',message:'实际投料日的供给资格/效期不成立，候选已撤销',need,sheet:'物料清单',field:'投料位置'});}a.feedDay=job.start;a.taskId=tasks.find(t=>t.routeStepId===route['路线工序编号']&&t.start===job.start&&t.orderId===need)?.id;}if(!okay)break;at=job.end;prev=job.last;
+   if(!okay)break;const job=resourceJobs(route,remaining,at+(prev?Number(route['最小等待天数']||0):0),prev,need,id,callId);if(!job){findings.push({code:'FINITE_CAPACITY',message:'有限资源/日容量/窗口不能安排 '+id+' '+route['工序名称'],need,routeStepId:route['路线工序编号'],sheet:'工艺路线',row:route._row,field:'设备组编号',cell:route._cells?.['设备组编号']||''});okay=false;break;}if(prev&&(d.parameterContract?(job.start-at)>Number(route['最大等待天数'])+1e-9:Math.floor(job.start)-Math.floor(at)>Number(route['最大等待天数']))){okay=false;findings.push({code:'MAX_WAIT',message:'前序完成后的等待超过配置上限，候选已撤销',need,sheet:'工艺路线',row:route._row,field:'最大等待天数',cell:route._cells?.['最大等待天数']});break;}const consumption=allocations.filter(a=>a.consumer===feedConsumer);for(const a of consumption){const supply=lots.find(l=>l.id===a.supplyId);if(supply&&(!(supply.ready<=Math.floor(job.start))||!(Math.floor(job.start)<supply.expiry))){okay=false;findings.push({code:'MATERIAL_AT_ACTUAL_FEED',message:'实际投料日的供给资格/效期不成立，候选已撤销',need,sheet:'物料清单',field:'投料位置'});}a.feedDay=job.start;a.taskId=tasks.find(t=>t.routeStepId===route['路线工序编号']&&t.start===job.start&&t.orderId===need)?.id;}if(!okay)break;at=job.end;prev=job.last;
   }
   if(!okay)return {ok:false};allocations.push({need,materialId:id,supplyId:'production:'+callId,quantity:remaining,exactQuantity:exact(remaining),feedDay:Math.ceil(at),conditional:true,kind:'本次制造产出',consumer,source:{taskId:prev,productId:id,productionId:callId}});return {ok:true,ready:at,task:prev};
  }
@@ -93,6 +96,7 @@ export function verifyWorkbookPlan(d,plan) {
   const previous=tasks.find(o=>o.id===t.predecessor);if(previous&&previous.end>t.start+1e-9)issues.push('前序未完成 '+t.id);
   const k=t.machine+'|'+Math.floor(t.start);capacity.set(k,(capacity.get(k)||0)+t.quantity);
   const crew=crews.get(t.crew);for(const point of [t.start,...tasks.filter(o=>o.crew===t.crew&&overlap(o,t)).map(o=>o.start).filter(n=>n>=t.start&&n<t.end)])if(tasks.filter(o=>o.crew===t.crew&&o.start<=point&&point<o.end).reduce((n,o)=>n+o.people,0)>Number(crew?.['每班可用人数']))issues.push('人员超占 '+t.id);
+  if(d.parameterContract&&t.tools?.some(id=>{const cap=Number(resources.get(id)?.['单次批量上限千克']);return cap>0&&t.quantity>cap*t.tools.length+1e-9;}))issues.push('工装批容量超限 '+t.id);
   if(tasks.some(o=>o!==t&&overlap(o,t)&&o.tools.some(tool=>t.tools.includes(tool))))issues.push('工装重叠 '+t.id);
   if(rows(d,'停机安排').some(s=>Number(s['可知日'])<=plan.conditions.currentDay&&s['资源编号']===t.machine&&overlap(t,{start:Number(s['开始日']),end:Number(s['结束日'])})))issues.push('停机占用 '+t.id);
  }
