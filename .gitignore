@@ -14,3 +14,26 @@ dist/
 .qa-query-ui.cjs
 
 .qa-editor-ui.cjs
+
+
+# New output from the reviewed FR034 browser capture scripts; tracked evidence stays tracked.
+# Restrict to capture directories and output suffixes; preserve fixtures, reports and originals.
+/qa/evidence/fr034-keyboard/*.html
+/qa/evidence/fr034-keyboard/*.png
+/qa/evidence/fr034-keyboard/*.aria.txt
+/qa/evidence/fr034-keyboard/keyboard-report.json
+/qa/evidence/fr034-keyboard-r1/attempt1/*.html
+/qa/evidence/fr034-keyboard-r1/attempt1/*.png
+/qa/evidence/fr034-keyboard-r1/attempt1/*.aria.txt
+/qa/evidence/fr034-keyboard-r1/attempt1/keyboard-report.json
+/qa/evidence/fr034-keyboard-r1/attempt1/tests/*.log
+/qa/evidence/fr034-keyboard-r1/baseline/*.html
+/qa/evidence/fr034-keyboard-r1/baseline/*.png
+/qa/evidence/fr034-keyboard-r1/baseline/*.aria.txt
+/qa/evidence/fr034-keyboard-r1/baseline/keyboard-report.json
+/qa/evidence/fr034-keyboard-r1/baseline/tests/*.log
+/qa/evidence/fr034-keyboard-r1/final/*.html
+/qa/evidence/fr034-keyboard-r1/final/*.png
+/qa/evidence/fr034-keyboard-r1/final/*.aria.txt
+/qa/evidence/fr034-keyboard-r1/final/keyboard-report.json
+/qa/evidence/fr034-keyboard-r1/final/tests/*.log

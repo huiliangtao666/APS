@@ -6,3 +6,97 @@ docs/fr014015-acceptance/evidence/**/*.csv -text whitespace=cr-at-eol
 docs/fr014015-acceptance/evidence/*.csv -text whitespace=cr-at-eol
 docs/fr014015-acceptance/evidence/attempts/*.log -text whitespace=-blank-at-eol
 docs/fr014015-acceptance/evidence/*.html -text whitespace=-blank-at-eol
+
+
+# Historical acceptance captures only; application/prototype/fixture entries remain source.
+# Exact paths follow the reviewed main tree; no language override or global HTML exclusion.
+/docs/fr013-main/evidence/diff-order-A-forward.html linguist-documentation linguist-generated
+/docs/fr013-main/evidence/diff-order-A-reverse.html linguist-documentation linguist-generated
+/docs/fr013-main/evidence/fr027-real-app.html linguist-documentation linguist-generated
+/docs/fr013-main/evidence/fr035-real-app.html linguist-documentation linguist-generated
+/docs/fr013-main/evidence/fr036-pg01.html linguist-documentation linguist-generated
+/docs/fr013-main/evidence/fr038-real-app.html linguist-documentation linguist-generated
+/docs/fr014015-acceptance/evidence/diff-order-A-forward.html linguist-documentation linguist-generated
+/docs/fr014015-acceptance/evidence/diff-order-A-reverse.html linguist-documentation linguist-generated
+/docs/fr014015-acceptance/evidence/fr027-real-app.html linguist-documentation linguist-generated
+/docs/fr014015-acceptance/evidence/fr035-real-app.html linguist-documentation linguist-generated
+/docs/fr014015-acceptance/evidence/fr036-pg01.html linguist-documentation linguist-generated
+/docs/fr014015-acceptance/evidence/fr038-real-app.html linguist-documentation linguist-generated
+/docs/fr027/evidence/before-repair1/failure.html linguist-documentation linguist-generated
+/docs/fr027/evidence/final/diff-order-A-forward.html linguist-documentation linguist-generated
+/docs/fr027/evidence/final/diff-order-A-reverse.html linguist-documentation linguist-generated
+/docs/fr027/evidence/final/fr027-real-app.html linguist-documentation linguist-generated
+/docs/fr027/evidence/final/fr035-real-app.html linguist-documentation linguist-generated
+/docs/fr027/evidence/final/fr036-pg01.html linguist-documentation linguist-generated
+/docs/fr027/evidence/final/fr038-real-app.html linguist-documentation linguist-generated
+/docs/fr035-acceptance/evidence/dev-replay/page-differences.html linguist-documentation linguist-generated
+/docs/fr035-acceptance/evidence/dev-replay/page-materials.html linguist-documentation linguist-generated
+/docs/fr035-acceptance/evidence/dev-replay/page-occupation.html linguist-documentation linguist-generated
+/docs/fr035-acceptance/evidence/dev-replay/page-orders.html linguist-documentation linguist-generated
+/docs/fr035-acceptance/evidence/dev-replay/page-tasks.html linguist-documentation linguist-generated
+/docs/fr035-acceptance/evidence/dev-replay/page-unplanned.html linguist-documentation linguist-generated
+/docs/fr035-acceptance/evidence/run3/diff-order-A-forward.html linguist-documentation linguist-generated
+/docs/fr035-acceptance/evidence/run3/diff-order-A-reverse.html linguist-documentation linguist-generated
+/docs/fr035-acceptance/evidence/run3/fr035-real-app.html linguist-documentation linguist-generated
+/docs/fr035-acceptance/evidence/run3/fr038-real-app.html linguist-documentation linguist-generated
+/docs/fr036-delivery/evidence/diff-order-A-forward.html linguist-documentation linguist-generated
+/docs/fr036-delivery/evidence/diff-order-A-reverse.html linguist-documentation linguist-generated
+/docs/fr036-delivery/evidence/fr035-real-app.html linguist-documentation linguist-generated
+/docs/fr036-delivery/evidence/fr036-pg01.html linguist-documentation linguist-generated
+/docs/fr036-delivery/evidence/fr038-real-app.html linguist-documentation linguist-generated
+/qa/b09-test-delivery/B09-MATERIAL-579fe05-Test-r1-REPORT.html linguist-documentation
+/qa/b12-test-delivery/B12-PROCESS-Test-r1-REPORT.html linguist-documentation
+/qa/b15-test-delivery/B15-PROTECTION-Test-r1-REPORT.html linguist-documentation
+/qa/b16-test-delivery/B16-SHARING-Test-r1-REPORT.html linguist-documentation
+/qa/evidence/fr033-issue19/original/after.html linguist-documentation linguist-generated
+/qa/evidence/fr033-issue19/original/before.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/attempt1/640-FAIL-keyboard-overlap-task-identity.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/attempt1/640-check-completed.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/attempt1/640-overlap-focus.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/baseline/1100-check-completed.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/baseline/1100-filter-long-quantity.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/baseline/1100-history-current.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/baseline/1100-long-chinese-quantity.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/baseline/1100-material-unknown.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/baseline/1100-no-banner-overlap-focus.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/baseline/1100-overlap-focus.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/baseline/1100-saved-source.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/baseline/640-check-completed.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/baseline/640-filter-long-quantity.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/baseline/640-history-current.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/baseline/640-long-chinese-quantity.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/baseline/640-material-unknown.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/baseline/640-no-banner-overlap-focus.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/baseline/640-overlap-focus.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/baseline/640-saved-source.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/final/1100-check-completed.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/final/1100-filter-long-quantity.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/final/1100-history-current.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/final/1100-long-chinese-quantity.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/final/1100-material-unknown.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/final/1100-no-banner-overlap-focus.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/final/1100-overlap-focus.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/final/1100-saved-source.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/final/640-check-completed.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/final/640-filter-long-quantity.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/final/640-history-current.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/final/640-long-chinese-quantity.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/final/640-material-unknown.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/final/640-no-banner-overlap-focus.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/final/640-overlap-focus.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard-r1/final/640-saved-source.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard/1100-filter-long-quantity.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard/1100-history-current.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard/1100-long-chinese-quantity.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard/1100-material-unknown.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard/1100-no-banner-overlap-focus.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard/1100-overlap-focus.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard/1100-saved-source.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard/640-filter-long-quantity.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard/640-history-current.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard/640-long-chinese-quantity.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard/640-material-unknown.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard/640-no-banner-overlap-focus.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard/640-overlap-focus.html linguist-documentation linguist-generated
+/qa/evidence/fr034-keyboard/640-saved-source.html linguist-documentation linguist-generated
+/qa/r7-test-delivery/R7-QUERY-REPORT-Test-r1-REPORT.html linguist-documentation
