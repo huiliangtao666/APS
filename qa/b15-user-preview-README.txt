@@ -86,7 +86,8 @@ install, custom image, hand-start, product replacement or publication is implied
 
 EXACT SUPPORTED PROCEDURE AFTER THE RELEASE AND FRESH CHECKS
 Run from the integrated source checkout; use its fixed wrapper SHA, not a
-moving product checkout. Prepare five runtime wrapper files, without state:
+moving product checkout. Prepare the five unchanged runtime files plus private package.json, lockfile
+and .npmrc templates, without state:
   python3 qa/b15-user-preview-control.py prepare --destination /Users/sg_cbb_mac_1/praetor-workspaces/APS-Test/apps/qa17-0afa-user-entry
 One supported binding/start sequence, using the existing appID:
   /Users/sg_cbb_mac_1/praetor-workspaces/APS-Test/.codex/skills/workspace-app-builder/scripts/publish-app.sh container qa-fr006-main-3d164d5 /workspace/apps/qa17-0afa-user-entry 4318 node 'node b15-user-preview-server.mjs'
@@ -96,10 +97,14 @@ zero menus. Then use the recovery budget ONCE with the official VM endpoint:
 Node directly executes the existing server as one listener; PORT is platform
 injected. The official cached node:22-slim supplies Node, not Python. The legacy
 launch.py remains among the five prepared files for provenance, but is not run.
-Workspace mode uses Node built-ins only; no package.json/npm install/build is
-needed. Managed identity still loads the existing official SDK lazily and fails
+Workspace mode uses Node built-ins only. The standard Node project includes
+private package.json with explicit empty dependencies/devDependencies and the
+audited Node entry, plus lockfile v3 and .npmrc. Keep the official automatic
+npm install --include dev lifecycle: offline=true, audit=false, fund=false and
+update-notifier=false prohibit external resolution for this empty dependency
+graph; do not invent skip flags. No build is required. Managed identity still loads the existing official SDK lazily and fails
 closed when SDK/configuration is absent. Never install it as part of recovery.
-No hand-started host process, dependency installation or extra proxy is used.
+No hand-started host process, external package installation or extra proxy is used.
 The wrapper listener returns503 while deployment configuration is absent. The
 VM ensure waits for TCP; optional HTTP probes reject503 by default unless an
 explicit expected status permits it. Read the actual official result and
@@ -176,3 +181,21 @@ Six synthetic groups cover mode/gate closure,0afa dialect/assets,role stripping,
 new-browser scope isolation,CSRF/run/save and managed SDK unsupported rejection.
 Original21 checks are not repeated or re-labelled. No fake result is a platform
 session success, real18302 access, product/browser smoke or user-entry closure.
+
+MANIFEST RECOVERY AMENDMENT — 2026-11-01
+event_key=aps:uat17-preview-manifest-recovery:20261101:r1
+authority=https://github.com/huiliangtao666/APS/issues/47#issuecomment-6560048239
+The old Node recovery budget was consumed by ENOENT package.json before any
+wrapper launch. The missing standard project manifest is a preparation defect;
+it does not require a platform skip-install path. PM authorized this concrete
+manifest change and ONE additional official preview invocation, independent
+of both prior 1/1 budgets. Failure stops; no second invocation. Source templates
+are deployment tooling only and do not deploy current main or a new product.
+Zero external dependencies applies to workspace-preview mode only. Managed
+identity still needs the official pre-existing SDK and identity configuration;
+it is intentionally not installed or claimed zero-dependency for that mode.
+Offline selfcheck: node qa/b15-user-preview-manifest-selftest.mjs (finite; no
+listener, product request, browser, Worker or SDK install). Run the prepared
+project's exact npm install --include dev inside official app-exec using cached
+node:22-slim, then compare manifest/lock and five original files. Project npm
+configuration retains lifecycle scripts; no ignore-scripts or skip flag.

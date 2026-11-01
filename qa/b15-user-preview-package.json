@@ -1,0 +1,16 @@
+{
+  "name": "aps-qa17-restricted-preview",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fixed 0afa unpublished workspace-preview wrapper; Node built-ins only in this mode.",
+  "type": "module",
+  "engines": {
+    "node": ">=22 <23"
+  },
+  "scripts": {
+    "dev": "node b15-user-preview-server.mjs",
+    "start": "node b15-user-preview-server.mjs"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

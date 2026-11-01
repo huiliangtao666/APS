@@ -11,6 +11,9 @@ APP_ID = 'qa-fr006-main-3d164d5'
 TARGET = '/workspace/apps/qa17-0afa-user-entry'
 LAUNCH = 'node b15-user-preview-server.mjs'
 FILES = ['core.mjs', 'lock.json', 'client.js', 'server.mjs', 'launch.py']
+PROJECT_FILES = {'b15-user-preview-package.json': 'package.json',
+                 'b15-user-preview-package-lock.json': 'package-lock.json',
+                 'b15-user-preview-npmrc': '.npmrc'}
 
 
 def commands(wab):
@@ -28,11 +31,19 @@ def commands(wab):
 def prepare(destination):
     dest = pathlib.Path(destination)
     dest.mkdir(parents=True, exist_ok=True)
-    for suffix in FILES:
-        source = pathlib.Path(__file__).with_name('b15-user-preview-' + suffix)
-        target = dest / source.name
+    sources = [('b15-user-preview-' + suffix, 'b15-user-preview-' + suffix) for suffix in FILES]
+    sources += list(PROJECT_FILES.items())
+    # Validate every target first; a collision must not leave a half-prepared project.
+    pending = []
+    for source_name, target_name in sources:
+        source = pathlib.Path(__file__).with_name(source_name)
+        target = dest / target_name
+        if target.is_symlink() or (target.exists() and not target.is_file()):
+            raise ValueError('refuse nonregular prepared file: ' + str(target))
         if target.exists() and target.read_bytes() != source.read_bytes():
             raise ValueError('refuse to overwrite differing prepared file: ' + str(target))
+        pending.append((source, target))
+    for source, target in pending:
         if not target.exists():
             shutil.copy2(source, target)
 
