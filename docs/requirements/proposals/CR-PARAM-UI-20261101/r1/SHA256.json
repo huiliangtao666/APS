@@ -1,0 +1,72 @@
+{
+  "01-需求变更与双入口设计.txt": {
+    "bytes": 14447,
+    "sha256": "2bab04504b543f6a6d06e1a42f66576a1cdac81ead1321b858a8797fbae97b89",
+    "publication": "design_docs_branch"
+  },
+  "02-用户修订参数目录.csv": {
+    "bytes": 76019,
+    "sha256": "4a7432b5584477b42ee39498ed6c3f64f4dfd5326a8f5862e253ae70bcc5b585",
+    "publication": "design_docs_branch"
+  },
+  "03-用户参数实例.csv": {
+    "bytes": 451996,
+    "sha256": "6bd378a8fee253340f5336ac58a3b5831cbd7ade686482b94cb9df18ceecf1ae",
+    "publication": "design_docs_branch"
+  },
+  "04-用户修订差异.csv": {
+    "bytes": 48614,
+    "sha256": "e0069ddfbf616ad56f26d0c8cb8615eecb6578ab44f0af5e9d0369b2f38a2827",
+    "publication": "design_docs_branch"
+  },
+  "05-统一页与流程入口映射.csv": {
+    "bytes": 63448,
+    "sha256": "7c897556818f823d1e62d351a368a9e0a29f34c4ebe0375b2d0902e547b0f9b1",
+    "publication": "design_docs_branch"
+  },
+  "06-校验属性业务评审.csv": {
+    "bytes": 3571,
+    "sha256": "9b3cd7468c71aa6ec9e2189153d5dd8d2c260c7a10b62878df6b472cf550b220",
+    "publication": "design_docs_branch"
+  },
+  "07-用户校验问题承接.csv": {
+    "bytes": 3208,
+    "sha256": "f035a665a55fb07a71573d621ed991c6d9589200f8770765f497df94433e2d3f",
+    "publication": "design_docs_branch"
+  },
+  "08-新增验收映射.csv": {
+    "bytes": 5960,
+    "sha256": "335a257b7b57d56ec5ad9135862488cdd2baf8562e22c8af63b7514625d9aedd",
+    "publication": "design_docs_branch"
+  },
+  "09-来源与变更清单.json": {
+    "bytes": 967,
+    "sha256": "e9e1836d5d7a0876f44e95b08ceac0479f7a0828fc7c9f425821529ca5e44653",
+    "publication": "design_docs_branch"
+  },
+  "10-需求变更请求.json": {
+    "bytes": 2741,
+    "sha256": "bfca5642185a514182766f4953d5a2f0f863663dc4c106091eb319bc2a161d2e",
+    "publication": "design_docs_branch"
+  },
+  "11-设计校验.json": {
+    "bytes": 573,
+    "sha256": "16da0a80a95d3651ef0700c43ac58de6292e775f330879226a93659438a014c5",
+    "publication": "design_docs_branch"
+  },
+  "APS配置参数梳理_20261101_用户原件.xlsx": {
+    "bytes": 247518,
+    "sha256": "e8b73e882e66b2e19ab7cb639c7a17e8830d08c0f485667484141837794f4d24",
+    "publication": "private_handoff_only"
+  },
+  "README.txt": {
+    "bytes": 1647,
+    "sha256": "2fe0ce2a27cfe2d4a575f2ef4fbef19533b7c7f8d89ce4b18b379b774cf20126",
+    "publication": "design_docs_branch"
+  },
+  "配置参数UI对应与评审_20261101.xlsx": {
+    "bytes": 26095,
+    "sha256": "330275371a20b6766d740ae9d02f97e22dd7e33c862491a6d1d14b70d9e45e74",
+    "publication": "design_docs_branch"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "cr_id": "CR-PARAM-UI-20261101",
+  "event_key": "design:parameter-import-dual-entry:20261101:r1",
+  "source_file": "APS配置参数梳理_20261101.xlsx",
+  "sha256": "e8b73e882e66b2e19ab7cb639c7a17e8830d08c0f485667484141837794f4d24",
+  "bytes": 247518,
+  "sheet_count": 11,
+  "parameter_definitions": 168,
+  "sample_categories": 38,
+  "sample_instances": 3428,
+  "discussion_rows": 19,
+  "new_discussions": [
+    "D14",
+    "D15",
+    "D16",
+    "D17",
+    "D18",
+    "D19"
+  ],
+  "issue_rows": 12,
+  "sample_values_changed": false,
+  "diff_cells": 638,
+  "new_columns": [
+    "最小值",
+    "最大值",
+    "是否必填",
+    "缺失时行为",
+    "权威来源及校验备注"
+  ],
+  "parameter_dictionary_header_row": 2,
+  "sample_header_row": 2,
+  "data_first_row": 3,
+  "source_protection": "原上传文件完整保留；新增列原文注明建议待评审；数值格式变化按语义比较",
+  "product_sha": null,
+  "primary_tracking_issue": 45
+}
