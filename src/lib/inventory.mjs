@@ -1,3 +1,4 @@
+import {minuteMode,minuteInstant,validateMinuteValidity} from './minute-validity.mjs';
 import {sourceRefs} from './problem-records.mjs';
 import { validRuleTime } from './business-rules.mjs';
 import { validSupplyTime } from './expected-supply.mjs';
@@ -29,7 +30,7 @@ export function validateInventoryBatches(batches = [], materials = []) {
     if (!id) add('INVENTORY_REQUIRED','批次编号',`${prefix}缺少批次编号`);
     else if (ids.has(id)) add('INVENTORY_DUPLICATE','批次编号',`批次编号 ${id} 重复`,batches.filter(r=>(r['批次编号']||'').trim()===id));
     ids.add(id);
-    for (const field of ['物料编号', '有效期', '位置', '质量状态']) {
+    for (const field of ['物料编号', ...(minuteMode(batch)?[]:['有效期']), '位置', '质量状态']) {
       if (!(batch[field] || '').trim()) add('INVENTORY_REQUIRED',field,`${prefix}（${id || '编号空'}）缺少${field}`);
     }
     if (batch['物料编号'] && !materialIds.has(batch['物料编号'].trim())) add('INVENTORY_MATERIAL','物料编号',`${prefix}引用未配置的物料 ${batch['物料编号']}`);
@@ -44,7 +45,8 @@ export function validateInventoryBatches(batches = [], materials = []) {
       ? decimalDifference(batch['账面数量'],batch['已占用数量']).n<0n
       : Number.isFinite(quantity)&&Number.isFinite(reserved)&&reserved>quantity;
     if (overReserved) add('INVENTORY_RESERVED','已占用数量',`${prefix}已占用数量不能大于账面数量`);
-    if (batch['有效期'] && !validExpiry(batch['有效期'])) add('INVENTORY_EXPIRY','有效期',`${prefix}有效期须为有效日历日期 YYYY-MM-DD`);
+    for(const message of validateMinuteValidity(batch))add('INVENTORY_EXPIRY','分钟时效',message);
+    if (!minuteMode(batch) && batch['有效期'] && !validExpiry(batch['有效期'])) add('INVENTORY_EXPIRY','有效期',`${prefix}有效期须为有效日历日期 YYYY-MM-DD`);
     const ready = batch['预计可用时间'] || '';
     if (ready && !validSupplyTime(ready)) add('INVENTORY_READY','预计可用时间',`${prefix}预计可用时间须为带时区的有效日期时间`);
   });
@@ -61,13 +63,16 @@ export function getUsableQualityStatuses(rules = [], materialId = '', at = new D
 }
 
 // The caller supplies the existing rule's allowed statuses; no new state mapping.
-export function inventoryEligibility(batch, asOf, usableStatuses) {
+export function inventoryEligibility(batch, asOf, usableStatuses, {readyAt}={}) {
   const at=Date.parse(asOf), reasons=[];
   if(!Number.isFinite(at)) reasons.push('查询时点无效');
   if(!usableStatuses.includes(batch['质量状态'])) reasons.push('模拟质量状态不在本规则可用列表');
-  if(!validExpiry(batch['有效期']||'')) reasons.push('有效期无效');
+  if(minuteMode(batch)){
+   reasons.push(...validateMinuteValidity(batch));
+   try{const expiry=Date.parse(minuteInstant(batch['时间原点'],batch['到期分钟']));if(at>expiry||at===expiry&&batch['到期边界']==='截止前')reasons.push('已过显式分钟到期边界');}catch{}
+  }else if(!validExpiry(batch['有效期']||'')) reasons.push('有效期无效');
   else if(Number.isFinite(at)&&batch['有效期']<inventoryBusinessDate(asOf)) reasons.push('已过有效期');
-  const ready=batch['预计可用时间'];
+  const ready=readyAt||batch['预计可用时间'];
   if(ready&&(!validSupplyTime(ready)||Date.parse(ready)>at)) reasons.push('尚未到预计可用时间或时间无效');
   if(!decimal(batch['账面数量'])||!decimal(batch['已占用数量'])||decimalDifference(batch['账面数量'],batch['已占用数量']).n<0n) reasons.push('数量或占用无效');
   return {eligible:reasons.length===0,reasons};

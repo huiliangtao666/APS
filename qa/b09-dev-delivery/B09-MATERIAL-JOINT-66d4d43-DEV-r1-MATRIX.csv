@@ -1,0 +1,30 @@
+﻿id,scope,expected,actual,status,product_sha,evidence,owner,next
+BU09-01,"BU09-01 actual multiCSV import, all-constraint Worker, exact162.5 FEFO, exclusions, preview, frozen sources, native export",用户实际导入/编辑/Worker/来源/冻结/导出符合相应断言,PASS；见原始浏览器检查及HTTP轨迹,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/browser/browser-report.json,APS-Dev,APS-PM核验后QA按场景验收
+BU09-02,BU09-02 literal original09 saved with BOM and independent normalized BOM used exactly once,用户实际导入/编辑/Worker/来源/冻结/导出符合相应断言,PASS；见原始浏览器检查及HTTP轨迹,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/browser/browser-report.json,APS-Dev,APS-PM核验后QA按场景验收
+BU09-03,"BU09-03 UI edit62.5 to62.4, saved/reloaded0.1 gap, unplanned tasks and source links, native export",用户实际导入/编辑/Worker/来源/冻结/导出符合相应断言,PASS；见原始浏览器检查及HTTP轨迹,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/browser/browser-report.json,APS-Dev,APS-PM核验后QA按场景验收
+BU09-04,BU09-04 current stock edit does not recalculate frozen old run/source/export,用户实际导入/编辑/Worker/来源/冻结/导出符合相应断言,PASS；见原始浏览器检查及HTTP轨迹,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/browser/browser-report.json,APS-Dev,APS-PM核验后QA按场景验收
+BU09-05,BU09-05 singleCSV actual replacement preserves derived literal650.0 BOM/CRLF bytes and hash,用户实际导入/编辑/Worker/来源/冻结/导出符合相应断言,PASS；见原始浏览器检查及HTTP轨迹,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/browser/browser-report.json,APS-Dev,APS-PM核验后QA按场景验收
+BU09-06,"BU09-06 four error classes, physical line selection, zero writes, edit drafts, recheck/commit and successful Worker",用户实际导入/编辑/Worker/来源/冻结/导出符合相应断言,PASS；见原始浏览器检查及HTTP轨迹,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/browser/browser-report.json,APS-Dev,APS-PM核验后QA按场景验收
+BU09-07,BU09-07 named replaceable325-demand/400-stock/100-occupied profile shows25kg gap; no implicit default,用户实际导入/编辑/Worker/来源/冻结/导出符合相应断言,PASS；见原始浏览器检查及HTTP轨迹,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/browser/browser-report.json,APS-Dev,APS-PM核验后QA按场景验收
+BU09-08,"BU09-08 material impact only: arrival120 not availability180, conditional source/supply IDs retained",用户实际导入/编辑/Worker/来源/冻结/导出符合相应断言,PASS；见原始浏览器检查及HTTP轨迹,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/browser/browser-report.json,APS-Dev,APS-PM核验后QA按场景验收
+BU09-09,BU09-09 actual supply availability edit/save ->240; old180 snapshot unchanged,用户实际导入/编辑/Worker/来源/冻结/导出符合相应断言,PASS；见原始浏览器检查及HTTP轨迹,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/browser/browser-report.json,APS-Dev,APS-PM核验后QA按场景验收
+BU09-10,BU09-10 normalized balanced BOM edit changes demand160; literal original09 remains650,用户实际导入/编辑/Worker/来源/冻结/导出符合相应断言,PASS；见原始浏览器检查及HTTP轨迹,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/browser/browser-report.json,APS-Dev,APS-PM核验后QA按场景验收
+BU09-11,BU09-11 query role can read/reopen frozen material results but cannot edit/import/run,用户实际导入/编辑/Worker/来源/冻结/导出符合相应断言,PASS；见原始浏览器检查及HTTP轨迹,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/browser/browser-report.json,APS-Dev,APS-PM核验后QA按场景验收
+UI-INVERTED,UAT11原始错误类别：真正日历倒置60→0，与缺工时/工装错引用/BOM合计错同时存在,运行前逐类定位，拒绝且零持久化字节,四类均定位；确认禁用；前后状态hash相同,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/inverted/report.json,APS-Dev,APS-PM核验后QA按场景验收
+BD01,精确物料预览零写入，MATERIAL关闭保持未检查,适用核心/边界/负面接缝通过,4/4接缝测试PASS,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/seams/BD01.json,APS-Dev,APS-PM核验后QA按场景验收
+BD02,未排任务冻结来源/物理行/缺映射回退,适用核心/边界/负面接缝通过,4/4接缝测试PASS,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/seams/BD02.json,APS-Dev,APS-PM核验后QA按场景验收
+BD03,四错误分别及联合拒绝，原子写入/Worker入场守卫,适用核心/边界/负面接缝通过,4/4接缝测试PASS,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/seams/BD03.json,APS-Dev,APS-PM核验后QA按场景验收
+BD04,原生导出、历史冻结、stale/角色/CSRF守卫,适用核心/边界/负面接缝通过,4/4接缝测试PASS,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/seams/BD04.json,APS-Dev,APS-PM核验后QA按场景验收
+ORACLE27,独立Fraction文件核对，未导入产品算法,162.5/162.4/0.1/325/25、启用约束、资源/日历及180/240,27/27 PASS,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/browser/independent-oracle.json,APS-Dev,APS-PM核验后QA按场景验收
+RESTART,真实进程重启→API及UI重开→原生CSV原始bytes,快照/来源/hash与重启前一致，UTF8 BOM不得剥除,PASS；导出原件55881 bytes未变化,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/browser/process-restart-report.json,APS-Dev,APS-PM核验后QA按场景验收
+BUILD,最终候选类型检查/Vite/API/Worker构建,必需构建通过,PASS；资源失败原件保留，最终构建通过,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/build-steps.log,APS-Dev,APS-PM核验后QA按场景验收
+LIB,库回归,相关回归通过；保留原SHA不迁签,113 PASS；最终产品源码树和全部静态资产逐字一致,PASS,fd6607fb0e088b7841a494072ec0fe7b2d25b37b,regression/lib-tests.log,APS-Dev,APS-PM核验后QA按场景验收
+API,API/权限/Worker/历史回归,相关回归通过；保留原SHA不迁签,124 PASS；最终产品源码树和全部静态资产逐字一致,PASS,fd6607fb0e088b7841a494072ec0fe7b2d25b37b,regression/api-tests.log,APS-Dev,APS-PM核验后QA按场景验收
+QUERY,查询UI,相关回归通过；保留原SHA不迁签,5 PASS；最终产品源码树和全部静态资产逐字一致,PASS,fd6607fb0e088b7841a494072ec0fe7b2d25b37b,regression/query-ui.log,APS-Dev,APS-PM核验后QA按场景验收
+B08-SOURCE,旧资源来源安全影响检查,相关回归通过；保留原SHA不迁签,3 PASS；最终产品源码树和全部静态资产逐字一致,PASS,fd6607fb0e088b7841a494072ec0fe7b2d25b37b,regression/b08-source.log,APS-Dev,APS-PM核验后QA按场景验收
+PORTABLE,闭包源码/SDK/依赖独立重建及真实Worker,公开固定Node基础镜像+锁定依赖可重建，明确仅598源文件子集,PASS：新镜像初始化并实际Worker给出100+62.5齐套,PASS,66d4d43e4b1cc566a47d96a93671d179d8921434,evidence/portable-replay.json,APS-Dev,APS-PM核验后QA按场景验收
+TEST-OWNER,Test域核心/边界/独立检查,引用源与原件一致，不重复同断言整套,54域测试+23独立断言+4物料影响回归；28内部hash核验,PASS,579fe0589757154857c519e4968dee1e288ca9a0,test-owner/B09-MATERIAL-579fe05-Test-r1-EVIDENCE.zip,APS-Dev,APS-PM核验后QA按场景验收
+WAIT-MAPPING,原09及未知单位/收率/损失组合,无批准转换则不推定，原文独立保存,原09保持字面未映射；规范化模拟独立配置,WAIT_APPROVAL,66d4d43e4b1cc566a47d96a93671d179d8921434,authority/B09-approved-excerpts.json,APS-Dev,APS-PM核验后QA按场景验收
+RESERVATION,CR-FR010020-RESERVATION effective=false,不实施全局预占/真实扣库/到货审批,未实施；仅本方案局部候选分配及基线已有占用扣除,NOT_IMPLEMENTED_BY_AUTHORIZATION,66d4d43e4b1cc566a47d96a93671d179d8921434,authority/change-register.json,APS-Dev,APS-PM核验后QA按场景验收
+QA09,UAT09正式业务验收,PM核入口后派QA,本次仅Dev开发自测；QA未派，不签通过,NOT_EXECUTED,66d4d43e4b1cc566a47d96a93671d179d8921434,ENVIRONMENT.json,APS-Dev,APS-PM核验后QA按场景验收
+QA10-11,UAT10/11正式业务验收,UAT09结论前不派QA,仅包内负面/导入开发自测完成，等待09结论,NOT_EXECUTED,66d4d43e4b1cc566a47d96a93671d179d8921434,ENVIRONMENT.json,APS-Dev,APS-PM核验后QA按场景验收

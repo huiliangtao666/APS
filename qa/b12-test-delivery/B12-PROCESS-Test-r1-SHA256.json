@@ -1,0 +1,26 @@
+{
+  "source_sha": "e8e2081ac7ba5e503ee9ddb2df41bb5d07a21f75",
+  "event_key": "dlv_eccbf433-46fc-4696-ab37-76817c015055:r1",
+  "files": {
+    "B12-PROCESS-Test-r1-REPORT.html": {
+      "bytes": 9639,
+      "sha256": "1e6bd02a7871e1c8f83d35967c3eb7a27501519ebbb96208307fbea077910c3c"
+    },
+    "B12-PROCESS-Test-r1-MATRIX.csv": {
+      "bytes": 9631,
+      "sha256": "ab512ad7f68a9f15f0fe18931dfa20eae489285318b785189e4a2ac1f80f42ba"
+    },
+    "B12-PROCESS-Test-r1-CLOSURE.csv": {
+      "bytes": 6650,
+      "sha256": "52a18da7fd9d64f4be8409cd6a8cdc09d894053469993438e02637b052c52c48"
+    },
+    "B12-PROCESS-Test-r1-HANDOFF.json": {
+      "bytes": 227217,
+      "sha256": "962cfbfec8a90dd26e451865b0e76b048fff0fcd0cdf75036e37ece486a44a57"
+    },
+    "B12-PROCESS-Test-r1-EVIDENCE.zip": {
+      "bytes": 2465166,
+      "sha256": "db7bc92523af74564e74c3eb4fd51faad4b16e304b47fa8165cb8885984e481b"
+    }
+  }
+}

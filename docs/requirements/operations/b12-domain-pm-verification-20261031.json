@@ -1,0 +1,53 @@
+{
+  "event_key": "dlv_eccbf433-46fc-4696-ab37-76817c015055:r1",
+  "source": "e8e2081ac7ba5e503ee9ddb2df41bb5d07a21f75",
+  "outer": 6,
+  "internal": 104,
+  "source_hashes": 577,
+  "matrix_rows": 27,
+  "verdict_counts": {
+    "PASS": 19,
+    "PASS_AFTER_FIX": 2,
+    "NOT_EXECUTED": 4,
+    "WAIT_APPROVAL": 2
+  },
+  "originals": 78,
+  "closure_rows": 14,
+  "changed_files": [
+    "qa/b12-test-INTEGRATION.md",
+    "qa/b12-test-core.mjs",
+    "qa/b12-test-export.mjs",
+    "qa/b12-test-oracle.py",
+    "qa/b12-test-replay.sh",
+    "qa/b12-test-worker.mjs",
+    "src/lib/process-cooling.mjs",
+    "src/lib/process-cooling.test.mjs",
+    "src/lib/process-route-planner.mjs",
+    "src/lib/process-route.d.mts",
+    "src/lib/process-route.mjs",
+    "src/lib/verify-process-route.mjs"
+  ],
+  "product_tests": {
+    "fixed_source_core": 36,
+    "unchanged_batch_impact": 13,
+    "existing_r4_impact": 14,
+    "independent_core": 23,
+    "independent_r4": 23,
+    "build": "PASS at feature commit; subsequent changes QA+whitespace only"
+  },
+  "status": "PROCESSED_TASK_SCOPE_ONLY",
+  "qa": "NOT_EXECUTED",
+  "main_integration": "PENDING_DEV",
+  "repair_increment": 0,
+  "source_notification": "dlv_3aa56adb-7f4e-4832-ab48-50a809d33047",
+  "prior_delivery": "dlv_eccbf433-46fc-4696-ab37-76817c015055",
+  "continuation_dispatch": "dlv_586f8017-7984-445c-865d-f73cbd231c6f",
+  "package": "#39",
+  "applies_to": "v0.3 UAT12/13/14 and authorized fixed model; no whole CR acceptance",
+  "remaining": [
+    "Dev main serial integration/source UI/API/Worker/frozen CSV mapping",
+    "Final whole package candidate/accessible environment/selftest",
+    "QA UAT12 then13 then14 after B09 UAT conclusions",
+    "Explicit WAIT_APPROVAL quantities/packaging/general loading semantics retained"
+  ]
+}

@@ -1,0 +1,481 @@
+{
+  "contract": "BR13-directed-occupations-v1",
+  "domainValid": true,
+  "status": "checked",
+  "overallSchedulable": null,
+  "requiredOccupations": [
+    {
+      "transitionId": "T1",
+      "taskIds": [
+        "production-A",
+        "production-B"
+      ],
+      "policyId": "A-B",
+      "direction": [
+        "A",
+        "B"
+      ],
+      "resourceId": "M",
+      "policySource": {
+        "id": "A-B",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      },
+      "sequenceSource": {
+        "id": "explicit-mock-sequence",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      },
+      "phase": "changeover",
+      "kind": "resource",
+      "quantity": 1,
+      "start": 30,
+      "end": 40,
+      "registrySource": {
+        "id": "M-calendar",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      }
+    },
+    {
+      "transitionId": "T1",
+      "taskIds": [
+        "production-A",
+        "production-B"
+      ],
+      "policyId": "A-B",
+      "direction": [
+        "A",
+        "B"
+      ],
+      "resourceId": "P",
+      "policySource": {
+        "id": "A-B",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      },
+      "sequenceSource": {
+        "id": "explicit-mock-sequence",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      },
+      "phase": "changeover",
+      "kind": "personnel",
+      "quantity": 1,
+      "skill": "clean",
+      "start": 30,
+      "end": 40,
+      "registrySource": {
+        "id": "P-calendar",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      }
+    },
+    {
+      "transitionId": "T1",
+      "taskIds": [
+        "production-A",
+        "production-B"
+      ],
+      "policyId": "A-B",
+      "direction": [
+        "A",
+        "B"
+      ],
+      "resourceId": "M",
+      "policySource": {
+        "id": "A-B",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      },
+      "sequenceSource": {
+        "id": "explicit-mock-sequence",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      },
+      "phase": "validation",
+      "kind": "resource",
+      "quantity": 1,
+      "start": 40,
+      "end": 45,
+      "registrySource": {
+        "id": "M-calendar",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      }
+    }
+  ],
+  "acceptedOccupations": [
+    {
+      "transitionId": "T1",
+      "taskIds": [
+        "production-A",
+        "production-B"
+      ],
+      "policyId": "A-B",
+      "direction": [
+        "A",
+        "B"
+      ],
+      "resourceId": "M",
+      "policySource": {
+        "id": "A-B",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      },
+      "sequenceSource": {
+        "id": "explicit-mock-sequence",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      },
+      "phase": "changeover",
+      "kind": "resource",
+      "quantity": 1,
+      "start": 30,
+      "end": 40,
+      "registrySource": {
+        "id": "M-calendar",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      }
+    },
+    {
+      "transitionId": "T1",
+      "taskIds": [
+        "production-A",
+        "production-B"
+      ],
+      "policyId": "A-B",
+      "direction": [
+        "A",
+        "B"
+      ],
+      "resourceId": "P",
+      "policySource": {
+        "id": "A-B",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      },
+      "sequenceSource": {
+        "id": "explicit-mock-sequence",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      },
+      "phase": "changeover",
+      "kind": "personnel",
+      "quantity": 1,
+      "skill": "clean",
+      "start": 30,
+      "end": 40,
+      "registrySource": {
+        "id": "P-calendar",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      }
+    },
+    {
+      "transitionId": "T1",
+      "taskIds": [
+        "production-A",
+        "production-B"
+      ],
+      "policyId": "A-B",
+      "direction": [
+        "A",
+        "B"
+      ],
+      "resourceId": "M",
+      "policySource": {
+        "id": "A-B",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      },
+      "sequenceSource": {
+        "id": "explicit-mock-sequence",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      },
+      "phase": "validation",
+      "kind": "resource",
+      "quantity": 1,
+      "start": 40,
+      "end": 45,
+      "registrySource": {
+        "id": "M-calendar",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      }
+    }
+  ],
+  "findings": [],
+  "inspections": [
+    {
+      "transitionId": "T1",
+      "taskIds": [
+        "production-A",
+        "production-B"
+      ],
+      "policyId": "A-B",
+      "direction": [
+        "A",
+        "B"
+      ],
+      "resourceId": "M",
+      "policySource": {
+        "id": "A-B",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      },
+      "sequenceSource": {
+        "id": "explicit-mock-sequence",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      },
+      "start": 30,
+      "end": 40,
+      "readyAt": 45,
+      "successorStart": 45,
+      "declaredNoChangeover": false,
+      "declaredNoPersonnel": false,
+      "declaredNoWait": false,
+      "policy": {
+        "id": "A-B",
+        "from": "A",
+        "to": "B",
+        "resourceIds": [
+          "M"
+        ],
+        "prohibited": false,
+        "durationMinutes": 10,
+        "resources": [
+          {
+            "id": "M",
+            "quantity": 1
+          }
+        ],
+        "personnel": [
+          {
+            "id": "P",
+            "quantity": 1,
+            "skill": "clean"
+          }
+        ],
+        "validation": {
+          "clock": "elapsed-minutes",
+          "waitMinutes": 5,
+          "resources": [
+            {
+              "id": "M",
+              "quantity": 1
+            }
+          ],
+          "personnel": []
+        },
+        "source": {
+          "id": "A-B",
+          "version": "mock-v1",
+          "purpose": "selftest-only"
+        }
+      },
+      "checks": [
+        "direction",
+        "prohibition",
+        "precedence",
+        "validation-wait",
+        "horizon"
+      ]
+    }
+  ],
+  "notChecked": [
+    "Actual production sequence and authoritative task/product/resource linkage",
+    "Completeness/authority of caller-supplied ledgers, calendars, sources and business configuration",
+    "Production duration, material/BOM, quantities, delivery and whole-route feasibility",
+    "Shared pools, skill substitution and capacity coupling across distinct registry IDs",
+    "Physical cleaning completion, quality approval and actual validation/release facts",
+    "Application planner, independent saved-plan verifier, UI/API/Worker/persistence/export integration"
+  ],
+  "snapshot": {
+    "config": {
+      "contract": "BR13-directed-occupations-v1",
+      "source": {
+        "id": "mock-config",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      },
+      "timebase": {
+        "unit": "minute",
+        "origin": "mock-epoch-not-site-time"
+      },
+      "products": [
+        "A",
+        "B"
+      ],
+      "resources": [
+        {
+          "id": "M",
+          "capacity": 1,
+          "capacityScope": "independent",
+          "windows": [
+            {
+              "start": 0,
+              "end": 200
+            }
+          ],
+          "unavailable": [],
+          "source": {
+            "id": "M-calendar",
+            "version": "mock-v1",
+            "purpose": "selftest-only"
+          }
+        },
+        {
+          "id": "TOOL",
+          "capacity": 1,
+          "capacityScope": "independent",
+          "windows": [
+            {
+              "start": 0,
+              "end": 200
+            }
+          ],
+          "unavailable": [],
+          "source": {
+            "id": "TOOL-calendar",
+            "version": "mock-v1",
+            "purpose": "selftest-only"
+          }
+        }
+      ],
+      "personnel": [
+        {
+          "id": "P",
+          "capacity": 2,
+          "capacityScope": "independent",
+          "windows": [
+            {
+              "start": 0,
+              "end": 200
+            }
+          ],
+          "unavailable": [],
+          "source": {
+            "id": "P-calendar",
+            "version": "mock-v1",
+            "purpose": "selftest-only"
+          },
+          "skills": [
+            "clean"
+          ]
+        }
+      ],
+      "policies": [
+        {
+          "id": "A-B",
+          "from": "A",
+          "to": "B",
+          "resourceIds": [
+            "M"
+          ],
+          "prohibited": false,
+          "durationMinutes": 10,
+          "resources": [
+            {
+              "id": "M",
+              "quantity": 1
+            }
+          ],
+          "personnel": [
+            {
+              "id": "P",
+              "quantity": 1,
+              "skill": "clean"
+            }
+          ],
+          "validation": {
+            "clock": "elapsed-minutes",
+            "waitMinutes": 5,
+            "resources": [
+              {
+                "id": "M",
+                "quantity": 1
+              }
+            ],
+            "personnel": []
+          },
+          "source": {
+            "id": "A-B",
+            "version": "mock-v1",
+            "purpose": "selftest-only"
+          }
+        },
+        {
+          "id": "B-A",
+          "from": "B",
+          "to": "A",
+          "resourceIds": [
+            "M"
+          ],
+          "prohibited": false,
+          "durationMinutes": 20,
+          "resources": [
+            {
+              "id": "M",
+              "quantity": 1
+            }
+          ],
+          "personnel": [
+            {
+              "id": "P",
+              "quantity": 1,
+              "skill": "clean"
+            }
+          ],
+          "validation": {
+            "clock": "elapsed-minutes",
+            "waitMinutes": 7,
+            "resources": [
+              {
+                "id": "M",
+                "quantity": 1
+              }
+            ],
+            "personnel": []
+          },
+          "source": {
+            "id": "B-A",
+            "version": "mock-v1",
+            "purpose": "selftest-only"
+          }
+        }
+      ]
+    },
+    "transitions": [
+      {
+        "id": "T1",
+        "from": "A",
+        "to": "B",
+        "resourceId": "M",
+        "fromTaskId": "production-A",
+        "toTaskId": "production-B",
+        "predecessorEnd": 30,
+        "start": 30,
+        "successorStart": 45,
+        "source": {
+          "id": "explicit-mock-sequence",
+          "version": "mock-v1",
+          "purpose": "selftest-only"
+        }
+      }
+    ],
+    "existingOccupations": [],
+    "horizon": {
+      "start": 0,
+      "end": 200
+    },
+    "source": {
+      "id": "frozen-mock-candidate",
+      "version": "mock-v1",
+      "purpose": "selftest-only"
+    }
+  }
+}

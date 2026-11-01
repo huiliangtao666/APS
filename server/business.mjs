@@ -1,4 +1,10 @@
+import {cleaningHistoryTransition} from '../src/lib/changeover-application.mjs';
+import {bomApplication,saveBomApplication} from './workbook-bom-application.mjs';
+import {createWorkbookRouter} from './workbook-router.mjs';
+import {packTransition} from '../src/lib/pack-batch.mjs';
+import {stageMappingTransition} from '../src/lib/stage-bindings.mjs';
 import {createR21ConfigRouter} from './r21-config.mjs';
+import {isTrustedWrite} from './write-request.mjs';
 import {partialR21Seed,r21DeviceUsage} from '../src/lib/r21-stage-config.mjs';
 import {unmappedStageSources} from '../src/lib/original-stage-data.mjs';
 import {checkedCsvSources,csvProblemEvidence} from './csv-problems.mjs';
@@ -84,14 +90,15 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const allowed= action==='read' || (action==='export' ? m.role!=='query'||m.canExport===true : ['confirm','return','release','archive'].includes(action) ? m.role==='supervisor' : ['planner','supervisor'].includes(m.role));
     if(!allowed){console.info(JSON.stringify({action,decision:'deny',requestId:requestId(req),actor:actorKey(req)}));return res.status(403).json({error:'forbidden'});}
     if(req.method!=='GET'){
-      const site=req.get('sec-fetch-site');const origin=req.get('origin');
-      let badOrigin=false;try{if(origin){const parsed=new URL(origin);badOrigin=!['http:','https:'].includes(parsed.protocol)||parsed.host!==req.get('host');}}catch{badOrigin=true;}
-      if((site&&!['same-origin','none'].includes(site))||badOrigin)return res.status(403).json({error:'csrf'});
+      if(!isTrustedWrite(req))return res.status(403).json({error:'csrf'});
       if(typeof req.body?.reason!=='string'||!req.body.reason.trim()||req.body.reason.length>1000)return res.status(400).json({error:'reason_required'});
     }
     next();
   };
   const record=(s,req,action,target,details={})=>s.records.push({id:randomUUID(),action,target,actor:actorKey(req),role:req.member.role,at:new Date().toISOString(),reason:req.body.reason.trim(),requestId:requestId(req),...details});
+  router.use('/workbooks',createWorkbookRouter({dataDir,permission,actorKey,requestId,workerFactory}));
+  router.get('/bom-loss',permission('read'),(req,res)=>{const s=read();try{const p=bomApplication(s.data,String(req.query.productId||''),String(req.query.version||''));res.json({...p,revision:s.revision});}catch(e){res.status(422).json({error:e.message});}});
+  router.post('/bom-loss',permission('edit'),(req,res)=>{const s=read();if(req.body.revision!==s.revision)return res.status(409).json({error:'stale_input'});try{const p=saveBomApplication(s.data,req.body.productId,req.body.version,req.body.config,s.revision+1);s.data.bomLossProfiles=[...(s.data.bomLossProfiles||[]).filter(old=>old.productId!==p.productId||old.recipe.version!==p.recipe.version),p];s.revision++;record(s,req,'bom_loss_saved',p.productId,{model:p.config.model,configVersion:p.config.version});write(s);res.json({...p,revision:s.revision});}catch(e){res.status(422).json({error:e.message});}});
   router.get('/meta',permission('read'),(_req,res)=>res.json({release:'R1 prototype + FR-037 supported-flow slice',baseline:'APS v0.3 review draft',supportedRules:['BR-02 precedence','BR-03 exclusive machine overlap','FR-008 calendar','FR-007 personnel','FR-022 explicit joint occupancy'],timeOrigin:'2026-11-02T08:00:00+08:00',interval:'[start,end)',unsupportedWorkflows:['external-dispatch'],confirmation:'FR030-v1 internal only'}));
   router.get('/rules/preview',permission('read'),(_req,res)=>{const s=read();res.json({revision:s.revision,...configurationPreview(s.data)});});
   router.get('/rules/capabilities',permission('read'),(_req,res)=>res.json(ruleCatalog));
@@ -145,10 +152,11 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
       proposed[key]=(['tools','resourceClaims'].includes(key)?rows:(migratePolicies({[key]:rows})[key]||rows)).map(r=>Object.fromEntries(def.fields.map(f=>[f,r[f]??''])));
     }
     if(trialId&&factTables.some(k=>tables[k]!==undefined))return res.status(409).json({error:'trial_execution_edit_forbidden'});
+    if(trialId){const history=d=>{try{return JSON.parse((d.rules||[]).find(r=>r['规则编号']==='CLEANING')?.['参数JSON']||'{}').completedTransitions||[];}catch{return null;}};if(JSON.stringify(history(target.data))!==JSON.stringify(history(proposed)))return res.status(409).json({error:'trial_cleaning_history_edit_forbidden'});}
     if(!trialId){const staged=stageEvents(target.data,proposed,Object.keys(tables));if(staged.issues.length)return res.status(409).json({error:'event_reconciliation_required',issues:staged.issues});proposed=staged.data;for(const def of defs.filter(d=>JSON.stringify(proposed[d.key])!==JSON.stringify(target.data[d.key]))){const rows=proposed[def.key]||[];if(rows.some(r=>!r||typeof r!=='object'||Array.isArray(r)||Object.keys(r).some(k=>!def.fields.includes(k))||Object.values(r).some(v=>typeof v!=='string')))return res.status(400).json({error:'invalid_event_effect'});proposed[def.key]=rows.map(r=>Object.fromEntries(def.fields.map(f=>[f,r[f]??''])));}}
-    const transition=(trialId?trialInputIssues(s.data,proposed):executionTransition(target.data,proposed));if(transition.length)return res.status(409).json({error:'execution_reconciliation_required',...transitionEvidence(transition,trialId?s.data:target.data,proposed,trialId?s.revision:target.revision)});
+    const transition=[...cleaningHistoryTransition(target.data,proposed),...(trialId?trialInputIssues(s.data,proposed):executionTransition(target.data,proposed))];if(transition.length)return res.status(409).json({error:'execution_reconciliation_required',...transitionEvidence(transition,trialId?s.data:target.data,proposed,trialId?s.revision:target.revision)});
     const newlyEnabled=(proposed.rules||[]).some(r=>r['是否启用']==='是'&&!(target.data.rules||[]).some(old=>old['规则编号']===r['规则编号']&&old['是否启用']==='是'));
-    const issues=[...resourceMappingTransition(target.data,proposed,s.records),...poolTransitionIssues(target.data,proposed,s.records),...validateInputs(defs,proposed),...(newlyEnabled?assessRules(adaptOriginalDependencies(proposed).data,new Date().toISOString(),true,proposed.inputStage||'supported').issues:[])];if(issues.length){
+    const issues=[...packTransition(target.data,proposed,s.records),...stageMappingTransition(target.data,proposed,s.records),...resourceMappingTransition(target.data,proposed,s.records),...poolTransitionIssues(target.data,proposed,s.records),...validateInputs(defs,proposed),...(newlyEnabled?assessRules(adaptOriginalDependencies(proposed).data,new Date().toISOString(),true,proposed.inputStage||'supported').issues:[])];if(issues.length){
       // The rejected proposal is an ephemeral check input, never a saved input version.
       const source={domain:'candidate:'+(trialId?'trial:'+trialId:'current'),inputVersionId:inputHash(proposed),revision:target.revision,checkedAt:new Date().toISOString(),scope:'complete proposed input validation'};
       const csvSources=checkedCsvSources(proposed,target.csvSources,req.csvSources);
@@ -232,7 +240,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
   // Business dry run only: shares input/history guards, never preserve/write/record.
   router.post('/inputs/resource-policy-preview',permission('calculate'),(req,res)=>{
     const tables=req.body.tables;
-    if(!tables||typeof tables!=='object'||Array.isArray(tables)||Object.keys(tables).some(k=>!['originalResourceEvents','personnelPools','personnelGroups','dependencies','skillSubstitutions','originalTools','originalPersonnel','resourceMappings','tools','resourceClaims','rules'].includes(k)))return res.status(400).json({error:'preview_tables',message:'资源策略预览仅接受来源、映射、工装、声明、规则和人员配置草稿'});
+    if(!tables||typeof tables!=='object'||Array.isArray(tables)||Object.keys(tables).some(k=>!['stageMappings','originalInventory','originalSupply','originalProgress','originalEvents','inventory','supplies','supplyUses','executionSources','executionFacts','executionMaterials','simulationEvents','originalResourceEvents','personnelPools','personnelGroups','dependencies','skillSubstitutions','originalTools','originalPersonnel','resourceMappings','tools','resourceClaims','rules'].includes(k)))return res.status(400).json({error:'preview_tables',message:'资源策略预览仅接受来源、映射、工装、声明、规则和人员配置草稿'});
     const check={status:200,body:null},response={status(code){check.status=code;return this;},json(body){check.body=body;return this;}};
     saveInputs(req,response,tables,undefined,true);
     if(!check.body?.valid)return res.status(check.status).json(check.body);

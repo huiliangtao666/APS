@@ -69,7 +69,7 @@ export function validateProcessConfig({ products = [], orders = [], routes = [],
     if (timeKeys.has(key)) at('times',index,'固定分钟').push({ code:'INPUT / PROCESS_TIME_DUPLICATE', message:`产品 ${product} / 工序 ${operation} 工时重复` });
     timeKeys.add(key);
     const value = Number((row['固定分钟'] || '').trim());
-    if (row['计算方式'] !== '固定' || !Number.isFinite(value) || value <= 0) at('times',index,'固定分钟').push({ code:'INPUT / PROCESS_TIME_INVALID', message:`产品 ${product} / 工序 ${operation} 需配置正数固定分钟；速度换算暂不支持` });
+    if (row['计算方式'] !== '包装速率' && (row['计算方式'] !== '固定' || !Number.isFinite(value) || value <= 0)) at('times',index,'固定分钟').push({ code:'INPUT / PROCESS_TIME_INVALID', message:`产品 ${product} / 工序 ${operation} 需配置正数固定分钟；速度换算暂不支持` });
   });
   for (const [product, list] of routeByProduct) for (const row of list) {
     const operation = row['工序编号'].trim();

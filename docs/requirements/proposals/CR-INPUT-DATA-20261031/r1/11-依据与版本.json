@@ -1,0 +1,29 @@
+{
+  "retrieved_at": "2026-10-31T13:07:58.617585+00:00",
+  "main_sha": "172b415122472b933fc9935b5537697ebc03ccfc",
+  "project_id": "PVT_kwHOFM9WU84BpE1c",
+  "project_note": "最新实际18个联合包/历史执行入口；61基线FR/BR身份只读引用，不以旧卡状态覆盖迁移后包",
+  "controlled_changes_at_main_note": "main并非最新治理分支；另取Issue38/39当前明确引用的1b5a300773a1554b7d59241842b1ba1c79ac0789受控CR增量",
+  "uiux_design_sha": "8676c79d9805b4d55fbb0d98a9ac9c8ab6424e44",
+  "workbook_sha256": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+  "source_artifacts": {
+    "input-csv.mjs": "8bcafc7a929ddf72385f491af35c9590def292aa7e923c9c11f68f0a95f9debe",
+    "changes-latest-loss.json": "8139ad6ef9e90290d96c2946e561e294aa827bd2b72cce4ba07674371af04e59",
+    "main.json": "728a23af098532c28b314ad7432023938b6032e58894505c291296c3dba36d18",
+    "issue36.json": "c81de1648611cae8b99927cc994044450de722f994fc44a177db9a003d353ad3",
+    "csv-batch.mjs": "13d45284b5c3d9dd1099081bf2e6b47bbee3839fb96a3ee9845350e89d33e785",
+    "project2.json": "677347bb312ade893f32d1c82ea6acab9b0252bba6b941cdb98cbbb8156c5bec",
+    "issue41.json": "faebd1388ff213aacbfece3167ca60dcba7f8fcee40a408e36c3ddad07c11839",
+    "run-input.mjs": "fa448d9a9ad3b6948e469f869e12633d49b1275861346c4001660869bc0ee796",
+    "issue39.json": "db806891e0a657904dbc83bba4ba3e4863cbf522ae8b25ddfa6d7dcfb3d39fe3",
+    "baseline.json": "aa415a7b20ceb58c141ae7c08a301056db00e2ff23f20d3863efddd2eeecfdd9",
+    "issues.json": "fde7b4ba71bcaf6a5d34f09974a51295ebea99a08c87b969ea9f0f4d9c832022",
+    "comments45.json": "37daec3e1b688f355156eaee20f6a3fa76e396feaa11377e545cf9d6a56dcbe2",
+    "issue38.json": "9f3f9aa64dfb4da26d7421a0bb386b5f3b7a4549d620d9b5509b241bc83b0eb5",
+    "csv-contract.mjs": "864cf030b75bc7b87b8e60059ad182b39ef06d526363cc7dd8f88ef3932de6b2",
+    "changes.json": "b4606d1c66a6e3fdebde72378ecf0f276fe72f8a20b8c8ef918ed563b39f61db",
+    "issue45.json": "31f2f5a5c466dbcffbb797aeab12bf49402e9512a3f51043f4fc408e6c9d2227",
+    "tree.json": "f1d5dc8af1dc17a38ae416f199e13d9003f267989b5f4b492f9b293df22fa4bd"
+  },
+  "no_product_execution": true
+}

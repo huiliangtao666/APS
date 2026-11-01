@@ -1,0 +1,76 @@
+{
+  "data": {
+    "node": {
+      "id": "PVT_kwHOFM9WU84BpE1c",
+      "number": 2,
+      "owner": {
+        "login": "huiliangtao666"
+      },
+      "items": {
+        "nodes": [
+          {
+            "id": "PVTI_lAHOFM9WU84BpE1czhE8kL8",
+            "content": {
+              "number": 39,
+              "title": "[联合交付][B12] 完整工艺、拆合批与冷却空间联合包｜UAT-12/UAT-13/UAT-14",
+              "url": "https://github.com/huiliangtao666/APS/issues/39"
+            },
+            "fieldValues": {
+              "nodes": [
+                {},
+                {
+                  "text": "[联合交付][B12] 完整工艺、拆合批与冷却空间联合包｜UAT-12/UAT-13/UAT-14",
+                  "field": {
+                    "name": "Title"
+                  }
+                },
+                {
+                  "name": "In progress",
+                  "field": {
+                    "name": "Status"
+                  }
+                },
+                {
+                  "name": "P0",
+                  "field": {
+                    "name": "Priority"
+                  }
+                },
+                {
+                  "text": "b8512a3853160fca8deaf374cb1c5da3ea9e771c",
+                  "field": {
+                    "name": "交付代码SHA"
+                  }
+                },
+                {
+                  "text": "Dev main整合接缝DONE/PROCESSED；整包In progress；QA12-14未派；Dev续接B15在途",
+                  "field": {
+                    "name": "当前环节"
+                  }
+                },
+                {
+                  "text": "限定整合PASS；完整原19映射PARTIAL；BR13 NOT_EXECUTED；A01/A02 WAIT_APPROVAL；整包NOT_READY；0FAIL/修复+0/Log关闭0",
+                  "field": {
+                    "name": "验收结论"
+                  }
+                },
+                {
+                  "text": "Dev已批05/06/17映射及BR13责任待续接；A01/A02用户契约待决；B09 QA10执行/11未派；B12完整场景入口待核",
+                  "field": {
+                    "name": "阻塞原因"
+                  }
+                },
+                {
+                  "text": "https://github.com/huiliangtao666/APS/issues/39#issuecomment-6542327739",
+                  "field": {
+                    "name": "跟踪记录"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

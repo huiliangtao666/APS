@@ -1,0 +1,328 @@
+TAP version 13
+# Subtest: CORE-01 A→B: manual 30+10=40, 40+5=45; exact occupations and directed source
+ok 1 - CORE-01 A→B: manual 30+10=40, 40+5=45; exact occupations and directed source
+  ---
+  duration_ms: 3.697993
+  type: 'test'
+  ...
+# Subtest: CORE-02 B→A uses 20+7, never reverse policy or source
+ok 2 - CORE-02 B→A uses 20+7, never reverse policy or source
+  ---
+  duration_ms: 0.585915
+  type: 'test'
+  ...
+# Subtest: CORE-03 explicit zero duration/personnel/wait differs from omitted fields
+ok 3 - CORE-03 explicit zero duration/personnel/wait differs from omitted fields
+  ---
+  duration_ms: 0.787415
+  type: 'test'
+  ...
+# Subtest: CORE-04 multiple independent transitions + auxiliary tool; no task/order/quantity loss
+ok 4 - CORE-04 multiple independent transitions + auxiliary tool; no task/order/quantity loss
+  ---
+  duration_ms: 0.573499
+  type: 'test'
+  ...
+# Subtest: NEG-01 prohibited directed pair
+ok 5 - NEG-01 prohibited directed pair
+  ---
+  duration_ms: 0.377916
+  type: 'test'
+  ...
+# Subtest: NEG-02 exact policy missing
+ok 6 - NEG-02 exact policy missing
+  ---
+  duration_ms: 0.254166
+  type: 'test'
+  ...
+# Subtest: NEG-03 duplicate direction even if identical
+ok 7 - NEG-03 duplicate direction even if identical
+  ---
+  duration_ms: 0.273583
+  type: 'test'
+  ...
+# Subtest: NEG-04 unknown applicable resource
+ok 8 - NEG-04 unknown applicable resource
+  ---
+  duration_ms: 0.253666
+  type: 'test'
+  ...
+# Subtest: NEG-05 unknown cleaning resource
+ok 9 - NEG-05 unknown cleaning resource
+  ---
+  duration_ms: 0.621957
+  type: 'test'
+  ...
+# Subtest: NEG-06 unknown personnel
+ok 10 - NEG-06 unknown personnel
+  ---
+  duration_ms: 0.567207
+  type: 'test'
+  ...
+# Subtest: NEG-07 unknown skill
+ok 11 - NEG-07 unknown skill
+  ---
+  duration_ms: 0.842082
+  type: 'test'
+  ...
+# Subtest: NEG-08 missing duration
+ok 12 - NEG-08 missing duration
+  ---
+  duration_ms: 0.281125
+  type: 'test'
+  ...
+# Subtest: NEG-09 negative duration
+ok 13 - NEG-09 negative duration
+  ---
+  duration_ms: 0.245207
+  type: 'test'
+  ...
+# Subtest: NEG-10 fractional duration
+ok 14 - NEG-10 fractional duration
+  ---
+  duration_ms: 0.260292
+  type: 'test'
+  ...
+# Subtest: NEG-11 missing explicit personnel choice
+ok 15 - NEG-11 missing explicit personnel choice
+  ---
+  duration_ms: 0.267458
+  type: 'test'
+  ...
+# Subtest: NEG-12 missing wait distinct from zero
+ok 16 - NEG-12 missing wait distinct from zero
+  ---
+  duration_ms: 0.218583
+  type: 'test'
+  ...
+# Subtest: NEG-13 absent prohibition is not allow
+ok 17 - NEG-13 absent prohibition is not allow
+  ---
+  duration_ms: 0.225749
+  type: 'test'
+  ...
+# Subtest: NEG-14 cannot assume working-minute clock
+ok 18 - NEG-14 cannot assume working-minute clock
+  ---
+  duration_ms: 0.216541
+  type: 'test'
+  ...
+# Subtest: NEG-15 missing policy source
+ok 19 - NEG-15 missing policy source
+  ---
+  duration_ms: 0.226416
+  type: 'test'
+  ...
+# Subtest: NEG-16 duplicate edge atomic
+ok 20 - NEG-16 duplicate edge atomic
+  ---
+  duration_ms: 0.303333
+  type: 'test'
+  ...
+# Subtest: NEG-17 predecessor overlap
+ok 21 - NEG-17 predecessor overlap
+  ---
+  duration_ms: 0.241166
+  type: 'test'
+  ...
+# Subtest: NEG-18 validation one minute early
+ok 22 - NEG-18 validation one minute early
+  ---
+  duration_ms: 0.551832
+  type: 'test'
+  ...
+# Subtest: NEG-19 horizon one minute short
+ok 23 - NEG-19 horizon one minute short
+  ---
+  duration_ms: 0.274708
+  type: 'test'
+  ...
+# Subtest: NEG-20 fragmented calendar cannot be summed
+ok 24 - NEG-20 fragmented calendar cannot be summed
+  ---
+  duration_ms: 0.361458
+  type: 'test'
+  ...
+# Subtest: NEG-21 adjacent shifts cannot be silently bridged
+ok 25 - NEG-21 adjacent shifts cannot be silently bridged
+  ---
+  duration_ms: 0.271374
+  type: 'test'
+  ...
+# Subtest: NEG-22 exception intersects cleaning
+ok 26 - NEG-22 exception intersects cleaning
+  ---
+  duration_ms: 0.297458
+  type: 'test'
+  ...
+# Subtest: NEG-23 complete validation occupancy calendar
+ok 27 - NEG-23 complete validation occupancy calendar
+  ---
+  duration_ms: 0.280749
+  type: 'test'
+  ...
+# Subtest: NEG-24 personnel window incomplete
+ok 28 - NEG-24 personnel window incomplete
+  ---
+  duration_ms: 0.308249
+  type: 'test'
+  ...
+# Subtest: NEG-25 unsafe endpoint sum
+ok 29 - NEG-25 unsafe endpoint sum
+  ---
+  duration_ms: 0.233167
+  type: 'test'
+  ...
+# Subtest: NEG-26 numeric strings are not explicit integers
+ok 30 - NEG-26 numeric strings are not explicit integers
+  ---
+  duration_ms: 0.209875
+  type: 'test'
+  ...
+# Subtest: NEG-27 duplicate registry
+ok 31 - NEG-27 duplicate registry
+  ---
+  duration_ms: 0.22825
+  type: 'test'
+  ...
+# Subtest: NEG-28 coupled pool cannot claim independent capacity
+ok 32 - NEG-28 coupled pool cannot claim independent capacity
+  ---
+  duration_ms: 0.218583
+  type: 'test'
+  ...
+# Subtest: NEG-29 missing occupied quantity
+ok 33 - NEG-29 missing occupied quantity
+  ---
+  duration_ms: 0.349582
+  type: 'test'
+  ...
+# Subtest: NEG-30 unknown existing occupation resource
+ok 34 - NEG-30 unknown existing occupation resource
+  ---
+  duration_ms: 0.204791
+  type: 'test'
+  ...
+# Subtest: NEG-31 missing validation hold choice
+ok 35 - NEG-31 missing validation hold choice
+  ---
+  duration_ms: 0.791457
+  type: 'test'
+  ...
+# Subtest: NEG-32 invalid skills object returns gap instead of throwing
+ok 36 - NEG-32 invalid skills object returns gap instead of throwing
+  ---
+  duration_ms: 0.241416
+  type: 'test'
+  ...
+# Subtest: NEG-33 empty transitions is not a pass
+ok 37 - NEG-33 empty transitions is not a pass
+  ---
+  duration_ms: 0.198791
+  type: 'test'
+  ...
+# Subtest: NEG-34 duplicate demand cannot double count silently
+ok 38 - NEG-34 duplicate demand cannot double count silently
+  ---
+  duration_ms: 0.243624
+  type: 'test'
+  ...
+# Subtest: NEG-35 unknown transition resource
+ok 39 - NEG-35 unknown transition resource
+  ---
+  duration_ms: 0.240583
+  type: 'test'
+  ...
+# Subtest: NEG-36 reverse missing does not reuse A→B
+ok 40 - NEG-36 reverse missing does not reuse A→B
+  ---
+  duration_ms: 0.202124
+  type: 'test'
+  ...
+# Subtest: BOUND-01 endpoint adjacency/exact wait/horizon is allowed
+ok 41 - BOUND-01 endpoint adjacency/exact wait/horizon is allowed
+  ---
+  duration_ms: 0.220291
+  type: 'test'
+  ...
+# Subtest: BOUND-02 complete cleaning + validation window can end at calendar boundary
+ok 42 - BOUND-02 complete cleaning + validation window can end at calendar boundary
+  ---
+  duration_ms: 0.202958
+  type: 'test'
+  ...
+# Subtest: BOUND-03 resource conflict during validation, no accepted partial transition
+ok 43 - BOUND-03 resource conflict during validation, no accepted partial transition
+  ---
+  duration_ms: 0.324707
+  type: 'test'
+  ...
+# Subtest: BOUND-04 exact personnel capacity passes; one more head rejects
+ok 44 - BOUND-04 exact personnel capacity passes; one more head rejects
+  ---
+  duration_ms: 0.344625
+  type: 'test'
+  ...
+# Subtest: BOUND-05 two new transitions compete even without existing occupations
+ok 45 - BOUND-05 two new transitions compete even without existing occupations
+  ---
+  duration_ms: 0.297333
+  type: 'test'
+  ...
+# Subtest: BOUND-06 explicit validation people and tool occupy the wait interval
+ok 46 - BOUND-06 explicit validation people and tool occupy the wait interval
+  ---
+  duration_ms: 0.792957
+  type: 'test'
+  ...
+# Subtest: BOUND-07 explicit no hold means elapsed wait may cross offshift; occupied wait cannot
+ok 47 - BOUND-07 explicit no hold means elapsed wait may cross offshift; occupied wait cannot
+  ---
+  duration_ms: 0.411166
+  type: 'test'
+  ...
+# Subtest: BOUND-08 capacity sums stay exact beyond Number safe total
+ok 48 - BOUND-08 capacity sums stay exact beyond Number safe total
+  ---
+  duration_ms: 0.34
+  type: 'test'
+  ...
+# Subtest: NEG-37 invalid JSON values reject without state effects
+ok 49 - NEG-37 invalid JSON values reject without state effects
+  ---
+  duration_ms: 0.111667
+  type: 'test'
+  ...
+# Subtest: NEG-38 valid transition plus missing policy rejects atomically and retains both input identities
+ok 50 - NEG-38 valid transition plus missing policy rejects atomically and retains both input identities
+  ---
+  duration_ms: 0.241374
+  type: 'test'
+  ...
+# Subtest: NEG-39 malformed registries/policies/ledgers/calendars reject with precise gaps
+ok 51 - NEG-39 malformed registries/policies/ledgers/calendars reject with precise gaps
+  ---
+  duration_ms: 0.633749
+  type: 'test'
+  ...
+# Subtest: SAVE-01 JSON disk save/reopen freezes policy; new version changes only new evaluation
+ok 52 - SAVE-01 JSON disk save/reopen freezes policy; new version changes only new evaluation
+  ---
+  duration_ms: 34.767601
+  type: 'test'
+  ...
+# Subtest: WORKER-01 standalone Node domain worker equals direct JSON result; not app Worker
+ok 53 - WORKER-01 standalone Node domain worker equals direct JSON result; not app Worker
+  ---
+  duration_ms: 25.223619
+  type: 'test'
+  ...
+1..53
+# tests 53
+# suites 0
+# pass 53
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 124.544764

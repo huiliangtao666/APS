@@ -1,0 +1,31 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const html=fs.readFileSync(require('node:path').join(__dirname,'prototype.html'),'utf8');
+const nodes=new Map(),callbacks={},downloads=[],saved=new Map();
+function node(id){if(!nodes.has(id))nodes.set(id,{id,innerHTML:'',textContent:'',value:'',dataset:{},focus(){},close(){this.open=false},showModal(){this.open=true},querySelector(){return node('dialog-button')},addEventListener(k,f){callbacks[id+':'+k]=f}});return nodes.get(id)}
+const doc={querySelector:s=>node(s),activeElement:node('active'),createElement:()=>({click(){downloads.push({name:this.download,href:this.href})}}),addEventListener:(k,f)=>callbacks[k]=f};
+const sandbox={document:doc,window:{scrollY:120,scrollTo(){}},requestAnimationFrame:f=>f(),localStorage:{getItem:k=>saved.get(k)||null,setItem:(k,v)=>saved.set(k,v)},URL:{createObjectURL:()=> 'blob:demo',revokeObjectURL(){}},Blob:global.Blob,setTimeout:()=>0};
+vm.createContext(sandbox);const script=html.match(/<script>([\s\S]*)<\/script>/)[1];vm.runInContext(script,sandbox);
+const r=s=>vm.runInContext(s,sandbox),tests=[];function test(n,f){f();tests.push(n)}
+test('initial missing reason / master / transaction blocks',()=>assert.equal(r('blocks().length'),3));
+test('unready navigation returns readiness with reason',()=>{r('go(3)');assert.equal(r('step'),1)});
+test('master and order save preserve range and selection',()=>{r("input.reason='显式模拟';openEditor('machine',null)");node('#editValue').value='FC01';node('#editSource').value='mock';node('#editVersion').value='v1';r('saveEditor()');r("openEditor('order',null)");node('#editValue').value='正式订单';r('saveEditor()');assert.equal(r('input.ids.join()'),'A,B');assert.equal(r('input.end'),'600');assert.equal(r('input.calendar'),'FC01')});
+test('saved supplemental config still blocked until applied',()=>assert.equal(r('blocks()[0]'),'B 补录配置尚未显式应用'));
+test('apply then recheck permits configuration',()=>{r('actions.apply();actions.recheck();go(2)');assert.equal(r('step'),2);assert.equal(r('checked'),true)});
+test('submit immediate feedback and duplicate lock',()=>{r('go(3);actions.submit()');assert.equal(r('run.status'),'submitting');const id=r('run.id');r('actions.submit()');assert.equal(r('run.id'),id)});
+test('manual status sequence receives queued running completed',()=>{r('actions.advance()');assert.equal(r('run.status'),'queued');r('actions.advance()');assert.equal(r('run.phase'),'计算中');r('actions.advance()');assert.equal(r('run.result.tasks.length'),4)});
+test('unselected higher constraints are unchecked',()=>assert.equal(r('run.result.unchecked.join()'),'MOLD,LABOR,MATERIAL'));
+test('result and source return retain same selected task/filter',()=>{r("actions.result();selected='B-MIX';filter='B';sourceDialog('task');closeEditor()");assert.equal(r('selected'),'B-MIX');assert.equal(r('filter'),'B')});
+test('save immutable history independent of current configuration',()=>{r('actions.save()');let old=r('JSON.stringify(history[0])');r("input.mode='minimal-r1';mutate()");assert.equal(r('JSON.stringify(history[0])'),old);assert.equal(r('checked'),false)});
+test('old result remains accessible after current edit',()=>{r('go(4)');assert.equal(r('step'),4)});
+test('new run scope differs and old frozen scope preserved',()=>{r("actions.recheck();scenario='completed';go(3);actions.submit();actions.advance();actions.advance();actions.advance()");assert.equal(r('run.result.unchecked.includes("CALENDAR")'),true);assert.equal(r('history[0].result.checked.includes("CALENDAR")'),true)});
+test('csv and json downloads are design-only frozen objects',()=>{r('actions.csv();actions.json()');assert.equal(downloads.length,2)});
+test('partial includes unscheduled with null times',()=>{r("scenario='partial';actions.submit();actions.advance();actions.advance();actions.advance()");assert.equal(r('run.result.tasks.length'),2);assert.equal(r('run.result.unplanned.every(x=>x.start===null&&x.end===null)'),true)});
+test('zero tasks has no gantt bars and retains reasons',()=>{r("scenario='zero';actions.submit();actions.advance();actions.advance();actions.advance();renderResult()");assert.equal(r('run.result.tasks.length'),0);assert.equal(r('run.result.unplanned.length'),4);assert.ok(!node('#view').innerHTML.includes('class="bar '))});
+test('failure has no new result',()=>{r("scenario='failed';actions.submit();actions.advance();actions.advance();actions.advance()");assert.equal(r('run.result'),null)});
+test('timeout retains distinct status',()=>{r("scenario='timed_out';actions.submit();actions.advance();actions.advance();actions.advance()");assert.equal(r('run.status'),'timed_out')});
+test('unknown recovers same run without resubmit',()=>{r("scenario='completed';actions.submit();actions.advance();actions.disconnect()");const id=r('run.id');assert.equal(r('run.status'),'unknown');r('actions.recover()');assert.equal(r('run.id'),id);assert.equal(r('run.status'),'queued')});
+test('cancel awaits confirmation before cancelled',()=>{r('actions.cancel()');assert.equal(r('run.status'),'cancel_requested');r('actions.advance()');assert.equal(r('run.status'),'cancelled');assert.equal(r('run.result'),null)});
+test('unsupported fixture range blocks instead of inventing result',()=>{const id=r('run.id');r("input.end='200';mutate();actions.recheck();actions.submit()");assert.equal(r('run.id'),id)});
+test('all main and later screens render',()=>{r('renderSelect();renderCheck();renderConfig();renderRun();renderData();renderHistory();renderRoadmap()');assert.ok(node('#view').innerHTML.includes('UAT12–14'))});
+const result={type:'design_asset_checks_only',status:'PASS',count:tests.length,checks:tests,product_sha:null,product_tests:'NOT_EXECUTED',browser_visual_keyboard_screenreader:'NOT_EXECUTED; requires actual product candidate/browser; layout & native controls specified',method:'Node syntax check + isolated VM DOM stub for offline state/markup interaction invariants; no dependencies installed; no product process or environment touched'};
+fs.writeFileSync(require('node:path').join(__dirname,'08-设计校验.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));

@@ -1,0 +1,98 @@
+
+> aps-r1@0.1.0 build
+> tsc --noEmit && vite build && npx esbuild server/index.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs && npx esbuild server/calculation-worker.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/calculation-worker.mjs
+
+vite v5.4.21 building for production...
+transforming...
+✓ 122 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.45 kB │ gzip:   0.30 kB
+dist/assets/index-BeSu4_Ni.css   20.79 kB │ gzip:   5.65 kB
+dist/assets/index-BkjbyfPt.js   545.40 kB │ gzip: 213.05 kB
+✓ built in 2.08s
+
+> aps-r1@0.1.0 test:query-ui
+> esbuild src/query-ui.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-query-ui.cjs && node --test .qa-query-ui.cjs
+
+TAP version 13
+# Subtest: calculation feedback and disabled-button guidance appear next to the run action
+ok 1 - calculation feedback and disabled-button guidance appear next to the run action
+  ---
+  duration_ms: 4.432686
+  type: 'test'
+  ...
+# Subtest: Chinese query controls expose all supported categories, read-only rows, empty plan and disabled export without permission
+ok 2 - Chinese query controls expose all supported categories, read-only rows, empty plan and disabled export without permission
+  ---
+  duration_ms: 2.846986
+  type: 'test'
+  ...
+# Subtest: task detail renders saved times, current input warning, related inputs, findings and Gantt action without raw JSON
+ok 3 - task detail renders saved times, current input warning, related inputs, findings and Gantt action without raw JSON
+  ---
+  duration_ms: 3.882689
+  type: 'test'
+  ...
+# Subtest: task list with no saved plan explains missing data without fabricated task or success
+ok 4 - task list with no saved plan explains missing data without fabricated task or success
+  ---
+  duration_ms: 2.103448
+  type: 'test'
+  ...
+# Subtest: FR015 editor exposes explicit staged add/copy/delete/save/cancel and read-only role disables mutation controls
+ok 5 - FR015 editor exposes explicit staged add/copy/delete/save/cancel and read-only role disables mutation controls
+  ---
+  duration_ms: 4.591185
+  type: 'test'
+  ...
+# Subtest: FR015 legacy plans explain unavailable inputs; new plans expose original input review and authorized restore
+ok 6 - FR015 legacy plans explain unavailable inputs; new plans expose original input review and authorized restore
+  ---
+  duration_ms: 4.067896
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 88.166053
+
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+  dist/server.mjs  887.9kb
+
+⚡ Done in 37ms
+
+  dist/calculation-worker.mjs  532.0kb
+
+⚡ Done in 21ms
+▲ [WARNING] "import.meta" is not available with the "cjs" output format and will be empty [empty-import-meta]
+
+    src/ResourceWorkbench.tsx:20:29:
+      20 │   const response=await fetch(import.meta.env.BASE_URL+'api'+path,b...
+         ╵                              ~~~~~~~~~~~
+
+  You need to set the output format to "esm" for "import.meta" to work correctly.
+
+▲ [WARNING] "import.meta" is not available with the "cjs" output format and will be empty [empty-import-meta]
+
+    src/ResourceWorkbench.tsx:34:81:
+      34 │ ...onst response=await fetch(import.meta.env.BASE_URL+'api/export'...
+         ╵                              ~~~~~~~~~~~
+
+  You need to set the output format to "esm" for "import.meta" to work correctly.
+
+2 warnings
+
+  .qa-query-ui.cjs  546.4kb
+
+⚡ Done in 18ms

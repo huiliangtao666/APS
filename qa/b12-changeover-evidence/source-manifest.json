@@ -1,0 +1,74 @@
+[
+  {
+    "path": "qa/b12-changeover-INTEGRATION.md",
+    "bytes": 7727,
+    "sha256": "04f44290d1df31623ec38e5d9777825ac83594b3c1ff157b6ebd1fa4e27b03cd",
+    "role": "changed"
+  },
+  {
+    "path": "qa/b12-changeover-capture.mjs",
+    "bytes": 1437,
+    "sha256": "e9acefbf7de2aa9b13ccb46e76e25cb92f8b8a1e2fba8b0fbc14546d3e63160d",
+    "role": "changed"
+  },
+  {
+    "path": "qa/b12-changeover-fixtures.mjs",
+    "bytes": 1482,
+    "sha256": "ac808338ae96382a73a8efc0cce97c120f937ca39b2608df114d132f42c09d21",
+    "role": "changed"
+  },
+  {
+    "path": "qa/b12-changeover-json-runner.mjs",
+    "bytes": 216,
+    "sha256": "3fcc9a5b0801ac59e32e774298f9d26553f718e2a145ea1d209970c5bec6823a",
+    "role": "changed"
+  },
+  {
+    "path": "qa/b12-changeover-oracle.py",
+    "bytes": 8637,
+    "sha256": "4784c65fdc449b21a06969c4300dccd8f5c68813a3fac4994b6273dca6784198",
+    "role": "changed"
+  },
+  {
+    "path": "qa/b12-changeover-selftest.mjs",
+    "bytes": 14339,
+    "sha256": "dd0228622ad99bd68294482b45da63242e75f06570257a1487a1ddf898028ebc",
+    "role": "changed"
+  },
+  {
+    "path": "qa/b12-changeover-worker.mjs",
+    "bytes": 257,
+    "sha256": "8c675ffdcf004cc5fbed83ebe22804cc8c1ef471819cc0730c2f6885632a05d2",
+    "role": "changed"
+  },
+  {
+    "path": "src/lib/b12-changeover.d.mts",
+    "bytes": 3061,
+    "sha256": "12c960ce78cd0c9d0ec725ece27f593fb6fc9e30ca77820ac6a7b8aad02481b3",
+    "role": "changed"
+  },
+  {
+    "path": "src/lib/b12-changeover.mjs",
+    "bytes": 15061,
+    "sha256": "1b4ff14279f53a0bf6f0f55fb600dd60d30f83f3ff06a25ccf446b68a2859f13",
+    "role": "changed"
+  },
+  {
+    "path": "src/lib/working-windows.mjs",
+    "bytes": 1235,
+    "sha256": "900933f082b21dc9676857bb794fed82fcddd3ff860d0b6de57d8c18af530660",
+    "role": "read-only-dependency-or-authority"
+  },
+  {
+    "path": "docs/requirements/baselines/APS-BL-001-v0.3.json",
+    "bytes": 117997,
+    "sha256": "e30733655359e71b0c98220910303aefbc922ac123b96fb3025c4976a4067e36",
+    "role": "read-only-dependency-or-authority"
+  },
+  {
+    "path": "docs/requirements/changes/change-register.json",
+    "bytes": 74475,
+    "sha256": "2e7c460362767988cdb1a22f0d0cddc3f829a1df712ffdfbb5aed90e8b50eee9",
+    "role": "read-only-dependency-or-authority"
+  }
+]

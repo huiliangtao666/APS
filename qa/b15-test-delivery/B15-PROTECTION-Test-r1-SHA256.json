@@ -1,0 +1,25 @@
+{
+  "source_sha": "68cea51e9be162797776bf2da84c1492d9c61494",
+  "files": {
+    "B15-PROTECTION-Test-r1-REPORT.html": {
+      "bytes": 27082,
+      "sha256": "cc3530cd110c7318e89726880f55a2e2714203b42fbb6db2b26464fb71bf3daa"
+    },
+    "B15-PROTECTION-Test-r1-MATRIX.csv": {
+      "bytes": 9379,
+      "sha256": "dee991aba7a4c23cbbb99e45d6496e53c314578c1866c9adc5d6f150703ad44f"
+    },
+    "B15-PROTECTION-Test-r1-CLOSURE.csv": {
+      "bytes": 17727,
+      "sha256": "cc787c051e5b2949e82d183b39b912cc249bd93438da1e95353545fb7034557a"
+    },
+    "B15-PROTECTION-Test-r1-HANDOFF.json": {
+      "bytes": 228699,
+      "sha256": "abc8df2f10da432255808d78b5903e4852698d7bb09f6e71efb574eddf4188e8"
+    },
+    "B15-PROTECTION-Test-r1-EVIDENCE.zip": {
+      "bytes": 3113590,
+      "sha256": "924869974fece8bb5d7ea78df35ab79cd82fdb410535616fd486a6803d28f4a2"
+    }
+  }
+}

@@ -1,0 +1,1 @@
+QA原件和受控来源快照未向公开仓库批量上传。完整原件在APS-Design工作区 CR-UIUX-FLOW-20261031-D0-r1/sources/，亦包含在根目录同名ZIP交付。通过praetor workspaces download-file APS-Design --path CR-UIUX-FLOW-20261031-D0-r1.zip --out 本地文件取得；SHA256.json列出全部原件hash。若接收方Files API返回403，使用本delivery附带<send>原件，不引用旧失效附件。

@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "event_key": "dlv_f32dfc1f-287a-49ea-8db1-65995e8030fb:r1",
+  "dispatch_event_key": "b09:joint-development:12d453d:20261031:r1:APS-Test",
+  "notification": "dlv_04c28105-b350-438d-b8b4-88fe8bb0f31c",
+  "issue": 38,
+  "project_id": "PVT_kwHOFM9WU84BpE1c",
+  "project_item": "PVTI_lAHOFM9WU84BpE1czhE8kKE",
+  "status": "In progress",
+  "whole_package": "NOT_READY",
+  "test_domain_development": "DONE / PASS",
+  "source_sha": "579fe0589757154857c519e4968dee1e288ca9a0",
+  "source_parent": "12d453d7cb03829dc609115e48c5e4c19af4a6ec",
+  "evidence_head": "f1af34d4c8316abc24afd84ee0d82986dba0155a",
+  "design_sha": null,
+  "requirements_source_sha": "c48d214f8197d1346eccbb8886bb7138eb263d56",
+  "verification": {
+    "outer_artifact_hashes": 4,
+    "sha_index_hash": "7a0c418381bc220f28cf8a016acd189bb68f1b0ae78116139b1b6542f691d86a",
+    "zip_crc": "PASS",
+    "inner_hashes": 28,
+    "source_archive_hashes": 523,
+    "domain": "54/54",
+    "independent_decimal": "23/23",
+    "affected_planner": "4/4",
+    "build": "PASS (isolated tsc/Vite/API/calculation Worker)",
+    "matrix": {
+      "PASS": 20,
+      "NOT_EXECUTED": 3,
+      "WAIT_APPROVAL": 1,
+      "NOT_IMPLEMENTED_BY_AUTHORIZATION": 1
+    },
+    "closure_rows": 10,
+    "product_changes": "4 owned domain modules plus qa/b09-test-*; no shared entry changes",
+    "evidence_head_changes": "Evidence only; src/server unchanged"
+  },
+  "source_evidence": "https://github.com/huiliangtao666/APS/issues/38#issuecomment-6541552693",
+  "remaining": [
+    {
+      "id": "I01",
+      "owner": "APS-Dev",
+      "scope": "UAT11 calendar inversion, missing duration, unknown tool and bad BOM simultaneously localized, rejected, atomic zero-write",
+      "package": 38
+    },
+    {
+      "id": "I02",
+      "owner": "APS-Dev",
+      "scope": "Integrate fixed Test source into one nonmain candidate; final affected UI/API/Worker/store/reopen/history/native exports, exact quantities, provenance and all enabled constraints",
+      "package": 38
+    },
+    {
+      "id": "Q01",
+      "owner": "APS-PM / APS-QA",
+      "scope": "PM gate after final candidate/selftest/runtime/accessible evidence; QA UAT09 first, 10/11 wait 09 conclusion",
+      "package": 38
+    },
+    {
+      "id": "A01",
+      "owner": "PM/user",
+      "scope": "Original09 six literal columns remain unmapped; unknown unit/version/basis/yield/loss combinations WAIT_APPROVAL, existing normalized scenarios continue",
+      "package": 38
+    },
+    {
+      "id": "A02",
+      "owner": "PM/user",
+      "scope": "CR-FR010020-RESERVATION effective=false; no global reservation implementation"
+    }
+  ],
+  "resource_decision": {
+    "dev_delivery": "dlv_ddea429a-af36-46f2-be80-25c6c26f9da4",
+    "dev_platform_status": "executing",
+    "test_next": "Idle; no independent ready responsibility in current B09 scope; B12 #39 depends on B09 final candidate/UAT conclusion. No duplicate integration or QA preparation dispatch.",
+    "qa": "Not dispatched; final candidate and integration gate missing",
+    "test2": "Paused"
+  },
+  "boundaries": {
+    "old_uat_verdicts": "05 at 96a9dae;07 at 8084124;08 at 12d453d retained at original SHAs",
+    "repair_round_increment": 0,
+    "qa_log_closed": 0,
+    "cr_approval_changed": false,
+    "dec040506_implementation": false,
+    "main_merge": false,
+    "publish": false,
+    "scheduled_patrol": "remain paused",
+    "access": "GitHub fixed artifacts successfully read; known cross-workspace 403 not retried"
+  },
+  "receipt": "PROCESSED after authority updates; no ordinary ACK loop"
+}

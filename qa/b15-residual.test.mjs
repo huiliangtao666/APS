@@ -16,7 +16,7 @@ const out=process.env.RESIDUAL_OUT;
 const save=(name,x)=>{if(out){fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,name+'.json'),JSON.stringify(x,null,2));}};
 const hash=x=>createHash('sha256').update(x).digest('hex');
 async function imported(t,id){
- const f=await fixture(t),profile=residualProfile(id,id<'15'?'/fixtures/originals':'/fixtures/b15-originals');
+ const f=await fixture(t),profile=residualProfile(id,id<'15'?(process.env.B4_INPUTS||'/fixtures/originals'):(process.env.B15_ORIGINALS||'/fixtures/b15-originals'));
  const readBytes=f.bytes;f.bytes=()=>fs.existsSync(path.join(f.dir,'business.json'))?readBytes():null;
  await f.ok('/state');const before=f.bytes(),p=await f.call('/imports/preview',{revision:0,files:profile.files,repairs:profile.repairs,inputStage:'supported'});
  assert.equal(p.body.valid,true,JSON.stringify(p.body.issues));assert.equal(f.bytes(),before);

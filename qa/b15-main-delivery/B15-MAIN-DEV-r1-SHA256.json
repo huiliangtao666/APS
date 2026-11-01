@@ -1,0 +1,30 @@
+{
+  "productSha": "19e43ef7db177d750a5eb7e8754692a7362b3332",
+  "eventKey": "dlv_4c01a1e7-3520-4764-81a6-b7438c2b41f1:r2",
+  "files": {
+    "B15-MAIN-DEV-r1-REPORT.md": {
+      "bytes": 8845,
+      "sha256": "cb2e954eae79a669353827b371e660d24a24db2d845448152d4d07ff68855256"
+    },
+    "B15-MAIN-DEV-r1-MATRIX.csv": {
+      "bytes": 18781,
+      "sha256": "ee0b7aea58d9cf1e8eeeb997ba5bbdb319ee08257a2ab81e9a20007be1442573"
+    },
+    "B15-MAIN-DEV-r1-CLOSURE.csv": {
+      "bytes": 27136,
+      "sha256": "5e17ac1fc23156566c3cbca5425f750c4fdd180d8988eeb870b01f1323dbc88c"
+    },
+    "B15-MAIN-DEV-r1-INPUT-MAPPING.csv": {
+      "bytes": 34825,
+      "sha256": "534a52d6cbe1d823aa70b6fcdecef9ad205077855f44af9976c77bf741ae6bec"
+    },
+    "B15-MAIN-DEV-r1-ENVIRONMENT.json": {
+      "bytes": 359310,
+      "sha256": "93f6fa5f4c8ec54024fd3811e986646bf5c2b95f3dba1ea2f1e4c1b229015e23"
+    },
+    "B15-MAIN-DEV-r1-EVIDENCE.zip": {
+      "bytes": 7994196,
+      "sha256": "c8bf08164129f530a26505fbae561882f1a31155e73d3e9aa42d0659794232e3"
+    }
+  }
+}

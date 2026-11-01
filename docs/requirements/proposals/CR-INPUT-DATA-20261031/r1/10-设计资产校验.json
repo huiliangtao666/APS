@@ -1,0 +1,28 @@
+{
+  "event_key": "design:input-data-upgrade:20261031:r1",
+  "kind": "DESIGN_ASSETS_AND_SOURCE_DATA_ONLY",
+  "product_test": "NOT_EXECUTED",
+  "uat": "NOT_EXECUTED",
+  "checks": {
+    "29_sheet_mapping_complete": true,
+    "input_tables_16": true,
+    "reference_tables_7": true,
+    "ignored_explanations_diagrams_6": true,
+    "source_file_hash_unchanged": true,
+    "source_materials_140": true,
+    "source_demands_2150": true,
+    "outage_records_5": true,
+    "semifinished_gaps_20": true,
+    "assertions_unique_35": true,
+    "all_scenarios_marked_unexecuted": true,
+    "binding_parameter_ids_exist": true,
+    "business_fields_complete": true
+  },
+  "counts": {
+    "field_rows": 307,
+    "parameter_bindings": 4129,
+    "requirement_mappings": 27,
+    "assertions": 35,
+    "supplementary_materials": 20
+  }
+}

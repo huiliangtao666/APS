@@ -1,0 +1,91 @@
+{
+  "data": {
+    "node": {
+      "id": "PVTI_lAHOFM9WU84BpE1czhEHhdg",
+      "project": {
+        "id": "PVT_kwHOFM9WU84BpE1c",
+        "number": 2
+      },
+      "content": {
+        "title": "[BR] BR-13 换型与清洗｜已合并→#39（任务移交）",
+        "body": "<!-- aps-global-uat-replan-20261031-v1:cardPVTI_lAHOFM9WU84BpE1czhEHhdg -->\n## 原任务已关闭/归档：移交UAT联合包\n主收口及场景去向：[B12 / #39](https://github.com/huiliangtao666/APS/issues/39)；全量索引：https://github.com/huiliangtao666/APS/issues/36。\n原任务状态 `Backlog`。当前Done仅表示合并移交，原Backlog/未验证责任完整转入接收包的Backlog/后续断言，不是产品验收通过。\n原需求编号、基线条文、CR批准边界、历史证据全部保留；不在本旧卡继续派工。先前所有“本原任务In progress/Backlog/待独立派工”历史描述由本次迁移覆盖。收口责任在接收包FR/BR/Issue矩阵内逐项维护。\n<!-- /aps-global-uat-replan-20261031-v1:cardPVTI_lAHOFM9WU84BpE1czhEHhdg -->\n\n<!-- pm:design:scheduling-config-cr:20261031:r1 -->\n## CR-SCHED-CONFIG-20261031 正式登记关联\nevent_key=`design:scheduling-config-cr:20261031:r1`；治理入口 https://github.com/huiliangtao666/APS/issues/35；设计SHA `b481d2c860112213391a56fc14bd072fc8c3bffb`；新产品SHA=null。\n仅批准可配置共同原则与遗漏项追踪；原有效CR身份保留，具体枚举/公式/默认值沿明确既有批准。69条为语义索引（保留原40项），不是69个新增已批字段或任务。历史Done/限定PASS留原范围和SHA，不重开、不重签，产品FAIL/修复轮次+0。\n同一[参数索引](https://github.com/huiliangtao666/APS/blob/b481d2c860112213391a56fc14bd072fc8c3bffb/docs/requirements/proposals/CR-SCHED-CONFIG-20261031/parameter-inventory.csv)及[归属映射](https://github.com/huiliangtao666/APS/blob/b481d2c860112213391a56fc14bd072fc8c3bffb/docs/requirements/proposals/CR-SCHED-CONFIG-20261031/tracking-groups.csv)。\n- **CFG-07 / B4 / R4**：已授权工程沿原任务；新增参数化设计/mock继续，应用等待开工。原归属 CR-DEC04-05-06-20261029 / DEC06；边界：复用13项DEC06候选；任意装载节点、尾批、通用重组不因本原则自动获批。新增未开工状态 **WAIT_START**。\n恢复条件：PM启动对应业务包；具备该组契约、字段/单位/合法组合、批准与待决边界、可复演模拟profile/独立预期和FR/AC/UAT映射；未批具体业务语义先明确裁决。无需重新索批已经允许的mock/六字段/HP04/N06。\nH-P04/N06旧业务等待已解除；QA可自补可复演模拟数据/profile与独立预期，不编造现场事实/正式默认。性能目标和运行预算分开；B02账本能力沿原提案流转。\n当前UAT06执行#33 Done；UAT07联合#34继续，UAT08+按序等待。本登记不新增派工、不改原卡Status/负责人/验收SHA。\n<!-- /pm:design:scheduling-config-cr:20261031:r1 -->\n\n## 规则\n换型与清洗\n\n## 约束说明与阶段\n前后产品方向、资源、时长、人员、验证等待和禁止组合；A到B可以不同于B到A。 | R4\n\n来源：需求分析与设计说明书 v0.3，第 7 章；状态：需求基线。规则仅在对应阶段声明启用后作为验收范围。\n\n<!-- aps:CR-DEC04-05-06-20261029:start -->\n## CR-DEC04-05-06-20261029 新增设计范围\n用户授权DEC04/05/06需求设计深化、尽量参数化及基于原验证数据准备mock。本次为需求变更，不是缺陷修复；原有基线条文和已通过范围保留，具体参数值未获现场批准。\n本条影响：按前后产品/程序方向维护换型清洗时长与资源，必需转换缺项不得默认为0。\n设计/来源/38项数据核验与44项专项验收见 https://github.com/huiliangtao666/APS/blob/main/docs/requirements/changes/CR-DEC04-05-06-20261029/README.md 。主治理Issue https://github.com/huiliangtao666/APS/issues/25；当前仅设计与mock，不分发应用实现、不恢复其他backlog。\n<!-- aps:CR-DEC04-05-06-20261029:end -->\n\n<!-- test-result-20261029-1149 -->\n\n## 最新独立Test结果（2026-10-29）\n\n### CR-DEC04-05-06-20261029\n\n独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。\n\n报告：https://github.com/huiliangtao666/APS/blob/main/docs/requirements/changes/CR-DEC04-05-06-20261029/test-review-20261029.md\n\n交付：`dlv_ca267537-fa49-42fb-bc46-22e19b565ab5`\n\n原范围通过与历史记录保留；本次不标记完整CR或业务UAT通过。\n\n<!-- /test-result-20261029-1149 -->"
+      },
+      "fieldValues": {
+        "nodes": [
+          {
+            "text": "[BR] BR-13 换型与清洗｜已合并→#39（任务移交）",
+            "field": {
+              "name": "Title"
+            }
+          },
+          {
+            "name": "Done",
+            "field": {
+              "name": "Status"
+            }
+          },
+          {
+            "name": "P0",
+            "field": {
+              "name": "Priority"
+            }
+          },
+          {
+            "text": "BR-13",
+            "field": {
+              "name": "需求编号"
+            }
+          },
+          {
+            "text": "v0.3",
+            "field": {
+              "name": "基线版本"
+            }
+          },
+          {
+            "text": "v0.3+CR-DEC04-05-06-20261029+CR-SCHED-CONFIG-20261031",
+            "field": {
+              "name": "当前要求版本"
+            }
+          },
+          {
+            "text": "CR-DEC04-05-06-20261029：独立设计/mock审查完成，F01-F04待Design补齐；应用实现未派发",
+            "field": {
+              "name": "当前环节"
+            }
+          },
+          {
+            "text": "基线原范围历史记录保留；本CR仅设计/mock数据核验；产品实现和验收未开始",
+            "field": {
+              "name": "验收结论"
+            }
+          },
+          {
+            "text": "https://github.com/huiliangtao666/APS/blob/main/docs/requirements/requirements-register.md；CR登记：https://github.com/huiliangtao666/APS/issues/35；需求跟踪：https://github.com/huiliangtao666/APS/blob/main/docs/requirements/requirements-register.md",
+            "field": {
+              "name": "跟踪记录"
+            }
+          },
+          {
+            "text": "QA",
+            "field": {
+              "name": "UAT负责人"
+            }
+          },
+          {
+            "text": "CR-DEC04-05-06-20261029；CR-SCHED-CONFIG-20261031",
+            "field": {
+              "name": "生效CR"
+            }
+          },
+          {
+            "text": "CR-DEC04-05-06-20261029：独立Test认可为需求深化/mock评审输入；76原CSV、38派生CSV及38项有限预期核对成立。F01物理粒度分摊、F02基准/收率/损失组合、F03预计来源独立门控、F04覆盖/去重/余保/追踪契约待补齐。非完整设计签收，产品与业务UAT未执行。",
+            "field": {
+              "name": "阻塞原因"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

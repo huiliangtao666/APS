@@ -1,0 +1,319 @@
+{
+  "productSha": "5bdf8287778e5b0e98c33b512da4ed0f724785f7",
+  "parents": [
+    "7fd9683291607b65e8fbf52f633fcbc9d88254e7",
+    "44711f94dd329a823985e1bbb90d977bdd6084ed"
+  ],
+  "node": "v22.23.2",
+  "platform": "linux",
+  "arch": "arm64",
+  "cpus": 8,
+  "sourceFiles": 3395,
+  "allSourceHashesMatched": true,
+  "lockSha256": "fb974facfc148015d318f894918b5e63fa4ec4086fc90f9d7ebcf46cf32ffc06",
+  "dependencies": [
+    {
+      "name": "@praetor/lite-app-runtime",
+      "version": "0.5.0",
+      "expected": "0.5.0"
+    },
+    {
+      "name": "@praetor/lite-app-server",
+      "version": "0.4.1",
+      "expected": "0.4.1"
+    },
+    {
+      "name": "express",
+      "version": "4.22.3",
+      "expected": "4.22.3"
+    },
+    {
+      "name": "react",
+      "version": "18.3.1",
+      "expected": "18.3.1"
+    },
+    {
+      "name": "react-dom",
+      "version": "18.3.1",
+      "expected": "18.3.1"
+    },
+    {
+      "name": "react-router-dom",
+      "version": "6.30.6",
+      "expected": "6.30.6"
+    },
+    {
+      "name": "@types/express",
+      "version": "4.17.25",
+      "expected": "4.17.25"
+    },
+    {
+      "name": "@types/react",
+      "version": "18.3.31",
+      "expected": "18.3.31"
+    },
+    {
+      "name": "@types/react-dom",
+      "version": "18.3.7",
+      "expected": "18.3.7"
+    },
+    {
+      "name": "@vitejs/plugin-react",
+      "version": "4.7.0",
+      "expected": "4.7.0"
+    },
+    {
+      "name": "autoprefixer",
+      "version": "10.6.2",
+      "expected": "10.6.2"
+    },
+    {
+      "name": "concurrently",
+      "version": "9.2.5",
+      "expected": "9.2.5"
+    },
+    {
+      "name": "esbuild",
+      "version": "0.21.5",
+      "expected": "0.21.5"
+    },
+    {
+      "name": "postcss",
+      "version": "8.5.32",
+      "expected": "8.5.32"
+    },
+    {
+      "name": "tailwindcss",
+      "version": "3.4.19",
+      "expected": "3.4.19"
+    },
+    {
+      "name": "typescript",
+      "version": "5.9.3",
+      "expected": "5.9.3"
+    },
+    {
+      "name": "vite",
+      "version": "5.4.21",
+      "expected": "5.4.21"
+    }
+  ],
+  "isolation": "Disposable Docker container from exact git archive; cached dependencies verified against lock; no service, port, QA state or publication changed",
+  "time": "2026-10-31T11:41:13.515Z",
+  "originalDelivery": "dlv_32760108-fb3a-481d-be93-198c5d74fb54",
+  "event_key": "dlv_32760108-fb3a-481d-be93-198c5d74fb54:r1",
+  "branch": "main",
+  "designSha": null,
+  "sourceIntegration": {
+    "source": "44711f94dd329a823985e1bbb90d977bdd6084ed",
+    "sourceParent": "b94cbe62b8e63d41434b77fcd867219bb9a85fdf",
+    "sourceEvidence": "d2feef7965de06f051bcd41e594c7adf7866b5ed",
+    "baseMain": "7fd9683291607b65e8fbf52f633fcbc9d88254e7",
+    "baseMainParent": "70f5811559c7b8767b85666f3e8592215abfb7b7",
+    "mergeBase": "b8512a3853160fca8deaf374cb1c5da3ea9e771c",
+    "sourceFiles": [
+      "qa/b16-test-INTEGRATION.md",
+      "qa/b16-test-core.mjs",
+      "qa/b16-test-export.mjs",
+      "qa/b16-test-fixture.mjs",
+      "qa/b16-test-oracle.py",
+      "qa/b16-test-replay.sh",
+      "qa/b16-test-source.mjs",
+      "qa/b16-test-worker.mjs",
+      "src/lib/b16-sharing.d.mts",
+      "src/lib/b16-sharing.mjs"
+    ],
+    "mainIncrement": [
+      "public/fr036/matrix.json",
+      "public/fr036/samples.json",
+      "\"public/fr036/templates/12_\\345\\216\\237\\345\\247\\213\\345\\267\\245\\345\\272\\217\\350\\265\\204\\346\\272\\220\\344\\270\\216\\347\\211\\251\\346\\226\\231\\344\\276\\235\\350\\265\\226.csv\"",
+      "\"public/fr036/templates/12_\\345\\267\\245\\345\\272\\217\\350\\265\\204\\346\\272\\220\\344\\270\\216\\347\\211\\251\\346\\226\\231\\344\\276\\235\\350\\265\\226.csv\"",
+      "\"public/fr036/templates/37_MOCK\\350\\265\\204\\346\\272\\220\\344\\272\\213\\345\\256\\236\\350\\264\\246.csv\"",
+      "\"public/fr036/\\344\\275\\277\\347\\224\\250\\350\\257\\264\\346\\230\\216.txt\"",
+      "qa/b15-dev-browser.cjs",
+      "qa/b15-dev-fixture.mjs",
+      "qa/b15-dev-profiles.test.mjs",
+      "qa/b15-dev-runtime/build.mjs",
+      "qa/b15-dev-runtime/server.mjs",
+      "qa/b15-dev-seams.test.mjs",
+      "qa/b15-test-INTEGRATION.md",
+      "qa/b15-test-baseline-plan-comparison.mjs",
+      "qa/b15-test-baseline-repro.mjs",
+      "qa/b15-test-baseline-simulation-events.mjs",
+      "qa/b15-test-core.test.mjs",
+      "qa/b15-test-export.mjs",
+      "qa/b15-test-fixture.mjs",
+      "qa/b15-test-run.sh",
+      "qa/b15-test-seams.test.mjs",
+      "qa/b15-test-worker.mjs",
+      "qa/fr027.test.mjs",
+      "qa/r7-dev-application.test.mjs",
+      "qa/r7-dev-browser.cjs",
+      "qa/r7-dev-checks.sh",
+      "qa/r7-dev-runtime/build.mjs",
+      "qa/r7-dev-runtime/server.mjs",
+      "qa/r7-test-INTEGRATION.md",
+      "qa/r7-test-core.mjs",
+      "qa/r7-test-export.mjs",
+      "qa/r7-test-replay.sh",
+      "qa/r7-test-worker.mjs",
+      "server/business.mjs",
+      "server/planner.ts",
+      "server/trial-positions.mjs",
+      "server/trial-protection.mjs",
+      "src/App.tsx",
+      "src/ConfirmationPanel.tsx",
+      "src/ExchangeGuide.tsx",
+      "src/ReportPanel.tsx",
+      "src/TrialMovePanel.tsx",
+      "src/TrialPanel.tsx",
+      "src/lib/b15-protection.d.mts",
+      "src/lib/b15-protection.mjs",
+      "src/lib/data-query.mjs",
+      "src/lib/delivery-assessment.mjs",
+      "src/lib/plan-comparison.mjs",
+      "src/lib/r7-handoff.d.mts",
+      "src/lib/r7-handoff.mjs",
+      "src/lib/resource-workbench.mjs",
+      "src/lib/result-assessment.mjs",
+      "src/lib/simulation-events.mjs"
+    ],
+    "intersection": [],
+    "staticDependencies": [
+      "qa/joint-fixture.mjs",
+      "src/lib/batch-policy.mjs",
+      "src/lib/business-rules.mjs",
+      "src/lib/delivery-policy.mjs",
+      "src/lib/execution-resource-ledger.mjs",
+      "src/lib/expected-supply.mjs",
+      "src/lib/factory-lines.mjs",
+      "src/lib/independent-verification.mjs",
+      "src/lib/inventory.mjs",
+      "src/lib/joint-policy.mjs",
+      "src/lib/joint-resources.mjs",
+      "src/lib/line-scope.mjs",
+      "src/lib/material-allocation.mjs",
+      "src/lib/orders.mjs",
+      "src/lib/personnel-occupation.mjs",
+      "src/lib/physical-pools.mjs",
+      "src/lib/problem-records.mjs",
+      "src/lib/process-route-findings.mjs",
+      "src/lib/process-route.mjs",
+      "src/lib/record-identity.mjs",
+      "src/lib/resource-conflicts.mjs",
+      "src/lib/resource-policies.mjs",
+      "src/lib/scheduling-scope.mjs",
+      "src/lib/tool-validation.mjs",
+      "src/lib/verification-endpoints.mjs",
+      "src/lib/verify-batch-wait.mjs",
+      "src/lib/verify-calendar.mjs",
+      "src/lib/verify-execution-resource-ledger.mjs",
+      "src/lib/verify-joint-conditions.mjs",
+      "src/lib/verify-original-dependencies.mjs",
+      "src/lib/verify-original-resources.mjs",
+      "src/lib/verify-process-route.mjs",
+      "src/lib/verify-resource-mapping.mjs",
+      "src/lib/verify-resource-policies.mjs",
+      "src/lib/verify-working-windows.mjs",
+      "src/lib/working-windows.mjs"
+    ],
+    "dependencyIntersection": [],
+    "dependencyBlobDifferences": [],
+    "mergeTreeExit": 0,
+    "mergeTreeOutput": "f81d8d9f4b97b091ae3c0eb7b3ee40afd1891ba6\n",
+    "mergeTreeStderr": "",
+    "workingTreeClean": true,
+    "productSha": "5bdf8287778e5b0e98c33b512da4ed0f724785f7",
+    "parents": [
+      "7fd9683291607b65e8fbf52f633fcbc9d88254e7",
+      "44711f94dd329a823985e1bbb90d977bdd6084ed"
+    ],
+    "textConflicts": [],
+    "sourceBlobsIdentical": true,
+    "allExistingFileBlobsPreserved": 3385,
+    "governanceDiff": "",
+    "applicationImportsOfB16": [],
+    "designSha": null,
+    "applicationEnabled": false,
+    "P1Enabled": false,
+    "qaUat": "NOT_EXECUTED"
+  },
+  "upstreamEvidenceVerification": {
+    "sourceSha": "44711f94dd329a823985e1bbb90d977bdd6084ed",
+    "upstreamEvidenceSha": "d2feef7965de06f051bcd41e594c7adf7866b5ed",
+    "outerFilesVerified": [
+      {
+        "path": "B16-SHARING-Test-r1-REPORT.html",
+        "bytes": 25805,
+        "sha256": "e7ba9ba2740c04e860e6882615380c404bbda451ee5d8134086933937ea9cda2"
+      },
+      {
+        "path": "B16-SHARING-Test-r1-MATRIX.csv",
+        "bytes": 24210,
+        "sha256": "58a778a4f5a6154424a6a12e7371ed87e0d33ecd54e5634f0496d9b9acfbbce0"
+      },
+      {
+        "path": "B16-SHARING-Test-r1-CLOSURE.csv",
+        "bytes": 8377,
+        "sha256": "695943c9b257ab4d60cfdcc5854cc52f6dbddb3407a2196dd7c6439042e6ee36"
+      },
+      {
+        "path": "B16-SHARING-Test-r1-HANDOFF.json",
+        "bytes": 7986,
+        "sha256": "3ba03d5412827f9b2345af9a919a723e061ec116eec6dfdf02a06a6148c01c17"
+      },
+      {
+        "path": "B16-SHARING-Test-r1-EVIDENCE.zip",
+        "bytes": 410950,
+        "sha256": "1bc3e3b21975732e44b501ec1ebb6b8400774565a2c78ed6437dd6a8dcd34d22"
+      }
+    ],
+    "zipCrc": "PASS",
+    "internalFilesVerified": 81
+  },
+  "github": {
+    "branch": "main",
+    "localHead": "5bdf8287778e5b0e98c33b512da4ed0f724785f7",
+    "githubApiStatus": 200,
+    "githubApiSha": "5bdf8287778e5b0e98c33b512da4ed0f724785f7",
+    "lsRemoteSha": "5bdf8287778e5b0e98c33b512da4ed0f724785f7",
+    "parent": "7fd9683291607b65e8fbf52f633fcbc9d88254e7",
+    "workingTreeClean": true,
+    "pushExit": 0
+  },
+  "testCounts": {
+    "B16": {
+      "pass": 28,
+      "fail": 0
+    },
+    "dependencies": {
+      "pass": 54,
+      "fail": 1,
+      "classification": "inherited assertion; identical on direct parent"
+    },
+    "B12_final": {
+      "pass": 42,
+      "fail": 0
+    },
+    "B15": {
+      "pass": 30,
+      "fail": 0
+    },
+    "R7": {
+      "pass": 74,
+      "fail": 0
+    },
+    "independentPython": 318
+  },
+  "fixtureCorrection": {
+    "UAT17": "8aa1e0325c4ac77df84cadc892af94e0d94d238f290194b4eaec9342aedd98a4",
+    "effect": "test-only original copied to disposable container; no source change"
+  },
+  "servicesPreserved": 41,
+  "testContainer": "aps-main-b16-selftest (stopped)",
+  "image": "aps-main-b16:fixed",
+  "qaUat": "NOT_EXECUTED",
+  "P1Enabled": false,
+  "cardRecommendation": "NOT_READY",
+  "baseImageMetadata": "Inherited UAT09/B12/R7 product env labels are not provenance. Actual code is3395 exact manifest-verified files at productSha; no prior PASS relabeled."
+}

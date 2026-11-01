@@ -1,0 +1,210 @@
+{
+  "node": "v22.23.2",
+  "platform": "linux",
+  "arch": "arm64",
+  "directDependencies": [
+    {
+      "name": "@praetor/lite-app-runtime",
+      "version": "0.5.0"
+    },
+    {
+      "name": "@praetor/lite-app-server",
+      "version": "0.4.1"
+    },
+    {
+      "name": "express",
+      "version": "4.22.3"
+    },
+    {
+      "name": "react",
+      "version": "18.3.1"
+    },
+    {
+      "name": "react-dom",
+      "version": "18.3.1"
+    },
+    {
+      "name": "react-router-dom",
+      "version": "6.30.6"
+    },
+    {
+      "name": "@types/express",
+      "version": "4.17.25"
+    },
+    {
+      "name": "@types/react",
+      "version": "18.3.31"
+    },
+    {
+      "name": "@types/react-dom",
+      "version": "18.3.7"
+    },
+    {
+      "name": "@vitejs/plugin-react",
+      "version": "4.7.0"
+    },
+    {
+      "name": "autoprefixer",
+      "version": "10.6.2"
+    },
+    {
+      "name": "concurrently",
+      "version": "9.2.5"
+    },
+    {
+      "name": "esbuild",
+      "version": "0.21.5"
+    },
+    {
+      "name": "postcss",
+      "version": "8.5.32"
+    },
+    {
+      "name": "tailwindcss",
+      "version": "3.4.19"
+    },
+    {
+      "name": "typescript",
+      "version": "5.9.3"
+    },
+    {
+      "name": "vite",
+      "version": "5.4.21"
+    }
+  ],
+  "lockSha256": "fb974facfc148015d318f894918b5e63fa4ec4086fc90f9d7ebcf46cf32ffc06",
+  "normalAssets": {
+    "index-BbV1bWvt.js": "1b86f57a5ccd3388f353094c2b48ba1450e4c30654537c9304f2ab481b6e735d",
+    "index-BeSu4_Ni.css": "01a344422463920a76e80c60d9b42f16d4cd1a42c8811d55ea95fb0fead5349e"
+  },
+  "testAssets": {
+    "index-BeSu4_Ni.css": "01a344422463920a76e80c60d9b42f16d4cd1a42c8811d55ea95fb0fead5349e",
+    "index-D3tQ7juC.js": "0d98521fa53edef475045590bb740f0192a9f06cb7da209bc591ad975c29cf03"
+  },
+  "auth": "Explicit test actors; test UI aliases only lite-app-runtime; normal product assets separately built; formal SSO and QA UAT not executed",
+  "productSha": "172b415122472b933fc9935b5537697ebc03ccfc",
+  "parent": "093097bce421e8099eb470a592bac088e6a8aba8",
+  "baseMain": "5bdf8287778e5b0e98c33b512da4ed0f724785f7",
+  "sourceManifest": {
+    "sha": "172b415122472b933fc9935b5537697ebc03ccfc",
+    "parents": [
+      "093097bce421e8099eb470a592bac088e6a8aba8"
+    ],
+    "sourceFiles": 3413,
+    "allMatch": true,
+    "node": "v22.23.2"
+  },
+  "originalDelivery": "dlv_b3352a5a-be4b-4260-b49d-a211163a2e51",
+  "event_key": "dlv_b3352a5a-be4b-4260-b49d-a211163a2e51:r1",
+  "dispatchKey": "b15:main-r2-approved-residual:20261031:r1",
+  "br13Integration": {
+    "baseMain": "5bdf8287778e5b0e98c33b512da4ed0f724785f7",
+    "beforeHead": "29140f63dc416a71357d58d9f336abed12792dd3",
+    "source": "c773572aa53da2235ef29233bffa3d5656ce191c",
+    "sourceParent": "7fd9683291607b65e8fbf52f633fcbc9d88254e7",
+    "mergeBase": "7fd9683291607b65e8fbf52f633fcbc9d88254e7",
+    "sourceFiles": [
+      "qa/b12-changeover-INTEGRATION.md",
+      "qa/b12-changeover-capture.mjs",
+      "qa/b12-changeover-fixtures.mjs",
+      "qa/b12-changeover-json-runner.mjs",
+      "qa/b12-changeover-oracle.py",
+      "qa/b12-changeover-selftest.mjs",
+      "qa/b12-changeover-worker.mjs",
+      "src/lib/b12-changeover.d.mts",
+      "src/lib/b12-changeover.mjs"
+    ],
+    "intersection": [],
+    "mergeSha": "f5a51e3a369f42c526b5f9029711d175f91a1eeb",
+    "parents": [
+      "29140f63dc416a71357d58d9f336abed12792dd3",
+      "c773572aa53da2235ef29233bffa3d5656ce191c"
+    ]
+  },
+  "fr022Integration": {
+    "source": "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91",
+    "sourceParent": "5bdf8287778e5b0e98c33b512da4ed0f724785f7",
+    "mergeBase": "5bdf8287778e5b0e98c33b512da4ed0f724785f7",
+    "beforeHead": "a9f5c5f61666a702266259e9ed33a71da5e5e854",
+    "sourceFiles": [
+      "qa/fr022-maxlag-contract-fixture.mjs",
+      "qa/fr022-maxlag-contract-probe.mjs",
+      "qa/fr022-maxlag-contract.test.mjs",
+      "qa/joint-resources.test.mjs"
+    ],
+    "intersection": [],
+    "mergeSha": "093097bce421e8099eb470a592bac088e6a8aba8",
+    "parents": [
+      "a9f5c5f61666a702266259e9ed33a71da5e5e854",
+      "d5910cb2ac093568f5ae5b88da9bf7ec5b69af91"
+    ]
+  },
+  "github": {
+    "branch": "main",
+    "localHead": "172b415122472b933fc9935b5537697ebc03ccfc",
+    "githubApiStatus": 200,
+    "githubApiSha": "172b415122472b933fc9935b5537697ebc03ccfc",
+    "lsRemoteSha": "172b415122472b933fc9935b5537697ebc03ccfc",
+    "parent": "093097bce421e8099eb470a592bac088e6a8aba8",
+    "workingTreeClean": true,
+    "pushExit": 0
+  },
+  "testCounts": {
+    "core/libraries.log": 113,
+    "core/business.log": 126,
+    "residual/tests.log": 138,
+    "b12/tests.log": 42,
+    "b15/tests.log": 30,
+    "r7/tests.log": 74,
+    "fr022-impact-80.log": 80,
+    "b16-impact-28-final.log": 28
+  },
+  "uiChecks": 8,
+  "maxlagUiPhysicalRow": 11,
+  "independentPython267": true,
+  "wholePackage": "PARTIAL/NOT_READY",
+  "qa": "NOT_EXECUTED",
+  "P1Enabled": false,
+  "productDefectRepairIncrement": 0,
+  "qaIssueLogsClosed": 0,
+  "designSha": null,
+  "privateContainers": {
+    "aps-b15-residual-dev": {
+      "id": "5d06eabfee85712f7b77e991d2e81172459edcf9f633a55f96f98ca0020dbb6d",
+      "image": "sha256:5018461fc9000c9906aedfcc7686e6d13241b97f9f1a2e0da2061b2ccef17a47",
+      "status": "exited",
+      "ports": {
+        "4317/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "18230"
+          }
+        ]
+      },
+      "oomKilled": true
+    },
+    "aps-b15-residual-final": {
+      "id": "6281a93b3b751efc2c6041ccdcf5a9115e433d66ea30667d8d4973605d9c2ed8",
+      "image": "sha256:7172a6c49e2545bedfe94336aeb325a18a8c768f8cce71d2ae6208c3f942738c",
+      "status": "exited",
+      "ports": {},
+      "oomKilled": false
+    },
+    "aps-b15-residual-verified": {
+      "id": "4fc7454d6616303091bae0c90989c7c566274272ca2ecff89a5356ae118c8c72",
+      "image": "sha256:7cc6e294b7208f7238161789026b8de25d9998e352f194abac67ba623a9ddcc1",
+      "status": "exited",
+      "ports": {
+        "4317/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "18231"
+          }
+        ]
+      },
+      "oomKilled": false
+    }
+  },
+  "identityLimit": "Test members/role seam only; no formal SSO or QA signoff",
+  "reproductionLimit": "Actual fixed-source build used inherited dependencies verified against lock; clean official-image reproduction recipe provided but not independently rebuilt in this result"
+}

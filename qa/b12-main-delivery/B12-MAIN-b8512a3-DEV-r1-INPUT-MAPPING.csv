@@ -1,0 +1,58 @@
+﻿scene,original_file,bytes,sha256,source_to_runtime_status,whole_original19_result
+UAT-12,01_工厂与产线配置.csv,130,5ab9e0a4d1f8d432b8bcb2375449d4af285b3c55a2313aa83ca9420e136e1089,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-12,02_工厂工作日历.csv,139,d01e60d53e5acd10008cb7afac46b8f6b64df775cd1c30a74d4d5594e2a503a2,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-12,03_设备资源配置.csv,677,78d7557d0d7e3fe1ab4abe3c0a372c545b8ee3b5b5ff18e0ce0bbc7bb437ad52,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-12,04_设备停机与例外日历.csv,95,8f5877461e92412cb3fb2b6bb4b2bc7ca2cbb950e1ee648d9489a88f9cde0e86,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-12,05_模具与工具配置.csv,266,3d9363c7af74899c20fb743f5228dec448e5b70aa7acffa75880ae3beb0a1171,normalized explicit task suitability/claims; original05 READY mapping not bound in this profile,PARTIAL; see precise admission evidence
+UAT-12,06_人员技能与班次.csv,160,fb1a1a5c07ab5adeab29c06afcc0502e9d1b01504ad75b77bbd5cd61e517178a,normalized explicit shift/pool/participation; original06 READY mapping not bound in this profile,PARTIAL; see precise admission evidence
+UAT-12,07_产品与包装规格.csv,175,efad6d105b297a99691cc2af8086b984d77afda40d3307a5a25aa06d265d9cc0,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-12,08_物料主数据.csv,203,3cda8f510ba4c58cccd34710b3604682b746f43f0ca18f87e356d299780df2bd,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-12,09_物料BOM配置.csv,444,bdbf2fcbacafadfe3bb4eb9be5ae5fef3a89925531238466190adb5ff89c4d23,verbatim literal originalBom only; independent effective normalized BOM used,PARTIAL; see precise admission evidence
+UAT-12,10_工艺路线配置.csv,350,7169fc9451e0a24f5e776ace1de62d9b31dfa291ef6673711542d3a0d83d2505,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-12,11_工序工时配置.csv,329,9f0e32d1a771f369eda39e9e97e9f78970e35a7b490917034a29e18bc979805c,fixed raw times except PACK explicit fixed50; speed WAIT_APPROVAL A01,PARTIAL; see precise admission evidence
+UAT-12,12_工序资源与物料依赖.csv,660,3e75f68c295dfddfccaccd358de2a1fb997dd6c3c471eee47c94d9a806cb61f7,normalized explicit dependency/claims; original material/dynamic space binding remains blocked,PARTIAL; see precise admission evidence
+UAT-12,13_物料库存批次.csv,381,d3f4d18ba355e64c368fd9223dfde52241f757bff492536baa3ca139f408866a,independent normalized stock/date/unit/status/location; original13 runtime mapping not adopted,PARTIAL; see precise admission evidence
+UAT-12,14_预计到料与可用时间.csv,134,65e650a8d1cd7debe1110f1ab95b78746f60919e3777cf2e36e326fbeaa45291,empty original source; independent supplies empty,PARTIAL; see precise admission evidence
+UAT-12,15_空间与组批规则配置.csv,227,c70f1d81667236d7ccbc7bf4c3bf32e3b8de0c826a4c3ec3e73231d7f1393400,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-12,16_排程规则配置.csv,654,8aff7de258118d9a909d393761d347945d3c4e35c4cd575a27187592649a0d28,original enabled set preserved; existing approved runtime parameter contracts explicit,PARTIAL; see precise admission evidence
+UAT-12,17_生产订单与交期.csv,115,af442b33df81bf452b554f91b21cdc0987608ba221184673d5d46b657d21ad70,all original orders/demand preserved; explicit kg/status/options/completed0 supplements,PARTIAL; see precise admission evidence
+UAT-12,18_模拟执行进度.csv,84,21b35b7c8302116167076f057066bd3e30337d0ef204875f7c2a29fd5405dd14,empty original progress retained outside calculation; no synthetic execution facts,PARTIAL; see precise admission evidence
+UAT-12,19_模拟异常与条件变更.csv,77,8d83b95e40b70b63a70dfa0e49279b5d0a3011a3750a3949ee38159a13827836,empty original events retained outside calculation; no synthetic event effects,PARTIAL; see precise admission evidence
+UAT-13,01_工厂与产线配置.csv,130,5ab9e0a4d1f8d432b8bcb2375449d4af285b3c55a2313aa83ca9420e136e1089,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-13,02_工厂工作日历.csv,139,d01e60d53e5acd10008cb7afac46b8f6b64df775cd1c30a74d4d5594e2a503a2,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-13,03_设备资源配置.csv,677,78d7557d0d7e3fe1ab4abe3c0a372c545b8ee3b5b5ff18e0ce0bbc7bb437ad52,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-13,04_设备停机与例外日历.csv,50,5c3543dc5e6c0a86ad266e150a550b257b6e55b2c3d8bd3caadfcfec5822e974,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-13,05_模具与工具配置.csv,266,3d9363c7af74899c20fb743f5228dec448e5b70aa7acffa75880ae3beb0a1171,normalized explicit task suitability/claims; original05 READY mapping not bound in this profile,PARTIAL; see precise admission evidence
+UAT-13,06_人员技能与班次.csv,160,fb1a1a5c07ab5adeab29c06afcc0502e9d1b01504ad75b77bbd5cd61e517178a,normalized explicit shift/pool/participation; original06 READY mapping not bound in this profile,PARTIAL; see precise admission evidence
+UAT-13,07_产品与包装规格.csv,175,efad6d105b297a99691cc2af8086b984d77afda40d3307a5a25aa06d265d9cc0,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-13,08_物料主数据.csv,203,3cda8f510ba4c58cccd34710b3604682b746f43f0ca18f87e356d299780df2bd,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-13,09_物料BOM配置.csv,444,bdbf2fcbacafadfe3bb4eb9be5ae5fef3a89925531238466190adb5ff89c4d23,verbatim literal originalBom only; independent effective normalized BOM used,PARTIAL; see precise admission evidence
+UAT-13,10_工艺路线配置.csv,350,7169fc9451e0a24f5e776ace1de62d9b31dfa291ef6673711542d3a0d83d2505,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-13,11_工序工时配置.csv,329,9f0e32d1a771f369eda39e9e97e9f78970e35a7b490917034a29e18bc979805c,fixed raw times except PACK explicit fixed50; speed WAIT_APPROVAL A01,PARTIAL; see precise admission evidence
+UAT-13,12_工序资源与物料依赖.csv,1200,89cab17edd64252194eb1ebc2f1e272e1b48e3e37a6f84c9906fe68795614c9d,normalized explicit dependency/claims; original material/dynamic space binding remains blocked,PARTIAL; see precise admission evidence
+UAT-13,13_物料库存批次.csv,381,d3f4d18ba355e64c368fd9223dfde52241f757bff492536baa3ca139f408866a,independent normalized stock/date/unit/status/location; original13 runtime mapping not adopted,PARTIAL; see precise admission evidence
+UAT-13,14_预计到料与可用时间.csv,134,65e650a8d1cd7debe1110f1ab95b78746f60919e3777cf2e36e326fbeaa45291,empty original source; independent supplies empty,PARTIAL; see precise admission evidence
+UAT-13,15_空间与组批规则配置.csv,227,c70f1d81667236d7ccbc7bf4c3bf32e3b8de0c826a4c3ec3e73231d7f1393400,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-13,16_排程规则配置.csv,654,8aff7de258118d9a909d393761d347945d3c4e35c4cd575a27187592649a0d28,original enabled set preserved; existing approved runtime parameter contracts explicit,PARTIAL; see precise admission evidence
+UAT-13,17_生产订单与交期.csv,137,524be056428c56fe37e13702867411c2b97390fe6015dba75f4a32e4a04da46a,all original orders/demand preserved; explicit kg/status/options/completed0 supplements,PARTIAL; see precise admission evidence
+UAT-13,18_模拟执行进度.csv,84,21b35b7c8302116167076f057066bd3e30337d0ef204875f7c2a29fd5405dd14,empty original progress retained outside calculation; no synthetic execution facts,PARTIAL; see precise admission evidence
+UAT-13,19_模拟异常与条件变更.csv,77,8d83b95e40b70b63a70dfa0e49279b5d0a3011a3750a3949ee38159a13827836,empty original events retained outside calculation; no synthetic event effects,PARTIAL; see precise admission evidence
+UAT-14,01_工厂与产线配置.csv,130,5ab9e0a4d1f8d432b8bcb2375449d4af285b3c55a2313aa83ca9420e136e1089,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-14,02_工厂工作日历.csv,139,d01e60d53e5acd10008cb7afac46b8f6b64df775cd1c30a74d4d5594e2a503a2,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-14,03_设备资源配置.csv,677,78d7557d0d7e3fe1ab4abe3c0a372c545b8ee3b5b5ff18e0ce0bbc7bb437ad52,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-14,04_设备停机与例外日历.csv,50,5c3543dc5e6c0a86ad266e150a550b257b6e55b2c3d8bd3caadfcfec5822e974,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-14,05_模具与工具配置.csv,266,3d9363c7af74899c20fb743f5228dec448e5b70aa7acffa75880ae3beb0a1171,normalized explicit task suitability/claims; original05 READY mapping not bound in this profile,PARTIAL; see precise admission evidence
+UAT-14,06_人员技能与班次.csv,160,fb1a1a5c07ab5adeab29c06afcc0502e9d1b01504ad75b77bbd5cd61e517178a,normalized explicit shift/pool/participation; original06 READY mapping not bound in this profile,PARTIAL; see precise admission evidence
+UAT-14,07_产品与包装规格.csv,175,efad6d105b297a99691cc2af8086b984d77afda40d3307a5a25aa06d265d9cc0,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-14,08_物料主数据.csv,203,3cda8f510ba4c58cccd34710b3604682b746f43f0ca18f87e356d299780df2bd,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-14,09_物料BOM配置.csv,444,bdbf2fcbacafadfe3bb4eb9be5ae5fef3a89925531238466190adb5ff89c4d23,verbatim literal originalBom only; independent effective normalized BOM used,PARTIAL; see precise admission evidence
+UAT-14,10_工艺路线配置.csv,350,7169fc9451e0a24f5e776ace1de62d9b31dfa291ef6673711542d3a0d83d2505,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-14,11_工序工时配置.csv,329,9f0e32d1a771f369eda39e9e97e9f78970e35a7b490917034a29e18bc979805c,fixed raw times except PACK explicit fixed50; speed WAIT_APPROVAL A01,PARTIAL; see precise admission evidence
+UAT-14,12_工序资源与物料依赖.csv,1200,89cab17edd64252194eb1ebc2f1e272e1b48e3e37a6f84c9906fe68795614c9d,normalized explicit dependency/claims; original material/dynamic space binding remains blocked,PARTIAL; see precise admission evidence
+UAT-14,13_物料库存批次.csv,381,d3f4d18ba355e64c368fd9223dfde52241f757bff492536baa3ca139f408866a,independent normalized stock/date/unit/status/location; original13 runtime mapping not adopted,PARTIAL; see precise admission evidence
+UAT-14,14_预计到料与可用时间.csv,134,65e650a8d1cd7debe1110f1ab95b78746f60919e3777cf2e36e326fbeaa45291,empty original source; independent supplies empty,PARTIAL; see precise admission evidence
+UAT-14,15_空间与组批规则配置.csv,227,fd35e6802f0c9f59d1d3dd02b014718c3aa9c3427329e6ea7f0bb259db6fd4d6,verbatim runtime,PARTIAL; see precise admission evidence
+UAT-14,16_排程规则配置.csv,654,8aff7de258118d9a909d393761d347945d3c4e35c4cd575a27187592649a0d28,original enabled set preserved; existing approved runtime parameter contracts explicit,PARTIAL; see precise admission evidence
+UAT-14,17_生产订单与交期.csv,137,524be056428c56fe37e13702867411c2b97390fe6015dba75f4a32e4a04da46a,all original orders/demand preserved; explicit kg/status/options/completed0 supplements,PARTIAL; see precise admission evidence
+UAT-14,18_模拟执行进度.csv,84,21b35b7c8302116167076f057066bd3e30337d0ef204875f7c2a29fd5405dd14,empty original progress retained outside calculation; no synthetic execution facts,PARTIAL; see precise admission evidence
+UAT-14,19_模拟异常与条件变更.csv,77,8d83b95e40b70b63a70dfa0e49279b5d0a3011a3750a3949ee38159a13827836,empty original events retained outside calculation; no synthetic event effects,PARTIAL; see precise admission evidence

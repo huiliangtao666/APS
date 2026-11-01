@@ -60,3 +60,16 @@ test('shared access still rejects cross-site writes, missing reasons and stale r
   assert.equal((await call('/calculate', { revision: -1 })).status, 409);
   assert.deepEqual((await call('/operations')).body, []);
 });
+
+test('same-origin JSON workbench works through a host-rewriting proxy without trusting forwarded headers', async context => {
+  const call = await fixture(context);
+  const origin = 'https://aps.example.test';
+  assert.equal((await call('/calculate', { revision: 0 }, { origin, 'x-forwarded-host': 'aps.example.test' })).status, 403);
+  assert.equal((await call('/calculate', { revision: 0 }, { origin, 'x-aps-request': 'workbench', 'sec-fetch-site': 'cross-site' })).status, 403);
+  assert.equal((await call('/calculate', { revision: 0 }, { origin: 'null', 'x-aps-request': 'workbench' })).status, 403);
+  const headers = { origin, 'x-aps-request': 'workbench' };
+  assert.equal((await call('/r21/config', { revision: 0, values: {} }, headers)).status, 400);
+  const result = await call('/calculate', { revision: 0 }, headers);
+  assert.equal(result.status, 201);
+  assert.equal(result.body.tasks.length, 4);
+});

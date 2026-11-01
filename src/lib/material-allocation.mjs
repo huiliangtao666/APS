@@ -1,3 +1,5 @@
+import {calculateBomLoss} from './bom-loss-policy.mjs';
+import {minuteMode,minuteInstant} from './minute-validity.mjs';
 import {inventoryBusinessDate,inventoryEligibility} from './inventory.mjs';
 import { PLAN_TIME_ORIGIN, resolveExpectedSupply, validSupplyTime } from './expected-supply.mjs';
 // Exact rational arithmetic: no tolerance, display rounding or repeated float deductions.
@@ -43,6 +45,7 @@ export function calculateMaterialDemand(data,order,operation,minute,remainingKg,
  let kg=q(order['合格需求']),completed=q(order['已完成合格数量']||'0');
  if(cmp(completed,kg)>0)fail('已完成合格数量超过需求');
  kg=sub(kg,completed);
+ const lossProfile=(data.bomLossProfiles||[]).find(p=>p.productId===order['产品编号']&&p.recipe.version===bom[0]?.['版本编号']);
  const weight=q(product['单支净重kg']),bag=q(product['每袋支数']),yieldRate=q(product['总收率']);
  if(cmp(yieldRate,zero)<=0||cmp(yieldRate,one)>0)fail('总收率须大于零且不超过1');
  if(order['数量单位']==='支')kg=mul(kg,weight);
@@ -52,19 +55,21 @@ export function calculateMaterialDemand(data,order,operation,minute,remainingKg,
  const raw=bom.filter(b=>b['用量类型']==='BOM物料');
  if(raw.length){
   if(raw.some(b=>b['用量基准']!=='每1000kg投入'||b['用量单位']!=='kg'||b['收率/损耗口径备注']?.trim()||(String(b['损坏比例']||'').trim()&&cmp(q(b['损坏比例']),zero)!==0n)))fail('仅支持无加料的每1000kg投入；备注口径须先明确，不能推断');
+  if(lossProfile&&raw.some(b=>!lossProfile.recipe.materials.some(m=>m.materialId===b['物料编号']&&cmp(q(m.quotaKg),q(b['配置用量']))===0n)))fail('新损耗配方与当前标准投入不一致，请重新保存该配置');
   const total=raw.reduce((a,b)=>add(a,q(b['配置用量'])),zero);
   if(cmp(total,q('1000'))!==0n)fail('每1000kg投入的完整配方定额之和须为1000；不能自动归一化');
  }
  return bom.filter(b=>b['投料工序编号']===operation).map(b=>{
   let amount,formula;
   if(b['用量类型']==='BOM物料'){
-   amount=mul(div(kg,yieldRate),div(q(b['配置用量']),q('1000')));formula='订单余量kg ÷ 总收率 × 定额 ÷ 1000（仅损失、无工序加料）';
+   if(lossProfile){const result=calculateBomLoss(lossProfile.recipe,lossProfile.config,'1'),line=result.rows.find(r=>r.materialId===b['物料编号']);if(!line)fail('新损耗配方缺物料');amount=mul(kg,fromExact(line.targetInput));formula='bom-loss-kg-v1：标准投入定额 × 目标合格产出 ÷ Σ逐物料合格产出；配置版本'+lossProfile.config.version;}else{amount=mul(div(kg,yieldRate),div(q(b['配置用量']),q('1000')));formula='订单余量kg ÷ 总收率 × 定额 ÷ 1000（仅损失、无工序加料）';}
   }else{
    if(b['用量基准']!=='每袋'||b['用量单位']!=='个'||b['收率/损耗口径备注']?.trim()||!String(b['损坏比例']??'').trim())fail('包材仅支持每袋/个及显式领用量中损坏比例；其他口径未定义');
    const loss=q(b['损坏比例']);if(cmp(loss,one)>=0)fail('包材损坏比例须小于1');
    const pieces=div(kg,weight),bags=div(pieces,bag);
-   if(pieces.n%pieces.d!==0n||bags.n%bags.d!==0n)fail('支/袋不是整数；基线未声明中间取整规则');
-   amount=ceil(div(mul(bags,q(b['配置用量'])),sub(one,loss)));formula='向上取整（余量kg ÷ 单支净重 ÷ 每袋支数 × 定额 ÷ (1−损坏比例)）';
+   if(!b['最小包装单位']&&(pieces.n%pieces.d!==0n||bags.n%bags.d!==0n))fail('支/袋不是整数；基线未声明中间取整规则');
+   const minimum=b['最小包装单位']?q(b['最小包装单位']):one;if(cmp(minimum,zero)<=0)fail('最小包装单位须为正数');
+   amount=mul(ceil(div(div(mul(bags,q(b['配置用量'])),sub(one,loss)),minimum)),minimum);formula='向上取整（余量kg ÷ 单支净重 ÷ 每袋支数 × 定额 ÷ (1−损坏比例)）';
   }
   if(!Number.isFinite(num(amount)))fail('需求超出数值范围');
   return {orderId:order['订单编号'],productId:order['产品编号'],operation,taskId:`${order['订单编号']}-${operation}`,materialId:b['物料编号'],unit:b['用量单位'],version:b['版本编号'],effective:b['生效日期'],feedMinute:minute,feedAt:feedTime(minute),remainingKg:num(kg),quantity:num(amount),exactQuantity:exact(amount),formula};
@@ -96,16 +101,16 @@ export function createMaterialAllocator(data,policy) {
    for(const demand of demands){
     let left=fromExact(demand.exactQuantity);const allocations=[];
     const lotChecks=(data.inventory||[]).filter(b=>b['物料编号']===demand.materialId).map(b=>({b,state:inventoryEligibility(b,feedTime(minute),policy['可用状态'])}));
-    const excludedLots=lotChecks.filter(x=>!x.state.eligible).map(({b,state})=>({lotId:b['批次编号'],bookQuantity:b['账面数量'],occupiedQuantity:b['已占用数量'],quality:b['质量状态'],expiry:b['有效期'],readyAt:b['预计可用时间']||'',reasons:state.reasons}));
-    const inventory=lotChecks.filter(x=>x.state.eligible).map(x=>x.b).sort((a,b)=>a['有效期'].localeCompare(b['有效期'])||a['批次编号'].localeCompare(b['批次编号']));
-    const candidates=inventory.map(b=>({key:'inventory:'+b['批次编号'],lotId:b['批次编号'],capacity:sub(q(b['账面数量']),q(b['已占用数量'])),expiry:b['有效期'],quality:b['质量状态'],readyAt:b['预计可用时间']||'',conditional:false}));
+    const excludedLots=lotChecks.filter(x=>!x.state.eligible).map(({b,state})=>({lotId:b['批次编号'],bookQuantity:b['账面数量'],occupiedQuantity:b['已占用数量'],quality:b['质量状态'],expiry:minuteMode(b)?minuteInstant(b['时间原点'],b['到期分钟']):b['有效期'],readyAt:b['预计可用时间']||'',reasons:state.reasons}));
+    const inventory=lotChecks.filter(x=>x.state.eligible).map(x=>x.b).sort((a,b)=>(minuteMode(a)?minuteInstant(a['时间原点'],a['到期分钟']):a['有效期']).localeCompare(minuteMode(b)?minuteInstant(b['时间原点'],b['到期分钟']):b['有效期'])||a['批次编号'].localeCompare(b['批次编号']));
+    const candidates=inventory.map(b=>({key:'inventory:'+b['批次编号'],lotId:b['批次编号'],capacity:sub(q(b['账面数量']),q(b['已占用数量'])),expiry:minuteMode(b)?minuteInstant(b['时间原点'],b['到期分钟']):b['有效期'],quality:b['质量状态'],readyAt:b['预计可用时间']||'',conditional:false}));
     if(policy['允许预计供给'])for(const use of data.supplyUses||[]){
      if(use['订单编号']!==demand.orderId||use['工序编号']!==demand.operation)continue;
      const s=resolved.find(s=>s['供给编号']===use['供给编号']);
      if(!s||s['物料编号']!==demand.materialId||!validSupplyTime(s['生效到达时间'])||!validSupplyTime(s['生效可用时间'])||Date.parse(s['生效可用时间'])<Date.parse(s['生效到达时间']))continue;
-     const state=inventoryEligibility({...s,'账面数量':s['预计数量'],'已占用数量':'0','预计可用时间':s['生效可用时间']},feedTime(minute),policy['预计状态']);
+     const state=inventoryEligibility({...s,'账面数量':s['预计数量'],'已占用数量':s['已占用数量']||'0'},feedTime(minute),policy['预计状态'],{readyAt:s['生效可用时间']});
      if(!state.eligible)continue;
-     candidates.push({key:'supply:'+s['供给编号'],useKey:'use:'+use['引用编号'],limit:q(use['使用数量']),supplyId:s['供给编号'],lotId:s['批次编号'],capacity:q(s['预计数量']),expiry:s['有效期'],quality:s['质量状态'],readyAt:s['生效可用时间'],conditional:true});
+     candidates.push({key:'supply:'+s['供给编号'],useKey:'use:'+use['引用编号'],limit:q(use['使用数量']),supplyId:s['供给编号'],lotId:s['批次编号'],capacity:sub(q(s['预计数量']),q(s['已占用数量']||'0')),expiry:minuteMode(s)?minuteInstant(s['时间原点'],s['到期分钟']):s['有效期'],quality:s['质量状态'],readyAt:s['生效可用时间'],conditional:true});
     }
     // FEFO across eligible lots; expected supply remains explicitly earmarked and conditional.
     candidates.sort((a,b)=>a.expiry.localeCompare(b.expiry)||Number(a.conditional)-Number(b.conditional)||a.lotId.localeCompare(b.lotId));

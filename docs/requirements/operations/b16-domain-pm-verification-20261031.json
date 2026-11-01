@@ -1,0 +1,86 @@
+{
+  "event_key": "dlv_991020e0-9d19-4116-8a2d-68ac98573d8d:r1",
+  "notification": "dlv_d4408268-8386-46f4-9f89-1877b043182e",
+  "dispatch_event_key": "b16:independent-sharing-domain:20261031:r1:APS-Test",
+  "source": "44711f94dd329a823985e1bbb90d977bdd6084ed",
+  "parent": "b94cbe62b8e63d41434b77fcd867219bb9a85fdf",
+  "evidence": "d2feef7965de06f051bcd41e594c7adf7866b5ed",
+  "branch": "test/b16-sharing-core-20261031",
+  "outer_verified": 6,
+  "zip_crc": "PASS",
+  "internal_hashes": 81,
+  "remote_source_blobs_verified": 10,
+  "archived_source_blobs_verified": 48,
+  "matrix_rows": 107,
+  "matrix_verdicts": {
+    "PASS": 107
+  },
+  "closure_rows": 25,
+  "tests_logged": {
+    "pass": 28,
+    "fail": 0,
+    "new_domain": 23,
+    "unchanged_p0": 5
+  },
+  "independent_oracle_replayed": 318,
+  "source_paths": [
+    "qa/b16-test-INTEGRATION.md",
+    "qa/b16-test-core.mjs",
+    "qa/b16-test-export.mjs",
+    "qa/b16-test-fixture.mjs",
+    "qa/b16-test-oracle.py",
+    "qa/b16-test-replay.sh",
+    "qa/b16-test-source.mjs",
+    "qa/b16-test-worker.mjs",
+    "src/lib/b16-sharing.d.mts",
+    "src/lib/b16-sharing.mjs"
+  ],
+  "main_observed": "19e43ef7db177d750a5eb7e8754692a7362b3332",
+  "main_parents": [
+    "f709779b570f05a5b6be067cf1243baddc28a32d"
+  ],
+  "merge_base": "b8512a3853160fca8deaf374cb1c5da3ea9e771c",
+  "main_file_intersection": [],
+  "main_dependency_intersection": [],
+  "whole_issue": "NOT_READY",
+  "QA": "NOT_EXECUTED",
+  "domain": "PASS_OFFLINE_DOMAIN",
+  "repair_increment": 0,
+  "test_next": "IDLE: #43 unknown topic contracts/authorization; #44 real-interface authorization; shared application seams remain serial APS-Dev ownership",
+  "remaining": [
+    {
+      "owner": "APS-Dev",
+      "action": "串行main整合，保留source/parent/main/merge-base/交集及影响自测；当前无整合SHA"
+    },
+    {
+      "owner": "APS-Dev",
+      "action": "实际多线配置、导入编辑、查询汇总、指定线/自动排程选择、React/API/schema/真正Worker及CSV入口"
+    },
+    {
+      "owner": "APS-Dev",
+      "action": "真正多线独立检查器与问题定位、完整保存/比较/主管确认链；不能将旧P0单线problem抹去为通过"
+    },
+    {
+      "owner": "APS-PM",
+      "action": "核原件/hash/逐FR适用责任、原卡/Issue42状态；R7/P0整体依赖和P1启用授权保留"
+    },
+    {
+      "owner": "APS-QA",
+      "action": "PM明确入口后执行完整UAT16；本域自测与19文件归档校验不代签UAT"
+    }
+  ],
+  "limits": [
+    "本域固定未拆分kg订单、明确固定工时；拆批/合炉/其他单位及额外启用规则族明确GAP，由Dev接既有B12等模块。",
+    "自动模式仅给产品适用候选集；不搜索时刻、不生成排程或比较排序。",
+    "原始19 CSV按只读样本映射验证；kg/未拆分/零完成、BOM版本日期、分钟锚点/日期效期、班次、供给引用、产品适用及MOLD显式参数契约均是可替换测试映射。原件字节保留，不当现场默认。",
+    "原16 MOLD空参数不直接满足当前契约；测试显式使用既有CR-DEC02-03参数；原07未给产品适用关系。完整导入映射仍归Dev。",
+    "JSON文件保存重开、Node worker_threads和映射CSV仅域能力；未执行应用UI、真正Worker入口、19类别原生导出或主管确认/退回。",
+    "旧单线守卫/独立复核lineScope的problem原样保留；B16 opt-in适用检查通过不改变P0拒绝多线。实际多线checker须后续接入。",
+    "FR039/040、AC28/29、Issue42整体NOT_READY；R7/P0依赖未假记满足，QA UAT未执行，P1未启用，无发布或QA环境覆盖。"
+  ],
+  "dev_handoff_delivery": "dlv_32760108-fb3a-481d-be93-198c5d74fb54",
+  "dev_handoff_status_at_send": "waiting",
+  "plugin_write": "403 Resource not accessible by integration; existing workspace API fallback",
+  "status": "PROCESSED_DOMAIN_ONLY",
+  "main_at_record": "19e43ef7db177d750a5eb7e8754692a7362b3332"
+}

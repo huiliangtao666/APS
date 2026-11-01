@@ -1,3 +1,4 @@
+import {verifyStageBindings} from './verify-stage-bindings.mjs';
 import {verifyOriginalResources as verifyExecutionResources} from './verify-execution-resource-ledger.mjs';
 import {ruleCatalog} from './business-rules.mjs';
 import {verifyCalendar} from './verify-calendar.mjs';
@@ -128,6 +129,8 @@ export function independentlyVerifyPlan(plan, orders, routes = [], enabledRules 
     details.jointConditions=result(problems.length?'problem':tasks.length?'pass':'not_checked',problems.length?problems:['按冻结输入复核机器完整日历与停机、物料需求覆盖、来源资格及累计分配守恒；不调用排程或分配器。']);
     findings.push(...problems.map(message=>({code:'VERIFY / JOINT_CONDITIONS',message,taskIds:[]})));
   }
+  const stage=verifyStageBindings(plan,frozenData,frozenConditions??plan.conditions);
+  if(stage){details.stageBindings=stage;findings.push(...(stage.status==='problem'?stage.details.map(message=>({code:'VERIFY / STAGE_BINDING',message,taskIds:[]})):[]));}
   const original=(frozenConditions?.executionResourceContract?verifyExecutionResources:verifyOriginalResources)(plan,frozenData,frozenConditions||{});
   if(original){details.originalResources=original;findings.push(...(original.status==='problem'?original.details.map(message=>({code:'VERIFY / ORIGINAL_RESOURCES',message,taskIds:[]})):[]));}
   if(frozenData&&(frozenConditions??plan.conditions)?.mode!=='minimal-r1'){

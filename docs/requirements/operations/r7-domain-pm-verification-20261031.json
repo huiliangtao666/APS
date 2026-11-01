@@ -1,0 +1,77 @@
+{
+  "event_key": "dlv_e35a72db-7415-42e8-969e-268408d33a15:r1",
+  "notification": "dlv_78684948-e4ba-4e01-89c8-1bba7cb62e53",
+  "source": "3b26b5cce5e4a7118337cad06f33899e7b2b0dc0",
+  "parent": "2b2a5eaed050ca86280a54d32e06cadc16363825",
+  "evidence": "9556b2de14b54f136edc9cd75ca9be7187a4edcb",
+  "branch": "test/r7-query-report-core-20261031",
+  "main_observed": "b8512a3853160fca8deaf374cb1c5da3ea9e771c",
+  "merge_base": "b8512a3853160fca8deaf374cb1c5da3ea9e771c",
+  "outer_verified": 6,
+  "internal_hashes": 55,
+  "runtime_hashes": 22,
+  "source_hashes": 691,
+  "matrix_rows": 24,
+  "matrix_results": {
+    "PASS": 19,
+    "FAIL_EXISTING_SHARED_SCOPE": 1,
+    "MEASURED_NOT_AC27_PASS": 1,
+    "NOT_EXECUTED_NEW_APP_INTEGRATION": 1,
+    "AWAITING_DEV_INTEGRATION": 1,
+    "NOT_EXECUTED_UAT": 1
+  },
+  "closure_rows": 29,
+  "source_paths": [
+    "qa/r7-test-INTEGRATION.md",
+    "qa/r7-test-core.mjs",
+    "qa/r7-test-export.mjs",
+    "qa/r7-test-replay.sh",
+    "qa/r7-test-worker.mjs",
+    "src/lib/data-query.mjs",
+    "src/lib/delivery-assessment.mjs",
+    "src/lib/r7-handoff.d.mts",
+    "src/lib/r7-handoff.mjs",
+    "src/lib/result-assessment.mjs"
+  ],
+  "targeted_tests": {
+    "pass": 70,
+    "fail": 0
+  },
+  "independent_checks_reported": 48,
+  "static_contract": {
+    "pass": 8,
+    "fail": 1,
+    "inherited_baseline_reproduced": true,
+    "owner": "APS-Dev",
+    "missing_tables": [
+      "originalResourceEvents",
+      "originalDependencies"
+    ],
+    "stale_fields_table": "dependencies"
+  },
+  "status": "VERIFIED_DOMAIN_ONLY",
+  "whole_issue": "NOT_READY",
+  "QA": "NOT_EXECUTED",
+  "repair_increment": 0,
+  "continuation": "dlv_991020e0-9d19-4116-8a2d-68ac98573d8d",
+  "dev_continuation": "dlv_16b0f1de-32f3-4ce0-a436-df42b8d25d43",
+  "dev_dispatch_state": "SENT/WAITING",
+  "remaining": {
+    "APS-Dev": [
+      "serial main integration",
+      "FR036 public matrix/template/PG01 original parity",
+      "real report page/API/same-view native CSV",
+      "submit/return/confirm current revision final independent review, permissions/audit/history",
+      "BP01-BP07 complete app chain and final candidate"
+    ],
+    "APS-PM": [
+      "B12/B15 dependency and QA entrance audit",
+      "AC27 agreed scale/profile and outstanding business decisions"
+    ],
+    "APS-QA": [
+      "overall UAT only after PM dispatch"
+    ]
+  },
+  "cr_scope": "v0.3 plus applicable effective CR; no whole CR acceptance; DEC04-06 design/mock only and reservation effective=false",
+  "main_observed_at_record": "b8512a3853160fca8deaf374cb1c5da3ea9e771c"
+}

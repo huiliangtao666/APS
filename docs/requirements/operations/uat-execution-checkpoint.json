@@ -1,0 +1,43 @@
+{
+  "authority": "Live GitHub Project2 joint packages, not this derivative snapshot",
+  "processed_event": {
+    "event_key": "dlv_88fa9322-c89c-4e9b-93cb-8edc04134201:r1",
+    "product_sha": "80841247ac91cae193a452325097234f31e6609e",
+    "scope": "UAT07 complete explicit replaceable simulation AC06/17",
+    "qa_result": "PASS",
+    "matrix": {
+      "PASS": 33,
+      "PARTIAL_SUPPORT_ACCESS": 1
+    },
+    "product_fail": 0,
+    "repair_round_increment": 0,
+    "evidence_issue": "https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540477224",
+    "remaining_packages": [
+      37,
+      38,
+      39,
+      40,
+      41
+    ],
+    "whole_cr_accepted": false
+  },
+  "completed_package": 34,
+  "active_package": 37,
+  "github_status": "In progress",
+  "deliveries": {
+    "APS-Dev": "dlv_4a1d1bb6-e0a9-4a48-ab70-05561aac3b60",
+    "APS-Test": "dlv_0f5baaf3-a8c1-45fa-b5fe-3c26a771cee1"
+  },
+  "handoff_state": "SENT",
+  "test2": "PAUSED",
+  "qa": "IDLE until B08 entry ready",
+  "future_packages": [
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44
+  ]
+}

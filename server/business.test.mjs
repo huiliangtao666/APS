@@ -676,13 +676,17 @@ test('FR026 compare unchanged copies truthfully and edited runs expose input, ta
 test('FR026 material shortage survives capacity-only trial, allocations retain exact quantities and never deduct current stock',async t=>{
  const {call}=await fixture(t);const s=(await call('/state')).body,d=materialFixture(s.data);Object.assign(d.inventory[0],{'账面数量':'400','已占用数量':'100'});
  assert.equal((await call('/inputs',{revision:0,tables:d})).status,200);
+ // Freeze the full accepted input, including newly declared optional columns.
+ // Preserve every original inventory fact and every normalized field thereafter.
+ const inventoryBefore=structuredClone((await call('/state')).body.data.inventory);
+ for(const raw of d.inventory){const saved=inventoryBefore.find(row=>row['批次编号']===raw['批次编号']);assert.ok(saved);assert.deepEqual(Object.fromEntries(Object.keys(raw).map(key=>[key,saved[key]])),raw);}
  const p=(await call('/calculate',{revision:1})).body,trial=(await call('/plans/'+p.id+'/copy',{})).body;assert.equal(p.materialChecked,true);assert.equal(p.materialDemands[0].quantity,325);assert.equal(p.materialDemands[0].shortage,25);
  const groups=[{'人员组编号':'G-X','人员组名称':'增人试算','人员数量':'100','技能':'mix','班次':'day','可用起始分钟':'0','可用结束分钟':'600'}];
  assert.equal((await call('/trials/'+trial.id+'/inputs',{revision:0,tables:{personnelGroups:groups}})).status,200);
  const next=(await call('/calculate',{trialId:trial.id,revision:1})).body;
- const diff=(await call('/plans/'+p.id+'/compare/'+next.id)).body;assert.equal(diff.materials.known,true);assert.deepEqual(next.materialDemands,p.materialDemands);assert.equal(diff.orderOutcome,'unchanged-no-delivery-improvement');assert.deepEqual((await call('/state')).body.data.inventory,d.inventory);
+ const diff=(await call('/plans/'+p.id+'/compare/'+next.id)).body;assert.equal(diff.materials.known,true);assert.deepEqual(next.materialDemands,p.materialDemands);assert.equal(diff.orderOutcome,'unchanged-no-delivery-improvement');assert.deepEqual((await call('/state')).body.data.inventory,inventoryBefore);
  const changed=structuredClone(trial.data.inventory);changed[0]['账面数量']='425';assert.equal((await call('/trials/'+trial.id+'/inputs',{revision:1,tables:{inventory:changed}})).status,200);
- const filled=(await call('/calculate',{trialId:trial.id,revision:2})).body,diff2=(await call('/plans/'+p.id+'/compare/'+filled.id)).body;assert.ok(diff2.materials.changes.length);assert.equal(filled.materialDemands[0].shortage,0);assert.deepEqual((await call('/state')).body.data.inventory,d.inventory);
+ const filled=(await call('/calculate',{trialId:trial.id,revision:2})).body,diff2=(await call('/plans/'+p.id+'/compare/'+filled.id)).body;assert.ok(diff2.materials.changes.length);assert.equal(filled.materialDemands[0].shortage,0);assert.deepEqual((await call('/state')).body.data.inventory,inventoryBefore);
 });
 
 test('FR026 restore current-state blockers preserve stock, completed quantities, facts, confirmed originals and all history byte-for-byte',async t=>{

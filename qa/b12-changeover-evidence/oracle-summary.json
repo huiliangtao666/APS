@@ -1,0 +1,1 @@
+{"seed": 131320261031, "cases": 160, "pass": 160, "fail": 0, "valid": 27, "negative": 133, "method": "independent per-integer-minute enumeration + explicit expected occupations; no domain helper imports"}

@@ -1,0 +1,184 @@
+{
+  "config": {
+    "contract": "BR13-directed-occupations-v1",
+    "source": {
+      "id": "mock-config",
+      "version": "mock-v1",
+      "purpose": "selftest-only"
+    },
+    "timebase": {
+      "unit": "minute",
+      "origin": "mock-epoch-not-site-time"
+    },
+    "products": [
+      "A",
+      "B"
+    ],
+    "resources": [
+      {
+        "id": "M",
+        "capacity": 1,
+        "capacityScope": "independent",
+        "windows": [
+          {
+            "start": 0,
+            "end": 200
+          }
+        ],
+        "unavailable": [],
+        "source": {
+          "id": "M-calendar",
+          "version": "mock-v1",
+          "purpose": "selftest-only"
+        }
+      },
+      {
+        "id": "TOOL",
+        "capacity": 1,
+        "capacityScope": "independent",
+        "windows": [
+          {
+            "start": 0,
+            "end": 200
+          }
+        ],
+        "unavailable": [],
+        "source": {
+          "id": "TOOL-calendar",
+          "version": "mock-v1",
+          "purpose": "selftest-only"
+        }
+      }
+    ],
+    "personnel": [
+      {
+        "id": "P",
+        "capacity": 2,
+        "capacityScope": "independent",
+        "windows": [
+          {
+            "start": 0,
+            "end": 200
+          }
+        ],
+        "unavailable": [],
+        "source": {
+          "id": "P-calendar",
+          "version": "mock-v1",
+          "purpose": "selftest-only"
+        },
+        "skills": [
+          "clean"
+        ]
+      }
+    ],
+    "policies": [
+      {
+        "id": "A-B",
+        "from": "A",
+        "to": "B",
+        "resourceIds": [
+          "M"
+        ],
+        "prohibited": false,
+        "durationMinutes": 10,
+        "resources": [
+          {
+            "id": "M",
+            "quantity": 1
+          }
+        ],
+        "personnel": [
+          {
+            "id": "P",
+            "quantity": 1,
+            "skill": "clean"
+          }
+        ],
+        "validation": {
+          "clock": "elapsed-minutes",
+          "waitMinutes": 5,
+          "resources": [
+            {
+              "id": "M",
+              "quantity": 1
+            }
+          ],
+          "personnel": []
+        },
+        "source": {
+          "id": "A-B",
+          "version": "mock-v1",
+          "purpose": "selftest-only"
+        }
+      },
+      {
+        "id": "B-A",
+        "from": "B",
+        "to": "A",
+        "resourceIds": [
+          "M"
+        ],
+        "prohibited": false,
+        "durationMinutes": 20,
+        "resources": [
+          {
+            "id": "M",
+            "quantity": 1
+          }
+        ],
+        "personnel": [
+          {
+            "id": "P",
+            "quantity": 1,
+            "skill": "clean"
+          }
+        ],
+        "validation": {
+          "clock": "elapsed-minutes",
+          "waitMinutes": 7,
+          "resources": [
+            {
+              "id": "M",
+              "quantity": 1
+            }
+          ],
+          "personnel": []
+        },
+        "source": {
+          "id": "B-A",
+          "version": "mock-v1",
+          "purpose": "selftest-only"
+        }
+      }
+    ]
+  },
+  "transitions": [
+    {
+      "id": "T1",
+      "from": "A",
+      "to": "B",
+      "resourceId": "M",
+      "fromTaskId": "production-A",
+      "toTaskId": "production-B",
+      "predecessorEnd": 30,
+      "start": 30,
+      "successorStart": 45,
+      "source": {
+        "id": "explicit-mock-sequence",
+        "version": "mock-v1",
+        "purpose": "selftest-only"
+      }
+    }
+  ],
+  "existingOccupations": [],
+  "horizon": {
+    "start": 0,
+    "end": 200
+  },
+  "source": {
+    "id": "frozen-mock-candidate",
+    "version": "mock-v1",
+    "purpose": "selftest-only"
+  }
+}

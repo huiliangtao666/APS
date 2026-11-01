@@ -1,10 +1,13 @@
+import {packTimeFields,packRequested,operationDuration} from '../src/lib/pack-batch.mjs';
+import {stageMappingDef} from '../src/lib/stage-bindings.mjs';
+import {minuteValidityFields} from '../src/lib/minute-validity.mjs';
 import {originalProtection,originalSchedulingReservations} from '../src/lib/execution-resource-ledger.mjs';
 import {protectCalculatedTasks} from './trial-protection.mjs';
 import {scheduleProcessRoute} from '../src/lib/process-route-planner.mjs';
 import {processRequested} from '../src/lib/process-route.mjs';
 import {verifyProcessRoute} from '../src/lib/verify-process-route.mjs';
 import {processRouteFindings} from '../src/lib/process-route-findings.mjs';
-import {assessApplicationChangeovers,cleaningActive} from '../src/lib/changeover-application.mjs';
+import {assessApplicationChangeovers,cleaningActive,changeoverOrderCandidates} from '../src/lib/changeover-application.mjs';
 import {originalStageDefs,unmappedStageSources} from '../src/lib/original-stage-data.mjs';
 import {originalDependencyDef} from '../src/lib/original-dependencies.mjs';
 import {originalBomDef} from '../src/lib/original-bom.mjs';
@@ -41,7 +44,7 @@ type Finding = { code: string; message: string; taskIds: string[]; context?:any;
 type StoredVerificationReport = VerificationReport & { inputFingerprint?: string };
 type Plan = { id: string; name: string; createdAt: string; tasks: Task[]; findings: Finding[]; rules: string[]; inputVersion: string; verification?: StoredVerificationReport; supplyConditions?: SupplyCondition[]; supplyInput?: string; materialDemands?:MaterialDemandRow[]; materialChecked?:boolean; ruleSnapshot?: RuleSnapshot };
 
-export const defs: TableDef[] = [
+export const defs: TableDef[] = [stageMappingDef,
   {key:'originalResourceEvents',label:'MOCK资源取得归还释放账（追加事件）',file:'37_MOCK资源事实账.csv',fields:['事件编号','原账编号','前事件编号','事件类型','原账JSON']},
   { key: 'factoryLines', label: '工厂与产线', file: '01_工厂与产线配置.csv', fields: ['工厂编号','工厂名称','产线编号','产线名称','时区'] },
   { key: 'simulationEvents', label: '模拟异常事件（先更新时点事实）', file: '28_模拟异常事件.csv', fields: ['事件编号','事件分钟','保护截止分钟','保护策略','事件类型','参数JSON','原因','需处理事实JSON'] },
@@ -51,15 +54,15 @@ export const defs: TableDef[] = [
 
   { key: 'products', label: '产品与包装规格', file: '07_产品与包装规格.csv', fields: ['产品编号','产品名称','单支净重kg','每袋支数','总收率','模拟交付等待分钟'] },
   { key: 'materials', label: '物料主数据', file: '08_物料主数据.csv', fields: ['物料编号','物料名称','单位','类别'] },
-  { key: 'supplies', label: '预计到料', file: '20_预计到料.csv', fields: ['供给编号','物料编号','批次编号','预计数量','预计到达时间','预计可用时间','质量状态','有效期'] },
+  { key: 'supplies', label: '预计到料', file: '20_预计到料.csv', fields: ['供给编号','物料编号','批次编号','预计数量','预计到达时间','预计可用时间','质量状态','有效期','已占用数量',...minuteValidityFields] },
   { key: 'supplyDelays', label: '延期模拟记录', file: '21_延期模拟记录.csv', fields: ['记录编号','供给编号','记录时间','调整后到达时间','调整后可用时间','原因'] },
   { key: 'supplyUses', label: '计划供给引用', file: '22_计划供给引用.csv', fields: ['引用编号','订单编号','工序编号','供给编号','使用数量'] },
-  { key: 'inventory', label: '库存批次', file: '09_库存批次.csv', fields: ['批次编号','物料编号','账面数量','已占用数量','有效期','位置','质量状态','预计可用时间'] },
+  { key: 'inventory', label: '库存批次', file: '09_库存批次.csv', fields: ['批次编号','物料编号','账面数量','已占用数量','有效期','位置','质量状态','预计可用时间',...minuteValidityFields] },
   { key: 'orders', label: '订单与交期', file: '17_生产订单与交期.csv', fields: ['订单编号','产品编号','产线编号','合格需求','数量单位','要求可交付分钟','优先顺序','是否允许拆分','需求类型','订单状态','已完成合格数量'] },
-  { key: 'bom', label: 'BOM 与包装用量', file: '09_BOM与包装用量.csv', fields: ['版本编号','产品编号','生效日期','投料工序编号','用量类型','物料编号','配置用量','用量单位','用量基准','收率/损耗口径备注','损坏比例'] },
+  { key: 'bom', label: 'BOM 与包装用量', file: '09_BOM与包装用量.csv', fields: ['版本编号','产品编号','生效日期','投料工序编号','用量类型','物料编号','配置用量','用量单位','用量基准','收率/损耗口径备注','损坏比例','最小包装单位'] },
   { key: 'routes', label: '工艺路线', file: '10_工艺路线配置.csv', fields: ['产品编号','工序编号','工序名称','前序工序','最大等待分钟','程序编号'] },
-  { key: 'times', label: '工序工时', file: '11_工序工时配置.csv', fields: ['产品编号','工序编号','计算方式','固定分钟','速度支每分钟'] },
-  { key: 'machines', label: '设备资源', file: '03_设备资源配置.csv', fields: ['设备编号','设备名称','产线编号','工序编号','日历编号','最小装载kg','最大装载kg','装载计量基准'] },
+  { key: 'times', label: '工序工时', file: '11_工序工时配置.csv', fields: ['产品编号','工序编号','计算方式','固定分钟','速度支每分钟',...packTimeFields] },
+  { key: 'machines', label: '设备资源', file: '03_设备资源配置.csv', fields: ['设备编号','设备名称','产线编号','工序编号','日历编号','最小装载kg','最大装载kg','装载计量基准','不足批处理'] },
   { key: 'tools', label: '工装配置', file: '18_工装配置.csv', fields: ['工装编码','工装名称','适用任务','可用数量','每任务需求数量','提前占用分钟','后延占用分钟','是否启用','说明','可用起始分钟','可用结束分钟'] },
   { key: 'deliveryConditions', label: '订单模拟交付条件', file: '24_订单模拟交付条件.csv', fields: ['订单编号','模拟质量状态','模拟质量可用时间','模拟有效期截止时间','要求剩余有效分钟'] },
   { key: 'resourceClaims', label: '显式逐生产批占用声明', file: '23_资源占用声明.csv', fields: ['声明编号','订单编号','工序编号','资源类型','资源编号','需求数量','单位','提前占用分钟','后延占用分钟','占用口径','窗口开始偏移分钟','窗口结束偏移分钟','参数来源'] },
@@ -81,7 +84,7 @@ export const defs: TableDef[] = [
 export const seed: Record<string, Row[]> = {
   originalDependencies: [],
   resourceMappings: [],
-  originalInventory: [], originalSupply: [], originalProgress: [], originalEvents: [],
+  stageMappings: [], originalInventory: [], originalSupply: [], originalProgress: [], originalEvents: [],
   originalBom: [], originalTools: [], originalPersonnel: [],
   originalResourceEvents: [], simulationEvents: [], executionFacts: [], executionMaterials: [], executionSources: [],
   products: [
@@ -161,7 +164,7 @@ function validate(tasks: Task[]): Finding[] {
   return out;
 }
 
-export function calculate(data:Record<string,Row[]>, inputVersion:number, calculatedAt=new Date().toISOString(), conditions:{startMinute?:number;endMinute?:number|null;priority?:string;mode?:string;taskPositions?:Record<string,any>}={}) {
+export function calculate(data:Record<string,Row[]>, inputVersion:number, calculatedAt=new Date().toISOString(), conditions:{startMinute?:number;endMinute?:number|null;priority?:string;mode?:string;taskPositions?:Record<string,any>}={}, changeoverOrder:string[]|null=null) {
  const sourcePositions=conditions.taskPositions||{};let positions={...sourcePositions};
  const jointAttempts:any[]=[];
  const resourceReservations:any[]=[];const flags=conditions.mode==='minimal-r1'?{}:jointFlags(data,calculatedAt);
@@ -198,6 +201,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
     const sortBy=conditions.priority&&conditions.priority!=='规则设置'?conditions.priority:ruleSnapshot.settings.find(r=>r.id==='SORT'&&r.active)?.parameters['排序方式'];
     ruleSnapshot.note+=` 实际任务排序：${sortBy==='要求日期'?'要求日期':'优先顺序'}；来源：${conditions.priority&&conditions.priority!=='规则设置'?'本次计算条件（覆盖 SORT 的排序方式）':'本次规则设置或默认优先顺序'}。`;
     let sorted=[...(data.orders||[])].filter(o=>o['需求类型']!=='预测'&&isOrderSchedulable(o)).sort((a,b)=>sortBy==='要求日期'?Number(a['要求可交付分钟'])-Number(b['要求可交付分钟'])||Number(a['优先顺序'])-Number(b['优先顺序']):Number(a['优先顺序'])-Number(b['优先顺序']));
+    if(changeoverOrder){const rank=new Map(changeoverOrder.map((id,i)=>[id,i]));sorted.sort((a,b)=>(rank.get(a['订单编号'])??1e9)-(rank.get(b['订单编号'])??1e9));ruleSnapshot.note+=' BR13合法替代顺序候选：'+changeoverOrder.join(' → ');}
     const orderIssues=validateOrders(data.orders||[]).filter(issue=>issue.code!=='ORDER_MULTI_LINE');
     if(orderIssues.length){findings.push(...orderIssues.map(issue=>({...issue,table:"orders",row:issue.line?issue.line+1:0,code:`FR-009 / ${issue.code}`,message:issue.message,taskIds:[]})));setIssues(findings);setActivePlan({id:uid(),name:'订单数据校验',createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules,inputVersion:`v${inputVersion}`});setVerification(null);setMessage(`FR-009 订单字段检查发现 ${orderIssues.length} 个问题，未生成任务。`);return;}
     const masterIssues=[...unmappedStageSources(data),...validateBomConfig({products:data.products||[],materials:data.materials||[],routes:data.routes||[],bom:data.bom||[]}),...supplyIssues,...inventoryIssues,...validateMasterData({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],dependencies:data.dependencies||[]},data),...validateProcessConfig({products:data.products||[],materials:data.materials||[],orders:sorted,routes:data.routes||[],times:data.times||[],dependencies:data.dependencies||[],machines:data.machines||[],personnelGroups:data.personnelGroups||[],tools:data.tools||[]})];
@@ -216,11 +220,11 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
     if(Object.keys(positions).length&&minimal){
       setActivePlan({id:uid(),name:'固定位置检查受阻',createdAt:calculatedAt,tasks:[],findings:[{code:'POSITION / UNSUPPORTED',message:'最小模式位置语义未检查；保留锁定，不推断可行',taskIds:Object.keys(positions)}],rules:enabledRules,inputVersion:`v${inputVersion}`});return;
     }
-    if(!minimal&&processRequested(sourceData)&&ruleSnapshot.settings.some(r=>r.id==='MAX_LAG'&&r.active)){
+    if(!minimal&&(packRequested(sourceData)||processRequested(sourceData)&&ruleSnapshot.settings.some(r=>r.id==='MAX_LAG'&&r.active))){
      try{
       const route=scheduleProcessRoute(sourceData,sorted,calculatedAt,conditions);
       const frozen={...conditions,ruleEvaluationAt:calculatedAt,enabledRuleIds:ruleSnapshot.settings.filter(r=>r.active).map(r=>r.id),jointConditionsContract:'FR022-joint-v1',workingWindowsContract:'P06-windows-v1'};
-      const plan:any={id:uid(),name:'加工冷却完整路线',createdAt:calculatedAt,inputVersion:`v${inputVersion}`,...route,rules:frozen.enabledRuleIds,ruleSnapshot,resourcePolicyContract:'CR-DEC02-03-v1',jointConditionsContract:frozen.jointConditionsContract,workingWindowsContract:frozen.workingWindowsContract,supplyInput,supplyConditions:buildSupplyConditions(route.tasks,resolvedSupplies,route.materialDemands.filter((r:any)=>r.committed).flatMap((r:any)=>r.allocations.filter((a:any)=>a.conditional).map((a:any,i:number)=>({'引用编号':`FR020-${r.taskId}-${r.materialId}-${i}`,'订单编号':r.orderId,'工序编号':r.operation,'供给编号':a.supplyId,'使用数量':String(a.quantity)}))))};
+      const plan:any={id:uid(),name:'加工冷却完整路线',createdAt:calculatedAt,inputVersion:`v${inputVersion}`,...route,...(conditions.packBatchContract?{packBatchContract:conditions.packBatchContract}:{}),rules:frozen.enabledRuleIds,ruleSnapshot,resourcePolicyContract:'CR-DEC02-03-v1',jointConditionsContract:frozen.jointConditionsContract,workingWindowsContract:frozen.workingWindowsContract,supplyInput,supplyConditions:buildSupplyConditions(route.tasks,resolvedSupplies,route.materialDemands.filter((r:any)=>r.committed).flatMap((r:any)=>r.allocations.filter((a:any)=>a.conditional).map((a:any,i:number)=>({'引用编号':`FR020-${r.taskId}-${r.materialId}-${i}`,'订单编号':r.orderId,'工序编号':r.operation,'供给编号':a.supplyId,'使用数量':String(a.quantity)}))))};
       plan.processRouteVerification=verifyProcessRoute(plan,sourceData,frozen);
       if(plan.processRouteVerification.status==='problem')plan.findings.push(...processRouteFindings(plan.processRouteVerification,plan,sourceData));
       plan.findings=plan.findings.map((f:any)=>attachProblemRecords(f,sourceData));
@@ -317,6 +321,16 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
            const next=[...(personnel.nextStart!==undefined?[personnel.nextStart]:[]),...personnelRequirements.flatMap(r=>[...personnelReservations.map(p=>p.end-(r['窗口外释放']==='否'?0:Number(r['人员开始偏移']||0))),...(data.personnelGroups||[]).map(g=>Number(g['可用起始分钟'])-(r['窗口外释放']==='否'?0:Number(r['人员开始偏移']||0)))])].filter(t=>Number.isFinite(t)&&t>fit.start!);
            if(next.length){timingReasons.push({code:'PERSONNEL',source:personnelRequirements,from:fit.start,to:Math.min(...next),message:personnelError});candidate=Math.min(...next);continue;}break;
           }
+          if(!minimal&&cleaningActive(sourceData,calculatedAt)&&!batches){
+           const candidateTask={id:`${oid}-${operation}`,orderId:oid,productId:product,operation,machine:machineId,start:fit.start,end:fit.start+duration,duration};
+           const candidateRows=[...resourceReservations,...(jointPreview.allocations||[]),...(personnel.allocations||[]).map(r=>({...r,type:'人员',resourceId:r.groupId,quantity:String(r.count),taskIds:[candidateTask.id]})),{type:'设备',resourceId:machineId,quantity:'1',start:fit.start,end:fit.start+duration,taskIds:[candidateTask.id]}];
+           const cleaning=assessApplicationChangeovers({tasks:[...built,candidateTask],resourceReservations:candidateRows},sourceData,{...conditions,ruleEvaluationAt:calculatedAt});
+           if(cleaning.status==='problem'){
+            const ready=Math.max(fit.start,...(cleaning.domain?.findings||[]).filter((f:any)=>f.code==='VALIDATION_WAIT').map((f:any)=>f.readyAt));
+            if(ready>fit.start&&!position&&!fact){timingReasons.push({code:'BR13_READY',from:fit.start,to:ready,message:'显式方向清洗时长和验证等待；完整资源候选重新检查'});candidate=ready;continue;}
+            resourceError=cleaning.findings.map((f:any)=>f.code+' '+f.message).join('；');break;
+           }
+          }
           if(allocator){
            try{materialPreview=allocator.preview(demandFor(order,operation,fit.start),fit.start);}
            catch(e){materialError=e instanceof Error?e.message:'物料口径无效';break;}
@@ -367,5 +381,21 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
   (result as any).protection=protection;
   (result as any).findings.push(...protection.issues);
  }
- finishDelivery(); return result!;
+ finishDelivery();
+ if(result&&!minimal&&cleaningActive(sourceData,calculatedAt)&&!changeoverOrder){
+  const initial:any=result;
+  const needsSearch=initial.changeoverAssessment?.status==='problem'||initial.findings.some((f:any)=>f.message.includes('BR13'));
+  if(needsSearch){
+   const ids=sourceData.orders.filter(isOrderSchedulable).map(o=>o['订单编号']);
+   const tried:any[]=[];let accepted:any=null;
+   for(const order of changeoverOrderCandidates(ids)){
+    const candidate:any=calculate(sourceData,inputVersion,calculatedAt,conditions,order);
+    tried.push({order,status:candidate.changeoverAssessment?.status??'not_checked',tasks:candidate.tasks.map((t:any)=>t.id),findings:candidate.findings.map((f:any)=>({code:f.code,message:f.message}))});
+    if(!candidate.findings.length&&candidate.changeoverAssessment?.status==='pass'&&candidate.tasks.length>=initial.tasks.length){accepted=candidate;break;}
+   }
+   const search={contract:'BR13-bounded-full-candidate-v1',limit:120,maxOrders:8,attempts:tried,selectedOrder:accepted?tried.at(-1).order:null,status:accepted?'legal-alternative':'rejected',explanation:accepted?'合法替代顺序已经完整排程并检查方向/日历/人员/资源/物料及执行保护；冻结输入未改写。':(ids.length>8?'订单数超过8项搜索边界；保留原结果与冲突，不自动采用未核顺序。':'已检查的顺序均不满足当前约束；保留锁定及已开始事实。')+'搜索有界，不宣称全局无解；可维护显式方向/资源/日历后重新运行。'};
+   result=accepted??initial;(result as any).changeoverSearch=search;
+  }
+ }
+ return result!;
 }

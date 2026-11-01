@@ -1,0 +1,26 @@
+[
+  {
+    "path": "temp/main-r7/regression-originals/UAT-12/场景完整输入与参考结果.json",
+    "sha256": "b0ad8002898fa87ea0fec3f9b1921e9cafaf66b3287dd12216b7c0ea73416a33"
+  },
+  {
+    "path": "temp/main-r7/regression-originals/UAT-13/场景完整输入与参考结果.json",
+    "sha256": "3faf2155019250825b146586c24f6eb6863558c5ce9c857b28530c00a7939b59"
+  },
+  {
+    "path": "temp/main-r7/regression-originals/UAT-14/场景完整输入与参考结果.json",
+    "sha256": "ae52949bd8e9f201a85dbb6a306c1a9982282a4a0df28195c02d96bc53a6edbb"
+  },
+  {
+    "path": "temp/main-b15/originals/UAT-15/场景完整输入与参考结果.json",
+    "sha256": "26fb12030e0d09c9d0a1300134ce656f259d67f199b3ef7f6cc4ea477100b140"
+  },
+  {
+    "path": "temp/main-r7/regression-originals/UAT-17/场景完整输入与参考结果.json",
+    "sha256": "8aa1e0325c4ac77df84cadc892af94e0d94d238f290194b4eaec9342aedd98a4"
+  },
+  {
+    "path": "temp/main-b15/originals/UAT-18/场景完整输入与参考结果.json",
+    "sha256": "bd6f38d86222321c488340fa349b8e679c0286b39c6a76f800247db009df8179"
+  }
+]

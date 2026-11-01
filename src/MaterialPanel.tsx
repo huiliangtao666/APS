@@ -1,7 +1,7 @@
 import {type MaterialDemandRow} from './lib/material-allocation.mjs';
 const exact=(value?:{numerator:string;denominator:string})=>value?`${value.numerator}/${value.denominator}`:'旧快照未记录';
-export function MaterialPanel({plan,onTask}:{plan:{materialChecked?:boolean;materialDemands?:MaterialDemandRow[]};onTask:(id:string)=>void}){
- return <section className="panel" aria-label="物料需求与批次分配"><h2>物料需求与批次分配</h2>{!plan.materialChecked?
+export function MaterialPanel({plan,onTask}:{plan:{materialChecked?:boolean;materialDemands?:MaterialDemandRow[];stageBindingSources?:any[]};onTask:(id:string)=>void}){
+ return <section className="panel" aria-label="物料需求与批次分配"><h2>物料需求与批次分配</h2>{!!plan.stageBindingSources?.length&&<details aria-label="原来源冻结绑定"><summary>原13/14/18/19冻结绑定与数据性质</summary>{plan.stageBindingSources.map(b=><article key={b.configurationId}><b>{b.configurationId} · v{b.version} · {b.dataKind} · {b.sourceId} → {b.targetId}</b><p>{b.status==='BOUND'?'已按本运行显式配置采用':'未采用'}；明确模拟不代表客户事实。</p>{b.relatedRecords.filter((r:any)=>r.table===b.sourceTable).map((r:any,i:number)=><p key={i}>{r.csv?`${r.csv.file} · 物理第${r.csv.physicalRow}行 · SHA256 ${r.csv.sha256}`:'未取得CSV物理行原件；仅保留冻结逻辑记录'}</p>)}</article>)}</details>}{!plan.materialChecked?
   <p>物料未检查；须在支持模式中启用 MATERIAL 并声明完整参数和支持的 BOM 口径。</p>:
   <><p>本方案快照 · 模拟库存 · 已占用已扣除；预计供给仍是条件。未排工序的候选分配不占用库存。MATERIAL 分配状态规则与 INVENTORY 查询规则分别保存。点击任务查看本运行的冻结来源；显示精度不改变齐套判定。</p>
    {!plan.materialDemands?.length&&<p>本结果未记录物料需求行；不据此确认物料齐套，请核对订单、投料工序与BOM。</p>}

@@ -1,0 +1,58 @@
+{
+  "01-业务需求与主程序接入.txt": {
+    "bytes": 21060,
+    "sha256": "6b8b2ad68fa7716f5fce8cd46039afa1218599221bec8866dbc89dd76f662283"
+  },
+  "02-工作表接入与维护映射.csv": {
+    "bytes": 8674,
+    "sha256": "3d1f9417116b9a809e6be87fd5ab16314f8b6635bf347878f28f6cfde6b4c0c5"
+  },
+  "03-字段接入与权威来源.csv": {
+    "bytes": 69058,
+    "sha256": "641d6bfe349fdf8f9d77cfbcd611619b620070978694fd70b8b212f0dfcdf948"
+  },
+  "04-集中参数与业务单元格映射.csv": {
+    "bytes": 374386,
+    "sha256": "6badb863ad9a3aa8f3f3e035b9b8a0bce849cb6ff70ed21b94d8031ca40bbdcf"
+  },
+  "05-验收场景与独立预期.csv": {
+    "bytes": 10088,
+    "sha256": "a67a6ed2fc8728db9b7634cfe667360b03fbe9222211f471d269cc8f97177713"
+  },
+  "06-已有任务升级与验收归属.csv": {
+    "bytes": 10503,
+    "sha256": "ede58922d3c1f8c88e21adb8820d6c958a7e87872815774f1c0c3a12d8d67364"
+  },
+  "07-数据集清单.json": {
+    "bytes": 792,
+    "sha256": "d0523b0516950e6984cb112f1cbc0f4dbb6910596eca8c492249730ecade8a49"
+  },
+  "08-需求变更请求.json": {
+    "bytes": 2968,
+    "sha256": "e9024aa490d6a20b840d33864fd7d7ff484c4f0b175b3b1057f710cd57463d9e"
+  },
+  "09-半成品补充资料模板.csv": {
+    "bytes": 3928,
+    "sha256": "0b630ae47ea554635536d9afb3210c8c82d35131d3e7be8883eac529a1d4ed10"
+  },
+  "10-设计资产校验.json": {
+    "bytes": 820,
+    "sha256": "2f9da38804ae894858f612bf9d363d22ef71b2165ad6c4464b9dc22fe5263e2a"
+  },
+  "11-依据与版本.json": {
+    "bytes": 2185,
+    "sha256": "29c352656bd8b968a0f7395c9326dffd457952096ffa591e73a2ec101d1a322e"
+  },
+  "12-主程序接入业务契约.json": {
+    "bytes": 3497,
+    "sha256": "64347847e815e9d53e1252729f9bc42e2d88c44c5c13b085ebf3bb21a1b195b3"
+  },
+  "README.txt": {
+    "bytes": 1451,
+    "sha256": "84a5f52d35a5025839b55333cbb0e9f338032c3197c5716c8d5d6e5e74b3cd02"
+  },
+  "肉食品仿真数据_202611_合并图示版.xlsx": {
+    "bytes": 1672626,
+    "sha256": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0"
+  }
+}

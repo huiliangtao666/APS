@@ -14,16 +14,19 @@ function union(intervals){let end=-Infinity,total=0;for(const [a,b] of intervals
 export function resourceLoad(plan,{start=0,end=120}={}){
  if(!validInterval(start,end))throw Error('负荷窗口须为有效 [开始,结束) 分钟');
  const model=timetable(plan),input=model.input;
+ const cleaning=plan?.changeoverAssessment?.status==='pass'?plan.changeoverAssessment:null;
+ const cleaningResources=(cleaning?.acceptedOccupations||[]).filter(r=>r.kind==='resource').map(r=>({...r,type:r.resourceId.startsWith('machine:')?'设备':r.resourceId.startsWith('tool:')?'工装':'空间',resourceId:r.resourceId.replace(/^[^:]+:/,''),quantity:String(r.quantity),unit:r.resourceId.startsWith('machine:')?'台':r.resourceId.startsWith('tool:')?'套':input?.batchResources?.find(x=>'space:'+x['资源编号']===r.resourceId)?.['单位'],declarationId:'BR13:'+r.transitionId+':'+r.phase,reason:'BR13未来接受占用；历史不重复扣算'}));
+ const cleaningPeople=(cleaning?.groupEvidence||[]).filter(r=>r.transitionId).map(r=>({...r,type:'人员',resourceId:r.groupId,quantity:String(r.quantity),unit:'人',declarationId:'BR13:'+r.transitionId+':'+r.phase,taskIds:cleaning.domain.inspections.find(i=>i.transitionId===r.transitionId)?.taskIds||[],reason:'BR13未来清洗人员；唯一物理池'}));
  const scheduled=model.tasks.filter(t=>t.status==='scheduled'&&validInterval(t.start,t.end));
  const machineIds=unique([...(input?.machines||[]).map(r=>r['设备编号']),...model.tasks.map(t=>t.machine)]).filter(Boolean);
  const machines=machineIds.map(id=>{
   const tasks=scheduled.filter(t=>t.machine===id&&t.start<end&&t.end>start);
-  const spans=tasks.map(t=>[Math.max(start,t.start),Math.min(end,t.end)]);
+  const spans=[...tasks,...cleaningResources.filter(r=>r.type==='设备'&&r.resourceId===id&&r.start<end&&r.end>start)].map(t=>[Math.max(start,t.start),Math.min(end,t.end)]);
   const known=Array.isArray(plan?.tasks)&&!model.tasks.some(t=>t.machine===id&&t.status==='scheduled'&&!validInterval(t.start,t.end));
   const busyMinutes=known?union(spans):null;
   return {id,busyMinutes,unallocatedMinutes:known?end-start-busyMinutes:null,availableNow:null,taskIds:tasks.map(t=>t.id),inputRefs:refs('machines',(input?.machines||[]).filter(r=>r['设备编号']===id))};
  });
- const reservations=[...new Map(model.reservations.map(r=>[JSON.stringify([r.type,r.resourceId,r.unit,r.start,r.end,r.quantity,[...(r.taskIds||[])].sort(),r.resourceBatchId??null,r.declarationId??null,r.productionBatchId??null,r.taskId??null,r.demandKey??null,r.postId??null,r.roleSource??null,r.poolId??null]),r])).values()];
+ const reservations=[...new Map([...model.reservations,...cleaningResources,...cleaningPeople].map(r=>[JSON.stringify([r.type,r.resourceId,r.unit,r.start,r.end,r.quantity,[...(r.taskIds||[])].sort(),r.resourceBatchId??null,r.declarationId??null,r.productionBatchId??null,r.taskId??null,r.demandKey??null,r.postId??null,r.roleSource??null,r.poolId??null]),r])).values()];
  const configs=[...refs('tools',input?.tools||[]).map(r=>({...r,type:'工装',id:r.row['工装编码'],capacity:r.row['可用数量']})),...refs('personnelGroups',input?.personnelGroups||[]).map(r=>({...r,type:'人员',id:r.row['人员组编号'],capacity:r.row['人员数量']})),...refs('batchResources',(input?.batchResources||[]).filter(r=>r['资源类型']?.includes('空间'))).map(r=>({...r,type:'空间',id:r.row['资源编号'],capacity:r.row['容量']}))];
  const declarations=[...refs('dependencies',input?.dependencies||[]),...refs('resourceClaims',input?.resourceClaims||[])].filter(d=>['人员技能','工装','空间'].includes(d.row['资源类型'])).flatMap(d=>(d.row['资源类型']==='人员技能'?personnelCandidates(d.row):[d.row['资源编号']]).map(id=>({...d,type:d.row['资源类型']==='人员技能'?'人员':d.row['资源类型'],id,candidateGroupIds:d.row['候选人员组']?.trim()?personnelCandidates(d.row):null})));
  const keys=unique([...configs.map(c=>JSON.stringify([c.type,c.id])),...declarations.map(c=>JSON.stringify([c.type,c.id])),...reservations.filter(r=>r.type!=='设备').map(r=>JSON.stringify([r.type,r.resourceId]))]);

@@ -1,0 +1,52 @@
+{
+  "type": "DEV_DELIVERED",
+  "event_key": "dlv_32760108-fb3a-481d-be93-198c5d74fb54:r1",
+  "originalDelivery": "dlv_32760108-fb3a-481d-be93-198c5d74fb54",
+  "resultRevision": "r1",
+  "dispatchKey": "b16:verified-offline-domain:dev-main-handoff:20261031:r1",
+  "sourceEvent": "dlv_991020e0-9d19-4116-8a2d-68ac98573d8d:r1",
+  "sourceSha": "44711f94dd329a823985e1bbb90d977bdd6084ed",
+  "sourceParent": "b94cbe62b8e63d41434b77fcd867219bb9a85fdf",
+  "productSha": "5bdf8287778e5b0e98c33b512da4ed0f724785f7",
+  "parents": [
+    "7fd9683291607b65e8fbf52f633fcbc9d88254e7",
+    "44711f94dd329a823985e1bbb90d977bdd6084ed"
+  ],
+  "branch": "main",
+  "designSha": null,
+  "requirementsVersion": "APS-BL-001 v0.3 + applicable effective CR",
+  "soleIssue": "https://github.com/huiliangtao666/APS/issues/42",
+  "devResult": "PASS_OFFLINE_MAIN_INTEGRATION;1 inherited unrelated regression assertion retained",
+  "cardRecommendation": "NOT_READY",
+  "qaUat": "NOT_EXECUTED",
+  "P1Enabled": false,
+  "newProductDefects": 0,
+  "unclassifiedInheritedAssertion": "FR022 MAX_LAG qa/joint-resources.test.mjs:67 expected6 actual0 on parent and main; PM classify",
+  "historicalDefectRepairRoundIncrement": 0,
+  "qaIssueLogsClosed": 0,
+  "target": "APS-PM",
+  "status": "PREPARED; actual send receipt separately in B16-MAIN-DEV-r1-SEND.json",
+  "nextOwner": "APS-PM review evidence/FR022 assertion and P0-P1 conditions; APS-Dev only later authorized application seams; APS-QA after explicit entrance dispatch",
+  "files": {
+    "B16-MAIN-DEV-r1-REPORT.md": {
+      "bytes": 5373,
+      "sha256": "6bcfa9e310b4a07e333081fc9773e3359451940c35d54da912db7d4f409116a5"
+    },
+    "B16-MAIN-DEV-r1-MATRIX.csv": {
+      "bytes": 33200,
+      "sha256": "f93c26838853b11f1e9a44835c31fdff2c155ba8a7fcb42cf08a910e90217193"
+    },
+    "B16-MAIN-DEV-r1-CLOSURE.csv": {
+      "bytes": 13950,
+      "sha256": "6f968d2affda86f9611b21b35484c9adfffac5290cf62bdb80bb1a5dd403ba71"
+    },
+    "B16-MAIN-DEV-r1-ENVIRONMENT.json": {
+      "bytes": 10163,
+      "sha256": "1d3c8bdeaf6cdad1ad1fc2116d712ec5d0b618fd6a62d36530fd6ddab3a2d106"
+    },
+    "B16-MAIN-DEV-r1-EVIDENCE.zip": {
+      "bytes": 1645308,
+      "sha256": "cb375627311ccce8713909ffde3e0bab3b1f7979d23e55c47b9161afd1618358"
+    }
+  }
+}

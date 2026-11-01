@@ -1,0 +1,142 @@
+{
+  "algorithm": "SHA256",
+  "scope": "all package files except SHA256.json itself; final DELIVERY metadata is external to this immutable design asset set",
+  "files": {
+    "01-总体设计.txt": {
+      "bytes": 11208,
+      "sha256": "c0472535f8999f35f36173a38908f5ab433b5a1f9a78814654660d568ea5bb39"
+    },
+    "02-字段与维护关系.csv": {
+      "bytes": 190586,
+      "sha256": "f7df29c093a85e70fb0cf30966c6b50efd61fb29b20911ad6bbeafd50dfca52f"
+    },
+    "02b-业务关系.csv": {
+      "bytes": 17093,
+      "sha256": "4839db18c2fd0eb0a6d63e8a4aa41cf2c7cd5c4d0bb34aff51fb71268cead1e8"
+    },
+    "02c-参数语义索引_沿用待批边界.csv": {
+      "bytes": 33736,
+      "sha256": "631dedac94dc33ea326940744fdf128c982f1c42d5eb63d7f33fb459a1b39d94"
+    },
+    "03-状态与反馈.csv": {
+      "bytes": 4772,
+      "sha256": "45cc2e7fd0acb77de1720e3d35a04c4c202c8dec461903a62b6cf73d8a24fde6"
+    },
+    "04-实施接缝.txt": {
+      "bytes": 6130,
+      "sha256": "be016559439d1524b34a6cfacfc34271586a7f8fc41fd096e5b0b3306628105d"
+    },
+    "05-验收映射.csv": {
+      "bytes": 89194,
+      "sha256": "3e42d2f29e5ba8babeda41bda4e414b2cc9994d6b7ce7356554ecd7e82658d1f"
+    },
+    "06-后续阶段.csv": {
+      "bytes": 9443,
+      "sha256": "4c77c93fd25908c13e3eb6c966d924a73afa7590eaff3144aeedc13d30831dec"
+    },
+    "07-原型走查.txt": {
+      "bytes": 3990,
+      "sha256": "9f15aca69f7d2eb878b2fe0c3d9a89160e96e418cfdc8a135d369ea7a1bc66e2"
+    },
+    "08-设计校验.json": {
+      "bytes": 1611,
+      "sha256": "94af57616f22d72ec5dacad984206d359ef0e739b9a45578043ece5c20ea2e7d"
+    },
+    "09-UX验收计划.csv": {
+      "bytes": 2550,
+      "sha256": "80c2e79996a5b9453ec42b72657ebfbadffc0d71f4cf8839c9193a55afa104fa"
+    },
+    "README.txt": {
+      "bytes": 1591,
+      "sha256": "09b9eda0b2ef2b377a50ebfb9c4cf950314a4ffaba16d7b347ebf8796ccc264d"
+    },
+    "design-check.cjs": {
+      "bytes": 6237,
+      "sha256": "020b504b826c46be08d96913510af118e9357d91555944ebc97adb2ba4812e6d"
+    },
+    "prototype.html": {
+      "bytes": 36638,
+      "sha256": "f702370e13cfd071eca32a18077246ac7c7622dd08d0e78c8ffd69c7e9ddc1af"
+    },
+    "provenance.json": {
+      "bytes": 2641,
+      "sha256": "5f2b1ac1dfe8115f2de30288b94ce7b8958b9d1960a0968ea231b3e02012ee41"
+    },
+    "sources/APS-BL-001-v0.3.json": {
+      "bytes": 117997,
+      "sha256": "e30733655359e71b0c98220910303aefbc922ac123b96fb3025c4976a4067e36"
+    },
+    "sources/B1-UAT01-02-98347f8-QA-r1-MATRIX.csv": {
+      "bytes": 24252,
+      "sha256": "095ece8d31db52cce82b406e0ebd6fedab9c64d7dd0e9e45f88c1f7b5f0e2f27"
+    },
+    "sources/UAT03-833b3d5-QA-resume-r1-MATRIX.csv": {
+      "bytes": 12158,
+      "sha256": "e715be53f84297fc062351862876179c00dc4521c424c7929cc972d451831070"
+    },
+    "sources/UAT04-96a9dae-QA-recovery-r1-MATRIX.csv": {
+      "bytes": 8481,
+      "sha256": "9bc64692079818a82ac7a08cbd1115366b4d80f05e8ecefe0707d7dd8c0b24c7"
+    },
+    "sources/UAT05-96a9dae-QA-r1-MATRIX.csv": {
+      "bytes": 13569,
+      "sha256": "fc4cf7890835795cfde8097672eb3ecc50079a543e929018a6cc4af066ca9b95"
+    },
+    "sources/change-register.json": {
+      "bytes": 74475,
+      "sha256": "2e7c460362767988cdb1a22f0d0cddc3f829a1df712ffdfbb5aed90e8b50eee9"
+    },
+    "sources/comments45.json": {
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "sources/issue27.json": {
+      "bytes": 5619,
+      "sha256": "7c147ad73266a15d1a0d0e46ec60eb195d95ab7572b086aad1a1c98d45936e7f"
+    },
+    "sources/issue28.json": {
+      "bytes": 5554,
+      "sha256": "f4d35f8855248e0644fd347fcf22d768b6c40d79a095c913b31f4a4886b61b0d"
+    },
+    "sources/issue29.json": {
+      "bytes": 5578,
+      "sha256": "b68155f0cc685f3b2b6dbdad7bf15a0c6ebcdbca2332e8a3358a09b08f3af305"
+    },
+    "sources/issue30.json": {
+      "bytes": 5803,
+      "sha256": "f04b4ba7cb06fd6c6c4f50d7dfa32b11fdd749fb965cacef60e3e6ce2f630d35"
+    },
+    "sources/issue36.json": {
+      "bytes": 31005,
+      "sha256": "d3d16ed51fcce806dd9cd1ac88c676d50f7dd5b4437db71c98adf81bc1138114"
+    },
+    "sources/issue38.json": {
+      "bytes": 6772,
+      "sha256": "41b09ef85195159f93c2209e837749ad59a998ad5b5129286b33625463e06ef4"
+    },
+    "sources/issue41.json": {
+      "bytes": 7555,
+      "sha256": "b7b9821d071cb9e2ff0101679d972aecbcbd13a7223d8e1df3dbbf85a146e58c"
+    },
+    "sources/issue45.json": {
+      "bytes": 11621,
+      "sha256": "a8d415245f80c667489617dd39078fddaf9f410139d82bc0b6be8431b8dccd31"
+    },
+    "sources/main-sha.txt": {
+      "bytes": 40,
+      "sha256": "2bdcfcbc1293b461fecfe0a5b8915c38a11c1747fca7622df5c784325eaaf4a1"
+    },
+    "sources/manual.html": {
+      "bytes": 13421,
+      "sha256": "6ddf3e5bf53889d90009aa67e5f94c62966b821988d40db13676816aee2a398c"
+    },
+    "sources/request.json": {
+      "bytes": 5858,
+      "sha256": "58a2f9bbb2dfe1bda8032b3a3b181248ffb83b1ca02057399ff18f5cdd0b7d04"
+    },
+    "sources/uat-register.json": {
+      "bytes": 34503,
+      "sha256": "09f81080335767eee44dbe62346b4fd11ee0de86aae9a8f170df363c819c3ef5"
+    }
+  }
+}

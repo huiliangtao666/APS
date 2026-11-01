@@ -1,0 +1,30 @@
+{
+  "cr_id": "CR-INPUT-DATA-20261031",
+  "event_key": "design:input-data-upgrade:20261031:r1",
+  "source_file": "肉食品仿真数据_202611_合并图示版.xlsx",
+  "sha256": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+  "bytes": 1672626,
+  "schema_version": "APS-FOOD-XLSX-202611-R1",
+  "sheets": 29,
+  "source_tables": 16,
+  "reference_tables": 7,
+  "non_business_sheets": 6,
+  "formula_cells": 4839,
+  "parameter_rows": 3428,
+  "direct_parameter_bindings": 4129,
+  "day_zero": "2026-10-31",
+  "timezone": "Asia/Shanghai",
+  "display_time_unit": "整数天",
+  "first_planning_day": 1,
+  "planning_window_days": 14,
+  "main_month_day_range": [
+    1,
+    30
+  ],
+  "tail_day_range": [
+    31,
+    43
+  ],
+  "input_file_is_unchanged": true,
+  "product_sha": null
+}

@@ -1,0 +1,17 @@
+{
+  "join": "Concatenate part01 then part02 into B12-MAIN-b8512a3-DEV-r1-EVIDENCE.zip",
+  "bytes": 8186665,
+  "sha256": "ea081f0402f30942a7fcc4f7bbc3b6c2821d07756107e6bd6d6b1c5418d0f10a",
+  "parts": [
+    {
+      "file": "B12-MAIN-b8512a3-DEV-r1-EVIDENCE.zip.part01",
+      "bytes": 4194304,
+      "sha256": "869c8d479a6839d372e273e90c406c5c0c0151a8bbea684663bb642b73f02e57"
+    },
+    {
+      "file": "B12-MAIN-b8512a3-DEV-r1-EVIDENCE.zip.part02",
+      "bytes": 3992361,
+      "sha256": "f44670031467f20958c37c9d372ca2614ce3757e1b4f9595648444197ccbebcf"
+    }
+  ]
+}

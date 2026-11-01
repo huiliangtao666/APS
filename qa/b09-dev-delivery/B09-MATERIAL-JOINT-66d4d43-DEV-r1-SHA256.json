@@ -1,0 +1,35 @@
+{
+  "event_key": "dlv_ddea429a-af36-46f2-be80-25c6c26f9da4:r1",
+  "originalDelivery": "dlv_ddea429a-af36-46f2-be80-25c6c26f9da4",
+  "resultRevision": "r1",
+  "productSha": "66d4d43e4b1cc566a47d96a93671d179d8921434",
+  "parent": "d0eedb9b101c7b1dad44fb0b83a6f993bd8b7560",
+  "branch": "dev/b09-material-joint-20261031",
+  "designDocumentSha": "c48d214f8197d1346eccbb8886bb7138eb263d56",
+  "files": {
+    "B09-MATERIAL-JOINT-66d4d43-DEV-r1-REPORT.md": {
+      "bytes": 7080,
+      "sha256": "8bf8f30d3653381de1d50bb33d1ae4cf83de0e82d97788ce3b338fd02d1187a7"
+    },
+    "B09-MATERIAL-JOINT-66d4d43-DEV-r1-MATRIX.csv": {
+      "bytes": 8634,
+      "sha256": "4f3870ee77e335eb44f3cc08d499bc37771ea1a4dc5a18a5c1b58cadb5781dc5"
+    },
+    "B09-MATERIAL-JOINT-66d4d43-DEV-r1-CLOSURE.csv": {
+      "bytes": 7254,
+      "sha256": "e3ac60bd500bbfb37619b896c0176c032947ee65b7f785a2d481a5ccfb5898d8"
+    },
+    "B09-MATERIAL-JOINT-66d4d43-DEV-r1-ENVIRONMENT.json": {
+      "bytes": 43933,
+      "sha256": "6f353d9a29e1ffa6513529c63e92f4b6390771ab565a6ede6ed283460a22ae3f"
+    },
+    "B09-MATERIAL-JOINT-66d4d43-DEV-r1-EVIDENCE.zip": {
+      "bytes": 6011956,
+      "sha256": "81fbb3331b8817a9a632eed085e65f2d3536403089f16bafe402d7a3bf8c750e"
+    }
+  },
+  "internalFiles": 1282,
+  "zipCrc": "PASS",
+  "innerHashes": "PASS",
+  "portableSourceFiles": 598
+}

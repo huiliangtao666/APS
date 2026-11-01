@@ -1,5 +1,5 @@
 // Offline, append-only events. Effects and fresh cumulative facts commit in one input transaction.
-export const eventTypes=['插单','设备故障','人员缺勤','到料延期','物料状态变化'];
+export const eventTypes=['插单','设备故障','人员缺勤','到料延期','物料状态变化','人员数量变化'];
 const rows=d=>d.simulationEvents||[];
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 const minute=v=>typeof v==='string'&&/^\d+(?:\.\d{1,12})?$/.test(v)&&Number(v)<=525600;
@@ -13,10 +13,11 @@ export function validateEvents(data,checkEffects=true){
   if(!minute(e['事件分钟'])||Number(e['事件分钟'])<last)bad('事件分钟','事件须按非递减时点追加，0至525600分钟');last=Number(e['事件分钟']);
   if(!minute(e['保护截止分钟'])||Number(e['保护截止分钟'])<Number(e['事件分钟']))bad('保护截止分钟','保护截止须不早于事件；区间为[事件,截止)');
   if(e['保护策略']!=='禁止未开始任务开工')bad('保护策略','仅支持显式禁止未开始任务开工；旧方案任务锁定及自动恢复未定');
-  if(!eventTypes.includes(e['事件类型'])||!e['原因']?.trim())bad('事件类型','仅支持五种声明事件且须给原因');
+  if(!eventTypes.includes(e['事件类型'])||!e['原因']?.trim())bad('事件类型','仅支持声明的事件且须给原因');
   try{const p=parse(e);if(!p||typeof p!=='object'||Array.isArray(p))throw Error();JSON.parse(e['需处理事实JSON']||'[]').forEach(id=>{if(!(data.executionFacts||[]).some(f=>f['事实编号']===id))throw Error();});}catch{bad('参数JSON','参数须为JSON对象；需处理事实须为现有事实编号数组');}
  });
  if(checkEffects)rows(data).forEach((e,i)=>{try{const p=parse(e),type=e['事件类型'];
+  if(type==='人员数量变化'&&!rows(data).slice(i+1).some(n=>n['事件类型']===type&&parse(n).groupId===p.groupId)){const g=(data.personnelGroups||[]).find(g=>g['人员组编号']===p.groupId),pool=(data.personnelPools||[]).find(x=>x.poolId===p.poolId);if(!validHeadcountEffect(p)||!g||!pool||g.poolId!==p.poolId||g['人员数量']!==p.afterCount||pool['总人数']!==p.afterCount)issues.push(issue(i,'参数JSON','人数事件须保持同组和唯一物理池的新人数，不得复制或隐式倒退'));}
   if(type==='设备故障'&&!(data.downtime||[]).some(d=>d['设备编号']===p.machineId&&Number(d['起始分钟'])===Number(e['事件分钟'])&&Number(d['结束分钟'])===p.endMinute&&d['原因']===e['原因']))issues.push(issue(i,'参数JSON','已接纳故障窗口不可移除或改写；恢复语义未定'));
   if(type==='物料状态变化'&&!rows(data).slice(i+1).some(n=>n['事件类型']===type&&parse(n).lotId===p.lotId)&&(data.inventory||[]).find(l=>l['批次编号']===p.lotId)?.['质量状态']!==p.status)issues.push(issue(i,'参数JSON','当前批次状态与最近事件不一致；请追加显式状态事件'));
   if(type==='到料延期'&&!(data.supplyDelays||[]).some(d=>d['记录编号']==='EVENT-'+e['事件编号']&&d['供给编号']===p.supplyId&&d['调整后到达时间']===p.arrival&&d['调整后可用时间']===p.available))issues.push(issue(i,'参数JSON','已接纳延期记录不可移除或改写'));
@@ -42,13 +43,19 @@ export function stageEvents(before,proposed,submitted=[]){
  for(const f of data.executionFacts||[]){if(f['状态']==='已完成'?Number(f['观测分钟'])>time:Number(f['观测分钟'])!==time)fail(old.length,'事件分钟','在制观测须等于事件时点；已完成观测不得在事件之后');}
  for(let j=0;j<added.length;j++){
   const e=added[j],i=old.length+j,p=parse(e),type=e['事件类型'];let affected=[];
-  const keys= type==='插单'?['order','dependencies']:type==='设备故障'?['machineId','endMinute']:type==='人员缺勤'?['groupId','endMinute']:type==='到料延期'?['supplyId','arrival','available']:['lotId','status'];
+  const keys= type==='插单'?['order','dependencies']:type==='设备故障'?['machineId','endMinute']:type==='人员缺勤'?['groupId','endMinute']:type==='人员数量变化'?['groupId','poolId','beforeCount','afterCount','scope']:type==='到料延期'?['supplyId','arrival','available']:['lotId','status'];
   if(Object.keys(p).some(k=>!keys.includes(k))||keys.some(k=>p[k]===undefined)){fail(i,'参数JSON','参数字段不匹配或含未支持政策');continue;}
   if(['设备故障','人员缺勤'].includes(type)&&(!Number.isFinite(p.endMinute)||p.endMinute<=time||p.endMinute>525600)){fail(i,'参数JSON','结束分钟须为事件之后至525600的数值');continue;}
   if(type==='设备故障'){
    if(!data.machines.some(m=>m['设备编号']===p.machineId)){fail(i,'参数JSON','设备不存在');continue;}
    data.downtime.push({'设备编号':p.machineId,'起始分钟':String(time),'结束分钟':String(p.endMinute),'原因':e['原因']});
    affected=(data.executionFacts||[]).filter(f=>f['当前设备']===p.machineId&&f['状态']!=='已完成'&&Number(f['开始分钟'])<p.endMinute);
+  }else if(type==='人员数量变化'){
+   const genesis=!(before.executionFacts||[]).length&&!rows(before).length&&(data.stageMappings||[]).find(m=>m['来源类别']==='originalEvents'&&m['运行编号']===e['事件编号']&&m['状态']==='READY'&&m['数据性质']==='明确模拟'&&m['合同版本']==='FR013-stage-bindings-v1');
+   let supplied;try{supplied=genesis&&JSON.parse(genesis['参数JSON']);}catch{}
+   const oldGroup=(before.personnelGroups||[]).find(g=>g['人员组编号']===p.groupId)||supplied?.groupBefore,oldPool=(before.personnelPools||[]).find(x=>x.poolId===p.poolId)||supplied?.poolBefore,g=(data.personnelGroups||[]).find(g=>g['人员组编号']===p.groupId),pool=(data.personnelPools||[]).find(x=>x.poolId===p.poolId);
+   if(!validHeadcountEffect(p)||!g||!pool||g.poolId!==p.poolId||oldGroup?.poolId!==p.poolId||oldGroup['人员数量']!==p.beforeCount||oldPool?.['总人数']!==p.beforeCount||![p.beforeCount,p.afterCount].includes(g['人员数量'])||![p.beforeCount,p.afterCount].includes(pool['总人数'])){fail(i,'参数JSON','人数事件须绑定现有同一组/物理池及准确前后人数；禁止复制池或替历史账改人数');continue;}
+   g['人员数量']=p.afterCount;pool['总人数']=p.afterCount;
   }else if(type==='人员缺勤'){
    if(!data.personnelGroups.some(g=>g['人员组编号']===p.groupId)){fail(i,'参数JSON','人员组不存在；仅支持整个组缺勤');continue;}
    affected=(data.executionFacts||[]).filter(f=>f['状态']!=='已完成'&&data.dependencies.some(d=>d['订单编号']===f['订单编号']&&d['工序编号']===f['工序编号']&&d['资源类型']==='人员技能'&&(!d['资源编号']||d['资源编号']===p.groupId)));
@@ -75,3 +82,6 @@ export function stageEvents(before,proposed,submitted=[]){
  }
  return finish();
 }
+
+export function validHeadcountEffect(p){return !!p&&Object.keys(p).sort().join(',')==='afterCount,beforeCount,groupId,poolId,scope'&&p.scope==='事件起新运行'&&typeof p.groupId==='string'&&!!p.groupId&&typeof p.poolId==='string'&&!!p.poolId&&[p.beforeCount,p.afterCount].every(v=>typeof v==='string'&&/^[1-9]\d*$/.test(v)&&Number.isSafeInteger(Number(v)))&&p.beforeCount!==p.afterCount;}
+export function declaredHeadcount(data,groupId,beforeCount,afterCount){return (data.simulationEvents||[]).some(e=>{try{const p=parse(e),g=(data.personnelGroups||[]).find(g=>g['人员组编号']===groupId),pool=(data.personnelPools||[]).find(x=>x.poolId===p.poolId);return e['事件类型']==='人员数量变化'&&validHeadcountEffect(p)&&p.groupId===groupId&&p.beforeCount===beforeCount&&p.afterCount===afterCount&&g?.poolId===p.poolId&&pool?.['总人数']===afterCount;}catch{return false;}});}

@@ -1,0 +1,97 @@
+{
+  "source": "live Project #2 Issue37/36, not a replacement register",
+  "processing": "PROCESSED Dev event; QA SENT only",
+  "event": {
+    "event_key": "dlv_4a1d1bb6-e0a9-4a48-ab70-05561aac3b60:r1",
+    "scope": "B08/UAT08 AC07/15/17 H-P04/N06 personnel slice",
+    "product_sha": "979da1827d7190024621e0438a8c0055fed44ad8",
+    "development_selftest": "PM_VERIFIED_PASS",
+    "uat": "NOT_EXECUTED",
+    "qa_delivery": "dlv_9d041148-0fc2-47ee-9076-70f1f0c05041",
+    "qa_dispatch_status": "SENT",
+    "project_status": "In review",
+    "issue": "https://github.com/huiliangtao666/APS/issues/37#issuecomment-6540733675",
+    "product_fail": 0,
+    "repair_increment": 0,
+    "remaining": "QA UAT08 #37; broader approved scope #38/#39/#40/#41; no whole CR acceptance"
+  },
+  "project_item": {
+    "id": "PVTI_lAHOFM9WU84BpE1czhE8kHQ",
+    "fieldValues": {
+      "nodes": [
+        {},
+        {
+          "text": "[联合交付][B08] 人员数量、技能班次与窗外占用全链路｜UAT-08",
+          "field": {
+            "name": "Title"
+          }
+        },
+        {
+          "name": "In review",
+          "field": {
+            "name": "Status"
+          }
+        },
+        {
+          "text": "QA整体UAT08；dlv_9d041148-0fc2-47ee-9076-70f1f0c05041 SENT",
+          "field": {
+            "name": "当前环节"
+          }
+        },
+        {
+          "text": "等待QA独立业务结论；无未闭确认产品FAIL",
+          "field": {
+            "name": "阻塞原因"
+          }
+        },
+        {
+          "text": "开发自测23PASS；QA NOT_EXECUTED；修复+0",
+          "field": {
+            "name": "验收结论"
+          }
+        },
+        {
+          "text": "979da1827d7190024621e0438a8c0055fed44ad8",
+          "field": {
+            "name": "交付代码SHA"
+          }
+        },
+        {
+          "text": "APS-QA",
+          "field": {
+            "name": "UAT负责人"
+          }
+        }
+      ]
+    },
+    "content": {
+      "id": "I_kwDOVaKehM8AAAABbYH1mg",
+      "number": 37,
+      "title": "[联合交付][B08] 人员数量、技能班次与窗外占用全链路｜UAT-08",
+      "body": "<!-- b08:pm-qa-entry:979da18:r1 -->\n## PM核验与UAT08交接（当前状态）\n责任 APS-PM核验/调度→APS-QA整体UAT；唯一执行Issue #37，不新建分角色卡。\n固定产品979da1827d7190024621e0438a8c0055fed44ad8，分支dev/b08-personnel-joint-20261031；GitHub核双父7808c962e3a13d756a49f11ec1e5546a422f7974 / d9292f39a1017c1dcac8c290a1b224283d429756；基底80841247ac91cae193a452325097234f31e6609e。23文件影响按两父到基底联合计算，非merge相对第一父的9文件。\n来源事件dlv_4a1d1bb6-e0a9-4a48-ab70-05561aac3b60:r1；独立通知dlv_79fef157-8569-4e88-bd57-ba65af68983f。Dev开发自测已核PASS；Test源证据保持d929原SHA，最终979da18仅引用构建/核心/实际接缝，不迁签旧网格。\nPM实际Files API下载七件原件核外层hash/bytes；EVIDENCE.zip 17700310字节，SHA256 ed58892d9218960ea31ab22de259a8515ed6085d31116c196b8d33529196ccf0；CRC与195内部hash、24矩阵证据hash、18收口行均已核。矩阵23任务级PASS / 1 QA NOT_EXECUTED；不算QA结论。运行HTTP实读完整SHA、2068源记录、初始revision1/plans0/runs0；运行端25原件hash逐件一致。\n入口 http://host.docker.internal:18108/ （VM http://127.0.0.1:18108/），隔离容器aps-b08-qa-979da18；模拟planner/supervisor/query。原件/显式profile下载见/fixtures/；配置ad8af740ff896639fab4cd523f788e516e8266a6f79fd105006443ba9603242a，数据d1b48206147d135b1006a98d250e18648aa47470b0a636f7d5d0c1c7c86da845。PM只读探测未修改QA状态，QA自行核实际网络/角色再实测。\n验收v0.3 UAT08 AC07/15/17 + effective CR-DEC02-03/H-P04/N06/CFG02：导入与显式补录配置→人员/技能/班次/唯一池→真实Worker全启用约束及需求覆盖→问题/原行/任务→保存重开/导出；两人/三人边界、辅助不自动替代、阶段窗/完整实际窗、两种顺序最终合法、mock账版本化、query只读/原子负面。参考排列非唯一。无已确认未闭产品FAIL，修复轮次+0。\n整包In review，QA结论NOT_EXECUTED；FR007/BR07本阶段任务级开发齐备，QA验收后才关闭本包。精确其余责任沿18行closure到#38物料、#39全工艺、#40进度调整、#41整体确认报表；#38+未启动。#45首批UI/UX仍等待设计/补丁保护/统一候选，不因本交付自动开工；Dev/Test可等就绪条件。Test2暂停，旧归档/旧PASS保持，不合main不发布。\nQA实际delivery `dlv_9d041148-0fc2-47ee-9076-70f1f0c05041`，**SENT**（仅成功入队，不冒称EXECUTING/PROCESSED/PASS）；event_key `b08:qa-uat08:979da18:20261031:r1`。\n<!-- /b08:pm-qa-entry:979da18:r1 -->\n\n<!-- aps-pm-b08-executing-979da18-r1 -->\n## PM巡检：同包整合与剩余交接\n- 两原派工 `dlv_4a1d1bb6-e0a9-4a48-ab70-05561aac3b60` / `dlv_0f5baaf3-a8c1-45fa-b5fe-3c26a771cee1` 实际均 **EXECUTING**；Test源提交/自测进展不当最终完成事件。本轮新增派工0、PROCESSED0。\n- PM已从GitHub核当前整合候选 `979da1827d7190024621e0438a8c0055fed44ad8`，双父Dev `7808c962e3a13d756a49f11ec1e5546a422f7974` / Test `d9292f39a1017c1dcac8c290a1b224283d429756`，共同基线 `80841247ac91cae193a452325097234f31e6609e`；Dev14文件/Test9文件交集0，共23文件。本轮只核源/父/影响/进度，未把进度评论中的测试数当PM原件核验结论或QA PASS。\n- Dev配置UI/输入链与Test人员域实现已整合。原固定d9292f3的人员API/Worker网格与独立原CSV oracle保留原SHA，最终候选只补配置→Worker、人员/物理池/技能/日历来源→问题任务、持久化/导出等受影响接缝；不要求重跑整套双份矩阵。\n- **精确等待**：Dev最终候选固定交付、可运行且QA可读入口、原件/hash/矩阵与逐FR收口表；Test同最终候选的必要来源/配置-Worker接缝及其原件。二人仍在原任务内完成，未收到本包最终完成通知，暂不叠加派工。\n- 旧resource-load关于DEC02/03尚待确认的说明需在本包按实际支持范围清理，避免已批准H-P04/N06被误标永久阻断；只作已失效提示修正，不新增业务默认或修复轮次。当前没有交付中确认的未闭产品FAIL，QA **NOT_DISPATCHED**，Test2暂停，#38+仍Backlog。\n- #45 UI/UX CR已登记并有独立设计派工；Dev协调 `dlv_a0729164-52bf-46ad-97b8-520a591971e4`、Test协调 `dlv_f375d73b-b241-4f2f-a6b6-0eaf72a7ee06` 当前WAITING，只是协调队列，不是UI/UX产品已开工，也不抢占本包。首批UI/UX产品开发等设计/共享文件释放/QA补丁保护/统一候选，不让这些条件回退本包已有自测事实。\n<!-- /aps-pm-b08-executing-979da18-r1 -->\n\n<!-- b08:pm-current-checkpoint:20261031:r1 -->\n## 当前执行交接\nUAT07 #34 已按QA原事件 `dlv_88fa9322-c89c-4e9b-93cb-8edc04134201:r1` 核验关闭为Done，33PASS/1支持原件访问PARTIAL，无场景缺口/产品FAIL，修复+0。核验 https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540477224 。\n当前B08 #37 **In progress**，Dev/Test均同等产品开发+自测，文件职责互斥：\n- **APS-Dev**：`dlv_4a1d1bb6-e0a9-4a48-ab70-05561aac3b60`，**EXECUTING**（已核原delivery，尚无最终交付）。\n- **APS-Test**：`dlv_0f5baaf3-a8c1-45fa-b5fe-3c26a771cee1`，**EXECUTING**（已核原delivery，尚无最终交付）。\nQA空闲等#37具体入口，Test2暂停，#38+仍Backlog；不重开原归档任务。CR限定范围验收事件与同源执行快照已同步至非main治理分支 `pm/uat07-qa-closure-20261031` / `70af4192d3fe9b044d08b68a44763b86c8d96c05`：https://github.com/huiliangtao666/APS/blob/70af4192d3fe9b044d08b68a44763b86c8d96c05/docs/requirements/operations/uat07-qa-closure-20261031.md 。未改CR批准身份或完整验收状态，未合main/发布。\n\n<!-- b08:joint-personnel:dispatches:20261031:r1 -->\n## 实际派工\n- **APS-Dev**：`dlv_4a1d1bb6-e0a9-4a48-ab70-05561aac3b60`，**EXECUTING**（已核原delivery，尚无最终交付）。\n- **APS-Test**：`dlv_0f5baaf3-a8c1-45fa-b5fe-3c26a771cee1`，**EXECUTING**（已核原delivery，尚无最终交付）。\n\n<!-- aps-pm-b08-start-8084124-20261031-r1 -->\n## B08启动与唯一文件责任\nUAT07 #34 已经QA独立PASS并由PM核验关闭：https://github.com/huiliangtao666/APS/issues/34#issuecomment-6540477224 。基线候选 `80841247ac91cae193a452325097234f31e6609e`，分支 `dev/uat07-joint-20261031`；双父25353c1951d728b0a93d3312b60478436960dc7c / 9736d7acda4e44ab51d2c5032fa3ce7d70af064b。本包 UAT08 / AC07、AC15及AC17联动；CR-DEC02-03人员与H-P04/N06配置/mock决策、CSV校验及生效配置共同原则适用。\n\n**APS-Dev：配置/输入链产品开发 + 自测 + 最终整合负责人。** 独占 `src/DataEditor.tsx`、`src/PersonnelPolicyTrial.tsx`、`src/OriginalResourceConfig.tsx`、`src/ResourceWorkbench.tsx`、`src/ResourcePanel.tsx`、`src/lib/input-csv.*`、`src/lib/csv-contract.*`、新 `src/lib/b08-personnel-config.*`（需要时）、配置持久化/API/schema接口，以及 `qa/b08-dev-*`。负责可修改mock/配置、原件/映射、中文界面、保存读回、冻结和可运行QA入口；不编辑Test占用/检查模块。\n\n**APS-Test：人员占用/排程/独立检查产品开发 + 自测负责人。** 独占 `src/lib/personnel-occupation.*`、`src/lib/joint-resources.*`、`src/lib/resource-conflicts.*`、`src/lib/resource-policies.*`、`src/lib/resource-mapping.*`、`src/lib/original-resources.*`、`src/lib/execution-resource-ledger.*`、`src/lib/resource-workbench.*` 和对应 `qa/b08-test-*`。实现及验证人数/技能/班次/参与窗口/共享池/占用顺序/来源问题链；不是仅验收或重复Dev界面测试。共享根schema/API/React入口由Dev改，跨责任文件先在本Issue约定接口/交接，不交叉覆盖。\n\n两人从同一候选起步，分别 `dev/b08-personnel-joint-20261031` 和 `test/b08-personnel-core-20261031`，仅非main整合。沿用现有数据结构为基础，在本Issue列明确配置契约/合法组合/缺省策略；模拟值显式标注可修改，缺关键语义不得偷填。Test提供核心占用/Worker/检查证据，Dev提供自己配置/输入/持久化/界面证据；最终SHA按变更影响补必要集成检查，不各自重跑对方全套。过去UAT04/07 PASS留原SHA。\n\nUAT08：A-MIX需2名综合人员、B-MIX需1，可用2；10名普通辅助不能未经显式替代配置使用；后续A-FILL与B-MIX各需1可并行。原UAT08数据核原件，不照搬07/04常量。完整启用机器/前序/日历/工装/人员约束与需求覆盖；机器自动运行不代表装卸人员可跨班。技能多对一不得重复增加共享池容量。H-P04窗外提前/后延和两种处理顺序可配置，最终完整占用区间容量/班次均必检；N06用带来源/版本mock账，不等正式身份/现场账。\n\n交付同一最终候选、可运行QA入口、原件/hash/矩阵、逐FR/Issue/BR收口表，精确关闭FR007/BR07本阶段责任；剩余责任指向#38/#39/#40/#41，不重复开原归档卡。固定SHA完成适用核心/边界/负面及UI/API/Worker/保存重开/导出后仅标自身清单完成；完整包QA前保持开放。现阶段QA未派，#38及以后未启动，Test2暂停。真实FAIL才计原两轮；禁止main合并/发布/Design联系。\n<!-- /aps-pm-b08-start-8084124-20261031-r1 -->\n\n<!-- aps-global-uat-replan-20261031-v1:dependencies -->\n前置包实际链接：[B07 / #34](https://github.com/huiliangtao666/APS/issues/34)。\n<!-- aps-global-uat-replan-20261031-v1:B08 -->\n## 包状态与责任\nGitHub Status：**In review**；交接：**QA_UAT**；总协调APS-PM；实现/任务级自测：**APS-Dev + APS-Test（同等开发资源）**；QA仅完整入口就绪后整体场景验收；Test2暂停。\n本包前序UAT07已结论，现按明确文件责任启动联合开发自测。程序级索引：https://github.com/huiliangtao666/APS/issues/36。\n\n## 业务闭环和验收依据\n人员组/技能/班次配置与可修改模拟值→导入校验→整段/阶段参与及定向替代→H-P04提前/后延与检查顺序→实际Worker全资源容量→问题/原行/任务定位→冻结、保存重开、导出。N06使用有来源版本的mock取得/归还/释放账；不等待正式身份/现场账。两名综合人员不能被十名辅助人员替代；同一人员池不能按技能重复计数。沿用UAT04旧SHA证据，只补UAT08及受影响组合。\n\n依据：APS-BL-001 v0.3 `UAT-08 / AC-07, AC-15, AC-17` 及适用生效CR。UAT-R7-P0/P1-TOPICS/D3-EXCHANGE是编排包/待细化场景标识，不声称原18个UAT之外新增要求已批准。\n\n## 合并任务与唯一责任\n主收口FR/BR：FR-007, BR-07。\n本场景联动覆盖：FR-007, FR-008, FR-013, FR-014, FR-015, FR-016, FR-017, FR-018, FR-022, FR-024, FR-025, FR-032, FR-033, FR-034, FR-035, BR-07。\n原Issue：#35, #3；旧卡和原Issue关闭/归档为合并移交，原文和证据可从索引回查。相同FR可参与多场景，但其每条残余断言只在一个主收口包负责，其他包引用，不重复派工。\n\n## 启动依赖和精确等待条件\n前置包：B07（见索引中的Issue链接）。\nUAT07 #34 QA结论及可复用候选确认；PM启动本包；UAT08原件/明确模拟配置和文件分工齐备。\n启动时必须在本Issue填候选基线SHA、适用AC/断言、可配置数据profile、文件责任/分支、真实delivery ID。QA只在固定SHA/可运行环境/无未闭确认产品FAIL/明确预期与可访问原件具备后受调度。\n\n## 同包开发、自测与整合清单\n- [x] PM启动：核原需求/生效CR/当前候选和重复派工；按产品模块及文件划分给Dev和Test，二者都可开发并自测；每项代码改动只有一个责任人。\n- [x] Dev+Test：补齐本包已批准能力及必要接缝，完成核心、边界、负面和适用UI/API/Worker/保存重开/导出。相同SHA相同断言已有可信证据直接引用，仅补变更影响，避免双方重跑整套。\n- [x] 整合负责人：合入非main候选，记录各父SHA、冲突处理、影响、必要集成核验，交一个固定候选与可运行QA入口。\n- [x] 提交逐FR/Issue/BR/AC收口表：批准责任→旧SHA证据→新证据→通过/未过→剩余具体断言/责任人/下一包；历史Done和旧PASS不重开，合并Done不冒充验收PASS。\n- [ ] QA就绪后：整包In review；QA逐场景报告并即时记Issue Log；真实FAIL回同包修复，受影响定向复验；PM核验并同步状态，全部授权本包责任满足后Done。\n\n## 配置、授权和边界\n业务项尽量可配置；显式可修改mock可作为本阶段可复演数据，不等待已获授权取消的正式账号/现场账。未知关键语义保留待确认，不偷偷指定真实默认。CR-DEC04-05-06新增应用实现仍限原授权；B02实际全局预占提案effective=false，不因本次编排实施。已有真实缺陷按原最多两轮，证据缺口/平台故障不记产品FAIL。禁止main合并/应用发布，不联系Design。\n",
+      "state": "OPEN"
+    }
+  },
+  "verification": {
+    "source_event": "dlv_4a1d1bb6-e0a9-4a48-ab70-05561aac3b60:r1",
+    "outer_files": 7,
+    "internal_hashes": 195,
+    "matrix_rows": 24,
+    "closure_rows": 18,
+    "originals": 25,
+    "crc": "PASS",
+    "qa_verdict": "NOT_EXECUTED"
+  },
+  "remaining_by_package": {
+    "37": "QA UAT08",
+    "38": "material/data",
+    "39": "full process",
+    "40": "progress/adjustment",
+    "41": "whole single-line confirmation/report"
+  },
+  "idle_conditions": "Dev/Test await concrete ready work; #38 waits #37; #45 waits D0/QA patch protection/unified candidate; Test2 paused",
+  "controlled_cr_updated": [
+    "CR-DEC02-03-20261029",
+    "CR-SCHED-CONFIG-20261031"
+  ]
+}

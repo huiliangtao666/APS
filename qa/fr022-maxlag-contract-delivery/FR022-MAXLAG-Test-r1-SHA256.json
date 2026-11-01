@@ -1,0 +1,22 @@
+{
+  "FR022-MAXLAG-Test-r1-REPORT.md": {
+    "bytes": 8910,
+    "sha256": "2af22ab25e9c6d59ce00b17196240e586eff76eda4c82865495f6e273a9c7ee7"
+  },
+  "FR022-MAXLAG-Test-r1-MATRIX.csv": {
+    "bytes": 6783,
+    "sha256": "73e0a8df64428631981951178b78ed6a4dbe958154fee66775d0594c3d60d0df"
+  },
+  "FR022-MAXLAG-Test-r1-SIX-TASKS.csv": {
+    "bytes": 1622,
+    "sha256": "ce740f6b535d861b436ad0b8554e2adb10d88d7487cddebf90578b3fa15b0d01"
+  },
+  "FR022-MAXLAG-Test-r1-VERSION.json": {
+    "bytes": 1762,
+    "sha256": "1a8b35f5f2356342f9f65d25caa586f8edfaf9eb3c27593ca38370d0d9168f11"
+  },
+  "FR022-MAXLAG-Test-r1-EVIDENCE.zip": {
+    "bytes": 9741585,
+    "sha256": "70bd1d3f04ea7ae7aacea13690b534ced34f3dc210c6dcd0fb5a34c519a3c944"
+  }
+}

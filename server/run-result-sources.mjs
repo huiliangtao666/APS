@@ -9,5 +9,6 @@ export function bindRunResultSources(result,run,version){
  const scope=Object.fromEntries(['mode','orderIds','lineId','startMinute','endMinute','priority','enabledRuleIds','checkScope'].map(k=>[k,run.conditions[k]]));
  const source={domain:run.trialId?'trial:'+run.trialId:'current',inputVersionId:run.inputVersionId,executionVersionId:inputHash(run.executionData),revision:run.revision,checkedAt:run.createdAt,snapshotHash:run.snapshotHash,scope};
  const bind=f=>bindProblemSource(f,source,version?.data,run.sourceMap||{},version?.csvSources);
- return {...result,tasks:result.tasks.map(t=>Array.isArray(t.processSources)?{...t,processSources:bind({sourceRead:'frozen-calendar-v1',relatedRecords:t.processSources}).relatedRecords}:t),findings:result.findings.map(bind)};
+ const stageBindingSources=run.conditions.stageBindingContract?run.conditions.stageBindings.map(b=>({...b,relatedRecords:bind({sourceRead:'frozen-calendar-v1',relatedRecords:b.relatedRecords}).relatedRecords})):null;
+ return {...result,...(stageBindingSources?{stageBindingSources}:{}),tasks:result.tasks.map(t=>Array.isArray(t.processSources)?{...t,processSources:bind({sourceRead:'frozen-calendar-v1',relatedRecords:t.processSources}).relatedRecords}:t),findings:result.findings.map(bind)};
 }

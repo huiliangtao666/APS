@@ -17,7 +17,7 @@ export function ResourceWorkbench({data,revision,reason,canWrite,busy,draftPendi
  const [inventoryMinute,setInventoryMinute]=useState('0');
  useEffect(()=>{setFocusedSource(null);},[selected,view?.run.id]);
  const request=async(path:string,body?:any)=>{
-  const response=await fetch(import.meta.env.BASE_URL+'api'+path,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,reason})}:{cache:'no-store'});
+  const response=await fetch(import.meta.env.BASE_URL+'api'+path,body?{method:'POST',headers:{'Content-Type':'application/json','X-APS-Request':'workbench'},body:JSON.stringify({...body,reason})}:{cache:'no-store'});
   const result=await response.json();if(!response.ok)throw Object.assign(Error(result.message||result.issues?.map((i:any)=>`${i.file||i.table}:${i.row}:${i.field} ${i.message}`).join('；')||result.error),{detail:result});return result;
  };
  const client=resourceClient(request),eligible=(data.orders||[]).filter(o=>o['需求类型']==='正式订单'&&o['订单状态']==='有效');
@@ -31,7 +31,7 @@ export function ResourceWorkbench({data,revision,reason,canWrite,busy,draftPendi
  async function perform(action:()=>Promise<void>){setWorking(true);setError('');try{await action();}catch(e){setError((e as Error).message);}finally{setWorking(false);}}
  const disabled=busy||working||!canWrite||!reason.trim()||draftPending||!valid||!!active;
  const frozenInventory=view&&/^\d+$/.test(inventoryMinute)&&Number(inventoryMinute)<=525600?inventoryView(view.snapshot.executionData,feedTime(Number(inventoryMinute))):null;
- async function exportResult(body:object,name:string){const response=await fetch(import.meta.env.BASE_URL+'api/export',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,reason})});if(!response.ok)throw Error((await response.json()).error);const url=URL.createObjectURL(await response.blob()),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+ async function exportResult(body:object,name:string){const response=await fetch(import.meta.env.BASE_URL+'api/export',{method:'POST',headers:{'Content-Type':'application/json','X-APS-Request':'workbench'},body:JSON.stringify({...body,reason})});if(!response.ok)throw Error((await response.json()).error);const url=URL.createObjectURL(await response.blob()),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
  return <aside className="hint-box" aria-label="联合资源工作台"><h2>联合资源配置与试算</h2>
   <p>先维护工装、人员池、技能和任务窗口，再保存全部草稿。新试算冻结已保存版本，旧运行仍读取原配置。时间单位为分钟，0 = 2026-11-02 08:00 +08:00；归还/释放端点可立即复用。</p>
   <nav aria-label="资源配置类别">{Object.entries(resourceTables).map(([key,label])=><button type="button" key={key} onClick={()=>onLocate?.(key)}>{label}（{data[key]?.length||0}）</button>)}</nav>

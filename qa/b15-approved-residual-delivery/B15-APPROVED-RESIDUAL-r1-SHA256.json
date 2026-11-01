@@ -1,0 +1,30 @@
+{
+  "productSha": "172b415122472b933fc9935b5537697ebc03ccfc",
+  "event_key": "dlv_b3352a5a-be4b-4260-b49d-a211163a2e51:r1",
+  "files": {
+    "B15-APPROVED-RESIDUAL-r1-REPORT.md": {
+      "bytes": 12640,
+      "sha256": "b65bbafd233081ec25e262677da0e9c932b2b61f23aa9758bd1adbabf6e6967d"
+    },
+    "B15-APPROVED-RESIDUAL-r1-MATRIX.csv": {
+      "bytes": 8975,
+      "sha256": "a32faae80bda380e7c035ed7d00bb2ef7108b050d875d30119f73ea531a215f2"
+    },
+    "B15-APPROVED-RESIDUAL-r1-CLOSURE.csv": {
+      "bytes": 36783,
+      "sha256": "a6bf3c7742016fb531b5c4f5eee880744a9434fba2ef379931faa0bb6dc90c88"
+    },
+    "B15-APPROVED-RESIDUAL-r1-INPUT-MAPPING.csv": {
+      "bytes": 68218,
+      "sha256": "19cb616794a9509e24a2c557dc6f1c976e3b3dc2de3edd83ea1e4201a2a144c4"
+    },
+    "B15-APPROVED-RESIDUAL-r1-ENVIRONMENT.json": {
+      "bytes": 6379,
+      "sha256": "decdf55481a03ffff94a04afb27f305226eda4a690dbb02053e48aa1b6619734"
+    },
+    "B15-APPROVED-RESIDUAL-r1-EVIDENCE.zip": {
+      "bytes": 9390676,
+      "sha256": "8e326e2dc2a9c05c1977f5c8892b749bbdeb441a3adb10d7e289e4c4b8816d88"
+    }
+  }
+}
