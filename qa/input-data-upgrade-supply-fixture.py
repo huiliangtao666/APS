@@ -76,7 +76,20 @@ with zipfile.ZipFile(out/'small.xlsx','w',zipfile.ZIP_DEFLATED) as z:
         rels.append(f'<Relationship Id="rId{n}" Target="worksheets/sheet{n}.xml"/>')
     z.writestr('xl/workbook.xml','<workbook xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>'+''.join(sheets)+'</sheets></workbook>')
     z.writestr('xl/_rels/workbook.xml.rels','<Relationships>'+''.join(rels)+'</Relationships>')
+# Same business PO line under another record ID and a leading-zero alias.
+import re
+transit_sheet='xl/worksheets/sheet'+str(list(tables).index('既有采购在途')+1)+'.xml'
+with zipfile.ZipFile(out/'small.xlsx') as original, zipfile.ZipFile(out/'duplicate-po.xlsx','w',zipfile.ZIP_DEFLATED) as negative:
+    for entry in original.infolist():
+        content=original.read(entry.filename)
+        if entry.filename==transit_sheet:
+            xml=content.decode();record=re.search(r'<row r="3">.*?</row>',xml).group(0)
+            duplicate=re.sub(r'r="([A-Z]*)3"',r'r="\g<1>4"',record).replace('>T1<','>T2<')
+            linecol=col([f['name'] for f in schema['tables']['既有采购在途']['fields']].index('订单行号')+1)
+            duplicate=duplicate.replace(cell(linecol+'4','1'),cell(linecol+'4','01'))
+            content=xml.replace('</sheetData>',duplicate+'</sheetData>').encode()
+        negative.writestr(entry,content)
 (out/'mapping.json').write_text(json.dumps(mapping,ensure_ascii=False,indent=2))
 (out/'literal-inputs.json').write_text(json.dumps(tables,ensure_ascii=False,indent=2))
-(out/'fixture-sha256.json').write_text(json.dumps({p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in [out/'small.xlsx',out/'mapping.json',out/'literal-inputs.json']},indent=2))
+(out/'fixture-sha256.json').write_text(json.dumps({p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in [out/'small.xlsx',out/'duplicate-po.xlsx',out/'mapping.json',out/'literal-inputs.json']},indent=2))
 print('Small fixture:',(out/'small.xlsx').stat().st_size,'bytes; literal inputs / explicit mapping retained')

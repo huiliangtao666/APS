@@ -27,11 +27,12 @@ test('IN24 transit real import identity/retry/query, inspection, future waiting 
  const delayed=await f.run(4,9);assert.equal(delayed.result.demandResults[0].readyDay,6);assert.equal(delayed.result.allocations.filter(a=>a.supplyId==='transit:T1').reduce((n,a)=>n+a.quantity,0),100);assert.ok(delayed.result.allocations.find(a=>a.supplyId==='transit:T1').conditional);
  const frozen=await f.ok('/workbooks/runs/'+delayed.id+'/inputs'),native=await f.ok('/workbooks/runs/'+delayed.id+'/export');
  const before=fs.readFileSync(f.statePath),duplicate=await f.call('/workbooks/datasets/SUPPLY/edit',{expectedVersion:f.version(),table:'既有采购在途',key:'',operation:'create',changes:{...transit,'在途记录编号':'T2','订单行号':'01'}});assert.equal(duplicate.status,422);assert.deepEqual(fs.readFileSync(f.statePath),before);
+ const invalidPreview=await f.ok('/workbooks/preview',{fileBase64:fs.readFileSync(base+'/duplicate-po.xlsx').toString('base64'),datasetId:'SUPPLY'});assert.equal(invalidPreview.canCommit,false);assert.ok(invalidPreview.issues.some(i=>i.code==='SUPPLY_INPUT'));const beforeReject=fs.readFileSync(f.statePath),invalidCommit=await f.call('/workbooks/commit',{previewId:invalidPreview.id,fileHash:invalidPreview.fileHash,expectedVersion:invalidPreview.expectedVersion});assert.equal(invalidCommit.status,422);assert.deepEqual(fs.readFileSync(f.statePath),beforeReject);
  const p=await f.ok('/workbooks/preview',{fileBase64:xlsx.toString('base64'),datasetId:'SUPPLY'}),retry=await f.ok('/workbooks/commit',{previewId:p.id,fileHash:p.fileHash,expectedVersion:p.expectedVersion});assert.equal(retry.idempotent,true);assert.equal((await f.ok('/workbooks/datasets/SUPPLY')).version,f.version());
  const queried=await f.ok('/workbooks/datasets/SUPPLY/rows?table='+encodeURIComponent('既有采购在途')+'&q=PO1');assert.equal(queried.total,1);assert.equal(queried.rows[0]['在途状态'],'在途');
  await f.demand('MOCK-RAW',100,6);const at6=await f.run(6);assert.equal(at6.result.demandSummary.scheduled,1);
  await f.edit('既有采购在途','T1',{'在途状态':'取消'});assert.equal((await f.run(6)).result.demandSummary.scheduled,0);assert.equal(await f.ok('/workbooks/runs/'+delayed.id+'/export'),native);assert.deepEqual(await f.ok('/workbooks/runs/'+delayed.id+'/inputs'),frozen);
- save('http-in24',{at4,delayed,at6,retry,queried,frozen,native});
+ save('http-in24',{at4,delayed,at6,retry,invalidPreview,invalidCommit,queried,frozen,native});
 });
 
 test('IN25 actual WIP Worker preserves net history, rejects unknown remainder before creating run',async t=>{

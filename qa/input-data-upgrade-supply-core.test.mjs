@@ -1,7 +1,7 @@
 import test,{after} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
 import {parseWorkbook} from '../server/workbook-parse.mjs';
 import {refreshDerived,hash,inventoryAmount,workbookSchema} from '../server/workbook-model.mjs';
-import {supplyReadiness,supplyLots} from '../server/workbook-supply.mjs';
+import {supplyReadiness,supplyLots,transitIdentityIssues} from '../server/workbook-supply.mjs';
 import {calculateWorkbook,verifyWorkbookPlan} from '../server/workbook-plan.mjs';
 import {changeDraft} from '../server/workbook-drafts.mjs';
 const base=process.env.SUPPLY_FIXTURE;if(!base)throw Error('SUPPLY_FIXTURE required');
@@ -58,3 +58,7 @@ test('independent verification rejects early, excessive and wrong-material suppl
 });
 
 after(()=>out('memory-core',{node:process.version,execArgv:process.execArgv,memory:process.memoryUsage(),resourceUsage:process.resourceUsage()}));
+
+test('duplicate imported PO identity retains exact row/cell and is rejected by application identity gate',()=>{
+ const d=parseWorkbook(fs.readFileSync(base+'/duplicate-po.xlsx'),workbookSchema),rs=d.tables['既有采购在途'];assert.equal(rs.length,2);assert.equal(rs[1]['订单行号'],'01');const issues=transitIdentityIssues(rs);assert.equal(issues.length,1);assert.equal(issues[0].record,'T2');assert.equal(issues[0].row,4);assert.ok(issues[0].cell);out('duplicate-po',issues);
+});

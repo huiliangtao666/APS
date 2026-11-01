@@ -13,10 +13,8 @@ export function supplyIssues(d) {
   for(const f of ['放行日','到期日'])if(!day(r[f]))add('期初库存',r,f,'供应日序须显式填写整数');
   if(Number(r['到期日'])<=Number(r['放行日']))add('期初库存',r,'到期日','到期日须晚于放行日');
  }
- const po=new Set();
+ const poIssues=transitIdentityIssues(rows(d,'既有采购在途'));issues.push(...poIssues);
  for(const r of rows(d,'既有采购在途')){
-  const key=JSON.stringify([r['采购订单编号'],String(Number(r['订单行号']))]);
-  if(!r['采购订单编号']||!day(r['订单行号'])||Number(r['订单行号'])<1||po.has(key))add('既有采购在途',r,'订单行号','需唯一且完整的采购订单/正整数行身份');po.add(key);
   if(!number(r['订购数量'])||Number(r['订购数量'])<=0)add('既有采购在途',r,'订购数量','在途数量须显式为正');
   if(r['数量单位']!==materials.get(r['物料编号'])?.['基础单位'])add('既有采购在途',r,'数量单位','在途须使用物料基础单位');
   const s=rows(d,'供应商与供货条件').find(s=>s['供货关系编号']===r['供货关系编号']);
@@ -41,6 +39,13 @@ export function supplyIssues(d) {
   if(!Array.isArray(w.current_occupancy_day_interval)||w.current_occupancy_day_interval.length!==2||!w.current_occupancy_day_interval.every(day)||Number(w.current_occupancy_day_interval[1])<Number(w.current_occupancy_day_interval[0]))fail('WIP当前占用须显式给出半开日区间');
   const crew=rows(d,'班组资源').find(c=>c['班组编号']===w.remaining_labor_pool),tools=d.mapping?.tool_pools?.[w.remaining_tool_type];
   if(!crew||!number(w.remaining_labor_count)||Number(w.remaining_labor_count)<=0||Number(w.remaining_labor_count)>Number(crew['每班可用人数'])||!Array.isArray(tools)||!number(w.remaining_tool_count)||!Number.isInteger(Number(w.remaining_tool_count))||Number(w.remaining_tool_count)<0||Number(w.remaining_tool_count)>tools.length)fail('WIP剩余人员/工装必须有显式有限来源');
+ }
+ return issues;
+}
+export function transitIdentityIssues(records){
+ const seen=new Set(),issues=[];
+ for(const r of records){const key=JSON.stringify([r['采购订单编号'],String(Number(r['订单行号']))]);
+  if(!r['采购订单编号']||!day(r['订单行号'])||Number(r['订单行号'])<1||seen.has(key))issues.push(problem('既有采购在途',r,'订单行号','需唯一且完整的采购订单/正整数行身份','SUPPLY_INPUT'));seen.add(key);
  }
  return issues;
 }
