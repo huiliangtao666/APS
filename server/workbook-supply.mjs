@@ -10,8 +10,11 @@ export function supplyIssues(d) {
  const materials=new Map(rows(d,'物料主数据').map(r=>[r['物料编号'],r]));
  for(const r of rows(d,'期初库存')){
   for(const f of ['当前数量','期初已占用量'])if(!number(r[f])||Number(r[f])<0)add('期初库存',r,f,'实物和已有显式占用须为非负有限数量');
-  for(const f of ['放行日','到期日'])if(!day(r[f]))add('期初库存',r,f,'供应日序须显式填写整数');
-  if(Number(r['到期日'])<=Number(r['放行日']))add('期初库存',r,'到期日','到期日须晚于放行日');
+  const qualified=['已放行','合格'].includes(r['质量状态']),hasRelease=r['放行日']!==undefined&&r['放行日']!==null&&r['放行日']!=='';
+  // A quarantined lot with no release fact is unavailable, rather than an
+  // invented day0 supply or a blocker for every other qualified lot.
+  for(const f of ['到期日',...(qualified||hasRelease?['放行日']:[])])if(!day(r[f]))add('期初库存',r,f,'供应日序须显式填写整数');
+  if(day(r['放行日'])&&Number(r['到期日'])<=Number(r['放行日']))add('期初库存',r,'到期日','到期日须晚于放行日');
  }
  const poIssues=transitIdentityIssues(rows(d,'既有采购在途'));issues.push(...poIssues);
  for(const r of rows(d,'既有采购在途')){
@@ -53,7 +56,7 @@ export function supplyReadiness(d){const ready=workbookReadiness(d),issues=[...r
 
 export function supplyLots(d){
  const lots=[];
- for(const r of rows(d,'期初库存'))lots.push({id:'inventory:'+r['库存批次编号'],material:r['物料编号'],quantity:Math.max(0,Number(r['当前数量'])-Number(r['期初已占用量'])),used:0,ready:Number(r['放行日']),expiry:Number(r['到期日']),quality:['已放行','合格'].includes(r['质量状态']),conditional:false,source:{sheet:'期初库存',row:r._row,record:r['库存批次编号'],explicitOccupied:Number(r['期初已占用量'])}});
+ for(const r of rows(d,'期初库存'))lots.push({id:'inventory:'+r['库存批次编号'],material:r['物料编号'],quantity:Math.max(0,Number(r['当前数量'])-Number(r['期初已占用量'])),used:0,ready:day(r['放行日'])?Number(r['放行日']):null,expiry:Number(r['到期日']),quality:['已放行','合格'].includes(r['质量状态']),conditional:false,source:{sheet:'期初库存',row:r._row,record:r['库存批次编号'],explicitOccupied:Number(r['期初已占用量'])}});
  for(const r of rows(d,'既有采购在途')){const s=rows(d,'供应商与供货条件').find(s=>s['供货关系编号']===r['供货关系编号']);lots.push({id:'transit:'+r['在途记录编号'],material:r['物料编号'],quantity:Number(r['订购数量']),used:0,ready:Math.max(Number(r['预计放行日']),Number(r['约定到货日'])+Number(s?.['检验天数'])),expiry:Number(r['预计到期日']),quality:!['作废','取消','冻结','待检'].includes(r['在途状态']),conditional:true,source:{sheet:'既有采购在途',row:r._row,po:r['采购订单编号'],line:r['订单行号'],status:r['在途状态'],relationId:r['供货关系编号']}});}
  for(const r of d.drafts||[])if(r.status==='adopted')lots.push({id:'draft:'+r.id,material:r.materialId,quantity:r.quantity,used:0,ready:r.availableDay,expiry:r.expiryDay,quality:true,conditional:true,source:{draft:r.id,run:r.sourceRun,version:r.sourceVersion,suggestion:r.suggestionId,status:r.status}});
  return lots;

@@ -56,6 +56,11 @@ remain on their original contract. Existing qualified-output Excel BOM semantics
 separate standard-input loss model are retained; no new double deduction or silent model
 migration is introduced.
 
+Quarantined inventory with no release date remains unavailable and keeps its unknown
+release fact. It does not block a run using other qualified inventory. A qualified lot
+still requires an explicit integer release date, and an explicitly invalid date is
+rejected regardless of quality. Changing the input never rewrites historical snapshots.
+
 ## Concrete remaining work and verification limits
 
 The source candidate provides the shared infrastructure and mapped original numeric workbook
