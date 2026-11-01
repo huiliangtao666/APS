@@ -7,7 +7,8 @@ import {fork} from 'node:child_process';
 import {Router} from 'express';
 import {hash,workbookSchema,refreshDerived,validateWorkbook,workbookReadiness,rows,procurement,PROFILE} from './workbook-model.mjs';
 import {verifyWorkbookPlan} from './workbook-plan.mjs';
-export function createWorkbookRouter({dataDir,permission,actorKey,requestId,workerFactory}) {
+export function createWorkbookRouter({dataDir,permission,actorKey,requestId,workerFactory,importHeapMiB=180}) {
+ if(!Number.isSafeInteger(importHeapMiB)||importHeapMiB<32||importHeapMiB>512)throw Error('Invalid workbook import heap limit');
  const router=Router(),dir=path.join(dataDir,'workbooks');fs.mkdirSync(dir,{recursive:true});const stateFile=path.join(dir,'state.json'),workers=new Map();
  const read=()=>{try{return JSON.parse(fs.readFileSync(stateFile,'utf8'));}catch(e){if(e.code!=='ENOENT')throw e;return {datasets:[],previews:[],runs:[],records:[]};}};
  const write=s=>{const tmp=stateFile+'.'+randomUUID()+'.tmp';try{fs.writeFileSync(tmp,Buffer.from(JSON.stringify(s)),{flag:'wx',mode:0o600});fs.renameSync(tmp,stateFile);}finally{if(fs.existsSync(tmp))fs.unlinkSync(tmp);}};
@@ -21,7 +22,7 @@ export function createWorkbookRouter({dataDir,permission,actorKey,requestId,work
  const summary=d=>({classification:d.classification,warnings:d.warnings,drafts:d.drafts||[],bomLossProfiles:d.bomLossProfiles||[],id:d.id,name:d.name,version:d.version,fileHash:d.fileHash,profile:d.profile,createdAt:d.createdAt,mappingVersion:d.mapping?.version,readiness:workbookReadiness(d)});
  const handle=fn=>(req,res,next)=>{Promise.resolve().then(()=>fn(req,res)).catch(e=>{if(res.headersSent)return next(e);res.status(422).json({error:'workbook_invalid',message:e.message});});};
  let importBusy=false;
- const inspect=data=>new Promise((resolve,reject)=>{const child=fork(new URL('./workbook-import-worker.mjs',import.meta.url),[],{execArgv:['--max-old-space-size=180'],stdio:['ignore','ignore','ignore','ipc']});let message;const timer=setTimeout(()=>{child.kill('SIGKILL');reject(Error('整本解析超时；未提交数据'));},60000);child.once('message',m=>message=m);child.once('error',e=>{clearTimeout(timer);reject(Error('解析进程失败：'+e.message));});child.once('exit',code=>{clearTimeout(timer);if(code===0&&message?.kind==='result')resolve(message.summary);else reject(Error(message?.message||'解析进程中断；未提交数据'));});child.send(data);});
+ const inspect=data=>new Promise((resolve,reject)=>{const child=fork(new URL('./workbook-import-worker.mjs',import.meta.url),[],{execArgv:['--max-old-space-size='+importHeapMiB],stdio:['ignore','ignore','ignore','ipc']});let message;const timer=setTimeout(()=>{child.kill('SIGKILL');reject(Error('整本解析超时；未提交数据'));},60000);child.once('message',m=>message=m);child.once('error',e=>{clearTimeout(timer);reject(Error('解析进程失败：'+e.message));});child.once('exit',code=>{clearTimeout(timer);if(code===0&&message?.kind==='result')resolve(message.summary);else reject(Error(message?.message||'解析进程中断；未提交数据'));});child.send(data);});
  router.get('/simulation',permission('read'),(_req,res)=>res.json(JSON.parse(fs.readFileSync(new URL('./workbook-simulation.json',import.meta.url),'utf8'))));
  router.get('/schema',permission('read'),(_req,res)=>res.json(workbookSchema));
  router.get('/datasets',permission('read'),(_req,res)=>res.json(read().datasets.map(s=>{const m=s.versions.at(-1);return {id:m.id,name:m.name,version:m.version,fileHash:m.fileHash,profile:m.profile,createdAt:m.createdAt,mappingVersion:m.mappingVersion,readiness:m.readiness};})));

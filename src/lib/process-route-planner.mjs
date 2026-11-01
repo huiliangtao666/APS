@@ -19,7 +19,7 @@ export function scheduleProcessRoute(data,orders,at,conditions){
  if(!Number.isSafeInteger(start)||!Number.isSafeInteger(end)||end<=start)throw Error('配对须有合法整数计划区间');
  if((data.executionFacts||[]).length||(data.simulationEvents||[]).length)throw Error('配对路线尚不支持执行事实/事件恢复；未释放保护');
  const idFor=(b,op)=>JSON.stringify([b.orderId,b.index,op]);
- const issue=(b,operations,message,code='UNPLANNED / PROCESS_PAIR')=>{for(const operation of operations)findings.push({code,message,taskIds:[idFor(b,operation)],relatedRecords:processTaskSources(data,b.orderId,[operation]),sourceRead:'frozen-calendar-v1',context:{orderId:b.orderId,productionBatchId:b.id,operation,machineId:operationMachine(data,b.orderId,operation)['设备编号']}});};
+ const issue=(b,operations,message,code='UNPLANNED / PROCESS_PAIR',unplannedCause=null)=>{for(const operation of operations)findings.push({code,message,...(unplannedCause?{unplannedCause}:{}),taskIds:[idFor(b,operation)],relatedRecords:processTaskSources(data,b.orderId,[operation]),sourceRead:'frozen-calendar-v1',context:{orderId:b.orderId,productionBatchId:b.id,operation,machineId:operationMachine(data,b.orderId,operation)['设备编号']}});};
  const materialNext=minute=>allocator.futureMinutes.find(t=>t>minute);
  const newCandidate=()=>({tasks:[],reservations:[],materials:allocator.begin()});
  function previewOperation(candidate,members,op,startMinute,resourceBatchId){
@@ -101,7 +101,7 @@ export function scheduleProcessRoute(data,orders,at,conditions){
    const c=newCandidate();let checked;try{checked=previewOperation(c,members,op,minute,JSON.stringify([timeFor(data,b.order['产品编号'],op['工序编号'])?.['包装作业边界']==='同订单合并'?b.orderId:b.id,op['工序编号']]));}catch(e){checked={ok:false,reason:e.message};}
    attempts.push({stage:'individual',taskIds:[idFor(b,op['工序编号'])],candidate:minute,...checked});
    if(checked.ok){accept(c);return true;}c.materials.rollback();
-   if(checked.next>minute){minute=checked.next;continue;}for(const m of members)issue(m,[op['工序编号']],checked.reason);return false;
+   if(checked.next>minute){minute=checked.next;continue;}for(const m of members)issue(m,[op['工序编号']],checked.reason,undefined,checked.kind);return false;
   }
   for(const m of members)issue(m,[op['工序编号']],'候选达到1000次边界；不表示全局无解');return false;
  }

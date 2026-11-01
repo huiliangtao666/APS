@@ -5,6 +5,7 @@ import {validateInputs} from './input-validation.mjs';
 import {assessRules} from '../src/lib/business-rules.mjs';
 import {independentlyVerifyPlan} from '../src/lib/independent-verification.mjs';
 import {bindRunResultSources} from './run-result-sources.mjs';
+import {knownPartialFinding} from '../src/lib/known-partial.mjs';
 
 // All immutable confirmation reads share the same fail-closed digest check.
 export function validConfirmation(c){
@@ -26,8 +27,7 @@ export function reviewPlan(s,p,now=new Date().toISOString()){
  const unplanned=structuredClone(p.resultAssessment?.tasks?.filter(t=>t.status==='unplanned')||[]);
  const scheduled=new Set((p.tasks||[]).map(t=>t.id));
  // Only explicitly understood absence reasons can be accepted as partial work.
- const partialCode=/^UNPLANNED \/ (HORIZON|CALENDAR|PREDECESSOR|MATERIAL|PERSONNEL|JOINT_RESOURCE)$/;
- for(const f of p.findings||[])if(!partialCode.test(f.code)||!f.taskIds?.length||f.taskIds.some(id=>scheduled.has(id)||!unplanned.some(t=>t.id===id)))add('rule_conflict',f.message||'存在规则冲突或未支持的未排语义');
+ for(const f of p.findings||[])if(!knownPartialFinding(f)||!f.taskIds?.length||f.taskIds.some(id=>scheduled.has(id)||!unplanned.some(t=>t.id===id)))add('rule_conflict',f.message||'存在规则冲突或未支持的未排语义');
  if(unplanned.some(t=>!t.reasons?.length||t.reasons.some(r=>['unknown','unresolved'].includes(r.classification))||t.quantity==null||!t.unit)||p.resultAssessment?.orders?.some(o=>o.status==='unknown-route'))add('unknown_demand','未排数量、原因或路线未知，不能确认');
  if(p.deliveryAssessment?.active)for(const order of p.deliveryAssessment.orders||[])if(order.reasons?.some(r=>!['INCOMPLETE','NO_REMAINING_WORK','POST_COMPLETION_WAIT','SIMULATED_QUALITY_READY'].includes(r.code)))add('delivery_condition_blocked','已启用交付规则存在质量、效期、关键数据或未支持条件，不能确认');
  if((p.conditions?.orderIds||[]).some(id=>{const o=s.data.orders.find(o=>o['订单编号']===id);return s.data.routes.some(r=>r['产品编号']===o?.['产品编号']&&r['最大等待分钟']?.trim());})&&p.processRouteContract!=='R4-kg-fixed-pair-v1')add('unsupported_semantics','最大等待须有受支持的完整kg固定路线合同及独立复核；不能只凭草稿缺口报告确认');

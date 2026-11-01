@@ -1,32 +1,45 @@
 import {randomUUID} from 'node:crypto';
-import {hash,rows,workbookReadiness,procurement,workbookSchema} from './workbook-model.mjs';
+import {hash,rows,workbookReadiness,procurement,workbookSchema,refreshDerived,dayDate,dayMinute} from './workbook-model.mjs';
 import {verifyWorkbookPlan} from './workbook-plan.mjs';
 export function registerWorkbookRuns(router,ctx) {
  const {read,write,dataset,audit,handle,permission,workerFactory,workers,saveVersion}=ctx;
  const inputOf=r=>ctx.snapshot(r.inputRef);
  const publicRun=r=>{const {inputRef,...result}=r;return result;};
+ const effectiveInput=r=>refreshDerived(structuredClone(inputOf(r)),r.selection.startDay);
+ const resultProblem=r=>{
+  const d=inputOf(r),p=r.result;
+  if(hash(d)!==r.inputHash)return 'frozen_input_corrupt';
+  if(!p)return null;
+  if(r.resultHash&&hash(p)!==r.resultHash)return 'frozen_result_corrupt';
+  if(!['completed','partial'].includes(r.status)||p.status!==r.status||p.source?.datasetId!==d.id||p.source?.version!==d.version||p.source?.fileHash!==d.fileHash||p.source?.mappingHash!==hash(d.mapping)||p.source?.parameterHash!==hash(rows(d,'配置参数'))||hash(p.conditions)!==hash({...r.selection,interval:'[start,end)'}))return 'frozen_result_source_mismatch';
+  return null;
+ };
  router.get('/runs',permission('read'),(_req,res)=>res.json(read().runs.map(publicRun)));
- router.get('/runs/:id',permission('read'),(req,res)=>{const r=read().runs.find(r=>r.id===req.params.id);if(!r)return res.status(404).json({error:'run_not_found'});res.json(publicRun(r));});
+ router.get('/runs/:id',permission('read'),handle((req,res)=>{const r=read().runs.find(r=>r.id===req.params.id);if(!r)return res.status(404).json({error:'run_not_found'});const error=resultProblem(r);if(error)return res.status(409).json({error});res.json(publicRun(r));}));
  router.get('/runs/:id/inputs',permission('read'),(req,res)=>{const r=read().runs.find(r=>r.id===req.params.id);if(!r)return res.status(404).json({error:'run_not_found'});if(hash(inputOf(r))!==r.inputHash)return res.status(409).json({error:'frozen_input_corrupt'});res.json({runId:r.id,input:inputOf(r),inputHash:r.inputHash,selection:r.selection});});
  router.post('/datasets/:id/run',permission('calculate'),handle((req,res)=>{
+  if(!Number.isSafeInteger(req.body.version)||req.body.version<1)return res.status(400).json({error:'explicit_version_required'});
   const s=read(),d=dataset(s,req.params.id,req.body.version);if(!d)return res.status(404).json({error:'dataset_not_found'});
   if(workers.size>=2)return res.status(429).json({error:'run_capacity'});const ready=workbookReadiness(d);if(!ready.ready)return res.status(422).json({error:'not_ready',issues:ready.issues});
-  const selection=req.body.selection||{},start=selection.startDay??1,end=selection.endDay??start+14,current=selection.currentDay??start;
+  const selection=req.body.selection??{};if(!selection||typeof selection!=='object'||Array.isArray(selection)||Object.keys(selection).some(k=>!['startDay','endDay','currentDay','demandIds'].includes(k)))throw Error('运行选择包含未知字段');
+  const start=selection.startDay??1,end=selection.endDay??start+14,current=selection.currentDay??start;
   if(![start,end,current].every(Number.isInteger)||start<current||current<0||end<=start||end>44)throw Error('日窗口无效');
-  if(selection.demandIds&&(!Array.isArray(selection.demandIds)||!selection.demandIds.length||selection.demandIds.some(id=>!rows(d,'每日需求').some(r=>r['需求编号']===id))))throw Error('需求选择无效');
-  const run={id:randomUUID(),status:'queued',createdAt:new Date().toISOString(),inputRef:ctx.persist(d),inputHash:hash(d),datasetId:d.id,version:d.version,selection:{...selection,startDay:start,endDay:end,currentDay:current},result:null};s.runs.unshift(run);audit(s,req,'workbook_run_created',{runId:run.id,inputHash:run.inputHash});write(s);
+  const inWindow=rows(d,'每日需求').filter(r=>Number(r['需求日'])>=start&&Number(r['需求日'])<end);
+  if(Object.hasOwn(selection,'demandIds')&&(!Array.isArray(selection.demandIds)||!selection.demandIds.length||new Set(selection.demandIds).size!==selection.demandIds.length||selection.demandIds.some(id=>typeof id!=='string'||!inWindow.some(r=>r['需求编号']===id))))throw Error('需求选择须唯一且属于所选半开日窗');
+  if(!inWindow.length)return res.status(422).json({error:'empty_demand_selection',message:'所选日窗没有需求，未创建成功运行'});
+  const run={id:randomUUID(),status:'queued',createdAt:new Date().toISOString(),inputRef:ctx.persist(d),inputHash:hash(d),datasetId:d.id,version:d.version,selection:{...selection,startDay:start,endDay:end,currentDay:current},provenance:{profile:d.profile,fileHash:d.fileHash,mappingHash:hash(d.mapping),parameterHash:hash(rows(d,'配置参数')),mappingVersion:d.mapping?.version,timeUnit:'day',dayZero:dayDate(0),minuteOrigin:'2026-11-02T08:00:00+08:00',startDate:dayDate(start),endDate:dayDate(end),startMinute:dayMinute(start),endMinute:dayMinute(end),interval:'[start,end)'},result:null};s.runs.unshift(run);audit(s,req,'workbook_run_created',{runId:run.id,inputHash:run.inputHash});write(s);
   let timer;
-  const finish=(status,result,failure)=>{const state=read(),r=state.runs.find(r=>r.id===run.id);if(!r||!['queued','running'].includes(r.status))return;Object.assign(r,{status,result,failure,finishedAt:new Date().toISOString()});audit(state,req,'workbook_run_'+status,{runId:r.id,inputHash:r.inputHash});write(state);clearTimeout(timer);const w=workers.get(run.id);workers.delete(run.id);w?.terminate();};
+  const finish=(status,result,failure)=>{const state=read(),r=state.runs.find(r=>r.id===run.id);if(!r||!['queued','running'].includes(r.status))return;Object.assign(r,{status,result,resultHash:result?hash(result):null,failure,finishedAt:new Date().toISOString()});audit(state,req,'workbook_run_'+status,{runId:r.id,inputHash:r.inputHash});write(state);clearTimeout(timer);const w=workers.get(run.id);workers.delete(run.id);w?.terminate();};
   try{const executionData={...d,tables:Object.fromEntries(Object.entries(d.tables).filter(([table])=>workbookSchema.tables[table]?.kind==='输入')),referenceSource:{frozenInputHash:run.inputHash,meaning:'参考试算原文保留在冻结对象，不重复进入业务计算'}};const worker=workerFactory({workbookData:executionData,selection:run.selection});workers.set(run.id,worker);timer=setTimeout(()=>finish('failed',null,'计算超时；冻结输入保留，不代表无解'),90000);
    worker.on('message',m=>{if(m?.kind==='progress'){const state=read(),r=state.runs.find(r=>r.id===run.id);if(r?.status==='queued'){r.status='running';r.startedAt=new Date().toISOString();write(state);}}
-    else if(m?.kind==='result'&&m.plan){const check=verifyWorkbookPlan(d,m.plan);if(check.status!=='pass')return finish('failed',null,'结果独立检查失败：'+check.issues.join('；'));finish(m.plan.status,m.plan,null);}else finish('failed',null,'计算失败；未保存结果');});
+    else if(m?.kind==='result'&&m.plan){try{const check=verifyWorkbookPlan(effectiveInput(run),m.plan);if(check.status!=='pass')return finish('failed',null,'结果独立检查失败：'+check.issues.join('；'));const probe={...run,status:m.plan.status,result:m.plan};const error=resultProblem(probe);if(error)return finish('failed',null,'结果来源或运行条件不一致');m.plan.verification=check;finish(m.plan.status,m.plan,null);}catch{finish('failed',null,'结果无法独立复核；未保存结果');}}else finish('failed',null,'计算失败；未保存结果');});
    worker.on('error',()=>finish('failed',null,'Worker执行失败'));worker.on('exit',()=>finish('failed',null,'Worker未返回结果即退出'));
   }catch{finish('failed',null,'Worker无法启动');}
   res.status(202).json(publicRun(read().runs.find(r=>r.id===run.id)));
  }));
- router.post('/runs/:id/verify',permission('calculate'),handle((req,res)=>{const s=read(),r=s.runs.find(r=>r.id===req.params.id);if(!r?.result)return res.status(409).json({error:'result_not_ready'});if(hash(inputOf(r))!==r.inputHash)return res.status(409).json({error:'frozen_input_corrupt'});const verification=verifyWorkbookPlan(inputOf(r),r.result);r.result.verification=verification;audit(s,req,'workbook_verified',{runId:r.id,status:verification.status});write(s);res.json(verification);}));
+ router.post('/runs/:id/verify',permission('calculate'),handle((req,res)=>{const s=read(),r=s.runs.find(r=>r.id===req.params.id);if(!r?.result)return res.status(409).json({error:'result_not_ready'});const error=resultProblem(r);if(error)return res.status(409).json({error});const verification=verifyWorkbookPlan(effectiveInput(r),r.result);r.result.verification=verification;r.resultHash=hash(r.result);audit(s,req,'workbook_verified',{runId:r.id,status:verification.status});write(s);res.json(verification);}));
  router.get('/runs/:id/export',permission('export'),handle((req,res)=>{const r=read().runs.find(r=>r.id===req.params.id);if(!r?.result)return res.status(409).json({error:'result_not_ready'});if(hash(inputOf(r))!==r.inputHash)return res.status(409).json({error:'frozen_input_corrupt'});
-  const exportInput=inputOf(r);const body=[['种类','运行编号','数据集','版本','冻结hash','来源profile','业务编号','数量/值','单位','开始日','结束/可用日','来源/状态']];
+  const error=resultProblem(r);if(error)return res.status(409).json({error});const exportInput=inputOf(r);const check=verifyWorkbookPlan(effectiveInput(r),r.result);if(check.status!=='pass')return res.status(409).json({error:'independent_result_conflict',issues:check.issues});const body=[['种类','运行编号','数据集','版本','冻结hash','来源profile','业务编号','数量/值','单位','开始日','结束/可用日','来源/状态']];
   const put=(kind,id,value,unit,start,end,source)=>body.push([kind,r.id,r.datasetId,r.version,r.inputHash,exportInput.profile,id,value,unit,start,end,typeof source==='object'?JSON.stringify(source):source]);
   for(const x of r.result.demandResults)put('需求',x.id,x.quantity,x.unit,x.readyDay,x.arrivalDay,{...x.source,status:x.status,lateDays:x.lateDays});
   for(const x of r.result.tasks)put('任务',x.id,x.quantity,'千克',x.start,x.end,{...x.source,resource:x.machine,crew:x.crew,tools:x.tools});
@@ -34,6 +47,9 @@ export function registerWorkbookRuns(router,ctx) {
   for(const x of r.result.shortages)put('净缺口',x.materialId,x.quantity,x.unit,x.needDay,'',x.source);
   for(const x of r.result.suggestions)put('参考采购建议',x.materialId,x.quantity,x.unit,x.orderDay,x.availableDay,{relationId:x.relationId,lateDays:x.lateDays,need:x.need,netGap:x.netGap});
   put('检查范围','',JSON.stringify(r.result.verification),'','','',r.result.checkScope);put('时间基准','',r.result.dayZero,'自然日','','',r.result.minuteOrigin);
+  // Legacy runs retain their existing native format. New metadata belongs only
+  // to runs created with this contract; never backfill historical artifacts.
+  if(r.provenance){put('冻结来源','',JSON.stringify(r.provenance),'','','',r.selection);put('运行状态','',r.status,'','','',r.resultHash);}
   for(const p of exportInput.bomLossProfiles||[])put('标准投入逐物料损耗',p.productId,JSON.stringify(p.config),'%','','',p.recipe);
   res.type('text/csv; charset=utf-8').attachment('排程冻结结果-'+r.id+'.csv').send('\ufeff'+body.map(row=>row.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\r\n'));
  }));

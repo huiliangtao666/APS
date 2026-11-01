@@ -88,7 +88,12 @@ export function verifyWorkbookPlan(d,plan) {
  }
  for(const [k,used]of capacity){const [id,day]=k.split('|'),c=calendar.get(day),r=resources.get(id);if(used>Number(r['标准日产能千克'])*Number(c['日产能分子'])/Number(c['日产能分母'])+1e-7)issues.push('超日产能 '+k);}
  const ids=new Set();for(const r of plan.demandResults||[]){if(ids.has(r.id))issues.push('重复需求 '+r.id);ids.add(r.id);}
- const selected=rows(d,'每日需求').filter(r=>Number(r['需求日'])>=plan.conditions.startDay&&Number(r['需求日'])<plan.conditions.endDay&&(!plan.conditions.demandIds||plan.conditions.demandIds.includes(r['需求编号'])));if(selected.length!==ids.size)issues.push('需求覆盖不守恒');
+ const selected=rows(d,'每日需求').filter(r=>Number(r['需求日'])>=plan.conditions.startDay&&Number(r['需求日'])<plan.conditions.endDay&&(!plan.conditions.demandIds||plan.conditions.demandIds.includes(r['需求编号'])));if(!selected.length||selected.length!==ids.size||selected.some(r=>!ids.has(r['需求编号'])))issues.push('需求覆盖不守恒');
+ for(const r of plan.demandResults||[]){const source=selected.find(s=>s['需求编号']===r.id);if(!source||r.productId!==source['成品编号']||r.unit!=='千克'||!Number.isFinite(r.quantity)||r.quantity!==Number(source['需求千克'])||!['scheduled','unplanned'].includes(r.status))issues.push('需求身份/数量/状态不符 '+r.id);}
+ const summary=plan.demandSummary,scheduled=(plan.demandResults||[]).filter(r=>r.status==='scheduled').length;
+ if(!summary||summary.records!==selected.length||summary.totalKg!==selected.reduce((n,r)=>n+Number(r['需求千克']),0)||summary.scheduled!==scheduled||summary.unplanned!==selected.length-scheduled)issues.push('需求汇总与冻结源不符');
+ if(plan.timeUnit!=='day'||plan.dayZero!=='2026-10-31'||plan.minuteOrigin!=='2026-11-02T08:00:00+08:00')issues.push('时间单位或原点不符');
+ for(const t of tasks)if(![t.start,t.end,t.quantity,t.people].every(Number.isFinite)||!(t.quantity>0)||!(t.people>0)||!crews.has(t.crew)||!Array.isArray(t.tools)||new Set(t.tools).size!==t.tools.length||t.start<plan.conditions.startDay||t.end>plan.conditions.endDay||t.startMinute!==dayMinute(t.start)||t.endMinute!==dayMinute(t.end))issues.push('任务数量/资源/时间单位不符 '+t.id);
  const usage=new Map();for(const a of plan.allocations||[]){const total=(usage.get(a.supplyId)||0)+a.quantity;usage.set(a.supplyId,total);if(!(a.quantity>=0)||!Number.isFinite(a.quantity))issues.push('无效物料数量 '+a.supplyId);
   const [kind,id]=a.supplyId.split(':');let capacity,ready,expiry,quality=true;
   if(kind==='inventory'){const lot=rows(d,'期初库存').find(r=>r['库存批次编号']===id);if(!lot){issues.push('不存在的库存身份 '+id);continue;}capacity=Number(lot['当前数量'])-Number(lot['期初已占用量']);ready=Number(lot['放行日']);expiry=Number(lot['到期日']);quality=['已放行','合格'].includes(lot['质量状态']);}
@@ -99,8 +104,11 @@ export function verifyWorkbookPlan(d,plan) {
   else {issues.push('未知供给身份 '+a.supplyId);continue;}
   if(!quality||!(ready<=a.feedDay+1e-8)||!(a.feedDay<expiry)||total>capacity+1e-6)issues.push('供给资格/余额错误 '+a.supplyId);
  }
+ for(const w of d.mapping.wip_remaining||[]){const source=rows(d,'期初在制').find(r=>r['在制批次编号']===w.id);if(!source||!tasks.some(t=>t.productionId===w.id))continue;
+  for(const bid of w.remaining_material_bom_ids){const b=rows(d,'物料清单').find(b=>b['用量关系编号']===bid);if(!b){issues.push('WIP待投来源缺失 '+w.id);continue;}const expected=number(workbookNeed(b,Number(source['预计合格产出']))),actual=(plan.allocations||[]).filter(a=>a.consumer===w.id&&a.materialId===b['子项编号']&&a.kind==='WIP剩余待投').reduce((n,a)=>n+a.quantity,0);if(Math.abs(expected-actual)>1e-6)issues.push('WIP待投数量不守恒 '+w.id+'/'+bid);}
+ }
  const groups=new Map();for(const t of tasks){const key=t.productionId+'|'+t.routeStepId;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(t);}
- for(const [consumer,group]of groups){const first=group[0];if(first.productionId?.startsWith('WP'))continue;const qty=group.reduce((n,t)=>n+t.quantity,0),day=Math.floor(Math.min(...group.map(t=>t.start)));
+ for(const [consumer,group]of groups){const first=group[0];if(d.mapping.wip_remaining.some(w=>w.id===first.productionId))continue;const qty=group.reduce((n,t)=>n+t.quantity,0),day=Math.floor(Math.min(...group.map(t=>t.start)));
   for(const f of d.mapping.feed_mappings.filter(f=>f.route_step_id===first.routeStepId)){const b=rows(d,'物料清单').find(b=>b['用量关系编号']===f.bom_id);if(!b||!(Number(b['生效日'])<=day&&day<Number(b['失效日'])))continue;const expected=Number(b['子项基准用量'])*qty/Number(b['父项基准产出千克']),need=b['数量单位']==='个'?Math.ceil(expected):expected,actual=(plan.allocations||[]).filter(a=>a.consumer===consumer&&a.materialId===b['子项编号']).reduce((n,a)=>n+a.quantity,0);if(Math.abs(need-actual)>1e-6)issues.push('投料数量不守恒 '+consumer+'/'+b['子项编号']);}
  }
  return {status:issues.length?'problem':'pass',issues:[...new Set(issues)],scope:['设备/人员/工装有限占用','日产能','前序','可知日停机','完整需求身份','物料供给身份/质量/可用期/累计余额','按BOM投料数量守恒'],notChecked:[],inputHash:hash(d)};
