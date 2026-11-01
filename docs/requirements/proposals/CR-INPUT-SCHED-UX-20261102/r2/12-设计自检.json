@@ -1,0 +1,179 @@
+{
+  "kind": "DESIGN_ASSET_REVIEW",
+  "result": "DESIGN_SCOPE_COMPLETE_WITH_LOCAL_SEMANTIC_GATES",
+  "event_key": "dlv_0a7ce1ee-0df6-49fc-9517-75af1c2033d4:r2",
+  "effective": false,
+  "productSourceSha": "c18958ff4c06acbb049818efa92cf5652e57eff3",
+  "newProductSha": null,
+  "productTests": "NOT_EXECUTED",
+  "independentSmoke": "NOT_EXECUTED",
+  "UAT": "NOT_EXECUTED",
+  "browserLayoutAndRealFocus": "NOT_EXECUTED",
+  "checks": [
+    {
+      "name": "seven_assertions_32_unique_cases",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": 32
+    },
+    {
+      "name": "case_precondition_action_oracle_evidence",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": true
+    },
+    {
+      "name": "all_product_expectations_unexecuted",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": true
+    },
+    {
+      "name": "scenario_matrix_same",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": true
+    },
+    {
+      "name": "14_end_to_end_tracepoints",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": 14
+    },
+    {
+      "name": "business_and_parameter_causality",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": "synthetic/independent quantities; no new formula/default"
+    },
+    {
+      "name": "209_workbook_fields_indexed_224_rows",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": {
+        "workbookFields": 209,
+        "totalReadinessRows": 224
+      }
+    },
+    {
+      "name": "168_CP_no_new_defaults",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": 168
+    },
+    {
+      "name": "impact_14FR_5AC_2UAT_partial",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": {
+        "FR": 14,
+        "AC": 5,
+        "UAT": 2
+      }
+    },
+    {
+      "name": "fixed_product_source_fingerprints",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": 27
+    },
+    {
+      "name": "r2_originals_file_api_exact",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": "9663 bytes user original + 2907 bytes supplement, exact local/API equality"
+    },
+    {
+      "name": "offline_prototype_no_network",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": "No product API or external assets"
+    },
+    {
+      "name": "18_offline_interaction_checks",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": {
+        "kind": "DESIGN_PROTOTYPE_OFFLINE_VM",
+        "dom": "stub DOM; no browser layout/real focus/HTTP/Excel/Worker/persistence verified",
+        "productExecution": "NOT_EXECUTED",
+        "checks": [
+          {
+            "name": "default_workbench_excel_and_embedded_imports",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "two_independent_previews",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "commit_invalidates_other_preview",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "candidate_does_not_activate",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "invalid_parameter_preview_is_atomic",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "save_returns_original_step_selection",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "frozen_result_survives_new_version",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "409_keeps_draft_and_explicit_retry",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "scopes_are_isolated",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "native_does_not_adopt_workbook_parameters",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "unknown_quantity_blocks_run",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "zero_is_explicit_and_partial_no_gantt",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "conversion_rejection_writes_nothing",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "same_run_in_result_source_problem_views",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "new_runs_have_new_identity",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "query_tools_preserve_return_context",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "frozen_query_reads_run_not_current",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "compatibility_roundtrip_restores_excel_selection",
+            "result": "PASS_PROTOTYPE_ONLY"
+          }
+        ]
+      }
+    },
+    {
+      "name": "boundary_arithmetic",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": "existing boundary projection only"
+    },
+    {
+      "name": "skeleton_filled_and_r2_lineage",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": true
+    }
+  ],
+  "limitations": [
+    "Stub DOM/VM prototype only; no browser, real Excel parsing, HTTP, Worker or persisted product validation.",
+    "D01..D06 locally block ambiguous conversion/new semantics; default workbench and dual Excel direction already authorized.",
+    "Design branch only. PM decides effective slices and implementation window; no product, status, runtime, schedule or publishing actions."
+  ]
+}

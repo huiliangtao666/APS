@@ -1,0 +1,60 @@
+端到端数据流与API业务契约 r2
+以下新增操作/字段为拟议契约，不表示已实现；Design规定可观察输入输出及业务不变量，Dev决定路由/结构/组件/引擎技术实现。
+
+1 已核实的现有接缝（产品c18958ff）
+GET /api/workbooks/schema、/datasets、/datasets/:id、/datasets/:id/rows、/datasets/:id/source。
+POST /api/workbooks/preview(fileBase64/name/datasetId/adoptParameters)、GET /previews/:id、POST /commit(previewId/expectedVersion/reason)。以上preview持久化资料但不提交目标有效版本。
+POST /api/workbooks/datasets/:id/edit、/mapping；GET/POST /datasets/:id/parameters；POST /parameter-trials；GET /parameters/template、/parameters/catalog、/datasets/:id/parameters/export（均workbooks前缀）。
+POST /api/workbooks/datasets/:id/run(version,selection{currentDay,startDay,endDay,demandIds},parameterScope)；GET /runs、/runs/:id、/runs/:id/inputs；POST /runs/:id/verify；GET /runs/:id/export。
+现有创建代码冻结inputHash、datasetId/version、selection和provenance的fileHash/mappingHash/parameterHash/parameterScope/effectiveParameters/timeUnit/dayZero/minuteOrigin，真实Worker处理支持输入，检查结果来源及resultHash。
+现有result.tasks含id/start/end/machine/quantity/crew/tools/source；导出已有真实任务/需求/分配/缺口/来源。日→分钟边界导出不是分钟排程，更不等于写入native store。
+原/api/state、/api/inputs、/api/runs和plan为原生兼容家族，不可在Excel查询/甘特中回退读取它们。
+
+2 新主线序列及身份
+工作台A1 → Business Preview/Commit → dataset D v1+Bhash → Parameter Preview/Commit（明确采用）→ D v2+Bhash+Phash+effectiveParameterHash → 在线补缺/映射编辑→D v3+overlay/mappingHash → readiness → A3确认摘要 → CreateRun(D,v3,range,scope) → 服务端重新核验/解析实际参数/冻结 → Worker真实计算 → 同runRef结果/甘特/问题/来源 → 保存重开/导出。
+日轴甘特目标：在工作台统一结果区按原workbook profile显示真实result.tasks，X轴为原dayZero及[start,end)，Y轴为实际资源；不是将Excel任务塞入原生分钟state。日轴只说明天粒度，不推出日内开工/人员分钟占用。若复用既有甘特组件，必须显式适配day单位；不得借用native origin或补造时长。
+原生兼容结果可复用统一结果区，但从独立runRef及分钟轴适配读取；主线无需选择native。数据契约改造才是联动，菜单重命名不是。
+InputRef={model:workbook|native,id,version,inputHash,profile,timeBasis,quantityBasis,mappingVersion,mappingHash,sourceFiles[],overlayRef}。
+sourceFiles[]分business/parameter/csv，含fileHash/name和采用记录；在线overlay单列，不冒充文件重导。参数指纹和inputHash可区分；没有独立parameterVersion时明确随datasetVersion。
+RunRef={model,engineIdentity,runId,inputRef,parameterRef{scope,actualRecordsHash,effectiveAt},selectionHash,ruleProfile,checkScope,resultHash,conversionId?}。新增元数据只给新运行，不回填旧证据。
+RunViewModel的必要字段={runRef,units,axisOrigin,tasks[],demandResults[],issues[],allocations[],verification,sourceLocators[]}；适配必须保持任务/需求键、数量和边界，不重新求解。run状态与verification分离。
+
+3 双Excel预览/提交扩展契约
+PreviewImport输入：importKind、file、targetRef（参数必须已有D）、expectedVersion、mode{candidate|dataset|trial}、trialRef?、profile、reason。
+输出：previewId、detectedKind、fileHash、targetBefore、businessSourceHash、classification、changeSet(create/update/unchanged/conflict/rejectedCandidate)、counts、issues[]、applicableModes、previewFingerprint、expiresAt/复用条件。
+CommitImport输入：previewId、previewFingerprint、expectedVersion、confirmation(kind/target/mode/changeSetHash)、reason、idempotencyKey。
+服务端核对文件/目标/版本/scope/mode/profile/差异/权限；成功原子生成newRef及来源审计；任何非法行整批失败，候选/有效映射分层须先在预览列明且确认后仍逐项可查。
+422类型不符/不支持scope，409版本或预览变化，403无权限，429资源受限。失败不部分写入有效输入。幂等绑定target+kind+fileHash+scope+mode+preview/changeSet，重复键不同载荷报冲突；响应丢失按键查结果，不能再次增加需求。
+旧仅hash+mode去重不能冒充已满足新增作用域要求。
+
+4 就绪、定位、返回
+CheckReadiness(InputRef,selectedDemandIds,window,rules,scope,effectiveAt) → checkedRef、selectionHash、checks(status/blocking/basis)、issues、ready、token。
+任何输入/参数/映射/选择变化使旧检查过期；服务端创建仍复查，客户端ready不可信。
+ResolveLocator(issueId,checkedRef,returnContext) → stableObjectKey/field/cp/pa/scope/sourceRef、targetType、editorSupported/canEdit/reason及returnContext。读取无写入；合法保存沿原权威编辑路由，带expectedVersion和原因，返回newRef/changedFields。
+查询默认读取工作台精确dataset/version；“本运行冻结输入”明确读取run inputs；切换查询身份是显式动作。历史无元数据显示历史未记录；不拿当前值伪造。
+保存/取消/只读往返见02；returnContext不可由客户端指定任意源文件路径或越权对象，服务器仍校验。
+
+5 创建运行及各视图
+CreateRun输入：所见InputRef、selection/rules、parameterScope/effectiveAt、readiness身份、reason。摘要中两文件/overlay/实际采用参数必须与冻结一致。
+选择“当前版”在点击前被修改：409 INPUT_CHANGED，保留选择并重查；显式历史版本可按原支持能力另开运行，但须清楚标历史。不能悄悄换最新版。
+输出真实runRef/status；在交Worker前持久化不可变输入及参数/映射来源；创建失败不显示假runId成功。进度复用原业务状态机制，不新建app与agent私有通道。
+结果/甘特/问题/冻结查询/导出都以同runRef取得；缓存键含model/dataset/run，不因runId相同混模型。result.source与冻结身份/resultHash不匹配，409并停止混合展示。甘特条只能来自该run的tasks，未排需求不画虚构条。
+由任务定位来源→冻结对象；由问题定位任务→同run甘特；当前编辑需显式另开。导出按筛选/权限/单位带runRef，重开后hash/数量/边界保持一致。结果空/partial/failed按实际展示，不用已检查文字覆盖未检查范围。
+
+6 CSV兼容、迁移与防双写
+新主线默认仍为双Excel。CSV高级入口先显示当前Excel D及“仅兼容已批准CSV/映射支持范围”，不得将原生CSV提交当作Excel提交成功。
+路径A 原CSV直接兼容：保留原模板/类别/字段/检查/编辑/运行/冻结方案，不写D；显式进入兼容模式，返回工作台时恢复原D/步骤。
+路径B CSV→Excel：先按原CSV规则解析为有来源的预览，再逐字段映射到目标D新版本；仅已支持同义字段可确认，缺目标语义阻断本次迁移。CSV可作为D的补录来源，清楚记csv来源/overlay，不替换业务Excel原件hash。
+路径C Excel→分钟或原生数据→Excel：同一显式转换协议，目标为隔离新版本/数据集；不自动覆盖原生当前state或源D，结果由用户明确采用。
+PreviewConversion(sourceRef,targetModel/targetExpectedVersion,selectedEntities,mappingProfileVersion,decisionRefs) → conversionId/sourceHash/targetPreviewHash/mappingVersion、逐字段无损/需配置/不支持/待决定、entityMap、重复/守恒报告、diff/issues/mayCommit。
+ConfirmConversion带上述指纹/目标期望/明确决定，重新检查后全有或全无地产生唯一targetRef；拒绝不写目标；源变动/映射变动必须重预览。源后续修改只提示，目标不跟随自动双写。
+需求去重：同lineage的sourceDemandId不同版本为替代关系，不可累加；同来源同键重试不新建需求。跨来源无业务关联键显示无法判断，要求资料owner提供身份或独立事实，禁止按名称/日期猜合并。导入缺行不隐式删除；版本冲突无后写覆盖。
+
+7 语义映射矩阵和保护
+编码/名称/基础单位：仅同类型同含义同单位可无损；同ID不同义冲突，实体映射保留命名空间。
+时间：Excel日0=2026-10-31，旧native分钟0=2026-11-02 08:00+08；已核边界投影t(d)=1440(d-2)-480，日1=-1920/日2=-480/日3=960，仅解释既有导出。不得截负为0；不能从日容量推出分钟班次/加工工时。Excel日轴无需该转换。
+数量/BOM：Excel合格产出与native标准投入逐物料损耗不同；不重复扣损、不由收率猜加工损失，缺基准/单位/损耗/舍入资料阻断该转换。
+工装：设备能力/同类套数/物理实体不同；需真实池ID/共享范围/占用归还条件。mock仍mock，不为多设备复制共享G01。
+B16：单线Excel不自动升为多线，需line/product/候选设备/共享池明确归属，未明时阻断该转换，不停旧原生已批准能力。
+路线/WIP/人员：剩余工序/余料/区间/人员池未知不补[]或0，显式无后续投料的[]才表示确无。
+参数：同语义/单位/对象/scope/有效期才映射；候选/复合未支持项不启用，跨期自动换值另议。
