@@ -86,7 +86,7 @@ def api(path, data=None, role='planner', expected=200):
     except ValueError:
         value = body.decode()
     with (E / 'http.jsonl').open('a') as s:
-        s.write(json.dumps({'utc': utc(), 'path': path, 'role': role, 'method': req.method,
+        s.write(json.dumps({'utc': utc(), 'path': path, 'role': role, 'method': req.get_method(),
                            'status': status, 'request': data, 'response': value}, ensure_ascii=False) + '\n')
     if status != expected:
         raise RuntimeError(f'{path} expected {expected}, got {status}: {str(value)[:1000]}')
@@ -113,6 +113,7 @@ def run_worker(state, selection, trial=None):
 
 
 def main():
+    resume_created = '--resume-created' in sys.argv
     if (E / 'ATTEMPT').exists():
         raise RuntimeError('one invocation only; no unchanged retry')
     # Re-read the actual QA17 round and all later comments before runtime access.
@@ -138,10 +139,11 @@ def main():
         F.require_capacity(kib, 'startup')
         time.sleep(1)
     save('startup-capacity.json', samples)
-    with socket.socket() as s:
-        s.bind(('127.0.0.1', 18301))
+    if not resume_created:
+        with socket.socket() as s:
+            s.bind(('127.0.0.1', 18301))
     names = command(['docker', 'ps', '-a', '--format', '{{.Names}}']).decode().splitlines()
-    if F.CONTAINER in names:
+    if F.CONTAINER in names and not resume_created:
         raise RuntimeError('candidate already exists')
     image = json.loads(command(['docker', 'image', 'inspect', F.IMAGE]))[0]
     if image['Id'] != F.IMAGE:
@@ -152,9 +154,28 @@ def main():
     state.mkdir(parents=True, exist_ok=True)
     state.chmod(0o700)
     fixture_dir.mkdir(exist_ok=True)
-    if list(state.iterdir()):
+    if list(state.iterdir()) and not resume_created:
         raise RuntimeError('new private state must be empty')
-    save('empty-state.json', {'path': str(state), 'entries': [], 'mode': oct(state.stat().st_mode & 0o777), 'utc': utc()})
+    if resume_created:
+        # The only allowed recovery is a changed host tool following the initial
+        # GET-only logger failure; no second container, lifecycle call or store edit.
+        prior = json.loads((E / 'attempt1/window-release.json').read_text())
+        previous = json.loads((E / 'attempt1/candidate-inspect-before.json').read_text())
+        current = inspect(F.CONTAINER)
+        if prior.get('error') != 'AttributeError("\'Request\' object has no attribute \'method\'")':
+            raise RuntimeError('resume only addresses the observed logger exception')
+        if prior.get('pending') or not prior.get('oldFilesUnchanged') or (state / 'business.json').exists():
+            raise RuntimeError('resume requires previous zero business writes and terminal release')
+        if F.identity(previous) != F.identity(current) or current['Image'] != F.IMAGE:
+            raise RuntimeError('created candidate identity changed')
+        if current['HostConfig']['Memory'] != 1024 ** 3 or current['HostConfig']['PortBindings']['4317/tcp'] != [{'HostIp': '127.0.0.1', 'HostPort': '18301'}]:
+            raise RuntimeError('created candidate isolation drift')
+        if sorted((m['Source'], m['Destination'], m['RW']) for m in current['Mounts']) != sorted([(str(state), '/state', True), (str(fixture_dir), '/fixtures/execution', False)]):
+            raise RuntimeError('created candidate mount boundary changed')
+        save('resume-created-admission.json', {'reason': 'changed logger get_method contract; no business writes on first attempt',
+             'sameIdentity': True, 'noLifecycleCall': True, 'utc': utc()})
+    else:
+        save('empty-state.json', {'path': str(state), 'entries': [], 'mode': oct(state.stat().st_mode & 0o777), 'utc': utc()})
     before = protected()
     save('protected-before.json', before)
     (E / 'ATTEMPT').write_text(utc())
@@ -162,8 +183,11 @@ def main():
             '--restart', 'no', '-p', '127.0.0.1:18301:4317', '-e', 'B15_RUNTIME_ISOLATED=1',
             '-v', str(state) + ':/state', '-v', str(fixture_dir) + ':/fixtures/execution:ro',
             F.IMAGE, 'node', '--experimental-strip-types', 'qa/b15-runtime-server.mjs']
-    save('launch-command.json', {'argv': argv, 'utc': utc(), 'memoryLimitIsReservation': False})
-    container_id = command(argv).decode().strip()
+    if resume_created:
+        container_id = current['Id']
+    else:
+        save('launch-command.json', {'argv': argv, 'utc': utc(), 'memoryLimitIsReservation': False})
+        container_id = command(argv).decode().strip()
     first = inspect(F.CONTAINER)
     save('candidate-inspect-before.json', first)
     fatal = threading.Event()
