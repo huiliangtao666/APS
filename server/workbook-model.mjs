@@ -1,3 +1,4 @@
+import {validateBomRelations} from './workbook-relation-validation.mjs';
 import {createHash} from 'node:crypto';
 import fs from 'node:fs';
 export const workbookSchema=JSON.parse(fs.readFileSync(new URL('./workbook-schema.json',import.meta.url),'utf8'));
@@ -52,14 +53,14 @@ export function validateWorkbook(d) {
  const fk=(t,field,ids)=>{for(const r of rows(d,t))if(!ids.has(r[field]))add(t,r,field,'引用对象不存在：'+r[field],'FOREIGN_KEY');};
  for(const [t,f]of [['物料清单','父项编号'],['物料清单','子项编号'],['单位换算','物料编号'],['每日需求','成品编号'],['期初库存','物料编号'],['既有采购在途','物料编号'],['期初在制','成品编号'],['供应商与供货条件','物料编号']])fk(t,f,mats);
  fk('每日需求','客户编号',customers);fk('期初库存','库位编号',locations);fk('既有采购在途','供货关系编号',sup);fk('停机安排','资源编号',resources);
- const graph=new Map(),pairs=new Map();for(const b of rows(d,'物料清单')){
-  const p=b['父项编号'],c=b['子项编号'];if(!graph.has(p))graph.set(p,[]);graph.get(p).push({id:c,row:b});
-  const key=p+'|'+c,earlier=pairs.get(key)||[];for(const old of earlier)if(Number(b['生效日'])<Number(old['失效日'])&&Number(old['生效日'])<Number(b['失效日']))add('物料清单',b,'生效日','同一父子关系版本有效期重叠','BOM_VERSION_OVERLAP');earlier.push(b);pairs.set(key,earlier);
+ issues.push(...validateBomRelations(rows(d,'物料清单'),problem));
+ for(const b of rows(d,'物料清单')){
+  const c=b['子项编号'];
   if(!(Number(b['父项基准产出千克'])>0)||!(Number(b['子项基准用量'])>=0))add('物料清单',b,'子项基准用量','基准须大于0且定额不得负');
   if(mats.has(c)&&b['数量单位']!==mats.get(c)['基础单位'])add('物料清单',b,'数量单位','子件数量单位必须与SKU基础单位一致');
  }
- const done=new Set(),stack=new Set();function visit(id){if(done.has(id))return;stack.add(id);for(const c of graph.get(id)||[])if(stack.has(c.id))add('物料清单',c.row,'子项编号','BOM循环：'+[...stack,c.id].join(' → '),'BOM_CYCLE');else visit(c.id);stack.delete(id);done.add(id);}for(const id of graph.keys())visit(id);
- const scopes=new Map();for(const p of rows(d,'配置参数')){const key=p['对象编号']+'|'+p['参数名称'];if(!numeric(p['参数值']))add('配置参数',p,'参数值','参数值须为有限数字字面值');for(const old of scopes.get(key)||[])if(Number(p['生效日'])<Number(old['失效日'])&&Number(old['生效日'])<Number(p['失效日']))add('配置参数',p,'生效日','对象同义参数有效期重叠','PARAMETER_OVERLAP');scopes.set(key,[...(scopes.get(key)||[]),p]);}
+
+ const scopes=new Map();for(const p of rows(d,'配置参数')){const key=p['对象编号']+'|'+p['参数名称'];if(Object.hasOwn(p._formulas||{},'参数值')||!numeric(p['参数值']))add('配置参数',p,'参数值','参数值须为有限数字字面值');for(const old of scopes.get(key)||[])if(Number(p['生效日'])<Number(old['失效日'])&&Number(old['生效日'])<Number(p['失效日']))add('配置参数',p,'生效日','对象同义参数有效期重叠','PARAMETER_OVERLAP');scopes.set(key,[...(scopes.get(key)||[]),p]);}
  for(const r of rows(d,'期初库存')){
   if(Number(r['当前数量'])<Number(r['期初已占用量']))add('期初库存',r,'期初已占用量','占用量超过实物数量');const m=mats.get(r['物料编号']),l=locations.get(r['库位编号']);
   if(m&&l&&m['储存环境']!==l['储存环境'])add('期初库存',r,'库位编号','物料环境与库位环境不符','STORAGE_ENVIRONMENT');
@@ -71,7 +72,7 @@ export function validateWorkbook(d) {
  for(const r of rows(d,'工厂日历'))if(!Number.isInteger(Number(r['日序']))||r['公历日期'].replaceAll('-','')!==dayDate(Number(r['日序'])).replaceAll('-','')||!(Number(r['日产能分母'])>0))add('工厂日历',r,'公历日期','日序/日期或日容量分母无效');
  for(const r of rows(d,'停机安排'))if(!(Number(r['结束日'])>Number(r['开始日'])))add('停机安排',r,'结束日','结束日须晚于开始日');
  for(const r of rows(d,'每日需求'))if(!Number.isInteger(Number(r['需求日']))||Number(r['需求日'])<1||Number(r['需求日'])>43||!(Number(r['需求箱数'])>0))add('每日需求',r,'需求箱数','本profile需求日须1～43且需求箱数为正');
- for(const t of ['配置参数','物料清单'])for(const r of rows(d,t))if(!(Number(r['失效日'])>Number(r['生效日'])))add(t,r,'失效日','有效区间须为非空半开区间');
+ for(const t of ['配置参数','物料清单'])for(const r of rows(d,t))if(!numeric(r['生效日'])||!numeric(r['失效日'])||!(Number(r['失效日'])>Number(r['生效日'])))add(t,r,'失效日','有效区间须为非空半开区间');
  for(const r of rows(d,'物料主数据'))if(!['千克','个'].includes(r['基础单位']))add('物料主数据',r,'基础单位','本来源profile只支持食品千克、包装个数，不能猜测换算');
  return issues;
 }
