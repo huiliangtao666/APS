@@ -199,3 +199,24 @@ listener, product request, browser, Worker or SDK install). Run the prepared
 project's exact npm install --include dev inside official app-exec using cached
 node:22-slim, then compare manifest/lock and five original files. Project npm
 configuration retains lifecycle scripts; no ignore-scripts or skip flag.
+
+ACTUAL MANIFEST RECOVERY RESULT (2026-11-01T15:38Z)
+The official cached Node22 app-exec completed npm install --include dev offline
+in298ms. Seven finite manifest/closure/gate checks and four prepare checks PASS.
+The ONE official dev-preview invocation then returned:
+  dev preview needs @praetor/lite-app-runtime >= 0.4.0 (not installed)
+Thus the wrapper itself has no workspace-mode external dependency, but this
+platform dev-preview endpoint additionally imposes the runtime SDK preflight.
+This is now the sole startup blocker. It is not the old ENOENT or a request to
+skip npm. There was no Node listener or returned devBase; deployment remains
+closed and actual_user_url=null. The stale stopped Python container diagnosis
+is historical, not evidence of a new Node crash. Budget1/1 used; no second start.
+Do not run migrate-app.sh, install/copy SDK from another instance, invent a flag,
+hand-start a managed container, or claim an authenticated user success. Platform
+runtime owner must resolve/document the supported plain-Node SDK preflight
+under the no-external-package constraint; PM coordinates further recovery.
+After runtime recovery, user session verification uses the real Workbench
+preview iframe while signed into an entitled APS-Test workspace account.
+A naked401 only proves anonymous denial. The exact closed503 body must also
+arrive through that entitled session before writing deployment configuration.
+No login step alone can resolve this startup-layer SDK prerequisite.
