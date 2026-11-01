@@ -1,0 +1,61 @@
+数据流与API业务边界 r1；以下新增字段/操作均为拟议，不表示现网已实现。
+Design规定可观察输入/输出和业务不变量，具体路由命名、事务/数据库/算法由Dev定。
+
+1 已核存在的API（固定产品c18958ff）
+workbook：GET /api/workbooks/schema、/datasets、/datasets/:id、/datasets/:id/rows、/datasets/:id/source。
+POST /api/workbooks/preview（fileBase64/name/datasetId/adoptParameters）→预览；GET /previews/:id；POST /commit（previewId/expectedVersion/reason）→版本提交。preview本身会持久化预览/原件，不改变目标有效版本。
+POST /datasets/:id/edit、/mapping；GET/POST /datasets/:id/parameters；POST /parameter-trials；GET /parameters/template、/parameters/catalog、/datasets/:id/parameters/export。
+POST /datasets/:id/run（version/selection{currentDay,startDay,endDay,demandIds}/parameterScope）→queued；GET /runs、/runs/:id、/runs/:id/inputs；POST /runs/:id/verify；GET /runs/:id/export。以上workbook子路由均有/api/workbooks前缀。
+native：/api/state只读当前原生状态、/api/inputs原生维护、/api/runs运行、原有plan保存/复制/导出路由。具体子路径以当前App/server实际路由为准；不是workbook别名。
+已有workbook的日→分钟导出投影，不等于已经把Excel数据写进native store或原生甘特。原型与文案始终说明此点。
+
+2 端到端对象流
+双Excel各自选择 → 显式目标/profile/作用域 → 只预览 → 字段/类型/外键/身份/有效期/差异校验 → 明确确认 → 原子生成目标新版本 → 两类来源并列。
+在线/CSV维护 → 同一个模型内的规范对象与版本；步骤/统一页修改相同CP/PA → 增版并使就绪过期。
+选择模型与版本/范围/规则 → readiness(检查身份) → 摘要 → 服务端在创建前核版本和指纹 → 冻结快照与参数实际采用 → worker → 同身份结果及独立检查 → 查询/甘特/问题/来源 → 保存/导出。
+跨模型仅通过另一路：转换预览 → 明示语义/覆盖范围/待决/差异 → 用户拒绝或确认 → 生成独立目标版本 → 目标重新校验 → 用户显式选目标运行。无导入后自动双写、无运行时临时从另一模型补字段。
+
+3 共用可观察契约（新增）
+InputRef={model:workbook|native,id,version,inputHash,profile,sourceFiles:[{kind:business|parameter|csv,fileName,fileHash}],mappingVersion,timeBasis,quantityBasis}。
+RunRef={model,runId,inputRef,parameterRef:{scope,hash,effectiveAt,records},selectionHash,checkScope,resultHash,conversionId?}。native已有inputVersionId/snapshotHash、workbook已有version/inputHash，统一呈现仅适配不重写原记录。
+参数来源可多份：显示文件hash、来源时间、有效期、采用scope与实际采用记录hash。没有独立parameterVersion则显示“随数据集v4/参数指纹…”；禁止捏造p4版本号。
+客户端提交预期版本/previewId不等于服务端已绑定全部上下文；新增contract需服务端绑定并核对。客户端文件名/模型/locator不可信；不能让客户端指定任意文件路径。
+
+4 双导入操作（扩展既有preview/commit，路径由Dev选择）
+PreviewImport请求：importKind、file、targetRef（参数必须已有数据集）、expectedVersion、mode{candidate|dataset|trial}、trialRef?、profile、reason。
+响应：previewId、detectedKind、sourceFileHash、businessSourceHash、targetBefore、classification、changeSet{create/update/unchanged/conflict/rejectedCandidate}、issues[]、counts、applicableModes、expiresAt/可复用条件、previewFingerprint。
+类型不符：422 IMPORT_KIND_MISMATCH，仅预览失败，不写有效数据；scope与映射未支持：422 SCOPE_UNSUPPORTED；权限403；繁忙429；解析中断明确“未提交”。
+CommitImport请求：previewId、previewFingerprint、expectedVersion、confirmation{kind,target,mode,changeSetHash}、reason、idempotencyKey。
+服务端重新核验：原件hash/目标/版本/方式/scope/profile均与预览绑定，预览无阻塞、未过期、操作者有权限。成功一次生成完整新版本及来源审计；失败不改变目标有效表、参数、映射和current指针。
+幂等键覆盖model+target+fileHash+importKind+mode+scope+preview/变更指纹。网络超时先读提交结果，不重新创建；相同键不同载荷返回冲突。旧产品按hash+mode的去重不足以推定跨scope安全，由S2/S3加强。
+批量文件中行级错误不得提交部分有效行。显式候选/支持映射分层不是错误吞并：若预览将部分保留候选，确认摘要和结果均逐项列明；发现非法单位/身份/有效期等则整批失败。
+
+5 就绪与定位操作（新增输出规范）
+CheckReadiness请求：InputRef、selectedDemandIds、window、rules、scope、effectiveAt；响应{checkedRef,selectionHash,checks:[{id,status,blocking,basis,issueIds}],issues,ready,token}。
+token是与检查身份绑定的可观察凭据，Dev可选签名/版本引用等实现；不规定技术方案。任何输入/规则/窗口/scope变化使旧结果过期；服务端run仍重新检查，不信任客户端ready=true。
+ResolveLocator请求：issueId、checkedRef、returnContext；响应{targetType:record|parameter|mapping|file|decision,objectKey,field,editorSupported,canEdit,reason,sourceRef,returnContext}。
+Resolve只是读动作。编辑提交沿既有权威写路由，带expectedVersion/原因。保存返回newRef及changedFields；客户端回原步骤并重查。重查失败显示“已保存，检查失败/未完成”，不能回滚谎称没保存，也不能打就绪勾。
+
+6 创建、查询与导出运行
+CreateRun请求必须包含InputRef、当前选择/规则、scope、effectiveAt、readiness身份、reason；scope/参数/窗口须与摘要一致。
+若明确选了历史版本，可继续按该冻结版本运行，但摘要必须标历史且确认；若选“当前版本”在点击前变化，409 INPUT_CHANGED，保留选择后重查。不能悄悄拿最新版本代替用户所选，也不能用已过期ready发起。
+服务端先解析有效参数、冻结实际值与源文件/映射/规则/单位/时间基准，再交worker；创建返回runRef和真实status。创建失败无假runId成功状态。异步进度取既有产品状态机制；不为app/agent新建后端通信通道。
+GetResult/GetRunInput/GetIssues/GetGantt/ExportRun都要求runRef。缓存键及源定位包含model，不让相同runId跨模型撞用；结果必须与冻结inputHash/selectionHash匹配，无法匹配则失败关闭。
+历史缺失profile或hash：显示“历史未记录，范围待核”，维持原值和旧导出，不用当前计算补回假历史。可导出的部分/失败运行按已有能力：结果CSV只给实际结果；native状态原因导出单列。workbook没有某失败导出能力时不造下载按钮。
+
+7 显式转换业务契约（S5；未实现）
+目标关系：同一工作台/结果身份层，workbook和native保留独立执行模型。当前不迁引擎。两模型间转换只生成新副本，不是源和目标同步。初批可先只开放转换预览和拒绝；有未决语义时禁止确认。
+PreviewConversion请求：sourceRef精确版本、targetModel、target=新隔离目标、selectedEntities、mappingProfileVersion、decisionRefs。不提供“覆盖原生当前state”选项。
+响应：conversionId、sourceHash、targetPreviewHash、mappingVersion、逐字段映射表（可无损/需显式配置/不支持/待业务决定）、实体ID映射、时间/数量前后含义、来源追踪、重复需求检测、守恒报告、阻塞列表、mayCommit、拒绝说明。
+ConfirmConversion请求：conversionId、sourceHash、targetPreviewHash、decisionRefs、明确确认；源hash/目标预期/映射变化必须重预览。只有全部必要字段有合法可追溯含义且无重复/冲突才生成一个目标版本；源和其他目标不改。拒绝只记本次选择/无目标业务写入。
+成功记录conversionId、sourceRef、targetRef、mappingVersion、decisionRefs、source-to-target实体键、采用参数、actor/时间/原因；源后续修改不更新目标，目标显示“源有新版本，可重新预览”，不自动刷新。
+
+8 逐语义映射判定
+编码/名称/单位：仅当对象类型、单位和业务含义一致时可保持；同ID不同含义为冲突，需显式映射/命名空间。名称相同不推定同物料。
+需求：保留sourceModel+datasetId+sourceDemandId+来源版本及数量口径；同业务需求不同版本只能替代选择，不能叠加；已有目标来源链同键再次转换识别为重复或明确新版本，不新增数量。无跨来源业务关联键时提示“无法确认是否同一需求”，要求资料owner提供关系，不能按名称/日期猜合并。
+时间：Excel日0=2026-10-31，native分钟0=2026-11-02 08:00+08:00；已有日边界投影t(d)=1440(d-2)-480仅解释冻结导出边界。日1→-1920，日2→-480，日3→960。native新运行非负起点等限制继续；不能截断负值为0。日容量不能反推一天内何时开工/分钟工时/停机，需真实明确时间窗口和工时才可转换。
+BOM：Excel合格产出基准与native标准投入逐物料损耗分离；不能拿净耗再扣一次损耗，不能凭收率倒推出未知加工损失。缺目标基准、损耗来源或舍入单位则阻断，不设公式默认。
+工装：同类套数、设备能力与物理池ID不同；目标需明确物理实体、归属、可共享范围、占用和归还条件，来源mock须保留mock标记；不能给每台设备复制一套共享G01。
+路线/WIP/人员：保留剩余工序/余料/占用区间/人员池事实；未知不补空数组或0。已有显式[]表示确无后续投料可保留；未声明不同于空。
+B16：native多线配置和候选设备/共享池依其批准profile，不把workbook G01仿真单线映射升格多线；跨厂/跨线/共享库存语义缺失时转换受阻，native既有模式不因此停用。
+参数：仅相同语义/单位/对象/scope/有效期可映射；跨天/分钟有效期保留时间基准，复合CP/候选永不自动启用。标准投入BOM参数在其已有native源，不从workbook trial隐式覆盖。

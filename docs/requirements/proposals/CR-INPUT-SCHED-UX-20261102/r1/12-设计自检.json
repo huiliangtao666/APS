@@ -1,0 +1,178 @@
+{
+  "kind": "DESIGN_ASSET_REVIEW",
+  "result": "DESIGN_SCOPE_COMPLETE_WITH_EXPLICIT_SEMANTIC_GATES",
+  "effective": false,
+  "productSourceSha": "c18958ff4c06acbb049818efa92cf5652e57eff3",
+  "newProductSha": null,
+  "productTests": "NOT_EXECUTED",
+  "UAT": "NOT_EXECUTED",
+  "browserLayoutAndRealFocus": "NOT_EXECUTED",
+  "prototypeSyntax": "PASS",
+  "offlinePrototypeChecks": 14,
+  "checks": [
+    {
+      "name": "all_six_new_assertions",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": 24
+    },
+    {
+      "name": "all_precondition_action_expectation_present",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": 24
+    },
+    {
+      "name": "CP_catalog_168_distinct_no_new_defaults",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": "fixed-source catalog; original required metadata not promoted to global requirement"
+    },
+    {
+      "name": "every_workbook_input_field_indexed",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": {
+        "workbookFields": 209,
+        "totalReadinessRows": 224,
+        "nativeAndMappingRows": 15
+      }
+    },
+    {
+      "name": "impact_all_requested_FR_and_candidate_AC_UAT",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": {
+        "FR": 14,
+        "AC": 5,
+        "UAT": 2,
+        "scope": "partial responsibilities only"
+      }
+    },
+    {
+      "name": "standalone_html_no_network_or_bridge",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": "pure in-memory design mock; no chat submission requested"
+    },
+    {
+      "name": "no_unfilled_skeleton",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": true
+    },
+    {
+      "name": "prototype_offline_interactions",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": {
+        "kind": "DESIGN_PROTOTYPE_OFFLINE_VM",
+        "dom": "stub DOM; no browser layout/real focus/HTTP/Excel/Worker/persistence verified",
+        "productExecution": "NOT_EXECUTED",
+        "checks": [
+          {
+            "name": "two_independent_previews",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "commit_invalidates_other_preview",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "candidate_does_not_activate",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "invalid_parameter_preview_is_atomic",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "save_returns_original_step_selection",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "frozen_result_survives_new_version",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "409_keeps_draft_and_explicit_retry",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "scopes_are_isolated",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "native_does_not_adopt_workbook_parameters",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "unknown_quantity_blocks_run",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "zero_is_explicit_and_partial_no_gantt",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "conversion_rejection_writes_nothing",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "same_run_in_result_source_problem_views",
+            "result": "PASS_PROTOTYPE_ONLY"
+          },
+          {
+            "name": "new_runs_have_new_identity",
+            "result": "PASS_PROTOTYPE_ONLY"
+          }
+        ]
+      }
+    },
+    {
+      "name": "source_files_api_hashes",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": [
+        {
+          "workspace": "APS-Design",
+          "filesApiPath": "CR-INPUT-SCHED-UX-20261102-设计任务合同.txt/CR-INPUT-SCHED-UX-20261102-设计任务合同.txt",
+          "bytes": 4877,
+          "sha256": "b12047c3fe2df1cd1a083237231c82bebbeaa24d1028d091107f22f19ef77132",
+          "fileApiReadBack": "praetor workspaces read-file APS-Design --path EXACT_PATH --raw",
+          "verifiedEqualToLocal": true,
+          "publicRedistribution": false
+        },
+        {
+          "workspace": "APS-Design",
+          "filesApiPath": "APS-INPUT-SCHEDULING-UX-CR-REQUEST-20261102.md/APS-INPUT-SCHEDULING-UX-CR-REQUEST-20261102.md",
+          "bytes": 7776,
+          "sha256": "e467bf1a8e2c33a0b115ce67dff362332871fc1ac4dd28bfb15cf30135b1ada7",
+          "fileApiReadBack": "praetor workspaces read-file APS-Design --path EXACT_PATH --raw",
+          "verifiedEqualToLocal": true,
+          "publicRedistribution": false
+        }
+      ]
+    },
+    {
+      "name": "known_time_projection_arithmetic",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": "existing boundary projection, not a new minute duration formula"
+    },
+    {
+      "name": "no_product_files_in_design_payload",
+      "result": "PASS_DESIGN_ASSET",
+      "detail": true
+    }
+  ],
+  "limitations": [
+    "Offline VM uses stub DOM, not browser/HTTP/Excel/Worker/persisted product tests.",
+    "Prototype harness first run had duplicate lexical name across cases; fixed isolated case blocks and reran. No product defect/repair round created.",
+    "D01..D06 block only corresponding ambiguous conversion/new semantics; user direction and S1-S4 authorized scope need no repeated direction approval."
+  ],
+  "reviewedDeliverables": [
+    "00-交付说明.txt",
+    "01-业务契约.txt",
+    "02-流程与状态.txt",
+    "03-数据流与转换契约.txt",
+    "04-实施切片与待决.txt",
+    "05-新增验收矩阵.csv",
+    "06-字段级就绪.csv",
+    "07-参数字段索引.csv",
+    "08-影响映射.csv",
+    "09-场景与预期.json",
+    "10-交互原型.html",
+    "11-来源核验.json"
+  ]
+}

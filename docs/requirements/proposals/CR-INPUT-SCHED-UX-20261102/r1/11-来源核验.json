@@ -1,0 +1,212 @@
+{
+  "event_key": "dlv_0a7ce1ee-0df6-49fc-9517-75af1c2033d4:r1",
+  "dispatchEvent": "aps:user-cr:input-scheduling-unified-ux:20261102:r1:design",
+  "originals": [
+    {
+      "workspace": "APS-Design",
+      "filesApiPath": "CR-INPUT-SCHED-UX-20261102-设计任务合同.txt/CR-INPUT-SCHED-UX-20261102-设计任务合同.txt",
+      "bytes": 4877,
+      "sha256": "b12047c3fe2df1cd1a083237231c82bebbeaa24d1028d091107f22f19ef77132",
+      "fileApiReadBack": "praetor workspaces read-file APS-Design --path EXACT_PATH --raw",
+      "verifiedEqualToLocal": true,
+      "publicRedistribution": false
+    },
+    {
+      "workspace": "APS-Design",
+      "filesApiPath": "APS-INPUT-SCHEDULING-UX-CR-REQUEST-20261102.md/APS-INPUT-SCHEDULING-UX-CR-REQUEST-20261102.md",
+      "bytes": 7776,
+      "sha256": "e467bf1a8e2c33a0b115ce67dff362332871fc1ac4dd28bfb15cf30135b1ada7",
+      "fileApiReadBack": "praetor workspaces read-file APS-Design --path EXACT_PATH --raw",
+      "verifiedEqualToLocal": true,
+      "publicRedistribution": false
+    }
+  ],
+  "productSourceSha": "c18958ff4c06acbb049818efa92cf5652e57eff3",
+  "mainShaAtRead": "c18958ff4c06acbb049818efa92cf5652e57eff3",
+  "newProductSha": null,
+  "effective": false,
+  "newDesignSha": "见外部交付记录，避免提交SHA自引用",
+  "originalIssue": {
+    "url": "https://github.com/huiliangtao666/APS/issues/45",
+    "updatedAt": "2026-11-01T16:55:31Z",
+    "registration": "https://github.com/huiliangtao666/APS/issues/45#issuecomment-6560967837",
+    "dispatch": "https://github.com/huiliangtao666/APS/issues/45#issuecomment-6560984293",
+    "access": "GitHub REST API direct read with existing workspace credential; no Issue/Project/status write"
+  },
+  "precedentDesignShas": {
+    "input": "13e2eeed4438cb0b200db9c4de3781c7f1248be3",
+    "parameters": "b13860914439c43801eab1e10b42a5552821afe1",
+    "uiux": "8676c79d9805b4d55fbb0d98a9ac9c8ab6424e44"
+  },
+  "sources": [
+    {
+      "path": "docs/parameter-dual-entry.md",
+      "bytes": 14465,
+      "sha256": "25a1e3fdfa568c36fde9af44310626cdd2d18cbe7ac2486f94737bd011881b79",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "docs/requirements/README.md",
+      "bytes": 7083,
+      "sha256": "6286151cac89f860cfb96062644ad5137cbda90f970897b01056b465938749f8",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "docs/requirements/baselines/APS-BL-001-v0.3.json",
+      "bytes": 117997,
+      "sha256": "e30733655359e71b0c98220910303aefbc922ac123b96fb3025c4976a4067e36",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json",
+      "bytes": 238177,
+      "sha256": "0725f42b175242d8b0fe03e153af63def5bce5172d32de20ab2799956e0bc211",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "docs/requirements/uat-register.json",
+      "bytes": 34503,
+      "sha256": "09f81080335767eee44dbe62346b4fd11ee0de86aae9a8f170df363c819c3ef5",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "docs/workbook-input-integration.md",
+      "bytes": 6304,
+      "sha256": "bf809df74f17299753f4e90c01086b95e64052b697bb2df14f296f31ad97be13",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "server/business.mjs",
+      "bytes": 86674,
+      "sha256": "99ccf4a66bcb52b5db0dfdee329764c2d828cef27694e4fe10d8bb035bc7b524",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "server/input-validation.mjs",
+      "bytes": 9666,
+      "sha256": "af1c2a0451e1e7e0bb9ddbf5fce9e6eddb568ef380b4069556831e5c77d90414",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "server/parameter-contract.mjs",
+      "bytes": 22256,
+      "sha256": "78edea80b6e5749fabfdcfd7b5f4cb7b1eea990916dc745396117ff111586288",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "server/parameter-import.mjs",
+      "bytes": 7785,
+      "sha256": "5900332f6f1b99d5a26f2c5404b61bf484fdea9ce2e2aa220bd70ac6ce41ca15",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "server/parameter-router.mjs",
+      "bytes": 2788,
+      "sha256": "e6434cdded3d1f985face61160ab9cbabfaf9ef0ca36170da8853952b64940ef",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "server/run-input.mjs",
+      "bytes": 15580,
+      "sha256": "975eb325505a4b184a50fd59ae7581d1f8512f5f65dd489718c48b02bf2d8ad3",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "server/workbook-model.mjs",
+      "bytes": 14350,
+      "sha256": "e6646d38b6a50065a519dc6201b58aa66d1d08ce79afa2c5c7458b61defca98b",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "server/workbook-router.mjs",
+      "bytes": 16373,
+      "sha256": "a4afe2930a9061ed64839d1ea258e433405b721392ab7edd4bab27f5cda646ac",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "server/workbook-runtime.mjs",
+      "bytes": 11298,
+      "sha256": "d90dedcd54d428cb7e155cf9faec8f95897a4fe356e06da53ba699810f97e3f9",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "server/workbook-schema.json",
+      "bytes": 69597,
+      "sha256": "f8006d88d6b074d388226372f20b161735295961e0024b9345d5dd9520be2eb6",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "server/workbook-supply.mjs",
+      "bytes": 7547,
+      "sha256": "91783d17c1de37e333be69ff971e7f040d18f1090b7419447338076f669ff81e",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "src/App.tsx",
+      "bytes": 47792,
+      "sha256": "b718002587986ce8a4b1e604bc58157e5a2c7e71161027686df703a0350fc409",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "src/CsvBatchPanel.tsx",
+      "bytes": 11437,
+      "sha256": "f1e45ebed314dea84edfe5149cb598fcd83fe9b7ef1481834bd0e193fd988548",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "src/DataQueries.tsx",
+      "bytes": 14136,
+      "sha256": "2bf6e10c9d3b27e3c9eb332c065308d11952d1a0f4f092b5a4b410a211777ee0",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "src/InputData.tsx",
+      "bytes": 22566,
+      "sha256": "d4c15ff775f68d8e515b692d971e065417c133ccfd1fc5458d81b2d5b70a6e1f",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "src/ParameterPanel.tsx",
+      "bytes": 14163,
+      "sha256": "8a3b1553be6da7c4e279ee08ee3a3d7c550fb3b8c707316b98ba937aee2dcf97",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "src/RunPanel.tsx",
+      "bytes": 11617,
+      "sha256": "5077dac9fb8eec45128111a267307b7e2aec162ee62b39628fa5e01bbce62345",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "src/lib/business-rules.mjs",
+      "bytes": 17923,
+      "sha256": "0329cdba1f4a0bb09967c19b9a66b24cbefca45d055e14ae96e75b20fabefedb",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "src/lib/input-csv.mjs",
+      "bytes": 1307,
+      "sha256": "373a72d24745b68b19bd49c16a1fc9418d7dcc1ab76f2e297e975385b966c679",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "src/lib/parameter-catalog.mjs",
+      "bytes": 237085,
+      "sha256": "c1fd2823d55496187a4df91193d29e217ed97d4f632a4d624bdfcfc6ed7f1115",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    },
+    {
+      "path": "src/lib/scheduling-scope.mjs",
+      "bytes": 2408,
+      "sha256": "8caa11b7b04f92d929cc1bda8d4a8128124ca4cfbe53cf7e06a5e1e5d0077a7a",
+      "ref": "c18958ff4c06acbb049818efa92cf5652e57eff3"
+    }
+  ],
+  "scope": "design only; no app/runtime/state access; no product tests",
+  "counts": {
+    "readinessRows": 224,
+    "parameterCatalogRows": 168,
+    "acceptanceRows": 24,
+    "impactRows": 21
+  }
+}
