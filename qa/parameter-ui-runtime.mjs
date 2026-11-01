@@ -11,6 +11,9 @@ import {openStore} from '../server/auth/store.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 if(process.env.PARAMETER_UI_ISOLATED!=='1'||process.env.PARAMETER_UI_STATE!=='/state')throw Error('Explicit isolated test state required');
 const state='/state',hash=b=>createHash('sha256').update(b).digest('hex');
+// Fingerprint the loaded adapter. A Git checkout may replace a host file bind
+// later; that must not change the identity of this already loaded test process.
+const loadedAdapterSha256=hash(fs.readFileSync(fileURLToPath(import.meta.url)));
 const source=JSON.parse(fs.readFileSync(root+'/SOURCE.json'));
 if(source.source_sha!==process.env.PARAMETER_UI_PRODUCT_SHA)throw Error('Source SHA mismatch');
 for(const f of source.files){if(hash(fs.readFileSync(root+'/'+f.path))!==f.sha256)throw Error('Source drift: '+f.path);}
@@ -28,7 +31,7 @@ const {requireMember}=createAuthRouter({actorMiddleware,sendActorError:(res,e)=>
 const workerFactory=workerData=>{if(workers.size)throw Error('Only one serial Worker permitted');const w=new Worker(new URL('../server/calculation-worker.mjs',import.meta.url),{workerData,execArgv:['--experimental-strip-types'],resourceLimits:{maxOldGenerationSizeMb:128}});workers.add(w);createdWorkers++;audit.push({event:'worker-start',at:new Date().toISOString(),kind:workerData.kind});w.once('exit',code=>{workers.delete(w);audit.push({event:'worker-exit',at:new Date().toISOString(),code});});return w;};
 const managed=createBusinessRouter({dataDir:state,accessMode:'managed',actorMiddleware,requireMember,workerFactory,workbookImportHeapMiB:128});
 const shared=createBusinessRouter({dataDir:state,accessMode:'shared',workerFactory,workbookImportHeapMiB:128});
-app.get('/api/parameter-ui-deployment',(_req,res)=>res.json({productSha:source.source_sha,parent:source.parent,build,sourceManifestSha256:hash(fs.readFileSync(root+'/SOURCE.json')),adapterSha256:hash(fs.readFileSync(fileURLToPath(import.meta.url))),mode:'Explicit replaceable mock; production membership/permissions/CSRF, optional actual shared access',defaultMockRole:'supervisor',url:'http://127.0.0.1:18302',ownedWorkers:workers.size,createdWorkers,audit}));
+app.get('/api/parameter-ui-deployment',(_req,res)=>res.json({productSha:source.source_sha,parent:source.parent,build,sourceManifestSha256:hash(fs.readFileSync(root+'/SOURCE.json')),adapterSha256:loadedAdapterSha256,mode:'Explicit replaceable mock; production membership/permissions/CSRF, optional actual shared access',defaultMockRole:'supervisor',url:'http://127.0.0.1:18302',ownedWorkers:workers.size,createdWorkers,audit}));
 app.use('/api',(req,res,next)=>actorMiddleware(req,res,()=>req.parameterTestRole==='shared'?shared(req,res,next):managed(req,res,next)));
 app.use(express.static(root+'/dist'));app.get('*',(_req,res)=>res.sendFile(root+'/dist/index.html'));
 const server=app.listen(4317,'0.0.0.0');await new Promise(r=>server.once('listening',r));console.log('PARAMETER_UI_READY '+source.source_sha);
