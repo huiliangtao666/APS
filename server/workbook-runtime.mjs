@@ -1,3 +1,4 @@
+import {checkSelection,sourceIdentity} from './workbook-workbench.mjs';
 import {scopeFor,effectiveParameters,scopeOf} from './parameter-contract.mjs';
 import {supplyReadiness} from './workbook-supply.mjs';
 import {changeDraft,validateDraftRequest} from './workbook-drafts.mjs';
@@ -20,9 +21,26 @@ export function registerWorkbookRuns(router,ctx) {
  router.get('/runs',permission('read'),(_req,res)=>res.json(read().runs.map(publicRun)));
  router.get('/runs/:id',permission('read'),handle((req,res)=>{const r=read().runs.find(r=>r.id===req.params.id);if(!r)return res.status(404).json({error:'run_not_found'});const error=resultProblem(r);if(error)return res.status(409).json({error});res.json(publicRun(r));}));
  router.get('/runs/:id/inputs',permission('read'),(req,res)=>{const r=read().runs.find(r=>r.id===req.params.id);if(!r)return res.status(404).json({error:'run_not_found'});if(hash(inputOf(r))!==r.inputHash)return res.status(409).json({error:'frozen_input_corrupt'});res.json({runId:r.id,input:inputOf(r),inputHash:r.inputHash,selection:r.selection});});
+ router.post('/datasets/:id/readiness',permission('read'),handle((req,res)=>{
+  const d=dataset(read(),req.params.id);if(!d)return res.status(404).json({error:'dataset_not_found'});
+  if(req.body.version!==d.version)return res.status(409).json({error:'INPUT_CHANGED',actualVersion:d.version});
+  res.json(checkSelection(d,req.body,ctx.actorKey(req)));
+ }));
+ router.get('/runs/:id/rows',permission('read'),handle((req,res)=>{
+  const r=read().runs.find(r=>r.id===req.params.id);if(!r)return res.status(404).json({error:'run_not_found'});
+  const error=resultProblem(r);if(error)return res.status(409).json({error});
+  const d=inputOf(r),table=String(req.query.table);if(!workbookSchema.tables[table])throw Error('未知业务表');
+  const q=String(req.query.q||''),offset=Math.max(0,Number(req.query.offset)||0),values=rows(d,table).filter(x=>!q||JSON.stringify(x).includes(q));
+  res.json({model:'workbook',runId:r.id,datasetId:r.datasetId,version:r.version,inputHash:r.inputHash,resultHash:r.resultHash,table,total:values.length,offset,rows:values.slice(offset,offset+25),frozen:true});
+ }));
  router.post('/datasets/:id/run',permission('calculate'),handle((req,res)=>{
   if(!Number.isSafeInteger(req.body.version)||req.body.version<1)return res.status(400).json({error:'explicit_version_required'});
   const s=read();let d=dataset(s,req.params.id,req.body.version);if(!d)return res.status(404).json({error:'dataset_not_found'});
+  if(req.body.currentVersion===true||req.body.readinessToken){
+   const latest=dataset(s,req.params.id);if(latest?.version!==req.body.version)return res.status(409).json({error:'INPUT_CHANGED',actualVersion:latest?.version});
+   const check=checkSelection(d,req.body,ctx.actorKey(req));if(!req.body.readinessToken||check.token!==req.body.readinessToken)return res.status(409).json({error:'READINESS_CHANGED'});
+   if(!check.ready)return res.status(422).json({error:'not_ready',issues:check.issues});
+  }
   if(workers.size>=2)return res.status(429).json({error:'run_capacity'});
   const selection=req.body.selection??{};if(!selection||typeof selection!=='object'||Array.isArray(selection)||Object.keys(selection).some(k=>!['startDay','endDay','currentDay','demandIds'].includes(k)))throw Error('运行选择包含未知字段');
   const scope=scopeFor(d,req.body.parameterScope,ctx.actorKey(req));const globals=d.parameterContract?effectiveParameters(d,selection.startDay??0,scope):[];const global=n=>globals.find(p=>p['对象编号']==='GLOBAL'&&p['参数名称']===n)?.['参数值'];
@@ -33,7 +51,7 @@ export function registerWorkbookRuns(router,ctx) {
   const inWindow=rows(d,'每日需求').filter(r=>Number(r['需求日'])>=start&&Number(r['需求日'])<end);
   if(Object.hasOwn(selection,'demandIds')&&(!Array.isArray(selection.demandIds)||!selection.demandIds.length||new Set(selection.demandIds).size!==selection.demandIds.length||selection.demandIds.some(id=>typeof id!=='string'||!inWindow.some(r=>r['需求编号']===id))))throw Error('需求选择须唯一且属于所选半开日窗');
   if(!inWindow.length)return res.status(422).json({error:'empty_demand_selection',message:'所选日窗没有需求，未创建成功运行'});
-  const run={id:randomUUID(),status:'queued',createdAt:new Date().toISOString(),inputRef:ctx.persist(d),inputHash:hash(d),datasetId:d.id,version:d.version,selection:{...selection,startDay:start,endDay:end,currentDay:current},provenance:{profile:d.profile,fileHash:d.fileHash,mappingHash:hash(d.mapping),parameterHash:hash(rows(d,'配置参数')),mappingVersion:d.mapping?.version,...(d.parameterContract?{parameterContract:d.parameterContract,parameterScope:scope,effectiveParameters:d.effectiveParameters}:{}),timeUnit:'day',dayZero:dayDate(0),minuteOrigin:'2026-11-02T08:00:00+08:00',startDate:dayDate(start),endDate:dayDate(end),startMinute:dayMinute(start),endMinute:dayMinute(end),interval:'[start,end)'},result:null};s.runs.unshift(run);audit(s,req,'workbook_run_created',{runId:run.id,inputHash:run.inputHash});write(s);
+  const run={id:randomUUID(),status:'queued',createdAt:new Date().toISOString(),inputRef:ctx.persist(d),inputHash:hash(d),datasetId:d.id,version:d.version,selection:{...selection,startDay:start,endDay:end,currentDay:current},provenance:{model:'workbook',engineIdentity:'workbook-day-v1',...sourceIdentity(d),selectionHash:hash({...selection,startDay:start,endDay:end,currentDay:current}),actualRecordsHash:hash(d.effectiveParameters||rows(d,'配置参数')),effectiveAt:start,profile:d.profile,fileHash:d.fileHash,mappingHash:hash(d.mapping),parameterHash:hash(rows(d,'配置参数')),mappingVersion:d.mapping?.version,...(d.parameterContract?{parameterContract:d.parameterContract,parameterScope:scope,effectiveParameters:d.effectiveParameters}:{}),timeUnit:'day',dayZero:dayDate(0),minuteOrigin:'2026-11-02T08:00:00+08:00',startDate:dayDate(start),endDate:dayDate(end),startMinute:dayMinute(start),endMinute:dayMinute(end),interval:'[start,end)'},result:null};s.runs.unshift(run);audit(s,req,'workbook_run_created',{runId:run.id,inputHash:run.inputHash});write(s);
   let timer;
   const finish=(status,result,failure)=>{const state=read(),r=state.runs.find(r=>r.id===run.id);if(!r||!['queued','running'].includes(r.status))return;Object.assign(r,{status,result,resultHash:result?hash(result):null,failure,finishedAt:new Date().toISOString()});audit(state,req,'workbook_run_'+status,{runId:r.id,inputHash:r.inputHash});write(state);clearTimeout(timer);const w=workers.get(run.id);workers.delete(run.id);w?.terminate();};
   try{const executionData={...d,tables:Object.fromEntries(Object.entries(d.tables).filter(([table])=>workbookSchema.tables[table]?.kind==='输入')),referenceSource:{frozenInputHash:run.inputHash,meaning:'参考试算原文保留在冻结对象，不重复进入业务计算'}};const worker=workerFactory({workbookData:executionData,selection:run.selection});workers.set(run.id,worker);timer=setTimeout(()=>finish('failed',null,'计算超时；冻结输入保留，不代表无解'),90000);

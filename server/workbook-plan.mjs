@@ -22,8 +22,8 @@ export function calculateWorkbook(data,selection) {
   if(m['物料来源']!=='制造'){const suppliers=rows(d,'供应商与供货条件').filter(r=>r['物料编号']===id).sort((a,b)=>Number(a['采购优先级'])-Number(b['采购优先级']));if(suppliers[0]){const s=suppliers[0];suggestions.push({...shortage,netGap:qty,...procurement(qty,s,day,current),supplierId:s['供应商编号'],relationId:s['供货关系编号'],status:'reference',sourceVersion:d.version});}}
  }
  function resourceJobs(route,qty,earliest,previous,need,productId,productionId){
-  const candidates=resources.filter(r=>r['资源类别']==='设备'&&r['资源组编号']===route['设备组编号']);
-  const crew=rows(d,'班组资源').find(r=>r['班组编号']===route['班组编号']),people=Number(route['需求人数']),toolCount=Number(route['每批工装套数']),pool=d.mapping.tool_pools[route['所需工装类型']]||[];
+  const candidates=resources.filter(r=>r['资源类别']==='设备'&&r['资源组编号']===route['设备组编号']&&(!d.parameterContract||r['可用数量']===undefined||Number(r['可用数量'])>0));
+  const crew=rows(d,'班组资源').find(r=>r['班组编号']===route['班组编号']),people=Number(route['需求人数']),toolCount=Number(route['每批工装套数']),pool=(d.mapping.tool_pools[route['所需工装类型']]||[]).filter(id=>!d.parameterContract||Number(resources.find(r=>r['资源编号']===id)?.['可用数量'])>0);
   if(!candidates.length||!crew||people>Number(crew['每班可用人数'])||toolCount>pool.length)return null;
   let left=qty,cursor=earliest,last=previous,firstStart;
   while(left>1e-9){let chosen;
@@ -97,6 +97,7 @@ export function verifyWorkbookPlan(d,plan) {
   const k=t.machine+'|'+Math.floor(t.start);capacity.set(k,(capacity.get(k)||0)+t.quantity);
   const crew=crews.get(t.crew);if(d.parameterContract&&crew){const day=Math.floor(t.start),ratio=parameterDayRatio(d,calendar.get(String(day)),crew,day),used=tasks.filter(o=>o.machine===t.machine&&o.crew===t.crew&&Math.floor(o.start)===day).reduce((n,o)=>n+o.quantity,0);if(!(ratio>0)||used>Number(r?.['标准日产能千克'])*ratio+1e-7)issues.push('工厂/班组日历容量超限 '+t.id);}
   for(const point of [t.start,...tasks.filter(o=>o.crew===t.crew&&overlap(o,t)).map(o=>o.start).filter(n=>n>=t.start&&n<t.end)])if(tasks.filter(o=>o.crew===t.crew&&o.start<=point&&point<o.end).reduce((n,o)=>n+o.people,0)>Number(crew?.['每班可用人数']))issues.push('人员超占 '+t.id);
+  if(d.parameterContract&&(r?.['可用数量']!==undefined&&!(Number(r['可用数量'])>0)||t.tools?.some(id=>!(Number(resources.get(id)?.['可用数量'])>0))))issues.push('已采用资源数量为零或未知 '+t.id);
   if(d.parameterContract&&t.tools?.some(id=>{const cap=Number(resources.get(id)?.['单次批量上限千克']);return cap>0&&t.quantity>cap*t.tools.length+1e-9;}))issues.push('工装批容量超限 '+t.id);
   if(tasks.some(o=>o!==t&&overlap(o,t)&&o.tools.some(tool=>t.tools.includes(tool))))issues.push('工装重叠 '+t.id);
   if(rows(d,'停机安排').some(s=>Number(s['可知日'])<=plan.conditions.currentDay&&s['资源编号']===t.machine&&overlap(t,{start:Number(s['开始日']),end:Number(s['结束日'])})))issues.push('停机占用 '+t.id);

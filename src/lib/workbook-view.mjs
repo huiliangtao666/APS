@@ -1,0 +1,6 @@
+export function workbookView(run) {
+ const p=run.result;if(!p)return {runRef:{model:'workbook',runId:run.id,inputHash:run.inputHash},tasks:[],issues:[]};
+ if(p.timeUnit&&p.timeUnit!=='day'||p.source?.datasetId!==run.datasetId||p.source?.version!==run.version||p.source?.fileHash!==run.provenance?.fileHash&&run.provenance||p.source?.parameterHash!==run.provenance?.parameterHash&&run.provenance||p.source?.mappingHash!==run.provenance?.mappingHash&&run.provenance||run.provenance?.timeUnit&&run.provenance.timeUnit!=='day'||p.dayZero!==run.provenance?.dayZero&&run.provenance)throw Error('冻结运行身份不一致，已拒绝混合展示');
+ return {runRef:{model:'workbook',engineIdentity:run.provenance?.engineIdentity||'historical-workbook',runId:run.id,datasetId:run.datasetId,version:run.version,inputHash:run.inputHash,resultHash:run.resultHash},axisOrigin:p.dayZero,units:{time:'day',quantity:'千克'},tasks:p.tasks,demandResults:p.demandResults,issues:p.findings||[],verification:p.verification};
+}
+export function readWorkbenchContext(){try{return JSON.parse(sessionStorage.getItem('aps-workbench-context:r2')||'{}');}catch{return {};}}

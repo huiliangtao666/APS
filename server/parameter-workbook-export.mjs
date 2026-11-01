@@ -12,6 +12,9 @@ export function parameterWorkbook(records=[],version=0,annotations={}){
  const tables=[['参数清单',defs,parameterCatalog.map(d=>defs.map(k=>d[k]))],['仿真参数分类',['分类编号','原Excel参数名称','归并条目引用'],categories],['仿真参数实例',instances,records.map(p=>instances.map(k=>k==='CP编号'?cpOf(p):k==='作用范围'?scopeOf(p):k==='来源版本'?version:k==='资料状态'?p._candidate?'candidate':'dataset':p[k]??''))]];
  for(const [name,key]of [['需补充及后续讨论','discussions'],['校验问题','questions']]){const values=annotations[key]||[],heads=values.length?Object.keys(values[0]).filter(k=>!k.startsWith('_')):[key==='discussions'?'讨论编号':'问题编号','说明'];tables.push([name,heads,values.map(r=>heads.map(k=>r[k]))]);}
  for(const name of ['阅读说明','业务领域总览','配套配置与业务数据','派生结果及只读信息','原69项语义追溯','依据与范围'])tables.push([name,['说明'],[['参数导出/空白模板；来源版本 '+version+'，候选不表示启用，范围和有效期须保留。']]]);
+ return workbookTables(tables);
+}
+export function workbookTables(tables){
  const entries=tables.map(([name,headers,rows],i)=>['xl/worksheets/sheet'+(i+1)+'.xml',sheet(headers,rows)]);
  entries.push(['xl/workbook.xml','<?xml version="1.0"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>'+tables.map(([n],i)=>'<sheet name="'+xml(n)+'" sheetId="'+(i+1)+'" r:id="rId'+(i+1)+'"/>').join('')+'</sheets></workbook>']);
  entries.push(['xl/_rels/workbook.xml.rels','<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+tables.map((_,i)=>'<Relationship Id="rId'+(i+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+(i+1)+'.xml"/>').join('')+'</Relationships>']);
