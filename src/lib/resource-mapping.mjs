@@ -43,7 +43,8 @@ export function validateResourceMappings(d,{forRun=false,at=new Date().toISOStri
   if(m['源类型']!==(tool?s['资源类型']:'人员技能'))fail('源类型','工具须逐字声明原类型；人员须显式声明人员技能，不按名字猜类型');
   if(tool&&!['模具','工具'].includes(s['资源类型'].trim()))fail('源类型','本版仅将原模具/工具显式绑定工装；其他类型未启用');
   if(m['共享范围原文']!==s['共享范围'])fail('共享范围原文','须逐字保留原共享范围，不能丢失/改写');
-  if(!m['适用产线']||(d.machines||[]).some(r=>r['产线编号']!==m['适用产线'])||!(d.machines||[]).some(r=>r['产线编号']===m['适用产线'])||!(d.factoryLines||[]).some(r=>r['产线编号']===m['适用产线']))fail('适用产线','须显式引用当前单运行产线；跨产线联合运行/复制池容量未启用');
+  const b16Scope=(d.b16Profiles||[]).some(row=>{try{const p=JSON.parse(row['配置JSON']),r=p.resources.find(r=>r.type===(tool?'工装':'人员')&&r.resourceId===m['运行编号']);return p.contract==='B16-offline-sharing-v1'&&p.mock===true&&new Set(p.lines.map(l=>l.factoryId)).size===1&&r&&Array.isArray(r.lineIds)&&(r.lineIds.length===1||r.allowCrossLine===true)&&r.lineIds.includes(m['适用产线'])&&(d.machines||[]).every(machine=>p.lines.some(l=>l.id===machine['产线编号']));}catch{return false;}});
+  if(!b16Scope&&(!m['适用产线']||(d.machines||[]).some(r=>r['产线编号']!==m['适用产线'])||!(d.machines||[]).some(r=>r['产线编号']===m['适用产线'])||!(d.factoryLines||[]).some(r=>r['产线编号']===m['适用产线'])))fail('适用产线','须引用当前单线，或补齐显式B16同厂共享配置；不复制池容量');
   if(!['全工厂','*'].includes(s['共享范围'].trim()))fail('范围模式','当前仅支持显式全工厂/*至全局唯一容量；产线/工序局部共享合同未启用');
   const capacity=tool?'可用数量':'可用人数',targetCapacity=tool?'可用数量':'人员数量',start=tool?'最早可用分钟':'起始分钟',end=tool?'最晚可用分钟':'结束分钟';
   const a=tool?'可用起始分钟':'可用起始分钟',b=tool?'可用结束分钟':'可用结束分钟';

@@ -1,3 +1,4 @@
+import {b16Defs,b16Capability,applicationProfile,assignmentCandidates,resolveAssignment,checkB16Plan,validateB16Scope} from '../src/lib/b16-application.mjs';
 import {packTimeFields,packRequested,operationDuration} from '../src/lib/pack-batch.mjs';
 import {stageMappingDef} from '../src/lib/stage-bindings.mjs';
 import {minuteValidityFields} from '../src/lib/minute-validity.mjs';
@@ -23,7 +24,7 @@ import {assessResult} from '../src/lib/result-assessment.mjs';
 import {assessDelivery} from '../src/lib/delivery-assessment.mjs';
 import {jointFlags,claimsFor,previewResources} from '../src/lib/joint-resources.mjs';
 import {activeBatchRule,prepareProductionBatches,batchSummary} from '../src/lib/production-batches.mjs';
-import {orderHasRemaining,calculateMaterialDemand,createMaterialAllocator,materialPolicy,type MaterialDemandRow} from '../src/lib/material-allocation.mjs';
+import {quantityMath as Q,orderHasRemaining,calculateMaterialDemand,createMaterialAllocator,materialPolicy,type MaterialDemandRow} from '../src/lib/material-allocation.mjs';
 import { assessRules, type RuleSnapshot } from '../src/lib/business-rules.mjs';
 // Extracted existing scheduler; server uses canonical data only.
 import { independentlyVerifyPlan, type VerificationReport, type VerificationStatus } from '../src/lib/independent-verification.mjs';
@@ -44,7 +45,7 @@ type Finding = { code: string; message: string; taskIds: string[]; context?:any;
 type StoredVerificationReport = VerificationReport & { inputFingerprint?: string };
 type Plan = { id: string; name: string; createdAt: string; tasks: Task[]; findings: Finding[]; rules: string[]; inputVersion: string; verification?: StoredVerificationReport; supplyConditions?: SupplyCondition[]; supplyInput?: string; materialDemands?:MaterialDemandRow[]; materialChecked?:boolean; ruleSnapshot?: RuleSnapshot };
 
-export const defs: TableDef[] = [stageMappingDef,
+export const defs: TableDef[] = [stageMappingDef,...b16Defs,
   {key:'originalResourceEvents',label:'MOCK资源取得归还释放账（追加事件）',file:'37_MOCK资源事实账.csv',fields:['事件编号','原账编号','前事件编号','事件类型','原账JSON']},
   { key: 'factoryLines', label: '工厂与产线', file: '01_工厂与产线配置.csv', fields: ['工厂编号','工厂名称','产线编号','产线名称','时区'] },
   { key: 'simulationEvents', label: '模拟异常事件（先更新时点事实）', file: '28_模拟异常事件.csv', fields: ['事件编号','事件分钟','保护截止分钟','保护策略','事件类型','参数JSON','原因','需处理事实JSON'] },
@@ -165,6 +166,22 @@ function validate(tasks: Task[]): Finding[] {
 }
 
 export function calculate(data:Record<string,Row[]>, inputVersion:number, calculatedAt=new Date().toISOString(), conditions:{startMinute?:number;endMinute?:number|null;priority?:string;mode?:string;taskPositions?:Record<string,any>}={}, changeoverOrder:string[]|null=null) {
+ if((conditions as any).capability===b16Capability&&!(conditions as any).b16Resolved){
+  const profile=(conditions as any).b16Profile||applicationProfile(data,(conditions as any).profileId);
+  const candidates=assignmentCandidates(profile,data);const attempts:any[]=[];let rejected:any=null;
+  for(const assignment of candidates.assignments){
+   const resolved=resolveAssignment(data,profile,assignment);
+   const candidate:any=calculate(resolved,inputVersion,calculatedAt,{...conditions,b16Resolved:true,b16Profile:profile} as any,changeoverOrder);
+   candidate.id='B16-source-'+inputVersion+'-'+calculatedAt;candidate.lineAssignments=assignment;candidate.resolvedDependencies=resolved.dependencies.filter((d:any)=>d['资源类型']==='设备');candidate.capability=b16Capability;candidate.tasks=candidate.tasks.map((t:any)=>{const order=data.orders.find(o=>o['订单编号']===t.orderId)!;const remaining=Q.sub(Q.q(order['合格需求']),Q.q(order['已完成合格数量']||'0'));return {...t,lineId:assignment[t.orderId],quantity:t.quantity??Q.num(remaining),exactQuantity:t.exactQuantity??Q.exact(remaining),unit:order['数量单位']};});
+   const review=checkB16Plan(candidate,data,{...conditions,b16Profile:profile},calculatedAt);
+   candidate.b16Verification=review;candidate.ruleSnapshot.checkScope=structuredClone((conditions as any).checkScope||candidate.ruleSnapshot.checkScope);attempts.push({assignment,status:review.status,findings:review.findings});
+   if(review.status==='pass'&&!candidate.findings.length){candidate.name='B16 同厂多线计算';candidate.lineSelection={...candidates,assignments:undefined,attempts,selected:assignment};candidate.materialTransaction={scope:'all-plan',status:'committed',persistentReservation:false};return candidate;}
+   rejected=candidate;
+  }
+  const failed=rejected;failed.name='B16 多线候选未通过（全计划回滚）';failed.lineSelection={...candidates,assignments:undefined,attempts,selected:null};failed.materialTransaction={scope:'all-plan',status:'rolled_back',persistentReservation:false};
+  failed.rejectedCandidate={tasks:failed.tasks,materialDemands:failed.materialDemands,resourceReservations:failed.resourceReservations};
+  failed.findings.push(...failed.b16Verification.findings);failed.tasks=[];failed.materialDemands=[];failed.resourceReservations=[];failed.supplyConditions=[];failed.resultAssessment=assessResult(data,failed,conditions);failed.deliveryAssessment=assessDelivery(data,failed,calculatedAt,conditions);if(failed.execution)failed.execution.projectedTasks=[];return failed;
+ }
  const sourcePositions=conditions.taskPositions||{};let positions={...sourcePositions};
  const jointAttempts:any[]=[];
  const resourceReservations:any[]=[];const flags=conditions.mode==='minimal-r1'?{}:jointFlags(data,calculatedAt);
@@ -211,7 +228,7 @@ export function calculate(data:Record<string,Row[]>, inputVersion:number, calcul
       const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};
       setIssues(findings);setActivePlan(plan);setVerification(null);setMessage(`主数据/引用检查发现 ${findings.length} 个问题，未生成任务。`);return;
     }
-    const scopeFindings=validateSingleLineScope(sorted,data.machines||[],data);
+    const scopeFindings=(conditions as any).capability===b16Capability?validateB16Scope((conditions as any).b16Profile,{...data,orders:sorted}):validateSingleLineScope(sorted,data.machines||[],data);
     if(scopeFindings.length){
       findings.push(...scopeFindings);
       const plan:Plan={id:uid(),name:`单线计算 ${new Date().toLocaleString('zh-CN',{hour12:false})}`,createdAt:new Date().toISOString(),tasks:[],findings,rules:enabledRules.filter(r=>['MACHINE','PRECEDENCE','CALENDAR'].includes(r)),inputVersion:`v${inputVersion}`};

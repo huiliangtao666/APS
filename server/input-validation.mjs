@@ -1,3 +1,4 @@
+import {validateB16Configuration} from '../src/lib/b16-application.mjs';
 import {validatePackBatch} from '../src/lib/pack-batch.mjs';
 import {checkStageBindings} from '../src/lib/stage-bindings.mjs';
 import {originalIssues} from '../src/lib/execution-resource-ledger.mjs';
@@ -25,7 +26,7 @@ export {recordKeys} from '../src/lib/record-identity.mjs';
 // Both imports and edits validate the complete proposed state, before any write.
 export function validateInputs(defs,data,{at=new Date().toISOString(),checkPolicyExecution=true,mode=data.inputStage||'supported'}={}){
  const intake=adaptOriginalDependencies(data,{at});
- const issues=[...validatePackBatch(data),...checkStageBindings(data).issues,...originalIssues(data),...intake.issues,...validateOriginalStage(data),...validateOriginalBom(data),...validateOriginalResources(data),...validateResourceMappings(data),...validateEvents(data),...validateFactoryLines(data)];
+ const issues=[...validateB16Configuration(data),...validatePackBatch(data),...checkStageBindings(data).issues,...originalIssues(data),...intake.issues,...validateOriginalStage(data),...validateOriginalBom(data),...validateOriginalResources(data),...validateResourceMappings(data),...validateEvents(data),...validateFactoryLines(data)];
  data=intake.data;
  const add=(table,index,field,message,rows=[data[table][index]])=>issues.push({relatedRecords:sourceRefs(table,rows,data[table]),table,file:defs.find(d=>d.key===table).file,row:index+2,field,message});
  for(const def of defs){
@@ -80,7 +81,7 @@ export function validateInputs(defs,data,{at=new Date().toISOString(),checkPolic
     :{relatedRecords:[],associationGap:'检查未提供明确的逐条来源记录；请联系维护人员补齐来源后重新检查。'};
   issues.push({...f,...association,table,file:def.file,row:f.row??(line?line+1:0),field});
  }};
- collect('orders',validateOrders(data.orders));collect('machines',validateSingleLineScope(data.orders,data.machines));collect('products',validateMasterData(data));collect('routes',validateProcessConfig(data));collect('bom',validateBomConfig(data));collect('inventory',validateInventoryBatches(data.inventory,data.materials));
+ collect('orders',validateOrders(data.orders).filter(f=>f.code!=='ORDER_MULTI_LINE'||!(data.b16Profiles||[]).length));collect('machines',(data.b16Profiles||[]).length?[]:validateSingleLineScope(data.orders,data.machines));collect('products',validateMasterData(data));collect('routes',validateProcessConfig(data));collect('bom',validateBomConfig(data));collect('inventory',validateInventoryBatches(data.inventory,data.materials));
  collect('supplies',validateExpectedSupply({supplies:data.supplies,delays:data.supplyDelays,uses:data.supplyUses,materials:data.materials,orders:data.orders,routes:data.routes}));
  collect('batchResources',validateBatchResources(data));
  issues.push(...validateExecution(data));

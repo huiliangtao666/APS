@@ -1,0 +1,9 @@
+export const b16Capability:'B16-multiline-v1';
+export const b16Defs:{key:string;label:string;file:string;fields:string[]}[];
+export function applicationProfile(data:any,id:string):any;
+export function validateB16Configuration(data:any):any[];
+export function validateB16Scope(profile:any,data:any):any[];
+export function assignmentCandidates(profile:any,data:any):{policy:string;limit:number;choices:any[];assignments:Record<string,string>[]};
+export function resolveAssignment(data:any,profile:any,assignment:Record<string,string>):any;
+export function validateB16PlanScope(plan:any,data:any,conditions:any):any[];
+export function checkB16Plan(plan:any,data:any,conditions:any,at?:string):any;

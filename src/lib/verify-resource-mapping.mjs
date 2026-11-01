@@ -11,7 +11,10 @@ export function verifyResourceMappingSnapshot(d,conditions){
   const equal=(row,text)=>{try{const p=JSON.parse(text);return row&&Object.keys(row).length===Object.keys(p).length&&Object.keys(row).every(k=>row[k]===p[k]);}catch{return false;}};
   if(m['状态']!=='READY'||!['FR013-resource-map-v1',...(conditions.originalResourceContract==='FR013-resource-map-v2'?['FR013-resource-map-v2']:[])].includes(m['合同版本'])||!equal(source,m['源记录JSON'])||!equal(target,m['运行记录JSON'])){problems.push(`${m['配置编号']} 来源/运行冻结记录与版本不一致`);continue;}
   if(m['容量单位']!==(tool?'套':'人')||m['时间单位']!=='分钟'||!['DIRECT_IDENTITY',...(m['合同版本']==='FR013-resource-map-v2'?['EXPLICIT_SAME_ENTITY']:[])].includes(m['映射模式'])||m['范围模式']!=='全局唯一池'||m['释放策略']!=='半开端点释放')problems.push(`${m['配置编号']} 不支持的冻结单位/模式`);
-  if(m['适用产线']!==conditions.lineId)problems.push(`${m['配置编号']} 运行产线不属于显式映射范围`);
+  const scope=conditions.capability==='B16-multiline-v1'?conditions.b16Profile?.resources?.find(r=>r.type===(tool?'工装':'人员')&&r.resourceId===m['运行编号']):null;
+  const useOrders=new Set([...(d.dependencies||[]),...(d.resourceClaims||[])].filter(r=>r['资源编号']===m['运行编号']||!tool&&r['候选人员组']?.split(';').includes(m['运行编号'])).map(r=>r['订单编号']));
+  const permitted=scope&&Array.isArray(scope.lineIds)&&(scope.lineIds.length===1||scope.allowCrossLine===true)&&scope.lineIds.includes(m['适用产线'])&&(d.orders||[]).filter(o=>useOrders.has(o['订单编号'])).every(o=>scope.lineIds.includes(o['产线编号']));
+  if(!permitted&&m['适用产线']!==conditions.lineId)problems.push(`${m['配置编号']} 运行产线不属于显式映射范围`);
   if(source['共享范围']!==m['共享范围原文']||!['全工厂','*'].includes(source['共享范围'].trim()))problems.push(`${m['配置编号']} 共享范围不一致`);
   const keys=tool?[['可用数量','可用数量'],['最早可用分钟','可用起始分钟'],['最晚可用分钟','可用结束分钟']]:[['可用人数','人员数量'],['起始分钟','可用起始分钟'],['结束分钟','可用结束分钟']];
   const changedCount=!tool&&(d.simulationEvents||[]).some(e=>{try{const p=JSON.parse(e['参数JSON']);return e['事件类型']==='人员数量变化'&&p.scope==='事件起新运行'&&p.groupId===target['人员组编号']&&p.poolId===target.poolId&&p.beforeCount===source['可用人数']&&p.afterCount===target['人员数量']&&Number(conditions.startMinute)>=Number(e['事件分钟'])&&(d.personnelPools||[]).filter(x=>x.poolId===p.poolId&&x['总人数']===p.afterCount).length===1;}catch{return false;}});

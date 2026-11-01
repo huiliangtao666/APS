@@ -13,7 +13,7 @@ export function validConfirmation(c){
   && typeof c.snapshotHash==='string' && inputHash(c.snapshot)===c.snapshotHash;
 }
 export const contentHash=p=>inputHash(Object.fromEntries(Object.entries(p).filter(([k])=>!['status','verification'].includes(k))));
-const selection=c=>Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds'].map(k=>[k,c[k]]));
+const selection=c=>Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds','capability','profileId'].map(k=>[k,c[k]]));
 // A replay checks the supported scheduler contract, not an independent proof of
 // all business rules. Independently recheck the three available R1 invariants.
 export function reviewPlan(s,p,now=new Date().toISOString()){

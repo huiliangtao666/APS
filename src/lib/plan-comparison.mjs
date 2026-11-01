@@ -8,7 +8,7 @@ function changes(a,b,key){
  return [...new Set([...left.keys(),...right.keys()])].sort().flatMap(id=>stable(left.get(id))===stable(right.get(id))?[]:[{id,before:clone(left.get(id)??null),after:clone(right.get(id)??null)}]);
 }
 // Match records by business identity; duplicate identities remain grouped, never overwritten.
-const identities={resourceStops:['例外编号'],personnelPools:['poolId'],factoryLines:['产线编号'],skillSubstitutions:['关系编号'],orders:['订单编号'],calendars:['日历编号','起始分钟','结束分钟'],tools:['工装编码'],personnelGroups:['人员组编号'],inventory:['批次编号'],supplies:['供给编号'],supplyDelays:['记录编号'],supplyUses:['引用编号'],rules:['规则编号'],products:['产品编号'],materials:['物料编号'],routes:['产品编号','工序编号'],times:['产品编号','工序编号'],machines:['设备编号'],bom:['版本编号','产品编号','投料工序编号','物料编号','用量类型'],dependencies:['订单编号','工序编号','资源类型','资源编号','人员岗位编号','人员参与阶段'],resourceClaims:['声明编号'],deliveryConditions:['订单编号'],batchResources:['资源编号'],downtime:['设备编号','起始分钟','结束分钟']};
+const identities={b16Profiles:["配置编号"],b16MachineOptions:["订单编号","工序编号","产线编号"],resourceStops:['例外编号'],personnelPools:['poolId'],factoryLines:['产线编号'],skillSubstitutions:['关系编号'],orders:['订单编号'],calendars:['日历编号','起始分钟','结束分钟'],tools:['工装编码'],personnelGroups:['人员组编号'],inventory:['批次编号'],supplies:['供给编号'],supplyDelays:['记录编号'],supplyUses:['引用编号'],rules:['规则编号'],products:['产品编号'],materials:['物料编号'],routes:['产品编号','工序编号'],times:['产品编号','工序编号'],machines:['设备编号'],bom:['版本编号','产品编号','投料工序编号','物料编号','用量类型'],dependencies:['订单编号','工序编号','资源类型','资源编号','人员岗位编号','人员参与阶段'],resourceClaims:['声明编号'],deliveryConditions:['订单编号'],batchResources:['资源编号'],downtime:['设备编号','起始分钟','结束分钟']};
 export function conditionChanges(a,b){
  return Object.keys({...a,...b}).sort().flatMap(table=>changes(a[table]||[],b[table]||[],r=>JSON.stringify((identities[table]||Object.keys(r).sort()).map(k=>r[k]??null))).map(change=>{
   const single=change.before?.length===1&&change.after?.length===1;
@@ -48,13 +48,13 @@ function savedBottlenecks(plan,orderId){
 }
 function projection(p,data){
  return {
-  tasks:(p.tasks||[]).map(t=>({id:t.id,orderId:t.orderId,operation:t.operation,productionBatchId:t.productionBatchId??null,start:t.start,end:t.end,duration:t.duration,machine:t.machine,predecessor:t.predecessor??null})),
+  tasks:(p.tasks||[]).map(t=>({id:t.id,orderId:t.orderId,operation:t.operation,lineId:t.lineId??p.lineAssignments?.[t.orderId]??null,productionBatchId:t.productionBatchId??null,start:t.start,end:t.end,duration:t.duration,machine:t.machine,predecessor:t.predecessor??null})),
   // Retain full records, including candidate vs committed allocations and exact quantities.
   resources:p.resourceReservations??null,
   materials:p.materialChecked===true?p.materialDemands??null:null,
   orders:p.deliveryAssessment?.orders?.map(o=>({orderId:o.orderId,unit:o.unit,status:o.status,dueMinute:o.dueMinute,dueAt:o.dueAt,completionMinute:o.completionMinute,completionAt:o.completionAt,expectedDeliverableMinute:o.expectedDeliverableMinute,expectedDeliverableAt:o.expectedDeliverableAt,delayMinutes:o.delayMinutes,delayedQuantity:o.delayedQuantity,remainingQuantity:o.remainingQuantity,knownScheduledQuantity:o.knownCompletedQuantity,unknownDeliverableQuantity:o.unknownDeliverableQuantity,promised:false}))??null,
   // Per-operation quantities must never be summed across an order's route.
-  unplanned:p.resultAssessment?.tasks?.filter(t=>t.status==='unplanned').map(t=>({id:t.id,orderId:t.orderId,operation:t.operation,productionBatchId:t.productionBatchId,quantity:t.quantity,exactQuantity:t.exactQuantity,unit:t.unit}))??null,
+  unplanned:p.resultAssessment?.tasks?.filter(t=>t.status==='unplanned').map(t=>({id:t.id,orderId:t.orderId,operation:t.operation,lineId:t.lineId??p.lineAssignments?.[t.orderId]??null,productionBatchId:t.productionBatchId,quantity:t.quantity,exactQuantity:t.exactQuantity,unit:t.unit}))??null,
   inputs:data,conditions:p.conditions??null,scope:p.conditions?.checkScope??null
  };
 }

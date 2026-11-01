@@ -35,7 +35,8 @@ export function verifyCalendar(plan, data, conditions, enabledRules=plan.rules||
   if(!interval){add('TIME',`${task.id} 开始/结束未知或无效；不能核为通过。`,task,related,ev);continue;}
   if(orders.length!==1||machines.length!==1){add('REFERENCE',`${task.id} 缺少唯一订单或设备引用。`,task,related,ev);continue;}
   const machine=machines[0],order=orders[0];
-  if(!machine['产线编号']||machine['产线编号']!==order['产线编号']){add('REFERENCE',`${task.id} 订单与设备产线不一致或缺失。`,task,related,ev);continue;}
+  const shared=conditions?.capability==='B16-multiline-v1'&&conditions.b16Profile?.machineScopes?.some(s=>s.resourceId===task.machine&&s.capacity==='1'&&s.allowCrossLine===true&&s.lineIds.includes(machine['产线编号'])&&s.lineIds.includes(order['产线编号'])&&(data.factoryLines||[]).filter(l=>[machine['产线编号'],order['产线编号']].includes(l['产线编号'])).every(l=>l['工厂编号']===s.factoryId));
+  if(!shared&&(!machine['产线编号']||machine['产线编号']!==order['产线编号'])){add('REFERENCE',`${task.id} 订单与设备产线不一致或缺失。`,task,related,ev);continue;}
   const lines=(data.factoryLines||[]).filter(r=>r['产线编号']===machine['产线编号']);
   related.push(...refs('factoryLines',lines,'工厂编号'));
   const factories=[...new Set(lines.map(r=>r['工厂编号']).filter(Boolean))];

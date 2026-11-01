@@ -9,14 +9,14 @@ import subprocess
 
 APP_ID = 'qa-fr006-main-3d164d5'
 TARGET = '/workspace/apps/qa17-0afa-user-entry'
-LAUNCH = 'python3 b15-user-preview-launch.py'
+LAUNCH = 'node b15-user-preview-server.mjs'
 FILES = ['core.mjs', 'lock.json', 'client.js', 'server.mjs', 'launch.py']
 
 
 def commands(wab):
     script = str(pathlib.Path(wab) / 'scripts/publish-app.sh')
     return {
-        'bind': [script, 'container', APP_ID, TARGET, '4318', 'python', LAUNCH],
+        'bind': [script, 'container', APP_ID, TARGET, '4318', 'node', LAUNCH],
         'rollback': [script, 'container', APP_ID, '/workspace/apps/qa-fr006-main-3d164d5', '3000', 'vite', 'npm run dev'],
         'rollback_data_policy': 'Restore binding configuration only. No state/auth/native/history restore, deletion or old-instance stop. Keep new user data.',
         'preview': [str(pathlib.Path(wab).parent / 'lite-app-scaffold/scripts/dev-preview.sh')],

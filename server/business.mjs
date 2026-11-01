@@ -277,7 +277,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
     const snapshot=freezeTrialSnapshot(p,inputs(s,p).data);
     const copy={...structuredClone(snapshot.plan),id:randomUUID(),status:'draft',revision:0,sourceRevision:p.revision,trialId:id,sourcePlanId:p.id,sourceRunId:p.runId,sourceCreatedAt:p.createdAt,sourceVerification:p.verification??null,createdAt:now,name:p.name+' · 独立试算',copiedResult:true};
     delete copy.verification;
-    const trial={id,status:'active',revision:0,locks:structuredClone(p.lockSnapshot||{}),createdAt:now,actor:actorKey(req),sourcePlanId:p.id,sourceRunId:p.runId,sourceInputVersionId:p.inputVersionId,sourceSnapshotHash:p.snapshotHash,basePlanId:copy.id,latestPlanId:copy.id,data:structuredClone(snapshot.data),selection:Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds'].map(k=>[k,structuredClone(p.conditions[k])]))};
+    const trial={id,status:'active',revision:0,locks:structuredClone(p.lockSnapshot||{}),createdAt:now,actor:actorKey(req),sourcePlanId:p.id,sourceRunId:p.runId,sourceInputVersionId:p.inputVersionId,sourceSnapshotHash:p.snapshotHash,basePlanId:copy.id,latestPlanId:copy.id,data:structuredClone(snapshot.data),selection:Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds','capability','profileId'].map(k=>[k,structuredClone(p.conditions[k])]))};
     s.trials??=[];s.trials.unshift(trial);s.plans.unshift(copy);record(s,req,'trial_created',id,{sourcePlanId:p.id,planId:copy.id,inputVersionId:p.inputVersionId,snapshotHash:p.snapshotHash});write(s);res.status(201).json(trial);
   });
   // Preview transactions are ephemeral and never mutate saved plans, inputs or audit.
@@ -435,7 +435,7 @@ export function createBusinessRouter({ dataDir, actorMiddleware, requireMember, 
       if(required.some(d=>!(s.data.executionMaterials||[]).some(c=>c['事实编号']===fact['事实编号']&&c['物料编号']===d.materialId)))return restoreError(res,'restore_blocked','已开始工序缺少所声明物料的累计耗料记录；须核对来源，不推定零耗料。',{factId:fact['事实编号']});
     }}catch{return restoreError(res,'restore_blocked','当前执行工序的适用BOM、事实或耗料口径不完整，须先核对来源。');}
     const token=contentHash(s),at=new Date().toISOString();let frozen;
-    const selection=Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds'].map(k=>[k,p.conditions[k]]));
+    const selection=Object.fromEntries(['mode','orderIds','startMinute','endMinute','priority','enabledRuleIds','capability','profileId'].map(k=>[k,p.conditions[k]]));
     try{frozen=Object.keys(p.lockSnapshot||{}).length?freezePositions(s.data,p.conditions,p.lockSnapshot,at):freezeRunInput(s.data,selection,at);}catch(e){return restoreError(res,'restore_blocked','旧方案选择在当前数据下已失效，请核对订单、范围与规则；不自动扩大范围。',{cause:e.message});}
     const issues=[...validateInputs(defs,s.data),...executionAdmission(frozen.executionData,frozen.conditions),...assessRules(frozen.executionData,at,true,frozen.conditions.mode).issues];
     if(issues.length)return restoreError(res,'restore_blocked','当前模拟输入、执行或物料来源需核对，未保存恢复版本。',{issues});

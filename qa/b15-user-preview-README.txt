@@ -1,4 +1,4 @@
-#47 minimal unpublished workspace entry — r3
+#47 minimal unpublished workspace entry — r3; Node recovery amendment
 original_delivery=dlv_fa72c95d-9147-48ec-86a9-b395fedb3dc9
 event_key=aps:preview-minimal-workspace-entry:20261101:r3
 
@@ -68,26 +68,43 @@ The 48e profile still uses its original18252/uat-build/scene17 lock. Production
 managed-identity remains the default mode and official SDK>=0.4.1 verification;
 missing signed config still gives503 unsupported, missing/forged context401.
 
-ONE ACTION REQUIRING USER APPROVAL
-Approve reuse of the stopped qa-fr006-main-3d164d5 unpublished preview binding
-and activation of this restricted 0afa workspace entry, including platform gate
-verification and setting the returned URL configuration, after QA releases its
-exclusive window. This is one concrete activation action. No publish, product
-restart/hot replacement, state/dist changes or identity provisioning is included.
-Until approved, all commands below are proposals, not executed actions.
+CURRENT ACTIVATION AUTHORIZATION AND WINDOW
+Activation was approved and the original Python-stack attempt exited because
+python:3.12-slim has no Node executable. That attempt used its original 1/1
+budget. PM authorized the official Node-stack correction and a separate maximum
+one startup under aps:uat17-user-preview-node-recovery:20261101:r1
+(https://github.com/huiliangtao666/APS/issues/47#issuecomment-6559383632).
+Do not ask for the same approval again. Before binding/start, Dev #42 delivery
+dlv_8286af08-ce7d-49e1-b678-e23d18ade8a5 must explicitly RELEASED/0owned/0pending,
+and fresh heavy-task, capacity, PID and OOM checks must pass. Completion or
+waiting is not a window grant. New process requires >=1GiB available; browser
+requires >=640MiB. Stop at 256MiB, first OOM or protected PID drift. Single
+context/Worker only. If not released, retain this plan without starting.
+Use only the already available official Node runtime; missing image, dependency
+or platform configuration requires exact failure/difference reporting. No pull,
+install, custom image, hand-start, product replacement or publication is implied.
 
-EXACT SUPPORTED PROCEDURE AFTER THAT APPROVAL
+EXACT SUPPORTED PROCEDURE AFTER THE RELEASE AND FRESH CHECKS
 Run from the integrated source checkout; use its fixed wrapper SHA, not a
 moving product checkout. Prepare five runtime wrapper files, without state:
   python3 qa/b15-user-preview-control.py prepare --destination /Users/sg_cbb_mac_1/praetor-workspaces/APS-Test/apps/qa17-0afa-user-entry
 One supported binding/start sequence, using the existing appID:
-  /Users/sg_cbb_mac_1/praetor-workspaces/APS-Test/.codex/skills/workspace-app-builder/scripts/publish-app.sh container qa-fr006-main-3d164d5 /workspace/apps/qa17-0afa-user-entry 4318 python 'python3 b15-user-preview-launch.py' && /Users/sg_cbb_mac_1/praetor-workspaces/APS-Test/.codex/skills/lite-app-scaffold/scripts/dev-preview.sh
-Python execs Node as the single process; PORT is platform injected. Platform
-lite-app images provide Python/Node; workspace mode needs no npm dependencies.
+  /Users/sg_cbb_mac_1/praetor-workspaces/APS-Test/.codex/skills/workspace-app-builder/scripts/publish-app.sh container qa-fr006-main-3d164d5 /workspace/apps/qa17-0afa-user-entry 4318 node 'node b15-user-preview-server.mjs'
+Read back the exact same app/cwd/port, stack=node, command above, unpublished and
+zero menus. Then use the recovery budget ONCE with the official VM endpoint:
+  /Users/sg_cbb_mac_1/praetor-workspaces/APS-Test/.codex/skills/lite-app-scaffold/scripts/dev-preview.sh
+Node directly executes the existing server as one listener; PORT is platform
+injected. The official cached node:22-slim supplies Node, not Python. The legacy
+launch.py remains among the five prepared files for provenance, but is not run.
+Workspace mode uses Node built-ins only; no package.json/npm install/build is
+needed. Managed identity still loads the existing official SDK lazily and fails
+closed when SDK/configuration is absent. Never install it as part of recovery.
 No hand-started host process, dependency installation or extra proxy is used.
 The wrapper listener returns503 while deployment configuration is absent. The
-platform dev start waits for TCP readiness; this503 is deliberate closed state,
-not proof that user entry is ready. On runtime/readiness failure, use only the
+VM ensure waits for TCP; optional HTTP probes reject503 by default unless an
+explicit expected status permits it. Read the actual official result and
+diagnose; a closed503 is not user readiness. Do not weaken the gate or add a
+fake business200 to pass a probe. On runtime/readiness failure, use only the
 official app-diagnose.sh --dev; never start a second process or touch18302.
 
 Take devBase from the actual dev-preview response / printed Workbench URL.

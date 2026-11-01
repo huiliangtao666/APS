@@ -197,7 +197,7 @@ try {
   await check('executable binding and rollback plan: original app id, no data restore/publish/stop', async () => {
     const r = spawnSync('python3', [new URL('./b15-user-preview-control.py', import.meta.url).pathname, 'plan', '--wab-dir', '/skills/workspace-app-builder'], { encoding: 'utf8' });
     assert.equal(r.status, 0, r.stderr); const p = JSON.parse(r.stdout);
-    assert.deepEqual(p.bind.slice(1), ['container', 'qa-fr006-main-3d164d5', '/workspace/apps/qa17-0afa-user-entry', '4318', 'python', 'python3 b15-user-preview-launch.py']);
+    assert.deepEqual(p.bind.slice(1), ['container', 'qa-fr006-main-3d164d5', '/workspace/apps/qa17-0afa-user-entry', '4318', 'node', 'node b15-user-preview-server.mjs']);
     assert.deepEqual(p.rollback.slice(1), ['container', 'qa-fr006-main-3d164d5', '/workspace/apps/qa-fr006-main-3d164d5', '3000', 'vite', 'npm run dev']);
     assert.match(p.rollback_data_policy, /Keep new user data/); assert.ok(!p.bind.includes('publish')); assert.equal(p.preview[0], '/skills/lite-app-scaffold/scripts/dev-preview.sh');
   });

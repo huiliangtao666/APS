@@ -1,12 +1,14 @@
+import {b16Capability} from './lib/b16-application.mjs';
 import {schedulingScope,type SchedulingScope} from './lib/scheduling-scope.mjs';
 import {assessRules} from './lib/business-rules.mjs';
 import {useState} from 'react';
 type Row=Record<string,string>;
-export type Run = {id:string;status:string;phase:string;createdAt:string;finishedAt?:string;durationMs?:number;outcome?:string;retryOf?:string;planId?:string;inputVersionId:string;snapshotHash:string;conditions:{mode?:string;checkScope?:SchedulingScope;orderIds:string[];lineId:string;startMinute:number;endMinute:number|null;priority:string;enabledRuleIds:string[];timeOrigin:string};failure?:{code:string;message:string};resultState?:{label:string;code:string;globalFeasibility:string}};
+export type Run = {id:string;status:string;phase:string;createdAt:string;finishedAt?:string;durationMs?:number;outcome?:string;retryOf?:string;planId?:string;inputVersionId:string;snapshotHash:string;conditions:{capability?:string;profileId?:string;mode?:string;checkScope?:SchedulingScope;orderIds:string[];lineId:string;startMinute:number;endMinute:number|null;priority:string;enabledRuleIds:string[];timeOrigin:string};failure?:{code:string;message:string};resultState?:{label:string;code:string;globalFeasibility:string}};
 export function RunPanel({feedback,data,runs,canWrite,busy,onStart,onCancel,onResult,onInputs,onExport,onRetry,initialSelection}:{feedback?:string;onRetry?:(id:string)=>void;initialSelection?:Partial<Run['conditions']>;data:Record<string,Row[]>;runs:Run[];canWrite:boolean;busy:boolean;onStart:(selection:object)=>void;onCancel:(id:string)=>void;onResult:(id:string)=>void;onInputs:(id:string)=>Promise<unknown>;onExport?:(id:string)=>void}){
  const [orders,setOrders]=useState<string[]|null>(initialSelection?.orderIds??null),[rules,setRules]=useState<string[]|null>(initialSelection?.enabledRuleIds??null);
  const [start,setStart]=useState(String(initialSelection?.startMinute??0)),[end,setEnd]=useState(initialSelection?String(initialSelection.endMinute??''):'600'),[priority,setPriority]=useState(initialSelection?.priority??'规则设置');
  const [mode,setMode]=useState(initialSelection?.mode??'supported');
+ const [profileId,setProfileId]=useState(initialSelection?.profileId??'');
  const [snapshot,setSnapshot]=useState(''),[error,setError]=useState('');
  const eligible=(data.orders||[]).filter(o=>o['需求类型']==='正式订单'&&o['订单状态']==='有效');
  const selected=(orders??eligible.map(o=>o['订单编号'])).filter(id=>eligible.some(o=>o['订单编号']===id));const enabled=(rules??(data.rules||[]).filter(r=>r['是否启用']==='是').map(r=>r['规则编号'])).filter(id=>(data.rules||[]).some(r=>r['规则编号']===id));
@@ -16,15 +18,17 @@ export function RunPanel({feedback,data,runs,canWrite,busy,onStart,onCancel,onRe
  const states:Record<string,string>={queued:'等待线程',running:'正在计算',completed:'已得到安排（仅本次检查范围）',partial:'存在未排任务或问题',cancelled:'已取消',timed_out:'已超时（不代表无解）',failed:'失败'};
  return <section className="panel"><h2>计算范围与运行记录 · FR-018/038</h2><p>时间使用分钟轴，0 = 2026-11-02 08:00 +08:00。开始时间不移动原日历、停机、供给或人员窗口；完整工序须在结束范围内。已完成合格数量用于同单位模拟订单余量。已有支持模式支持模拟累计执行事实、原始保护区间与显式剩余工时；剩余分钟取自输入，不按完成数量比例推算。耗料仅覆盖已声明的模拟口径，不代表真实执行、完整投料核销或质量确认；恢复、转机与冲销未定时须核对，不表示 FR031 恢复已完成。</p>
  <label>计算模式<select aria-label="计算模式" value={mode} onChange={e=>setMode(e.target.value)}><option value="supported">已有支持模式（日历、人员、预计供给；物料须启用）</option><option value="minimal-r1">R1 最小模式（机器连续可用，仅机器与顺序）</option></select></label>
+ <label>多线配置<select aria-label="多线配置" value={profileId} onChange={e=>setProfileId(e.target.value)}><option value="">P0 单线默认</option>{(data.b16Profiles||[]).map(p=><option key={p["配置编号"]} value={p["配置编号"]}>B16 · {p["配置编号"]}</option>)}</select></label>
+ {profileId&&<p>采用显式 B16 配置的产品适用线、指定/自动选线及逐工序设备候选。请在“数据与 CSV”维护 B16 多线配置和设备候选表；全厂共享资源与库存只扣一次，候选失败全部回滚。必须使用已有支持模式并启用物料、工装、人员规则。</p>}
  <p>当前配置预览（尚未冻结）：{mode==='minimal-r1'?(hasFacts?'最小模式仅检查机器与顺序等明确范围；当前有模拟执行事实，不能使用忽略保护的最小模式，发起计算会被拒绝。':'最小模式仅检查下列明确范围，不采用执行事实、日历、人员或物料检查。'):hasFacts?'当前输入含模拟执行事实；计算保留原始保护区间并采用显式剩余分钟，关闭执行保护开关也不解除事实保护。物料分配须选择且生效 MATERIAL 规则；异常、暂停或不支持的协调条件仍可能阻断。':'当前输入没有模拟执行事实，本次不据此声称已采用执行事实或剩余工时；物料分配须选择且生效 MATERIAL 规则。'}实际采用范围由服务端在发起时按输入、规则及生效时刻冻结。</p>
  <CheckScope scope={currentScope}/>
  <p>历史运行实际采用范围以各记录保存的检查范围及原始输入为准；当前配置预览不会补写旧运行，未知范围仍保留未知。</p>
- <fieldset><legend>本产线有效正式订单</legend>{eligible.map(o=><label key={o['订单编号']}><input type="checkbox" checked={selected.includes(o['订单编号'])} onChange={()=>setOrders(toggle(selected,o['订单编号']))}/>{o['订单编号']} · {o['产线编号']} · 优先 {o['优先顺序']}</label>)}</fieldset>
+ <fieldset><legend>有效正式订单（B16可跨同厂产线）</legend>{eligible.map(o=><label key={o['订单编号']}><input type="checkbox" checked={selected.includes(o['订单编号'])} onChange={()=>setOrders(toggle(selected,o['订单编号']))}/>{o['订单编号']} · {o['产线编号']} · 优先 {o['优先顺序']}</label>)}</fieldset>
  <label>开始分钟<input aria-label="开始分钟" type="number" min="0" value={start} onChange={e=>setStart(e.target.value)}/></label>
  <label>计划结束分钟<input aria-label="计划结束分钟" type="number" min="1" value={end} onChange={e=>setEnd(e.target.value)}/></label>
  <label>任务排序<select aria-label="任务排序" value={priority} onChange={e=>setPriority(e.target.value)}><option>规则设置</option><option>优先顺序</option><option>要求日期</option></select></label>
  <fieldset><legend>本次规则配置（最小模式仅采用机器、顺序和排序；其余明确未检查）</legend>{(data.rules||[]).map(r=><label key={r['规则编号']}><input type="checkbox" checked={enabled.includes(r['规则编号'])} disabled={(mode==='minimal-r1'&&!['MACHINE','PRECEDENCE','SORT'].includes(r['规则编号']))||['MACHINE','PRECEDENCE','CALENDAR'].includes(r['规则编号'])} onChange={()=>setRules(toggle(enabled,r['规则编号']))}/>{r['中文名称']}</label>)}</fieldset>
- <button className="primary" disabled={!canWrite||busy||!selected.length||!start.trim()} onClick={()=>onStart({...(mode==='minimal-r1'?{mode}:{}),orderIds:selected,startMinute:Number(start),endMinute:end.trim()?Number(end):null,priority,enabledRuleIds:enabled})}>另开计算（冻结当前输入）</button>
+ <button className="primary" disabled={!canWrite||busy||!selected.length||!start.trim()} onClick={()=>onStart({...(mode==='minimal-r1'?{mode}:{}),...(profileId?{capability:b16Capability,profileId}:{}),orderIds:selected,startMinute:Number(start),endMinute:end.trim()?Number(end):null,priority,enabledRuleIds:enabled})}>另开计算（冻结当前输入）</button>
  <p role="status" aria-live="polite">{feedback||(!canWrite?'请先在页面顶部填写操作原因；如仍不可用，请检查数据是否加载成功。':'准备就绪，点击上方按钮发起计算。')}</p>
  <p>最多两个并行运行；状态按真实线程阶段显示，不估算百分比。已完成运行不可取消，取消不会保存部分结果。</p>
  {error&&<p role="alert">{error}</p>}
