@@ -45,12 +45,21 @@ export function parameterIssues(d){
  const issues=[],seen=new Set(),scopes=new Map(),ps=d.tables?.['配置参数']||[];
  const add=(p,message,code='PARAMETER_INVALID')=>issues.push({severity:'error',code,sheet:'配置参数',row:p._row||0,record:p['参数编号'],field:'参数值',cell:p._cells?.['参数值']||'',message});
  for(const p of ps){const id=p['参数编号'];if(!id||seen.has(id))add(p,'参数编号重复或为空');seen.add(id);
-  try{const spec=specification(p['参数名称'],cpOf(p));if(spec){validateAtomic(spec,p['参数值']);validateUnit(spec,p['单位']);}else finiteNumber(p['参数值']);const from=finiteNumber(p['生效日']),to=finiteNumber(p['失效日']);if(!Number.isInteger(from)||!Number.isInteger(to)||to<=from)throw Error('有效期须为非空整数半开区间');if(p._formulas?.['参数值'])throw Error('参数值不可执行公式');
+  try{const cp=cpOf(p),spec=specification(p['参数名称'],cp);if(cp)definition(cp);if(p._candidate&&/^CP03[0-5]$/.test(cp)&&!(finiteNumber(p['参数值'])>=0&&finiteNumber(p['参数值'])<1))throw Error('损耗比例须≥0且<1');if(p._candidate&&!spec&&/关系\/组合/.test(definition(cp)['呈现与编辑模式'])&&typeof p['参数值']!=='object')throw Error('关系/组合候选须按命名字段维护');if(p._candidate&&typeof p['参数值']==='object')validateComposite(cp,p['参数值']);else if(spec){validateAtomic(spec,p['参数值']);validateUnit(spec,p['单位']);}else if(!p._candidate)finiteNumber(p['参数值']);else if(!String(p['参数值']??'').trim())throw Error('候选值不能为空');if(!String(p['单位']??'').trim())throw Error('单位必填');const from=finiteNumber(p['生效日']),to=finiteNumber(p['失效日']);if(!Number.isInteger(from)||!Number.isInteger(to)||to<=from)throw Error('有效期须为非空整数半开区间');if(Object.keys(p._formulas||{}).length)throw Error('参数值及身份不可执行公式');
    const key=parameterIdentity(p),list=scopes.get(key)||[];if(list.some(x=>from<Number(x['失效日'])&&Number(x['生效日'])<to))throw Error('同对象/语义/作用范围有效期重叠');list.push(p);scopes.set(key,list);
    if(spec?.table&&!spec.candidate&&!p._candidate){const matches=(d.tables?.[spec.table]||[]).filter(r=>objectKey(r,spec)===p['对象编号']||(spec.table==='物料清单'&&r['清单版本编号']===p['对象编号']));if(!matches.length)add(p,'对象尚未映射到业务输入：'+p['对象编号'],'PARAMETER_OBJECT_UNMAPPED');}
   }catch(e){add(p,e.message);}
  }
- for(const t of ['库区库位','工艺路线'])for(const r of d.tables?.[t]||[]){if(t==='库区库位'&&r['最低温度']!==''&&r['最低温度']!==undefined&&r['最高温度']!==''&&r['最高温度']!==undefined&&Number(r['最低温度'])>Number(r['最高温度']))add({_row:r._row,'参数编号':r['库位编号']},'最低温度不得高于最高温度');if(t==='工艺路线'&&Number(r['最小等待天数']??0)>Number(r['最大等待天数']))add({_row:r._row,'参数编号':r['路线工序编号']},'最小等待不得大于最大等待');}
+ if(d.parameterCandidatesOnly)return issues;
+ // Check paired fields at every boundary, including trial inheritance. A future
+ // atomic edit must not create min>max merely because day0 currently looks valid.
+ for(const [table,key,low,high,defaultLow]of [['库区库位','库位编号','最低温度','最高温度',undefined],['工艺路线','路线工序编号','最小等待天数','最大等待天数',0]])for(const row of d.tables?.[table]||[]){
+  const relevant=ps.filter(p=>!p._candidate&&p['对象编号']===String(row[key])&&[low,high].includes(p['参数名称'])),scopeNames=new Set(['dataset',...relevant.map(scopeOf)]),days=new Set([0,...relevant.flatMap(p=>[Number(p['生效日']),Number(p['失效日'])])]);
+  for(const scope of scopeNames)for(const day of days){const active=effectiveParameters(d,day,scope),value=field=>{const p=active.find(p=>p['对象编号']===String(row[key])&&p['参数名称']===field),base=d.parameterBaseFields?.find(b=>b.table===table&&b.object===String(row[key])&&b.field===field);return p?.['参数值']??base?.value??row[field]??(field===low?defaultLow:undefined);};const lo=value(low),hi=value(high);if(lo!==''&&hi!==''&&Number(lo)>Number(hi)){
+   issues.push({severity:'error',code:'PARAMETER_RELATION',sheet:table,row:row._row||0,record:row[key],field:low,cell:row._cells?.[low]||'',message:low+'不得大于'+high+'；'+scope+'，日'+day});break;
+  }}
+ }
+
  return issues;
 }
 export function effectiveParameters(d,day=0,scope='dataset'){
@@ -60,24 +69,29 @@ export function effectiveParameters(d,day=0,scope='dataset'){
 }
 export function applyParameters(d,day=0,scope=d.parameterContext?.scope||'dataset'){
  const ps=effectiveParameters(d,day,scope),changes=[];
+ // Keep literal business inputs separate from resolved values. Re-evaluating a
+ // later period or removing a trial override must not inherit the last resolution.
+ if(d.parameterContract){const base=d.parameterBaseFields??=[],byKey=new Map(base.map(b=>[[b.table,b.object,b.field].join('|'),b]));for(const spec of atomicFields.filter(s=>s.table&&!s.candidate))for(const row of d.tables?.[spec.table]||[]){const object=objectKey(row,spec);const key=[spec.table,object,spec.name].join('|');let saved=byKey.get(key);if(!saved&&!(d.tables?.['配置参数']||[]).some(p=>!p._candidate&&p['参数名称']===spec.name&&(p['对象编号']===object||spec.table==='物料清单'&&p['对象编号']===row['清单版本编号'])))continue;if(!saved){saved={table:spec.table,object,field:spec.name,present:Object.hasOwn(row,spec.name),value:row[spec.name]};base.push(saved);byKey.set(key,saved);}if(saved.present)row[spec.name]=saved.value;else delete row[spec.name];}d.parameterBaseFields=base;}
  for(const p of ps){const spec=specification(p['参数名称'],cpOf(p));if(!spec?.table||spec.candidate)continue;
-  for(const row of d.tables?.[spec.table]||[])if(objectKey(row,spec)===p['对象编号']||(spec.table==='物料清单'&&row['清单版本编号']===p['对象编号'])){row[spec.name]=p['参数值'];changes.push({id:p['参数编号'],cp:spec.cp,object:p['对象编号'],field:spec.name,value:p['参数值'],scope:scopeOf(p),from:p['生效日'],to:p['失效日'],source:p._source});}
+  for(const row of d.tables?.[spec.table]||[])if(objectKey(row,spec)===p['对象编号']||(spec.table==='物料清单'&&row['清单版本编号']===p['对象编号'])){row[spec.name]=p['参数值'];changes.push({id:p['参数编号'],cp:spec.cp,object:p['对象编号'],field:spec.name,value:p['参数值'],unit:p['单位'],scope:scopeOf(p),from:p['生效日'],to:p['失效日'],source:p._source});}
  }
- if(d.parameterContract){d.effectiveParameters={day,scope,version:d.version,values:changes};}
+ if(d.parameterContract){for(const p of ps){const spec=specification(p['参数名称'],cpOf(p));if(spec?.global)changes.push({id:p['参数编号'],cp:spec.cp,object:p['对象编号'],field:spec.name,value:p['参数值'],unit:p['单位'],scope:scopeOf(p),from:p['生效日'],to:p['失效日'],source:p._source});}d.effectiveParameters={day,scope,version:d.version,values:changes};}
  return ps;
 }
 export function parameterView(d,query={},actor=''){
- const day=query.day===undefined?0:finiteNumber(query.day),scope=scopeFor(d,query.scope,actor),cp=query.cp?canonicalCp(query.cp):null,filter=String(query.q||''),effective=effectiveParameters(d,day,scope),effectiveIds=new Set(effective.map(p=>p['参数编号']));
+ const day=query.day===undefined?0:finiteNumber(query.day),scope=scopeFor(d,query.scope,actor),search=String(query.q||'').trim(),cp=query.cp?canonicalCp(query.cp):/^CP\d{3}$/.test(search)?canonicalCp(search):null,filter=/^CP\d{3}$/.test(search)?'':search,effective=effectiveParameters(d,day,scope),effectiveIds=new Set(effective.map(p=>p['参数编号']));
+ const baseEffective=effectiveParameters(d,day,'dataset'),same=(a,b)=>a['对象编号']===b['对象编号']&&canonicalCp(cpOf(a))===canonicalCp(cpOf(b))&&a['参数名称']===b['参数名称'];
  const raw=[...(d.tables?.['配置参数']||[]).filter(p=>scopeOf(p)==='dataset'||scopeOf(p)===scope),...(d.parameterCandidates||[]).filter(p=>scopeOf(p)==='dataset'||scopeOf(p)===scope)];
  const defs=(d.parameterDefinitions?.length?d.parameterDefinitions:parameterCatalog).map(p=>({...p,...definition(p['参数编号']),sourceDefinition:p}));
  const accepted=c=>(!query.topic||c['统一配置页签']===query.topic)&&(!query.domain||c['业务领域']===query.domain)&&(!cp||canonicalCp(c['参数编号'])===cp)&&(!query.step||c['流程步骤入口'].includes(query.step));
  const catalog=defs.map(c=>({...c,fields:atomicFields.filter(s=>s.cp===canonicalCp(c['参数编号'])),sourceTables:[...new Set([sourceTable(c['参数编号']),...atomicFields.filter(s=>s.cp===canonicalCp(c['参数编号'])).map(s=>s.table)].filter(Boolean))],immutable:isImmutable(c['参数编号'])})).filter(accepted).filter(c=>!filter||Object.values(c).some(x=>String(x).includes(filter)));
- let records=raw.map(p=>{const id=cpOf(p),c=id?definition(id):null,spec=specification(p['参数名称'],id),status=p._candidate||spec?.candidate?'候选，未启用':Number(p['生效日'])>day?'未来生效':effectiveIds.has(p['参数编号'])?'当前有效':'未采用/已失效';return {...p,cp:id,definition:c,status,scope:scopeOf(p),effectiveValue:effective.find(e=>e['对象编号']===p['对象编号']&&e['参数名称']===p['参数名称'])?.['参数值'],editable:!!id&&(!isImmutable(id)||(id==='CP036'&&d.profile==='excel-qualified-output-202611-r1')),adoptable:!!spec&&!spec.candidate&&!p._candidate};}).filter(p=>(!cp||canonicalCp(p.cp)===cp)&&(!query.object||p['对象编号']===query.object)&&(!query.status||p.status===query.status)&&(!p.definition||accepted(p.definition))&&(!filter||JSON.stringify(p).includes(filter)));
+ let records=raw.map(p=>{const base=baseEffective.find(e=>same(e,p)),actual=effective.find(e=>same(e,p)),specBase=specification(p['参数名称'],cpOf(p)),literal=specBase?.table&&((d.parameterBaseFields||[]).find(b=>b.table===specBase.table&&b.object===p['对象编号']&&b.field===p['参数名称'])||{value:(d.tables?.[specBase.table]||[]).find(r=>objectKey(r,specBase)===p['对象编号'])?.[specBase.name]});const id=cpOf(p),c=id?definition(id):null,spec=specification(p['参数名称'],id),status=p._candidate||spec?.candidate?'候选，未启用':Number(p['生效日'])>day?'未来生效':effectiveIds.has(p['参数编号'])?'当前有效':'未采用/已失效';return {...p,cp:id,definition:c,status,scope:scopeOf(p),baseValue:base?.['参数值']??literal?.value,overrideValue:actual&&scopeOf(actual)!=='dataset'?actual['参数值']:undefined,effectiveValue:actual?.['参数值']??literal?.value,effectiveSource:actual?scopeOf(actual):literal?'业务表基础输入':undefined,editable:!!id&&(!isImmutable(id)||(id==='CP036'&&d.profile==='excel-qualified-output-202611-r1')),adoptable:!!spec&&!spec.candidate&&!p._candidate};}).filter(p=>(!cp||canonicalCp(p.cp)===cp)&&(!query.object||p['对象编号']===query.object)&&(!query.status||p.status===query.status)&&(!p.definition||accepted(p.definition))&&(!filter||JSON.stringify(p).includes(filter)));
  const offset=Math.max(0,Number(query.offset)||0),limit=Math.min(100,Math.max(1,Number(query.limit)||25));
  if(query.layer==='catalog')records=catalog;
  if(query.layer==='categories')records=d.parameterCategories||[];
  if(query.layer==='discussions')records=d.parameterAnnotations?.discussions||[];
  if(query.layer==='questions')records=d.parameterAnnotations?.questions||[];
+ if(!['instances','catalog',undefined].includes(query.layer)&&filter)records=records.filter(p=>JSON.stringify(p).includes(filter));
  return {datasetId:d.id,version:d.version,scope,day,total:records.length,offset,records:records.slice(offset,offset+limit),catalog,topics:[...new Set(parameterCatalog.map(d=>d['统一配置页签']))],domains:[...new Set(parameterCatalog.map(d=>d['业务领域']))],trials:(d.parameterTrials||[]).filter(t=>t.actor===actor),sources:d.parameterSources||[],mappingVersion:'CR-PARAM-UI-20261101:r1',checksInvalidated:!!d.checksInvalidated};
 }
 export function changeParameter(d,body,actor){
@@ -92,13 +106,14 @@ export function changeParameter(d,body,actor){
  if(operation==='inherit'){if(scope==='dataset')throw Error('撤销覆盖仅适用于试算覆盖；共享来源不能无声删除');if(!existing)throw Error('覆盖不存在');target.splice(target.indexOf(existing),1);return {changedRecord:id,inherited:true,checksInvalidated:true};}
  if(operation!=='save')throw Error('未知参数操作');
  let stored;
- if(candidate){if(/关系\/组合/.test(c['呈现与编辑模式'])&&typeof value!=='object')throw Error('关系/组合参数须使用业务结构化表单，不能保存任意数值');if(/^CP03[0-5]$/.test(cp)&&!(finiteNumber(value)>=0&&finiteNumber(value)<1))throw Error('损耗比例须≥0且<1；空白不能当继承或0');if(body.enable===true)throw Error('候选资料不能显示已启用');stored=typeof value==='object'?validateComposite(cp,value):(spec?validateAtomic(spec,value):String(value??'').trim());if(stored==='')throw Error('候选值不能为空');}
+ if(candidate){if(!spec&&/关系\/组合/.test(c['呈现与编辑模式'])&&typeof value!=='object')throw Error('关系/组合参数须使用业务结构化表单，不能保存任意数值');if(/^CP03[0-5]$/.test(cp)&&!(finiteNumber(value)>=0&&finiteNumber(value)<1))throw Error('损耗比例须≥0且<1；空白不能当继承或0');if(body.enable===true)throw Error('候选资料不能显示已启用');stored=typeof value==='object'?validateComposite(cp,value):(spec?validateAtomic(spec,value):String(value??'').trim());if(stored==='')throw Error('候选值不能为空');}
  else {if(!spec||spec.candidate)throw Error('必要运行能力尚未支持或未明确，请保存为候选；不能假启用');stored=validateAtomic(spec,value);
   if(spec.global&&objectId!=='GLOBAL')throw Error('此参数须采用GLOBAL对象');if(spec.table&&!(d.tables[spec.table]||[]).some(r=>objectKey(r,spec)===objectId||(spec.table==='物料清单'&&r['清单版本编号']===objectId)))throw Error('引用对象不存在；先补完整业务输入');
  }
  const unit=String(body.unit??existing?.['单位']??'');if(!unit.trim())throw Error('单位必填');if(spec)validateUnit(spec,unit);if(existing&&unit!==existing['单位'])throw Error('单位变更须重新建立明确映射，不能静默换算');
  const identity=[scope,objectId,canonical,field].join('|');if(target.some(p=>p!==existing&&parameterIdentity(p)===identity&&start<Number(p['失效日'])&&Number(p['生效日'])<end))throw Error('同对象/语义/作用范围有效期重叠');
- const p={...(existing||{}),'参数编号':existing?.['参数编号']||body.newId||'P-'+randomUUID(),'对象编号':objectId,'对象名称':existing?.['对象名称']||objectId,'参数名称':field,'参数值':stored,'单位':unit,'生效日':String(start),'失效日':String(end),_cp:canonical,_scope:scope,_candidate:!!candidate,_source:{kind:'维护',reason:body.reason,version:d.version+1},_formulas:{}};
+ const nextId=existing?.['参数编号']||body.newId||'P-'+randomUUID();if(target.some(p=>p!==existing&&p['参数编号']===nextId))throw Error('参数编号已存在，不能覆盖其他身份');
+ const p={...(existing||{}),'参数编号':nextId,'对象编号':objectId,'对象名称':existing?.['对象名称']||objectId,'参数名称':field,'参数值':stored,'单位':unit,'生效日':String(start),'失效日':String(end),_cp:canonical,_scope:scope,_candidate:!!candidate,_source:{kind:'维护',reason:body.reason,version:d.version+1},_formulas:{}};
  if(existing)Object.assign(existing,p);else target.push(p);
  d.parameterContract='CR-PARAM-UI-20261101:r1';d.checkedAt=null;d.checksInvalidated=true;
  return {changedRecord:p['参数编号'],checksInvalidated:true,scope,entry:c['中文配置项']};

@@ -78,7 +78,8 @@ export default function App() {
   const [issues,setIssues]=useState<Finding[]>([]);
   const [inputVersion,setInputVersion]=useState(0);
   const [reason,setReason]=useState('');
-  const [workbookWorkbench,setWorkbookWorkbench]=useState(false);
+  const [workbookWorkbench,setWorkbookWorkbench]=useState(false),[workbookOpened,setWorkbookOpened]=useState(false);
+  useEffect(()=>{if(view==='input'||workbookWorkbench)setWorkbookOpened(true);},[view,workbookWorkbench]);
   const [busy,setBusy]=useState(false);
   const [session,setSession]=useState<{role:string;canWrite:boolean;canExport:boolean}|null>(null);
   const [operations,setOperations]=useState<{id:string;action:string;actor:string;at:string;reason:string;target?:string;before?:Row[];after?:Row[]}[]>([]);
@@ -126,12 +127,11 @@ export default function App() {
       <section className="hero"><div><p className="eyebrow">单线排程 · R1 最小模式 / 已有支持模式</p><h1>{view==='schedule'?'排程计算与范围核对':view==='input'?'输入数据与整本采用':view==='data'?'日历与排程数据':view==='query'?'模拟数据与关联查询':view==='reports'?'查询报表与文件导出':'实现范围与业务决策'}</h1><p className="sub">基于 v0.3 UAT-02 / 2026-11-02 08:00（Asia/Shanghai）；样例业务值均为虚构，仅用于软件验证。</p></div><div className="hero-source"><span>追溯基线</span><b>FR-008 · UAT-02 · AC-05</b><small>工厂窗口继承 · 设备停机例外 · 连续工作窗口</small></div></section>
       {message&&<div className="toast" role="status" aria-live="polite" aria-atomic="true"><span>{message}</span><button aria-label="关闭提示" onClick={()=>setMessage('')}>×</button></div>}
       {recordProblem&&<ProblemRecords key={recordProblemOpen} finding={recordProblem} data={data} identityContext={{inputVersionId:currentInputId,operations}} canWrite={!!session?.canWrite&&!busy} onClose={()=>setRecordProblem(null)} onQuery={(ref,current)=>{const resolved=current?currentRecord(ref,data,{inputVersionId:currentInputId,operations}):null;if(current&&!resolved)return;const id=ref.origin?.inputVersionId;const original=id?(checkedInputs[id]||plans.find(p=>(p as any).inputVersionId===id)?.inputSnapshot):undefined;if(!current&&!original){setMessage('原输入版本不可用；上方保留原检查值，不能使用当前同位记录替代。');return;}setQuerySnapshot(!current&&original&&id?{data:original,id}:undefined);setQueryOccurrence(current?resolved?.index:ref.origin?.occurrence.index);setQueryHistorical(!current);setQueryInputTable(ref.table);setQueryInputRow(current?resolved!.row:ref.row);setView('query');}} onEdit={ref=>{setTableKey(ref.table);setEditRecord(ref);setView('data');}}/>}
-      {view==='input'&&<InputData api={api} canWrite={!!session?.canWrite} canExport={!!session?.canExport} reason={reason}/>}
+      {view==='schedule'&&<button onClick={()=>setWorkbookWorkbench(v=>!v)}>Excel 六步工作台与就地参数</button>}
+      {workbookOpened&&<div hidden={view!=='input'&&!(view==='schedule'&&workbookWorkbench)}><InputData api={api} canWrite={!!session?.canWrite} canExport={!!session?.canExport} reason={reason}/></div>}
       {view==='data'&&<BomApplication api={api} data={data} canWrite={!!session?.canWrite&&!busy&&!!reason.trim()} onSaved={refresh}/>}
       {view==='reports'&&<ReportPanel plans={plans} api={api} onExport={session?.canExport&&!busy&&!!reason.trim()?download:undefined}/>}
       {view==='schedule'&&<>
-        <button onClick={()=>setWorkbookWorkbench(v=>!v)}>Excel 六步工作台与就地参数</button>
-        {workbookWorkbench&&<InputData api={api} canWrite={!!session?.canWrite} canExport={!!session?.canExport} reason={reason}/>}
         <ConfirmationPanel plans={plans} role={session?.role} busy={busy} reason={reason} api={api} refresh={refresh} onExport={session?.canExport?id=>download({confirmationId:id},id+'-确认副本.json'):undefined}/>
         <TrialPanel plans={plans} activeId={activePlan?.id} trials={trials} runs={runs} revision={inputVersion} canWrite={!!session?.canWrite} busy={busy} reason={reason} api={api} refresh={refresh} onResult={id=>{api('/plans').then(list=>{setPlans(list);const p=list.find((x:Plan)=>x.id===id);if(p){setActivePlan(p);setIssues(p.findings);setVerification(p.verification||null);}}).catch(e=>setMessage(e.message));}} onRun={(trial,selection)=>perform(async()=>{const run=await api('/runs',{trialId:trial.id,revision:trial.revision,selection});pendingRun.current=run.id;await refresh();})} onCancel={cancelRun}/>
         {activePlan&&<ResultPanel onProblem={locate} plan={activePlan} onTask={id=>setSelected([id])} onInput={(table,row,taskId)=>{if(taskId)setSelected([taskId]);setQuerySnapshot(undefined);setQueryOccurrence(undefined);setQueryHistorical(true);setQueryInputTable(table);setQueryInputRow(row);setView('query');}}/>}

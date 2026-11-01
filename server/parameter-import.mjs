@@ -1,4 +1,4 @@
-import {parameterCatalog,definition,cpOf,parameterIssues,scopeOf,scopeFor,validateComposite,specification} from './parameter-contract.mjs';
+import {parameterCatalog,definition,canonicalCp,cpOf,parameterIssues,scopeOf,scopeFor,validateComposite,specification} from './parameter-contract.mjs';
 const headers=['参数编号','对象编号','对象名称','参数名称','参数值','单位','生效日','失效日','参数说明'];
 export function parseParameterSheets(names,getCells){
  const result={parameterWorkbook:true,tables:{'配置参数':[]},bindings:[],classification:[],issues:[],warnings:[],parameterDefinitions:[],parameterCategories:[],parameterAnnotations:{discussions:[],questions:[],reference:[]},schemaVersion:'CR-PARAM-UI-20261101:r1'};
@@ -15,6 +15,7 @@ export function parseParameterSheets(names,getCells){
   else result.parameterAnnotations.reference.push({sheet:name,rows:values});
   result.classification.push({sheet:name,kind,rows:values.length});
  }
+ const instanceIds=new Set();for(const r of result.tables['配置参数']){if(!r['参数编号']||instanceIds.has(r['参数编号']))add('仿真参数实例',r._row,'参数编号','参数实例编号为空或重复');instanceIds.add(r['参数编号']);const named=specification(r['参数名称']);if(r._cp&&named&&canonicalCp(r._cp)!==canonicalCp(named.cp))add('仿真参数实例',r._row,'CP编号','CP语义与原子字段映射不一致');}
  for(const required of ['参数清单','仿真参数实例','仿真参数分类'])if(!names.includes(required))add(required,0,'','缺少参数工作簿必需分层工作表');
  const cpIds=new Set(result.parameterDefinitions.map(r=>r['参数编号']));for(const r of result.tables['配置参数'])if(cpOf(r)&&!cpIds.has(cpOf(r)))add('仿真参数实例',r._row,'参数名称','实例对应CP在本目录中不存在');
  for(const r of result.parameterCategories){for(const v of Object.values(r).filter(v=>typeof v==='string'))for(const m of v.matchAll(/CP\d{3}/g))if(!cpIds.has(m[0]))add('仿真参数分类',r._row,'CP引用','SP引用不存在：'+m[0]);}
@@ -29,9 +30,9 @@ export function integrateParameterImport(parsed,old,{id,name,expectedVersion,fil
  d.parameterDefinitions=parsed.parameterDefinitions;d.parameterCategories=parsed.parameterCategories;d.parameterAnnotations=parsed.parameterAnnotations;d.parameterCounts=parsed.parameterCounts;
  d.parameterClassification=parsed.classification;d.classification=old?.classification||parsed.classification;d.warnings=[...(old?.warnings||[]),...parsed.warnings];
  const activeTarget=d.tables['配置参数']??=[],candidateTarget=d.parameterCandidates??=[];
- for(const r of parsed.tables['配置参数']){const candidate=!adoptParameters||r['资料状态']==='candidate'||!!specification(r['参数名称'],cpOf(r))?.candidate,target=candidate?candidateTarget:activeTarget;const scope=scopeFor(d,r['作用范围'],actor);const incoming={...r,_cp:cpOf(r),_scope:scope,_candidate:candidate,_source:{fileHash,sheet:'仿真参数实例',row:r._row,mappingVersion:parsed.schemaVersion}};const prior=target.find(p=>p['参数编号']===r['参数编号']);if(prior){if(prior['对象编号']!==r['对象编号']||prior['参数名称']!==r['参数名称']||scopeOf(prior)!==scope)throw Error('参数实例编号与既有身份冲突：'+r['参数编号']);Object.assign(prior,incoming);}else target.push(incoming);}
+ for(const r of parsed.tables['配置参数']){const cp=cpOf(r),spec=specification(r['参数名称'],cp),candidate=!adoptParameters||r['资料状态']==='candidate'||!spec||!!spec.candidate,target=candidate?candidateTarget:activeTarget;const scope=scopeFor(d,r['作用范围'],actor);if(scope!=='dataset'&&(!spec||spec.global||spec.candidate))throw Error('此参数不支持仅本次试算覆盖');if(!candidate&&spec.global&&r['对象编号']!=='GLOBAL')throw Error('全局参数须采用GLOBAL对象');const incoming={...r,_cp:cp,_scope:scope,_candidate:candidate,_source:{fileHash,sheet:'仿真参数实例',row:r._row,mappingVersion:parsed.schemaVersion}};const identities=[...activeTarget,...candidateTarget].filter(p=>p['参数编号']===r['参数编号']);if(identities.some(p=>p['对象编号']!==r['对象编号']||p['参数名称']!==r['参数名称']||canonicalCp(cpOf(p))!==canonicalCp(cp)||scopeOf(p)!==scope))throw Error('参数实例编号与既有身份冲突：'+r['参数编号']);const prior=target.find(p=>p['参数编号']===r['参数编号']);if(prior)Object.assign(prior,incoming);else target.push(incoming);}
  // Candidate numeric samples still get type and period validation, without requiring business adoption.
- const candidateProbe={...d,tables:{...d.tables,'配置参数':candidateTarget.filter(p=>typeof p['参数值']!=='object'&&(!p._cp||specification(p['参数名称'],p._cp)))}};
+ const candidateProbe={...d,parameterCandidatesOnly:true,tables:{...d.tables,'配置参数':candidateTarget}};
  const activeProbe={...d,tables:{...d.tables,'配置参数':activeTarget}};
  const issues=[...parsed.issues,...parameterIssues(activeProbe),...parameterIssues(candidateProbe)];
  d.checkedAt=null;d.checksInvalidated=true;

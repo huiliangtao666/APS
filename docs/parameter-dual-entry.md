@@ -104,3 +104,43 @@ PARAMETER_FIXTURE=/workspace/temp/parameter-ui/fixture node --max-old-space-size
 The small fixture is explicitly synthetic: 11 sheets,168 CP,2 SP,2 PA,1 D,1 Q. It must not
 be reported as the original11/168/38/3428/19/12 private workbook test. Source hashes and
 all raw self-test logs belong in the root delivery evidence, not in an evidence-only commit.
+
+## Original package continuation · dlv_d56838b8
+
+This source continuation retains the same 20 PCU / 35 IN / 67-row responsibility matrix.
+It does not close the package or replace the earlier fixed-SHA evidence.
+
+The two main navigation entries now keep one workbook workspace mounted after its first
+use. Changing entries or viewing a frozen run keeps its local selection and drafts. Parameter
+and relationship drafts are retained per dataset/table in browser memory; changing dataset
+cannot submit an editor against another dataset. A pending parameter save protects the dataset
+selector. Cancel restores the opening control's focus where that control is still present.
+Version conflicts retain the original expected version and show an explicit comparison/retry
+action. The A2 parameter issue link opens the affected record search. Object/status filters,
+imported definition text and shared/override/effective sources are visible. Searching CP063
+also finds the canonical CP074 instance. A1 exposes the actual selected window length; saving
+an effective global start/window parameter updates the corresponding current selection.
+Standard-input loss maintenance stays in its own persistent editor and its explicit scope.
+
+New-contract datasets retain literal business-field baselines separately from effective
+parameter resolutions. Resolving another date or removing the last trial override restores
+that baseline, including when there is no shared parameter record. Direct maintenance of an
+unbound business field updates its baseline. Existing immutable run snapshots are never
+rewritten. Runtime provenance now includes effective global controls and units as well as
+applied table fields. Paired waiting/temperature bounds are checked at parameter period
+boundaries and in trial scopes, rather than only at day0.
+
+Parameter imports reject duplicate PA identities and inconsistent explicit CP mappings.
+Composite candidates receive period/value validation; unsupported composites stay candidates
+even when an import requests adoption. An existing PA cannot be relabelled across candidate
+and adopted storage. Candidate-only validation does not substitute proposals for active
+business constraints.
+
+`qa/parameter-ui-continuation.test.mjs` contains small pure contract regressions using only
+Node built-ins. `qa/parameter-ui-http.test.mjs` is the prepared real HTTP/import-child/serial
+Worker/persistence/native-export/production-CSRF scenario. The latter deliberately requires
+`APS_PARAMETER_RUNTIME_WINDOW=approved`, `PARAMETER_RUNTIME_ROOT` and `PARAMETER_FIXTURE`.
+It must be run only inside an explicitly coordinated window, using an owned isolated state
+directory. Its shared-access checks prove shared access and CSRF behavior; they do not
+establish a named human role or managed deployment identity. Browser dual-entry operation,
+standard build, full private workbooks and package acceptance remain separately required.
