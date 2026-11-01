@@ -8,7 +8,7 @@ import shutil
 import subprocess
 
 APP_ID = 'qa-fr006-main-3d164d5'
-TARGET = '/workspace/apps/qa17-48e-user-entry'
+TARGET = '/workspace/apps/qa17-0afa-user-entry'
 LAUNCH = 'python3 b15-user-preview-launch.py'
 FILES = ['core.mjs', 'lock.json', 'client.js', 'server.mjs', 'launch.py']
 
@@ -20,6 +20,7 @@ def commands(wab):
         'rollback': [script, 'container', APP_ID, '/workspace/apps/qa-fr006-main-3d164d5', '3000', 'vite', 'npm run dev'],
         'rollback_data_policy': 'Restore binding configuration only. No state/auth/native/history restore, deletion or old-instance stop. Keep new user data.',
         'preview': [str(pathlib.Path(wab).parent / 'lite-app-scaffold/scripts/dev-preview.sh')],
+        'activation': 'NOT_EXECUTED; one approval for prepare + bind + official dev-preview + gate verification + reviewed deployment config; no publication',
         'user_url': 'Only platform devBase / printed Workbench URL, preserving public origin and deployment prefix. Never internal upstream or Agent Browser URL.',
     }
 
@@ -34,6 +35,25 @@ def prepare(destination):
             raise ValueError('refuse to overwrite differing prepared file: ' + str(target))
         if not target.exists():
             shutil.copy2(source, target)
+
+
+def configure(destination, dev_base, origin, gate_evidence):
+    """After actual platform gate verification; flags are not proof of user permission."""
+    gate = json.loads(pathlib.Path(gate_evidence).read_text())
+    if (gate.get('workspaceId') != 'APS-Test' or gate.get('devBase') != dev_base or
+            gate.get('origin') != origin or gate.get('anonymousStatus') != 401 or
+            gate.get('authorizedSessionStatus') not in (200, 503) or not gate.get('platformOnlyIngressVerified')):
+        raise ValueError('actual workspace-session gate evidence required; keep preview closed')
+    config = {'mode': 'workspace-preview', 'candidate': 'integrated0afa',
+              'workspaceId': 'APS-Test', 'unpublished': True,
+              'ingress': 'platform-workspace-session-only', 'platformGateVerified': True,
+              'gateEvidence': str(pathlib.Path(gate_evidence).resolve()), 'base': dev_base, 'origin': origin}
+    # Core validates exact HTTPS origin and canonical platform prefix at load.
+    target = pathlib.Path(destination) / 'b15-user-preview-deployment.json'
+    if target.exists():
+        raise ValueError('refuse to replace reviewed deployment; use a deliberate reconfiguration')
+    target.write_text(json.dumps(config, ensure_ascii=False, indent=2) + '\n')
+    target.chmod(0o600)
 
 
 def snapshot(state_root, destination):
@@ -76,10 +96,13 @@ def snapshot(state_root, destination):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=['plan', 'prepare', 'snapshot', 'bind', 'rollback'])
+    parser.add_argument('action', choices=['plan', 'prepare', 'configure', 'snapshot', 'bind', 'rollback'])
     parser.add_argument('--wab-dir', default=str(pathlib.Path(__file__).resolve().parents[3] / '.codex/skills/workspace-app-builder'))
     parser.add_argument('--destination')
     parser.add_argument('--state-root')
+    parser.add_argument('--dev-base')
+    parser.add_argument('--origin')
+    parser.add_argument('--gate-evidence')
     parser.add_argument('--execute-approved', action='store_true')
     args = parser.parse_args()
     plan = commands(args.wab_dir)
@@ -87,6 +110,10 @@ if __name__ == '__main__':
         if not args.destination:
             parser.error('--destination required; use own preparation directory until activation approved')
         prepare(args.destination)
+    elif args.action == 'configure':
+        if not args.execute_approved or not all([args.destination, args.dev_base, args.origin, args.gate_evidence]):
+            parser.error('configure needs --execute-approved --destination --dev-base --origin --gate-evidence')
+        configure(args.destination, args.dev_base, args.origin, args.gate_evidence)
     elif args.action == 'snapshot':
         if not args.execute_approved or not args.state_root or not args.destination:
             parser.error('snapshot needs --execute-approved --state-root LIVE --destination NEW_PRIVATE_DIRECTORY; exclusive state window required')
