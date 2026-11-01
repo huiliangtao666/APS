@@ -12,7 +12,7 @@ const ownedRoot=process.env.PARAMETER_RUNTIME_ROOT;
 if(process.env.APS_PARAMETER_RUNTIME_WINDOW!=='approved'||!fixture||!ownedRoot)throw Error('Explicit coordinated window, PARAMETER_FIXTURE and owned PARAMETER_RUNTIME_ROOT required');
 fs.mkdirSync(ownedRoot,{recursive:true});
 const timeout=ms=>new Promise(resolve=>setTimeout(resolve,ms));
-test('PCU04/06–15/19: real HTTP, import child, serial Workers, frozen reopen/export and production CSRF',async context=>{
+test('PCU04/06–15/19: real HTTP, import child, serial Workers, frozen reopen/export and production CSRF',{timeout:300000},async context=>{
  const dataDir=fs.mkdtempSync(path.join(ownedRoot,'http-')),evidence=[],ownedWorkers=new Set();let createdWorkers=0;
  const workerFactory=workerData=>{assert.equal(ownedWorkers.size,0,'single Worker window');const worker=new Worker(new URL('../server/calculation-worker.mjs',import.meta.url),{workerData,resourceLimits:{maxOldGenerationSizeMb:64},execArgv:['--experimental-strip-types']});ownedWorkers.add(worker);createdWorkers++;worker.on('exit',()=>ownedWorkers.delete(worker));return worker;};
  let server;
@@ -20,7 +20,7 @@ test('PCU04/06–15/19: real HTTP, import child, serial Workers, frozen reopen/e
  async function close(){if(server){await new Promise(resolve=>server.close(resolve));server=undefined;}}
  context.after(async()=>{await close();for(const w of ownedWorkers)await w.terminate();fs.writeFileSync(path.join(dataDir,'http-evidence.json'),JSON.stringify({evidence,createdWorkers,ownedWorkersRemaining:ownedWorkers.size,listenerClosed:!server},null,2));});
  await open();
- const call=async(route,body,headers={})=>{const r=await fetch('http://127.0.0.1:'+server.address().port+'/api'+route,{method:body===undefined?'GET':'POST',headers:{'content-type':'application/json','x-aps-request':'workbench',...headers},...(body===undefined?{}:{body:JSON.stringify({reason:'explicit replaceable parameter HTTP scenario',...body})})});const text=await r.text();let value;try{value=JSON.parse(text);}catch{value=text;}evidence.push({route,status:r.status,body:body===undefined?undefined:{...body,fileBase64:body.fileBase64?'fixture bytes redacted':undefined},value});return {status:r.status,value};};
+ const call=async(route,body,headers={})=>{if(body!==undefined){const availableKiB=Number(fs.readFileSync('/proc/meminfo','utf8').match(/^MemAvailable:\s+(\d+)/m)?.[1]),minimumKiB=Number(process.env.PARAMETER_WRITE_MIN_KIB);assert.ok(Number.isSafeInteger(minimumKiB)&&minimumKiB>0,'explicit workload write capacity gate required');evidence.push({beforeWrite:route,availableKiB,minimumKiB});assert.ok(availableKiB>=minimumKiB,'capacity before write; stop without request');}const r=await fetch('http://127.0.0.1:'+server.address().port+'/api'+route,{method:body===undefined?'GET':'POST',headers:{'content-type':'application/json','x-aps-request':'workbench',...headers},...(body===undefined?{}:{body:JSON.stringify({reason:'explicit replaceable parameter HTTP scenario',...body})})});const text=await r.text();let value;try{value=JSON.parse(text);}catch{value=text;}evidence.push({route,status:r.status,body:body===undefined?undefined:{...body,fileBase64:body.fileBase64?'fixture bytes redacted':undefined},value});return {status:r.status,value};};
  const ok=async(route,body)=>{const r=await call(route,body);assert.ok([200,202].includes(r.status),JSON.stringify(r));return r.value;};
  const workbook='/workbooks',id='PARAMETER-HTTP';
  let version;
