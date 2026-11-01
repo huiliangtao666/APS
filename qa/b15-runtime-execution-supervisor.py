@@ -358,7 +358,7 @@ console.log(JSON.stringify({issues,findings:p.findings,tasks:p.tasks.map(t=>({id
         result['checks'].extend(json.loads((E / 'browser-result.json').read_text())['checks'])
         if original_input != api('/runs/' + baseline_run['id'] + '/inputs'):
             raise RuntimeError('history changed on reopen')
-        if (E / 'native.csv').read_text() != api('/export', {'planId': baseline_plan['id']}):
+        if (E / 'native.csv').read_bytes() != api('/export', {'planId': baseline_plan['id']}).encode('utf8'):
             raise RuntimeError('native bytes changed')
         result['checks'].append({'id': 'history_frozen_and_native_after_reopen', 'result': 'PASS'})
         result['result'] = 'PASS'
