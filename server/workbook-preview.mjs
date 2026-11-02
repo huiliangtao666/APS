@@ -33,7 +33,7 @@ const own=(o,k)=>!!o&&Object.hasOwn(o,k);
 const copy=v=>v&&typeof v==='object'?structuredClone(v):v;
 const keyOf=(table,r,spec)=>table==='单位换算'?[r['物料编号'],r['换算前单位'],r['换算后单位']].join('|'):String(r[spec?.key]??'');
 export function sourceRef(data,table,row,field){
-  const online=row?._origin||row?._overlayRef;
+  const online=row?._origin||row?._overlayRef||row?._source?.kind==='维护'||row?._source?.role==='EDIT';
   const cell=row?._cells?.[field]||null;
   const excelRow=!!row&&(Object.keys(row._cells||{}).length>0||Number.isSafeInteger(row._source?.row));
   return {sourceKind:online?'online':excelRow?'excel':row?'derived':'missing-record',
@@ -61,7 +61,7 @@ export function buildWorkbookPreview(p,{data,before=null,now=Date.now(),limits=p
   if(p.expectedVersion>0&&!before)fail('BASE_SNAPSHOT_REQUIRED',422);
   const records=[],seen=new Set();let changedFieldCount=0,fieldCount=0,recordBytes=0;
   const tableCounts=new Map([...new Set([...Object.keys(data.tables||{}),...Object.keys(before?.tables||{})])]
-    .map(table=>[table,{table,records:0,create:0,replace:0,delete:0,changedFieldCount:0}]));
+    .map(table=>[table,{table,kind:workbookSchema.tables[table]?.kind||'unknown',inputRecords:(data.tables?.[table]||[]).length+(table==='配置参数'?(data.parameterCandidates||[]).length:0),records:0,create:0,replace:0,delete:0,changedFieldCount:0}]));
   const indexes=new Map();
   function lookup(d,table,key,layer){
     if(!d)return [];
@@ -103,7 +103,7 @@ export function buildWorkbookPreview(p,{data,before=null,now=Date.now(),limits=p
     record.recordHash=digest(record);records.push(record);changedFieldCount+=count;fieldCount+=fields.length;
     recordBytes+=Buffer.byteLength(JSON.stringify(record));
     if(recordBytes>limits.maxProjectionBytes)fail('INPUT_TOO_LARGE',413,{recordBytes,limit:limits.maxProjectionBytes});
-    const tc=tableCounts.get(c.table)||{table:c.table,records:0,create:0,replace:0,delete:0,changedFieldCount:0};
+    const tc=tableCounts.get(c.table)||{table:c.table,kind:spec.kind,inputRecords:(data.tables?.[c.table]||[]).length+(c.table==='配置参数'?(data.parameterCandidates||[]).length:0),records:0,create:0,replace:0,delete:0,changedFieldCount:0};
     tc.records++;tc[operation]++;tc.changedFieldCount+=count;tableCounts.set(c.table,tc);
     if(records.length>limits.maxRecords||fieldCount>limits.maxFields)fail('INPUT_TOO_LARGE',413,{records:records.length,fieldCount,limits});
   }
@@ -148,7 +148,9 @@ export function buildWorkbookPreview(p,{data,before=null,now=Date.now(),limits=p
       for(const r of data.tables?.['期初在制']||[])if(aggregate||report.table==='期初在制'&&r['在制批次编号']===report.objectId)add('期初在制',r,'当前工序编号','wip');
     }
   }
+  for(const t of tableCounts.values())t.unchangedRecords=Math.max(0,t.inputRecords-t.create-t.replace);
   const core={binding:bindingOf(p),createdAt,expiresAt,limits,records,reports,anchors,
+    validationDigest:digest(p.issues||[]),warningsDigest:digest(p.warnings||[]),
     counts:{records:records.length,changedFieldCount,fieldCount,rawReports:reports.length,
       blockingReports:reports.filter(r=>r.blocksCommit).length,warnings:reports.filter(r=>r.severity==='warning').length,
       uniqueLocations:new Set(reports.map(r=>r.locationId)).size,groups:new Set(reports.map(r=>r.groupId)).size},
@@ -210,6 +212,7 @@ export function validatePreviewConfirmation(p,body,{actor,currentVersion,now=Dat
   const v=assertProjection(p.previewModule);
   const {summaryFingerprint,projectionBytes,...content}=v;
   if(digest(content)!==summaryFingerprint||!Number.isFinite(projectionBytes))fail('PREVIEW_DATA_CHANGED');
+  if(digest(p.issues||[])!==v.validationDigest||digest(p.warnings||[])!==v.warningsDigest)fail('VALIDATION_CHANGED');
   if(v.binding.owner!==null&&v.binding.owner!==actor)fail('PREVIEW_OWNER_CHANGED',403);
   const old=commitBinding(p,body,actor);if(old)fail(old.toUpperCase());
   if(digest(bindingOf(p))!==digest(v.binding))fail('BINDING_CHANGED');

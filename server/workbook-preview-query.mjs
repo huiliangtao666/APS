@@ -1,4 +1,5 @@
 import {assertProjection,canonical,digest,fail,previewSummary} from './workbook-preview.mjs';
+import {createHash} from 'node:crypto';
 
 const clip=(v,n=160)=>String(v??'').slice(0,n);
 export function bounded(value,max){const bytes=Buffer.byteLength(JSON.stringify(value));if(bytes>max)fail('RESPONSE_TOO_LARGE',413,{bytes,max});return value;}
@@ -77,20 +78,18 @@ export function* exportWorkbookPreview(v,q){
   const filter=normalizeFilter(q),records=q.scope==='ALL'?v.records:matched(v,filter),ids=new Set(records.map(r=>r.changeId));
   const reports=q.scope==='ALL'?v.reports:v.reports.filter(i=>(!filter.table||i.table===filter.table)&&(!filter.severity||i.severity===filter.severity)&&(!filter.q||canonical(i).toLowerCase().includes(filter.q.toLowerCase())||records.some(r=>r.table===i.table&&String(r.key)===String(i.objectId))));
   // ALL includes reports with no changed record. FILTERED explicitly describes its two populations.
-  const counts={records:records.length,changedFieldCount:records.reduce((n,r)=>n+r.changedFieldCount,0),fields:records.reduce((n,r)=>n+r.fields.length,0),rawReports:reports.length,uniqueLocations:new Set(reports.map(r=>r.locationId)).size};
-  const sha=awaitlessHash();let bytes=0;
+  const reportIds=new Set(reports.map(r=>r.reportId));
+  const counts={records:records.length,changedFieldCount:records.reduce((n,r)=>n+r.changedFieldCount,0),fields:records.reduce((n,r)=>n+r.fields.length,0),rawReports:reports.length,uniqueLocations:new Set(reports.map(r=>r.locationId)).size,groups:new Set(reports.map(r=>r.groupId)).size,sources:v.anchors.filter(a=>reportIds.has(a.reportId)).length};
+  const sha=createHash('sha256');let bytes=0;
   const line=value=>{const s=JSON.stringify(value)+'\n';sha.update(s);bytes+=Buffer.byteLength(s);return s;};
   yield line({kind:'manifest',schemaVersion:1,binding:v.binding,summaryFingerprint:v.summaryFingerprint,scope:q.scope,
     filter:q.scope==='ALL'?null:filter,filterHash:digest(q.scope==='ALL'?null:filter),counts,sourceFiles:v.sourceFiles,simulation:v.simulation,
     allRecordFields:true,valueEncoding:'typed-json-with-presence',reportSelection:'ALL or issue-filter plus matching-record identities',complete:false});
   for(const r of records){yield line({kind:'record',...r,fields:undefined});for(const f of r.fields)yield line({kind:'field',changeId:r.changeId,...f});}
   for(const report of reports)yield line({kind:'report',...report});
-  const reportIds=new Set(reports.map(r=>r.reportId));
   for(const anchor of v.anchors)if(reportIds.has(anchor.reportId))yield line({kind:'source',...anchor});
   yield JSON.stringify({kind:'completion',complete:true,counts,contentBytes:bytes,contentSha256:sha.digest('hex'),recordIdentityDigest:digest([...ids])})+'\n';
 }
-import {createHash} from 'node:crypto';
-const awaitlessHash=()=>createHash('sha256');
 
 export function readWorkbookPreview(p,q,kind='summary',access={}){
   const v=assertProjection(p.previewModule);

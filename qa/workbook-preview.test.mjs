@@ -110,6 +110,8 @@ test('competing preview and callback failure are atomic; validation tamper inval
   const baseline=JSON.stringify(s);assert.throws(()=>confirmWorkbookPreview(s,b,access,(clone)=>{clone.datasets.push({id:'partial'});throw Error('rollback');}),/rollback/);assert.equal(JSON.stringify(s),baseline);
   const tampered=structuredClone(p);tampered.previewModule.counts.blockingReports=0;tampered.previewModule.reports.push({message:'tamper'});
   rejects(()=>confirmWorkbookPreview(stateOf(tampered),bodyOf(tampered),access,applyImport),'PREVIEW_DATA_CHANGED');
+  const revalidated=structuredClone(p);revalidated.issues.push({code:'NEW_BLOCKER'});
+  rejects(()=>confirmWorkbookPreview(stateOf(revalidated),bodyOf(revalidated),access,applyImport),'VALIDATION_CHANGED');
 });
 
 test('bounded G1/G2 mock measurements; no application, import, Worker or browser',()=>{

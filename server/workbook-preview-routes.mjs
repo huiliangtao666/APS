@@ -1,6 +1,5 @@
 import {PreviewError,confirmWorkbookPreview,previewCommitStatus,fail} from './workbook-preview.mjs';
 import {readWorkbookPreview,exportWorkbookPreview,identify} from './workbook-preview-query.mjs';
-import {once} from 'node:events';
 
 /** Integration seam, deliberately NOT registered by this isolated change.
  * ctx uses the existing router's read/write/permission/actorKey. access(req) is
@@ -30,7 +29,10 @@ export function registerWorkbookPreviewRoutes(router,ctx){
     res.type('application/x-ndjson').set('Content-Disposition','attachment; filename="workbook-preview-'+req.query.scope+'.ndjson"');
     for(let step=first;!step.done;step=iterator.next()){
       if(res.destroyed)return;
-      if(!res.write(step.value))await Promise.race([once(res,'drain'),once(res,'close')]);
+      if(!res.write(step.value))await new Promise(resolve=>{
+        const done=()=>{res.off('drain',done);res.off('close',done);resolve();};
+        res.once('drain',done);res.once('close',done);
+      });
     }
     res.end();
   }));
