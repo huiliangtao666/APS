@@ -7,7 +7,7 @@ const views=[['E1','设备甘特'],['E2','需求交付'],['E3','设备负荷'],[
 const request=(kind:string,q:object)=>'/workbooks/equipment/'+kind+'?request='+encodeURIComponent(JSON.stringify(q));
 const date=(d:number)=>new Date(Date.UTC(2026,9,31)+d*86400000).toISOString().slice(0,10);
 const day=(s:string)=>(Date.parse(s+'T00:00:00Z')-Date.UTC(2026,9,31))/86400000;
-function time(n:number){return new Date(Date.UTC(2026,9,31)+n*60000).toISOString().slice(0,16).replaceAll('-','.').replace('T',' ');}
+function time(n:number){return new Date(Date.UTC(2026,9,31)+n*60000).toISOString().slice(0,16).replace(/-/g,'.').replace('T',' ');}
 type Conditions={fromDate:string;toDateInclusive:string;q:string;filters:Record<string,QuerySelection>;includeBom:boolean;pageSize:number;offset:number;sort:string;direction:'asc'|'desc'};
 export function EquipmentSchedule({run,api,canExport}:{run:any;api:QueryApi;canExport:boolean}){
  const [identity,setIdentity]=useState<QueryIdentity>(),[error,setError]=useState(''),[view,setView]=useState('E1'),[record,setRecord]=useState<QueryRecord>(),[reload,setReload]=useState(0);
