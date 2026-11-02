@@ -7,7 +7,7 @@ export function importBinding(body,{id,expectedVersion,exists,actor}) {
  const importKind=body.importKind;
  if(importKind===undefined)return {mode:body.adoptParameters===true?'dataset':'candidate',scope:'dataset'};
  if(!['business','parameter','mixed'].includes(importKind))return {error:'import_kind_invalid',status:422};
- if(importKind==='parameter'&&!exists)return {error:'parameter_target_required',status:422};
+ // Parameter-first import creates an isolated parameter-only version; readiness remains blocked until B arrives.
  if(body.expectedVersion!==expectedVersion)return {error:'preview_stale',status:409,actualVersion:expectedVersion};
  const mode=body.mode||'candidate',scope=body.scope||'dataset';
  if(!['candidate','dataset'].includes(mode)||scope!=='dataset')return {error:'bulk_trial_not_supported',status:422};
@@ -60,7 +60,7 @@ export function importChanges(old,next) {
 }
 export function checkSelection(data,body,actor) {
  const d=structuredClone(data),selection=body.selection||{},scope=scopeFor(d,body.parameterScope,actor);
- if(Object.keys(selection).some(k=>!['startDay','endDay','currentDay','demandIds'].includes(k)))throw Error('运行选择包含未知字段');
+ if(Object.keys(selection).some(k=>!['startDay','endDay','currentDay','currentMinute','demandIds'].includes(k)))throw Error('运行选择包含未知字段');
  const {startDay:start,endDay:end,currentDay:current}=selection;
  if(![start,end,current].every(Number.isInteger)||start<current||current<0||end<=start||end>44)throw Error('日窗口无效');
  d.parameterContext={scope,effectiveDay:start};refreshDerived(d,start);

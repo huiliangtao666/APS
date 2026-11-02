@@ -6,7 +6,7 @@ import {hash} from './workbook-model.mjs';
  * its canonical module adapter is supplied by the serial integrator after source
  * delivery. This file never computes a report or stores a parallel result ledger.
  */
-export function registerWorkbookQueryReportRoutes(router,ctx,domain=workbookReportDomain){
+export function registerWorkbookQueryReportRoutes(router,ctx,domain=workbookReportDomain,prefix='/query-reports'){
   for(const key of ['read','dataset','snapshot','permission','actorKey'])if(typeof ctx[key]!=='function')throw Error('Missing workbook query context: '+key);
   for(const key of ['catalog','options','query','detail','export'])if(typeof domain[key]!=='function')throw Error('Missing query domain adapter: '+key);
   const bad=(code,status=422)=>{throw Object.assign(Error(code),{code,status});};
@@ -29,15 +29,15 @@ export function registerWorkbookQueryReportRoutes(router,ctx,domain=workbookRepo
     res.type('application/json').send(data);
   };
   const source=(q,req)=>workbookQueryBoundContext(ctx,q.identity,ctx.actorKey(req));
-  router.get('/query-reports/context',ctx.permission('read'),handle((req,res)=>{
+  router.get(prefix+'/context',ctx.permission('read'),handle((req,res)=>{
     const q=parse(req),value=workbookQueryContext(ctx,q,ctx.actorKey(req));
     respond(res,{...domain.catalog(value),preferenceScope:hash(ctx.actorKey(req)),identity:value.identity});
   }));
-  for(const kind of ['options','query','detail','value'])router.get('/query-reports/'+kind,ctx.permission('read'),handle((req,res)=>{
+  for(const kind of ['options','query','detail','value'])router.get(prefix+'/'+kind,ctx.permission('read'),handle((req,res)=>{
     const q=parse(req),value=source(q,req);
     respond(res,{...domain[kind](value,q),identity:value.identity});
   }));
-  router.get('/query-reports/export',ctx.permission('export'),handle(async(req,res)=>{
+  router.get(prefix+'/export',ctx.permission('export'),handle(async(req,res)=>{
     const q=parse(req),value=source(q,req),output=domain.export(value,q);
     const iterator=output[Symbol.iterator](),first=iterator.next();
     res.type('application/x-ndjson').set('Content-Disposition','attachment; filename="query-report.ndjson"');

@@ -25,7 +25,8 @@ export function parseWorkbook(buffer,schema){
   for(const c of xml(paths.get(name)).matchAll(/<c\b([^>]*)(?:\/>|>([\s\S]*?)<\/c>)/g)){if(++count>800000)throw Error('单表单元格超限');const ca=attrs(c[1]),body=c[2]||'',v=body.match(/<v(?:\s[^>]*)?>([\s\S]*?)<\/v>/)?.[1]||'',f=/<f(?:\s[^>]*)?(?:\/?>)/.test(body)?(body.match(/<f(?:\s[^>]*)?>([\s\S]*?)<\/f>/)?.[1]??''):undefined;if(ca.t==='s'&&!strings[Number(v)]&&strings[Number(v)]!=='')throw Error('共享字符串索引无效');map.set(ca.r,{value:ca.t==='s'?strings[Number(v)]:ca.t==='inlineStr'?text(body):unescape(v),formula:f===undefined?null:unescape(f)});}
   cells.set(name,map);return map;
  }
- if(names.includes('参数清单')||names.includes('仿真参数实例'))return parseParameterSheets(names,getCells);
+ const isV2=names.includes('版本与使用')&&[...getCells('版本与使用').values()].some(c=>c.value==='APS-MEAT-202611-V2.0');
+ if(names.includes('参数清单')||names.includes('仿真参数实例'))return {...parseParameterSheets(names,getCells),...(isV2?{productionContract:'workbook-minute-v2',datasetVersion:'APS-MEAT-202611-V2.0'}:{})};
  // Resolve parameter identity by Chinese headers, independently of sheet/column order.
  const headerCache=new Map();
  function headersFor(sheet){if(headerCache.has(sheet))return headerCache.get(sheet);const h=new Map();for(const [a,c]of getCells(sheet))if(a.match(/\d+$/)?.[0]==='2')h.set(a.replace(/\d/g,''),c.value);headerCache.set(sheet,h);return h;}
@@ -51,12 +52,12 @@ export function parseWorkbook(buffer,schema){
  for(const name of names){const spec=schema.tables[name],sc=getCells(name);if(!spec){if([...sc.values()].some(c=>c.value||c.formula))issue(name,0,'','','未知非空工作表，须明确忽略或补映射','UNKNOWN_SHEET');classification.push({sheet:name,kind:'未知',rows:0});continue;}
   if(!['输入','参考结果'].includes(spec.kind)){classification.push({sheet:name,kind:spec.kind,rows:0});continue;}const headers=new Map(),known=new Set(spec.fields.map(f=>f.name));
   for(const [a,c]of sc)if(a.match(/\d+$/)?.[0]==='2'&&c.value){if([...headers.values()].includes(c.value))issue(name,2,c.value,a,'重复中文表头','DUPLICATE_HEADER');headers.set(a.replace(/\d/g,''),c.value);if(!known.has(c.value))issue(name,2,c.value,a,'未知非空业务列，须明确忽略或补映射','UNKNOWN_FIELD');}
-  for(const field of known)if(![...headers.values()].includes(field))issue(name,2,field,'','缺少字段','MISSING_FIELD');const rs=new Map();
+  for(const field of known)if(!spec.fields.find(f=>f.name===field)?.optional&&![...headers.values()].includes(field))issue(name,2,field,'','缺少字段','MISSING_FIELD');const rs=new Map();
   for(const [a,c]of sc){const m=a.match(/^([A-Z]+)(\d+)$/);if(!m||Number(m[2])<3||(!c.value&&c.formula===null))continue;const row=Number(m[2]),field=headers.get(m[1]);if(!field){issue(name,row,'',a,'无表头非空业务列','UNKNOWN_FIELD');continue;}if(!rs.has(row))rs.set(row,{_row:row,_cells:{},_formulas:{}});const r=rs.get(row);r._cells[field]=a;
    try{let v=c.value;if(c.formula!==null){r._formulas[field]=c.formula;if(name==='配置参数'&&field==='参数值')throw Error('参数值必须为字面值，不接受公式');v=value(name,a);if(Number.isFinite(Number(v))&&Number(v)!==Number(c.value)||!Number.isFinite(Number(v))&&v!==c.value)warnings.push({code:'STALE_CACHE',sheet:name,row,field,cell:a,message:'缓存差异，采用权威参数重算值',cached:c.value,value:v});const f=c.formula.match(/^'配置参数'!\$?([A-Z]+)\$?(\d+)$/);if(f){const parameterId=parameterAt(f[1]+f[2]);if(!parameterId)throw Error('集中参数引用缺少参数值列或参数编号');bindings.push({sheet:name,row,field,parameterId});}}r[field]=v;}catch(e){issue(name,row,field,a,e.message,'INVALID_FORMULA');r[field]='';}
   }tables[name]=[...rs.values()];for(const b of bindings.filter(b=>b.sheet===name)){const r=rs.get(b.row);b.recordKey=name==='单位换算'?[r['物料编号'],r['换算前单位'],r['换算后单位']].join('|'):r[spec.key];}classification.push({sheet:name,kind:spec.kind,rows:rs.size});if(!['配置参数','物料主数据','供应商与供货条件'].includes(name))cells.delete(name);
  }
- for(const [name,spec]of Object.entries(schema.tables))if(spec.kind==='输入'&&!names.includes(name))issue(name,0,'','','缺少本版必填输入表','MISSING_SHEET');
+ for(const [name,spec]of Object.entries(schema.tables))if(spec.kind==='输入'&&(!spec.v2Only||isV2)&&!names.includes(name))issue(name,0,'','','缺少本版必填输入表','MISSING_SHEET');
  for(const i of issues){const spec=schema.tables[i.sheet],r=tables[i.sheet]?.find(r=>r._row===i.row);i.record=r?.[spec?.key]||'';}
- return {tables,bindings,classification,issues,warnings,schemaVersion:schema.version};
+ return {tables,bindings,classification,issues,warnings,schemaVersion:schema.version,...(isV2?{productionContract:'workbook-minute-v2',datasetVersion:'APS-MEAT-202611-V2.0'}:{})};
 }

@@ -1,3 +1,4 @@
+import {minuteAtomicFields} from './minute-parameter-fields.mjs';
 import {randomUUID} from 'node:crypto';
 import {parameterCatalog} from '../src/lib/parameter-catalog.mjs';
 export {parameterCatalog};
@@ -17,6 +18,7 @@ const groups=[
 ];
 export const atomicFields=groups.flatMap(([table,key,fields])=>Object.entries(fields).map(([name,[cp,min,inclusive,max]])=>({table,key,name,cp,min,inclusive,max,integer:/天数|班次|人数|套数|可用数量|优先级/.test(name),type:'number'})));
 atomicFields.push({name:'计划起始日',cp:'CP005',min:0,inclusive:true,integer:true,type:'number',global:true},{name:'窗口天数',cp:'CP006',min:0,inclusive:false,integer:true,type:'number',global:true},{name:'标准生产批量千克',cp:'CP101',min:0,inclusive:false,type:'number',global:true},{name:'供应延期概率',cp:'CP159',min:0,inclusive:true,max:1,type:'number',candidate:true},{name:'延期天数上限',cp:'CP160',min:0,inclusive:true,integer:true,type:'number',candidate:true});
+atomicFields.push(...minuteAtomicFields);
 export const specification=(name,cp)=>atomicFields.find(s=>s.name===name&&(!cp||canonicalCp(cp)===s.cp));
 export const canonicalCp=cp=>cp==='CP063'?'CP074':cp;
 export const definition=cp=>{const d=byId.get(cp);if(!d)throw Error('未知CP目录编号');return d;};
@@ -53,8 +55,9 @@ export function businessDefinition(d,cp){
 }
 export function adoptDefinitionBounds(d,p){
  const spec=parameterSpec(p);if(!spec||blockedParameter(p)||p._candidate)return;
+ if(spec.type==='enum')return;
  const c=businessDefinition(d,cpOf(p)),value=finiteNumber(p['参数值']);
- for(const [key,cmp]of [['最小值',(a,b)=>a<b],['最大值',(a,b)=>a>b]])if(String(c[key]??'').trim()!==''&&cmp(value,finiteNumber(c[key])))throw Error('P目录边界：'+key+' '+c[key]);
+ for(const [key,cmp]of [['最小值',(a,b)=>a<b],['最大值',(a,b)=>a>b]]){const text=String(c[key]??'').trim();if(!text)continue;const expression=/^(>=|<=|>|<)\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+))$/.exec(text);if(expression){const n=finiteNumber(expression[2]),op=expression[1];if(!(op==='>'?value>n:op==='>='?value>=n:op==='<'?value<n:value<=n))throw Error('P目录边界：'+key+' '+text);}else if(cmp(value,finiteNumber(text)))throw Error('P目录边界：'+key+' '+text);}
 }
 export function tagParameterSources(d){
  const hashes=new Set((d.parameterSources||[]).filter(s=>s.mode==='dataset').map(s=>s.fileHash));
@@ -64,8 +67,8 @@ export function tagParameterSources(d){
 export const objectKey=(row,spec)=>spec.key==='_unitKey'?[row['物料编号'],row['换算前单位'],row['换算后单位']].join('|'):String(row[spec.key]);
 export const parameterIdentity=p=>JSON.stringify([scopeOf(p),semanticIdentity(p)]);
 export function finiteNumber(value){const text=String(value??'').trim();if(!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(text)||!Number.isFinite(Number(text)))throw Error('须为有限数值字面值；空白不代表0');return Number(text);}
-export function validateUnit(spec,unit){const allowed=/^计划起始日$/.test(spec.name)?['日序']:/^可用数量$/.test(spec.name)?['个']:/^标准日产能千克$/.test(spec.name)?['千克/标准日','kg/标准日']:/千克$/.test(spec.name)&&!/^每箱|^每件/.test(spec.name)?['千克','kg']:/^子项基准用量$/.test(spec.name)?['千克','kg','个']:/^最小订货量$|^订货倍数$/.test(spec.name)?['本行数量单位','千克','kg','个']:/^最大容量$/.test(spec.name)?['本行容量单位','千克','kg','个']:/温度/.test(spec.name)?['摄氏度','℃']:/班次/.test(spec.name)?['班/天','班']:/人数/.test(spec.name)?['人']:/套数/.test(spec.name)?['套']:/比例|收率|概率|率$/.test(spec.name)?['比例']:/天数/.test(spec.name)?['天']:/优先级/.test(spec.name)?['顺序','优先级','无量纲']:/每箱净重/.test(spec.name)?['千克/箱','千克','kg/箱']:/每件净重/.test(spec.name)?['千克/件','千克','kg/件']:null;if(allowed&&!allowed.includes(String(unit)))throw Error(spec.name+'单位不匹配：'+unit);}
-export function validateAtomic(spec,value){const n=finiteNumber(value);if(spec.integer&&!Number.isInteger(n))throw Error(spec.name+'须为整数');if(spec.min!==null&&spec.min!==undefined&&(spec.inclusive?n<spec.min:n<=spec.min))throw Error(spec.name+(spec.inclusive?'须≥':'须>')+spec.min);if(spec.max!==undefined&&n>spec.max)throw Error(spec.name+'须≤'+spec.max);return String(value).trim();}
+export function validateUnit(spec,unit){if(spec.unit){if(String(unit)!==spec.unit)throw Error(spec.name+'单位须为'+spec.unit);return;}const allowed=/^计划起始日$/.test(spec.name)?['日序']:/^可用数量$/.test(spec.name)?['个']:/^标准日产能千克$/.test(spec.name)?['千克/标准日','kg/标准日']:/千克$/.test(spec.name)&&!/^每箱|^每件/.test(spec.name)?['千克','kg']:/^子项基准用量$/.test(spec.name)?['千克','kg','个']:/^最小订货量$|^订货倍数$/.test(spec.name)?['本行数量单位','千克','kg','个']:/^最大容量$/.test(spec.name)?['本行容量单位','千克','kg','个']:/温度/.test(spec.name)?['摄氏度','℃']:/班次/.test(spec.name)?['班/天','班']:/人数/.test(spec.name)?['人']:/套数/.test(spec.name)?['套']:/比例|收率|概率|率$/.test(spec.name)?['比例']:/天数/.test(spec.name)?['天']:/优先级/.test(spec.name)?['顺序','优先级','无量纲']:/每箱净重/.test(spec.name)?['千克/箱','千克','kg/箱']:/每件净重/.test(spec.name)?['千克/件','千克','kg/件']:null;if(allowed&&!allowed.includes(String(unit)))throw Error(spec.name+'单位不匹配：'+unit);}
+export function validateAtomic(spec,value){if(spec.type==='enum'){if(!spec.values.includes(String(value)))throw Error(spec.name+'须为'+spec.values.join('/'));return String(value); }const n=finiteNumber(value);if(spec.integer&&!Number.isInteger(n))throw Error(spec.name+'须为整数');if(spec.min!==null&&spec.min!==undefined&&(spec.inclusive?n<spec.min:n<=spec.min))throw Error(spec.name+(spec.inclusive?'须≥':'须>')+spec.min);if(spec.max!==undefined&&n>spec.max)throw Error(spec.name+'须≤'+spec.max);return String(value).trim();}
 export function validateComposite(cp,value){
  if(!value||typeof value!=='object'||Array.isArray(value))throw Error('组合参数须按命名字段维护');
  const exact=keys=>{if(Object.keys(value).some(k=>!keys.includes(k))||keys.some(k=>!Object.hasOwn(value,k)))throw Error('组合字段缺少或包含未知字段：'+keys.join('、'));};
@@ -126,7 +129,7 @@ export function applyParameters(d,day=0,scope=d.parameterContext?.scope||'datase
   if(actual){if(blockedParameter(actual)){delete row['生产班次数'];delete row['日产能分子'];}else row['生产班次数']=row['日产能分子']=actual['参数值'];}
  }
  for(const p of factory)changes.push({id:p['参数编号'],cp:cpOf(p),object:'CAL',field:p['参数名称'],value:blockedParameter(p)?null:p['参数值'],unit:p['单位'],scope:scopeOf(p),from:p['生效日'],to:p['失效日'],source:p._source,sourceRole:sourceRole(p),blocked:!!blockedParameter(p)});
- if(d.parameterContract){for(const p of ps){const spec=specification(p['参数名称'],cpOf(p));if(spec?.global)changes.push({id:p['参数编号'],cp:spec.cp,object:p['对象编号'],field:spec.name,value:p['参数值'],unit:p['单位'],scope:scopeOf(p),from:p['生效日'],to:p['失效日'],source:p._source,sourceRole:sourceRole(p),blocked:!!blockedParameter(p)});}d.effectiveParameters={day,scope,version:d.version,precedenceVersion,values:changes};}
+ if(d.parameterContract){for(const p of ps){const spec=specification(p['参数名称'],cpOf(p));if(spec?.global||spec?.calendarGlobal)changes.push({id:p['参数编号'],cp:spec.cp,object:p['对象编号'],field:spec.name,value:p['参数值'],unit:p['单位'],scope:scopeOf(p),from:p['生效日'],to:p['失效日'],source:p._source,sourceRole:sourceRole(p),blocked:!!blockedParameter(p)});}d.effectiveParameters={day,scope,version:d.version,precedenceVersion,values:changes};}
  return ps;
 }
 export function parameterView(d,query={},actor=''){
@@ -160,7 +163,7 @@ export function changeParameter(d,body,actor){
  let stored;
  if(candidate){if(!spec&&/关系\/组合/.test(c['呈现与编辑模式'])&&typeof value!=='object')throw Error('关系/组合参数须使用业务结构化表单，不能保存任意数值');if(/^CP03[0-5]$/.test(cp)&&!(finiteNumber(value)>=0&&finiteNumber(value)<1))throw Error('损耗比例须≥0且<1；空白不能当继承或0');if(body.enable===true)throw Error('候选资料不能显示已启用');stored=typeof value==='object'?validateComposite(cp,value):(spec?validateAtomic(spec,value):String(value??'').trim());if(stored==='')throw Error('候选值不能为空');}
  else {if(!spec||spec.candidate)throw Error('必要运行能力尚未支持或未明确，请保存为候选；不能假启用');stored=validateAtomic(spec,value);
-  if(spec.global&&objectId!=='GLOBAL')throw Error('此参数须采用GLOBAL对象');if(spec.table&&!spec.factory&&!(d.tables[spec.table]||[]).some(r=>objectKey(r,spec)===objectId||(spec.table==='物料清单'&&r['清单版本编号']===objectId)))throw Error('引用对象不存在；先补完整业务输入');
+  if((spec.global&&objectId!=='GLOBAL')||(spec.calendarGlobal&&objectId!=='CAL'))throw Error('此参数须采用GLOBAL对象');if(spec.table&&!spec.factory&&!(d.tables[spec.table]||[]).some(r=>objectKey(r,spec)===objectId||(spec.table==='物料清单'&&r['清单版本编号']===objectId)))throw Error('引用对象不存在；先补完整业务输入');
  }
  const unit=String(body.unit??existing?.['单位']??'');if(!unit.trim())throw Error('单位必填');if(spec)validateUnit(spec,unit);if(existing&&unit!==existing['单位'])throw Error('单位变更须重新建立明确映射，不能静默换算');
  const probe={'对象编号':objectId,'参数名称':field,'单位':unit,_cp:canonical,_scope:scope,_sourceRole:'EDIT',_profile:existing?._profile||'workbook-day'};
