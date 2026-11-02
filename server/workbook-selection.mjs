@@ -1,3 +1,4 @@
+import {minuteMode} from './workbook-minute.mjs';
 import {parameterSpec,sourceTable,cpOf} from './parameter-contract.mjs';
 const rows=(d,t)=>d.tables?.[t]||[];
 // Build one dependency projection for readiness, calculation and verification.
@@ -65,7 +66,7 @@ export function selectedFactIssues(d){
  for(const r of rows(d,'物料主数据').filter(r=>d._selectionClosure.materialIds.includes(r['物料编号'])))needed('物料主数据',r,['保质天数',...(r['物料来源']==='制造'?['生产提前期天数','每箱净重千克']:[])]);
  for(const r of rows(d,'客户与交付'))needed('客户与交付',r,['运输天数','允许提前天数','允许延后天数','到货剩余保质比例']);
  for(const r of rows(d,'供应商与供货条件'))needed('供应商与供货条件',r,['采购优先级','采购导期天数','检验天数','最小订货量','订货倍数']);
- for(const r of [...rows(d,'工艺路线'),...(d.mapping?.sfRoutes||[])])needed('工艺路线',r,['工序顺序','跨日历时天数','最小等待天数','最大等待天数','每批工装套数','需求人数']);
+ for(const r of [...rows(d,'工艺路线'),...(d.mapping?.sfRoutes||[])])needed('工艺路线',r,['工序顺序',...(minuteMode(d)?['基准加工分钟','固定准备分钟','最短工艺分钟','最大等待分钟']:['跨日历时天数','最小等待天数','最大等待天数']),'每批工装套数','需求人数']);
  for(const r of rows(d,'设备与工装'))needed('设备与工装',r,['可用数量',...(r['资源类别']==='设备'?['单次批量上限千克','标准日产能千克']:[])]);
  for(const r of rows(d,'班组资源'))needed('班组资源',r,['每班可用人数','标准日班次数','周日班次数']);
  for(const r of rows(d,'工厂日历'))needed('工厂日历',r,['生产班次数','日产能分子','日产能分母']);

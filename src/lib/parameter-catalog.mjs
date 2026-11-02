@@ -1,3 +1,4 @@
+import {minuteParameterCatalog} from "./minute-parameter-catalog.mjs";
 // Fixed approved mapping b13860914439c43801eab1e10b42a5552821afe1; suggestions remain metadata.
 export const parameterCatalog=[
  {
@@ -4369,3 +4370,5 @@ export const parameterCatalog=[
   "两入口一致性要求": "统一页与步骤入口使用同一校验、权限、对象、有效期和版本；适用可写参数两端均可保存"
  }
 ];
+
+parameterCatalog.push(...minuteParameterCatalog);

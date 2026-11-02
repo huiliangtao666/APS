@@ -3798,6 +3798,40 @@
         "parameter_sha256": "f9a4fea37b2c50038cc7c7bd9ad513d2c73b981d8ef0cd1cc2d8f47a775b176e",
         "adoption": "NOT_EXECUTED; no new import/run authorized; minute schema/model/frozen task dependency #50 remains explicit"
       }
+    },
+    {
+      "id": "CR-EQUIPMENT-SCHEDULE-VIEW-20261102",
+      "title": "设备排程六视图与生产分钟闭环",
+      "baseline_id": "APS-BL-001",
+      "approval_status": "用户明确#50马上开始；完整实现及必要自测已授权",
+      "approved_on": "2026-11-02",
+      "effective": true,
+      "effective_scope": "已批准目标要求，不代表产品实现或验证通过",
+      "implementation_status": "SOURCE_DRAFT_NOT_READY; first finite V2 input check stopped with Node heap OOM exit134 after parser recognition; build/runtime/Worker/QA NOT_EXECUTED",
+      "primary_issue": "https://github.com/huiliangtao666/APS/issues/50",
+      "implementation_contract": "https://github.com/huiliangtao666/APS/issues/50#issuecomment-6577598908",
+      "design_shas": [
+        "4c56e27249eaa9c73c6708fd9c72eccd8b9697aa",
+        "55a063fcd9daf6d3d5fdf9b25147b32ae57ee5c0"
+      ],
+      "integration_base_sha": "c5f01642b92ac765beed3d7c8caa0d2f28d33620",
+      "source_owner": "APS-Test",
+      "integration_owner": "APS-Dev",
+      "implementation_document": "docs/requirements/changes/CR-EQUIPMENT-SCHEDULE-VIEW-20261102/implementation.md",
+      "event_key": "dlv_13b4162c-9de4-447d-a5e5-c0f15ee0fe08:r1",
+      "dataset_contract": {
+        "version": "APS-MEAT-202611-V2.0",
+        "business_sha256": "247423ea73d441e8ef6d03f538f393973287e17acb93d81ec1353abc4283d247",
+        "parameter_sha256": "f9a4fea37b2c50038cc7c7bd9ad513d2c73b981d8ef0cd1cc2d8f47a775b176e",
+        "adoption": "NOT_EXECUTED; parser recognition only; preparation heap OOM"
+      },
+      "exclusions": [
+        "DEC04/05/06未授权应用扩展",
+        "真实外部对接",
+        "公开发布",
+        "旧运行回填",
+        "以源码草稿或Design仿真冒签产品PASS/QA/UAT"
+      ]
     }
   ]
 }

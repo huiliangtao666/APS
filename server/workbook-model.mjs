@@ -1,3 +1,4 @@
+import {projectMinuteInputs,minuteMode,minuteIssues} from './workbook-minute.mjs';
 import {applyParameters,parameterIssues,scopeOf,blockedParameter} from './parameter-contract.mjs';
 import {validateBomRelations} from './workbook-relation-validation.mjs';
 import {createHash} from 'node:crypto';
@@ -35,7 +36,7 @@ export function refreshDerived(d,atDay=0) {
  for(const r of rows(d,'期初库存'))r['期初可用量']=String(inventoryAmount(r,0));
  // Transit release is authoritative explicit date; inspection duration is an additional floor.
  for(const r of rows(d,'既有采购在途')){const s=suppliers.get(r['供货关系编号']);r._availableDay=Math.max(Number(r['预计放行日']),Number(r['约定到货日'])+Number(s?.['检验天数']));}
- return d;
+ projectMinuteInputs(d);return d;
 }
 export function inventoryAmount(r,day) {return ['已放行','合格'].includes(r['质量状态'])&&Number(r['放行日'])<=day&&day<Number(r['到期日'])?Math.max(0,Number(r['当前数量'])-Number(r['期初已占用量'])):0;}
 export function validateWorkbook(d,{completeness=true}={}) {
@@ -73,7 +74,7 @@ export function validateWorkbook(d,{completeness=true}={}) {
  for(const r of rows(d,'供应商与供货条件'))if(!(Number(r['订货倍数'])>0))add('供应商与供货条件',r,'订货倍数','订货倍数须大于0');
  const po=new Set();for(const r of rows(d,'既有采购在途')){const id=r['采购订单编号']+'|'+r['订单行号'];if(po.has(id))add('既有采购在途',r,'订单行号','采购行身份重复');po.add(id);const s=sup.get(r['供货关系编号']);if(s&&(s['物料编号']!==r['物料编号']||s['供应商编号']!==r['供应商编号']))add('既有采购在途',r,'供货关系编号','供货关系与物料/供应商不一致');}
  for(const r of rows(d,'工厂日历')){if(!numeric(r['日序'])||!Number.isInteger(Number(r['日序']))||String(r['公历日期']??'').replaceAll('-','')!==dayDate(Number(r['日序'])).replaceAll('-',''))add('工厂日历',r,'公历日期','日序/日期无效');if(!(Number(r['日产能分母'])>0))add('工厂日历',r,'日产能分母','日容量标准分母须显式大于0');}
- for(const r of rows(d,'停机安排'))if(!(Number(r['结束日'])>Number(r['开始日'])))add('停机安排',r,'结束日','结束日须晚于开始日');
+ for(const r of rows(d,'停机安排'))if(!minuteMode(d)&&!(Number(r['结束日'])>Number(r['开始日'])))add('停机安排',r,'结束日','结束日须晚于开始日');
  for(const r of rows(d,'每日需求'))if(!Number.isInteger(Number(r['需求日']))||Number(r['需求日'])<1||Number(r['需求日'])>43||!(Number(r['需求箱数'])>0))add('每日需求',r,'需求箱数','本profile需求日须1～43且需求箱数为正');
  for(const t of d.parameterContract?['物料清单']:['配置参数','物料清单'])for(const r of rows(d,t))if(!numeric(r['生效日'])||!numeric(r['失效日'])||!(Number(r['失效日'])>Number(r['生效日'])))add(t,r,'失效日','有效区间须为非空半开区间');
  for(const r of rows(d,'物料主数据'))if(!['千克','个'].includes(r['基础单位']))add('物料主数据',r,'基础单位','本来源profile只支持食品千克、包装个数，不能猜测换算');
@@ -81,7 +82,7 @@ export function validateWorkbook(d,{completeness=true}={}) {
  return completeness?issues:issues.filter(i=>!['FOREIGN_KEY','PARAMETER_OBJECT_UNMAPPED','PARAMETER_REQUIRED'].includes(i.code)&&!((i.code==='INPUT_INVALID')&&String(rows(d,i.sheet).find(r=>r._row===i.row)?.[i.field]??'').trim()===''));
 }
 export function workbookReadiness(d) {
- const issues=validateWorkbook(d),mapping=d.mapping;
+ const issues=[...validateWorkbook(d),...minuteIssues(d)],mapping=d.mapping;
  if(!mapping?.line?.id)issues.push(problem('工艺路线',null,'产线归属','G01业务映射待补：在工作台A2选择单线映射','G01'));
  const routes=[...rows(d,'工艺路线'),...(mapping?.sfRoutes||[])];
  for(const m of rows(d,'物料主数据').filter(r=>r['物料来源']==='制造'&&(!d._selectionClosure||d._selectionClosure.materialIds.includes(r['物料编号']))))if(!routes.some(r=>r['成品编号']===m['物料编号']))issues.push(problem('物料主数据',m,'物料编号','G02制造路线待补：在工艺路线表维护；半成品补充路线使用A2映射','G02'));

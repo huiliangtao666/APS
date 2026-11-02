@@ -1,3 +1,4 @@
+import {minuteMode} from './workbook-minute.mjs';
 import {selectionDataset,selectedFactIssues} from './workbook-selection.mjs';
 import {rows,problem,workbookReadiness} from './workbook-model.mjs';
 
@@ -40,7 +41,7 @@ export function supplyIssues(d) {
   // [] is an explicit statement of no future feed; undefined is unknown.
   if(!unique(w.remaining_material_bom_ids)||w.remaining_material_bom_ids.some(id=>!bs.some(b=>b['用量关系编号']===id)))fail('余料须显式列出该产品BOM关系，不能缺失后补0');
   if(Array.isArray(w.remaining_material_bom_ids))for(const id of w.remaining_material_bom_ids){const f=d.mapping?.feed_mappings?.find(f=>f.bom_id===id);if(!f||!w.remaining_route_steps?.includes(f.route_step_id))fail('剩余待投BOM必须映射到剩余工序');}
-  if(!Array.isArray(w.current_occupancy_day_interval)||w.current_occupancy_day_interval.length!==2||!w.current_occupancy_day_interval.every(day)||Number(w.current_occupancy_day_interval[1])<Number(w.current_occupancy_day_interval[0]))fail('WIP当前占用须显式给出半开日区间');
+  if(!minuteMode(d)&&(!Array.isArray(w.current_occupancy_day_interval)||w.current_occupancy_day_interval.length!==2||!w.current_occupancy_day_interval.every(day)||Number(w.current_occupancy_day_interval[1])<Number(w.current_occupancy_day_interval[0])))fail('WIP当前占用须显式给出半开日区间');
   const crew=rows(d,'班组资源').find(c=>c['班组编号']===w.remaining_labor_pool),tools=d.mapping?.tool_pools?.[w.remaining_tool_type];
   if(!crew||!number(w.remaining_labor_count)||Number(w.remaining_labor_count)<=0||Number(w.remaining_labor_count)>Number(crew['每班可用人数'])||!Array.isArray(tools)||!number(w.remaining_tool_count)||!Number.isInteger(Number(w.remaining_tool_count))||Number(w.remaining_tool_count)<0||Number(w.remaining_tool_count)>tools.length)fail('WIP剩余人员/工装必须有显式有限来源');
  }
