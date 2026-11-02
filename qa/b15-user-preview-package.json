@@ -11,6 +11,8 @@
     "dev": "node b15-user-preview-server.mjs",
     "start": "node b15-user-preview-server.mjs"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@praetor/lite-app-runtime": "file:../../.praetor/sdk/lite-app-runtime.tgz"
+  },
   "devDependencies": {}
 }

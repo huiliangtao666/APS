@@ -1,3 +1,84 @@
+CURRENT #47 AMENDMENT — 2026-11-02 / target dependency adaptation r1
+Authority: https://github.com/huiliangtao666/APS/issues/47#issuecomment-6567192449
+Delivery: dlv_06fa93fe-92f7-4e91-99fd-fe9cb8e9bc72
+Dispatch: aps:uat17-preview-contract-target-adaptation:20261102:r1
+This section supersedes the historical procedures below. No application was
+installed, bound, started, restarted or accessed by this amendment. Current
+new start/restart/browser/Worker budget=0. Historical activation/Node/manifest
+remain each1/1 exhausted. Dev45 owns the heavy window; wait for its explicit
+RELEASED/0owned/0pending and PM's reviewed single-window handover before any
+finite dependency execution. actual_user_url and devBase remain null.
+
+Minimal source changes: package template adds only @praetor/lite-app-runtime;
+lock template reuses the byte-identical real npm10.9.8 lock from the previously
+completed own-SDK offline preparation. Description/scripts/type/engines and
+.npmrc remain unchanged. The historical description refers to wrapper imports:
+workspace-preview code still uses built-ins, but the platform has an additional
+SDK prerequisite. No React/router/Vite peer or SDK development tree is added.
+SDK0.5.0,35636bytes,SHA256
+32884090246c8a23783425c93b3ae26a1279eace2045aed5dee2e43ac014951f.
+The independent installation PASS is retained at its original event/SHA;
+this amendment claims only static target-path/template validation.
+
+Target cwd=/workspace/apps/qa17-0afa-user-entry; own SDK is
+/workspace/.praetor/sdk/lite-app-runtime.tgz. Independently computing relpath
+produces ../../.praetor/sdk/lite-app-runtime.tgz. The earlier preparation cwd
+/workspace/temp/qa17-own-sdk-dependency-r1 has the same depth and independently
+produces the same path; reuse is justified by resolution equality, not by
+copying a guessed preparation path. This template is for that target layout.
+Both dependency and lock resolved entries have this exact file: path and the
+previously verified SRI. No lock entry was hand-edited or newly npm-generated.
+
+Current target already has the old manifest/lock. control prepare refuses to
+overwrite differing files; do not invoke it on the existing target or weaken
+that guard. Later apply only the two reviewed project templates after verifying
+original hashes and saving a private rollback copy. Preserve .npmrc, all five
+runtime files, deployment gate, product0afa/18302 and old data. Apply/installation
+is pending PM scheduling. In the future official app container, the exact
+canonicalization command is:
+  npm install --package-lock-only --offline --include=dev --ignore-scripts=false --foreground-scripts
+and installation is:
+  npm ci --offline --include=dev --ignore-scripts=false --foreground-scripts
+Use app-exec.sh --mode standalone --cwd /workspace/apps/qa17-0afa-user-entry
+with a bounded timeout, never host npm; preserve offline .npmrc and lifecycle.
+The supplied lock was already npm-generated; canonicalization is a later target
+operation, not another claim that the completed preparation needs retesting.
+
+Official dev-preview.sh lines69-81 choose the control-plane POST for VM even
+for stack=node. Its container-only legacy branch is not a VM workaround.
+init-app.sh lines165-199 proves own sync-tarball supply and container-side SDK
+installation before the scaffold's preview stage; it does not prove this
+explicit node control-plane handler's lookup/install order. Original error:
+  dev preview needs @praetor/lite-app-runtime >= 0.4.0 (not installed)
+This proves the observed floor rejection, not a full node execution contract.
+Node app-container.js consumes command/env/appPort/devBase/stripPrefix/probe
+from the controller; it does not determine those values or install this SDK.
+Official lite-app-overview (remote-VM section) confirms container execution,
+matching current skill and retained diagnostics. The older workspace-settings
+help describes native preview; it is not grounds to change execution mode.
+Obtain the deployed control-plane branch/version, SDK lookup and order, effective
+command, PORT/readiness and prefix contract from the lite-app/dev-preview
+maintainer. No migration,
+platform/daemon edit or fallback to a host/native listener is authorized.
+
+No bind is required for the unchanged app/cwd/port/command. After the contract
+answers and actual target installation, PM must separately authorize a precise
+new startup count and window. The proposed bounded attempt is one official
+dev-preview call, zero restart/second attempt/Worker; browser admission is a
+separate explicit budget. It is not authorized by this document. On first
+failure preserve response plus app-diagnose.sh --dev; stop and do not retry.
+Use only returned devBase and the printed Workbench/Agent Browser URLs in their
+own contexts, preserving deployment prefix. Do not configure the deployment
+until the same real route proves anonymous401, authorized-session closed503
+and platform-only ingress. Never fake a health200 to open the business gate.
+Do not delete/change reviewed deployment, state/native/history/frozen/config
+or restore old instances. Dependency rollback is only the saved two project
+files, plus only dependency artifacts created by the later operation and proven
+unused; it is not a binding, service or business-state rollback.
+
+HISTORICAL RECORDS BELOW — prior observations and exhausted procedures only;
+not current execution permission. Retain original PASS at original versions.
+
 #47 minimal unpublished workspace entry — r3; Node recovery amendment
 original_delivery=dlv_fa72c95d-9147-48ec-86a9-b395fedb3dc9
 event_key=aps:preview-minimal-workspace-entry:20261101:r3
