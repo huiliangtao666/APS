@@ -1,0 +1,67 @@
+[
+  {
+    "path": "01-完整版本与CR执行说明.txt",
+    "bytes": 4051,
+    "sha256": "42157fd41055b0155c9b5f8b62b4ad2c0e28d985a44e49505657156da20e2657"
+  },
+  {
+    "path": "02-完整表字段与角色映射.csv",
+    "bytes": 103469,
+    "sha256": "decc9f6a74c931803c35ba2a66b076a32dd0a86869c76bab409daac0a6ebcce0"
+  },
+  {
+    "path": "03-独立数据校验.json",
+    "bytes": 2047,
+    "sha256": "5b4f2142a77adffe20823660b2255bbc38042840dba51bbd8436719e88d4c0ba"
+  },
+  {
+    "path": "04-数据版本与来源清单.json",
+    "bytes": 2387,
+    "sha256": "7c33b1ed6c803c00ee17a8c64dd7c1550841bb7541f03d34c289700373835d3a"
+  },
+  {
+    "path": "05-CR按V2执行验收清单.csv",
+    "bytes": 4186,
+    "sha256": "8eb3c5a888c7019b9806cacb884246b4aa779cfcf7969e93e30a10a6fa6c94f7"
+  },
+  {
+    "path": "06-继承与变更对照.csv",
+    "bytes": 1354,
+    "sha256": "0c20256e985dba05f6a4b806876d4947621aaff51810cbe48425a7a581400ce1"
+  },
+  {
+    "path": "07-分钟数值与执行边界.txt",
+    "bytes": 2319,
+    "sha256": "7ef4eddb7c84e10fc3b41c38d0b2bd5aa4c684b093e0b7b732a43c316305ffd1"
+  },
+  {
+    "path": "仿真生成与核对脚本/build.py",
+    "bytes": 9232,
+    "sha256": "09cc86e94c6a0bf3838d810107ee9479181be9ba7e64ec2f1e00a73c51ebb674"
+  },
+  {
+    "path": "仿真生成与核对脚本/inputs.py",
+    "bytes": 10450,
+    "sha256": "a9998a811491222e02e081ffe58ac8dc3b8f98c349238b748b8480bc78f8320d"
+  },
+  {
+    "path": "仿真生成与核对脚本/model.py",
+    "bytes": 8260,
+    "sha256": "3f56040c74e1b4b590338afae104a9e6004be34ad35d490a461f15fbe927d57f"
+  },
+  {
+    "path": "仿真生成与核对脚本/parameters.py",
+    "bytes": 14982,
+    "sha256": "c04e333bd3fcea0becc15ddf7412413ea2ce5944ae7dcada1647d57fd1d58150"
+  },
+  {
+    "path": "仿真生成与核对脚本/validate.py",
+    "bytes": 10528,
+    "sha256": "195b5201f9bb60cbc9b674a036d4b9fb5ce15df3cbdc1ffc1d21d84b0a1a656f"
+  },
+  {
+    "path": "仿真生成与核对脚本/xlsx_edit.py",
+    "bytes": 6849,
+    "sha256": "bddee709153fc04e48a0e5f2955b9eff0aeb1c7be4a11bda592d480d6f885361"
+  }
+]

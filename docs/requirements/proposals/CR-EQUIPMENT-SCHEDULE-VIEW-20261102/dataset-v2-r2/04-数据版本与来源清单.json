@@ -1,0 +1,76 @@
+{
+  "version": "APS-MEAT-202611-V2.0",
+  "business_file": "肉食品仿真数据_202611_完整分钟版_V2.0_20261102.xlsx",
+  "parameter_file": "APS配置参数梳理_完整分钟版_V2.0_20261102.xlsx",
+  "counts": {
+    "sku": 140,
+    "bom": 317,
+    "routes": 127,
+    "manufactured_materials": 30,
+    "devices": 32,
+    "tools": 17,
+    "shift_rows": 81,
+    "downtime": 5,
+    "wip": 8,
+    "clean_rules": 1986,
+    "parameter_catalog": 181,
+    "parameter_instances": 4862,
+    "retired_day_parameters": 174
+  },
+  "reviewed_product_sha": "677029d2473b030bec5150b23eeae9488a0c4e84",
+  "new_product_sha": null,
+  "product_import_or_runtime": "NOT_EXECUTED",
+  "files": [
+    {
+      "path": "肉食品仿真数据_202611_完整分钟版_V2.0_20261102.xlsx",
+      "bytes": 2202570,
+      "sha256": "247423ea73d441e8ef6d03f538f393973287e17acb93d81ec1353abc4283d247"
+    },
+    {
+      "path": "APS配置参数梳理_完整分钟版_V2.0_20261102.xlsx",
+      "bytes": 356351,
+      "sha256": "f9a4fea37b2c50038cc7c7bd9ad513d2c73b981d8ef0cd1cc2d8f47a775b176e"
+    }
+  ],
+  "source_files": [
+    {
+      "path": "upload/肉食品仿真数据_202611_合并图示版.xlsx",
+      "bytes": 1672626,
+      "sha256": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0"
+    },
+    {
+      "path": "upload/APS配置参数梳理_20261101.xlsx",
+      "bytes": 247518,
+      "sha256": "e8b73e882e66b2e19ab7cb639c7a17e8830d08c0f485667484141837794f4d24"
+    }
+  ],
+  "dataset_roles": {
+    "B": "主数据/业务/配套分钟输入/基础参数镜像/原参考",
+    "P": "权威目录定义、边界/必填/缺失、有效实例及建议性质"
+  },
+  "source_priority": "P>B independent of import order; online changes use new dataset version; old runs frozen",
+  "contract": {
+    "production_unit": "minute",
+    "display_step_minutes": 30,
+    "daily_business": [
+      "需求",
+      "库存",
+      "补料"
+    ],
+    "day_zero_and_minute_origin": "2026-10-31T00:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "window_minute_interval": [
+      1440,
+      21600
+    ]
+  },
+  "cr_issues": [
+    50,
+    49,
+    45
+  ],
+  "no_originals_overwritten": true,
+  "public_original_data_published": false,
+  "previous_mock_status": "旧261任务展示夹具不参与V2生产输入",
+  "validation": "12组数据静态核对通过；产品实际导入/运行/UAT未执行"
+}
