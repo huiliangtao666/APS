@@ -1,0 +1,15 @@
+{
+  "kind": "DESIGN_ASSET_ONLY",
+  "checks": {
+    "both_upload_hashes_match_known_versions": true,
+    "sample_instances_3428_same_values": true,
+    "P_directory168": true,
+    "all_source_files_fixed_sha": true,
+    "findings_unique": true,
+    "assertions18_unique": true,
+    "calendar_original_identity_confirmed": true,
+    "oracle_available_day7": true
+  },
+  "product_tests": "NOT_EXECUTED",
+  "new_product_sha": null
+}

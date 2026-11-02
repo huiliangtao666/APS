@@ -1,0 +1,46 @@
+{
+  "01-核对结论与修订设计.txt": {
+    "bytes": 12162,
+    "sha256": "d576e992992c06705a72183d0dd06f8d2114c372bb8f298be98958247dc5e206"
+  },
+  "02-源码与设计差异核对.csv": {
+    "bytes": 4336,
+    "sha256": "8df6129553723a95249eeac61d544180bea66a1b3fa31599fcbbbe2b418e1a61"
+  },
+  "03-双文件优先级与覆盖规则.csv": {
+    "bytes": 1425,
+    "sha256": "3c2747649eac1e1b297dacc8191dfbdd95363ea0ad49d740eee1219de1bd8c38"
+  },
+  "04-双文件与渐进完善验收.csv": {
+    "bytes": 5884,
+    "sha256": "b94b1ed5ad6fdee7dd8d7e43a8d96068ae25ace2f5ee931365eb997ace097e15"
+  },
+  "05-原件事实与独立预期.json": {
+    "bytes": 2082,
+    "sha256": "1d6e6d63f41af8fe3c66f93529d646920a584dd6bca9b493ceae169a41b156a1"
+  },
+  "06-变更来源及核对范围.json": {
+    "bytes": 1913,
+    "sha256": "f413b7ed11e813245732e9911b9f884cef153d1f7c5b91e0762eed9b3c2ed7d9"
+  },
+  "07-源码证据索引.json": {
+    "bytes": 5155,
+    "sha256": "eec3765f9a546ac15333e537c40890cfba713e2c81ae0dbcb86844a04f08237c"
+  },
+  "08-设计资产校验.json": {
+    "bytes": 429,
+    "sha256": "39af59a54cf860e1c19fa7a461214f95d3d3154d4a4a46db3cddff9f842fd117"
+  },
+  "09-业务交换与状态补充.json": {
+    "bytes": 2291,
+    "sha256": "cdb1634bf9c33334f64edecc8bbe96ddd9b8ae606320b60e93ff9692726be253"
+  },
+  "README.txt": {
+    "bytes": 1303,
+    "sha256": "f28e196cee8fbf18fbdbbb5132c3d1c648c4d84836e05a9fcc46a1f8d78653e2"
+  },
+  "双文件优先级与验收核对.xlsx": {
+    "bytes": 12031,
+    "sha256": "e55d37ef86e3fe2d0aa3ac051174659c42b209212511f70138214d99a7ae0651"
+  }
+}

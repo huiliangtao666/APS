@@ -1,0 +1,42 @@
+{
+  "cr_id": "CR-INPUT-SCHED-UX-20261102",
+  "revision": "two-file-precedence-r1",
+  "event_key": "design:two-workbook-precedence:20261102:r1",
+  "user_quote": "第一份包含主数据、业务数据和部分配置参数；第二份主要是配置参数。配置参数如有冲突或者歧义，请以第二份为准。我在实际UAT中，我分别导入这两份文件用来测试。确实参数会在测试中逐渐完成。请检查程序设计上是否符合以上目标，如有差异请进行修正。",
+  "authority": "本轮用户明确两文件主源、第二份参数优先及逐步完善目标，并要求核对修正；沿Issue45原CR补充，不重建平行CR/微任务。",
+  "primary_issue": "https://github.com/huiliangtao666/APS/issues/45",
+  "related_crs": [
+    "CR-INPUT-DATA-20261031",
+    "CR-PARAM-UI-20261101",
+    "CR-SCHED-CONFIG-20261031"
+  ],
+  "parent_design_shas": [
+    "3efbcce390b48104eaa2e6d46f984baa3ce08756",
+    "41a0191a7814cec2cfbad1c15298c36ae8e345c4",
+    "b13860914439c43801eab1e10b42a5552821afe1"
+  ],
+  "inspected_product_sha": "33fe82f4b52dac4c7f98490a5667605b9de6bab6",
+  "new_product_sha": null,
+  "design_state": "CORRECTED_DESIGN_AND_SOURCE_REVIEW_DELIVERED",
+  "registration_state": "PENDING_PM_PROCESSING",
+  "source_review_findings": 10,
+  "new_assertions": 18,
+  "originals": [
+    {
+      "role": "B",
+      "file": "肉食品仿真数据_202611_合并图示版.xlsx",
+      "bytes": 1672626,
+      "sha256": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0"
+    },
+    {
+      "role": "P",
+      "file": "APS配置参数梳理_20261101.xlsx",
+      "bytes": 247518,
+      "sha256": "e8b73e882e66b2e19ab7cb639c7a17e8830d08c0f485667484141837794f4d24"
+    }
+  ],
+  "runtime_or_product_test": "NOT_EXECUTED_BY_DESIGN",
+  "no_added_runtime_budget": true,
+  "no_app_restart": true,
+  "no_product_status_or_repair_round_change_by_design": true
+}

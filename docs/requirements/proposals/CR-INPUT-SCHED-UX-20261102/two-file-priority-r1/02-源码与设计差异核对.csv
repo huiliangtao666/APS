@@ -1,0 +1,11 @@
+﻿编号,结论性质,目标或问题,证据文件,起始行,现有行为与依据,修订目标,证据边界
+MATCH-01,部分已符合,两个文件分别导入，同一目标数据集,src/WorkbookImportCards.tsx,3,两个独立导入卡；参数卡绑定所选datasetId,保留：不要求用户物理合并Excel，预览/确认/来源各自独立,静态源码已核，不代表当前部署及真实UAT已通过
+MATCH-02,部分已符合,参数采用后冻结与历史保护,server/workbook-runtime.mjs,49,按范围取参数、refreshDerived后冻结实际值及sourceFiles，历史inputRef独立,保留并补来源优先级及双文件原件的端到端验收,同上
+GAP-01,设计及源码缺口,没有第二份优先于第一份的来源解析规则,server/workbook-workbench.mjs,41,业务重导在旧参数合同存在时整包复制旧配置参数，而非按B/P来源逐键合并；effectiveParameters只按dataset/trial覆盖,新增来源角色P>B，重导B只更新B层未被P覆盖项；有效期与在线覆盖明确,源码路径可核；未动态执行，不计新产品FAIL
+GAP-02,源码差异,CAL工厂日历参数按班组对象校验而被拒绝,server/parameter-contract.mjs,13,标准/周日班次映射到班组编号；CAL不在班组表。原件PA3427/3428明确对象名工厂日历,按原件证据映射CAL到工厂日历参数，日历引用按标准/周日语义解析；不能要求删行或改假TM,与Issue45已报CAL错误一致；本轮仅源码和原件核对，未重测/新增轮次
+GAP-03,源码差异,第二份目录语义被内置旧目录盖回去,server/parameter-contract.mjs,85,"defs={...uploaded,...definition,sourceDefinition:uploaded}；顶层同名项仍以内置为准；值校验亦固定atomicFields",分技术不可改字段与中文业务规则/校验元数据；后者以P来源为准，显式标采用/待编译/未支持，禁止只放raw备份,K～O及O建议仍保留条件/建议性质，不能当脚本执行
+GAP-04,源码及分层不足,参数尚未补齐会与导入合法性混同,server/parameter-import.mjs,37,active/candidate统一汇总为issues；workbook-router按issues任一条阻止提交；当前活跃CAL等未映射也阻候选文件保存,合法但不完整资料允许保存待补，解析错误/非法类型和运行必要缺项分层，后者不阻无关编辑和导入,保留格式损坏/无效数值整批拒绝；不为放行而填0
+GAP-05,源码范围缺口,就绪检查没有按本次需求依赖范围收敛,server/workbook-workbench.mjs,63,先对整个d调用supplyReadiness；workbookReadiness遍历全部制造SKU/BOM/WIP，未传本次需求闭包,全库完整性问题列表照查；运行门槛只取所选需求、实际采用BOM/资源/供应/已执行依赖；范围外缺项列未检查,共享池/同物理供给及锁定执行依赖须纳闭包，不能为小范围试算忽略共享约束
+GAP-06,源码合并缺口,参数替换以PA记录号为主，不能稳定识别同义更新,server/parameter-import.mjs,33,只按参数编号找prior；同义同scope同区间换PA号会追加后报重叠；部分时段替换也未按来源分段,PA保留来源ID；按语义/对象类型/对象ID/单位维度/profile/scope/有效期匹配；跨来源P优先，P内同级冲突仍拒绝,同名不同对象/量纲不自动覆盖；不得按显示名称猜语义
+GAP-07,现有设计需明确修订,原大预览设计将CAL先列原文件修正，而当前原件语义已明确,CR-INPUT-SCHED-UX-20261102-Design-large-preview-r1/01-业务交互与状态.txt,30,旧设计不从代码名猜对象类型是正确保护，但原件本轮已明确CAL/工厂日历，不能继续要求用户先修参数文件,原有未知对象仍待定位；此已知CAL应补程序映射；原预览只读及分页合同保留，在线参数维护沿实际编辑器,沿同CR补充，不另建第二套大预览设计，不重开旧交付结论
+GAP-08,主路径表达需修正,默认候选不能被当成第二份已经采用,src/WorkbookImportCards.tsx,6,参数mode初始candidate，需另选dataset；当前仅导入候选不改变第一份有效值,主UAT路径提供明确“导入并采用可用参数（第二份优先）”确认，候选另选；来源摘要持续说明当前有效值取自哪份,预览/上传不自动激活；确认采用之后才运行P优先

@@ -1,0 +1,137 @@
+{
+  "inspected_product_sha": "33fe82f4b52dac4c7f98490a5667605b9de6bab6",
+  "method": "GitHub fixed SHA contents bytes; read-only source review; no product code execution",
+  "sources": [
+    {
+      "path": "changes.json",
+      "bytes": 241378,
+      "sha256": "7725dedb75ada44dfa41e93249aab06853b0789c26da6e443b3a4a5519dbb7c9"
+    },
+    {
+      "path": "docs/parameter-dual-entry.md",
+      "bytes": 14465,
+      "sha256": "25a1e3fdfa568c36fde9af44310626cdd2d18cbe7ac2486f94737bd011881b79"
+    },
+    {
+      "path": "docs/workbench-excel-r2.md",
+      "bytes": 7627,
+      "sha256": "eededff7241b3978f91da3d99251b9e5fcd1f05b702cbc991ef991ebde40f53f"
+    },
+    {
+      "path": "docs/workbook-input-integration.md",
+      "bytes": 6304,
+      "sha256": "bf809df74f17299753f4e90c01086b95e64052b697bb2df14f296f31ad97be13"
+    },
+    {
+      "path": "head.json",
+      "bytes": 2526,
+      "sha256": "0a831ea5cb203ef636194f6d2da669c678b45602d520ad068f3f3b2adb759d5a"
+    },
+    {
+      "path": "issue45.json",
+      "bytes": 170884,
+      "sha256": "3022680296caf5ad8a543ec650b75ac93cc5ed265c73c659c10d22795d0f0cde"
+    },
+    {
+      "path": "qa/parameter-ui-core.test.mjs",
+      "bytes": 14051,
+      "sha256": "2186e29c4e563909eae5c2687fcff85ece71c2ce804c71f89684b53330682b9a"
+    },
+    {
+      "path": "qa/parameter-ui-fixture.py",
+      "bytes": 3111,
+      "sha256": "4c6ce9f6b277a9f1e70fae005bae9eea67e618b221f4836dc8e383c79e576af1"
+    },
+    {
+      "path": "server/parameter-contract.mjs",
+      "bytes": 22256,
+      "sha256": "78edea80b6e5749fabfdcfd7b5f4cb7b1eea990916dc745396117ff111586288"
+    },
+    {
+      "path": "server/parameter-import.mjs",
+      "bytes": 7785,
+      "sha256": "5900332f6f1b99d5a26f2c5404b61bf484fdea9ce2e2aa220bd70ac6ce41ca15"
+    },
+    {
+      "path": "server/parameter-router.mjs",
+      "bytes": 2788,
+      "sha256": "e6434cdded3d1f985face61160ab9cbabfaf9ef0ca36170da8853952b64940ef"
+    },
+    {
+      "path": "server/workbook-import-worker.mjs",
+      "bytes": 3544,
+      "sha256": "d9f01fc848e03126852867beeb2dbaaef9eaf83875790f12a5eef726ac5e8d23"
+    },
+    {
+      "path": "server/workbook-model.mjs",
+      "bytes": 14350,
+      "sha256": "e6646d38b6a50065a519dc6201b58aa66d1d08ce79afa2c5c7458b61defca98b"
+    },
+    {
+      "path": "server/workbook-parse.mjs",
+      "bytes": 11607,
+      "sha256": "17d6e24c8a6b36cc2613b0b18bb348bac7f49d61368c5842a8a54a854ab17227"
+    },
+    {
+      "path": "server/workbook-plan.mjs",
+      "bytes": 25980,
+      "sha256": "224d6d91066fd2eef76e00745a75febcb88f1a2d524f295c608726eb0a48805c"
+    },
+    {
+      "path": "server/workbook-router.mjs",
+      "bytes": 18200,
+      "sha256": "12113239971be3935d1f152427a9b31be90364cf86e49f2f50f3710b27ac4665"
+    },
+    {
+      "path": "server/workbook-runtime.mjs",
+      "bytes": 13209,
+      "sha256": "ab9eddd3344f28cec5c6f037f583b102fa13eb8ab383da399abffda55909e3fe"
+    },
+    {
+      "path": "server/workbook-schema.json",
+      "bytes": 69597,
+      "sha256": "f8006d88d6b074d388226372f20b161735295961e0024b9345d5dd9520be2eb6"
+    },
+    {
+      "path": "server/workbook-supply.mjs",
+      "bytes": 7547,
+      "sha256": "91783d17c1de37e333be69ff971e7f040d18f1090b7419447338076f669ff81e"
+    },
+    {
+      "path": "server/workbook-workbench.mjs",
+      "bytes": 6245,
+      "sha256": "39e0b871af968b9612b0d7fd1014229d458b97ab9d596eca4d7c35aacf3987b5"
+    },
+    {
+      "path": "src/App.tsx",
+      "bytes": 48389,
+      "sha256": "d556e29720ce4ee97fd2c7dc522508052268f79b8c8955c3a1c3ebdcdad66e73"
+    },
+    {
+      "path": "src/ParameterPanel.tsx",
+      "bytes": 14163,
+      "sha256": "8a3b1553be6da7c4e279ee08ee3a3d7c550fb3b8c707316b98ba937aee2dcf97"
+    },
+    {
+      "path": "src/WorkbookImportCards.tsx",
+      "bytes": 6288,
+      "sha256": "8230bb230c44f6c9e90f1368e6d5e949a920923de4ebfebec6a02b910deecdf1"
+    },
+    {
+      "path": "tree.json",
+      "bytes": 1296094,
+      "sha256": "ea29a7f3d34708cecf57bc318242bd393cd506cb4b25af2345ba0c28a0ee891a"
+    }
+  ],
+  "line_links": [
+    "https://github.com/huiliangtao666/APS/blob/33fe82f4b52dac4c7f98490a5667605b9de6bab6/src/WorkbookImportCards.tsx#L3",
+    "https://github.com/huiliangtao666/APS/blob/33fe82f4b52dac4c7f98490a5667605b9de6bab6/server/workbook-runtime.mjs#L49",
+    "https://github.com/huiliangtao666/APS/blob/33fe82f4b52dac4c7f98490a5667605b9de6bab6/server/workbook-workbench.mjs#L41",
+    "https://github.com/huiliangtao666/APS/blob/33fe82f4b52dac4c7f98490a5667605b9de6bab6/server/parameter-contract.mjs#L13",
+    "https://github.com/huiliangtao666/APS/blob/33fe82f4b52dac4c7f98490a5667605b9de6bab6/server/parameter-contract.mjs#L85",
+    "https://github.com/huiliangtao666/APS/blob/33fe82f4b52dac4c7f98490a5667605b9de6bab6/server/parameter-import.mjs#L37",
+    "https://github.com/huiliangtao666/APS/blob/33fe82f4b52dac4c7f98490a5667605b9de6bab6/server/workbook-workbench.mjs#L63",
+    "https://github.com/huiliangtao666/APS/blob/33fe82f4b52dac4c7f98490a5667605b9de6bab6/server/parameter-import.mjs#L33",
+    "https://github.com/huiliangtao666/APS/blob/33fe82f4b52dac4c7f98490a5667605b9de6bab6/src/WorkbookImportCards.tsx#L6"
+  ]
+}
