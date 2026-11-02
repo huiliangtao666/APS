@@ -23,7 +23,7 @@ def commands(wab):
         'rollback': [script, 'container', APP_ID, '/workspace/apps/qa-fr006-main-3d164d5', '3000', 'vite', 'npm run dev'],
         'rollback_data_policy': 'Restore binding configuration only. No state/auth/native/history restore, deletion or old-instance stop. Keep new user data.',
         'preview': [str(pathlib.Path(wab).parent / 'lite-app-scaffold/scripts/dev-preview.sh')],
-        'activation': 'NOT_EXECUTED; one approval for prepare + bind + official dev-preview + gate verification + reviewed deployment config; no publication',
+        'activation': 'NOT_EXECUTED; current new start/restart/browser/Worker budget=0; historical activation/Node/manifest each1/1 exhausted. Target dependency application waits for Dev45 RELEASED/0owned/0pending and PM window; any startup needs a separately approved exact count. No publication',
         'user_url': 'Only platform devBase / printed Workbench URL, preserving public origin and deployment prefix. Never internal upstream or Agent Browser URL.',
     }
 

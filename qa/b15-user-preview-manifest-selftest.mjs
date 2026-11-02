@@ -2,16 +2,26 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { builtinModules } from 'node:module';
+import { posix } from 'node:path';
 import { configuration } from './b15-user-preview-server.mjs';
 const read = name => fs.readFileSync(new URL(name, import.meta.url), 'utf8');
 const pkg = JSON.parse(read('./b15-user-preview-package.json'));
 const lock = JSON.parse(read('./b15-user-preview-package-lock.json'));
 assert.equal(pkg.private, true);
-assert.deepEqual(pkg.dependencies, {});
+const sdkFile = 'file:../../.praetor/sdk/lite-app-runtime.tgz';
+assert.deepEqual(pkg.dependencies, { '@praetor/lite-app-runtime': sdkFile });
+assert.equal(posix.resolve('/workspace/apps/qa17-0afa-user-entry', sdkFile.slice(5)), '/workspace/.praetor/sdk/lite-app-runtime.tgz');
 assert.deepEqual(pkg.devDependencies, {});
 assert.deepEqual(pkg.scripts, { dev: 'node b15-user-preview-server.mjs', start: 'node b15-user-preview-server.mjs' });
 assert.equal(lock.lockfileVersion, 3);
-assert.deepEqual(Object.keys(lock.packages), ['']);
+assert.deepEqual(Object.keys(lock.packages), ['', 'node_modules/@praetor/lite-app-runtime']);
+assert.deepEqual(lock.packages[''].dependencies, pkg.dependencies);
+const sdk = lock.packages['node_modules/@praetor/lite-app-runtime'];
+assert.equal(sdk.version, '0.5.0');
+assert.equal(sdk.resolved, sdkFile);
+assert.equal(sdk.integrity, 'sha512-xcP0pzSkrhcJIlPa/dxW8pkj3dLHacHzVNikcY2ebBP6VmWAXqFg4AZN/IWTD2txqLEDUh42cS0a6qYkI8V9tw==');
+assert.equal(sdk.engines.node, '>=18');
+assert.deepEqual(sdk.peerDependenciesMeta, { react: { optional: true }, 'react-router-dom': { optional: true }, vite: { optional: true } });
 assert.equal(lock.name, pkg.name);
 assert.equal(lock.version, pkg.version);
 assert.deepEqual(lock.packages[''].engines, pkg.engines);
@@ -33,4 +43,4 @@ for (const [key, value] of [['unpublished', false], ['platformGateVerified', fal
   await assert.rejects(configuration(env, { ...deployment, [key]: value }), /verified_unpublished_workspace_gate_required/);
 }
 await assert.rejects(configuration(env, { ...deployment, mode: 'managed-identity' }), /missing B15_PREVIEW_SDK_ROOT/);
-console.log(JSON.stringify({ result: 'PASS', checks: ['private-empty-dependency-manifest', 'lock-v3-empty-graph', 'offline-npm-config-retains-lifecycle', 'builtin-static-closure', 'workspace-mode-without-SDK', 'closed-gate-negatives', 'managed-mode-still-requires-SDK'], listener: false, productHTTP: false, browser: false, Worker: false }));
+console.log(JSON.stringify({ result: 'PASS', checks: ['private-official-sdk-file-dependency', 'target-cwd-resolution-and-lock-v3-single-sdk', 'offline-npm-config-retains-lifecycle', 'builtin-static-closure', 'workspace-mode-without-SDK', 'closed-gate-negatives', 'managed-mode-still-requires-SDK'], listener: false, productHTTP: false, browser: false, Worker: false }));
