@@ -304,3 +304,36 @@ Next work must first resolve and revalidate full-source clone memory at the same
 heap limit, then explicitly admit only an affected server bundle and new fixed
 candidate using the already accepted v2/v3 state. Both baseline and P calculations
 are exhausted and must not be rerun. APS-Test remains owner; Dev is main writer.
+
+## r10 continuation: full-source copy peak and bounded module closure
+
+Under PM contract 6587564225, replace the full structured-clone serialization
+buffer with a detached JSON-tree copy that shares only immutable string values.
+The source tree, all provenance, both accepted runs and every original field
+remain intact. Source hashing and projection-byte measurement stream in native
+JSON property order; the full V2 input hash and the original 32,955,199 projected
+bytes remain identical. The common workbook query context uses the same detached
+copy and streaming hash, so the HTTP seam avoids the same serialization peak.
+Report resolution copies the rows that the existing parameter resolver writes,
+shares the frozen remainder, and retains one immutable resolved day per snapshot.
+No parameter rule, business default, source check or engineering limit changes.
+
+The complete same-hash 18-view module passed at --max-old-space-size=192 in
+21.842 seconds, including all pages, complete certified exports and source/raw/
+run drilldowns. Both accepted v2/v3 runs were checked through the common context;
+the original v3 state and all input/result hashes remained unchanged. The module
+process max RSS was 455,968 KiB, distinct from the 192 MiB old-space setting.
+The outer monitor reported no OOM, identity/file/volume/event drift or pending.
+
+The separately authorized targeted regression call failed before executing any
+tests because this cached Node rejects --test-isolation=none (exit 9). Preserve
+this runner failure; do not count the unexecuted assertions as PASS or silently
+spend another call. A corrected single-process runner can import node:test files
+directly under plain node, requiring one additional finite call from PM. Source
+copy/budget and existing context/day regression tests are retained for that run.
+
+Impact is server-only: 130 local server inputs (one new pure helper), unchanged
+246 package manifests and unchanged 79 reusable worker/frontend/other artifacts.
+No new package, worker/frontend/full build or calculation is needed. Conditional
+server bundle and candidate HTTP evidence, if executed, are recorded separately
+in the fixed-version r10 delivery; module results cannot stand in for HTTP/UI.
