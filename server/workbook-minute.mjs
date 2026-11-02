@@ -62,7 +62,7 @@ export function laborSegments(route,start,end){
 export function routeMinutes(route,quantity){const base=integer(route['基准加工分钟'],'基准加工'),prepare=integer(route['固定准备分钟'],'准备'),minimum=integer(route['最短工艺分钟'],'最短工艺');const process=route['工时模型']==='固定连续历时'?base:Math.ceil(quantity/Number(route['基准加工量千克'])*base);const duration=Math.max(minimum,prepare+process);if(!(duration>0))throw Error('生产历时须>0');return duration;}
 export function knownMinuteStops(d,currentMinute){return rows(d,'停机安排').filter(r=>instantMinute(r['信息可知时刻'])<=currentMinute).map(r=>({id:r['停机编号'],resource:r['资源编号'],start:integer(r['开始分钟偏移'],'停机开始'),end:integer(r['结束分钟偏移'],'停机结束'),source:{sheet:'停机安排',row:r._row}}));}
 export function wipOccupations(d,start,end){return (d.mapping?.wip_remaining||[]).filter(w=>w.current_occupancy_minute_interval?.[0]<end&&Math.max(w.current_occupancy_minute_interval?.[1],w.tool_release??-Infinity)>start).map(w=>{const [a,b]=w.current_occupancy_minute_interval;return {start:Math.max(a,start),end:Math.max(b,start),resource:w.resource,quantity:w.quantity,crew:w.remaining_labor_pool,people:w.remaining_labor_count,labor:[{start:Math.max(a,b-w.labor_end_minutes,start),end:b}],tools:w.current_tools,toolEnd:w.tool_release,taskId:w.id,kind:'WIP物理保留',source:w.source};});}
-export function minuteResourceCandidate({d,route,quantity,earliest,end,occupancy,daily,resources,crew,pool,standardBatch,currentMinute}){
+export function minuteResourceCandidate({d,route,quantity,earliest,end,occupancy,daily,resources,crew,pool,standardBatch,currentMinute,predecessor}){
  const lower=Math.ceil(earliest*1440-1e-7),limit=end*1440,people=Number(route['需求人数']),count=Number(route['每批工装套数']),stops=knownMinuteStops(d,currentMinute),busy=occupancy.map(o=>({...o,start:Math.round(o.start*1440),end:Math.round(o.end*1440)}));
  const candidates=resources.filter(r=>r['资源类别']==='设备'&&r['资源组编号']===route['设备组编号']&&Number(r['可用数量'])>0),crewId=crew['班组编号'];
  const allShifts=[];for(let day=Math.floor(lower/1440);day<end;day++)allShifts.push(...shiftWindows(d,crew,day));
@@ -82,6 +82,19 @@ export function minuteResourceCandidate({d,route,quantity,earliest,end,occupancy
    const previous=busy.filter(o=>o.resource===id&&o.end<=x&&o.productId).sort((a,b)=>b.end-a.end||String(a.taskId).localeCompare(String(b.taskId)))[0];
    let clean=null,cleaning=0;if(previous){clean=rows(d,'换型清洗').find(c=>c['设备组编号']===route['设备组编号']&&c['前产品编号']===previous.productId&&c['后产品编号']===route['成品编号']);if(!clean)throw Error('缺少有向清洗规则：'+route['设备组编号']+'/'+previous.productId+'/'+route['成品编号']);cleaning=integer(clean['清洗分钟'],'清洗');}
    const at=x+cleaning,until=at+duration;if(until>limit||Math.floor(at/1440)!==day)continue;
+   // WIP and material-delayed operations use the actual previous task finish,
+   // rather than resetting the waiting clock to the new material-ready time.
+   if(predecessor&&predecessor.routeStepId!==route['路线工序编号']&&at-predecessor.endMinute>integer(route['最大等待分钟'],'最大等待'))continue;
+   // A gap insertion must preserve an already reserved successor's directed
+   // cleaning. Do not silently change its predecessor without rescheduling it.
+   const successor=busy.filter(o=>o.resource===id&&o.productId&&o.start>=until).sort((a,b)=>a.start-b.start||String(a.taskId).localeCompare(String(b.taskId)))[0];
+   if(successor){
+    const boundary=successor.cleaning?.start??successor.start,prior=busy.filter(o=>o.resource===id&&o.productId&&o.end<=boundary).sort((a,b)=>b.end-a.end||String(a.taskId).localeCompare(String(b.taskId)))[0];
+    if(until<=boundary&&(!prior||until>=prior.end)){
+     const nextRule=rows(d,'换型清洗').find(c=>c['设备组编号']===route['设备组编号']&&c['前产品编号']===route['成品编号']&&c['后产品编号']===successor.productId);
+     if(!nextRule||(successor.cleaning?(successor.cleaning.rule!==nextRule['清洗规则编号']||successor.cleaning.crew!==crewId||successor.cleaning.end-successor.cleaning.start!==Number(nextRule['清洗分钟'])):Number(nextRule['清洗分钟'])!==0))continue;
+    }
+   }
    const job={start:at,end:until},physical={start:x,end:until};
    if(stops.some(s=>s.resource===id&&overlap(s,physical)))continue;
    if(resource['生产日历方式']==='工厂班次'&&!inShifts(x,until))continue;

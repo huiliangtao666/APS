@@ -186,3 +186,22 @@ The subsequent candidate uses a newly bundled server and the unchanged r5
 frontend/calculation/import artifacts, each with separately recorded source and
 hash provenance. It is not represented as a new full build. Runtime budgets and
 first-resource-stop gates remain those of the latest original Issue #50 contract.
+
+The r7 immutable candidate passed HTTP readiness and created a real baseline run
+with the expected complete frozen identity. Its Worker returned a plan, but the
+independent verifier rejected cleaning direction/timing on DAY-T2 and predecessor
+maximum waiting on DAY-T8. There was no new runtime OOM. The failed run and all
+historical state remain; the rejected plan itself was not persisted by the product.
+
+Two focused public regressions then reproduced unsafe insertion before a
+reserved successor cleaning, and a wait clock reset after material readiness.
+Minute placement now checks the actual predecessor end (also for WIP), preserves
+same-operation batch handling and the exact allowed boundary, and rejects an
+insertion that would invalidate a reserved successor's directed cleaning.
+Both regressions and the affected shared-weight/WIP check pass. This does not
+claim the unavailable original rejected task bodies were inspected or that the
+full baseline now passes. The fixed candidate was released before source edits;
+these later solver fixes have no new runtime/bundle verdict. Remaining baseline
+and candidate budgets are exhausted, so no P-slot substitution, restart or QA
+readiness is inferred. A follow-on minimal calculation-worker bundle and a new
+immutable candidate/baseline attempt require explicit incremental runtime budget.
