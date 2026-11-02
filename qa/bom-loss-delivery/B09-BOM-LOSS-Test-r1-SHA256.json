@@ -1,0 +1,26 @@
+{
+  "B09-BOM-LOSS-Test-r1-MATRIX.csv": {
+    "bytes": 9405,
+    "sha256": "82d4467b71a310cebaf515dff890b7e9ae02b9a2909eac545b4b664b2e529897"
+  },
+  "B09-BOM-LOSS-Test-r1-REPORT.md": {
+    "bytes": 3693,
+    "sha256": "79b75cd19b84483e441a29a52b1c79d743ff4126acd028eb5e3daee928fbf535"
+  },
+  "B09-BOM-LOSS-Test-r1-CLOSURE.csv": {
+    "bytes": 1737,
+    "sha256": "afbafa485ea1269e4159959dcaadffd56ac861b901292ed104aaf9802dcc6f0d"
+  },
+  "B09-BOM-LOSS-Test-r1-INTEGRATION.md": {
+    "bytes": 8201,
+    "sha256": "fb159e50a2a167714557245c04a901428dc791d68647b8ba24b6dbee648b0915"
+  },
+  "B09-BOM-LOSS-Test-r1-VERSION.json": {
+    "bytes": 17063,
+    "sha256": "780306765585a8a13140dda9d210aae44168b0a2129ab439ea144e181012d4b9"
+  },
+  "B09-BOM-LOSS-Test-r1-EVIDENCE.zip": {
+    "bytes": 762269,
+    "sha256": "a957b0bbb0883d4421d2ecc7885357e941f0226fc27aa650dc046cfae3e3024f"
+  }
+}
