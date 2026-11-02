@@ -3,6 +3,7 @@
 export const MINUTE_DATASET='APS-MEAT-202611-V2.0';
 export const MINUTE_ORIGIN='2026-10-31T00:00:00+08:00';
 export const MINUTE_ENGINE='workbook-minute-v2';
+export const weightSharedResource=r=>['重量共享','重量容量共享'].includes(r?.['资源占用方式']);
 export const minuteMode=d=>d.productionContract===MINUTE_ENGINE;
 const rows=(d,t)=>d.tables?.[t]||[];
 export const integer=(v,label)=>{if(v===undefined||v===null||String(v).trim()===''||!Number.isSafeInteger(Number(v)))throw Error(label+'须为显式整数分钟');return Number(v);};
@@ -70,7 +71,7 @@ export function minuteResourceCandidate({d,route,quantity,earliest,end,occupancy
   const id=resource['资源编号'],key=id+'|'+day,calendar=rows(d,'工厂日历').find(r=>Number(r['日序'])===day);if(!calendar)continue;
   const ratio=Math.min(Number(calendar['生产班次数'])/Number(calendar['日产能分母']),shiftWindows(d,crew,day).length/Number(crew['标准日班次数'])),capacity=Number(resource['标准日产能千克'])*ratio,available=capacity-(daily.get(key)||0);
   const toolCap=count?Math.max(0,...pool.map(id=>Number(resources.find(r=>r['资源编号']===id)?.['单次批量上限千克'])))*count:Infinity;
-  const batch=Math.min(quantity,Number(resource['单次批量上限千克']),resource['资源占用方式']==='重量共享'?Number(resource['同时占位上限千克']):Infinity,available,toolCap,standardBatch);
+  const batch=Math.min(quantity,Number(resource['单次批量上限千克']),weightSharedResource(resource)?Number(resource['同时占位上限千克']):Infinity,available,toolCap,standardBatch);
   if(!(batch>0))continue;const duration=routeMinutes(route,batch),tail=Number(route['结束参与分钟']),head=Number(route['开始参与分钟']);
   const points=new Set([Math.max(lower,day*1440)]);
   for(const s of allShifts){for(const n of [s.start,s.end-duration,s.start-duration+tail,s.end-head])if(n>=day*1440&&n<(day+1)*1440)points.add(Math.max(lower,n));}
@@ -88,7 +89,7 @@ export function minuteResourceCandidate({d,route,quantity,earliest,end,occupancy
    const labor=laborSegments(route,at,until),cleanCrew=previous?.crew,cleanPeople=Number(clean?.['清洗人数']||0);
    if(labor.some(l=>!inShifts(l.start,l.end))||cleaning&&!inShifts(x,at))continue;
    const same=busy.filter(o=>o.resource===id&&overlap(o,physical));
-   if(resource['资源占用方式']==='重量共享'){if(eventPeak([...same.map(o=>({...o,amount:o.quantity})),{...physical,amount:batch}],x,until)>Number(resource['同时占位上限千克']))continue;}
+   if(weightSharedResource(resource)){if(eventPeak([...same.map(o=>({...o,amount:o.quantity})),{...physical,amount:batch}],x,until)>Number(resource['同时占位上限千克']))continue;}
    else if(same.length)continue;
    const peopleAt=busy.filter(o=>o.crew===crewId).flatMap(o=>(o.labor||[{start:o.start,end:o.end}]).map(l=>({...l,amount:o.people})));
    if(eventPeak([...peopleAt,...labor.map(l=>({...l,amount:people})),...(cleaning&&cleanCrew===crewId?[{start:x,end:at,amount:cleanPeople}]:[])],x,until)>Number(crew['每班可用人数']))continue;

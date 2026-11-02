@@ -1,5 +1,5 @@
 import {createHash} from 'node:crypto';
-import {MINUTE_ORIGIN,MINUTE_ENGINE,minuteMode,integer,routeMinutes,laborSegments,shiftWindows,wipOccupations,knownMinuteStops,eventPeak,unionMinutes,overlap,boundary,instantMinute} from './workbook-minute.mjs';
+import {MINUTE_ORIGIN,MINUTE_ENGINE,weightSharedResource,minuteMode,integer,routeMinutes,laborSegments,shiftWindows,wipOccupations,knownMinuteStops,eventPeak,unionMinutes,overlap,boundary,instantMinute} from './workbook-minute.mjs';
 const rows=(d,t)=>d.tables?.[t]||[];
 const equal=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 // Rebuild physical usage from source tasks and frozen WIP. Do not accept the
@@ -32,7 +32,7 @@ export function verifyMinutePlan(d,p){
    occ.push({...x,taskId:t.id+'-CLEAN',tools:[],labor:[{start:x.start,end:x.end}]});
   }else{const before=tasks.filter(o=>o.machine===t.machine&&o.end<=t.start).sort((a,b)=>b.end-a.end)[0];if(before){const rule=rows(d,'换型清洗').find(x=>x['设备组编号']===rt['设备组编号']&&x['前产品编号']===before.productId&&x['后产品编号']===t.productId);if(!rule||Number(rule['清洗分钟'])>0)add('应清洗未清洗 '+t.id);}}
  }
- for(const [id,r]of resources){const own=occ.filter(o=>o.resource===id);if(r['资源占用方式']==='重量共享'){if(eventPeak(own.map(o=>({...o,amount:o.quantity})),start,end)>Number(r['同时占位上限千克']))add('共享重量超占 '+id);}else if(eventPeak(own,start,end)>1)add('独占设备超占 '+id);
+ for(const [id,r]of resources){const own=occ.filter(o=>o.resource===id);if(weightSharedResource(r)){if(eventPeak(own.map(o=>({...o,amount:o.quantity})),start,end)>Number(r['同时占位上限千克']))add('共享重量超占 '+id);}else if(eventPeak(own,start,end)>1)add('独占设备超占 '+id);
   if(r['资源类别']==='工装'&&eventPeak(occ.filter(o=>o.tools.includes(id)).map(o=>({...o,end:o.toolEnd??o.end})),start,end)>1)add('实体工具重用 '+id);
  }
  for(const [id,c]of crews)if(eventPeak(occ.filter(o=>o.crew===id).flatMap(o=>o.labor.map(l=>({...l,amount:o.people}))),start,end)>Number(c['每班可用人数']))add('人员并发超占 '+id);

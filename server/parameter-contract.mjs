@@ -39,6 +39,7 @@ export function validateObjectDimension(d,p){
  const spec=parameterSpec(p);if(!spec?.table||p._candidate)return;
  for(const row of d.tables?.[spec.table]||[]){
   if(objectKey(row,spec)!==p['对象编号']&&!(spec.table==='物料清单'&&row['清单版本编号']===p['对象编号']))continue;
+  if(spec.name==='可用数量'&&dimension(p)==='套'&&row['资源类别']!=='工装')throw Error('套仅适用于实体工装可用数量');
   const expected=['最小订货量','订货倍数','子项基准用量'].includes(spec.name)?row['数量单位']:spec.name==='最大容量'?row['容量单位']:null;
   if(expected&&dimension(p)!==normalizedUnit(expected))throw Error('参数量纲与业务对象单位不一致，须明确映射；不自动换算');
   if(p._dimension&&p._dimension!==parameterDimension(d,p))throw Error('对象单位映射已变化，保留来源维度并拒绝静默重解释');
@@ -61,6 +62,13 @@ export function adoptDefinitionBounds(d,p){
  // Parse its operator separately; parameter values remain strict numeric literals.
  for(const [key,defaultOperator]of [['最小值','>='],['最大值','<=']]){
   const text=String(c[key]??'').trim();if(!text)continue;
+  // These catalog entries describe paired fields, not scalar limits. The
+  // existing parameterIssues relation check evaluates them for each object,
+  // scope and effective boundary once business objects are present (P may be
+  // imported first). Keep all other text fail-closed and numeric limits strict.
+  const paired=canonicalCp(cpOf(p))==='CP066'&&key==='最大值'&&text==='须≥最低温度'
+   ||canonicalCp(cpOf(p))==='CP093'&&key==='最大值'&&text==='须≥最小等待';
+  if(paired)continue;
   const expression=/^(>=|<=|>|<|≥|≤)\s*(.*)$/.exec(text);
   const operator=expression?.[1]||defaultOperator,bound=finiteNumber(expression?expression[2]:text);
   const accepted=operator==='>'?value>bound:operator==='<'?value<bound:
@@ -76,7 +84,7 @@ export function tagParameterSources(d){
 export const objectKey=(row,spec)=>spec.key==='_unitKey'?[row['物料编号'],row['换算前单位'],row['换算后单位']].join('|'):String(row[spec.key]);
 export const parameterIdentity=p=>JSON.stringify([scopeOf(p),semanticIdentity(p)]);
 export function finiteNumber(value){const text=String(value??'').trim();if(!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(text)||!Number.isFinite(Number(text)))throw Error('须为有限数值字面值；空白不代表0');return Number(text);}
-export function validateUnit(spec,unit){if(spec.unit){if(String(unit)!==spec.unit)throw Error(spec.name+'单位须为'+spec.unit);return;}const allowed=/^计划起始日$/.test(spec.name)?['日序']:/^可用数量$/.test(spec.name)?['个']:/^标准日产能千克$/.test(spec.name)?['千克/标准日','kg/标准日']:/千克$/.test(spec.name)&&!/^每箱|^每件/.test(spec.name)?['千克','kg']:/^子项基准用量$/.test(spec.name)?['千克','kg','个']:/^最小订货量$|^订货倍数$/.test(spec.name)?['本行数量单位','千克','kg','个']:/^最大容量$/.test(spec.name)?['本行容量单位','千克','kg','个']:/温度/.test(spec.name)?['摄氏度','℃']:/班次/.test(spec.name)?['班/天','班']:/人数/.test(spec.name)?['人']:/套数/.test(spec.name)?['套']:/比例|收率|概率|率$/.test(spec.name)?['比例']:/天数/.test(spec.name)?['天']:/优先级/.test(spec.name)?['顺序','优先级','无量纲']:/每箱净重/.test(spec.name)?['千克/箱','千克','kg/箱']:/每件净重/.test(spec.name)?['千克/件','千克','kg/件']:null;if(allowed&&!allowed.includes(String(unit)))throw Error(spec.name+'单位不匹配：'+unit);}
+export function validateUnit(spec,unit){if(spec.unit){if(String(unit)!==spec.unit)throw Error(spec.name+'单位须为'+spec.unit);return;}const allowed=/^计划起始日$/.test(spec.name)?['日序']:/^可用数量$/.test(spec.name)?['个','套']:/^标准日产能千克$/.test(spec.name)?['千克/标准日','kg/标准日']:/千克$/.test(spec.name)&&!/^每箱|^每件/.test(spec.name)?['千克','kg']:/^子项基准用量$/.test(spec.name)?['千克','kg','个']:/^最小订货量$|^订货倍数$/.test(spec.name)?['本行数量单位','千克','kg','个']:/^最大容量$/.test(spec.name)?['本行容量单位','千克','kg','个']:/温度/.test(spec.name)?['摄氏度','℃']:/班次/.test(spec.name)?['班/天','班']:/人数/.test(spec.name)?['人']:/套数/.test(spec.name)?['套']:/比例|收率|概率|率$/.test(spec.name)?['比例']:/天数/.test(spec.name)?['天']:/优先级/.test(spec.name)?['顺序','优先级','无量纲']:/每箱净重/.test(spec.name)?['千克/箱','千克','kg/箱']:/每件净重/.test(spec.name)?['千克/件','千克','kg/件']:null;if(allowed&&!allowed.includes(String(unit)))throw Error(spec.name+'单位不匹配：'+unit);}
 export function validateAtomic(spec,value){if(spec.type==='enum'){if(!spec.values.includes(String(value)))throw Error(spec.name+'须为'+spec.values.join('/'));return String(value); }const n=finiteNumber(value);if(spec.integer&&!Number.isInteger(n))throw Error(spec.name+'须为整数');if(spec.min!==null&&spec.min!==undefined&&(spec.inclusive?n<spec.min:n<=spec.min))throw Error(spec.name+(spec.inclusive?'须≥':'须>')+spec.min);if(spec.max!==undefined&&n>spec.max)throw Error(spec.name+'须≤'+spec.max);return String(value).trim();}
 export function validateComposite(cp,value){
  if(!value||typeof value!=='object'||Array.isArray(value))throw Error('组合参数须按命名字段维护');

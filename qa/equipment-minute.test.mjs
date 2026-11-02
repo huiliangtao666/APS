@@ -1,8 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {instantMinute,minuteTime,eventPeak,unionMinutes,routeMinutes,laborSegments,wipOccupations,knownMinuteStops,MINUTE_ORIGIN} from '../server/workbook-minute.mjs';
+import {instantMinute,minuteTime,eventPeak,unionMinutes,routeMinutes,laborSegments,wipOccupations,knownMinuteStops,minuteResourceCandidate,MINUTE_ORIGIN} from '../server/workbook-minute.mjs';
+import {integrateParameterImport} from '../server/parameter-import.mjs';
+import {parameterIssues} from '../server/parameter-contract.mjs';
 import {checkPrivateV2} from './equipment-minute-v2.mjs';
 import {validateAtomic,specification,adoptDefinitionBounds} from '../server/parameter-contract.mjs';
+import {verifyMinutePlan} from '../server/workbook-minute-verify.mjs';
 import {equipmentDomain} from '../server/workbook-equipment.mjs';
 import {hash} from '../server/workbook-model.mjs';
 
@@ -136,4 +139,69 @@ test('legacy day coordinates retain their own origin and never overwrite the fro
  assert.equal(page.records[0].values.start,1800);
  const out=[...equipmentDomain.export(v,{...q,queryFingerprint:page.queryFingerprint})].map(s=>JSON.parse(s));
  assert.equal(out[1].values.startTime,'2026.11.01 06:00');assert.equal(hash(v),before);
+});
+
+// The complete private V2 exposed relational CP066 catalog metadata. These
+// small public examples verify the same import/validation seam without another
+// private eight-stage attempt or a planner call.
+const pairedCatalog=()=>({parameterWorkbook:true,tables:{'配置参数':[
+ ['P-LOW','最低温度','-25'],['P-HIGH','最高温度','-18']
+].map(([id,field,value],i)=>({'参数编号':id,'对象编号':'LOC','参数名称':field,'参数值':value,'单位':'摄氏度','生效日':'0','失效日':'44',_row:i+3}))},parameterDefinitions:[{'参数编号':'CP066','最大值':'须≥最低温度'}],parameterCategories:[],parameterAnnotations:{discussions:[],questions:[],reference:[]},parameterCounts:{definitions:1,instances:2},classification:[],issues:[],warnings:[],schemaVersion:'explicit-regression'});
+const pairedOptions={id:'paired-example',name:'explicit paired bounds',expectedVersion:0,fileHash:'synthetic-P',adoptParameters:true,actor:'owner'};
+test('P catalog relational boundary permits parameter-first adoption and preserves strict scalar bounds',()=>{
+ const parsed=pairedCatalog(),before=hash(parsed),r=integrateParameterImport(parsed,null,pairedOptions);
+ assert.deepEqual(r.issues,[]);assert.equal(hash(parsed),before);
+ assert.equal(r.d.parameterDefinitions[0]['最大值'],'须≥最低温度');
+ assert.equal(r.d.tables['配置参数'].length,2);
+ assert.deepEqual(r.d.tables['配置参数'].map(p=>p['参数值']),['-25','-18']);
+ assert.ok(r.d.tables['配置参数'].every(p=>p._sourceRole==='P'&&!p._candidate));
+ const d={tables:{'库区库位':[{'库位编号':'LOC','最低温度':'-25','最高温度':'-18'}]},parameterDefinitions:parsed.parameterDefinitions};
+ assert.doesNotThrow(()=>adoptDefinitionBounds(d,{'对象编号':'LOC','参数名称':'最低温度','参数值':'-25'}));
+ assert.throws(()=>adoptDefinitionBounds({...d,parameterDefinitions:[{'参数编号':'CP066','最大值':'须≥未知字段'}]},{'对象编号':'LOC','参数名称':'最低温度','参数值':'-25'}),/有限数值/);
+ assert.throws(()=>adoptDefinitionBounds({parameterDefinitions:[{'参数编号':'CP016','最小值':'>0'}]},{'参数名称':'每箱净重千克','参数值':'0'}),/P目录边界/);
+});
+test('P catalog relational boundary still rejects reversed temperatures and waiting at future effective boundaries',()=>{
+ const r=integrateParameterImport(pairedCatalog(),null,pairedOptions),d=r.d;
+ d.tables['库区库位']=[{'库位编号':'LOC','最低温度':'-25','最高温度':'-18'}];
+ assert.deepEqual(parameterIssues(d,{completeness:false}),[]);
+ d.tables['配置参数'].push({...d.tables['配置参数'][0],'参数编号':'FUTURE-LOW','参数值':'-10','生效日':'7','失效日':'8',_sourceRole:'EDIT'});
+ assert.ok(parameterIssues(d,{completeness:false}).some(i=>i.code==='PARAMETER_RELATION'&&/日7/.test(i.message)));
+ const waiting={parameterDefinitions:[{'参数编号':'CP093','最大值':'须≥最小等待'}],tables:{'工艺路线':[{'路线工序编号':'ROUTE','最小等待天数':'0','最大等待天数':'1'}],'配置参数':[
+ {'参数编号':'MIN','对象编号':'ROUTE','参数名称':'最小等待天数','参数值':'2','单位':'天','生效日':'7','失效日':'8',_sourceRole:'P'},
+ {'参数编号':'MAX','对象编号':'ROUTE','参数名称':'最大等待天数','参数值':'1','单位':'天','生效日':'0','失效日':'44',_sourceRole:'P'}]}};
+ assert.ok(parameterIssues(waiting,{completeness:false}).some(i=>i.code==='PARAMETER_RELATION'&&/日7/.test(i.message)));
+ assert.ok(!parameterIssues(waiting,{completeness:false}).some(i=>i.code==='PARAMETER_INVALID'));
+});
+
+test('V2 resource literals preserve weight-capacity sharing and tool set units without weakening checks',()=>{
+ const parsed=pairedCatalog();parsed.parameterDefinitions=[];
+ parsed.tables['配置参数']=[
+ {'参数编号':'OCC','对象编号':'EQ','参数名称':'资源占用方式','参数值':'重量容量共享','单位':'枚举','生效日':'0','失效日':'44'},
+ {'参数编号':'TOOLS','对象编号':'TL','参数名称':'可用数量','参数值':'1','单位':'套','生效日':'0','失效日':'44'}];
+ const r=integrateParameterImport(parsed,null,pairedOptions);assert.deepEqual(r.issues,[]);
+ assert.equal(r.d.tables['配置参数'][0]['参数值'],'重量容量共享');
+ r.d.tables['设备与工装']=[{'资源编号':'EQ','资源类别':'设备'},{'资源编号':'TL','资源类别':'工装'}];
+ assert.deepEqual(parameterIssues(r.d,{completeness:false}),[]);
+ r.d.tables['设备与工装'][1]['资源类别']='设备';
+ assert.ok(parameterIssues(r.d,{completeness:false}).some(i=>/套仅适用于/.test(i.message)));
+ r.d.tables['设备与工装'][1]['资源类别']='工装';r.d.tables['配置参数'][1]['单位']='千克';
+ assert.ok(parameterIssues(r.d,{completeness:false}).some(i=>i.code==='PARAMETER_INVALID'&&/单位不匹配|对象单位映射已变化/.test(i.message)));
+ assert.throws(()=>validateAtomic(specification('资源占用方式'),'任意共享'));
+ assert.throws(()=>validateAtomic(specification('可用数量'),'1.5'));
+});
+test('V2 weight-capacity sharing independently limits allocator and frozen WIP checker at 5000kg',()=>{
+ const resource={'资源编号':'EQ','资源类别':'设备','资源组编号':'G','可用数量':'1','单次批量上限千克':'5000','同时占位上限千克':'5000','标准日产能千克':'10000','资源占用方式':'重量容量共享','生产日历方式':'工厂班次'},crew={'班组编号':'C','每班可用人数':'10','标准日班次数':'2','周日班次数':'2'};
+ const d={productionContract:'workbook-minute-v2',tables:{'工厂日历':[{'日序':'0','生产班次数':'1','日产能分母':'2'}],'生产班次':[{'开始分钟偏移':'480'}],'停机安排':[],'设备与工装':[resource],'班组资源':[crew]},effectiveParameters:{values:['第一班开始分钟','第一班结束分钟','第二班开始分钟','第二班结束分钟'].map((field,i)=>({object:'CAL',field,value:[480,960,960,1440][i],from:0,to:44}))},mapping:{feed_mappings:[],wip_remaining:[]}};
+ const route={'设备组编号':'G','成品编号':'M','需求人数':'0','每批工装套数':'0','工时模型':'固定连续历时','基准加工分钟':'17','固定准备分钟':'0','最短工艺分钟':'0','基准加工量千克':'500','人员参与方式':'全程参与','允许跨班连续':'否','结束参与分钟':'0','开始参与分钟':'0','工装后延释放分钟':'0'};
+ const args={d,route,quantity:2000,earliest:480/1440,end:1,occupancy:[{resource:'EQ',start:480/1440,end:600/1440,quantity:3000,tools:[],people:0}],daily:new Map(),resources:[resource],crew,pool:[],standardBatch:5000,currentMinute:0};
+ assert.equal(minuteResourceCandidate(args).start*1440,480);
+ args.occupancy[0].quantity=4000;assert.equal(minuteResourceCandidate(args).start*1440,600);
+ resource['资源占用方式']='独占';args.occupancy[0].quantity=3000;assert.equal(minuteResourceCandidate(args).start*1440,600);
+ resource['资源占用方式']='重量容量共享';
+ const w=(id,quantity)=>({id,resource:'EQ',quantity,current_occupancy_minute_interval:[480,600],current_tools:[],tool_release:600,remaining_labor_pool:'C',remaining_labor_count:0,labor_end_minutes:0,remaining_route_steps:[],remaining_material_bom_ids:[]});
+ d.mapping.wip_remaining=[w('A',3000),w('B',2000)];
+ const plan={engineIdentity:'workbook-minute-v2',minuteOrigin:MINUTE_ORIGIN,timeUnit:'minute',timezone:'Asia/Shanghai',conditions:{startDay:0,endDay:1,currentMinute:0},tasks:[],demandResults:[],allocations:[]};
+ assert.equal(verifyMinutePlan(d,plan).status,'pass');
+ d.mapping.wip_remaining[1].quantity=2001;assert.ok(verifyMinutePlan(d,plan).issues.includes('共享重量超占 EQ'));
+ d.mapping.wip_remaining[1].quantity=2000;resource['资源占用方式']='独占';assert.ok(verifyMinutePlan(d,plan).issues.includes('独占设备超占 EQ'));
 });

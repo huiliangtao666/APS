@@ -88,13 +88,52 @@ node --check (no imports evaluated); git diff --check passed. TypeScript, Vite,
 API, Worker, real V2 import/P-only update, both actual calculations, six-view
 browser/reopen/export, QA and UAT all remain NOT_EXECUTED for this source.
 
+## r3 bounded execution and precise product correction
+
+Authorization: https://github.com/huiliangtao666/APS/issues/50#issuecomment-6584051209
+Continuation delivery: dlv_f3b02ffd-68b1-42a6-99d4-2e52387fdf45.
+The original event continues as dlv_13b4162c-9de4-447d-a5e5-c0f15ee0fe08:r3.
+
+At fixed source 7d15bcbeaa3b06009b77936e800b57cd6cd35ff9, the single
+15-case module invocation produced 14 PASS and one intentionally skipped private
+V2 case. The private check was invoked separately exactly once. Parse B, parse P
+and prepare B passed with original hashes, full rows and validation preserved.
+P-first adoption failed with 174 PARAMETER_INVALID issues: 168 CP066
+temperature fields incorrectly treated the existing relation `须≥最低温度` as
+a numeric limit, three resource modes `重量容量共享` were absent from the
+executable enum, and three physical tool quantities used the valid unit `套`. No new OOM occurred. Forward, inverse and
+both readiness stages were not executed. The old r1 OOM remains historical,
+and later full-V2 memory/readiness behavior is still unverified.
+
+The correction in server/parameter-contract.mjs recognizes only the exact CP066
+and CP093 paired-field directory statements already enforced by parameterIssues
+for each object/scope/effective boundary. It defers those statements to that
+existing relation validator, including when P arrives before business objects.
+Numeric boundaries, unknown statement rejection, units, missing values, all
+input rows, metadata and later paired comparisons remain enforced. This is a
+shared parameter-validation seam correction under the restored #50 ownership;
+no old deployment/source/state/build was changed. Four small regression cases
+exercise P-first import, future EDIT temperature reversal, future waiting
+reversal, unknown bound rejection and strict CP016 positivity. Resource adoption
+now preserves both explicitly supported weight-sharing literals, and the
+allocator and frozen checker apply the same 5000kg limit to either spelling.
+Available resource quantities accept physical tool sets, with object validation
+rejecting `套` on equipment and rejecting mass units. Independent expected
+5000kg/5001kg checks cover existing WIP and allocation; no real calculation or
+private dataset is rerun. The last permitted targeted invocation produced four
+PASS and one test-message mismatch: changing a stored tool unit to kg correctly
+failed earlier at the existing frozen dimension guard, rather than the unit
+allowlist expected by the assertion. That assertion now accepts either precise
+validation rejection, but was not re-executed because all three module calls
+are consumed. No final full selftest PASS is claimed. Actual execution
+results and final source identity are in the r3 workspace result/evidence.
+
 ## Current gate
 
-Dev49 delivery 36359c68 retains the actual runtime window. This source-only
-continuation adds zero app-exec, tests, build, install/pull, candidate start,
-HTTP/browser, import, Worker, calculation or publish actions. It does not establish
-OOM resolution, change the original 45-assertion matrix to PASS, complete #50,
-reopen #45/#47, or authorize main integration. PM must first confirm actual final
-release/0owned/0pending, fresh protection/capacity/READY and explicitly hand over
-the concrete next execution. The same #50 owner then continues implementation,
-self-repair and retest against the original EV01–28/DV01–17 contract.
+The sole full private V2 attempt is consumed. The scope remains E1–E6, EV01–28,
+DV01–17 and the original 45-row matrix. No repeated full-V2 attempt, build,
+candidate create/start, browser, actual calculation Worker, QA, main integration
+or publish follows the failed first segment. Corrected source may be ordinary
+pushed for preservation; it is not a validated integration candidate. Completing
+this gate needs a concrete bounded continuation for the changed source through
+P-first, forward/inverse and readiness; no heap uplift or data reduction.
