@@ -1,0 +1,17 @@
+{
+  "kind": "DESIGN_ASSET_REVIEW_ONLY",
+  "source_hash": "e8b73e882e66b2e19ab7cb639c7a17e8830d08c0f485667484141837794f4d24",
+  "old_source_hash": "a61c0eb9a4c8bdaf62a04fe963350a1cf4e12bf50df8cd1919b606ad533a19e4",
+  "checks": {
+    "168_ids_preserved": true,
+    "168_entry_mapping_complete": true,
+    "3428_values_unchanged": true,
+    "38_categories": true,
+    "13_cp_references_updated": true,
+    "12_issues_covered": true,
+    "19_discussions_preserved": true,
+    "20_assertions_unique": true,
+    "new_workbook_11_sheets": true
+  },
+  "product_execution": false
+}

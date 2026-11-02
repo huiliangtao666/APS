@@ -1,0 +1,83 @@
+{
+  "cr_id": "CR-PARAM-UI-20261101",
+  "event_key": "design:parameter-import-dual-entry:20261101:r1",
+  "source_file": "APS配置参数梳理_20261101.xlsx",
+  "sha256": "e8b73e882e66b2e19ab7cb639c7a17e8830d08c0f485667484141837794f4d24",
+  "bytes": 247518,
+  "sheet_count": 11,
+  "parameter_definitions": 168,
+  "sample_categories": 38,
+  "sample_instances": 3428,
+  "discussion_rows": 19,
+  "new_discussions": [
+    "D14",
+    "D15",
+    "D16",
+    "D17",
+    "D18",
+    "D19"
+  ],
+  "issue_rows": 12,
+  "sample_values_changed": false,
+  "diff_cells": 638,
+  "new_columns": [
+    "最小值",
+    "最大值",
+    "是否必填",
+    "缺失时行为",
+    "权威来源及校验备注"
+  ],
+  "parameter_dictionary_header_row": 2,
+  "sample_header_row": 2,
+  "data_first_row": 3,
+  "source_protection": "原上传文件完整保留；新增列原文注明建议待评审；数值格式变化按语义比较",
+  "product_sha": null,
+  "primary_tracking_issue": 45,
+  "title": "配置参数导入查询编辑与统一页/流程步骤双入口同效",
+  "user_quote": "配置参数部分我做了一些更新，请作为需求变更，配置参数可以导入、查询和编辑；之前设计的配置参数相关的UI与此对应上（一方面有统一页面，分页签可以配置配查询；一方面关键配置在相应流程步骤的页面也可以配置，方面便操作边优化。两个方法同样有效）。",
+  "authority": "用户本轮明确要求需求变更及导入/查询/编辑/双入口能力；不重复索批方向。文件内候选值及校验建议保留待评审性质，逐项评审附后。",
+  "registration_status": "PENDING_PM_REGISTRATION",
+  "parent_crs": [
+    "CR-INPUT-DATA-20261031",
+    "CR-UIUX-FLOW-20261031",
+    "CR-SCHED-CONFIG-20261031"
+  ],
+  "related_crs": [
+    "CR-BOM-LOSS-20261031",
+    "CR-PACK-BATCH-20261031"
+  ],
+  "primary_requirements": [
+    "FR-013",
+    "FR-014",
+    "FR-015",
+    "FR-016",
+    "FR-017",
+    "FR-018"
+  ],
+  "related_requirements": [
+    "FR-002",
+    "FR-003",
+    "FR-004",
+    "FR-005",
+    "FR-008",
+    "FR-009",
+    "FR-010",
+    "FR-011",
+    "FR-020",
+    "FR-025",
+    "FR-026",
+    "FR-037",
+    "BR-18"
+  ],
+  "scope": [
+    "统一配置主题页签，分类查询及直接编辑",
+    "关键参数在流程步骤原地查询及编辑，同scope同一真源同样有效",
+    "用户更新文件导入，目录和实例分层，可校验属性支持",
+    "版本、有效期、继承及冲突校验，实际采用和历史冻结",
+    "本轮新增20断言按原包合并验证"
+  ],
+  "implementation_status": "NO_PRODUCT_IMPLEMENTATION_BY_DESIGN",
+  "no_new_tasks_per_parameter": true,
+  "product_test": "NOT_EXECUTED",
+  "uat": "NOT_EXECUTED"
+}
