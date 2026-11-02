@@ -53,10 +53,12 @@ explicit node control-plane handler's lookup/install order. Original error:
 This proves the observed floor rejection, not a full node execution contract.
 Node app-container.js consumes command/env/appPort/devBase/stripPrefix/probe
 from the controller; it does not determine those values or install this SDK.
-Current official help still describes native VM preview while current skill
-and retained diagnostics use app containers. Obtain the deployed control-plane
-branch/version, SDK lookup and order, effective command, PORT/readiness and
-prefix contract from the lite-app/dev-preview maintainer. No migration,
+Official lite-app-overview (remote-VM section) confirms container execution,
+matching current skill and retained diagnostics. The older workspace-settings
+help describes native preview; it is not grounds to change execution mode.
+Obtain the deployed control-plane branch/version, SDK lookup and order, effective
+command, PORT/readiness and prefix contract from the lite-app/dev-preview
+maintainer. No migration,
 platform/daemon edit or fallback to a host/native listener is authorized.
 
 No bind is required for the unchanged app/cwd/port/command. After the contract
