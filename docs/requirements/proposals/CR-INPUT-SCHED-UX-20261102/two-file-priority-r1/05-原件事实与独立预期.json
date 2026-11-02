@@ -1,0 +1,87 @@
+{
+  "kind": "DESIGN_ORACLE_AND_MUTATION_RECIPE_ONLY_NOT_PRODUCT_TEST",
+  "unmodified_originals": [
+    {
+      "role": "B",
+      "file": "肉食品仿真数据_202611_合并图示版.xlsx",
+      "bytes": 1672626,
+      "sha256": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0"
+    },
+    {
+      "role": "P",
+      "file": "APS配置参数梳理_20261101.xlsx",
+      "bytes": 247518,
+      "sha256": "e8b73e882e66b2e19ab7cb639c7a17e8830d08c0f485667484141837794f4d24"
+    }
+  ],
+  "facts": {
+    "B_sheet_count": 29,
+    "P_sheet_count": 11,
+    "B_sample_parameters": 3428,
+    "P_sample_parameters": 3428,
+    "sample_values_semantically_equal": true,
+    "P_directory_entries": 168,
+    "P_extra_columns": [
+      "最小值",
+      "最大值",
+      "是否必填",
+      "缺失时行为",
+      "权威来源及校验备注"
+    ],
+    "calendar_instance_ids": [
+      "PA3427",
+      "PA3428"
+    ],
+    "calendar_object_id": "CAL",
+    "calendar_name_from_original": "工厂日历",
+    "factory_standard_shifts": 2,
+    "factory_sunday_shifts": 1
+  },
+  "deterministic_fixture": {
+    "source_instance_id": "PA0783",
+    "object_id": "SO001",
+    "semantic_field": "检验天数",
+    "P_clone_value": 2,
+    "B_original_value": 1,
+    "B_reimport_clone_value": 3,
+    "current_order_day": 2,
+    "purchase_lead_days": 3,
+    "need_day": 5,
+    "expected_after_P": {
+      "inspection_days": 2,
+      "available_day": 7,
+      "late_days": 2
+    },
+    "expected_after_later_B": {
+      "inspection_days": 2,
+      "available_day": 7
+    },
+    "partial_interval": {
+      "B": [
+        0,
+        44,
+        1
+      ],
+      "P": [
+        10,
+        20,
+        2
+      ],
+      "new_run_days": [
+        9,
+        10,
+        19,
+        20
+      ],
+      "expected_values": [
+        1,
+        2,
+        2,
+        1
+      ]
+    }
+  },
+  "no_original_file_modified": true,
+  "no_runtime_or_service_started": true,
+  "no_test_executed": true
+}
