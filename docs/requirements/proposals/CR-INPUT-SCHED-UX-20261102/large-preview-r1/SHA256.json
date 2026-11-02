@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "design-assets-1",
+  "event_key": "aps:user-cr:input-scheduling-unified-ux:large-preview:20261102:r1:design",
+  "parentDesignSha": "3efbcce390b48104eaa2e6d46f984baa3ce08756",
+  "productSourceSha": "33fe82f4b52dac4c7f98490a5667605b9de6bab6",
+  "newProductSha": null,
+  "effective": false,
+  "privateOriginalsIncluded": false,
+  "selfExcluded": "SHA256.json（本清单不自哈希；由Git blob与外层ZIP摘要固定）",
+  "files": [
+    {
+      "path": "00-交付说明.txt",
+      "bytes": 2828,
+      "sha256": "0042b9b72e7cfc3337390b3ea498698a3d9a71d139eafa5de33badb4347596e6"
+    },
+    {
+      "path": "01-业务交互与状态.txt",
+      "bytes": 10091,
+      "sha256": "bc14350d26f481093ca65ea6706d6009c2693dbdbb6236d86535d5ba54a56447"
+    },
+    {
+      "path": "02-业务API导出一致性契约.txt",
+      "bytes": 11158,
+      "sha256": "af37e2b2b28e272cea4f74c87883983aacfb67f9a76c615f4809332387506a30"
+    },
+    {
+      "path": "03-性能容量与测量提案.txt",
+      "bytes": 5715,
+      "sha256": "77ceee973c6f97bbe191874e5d8a5f2efa55979c8d937a91a8752c5b41f816b0"
+    },
+    {
+      "path": "04-增量验收矩阵.csv",
+      "bytes": 8963,
+      "sha256": "c0381447a5c37b6126b8a53d11b903e78952eeb703f621d648e5b9d13e565e59"
+    },
+    {
+      "path": "05-独立切片与待决.txt",
+      "bytes": 3733,
+      "sha256": "1ae7ec6868ea1f35d209b102353a141b1da3aac1c5d478daacb6feded3b8cb13"
+    },
+    {
+      "path": "06-仿真与UAT预期.json",
+      "bytes": 14981,
+      "sha256": "236310cd185ef29b7f533d4c31f75ba5449c2cad5e94b1c7fc941dfda9469617"
+    },
+    {
+      "path": "06-生成仿真数据.py",
+      "bytes": 1735,
+      "sha256": "76283eb78f4ff7479e869504cf02bb22e3631c5f494c9710c5b82051df816712"
+    },
+    {
+      "path": "07-交互原型.html",
+      "bytes": 22667,
+      "sha256": "3085723a1ef47dc434fd310476707be5c6e6a3c352e9da3a5b53329ef9bd780a"
+    },
+    {
+      "path": "08-来源与授权核验.json",
+      "bytes": 2366,
+      "sha256": "60e2d754e37be73491639da9bbb62a18eddfe7ae8e3034d58b11e1e84c1a4f60"
+    },
+    {
+      "path": "09-原型自检.cjs",
+      "bytes": 6059,
+      "sha256": "d5905f7f9b4282008ef7ecbf8378e95b30048f49fd8fd065b08ca09bfc04911c"
+    },
+    {
+      "path": "09-设计自检.json",
+      "bytes": 2737,
+      "sha256": "fc9297eaf0d1ea877b06a2da1b436356695067037212b7ad4426df1eb924fccd"
+    }
+  ]
+}

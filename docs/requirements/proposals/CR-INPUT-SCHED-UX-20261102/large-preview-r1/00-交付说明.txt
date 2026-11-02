@@ -1,0 +1,24 @@
+CR-INPUT-SCHED-UX-20261102 / large-preview:r1 设计补充
+日期：2026-11-02；Design唯一owner；DESIGN_REVIEW_PENDING；effective=false。
+event_key=aps:user-cr:input-scheduling-unified-ux:large-preview:20261102:r1:design
+delivery=dlv_2a099e86-819b-42c1-b5bc-ee0f8ef6d370
+
+沿原#45及Project2原item PVTI_lAHOFM9WU84BpE1czhE8v2M。直接设计父版本r2=3efbcce390b48104eaa2e6d46f984baa3ce08756。r1/r2 completed结论不重开；此包是同CR新增设计范围，不替代r2整体。
+授权依据：https://github.com/huiliangtao666/APS/issues/45#issuecomment-6568078607
+读取产品源码参考SHA=33fe82f4b52dac4c7f98490a5667605b9de6bab6；新产品SHA=null。
+
+相对r2的增量：
+1 r2/01第3节双Excel独立卡之“差异”扩为摘要→表/异常→有界记录列表→单记录完整字段差异；初屏、折叠区及首次响应均不得包含全量差异。
+2 r2/02状态与恢复增加预览计算、分页失败、过期、版本冲突、提交结果未知、导出准备中和超限，均有下一动作。
+3 r2/03与UX-T-01、03、05、07增加快照分页、原始错误/去重位置/分组计数、CAL定位、完整导出、版本/用途绑定与有界确认。
+4 r2/04 S2细化为LP1–LP5可独立实施切片（本包05），尚未授权派工；S4真实冻结结果目标不降低。
+5 增加24条LP验收断言、6组UAT增量预期、可追溯仿真数据与独立算术口径；不把原型运行或设计自检作为产品/UAT。
+6 r2默认工作台、双Excel主源、参数双入口、CSV兼容、原日语义、D01–D06、参数候选/采用/冻结保护继续有效。
+
+资产导航：01业务交互与状态；02业务API/导出/一致性契约；03容量性能测量提案；04验收矩阵；05独立切片与待决；06仿真数据；07离线交互原型；08来源核验；09设计自检；SHA256资产清单。
+原型为本地纯前端业务演示，分页/搜索/错误/维护/确认/导出均为仿真；不连接产品，不装依赖，不启动服务，不发送数据到Agent。
+私有原件和截图仅留APS-Design Files API目录CR-INPUT-SCHED-UX-20261102-large-preview/，不进入公开Git或设计ZIP。08提供逐文件bytes/hash和取得命令。
+
+可接受性：本次仅设计资产可评审。性能数值、容量和预览有效期为待评审工程目标，不是新增业务参数默认或现网性能结论。Dev负责真实路由/数据结构/架构选择，并须维持02的业务约束。
+所有验收实际结果=NOT_EXECUTED；QA依赖未准入。不写原卡/CR实施状态，不派Dev/Test/QA，不改产品/算法/默认/运行/发布，不恢复五分钟巡检。
+原刷新恢复产品FAIL、累计尝试2/2、browser1/1耗尽及既有授权/阻塞完全沿#45原合同；本补充新增产品FAIL=0，新增修复轮次=0，新增运行预算=0。
