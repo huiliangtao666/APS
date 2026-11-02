@@ -1,0 +1,134 @@
+{
+  "scope": "独立HTML原型逻辑与DOM桩交互；非产品测试、真实浏览器或UAT",
+  "checks": [
+    {
+      "name": "五类页面及全部子视图有界渲染",
+      "result": "PASS"
+    },
+    {
+      "name": "起始与默认范围为日历日期",
+      "result": "PASS"
+    },
+    {
+      "name": "日序转换跨月及合法性",
+      "result": "PASS"
+    },
+    {
+      "name": "真实期初保留10月31日",
+      "result": "PASS"
+    },
+    {
+      "name": "公历日期原字段格式一致",
+      "result": "PASS"
+    },
+    {
+      "name": "时长不转成日期",
+      "result": "PASS"
+    },
+    {
+      "name": "筛选候选使用实际物料类别",
+      "result": "PASS"
+    },
+    {
+      "name": "框内搜索编号及名称",
+      "result": "PASS"
+    },
+    {
+      "name": "搜索不清掉隐藏选择",
+      "result": "PASS"
+    },
+    {
+      "name": "全选匹配结果与显式清空、不限分开",
+      "result": "PASS"
+    },
+    {
+      "name": "筛选只有查询后生效",
+      "result": "PASS"
+    },
+    {
+      "name": "多字段内并集、跨字段交集",
+      "result": "PASS"
+    },
+    {
+      "name": "日期表单接线及非法范围不改状态",
+      "result": "PASS"
+    },
+    {
+      "name": "BOM关闭只显示选中物料",
+      "result": "PASS"
+    },
+    {
+      "name": "BOM开启含三级全部下属并去重",
+      "result": "PASS"
+    },
+    {
+      "name": "多层分别选中只取直接并集",
+      "result": "PASS"
+    },
+    {
+      "name": "BOM有效期边界及无BOM根保留",
+      "result": "PASS"
+    },
+    {
+      "name": "BOM循环提示且不无限遍历",
+      "result": "PASS"
+    },
+    {
+      "name": "库存使用同一BOM范围且不改数量",
+      "result": "PASS"
+    },
+    {
+      "name": "采购建议根与BOM子件查询",
+      "result": "PASS"
+    },
+    {
+      "name": "供应商多选通过建议关系查净算",
+      "result": "PASS"
+    },
+    {
+      "name": "默认分页100且200/500可用",
+      "result": "PASS"
+    },
+    {
+      "name": "分页无重复遗漏",
+      "result": "PASS"
+    },
+    {
+      "name": "主表栏位按视图保留",
+      "result": "PASS"
+    },
+    {
+      "name": "明细表亦提供栏位及分页",
+      "result": "PASS"
+    },
+    {
+      "name": "参数明细从第二份取得并保留建议性质",
+      "result": "PASS"
+    },
+    {
+      "name": "产能周日日历、停机边界及可知日",
+      "result": "PASS"
+    },
+    {
+      "name": "未知数据、真实零与演示隔离",
+      "result": "PASS"
+    },
+    {
+      "name": "明细溯源各入口保留",
+      "result": "PASS"
+    },
+    {
+      "name": "需求数量守恒且导出全部筛选行",
+      "result": "PASS"
+    },
+    {
+      "name": "CSV日期日历化与全筛选记录行数",
+      "result": "PASS"
+    },
+    {
+      "name": "删除反馈入口与旧分页，HTML完整",
+      "result": "PASS"
+    }
+  ],
+  "passed": 32
+}

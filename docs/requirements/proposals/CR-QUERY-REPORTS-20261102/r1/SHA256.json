@@ -1,0 +1,92 @@
+[
+  {
+    "path": "01-需求变更与页面设计.txt",
+    "bytes": 10369,
+    "sha256": "c5de4a5f9a0e94441f67582d879596fd3b889d678ed22e5804ababd2d1fb2494"
+  },
+  {
+    "path": "02-字段与取数映射.csv",
+    "bytes": 4413,
+    "sha256": "783ed0a7d3a0b11305dea0dd1c417d69980900a4429b9c393dc62a9eb1b479ed"
+  },
+  {
+    "path": "03-数据配置后端符合性核对.csv",
+    "bytes": 2682,
+    "sha256": "7c465e12f416bcdffcb81d70de8ab3f813f1702ded0124e5b4d55144608f73fc"
+  },
+  {
+    "path": "04-验收场景.csv",
+    "bytes": 5222,
+    "sha256": "a9ba0cbdcc2e409e16a1725c18cd7138611b7536dcf99950da3f505d5f5ab861"
+  },
+  {
+    "path": "05-查询与日期业务契约.json",
+    "bytes": 3054,
+    "sha256": "1af7a4aa59d171e579ca5c587510f4f125e410a7d39e0d5567104fc81de1806e"
+  },
+  {
+    "path": "06-原型及来源清单.json",
+    "bytes": 3654,
+    "sha256": "7fc492d3d20dcc5da5e8643be1d1f64f682ecb978de5137f2ddc8c74d35dc415"
+  },
+  {
+    "path": "07-原型自检.json",
+    "bytes": 2986,
+    "sha256": "ed819b489caa202152f7ea8397c740756ffda2acf2e92cf0fffc6ef5e07b4ebe"
+  },
+  {
+    "path": "08-APS通用界面规则.txt",
+    "bytes": 3555,
+    "sha256": "0f8251f76747e8889b8e8f5d21ce470821d50537bc0ebf0333984dcdbb26d606"
+  },
+  {
+    "path": "原型源/common.js",
+    "bytes": 9815,
+    "sha256": "aefe4725e00ffbcf7b3bd7db964f8bbd3e75f9f53f9d52e571727391d42b4f4e"
+  },
+  {
+    "path": "原型源/core.js",
+    "bytes": 12000,
+    "sha256": "496e2a0ec201be30207e8a75901f5d1952026e35f8d84a0bad5193eab582a843"
+  },
+  {
+    "path": "原型源/dialogs.js",
+    "bytes": 5377,
+    "sha256": "d1e1a6ca624107d4e1b68a8a7701816daf0fa9c364334e8dd12231a861b42220"
+  },
+  {
+    "path": "原型源/events.js",
+    "bytes": 7065,
+    "sha256": "4d51721283258bfa014a283179dc15278013ec4c21ef31305692e3ba531b1581"
+  },
+  {
+    "path": "原型源/reports-a.js",
+    "bytes": 8461,
+    "sha256": "023cf5864215662ab32bf4dca88015fa9683b7d2e2ed50dd29781c25499b8d90"
+  },
+  {
+    "path": "原型源/reports-b.js",
+    "bytes": 10239,
+    "sha256": "11a0b795cff026f4c8b63edc7155aa2be078ee1f9fe1b66aff7d8cb199a9e5e8"
+  },
+  {
+    "path": "原型源/reports-c.js",
+    "bytes": 6726,
+    "sha256": "50136ed6d1b82c7df09953ec280e31e9aecb0083b6843f093651346f540f3dbb"
+  },
+  {
+    "path": "原型源/shell.html",
+    "bytes": 3053,
+    "sha256": "fee52a95443790d900bea2bc270c6db84f83c59bd345281cd1d05b3c6543e34b"
+  },
+  {
+    "path": "原型源/style.css",
+    "bytes": 13466,
+    "sha256": "9fd032b27bc2fd85065b486ec5168cf7ee32f82c1eb08ef4f1ced13e7eb5fc46"
+  },
+  {
+    "path": "原型源/说明.txt",
+    "bytes": 360,
+    "sha256": "54802c9dabb078a16b3be6d6a2ba081a81cdd30cfe7667cc764eb4c74fbe723c"
+  }
+]

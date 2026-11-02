@@ -1,0 +1,101 @@
+{
+  "kind": "BUSINESS_QUERY_CONTRACT_NOT_EXISTING_ENDPOINT_PROMISE",
+  "existing_entrypoints": [
+    "/api/workbooks/datasets/:id/rows",
+    "/api/workbooks/runs/:id/rows",
+    "/api/workbooks/runs/:id/inputs",
+    "/api/workbooks/runs/:id",
+    "/api/workbooks/datasets/:id/parameters"
+  ],
+  "scope": "复用既有接口或扩展查询投影，具体路由/数据结构由Dev确定；不另建数据主账",
+  "request_semantics": {
+    "context": {
+      "model": "workbook",
+      "datasetId": "明确当前选择",
+      "version": "明确正整数，不隐取latest",
+      "runId": "冻结查询时必填，与当前身份不能混用",
+      "parameterScope": "沿已有权限的共享或试算scope"
+    },
+    "queryKind": [
+      "bom",
+      "demand",
+      "inventory",
+      "capacity",
+      "replenishment"
+    ],
+    "materialSeeds": {
+      "fg": [
+        "FG001"
+      ],
+      "sf": null,
+      "rm": null,
+      "pk": null,
+      "semantics": "null=未限定，[]=明确清空；种子并集；所有组null才全量"
+    },
+    "includeBom": false,
+    "bomAsOfDate": "2026-11-01；其他查询默认fromDate",
+    "fromDate": "2026-11-01",
+    "toDateInclusive": "2026-11-14",
+    "filters": "同字段内并、跨字段交；服务端白名单解析",
+    "pageSize": [
+      100,
+      200,
+      500
+    ],
+    "sort": "字段/方向加唯一键稳定次序",
+    "columns": "显示及导出投影，不改变源数据"
+  },
+  "date_contract": {
+    "sampleDayZero": "2026-10-31",
+    "defaultFrom": "2026-11-01",
+    "defaultToInclusive": "2026-11-14",
+    "sampleInternalStart": 1,
+    "sampleInternalEndExclusive": 15,
+    "display": "YYYY.MM.DD",
+    "wireCalendar": "YYYY-MM-DD",
+    "invariants": [
+      "时长仍天数",
+      "冻结原始时点和结果hash不改",
+      "不因时区或半开边界多扣一天",
+      "物料/参数/日历BOM按同有效日期投影"
+    ]
+  },
+  "response_semantics": {
+    "identity": [
+      "datasetId",
+      "version",
+      "runId",
+      "inputHash",
+      "parameterHash",
+      "mappingHash",
+      "resultHash",
+      "scope",
+      "asOfDate",
+      "dayZero",
+      "timeUnit"
+    ],
+    "result": [
+      "records",
+      "total",
+      "stableSort",
+      "summaryByUnit",
+      "selectedRoots",
+      "expandedMaterialIds",
+      "bomVersionOrFingerprint",
+      "notProvided",
+      "notSupported",
+      "provenance"
+    ],
+    "provenance": "原件hash、sheet、row/cell/业务键；在线overlay原因版本；派生规则与输入；冻结任务/分配ID",
+    "errors": [
+      "INVALID_DATE",
+      "UNSUPPORTED_PAGE_SIZE",
+      "CONTEXT_MISMATCH",
+      "SOURCE_CORRUPT",
+      "BOM_CYCLE_OR_AMBIGUITY",
+      "FORBIDDEN"
+    ]
+  },
+  "export": "同一查询身份/条件指纹/排序/可见栏位的完整匹配结果，明确TOTAL而非CURRENT_PAGE；格式沿现有CSV/Excel能力，公式样文本安全转义",
+  "mutations": "本查询不修改业务事实或参数；关联维护沿既有新版本流程再返回重查，不静默改旧结果"
+}

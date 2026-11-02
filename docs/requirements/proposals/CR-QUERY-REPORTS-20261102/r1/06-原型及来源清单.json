@@ -1,0 +1,99 @@
+{
+  "cr_id": "CR-QUERY-REPORTS-20261102",
+  "event_key": "design:query-reports:20261102:r1",
+  "authority": "用户明确更新设计、通用规则并要求新增CR排计划，不重复索批同一方向",
+  "design_status": "DESIGN_DELIVERED_FOR_PM_REGISTRATION_AND_PLANNING",
+  "current_user_rule_effect": "本次及后续设计直接适用；不推导产品已实现",
+  "registration_owner": "APS-PM",
+  "implementation_project": "Project2 PVT_kwHOFM9WU84BpE1c",
+  "new_product_sha": null,
+  "reviewed_main_sha": "33fe82f4b52dac4c7f98490a5667605b9de6bab6",
+  "reviewed_candidate_sha": "38375ed8f93fe4431305bc9b7fd9674d10f8dc48",
+  "prototype": {
+    "artifact": "APS五类业务查询_设计原型_R2_20261102.html",
+    "bytes": 3920548,
+    "sha256": "6b7c632834c35b6e15ff95e953fcee8f08f58c2e51caf6ca3ef052ad7ceba5d6",
+    "status": "CR_DESIGN_PROPOSAL",
+    "cr_id": "CR-QUERY-REPORTS-20261102",
+    "new_product_sha": null,
+    "source_files": {
+      "B": {
+        "file": "肉食品仿真数据_202611_合并图示版.xlsx",
+        "sha256": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+        "bytes": 1672626
+      },
+      "P": {
+        "file": "APS配置参数梳理_20261101.xlsx",
+        "sha256": "e8b73e882e66b2e19ab7cb639c7a17e8830d08c0f485667484141837794f4d24",
+        "bytes": 247518
+      },
+      "referenceProductSha": "33fe82f4b52dac4c7f98490a5667605b9de6bab6",
+      "prototypeVersion": "QUERY-REPORTS-20261102-r2",
+      "status": "CR设计提案；待PM登记实施；未接入系统"
+    }
+  },
+  "originals": {
+    "B": {
+      "file": "肉食品仿真数据_202611_合并图示版.xlsx",
+      "sha256": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "bytes": 1672626
+    },
+    "P": {
+      "file": "APS配置参数梳理_20261101.xlsx",
+      "sha256": "e8b73e882e66b2e19ab7cb639c7a17e8830d08c0f485667484141837794f4d24",
+      "bytes": 247518
+    }
+  },
+  "screenshots": [
+    {
+      "workspace": "APS-Design",
+      "path": "upload/pasted-2026-11-02T06-34-45.png",
+      "bytes": 69883,
+      "sha256": "169b71739f4ef454c181d907f2791f4468f2758d3d690e354de3c905b1d38378",
+      "publicly_published": false
+    },
+    {
+      "workspace": "APS-Design",
+      "path": "upload/pasted-2026-11-02T06-46-46.png",
+      "bytes": 391486,
+      "sha256": "bad98925a5d971cb81882d1a164591c7f9045cc930e9914dc66650f7c2adf030",
+      "publicly_published": false
+    }
+  ],
+  "table_counts": {
+    "物料主数据": 140,
+    "物料清单": 317,
+    "关键路径明细": 27,
+    "客户与交付": 40,
+    "库区库位": 84,
+    "供应商与供货条件": 215,
+    "工艺路线": 87,
+    "设备与工装": 46,
+    "班组资源": 6,
+    "工厂日历": 44,
+    "停机安排": 5,
+    "每日需求": 2150,
+    "期初库存": 420,
+    "既有采购在途": 55,
+    "期初在制": 8,
+    "生产补给建议": 695,
+    "采购订单草案": 1901,
+    "每日缺料净算": 6020,
+    "单位换算": 275,
+    "物料需求来源": 8456,
+    "参数目录": 168,
+    "参数实例": 3428
+  },
+  "related_crs": [
+    "CR-INPUT-SCHED-UX-20261102",
+    "CR-INPUT-DATA-20261031",
+    "CR-PARAM-UI-20261101"
+  ],
+  "private_data_policy": "含完整原件数据的HTML仅APS-Design文件交付，不放公开Git；固定Git保留设计文档与无数据原型源。PM按权限经Files API取HTML，不能用本地路径当已交接成功。",
+  "scope_limits": [
+    "只做设计和原型，未写产品src/server",
+    "未修改main/Project/受控CR登记",
+    "未新增应用运行/Worker/浏览器/构建窗口",
+    "未代签QA或UAT，不重跑同范围旧验证"
+  ]
+}

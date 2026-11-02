@@ -1,0 +1,1 @@
+这些是无用户数据的独立HTML原型源；data.json与完整HTML仅按权限在APS-Design文件服务取得。UI不含反馈SDK；HTML无后端写入。生成顺序core/common/reports-a/reports-b/reports-c/dialogs/events，业务源使用用户B/P原件明确身份。正式产品实现由Dev复用现有APS接口，勿把离线脚本当上线代码。
