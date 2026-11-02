@@ -39,6 +39,8 @@
   },
   "deterministic_fixture": {
     "source_instance_id": "PA0783",
+    "original_SO001_purchase_lead_days": 1,
+    "fixture_purchase_lead_explicitly_changed": true,
     "object_id": "SO001",
     "semantic_field": "检验天数",
     "P_clone_value": 2,
