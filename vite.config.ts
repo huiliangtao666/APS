@@ -1,6 +1,7 @@
 import { definePraetorConfig } from '@praetor/lite-app-runtime/vite';
 import react from '@vitejs/plugin-react';
 import { build } from 'esbuild';
+import { copyFile } from 'node:fs/promises';
 
 let workerRoot = '';
 let workerOutDir = 'dist';
@@ -29,15 +30,19 @@ export default definePraetorConfig({
       workerOutDir = config.build.outDir;
     },
     async closeBundle() {
-      await build({
-        absWorkingDir: workerRoot,
-        entryPoints: ['server/calculation-worker.mjs'],
-        outfile: `${workerOutDir}/calculation-worker.mjs`,
-        bundle: true,
-        platform: 'node',
-        format: 'esm',
-        packages: 'external',
-      });
+      await Promise.all([
+        ...['calculation-worker', 'workbook-import-worker'].map(name => build({
+          absWorkingDir: workerRoot,
+          entryPoints: [`server/${name}.mjs`],
+          outfile: `${workerOutDir}/${name}.mjs`,
+          bundle: true,
+          platform: 'node',
+          format: 'esm',
+          packages: 'external',
+        })),
+        ...['workbook-schema.json', 'workbook-simulation.json'].map(name =>
+          copyFile(`${workerRoot}/server/${name}`, `${workerRoot}/${workerOutDir}/${name}`)),
+      ]);
     },
   }],
   // Express dev port. Vite proxies `${base}api/*` here; Express binds it.
