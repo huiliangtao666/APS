@@ -1,0 +1,47 @@
+{
+  "prototype": {
+    "file": "APS设备排程_紧凑展示原型_20261102.html",
+    "bytes": 1125954,
+    "sha256": "4f8e75e2b590572ce5d393b53841f7e26cf5bfd1e3e318127c49c29b1699551e",
+    "version": "EQUIPMENT-VIEW-20261102-r1",
+    "new_product_sha": null,
+    "product_runtime": "NOT_EXECUTED",
+    "formal_cr_created": false
+  },
+  "reference_main_sha": "677029d2473b030bec5150b23eeae9488a0c4e84",
+  "product_change_sha": null,
+  "formal_cr_requested_this_round": false,
+  "sources": {
+    "B": {
+      "file": "肉食品仿真数据_202611_合并图示版.xlsx",
+      "sha256": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "bytes": 1672626
+    },
+    "P": {
+      "file": "APS配置参数梳理_20261101.xlsx",
+      "sha256": "e8b73e882e66b2e19ab7cb639c7a17e8830d08c0f485667484141837794f4d24",
+      "bytes": 247518
+    },
+    "reviewedProductSha": "677029d2473b030bec5150b23eeae9488a0c4e84",
+    "prototypeVersion": "EQUIPMENT-VIEW-20261102-r1",
+    "fixtureMeaning": "设备/工艺/班组/日历/停机/目录来自用户仿真原件；任务、工装分配、状态、缺料和调整均为设计夹具，不是APS计算或执行事实",
+    "zeroDurationMeaning": "原件0天工序在本设计夹具中按1个整日槽位呈现，仅为可读布局，不是加工默认值或修改真实时长"
+  },
+  "existing_views": [
+    "日轴甘特",
+    "任务定位",
+    "问题",
+    "冻结来源",
+    "冻结查询"
+  ],
+  "prototype_views": [
+    "设备甘特",
+    "需求交付",
+    "设备负荷",
+    "人员工装",
+    "物料风险",
+    "任务明细"
+  ],
+  "verification": "30项独立HTML/DOM桩；非产品测试、真实浏览器或UAT",
+  "private_artifact_access": "APS-Design Files API；原件/截图/完整data.json不进公开Git"
+}

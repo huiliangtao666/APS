@@ -1,0 +1,187 @@
+[
+  {
+    "path": "00-交付入口与结论.txt",
+    "bytes": 2487,
+    "sha256": "c565930332554ddf03622fa478b299b30b8fda88c0b708a4306b0a7dab87ee8c"
+  },
+  {
+    "path": "01-五类查询完整需求与版本优先.txt",
+    "bytes": 10624,
+    "sha256": "0d731eaf7b1900dda4a8f74f00866fc48e3e8e9adb16f54fe581de456ae0a681"
+  },
+  {
+    "path": "02-五类查询全量覆盖索引.csv",
+    "bytes": 6539,
+    "sha256": "dc4d4b99e9d2dda6fd959701f498a1f40d169ec098833ba9c08adacf78e36bb0"
+  },
+  {
+    "path": "03-设备排程展示CR完整提案.txt",
+    "bytes": 11105,
+    "sha256": "16d3fc47b25d8452d9243c1756ba16b2a2085759e584a12ec66b887367b3b53b"
+  },
+  {
+    "path": "04-设备展示数据配置后端映射.csv",
+    "bytes": 4665,
+    "sha256": "152d86fddfad9d2c076fe29790ea14970d32c57d6407078d4321797cf5a36b82"
+  },
+  {
+    "path": "05-设备展示验收场景.csv",
+    "bytes": 6425,
+    "sha256": "865194869226f25854a360cc79d0668cf3f74d83a125188231c9ec20c9bfd0f0"
+  },
+  {
+    "path": "06-来源版本与静态核对.json",
+    "bytes": 5995,
+    "sha256": "67ccfdd744ca1b28ac20521441ceb7db52573bc4629714dda77c30adea7462e7"
+  },
+  {
+    "path": "07-设计完整性自检.json",
+    "bytes": 1199,
+    "sha256": "e8b7ba98110b00bff3205ad357e25182eb833f1a3b3faefe13731eb76273dd80"
+  },
+  {
+    "path": "08-生产分钟与日业务时间契约.txt",
+    "bytes": 4951,
+    "sha256": "a90e28b5a0cacfe38fe412d2247af7ac0e06122a967f2fa6e346d2c7f88d386d"
+  },
+  {
+    "path": "09-分钟原型自检.json",
+    "bytes": 3160,
+    "sha256": "e07e5a6ca4f54f7df6bdada4f60dc40528ae7f50599f0e143e655a344f77bd7a"
+  },
+  {
+    "path": "10-APS通用界面规范v3.txt",
+    "bytes": 4330,
+    "sha256": "7f62e0297cf8999ffa224c392395a588353ff4b92b64d01b608c7ec0ac2e92d0"
+  },
+  {
+    "path": "分钟原型源/base.css",
+    "bytes": 13466,
+    "sha256": "9fd032b27bc2fd85065b486ec5168cf7ee32f82c1eb08ef4f1ced13e7eb5fc46"
+  },
+  {
+    "path": "分钟原型源/check.cjs",
+    "bytes": 11145,
+    "sha256": "1d0475d6690f42b6b3c86b5a234770e44db96b15fff6a365fc0a2ccadadc6ea7"
+  },
+  {
+    "path": "分钟原型源/common.js",
+    "bytes": 9998,
+    "sha256": "0c476431e0217f9d2c81a456b9718b063608adb509857ad72283c2b28bf5088e"
+  },
+  {
+    "path": "分钟原型源/core.js",
+    "bytes": 10915,
+    "sha256": "c690962ad5eba7ff650d4098cb34ca647af32ec5fc5405c64385803734519fc0"
+  },
+  {
+    "path": "分钟原型源/dialogs.js",
+    "bytes": 15222,
+    "sha256": "e7e9257c871e1d4a71f7ee7a56cdf4d162495ef07e42641658bc125401cdaae8"
+  },
+  {
+    "path": "分钟原型源/events.js",
+    "bytes": 8778,
+    "sha256": "e05ba746bdae09a18b185edf9db21947d8f6e354cb84a24218dd57af449b377d"
+  },
+  {
+    "path": "分钟原型源/minute.js",
+    "bytes": 845,
+    "sha256": "520f6bb51839b9e7dc52df5445fa73513cb755c2fa41d9e1be529424568ca0a5"
+  },
+  {
+    "path": "分钟原型源/models.js",
+    "bytes": 12752,
+    "sha256": "be598af19242d8dccd334eb446e2edf6fc450312170eb3fa35a140b5ccd3786d"
+  },
+  {
+    "path": "分钟原型源/shell.html",
+    "bytes": 4030,
+    "sha256": "fd9a26723502eb5010612349ab84d10f81de010f4886d85fab61467bf8731c76"
+  },
+  {
+    "path": "分钟原型源/style.css",
+    "bytes": 12802,
+    "sha256": "e01e2e78427f4a5d600b7358577b16a76f0979b266a9be246010bddd0dc810d9"
+  },
+  {
+    "path": "历史设计依据/查询r1-01-需求变更与页面设计.txt",
+    "bytes": 10923,
+    "sha256": "b2df73e3b1f2a80eb11c8a39361ce2681f7d08bc6d32a237e22f917c82583807"
+  },
+  {
+    "path": "历史设计依据/查询r1-02-字段与取数映射.csv",
+    "bytes": 4413,
+    "sha256": "783ed0a7d3a0b11305dea0dd1c417d69980900a4429b9c393dc62a9eb1b479ed"
+  },
+  {
+    "path": "历史设计依据/查询r1-03-数据配置后端符合性核对.csv",
+    "bytes": 3048,
+    "sha256": "2db54f46d7797b07a91b840791470df1141479828f31d96584d50a19d03731e4"
+  },
+  {
+    "path": "历史设计依据/查询r1-04-验收场景.csv",
+    "bytes": 5222,
+    "sha256": "a9ba0cbdcc2e409e16a1725c18cd7138611b7536dcf99950da3f505d5f5ab861"
+  },
+  {
+    "path": "历史设计依据/查询r1-05-查询与日期业务契约.json",
+    "bytes": 3054,
+    "sha256": "1af7a4aa59d171e579ca5c587510f4f125e410a7d39e0d5567104fc81de1806e"
+  },
+  {
+    "path": "历史设计依据/查询r1-06-原型及来源清单.json",
+    "bytes": 3654,
+    "sha256": "06e517b35380a32527681b3c67735e94196c6009d6d74967d04a6d6109a473e9"
+  },
+  {
+    "path": "历史设计依据/查询r1-07-原型自检.json",
+    "bytes": 2986,
+    "sha256": "ed819b489caa202152f7ea8397c740756ffda2acf2e92cf0fffc6ef5e07b4ebe"
+  },
+  {
+    "path": "历史设计依据/查询r1-08-APS通用界面规则.txt",
+    "bytes": 3555,
+    "sha256": "0f8251f76747e8889b8e8f5d21ce470821d50537bc0ebf0333984dcdbb26d606"
+  },
+  {
+    "path": "历史设计依据/查询r1-09-最新后端复核记录.json",
+    "bytes": 5231,
+    "sha256": "69e6f62230cabc0bd0664b53585ea53e50a47037ee5e83439c31e5260472ff0f"
+  },
+  {
+    "path": "历史设计依据/设备原型r1-01-业务设计与展示口径.txt",
+    "bytes": 4823,
+    "sha256": "4734064b8285d36fcb59376425b5c0574309663b173b17fe9d7c4baf1e6ff6f6"
+  },
+  {
+    "path": "历史设计依据/设备原型r1-02-原型逻辑自检.json",
+    "bytes": 2853,
+    "sha256": "19a5a2c757511a91be1e4b6e57a5bb8186f6d3a452b84a498855821780b9bc30"
+  },
+  {
+    "path": "历史设计依据/设备原型r1-03-来源与版本.json",
+    "bytes": 1795,
+    "sha256": "189862edb8863e35d825c703067e12fa4449b42269766431c56b0b937ec644cb"
+  },
+  {
+    "path": "历史设计依据/默认全选R3-01-用户补充与设计修正.txt",
+    "bytes": 2559,
+    "sha256": "08ab5b6131b205067c21fb7f94ae8ebea12bf98a3f36232efcdf5662180f6120"
+  },
+  {
+    "path": "历史设计依据/默认全选R3-02-R3增量原型自检.json",
+    "bytes": 1384,
+    "sha256": "6033ec1077946a542cbf7c6a9a4a56bf9b4cb3c852628766e9096f4e2d5ecc17"
+  },
+  {
+    "path": "历史设计依据/默认全选R3-03-APS通用规则.txt",
+    "bytes": 3615,
+    "sha256": "3db92bdb85cd72f3f3d2c8540f301d6051ba0c98fc7f65ec700255de5600cdf7"
+  },
+  {
+    "path": "历史设计依据/默认全选R3-04-原型身份.json",
+    "bytes": 1282,
+    "sha256": "93b2a08450ea4094341ae0fd19e49ee6f2d29dce98bfa7572651e76cf0d30ee5"
+  }
+]

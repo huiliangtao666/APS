@@ -1,0 +1,45 @@
+{
+  "kind": "DESIGN_COMPLETENESS_STATIC_ONLY",
+  "query_subviews": 18,
+  "query_common_rules": 9,
+  "equipment_mapping_rows": 15,
+  "equipment_acceptance_rows": 28,
+  "checks": [
+    {
+      "assertion": "五页18子视图均有完整需求入口",
+      "result": "PASS_DESIGN_STATIC"
+    },
+    {
+      "assertion": "默认全选覆盖原有限选择初始示例",
+      "result": "PASS_DESIGN_STATIC"
+    },
+    {
+      "assertion": "设备独立CR与查询原卡不混范围",
+      "result": "PASS_DESIGN_STATIC"
+    },
+    {
+      "assertion": "11份固定产品源码与受控资料已取回",
+      "result": "PASS_DESIGN_STATIC"
+    },
+    {
+      "assertion": "真实与原型状态/0天画1天差异明确",
+      "result": "PASS_DESIGN_STATIC"
+    },
+    {
+      "assertion": "无原件数据及完整HTML公开发布",
+      "result": "PASS_DESIGN_STATIC"
+    },
+    {
+      "assertion": "产品测试与UAT未执行明确",
+      "result": "PASS_DESIGN_STATIC"
+    }
+  ],
+  "minute_prototype_checks": 33,
+  "spreadsheet_verification": {
+    "zip_crc": "PASS",
+    "xml_parse": "PASS",
+    "task_rows": 261,
+    "integer_start_end_duration": "PASS",
+    "minute_precision": "PASS"
+  }
+}
