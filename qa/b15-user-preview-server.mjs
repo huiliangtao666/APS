@@ -90,8 +90,10 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
       console.log(JSON.stringify({ mode: c.mode, configurationOnly: true, supported, base: c.base, activation: 'NOT_EXECUTED' }));
       process.exitCode = supported ? 0 : 2;
     } else {
-      const port = Number(process.env.PORT);
-      if (!Number.isInteger(port) || port < 1 || port > 65535) throw Error('platform PORT required');
+      // The official VM dev-preview path uses the runtime SDK's Vite port
+      // contract even for this single Node listener. Production uses PORT.
+      const port = Number(process.env.PORT ?? process.env.PRAETOR_DEV_VITE_PORT);
+      if (!Number.isInteger(port) || port < 1 || port > 65535) throw Error('platform PORT or PRAETOR_DEV_VITE_PORT required');
       const server = http.createServer(async (req, res) => {
         try { await load(); return handler(req, res); }
         catch { res.writeHead(503, { 'content-type': 'application/json', 'cache-control': 'no-store' }); res.end('{"error":"preview_configuration_closed"}'); }
