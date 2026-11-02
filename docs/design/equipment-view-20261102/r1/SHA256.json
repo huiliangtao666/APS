@@ -1,0 +1,67 @@
+[
+  {
+    "path": "01-业务设计与展示口径.txt",
+    "bytes": 4823,
+    "sha256": "4734064b8285d36fcb59376425b5c0574309663b173b17fe9d7c4baf1e6ff6f6"
+  },
+  {
+    "path": "02-原型逻辑自检.json",
+    "bytes": 2853,
+    "sha256": "19a5a2c757511a91be1e4b6e57a5bb8186f6d3a452b84a498855821780b9bc30"
+  },
+  {
+    "path": "03-来源与版本.json",
+    "bytes": 1795,
+    "sha256": "189862edb8863e35d825c703067e12fa4449b42269766431c56b0b937ec644cb"
+  },
+  {
+    "path": "原型源/base.css",
+    "bytes": 13466,
+    "sha256": "9fd032b27bc2fd85065b486ec5168cf7ee32f82c1eb08ef4f1ced13e7eb5fc46"
+  },
+  {
+    "path": "原型源/check.cjs",
+    "bytes": 10104,
+    "sha256": "92a56de5536cc5bc5816e660a27d0a657a6c0d2d89485a5cde80707c8a132b0a"
+  },
+  {
+    "path": "原型源/common.js",
+    "bytes": 9919,
+    "sha256": "534b36174c17aaee73901accb920e93ea4d798c37634e84e45248da2c9179fa3"
+  },
+  {
+    "path": "原型源/core.js",
+    "bytes": 10881,
+    "sha256": "70feda4b0d7c5b94eceb98682ea4ec5c7ec5cc2b8b2dfa28cca7d6e4eec23a2d"
+  },
+  {
+    "path": "原型源/dialogs.js",
+    "bytes": 14860,
+    "sha256": "bd8fd4c1af282019261df9d2ddf5d2096f051cdb853d7b903bd168af99f4a0a3"
+  },
+  {
+    "path": "原型源/events.js",
+    "bytes": 8212,
+    "sha256": "cb0ac962a6cbf99c1e4316aebc17a248229ef10e87fe0195f9b25829dd8d1729"
+  },
+  {
+    "path": "原型源/models.js",
+    "bytes": 12619,
+    "sha256": "7f971dac331927cae4856244a616d54b56f46a51ed878b3dfa7fb98375d5183e"
+  },
+  {
+    "path": "原型源/prepare.py",
+    "bytes": 6827,
+    "sha256": "cecda177c8473913c1a8832a7630635dfa299b6df298963fa709e38bf4cf8b3c"
+  },
+  {
+    "path": "原型源/shell.html",
+    "bytes": 3843,
+    "sha256": "d2b27b44d54a7c6076f3cc2ba39c4d8692335f5021a8a83692a011afd861f953"
+  },
+  {
+    "path": "原型源/style.css",
+    "bytes": 12362,
+    "sha256": "23b6dac46ebf33874f4453a1c327aca3067cc5bc21a941fac2f25641ad4cf1c6"
+  }
+]

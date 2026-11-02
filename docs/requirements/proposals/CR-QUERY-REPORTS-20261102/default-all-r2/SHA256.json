@@ -1,0 +1,72 @@
+[
+  {
+    "path": "01-用户补充与设计修正.txt",
+    "bytes": 2559,
+    "sha256": "08ab5b6131b205067c21fb7f94ae8ebea12bf98a3f36232efcdf5662180f6120"
+  },
+  {
+    "path": "02-R3增量原型自检.json",
+    "bytes": 1384,
+    "sha256": "6033ec1077946a542cbf7c6a9a4a56bf9b4cb3c852628766e9096f4e2d5ecc17"
+  },
+  {
+    "path": "03-APS通用规则.txt",
+    "bytes": 3615,
+    "sha256": "3db92bdb85cd72f3f3d2c8540f301d6051ba0c98fc7f65ec700255de5600cdf7"
+  },
+  {
+    "path": "04-原型身份.json",
+    "bytes": 1282,
+    "sha256": "93b2a08450ea4094341ae0fd19e49ee6f2d29dce98bfa7572651e76cf0d30ee5"
+  },
+  {
+    "path": "原型源/check.cjs",
+    "bytes": 5204,
+    "sha256": "5a2da3094155f2efd0b6e4ea28ffb0169097f2ea4b6603011d3e2368fd254627"
+  },
+  {
+    "path": "原型源/common.js",
+    "bytes": 9946,
+    "sha256": "7db579bb7842f3a1fbfcedba3290e0723aa936930c2e657bf64d36f6598a0854"
+  },
+  {
+    "path": "原型源/core.js",
+    "bytes": 12702,
+    "sha256": "cbc4ed8419891664716344ca2cece2aad356e0c83331393e3d742e01b3af3218"
+  },
+  {
+    "path": "原型源/dialogs.js",
+    "bytes": 5377,
+    "sha256": "d1e1a6ca624107d4e1b68a8a7701816daf0fa9c364334e8dd12231a861b42220"
+  },
+  {
+    "path": "原型源/events.js",
+    "bytes": 7065,
+    "sha256": "4d51721283258bfa014a283179dc15278013ec4c21ef31305692e3ba531b1581"
+  },
+  {
+    "path": "原型源/reports-a.js",
+    "bytes": 8461,
+    "sha256": "023cf5864215662ab32bf4dca88015fa9683b7d2e2ed50dd29781c25499b8d90"
+  },
+  {
+    "path": "原型源/reports-b.js",
+    "bytes": 10285,
+    "sha256": "d035a2bd971707c8df659949209fdd470825001c9c9ca3658fd976f5f0bb567e"
+  },
+  {
+    "path": "原型源/reports-c.js",
+    "bytes": 6726,
+    "sha256": "50136ed6d1b82c7df09953ec280e31e9aecb0083b6843f093651346f540f3dbb"
+  },
+  {
+    "path": "原型源/shell.html",
+    "bytes": 3075,
+    "sha256": "090e263e87c845c55284731a4c1f32cbfc29cabbb6fbb5e20cf4af4a739a204b"
+  },
+  {
+    "path": "原型源/style.css",
+    "bytes": 13466,
+    "sha256": "9fd032b27bc2fd85065b486ec5168cf7ee32f82c1eb08ef4f1ced13e7eb5fc46"
+  }
+]
