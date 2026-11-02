@@ -1,0 +1,200 @@
+{
+  "productSha": "e603e8fc342d8d1e1f02b9ed8444aef1d9879463",
+  "parent": "172b415122472b933fc9935b5537697ebc03ccfc",
+  "branch": "main",
+  "designSha": null,
+  "originalDelivery": "dlv_44957cda-4ca5-41d8-a44e-ddc3cbca11e6",
+  "event_key": "dlv_44957cda-4ca5-41d8-a44e-ddc3cbca11e6:r1",
+  "sourceCheck": {
+    "sha": "e603e8fc342d8d1e1f02b9ed8444aef1d9879463",
+    "parent": "172b415122472b933fc9935b5537697ebc03ccfc",
+    "files": 3424,
+    "allMatch": true,
+    "node": "v22.23.2",
+    "directDependencies": {
+      "@praetor/lite-app-runtime": "0.5.0",
+      "@praetor/lite-app-server": "0.4.1",
+      "express": "4.22.3",
+      "react": "18.3.1",
+      "react-dom": "18.3.1",
+      "react-router-dom": "6.30.6",
+      "@types/express": "4.17.25",
+      "@types/react": "18.3.31",
+      "@types/react-dom": "18.3.7",
+      "@vitejs/plugin-react": "4.7.0",
+      "autoprefixer": "10.6.2",
+      "concurrently": "9.2.5",
+      "esbuild": "0.21.5",
+      "postcss": "8.5.32",
+      "tailwindcss": "3.4.19",
+      "typescript": "5.9.3",
+      "vite": "5.4.21"
+    },
+    "lockSha256": "fb974facfc148015d318f894918b5e63fa4ec4086fc90f9d7ebcf46cf32ffc06"
+  },
+  "github": {
+    "branch": "main",
+    "localHead": "e603e8fc342d8d1e1f02b9ed8444aef1d9879463",
+    "githubApiStatus": 200,
+    "githubApiSha": "e603e8fc342d8d1e1f02b9ed8444aef1d9879463",
+    "lsRemoteSha": "e603e8fc342d8d1e1f02b9ed8444aef1d9879463",
+    "parent": "172b415122472b933fc9935b5537697ebc03ccfc",
+    "workingTreeClean": true,
+    "pushExit": 0
+  },
+  "integration": {
+    "baseMain": "172b415122472b933fc9935b5537697ebc03ccfc",
+    "productSha": "e603e8fc342d8d1e1f02b9ed8444aef1d9879463",
+    "parent": "172b415122472b933fc9935b5537697ebc03ccfc",
+    "mergeBase": "172b415122472b933fc9935b5537697ebc03ccfc",
+    "changedFiles": [
+      "qa/b15-lossless-INTEGRATION.md",
+      "qa/b15-lossless-fixture.mjs",
+      "qa/b15-lossless-negative.test.mjs",
+      "qa/b15-lossless-runtime.mjs",
+      "qa/b15-lossless-ui-build.mjs",
+      "qa/b15-lossless.test.mjs",
+      "qa/b15-residual.test.mjs",
+      "server/business.mjs",
+      "server/csv-batch.mjs",
+      "server/input-validation.mjs",
+      "server/planner.ts",
+      "server/run-input.mjs",
+      "server/run-result-sources.mjs",
+      "src/App.tsx",
+      "src/DataEditor.tsx",
+      "src/MaterialPanel.tsx",
+      "src/PolicyPreview.tsx",
+      "src/StructuredValue.tsx",
+      "src/data-defs.ts",
+      "src/lib/csv-contract.mjs",
+      "src/lib/execution-facts.mjs",
+      "src/lib/expected-supply.mjs",
+      "src/lib/independent-verification.d.mts",
+      "src/lib/independent-verification.mjs",
+      "src/lib/inventory-view.mjs",
+      "src/lib/inventory.d.mts",
+      "src/lib/inventory.mjs",
+      "src/lib/material-allocation.mjs",
+      "src/lib/minute-validity.d.mts",
+      "src/lib/minute-validity.mjs",
+      "src/lib/original-stage-data.mjs",
+      "src/lib/record-identity.mjs",
+      "src/lib/resource-mapping.mjs",
+      "src/lib/result-assessment.mjs",
+      "src/lib/simulation-events.mjs",
+      "src/lib/stage-bindings.d.mts",
+      "src/lib/stage-bindings.mjs",
+      "src/lib/verify-joint-conditions.mjs",
+      "src/lib/verify-resource-mapping.mjs",
+      "src/lib/verify-stage-bindings.mjs"
+    ],
+    "fileCount": 40,
+    "governanceDocsChanged": [],
+    "testOwnedIntersection": [],
+    "integration": "single direct descendant of live main; no cherry-pick or duplicate source merge; ordinary fast-forward push planned"
+  },
+  "execution": {
+    "runtime": "isolated Linux application containers and platform finite app-exec",
+    "dependencyInstall": "npm ci in new isolated application project, lock unchanged",
+    "node": "v22.23.2",
+    "build": "standard npm run build with V8 heap280; tsc/Vite/server/actual calculation Worker",
+    "newTests": 35,
+    "impactTests": 92,
+    "businessWorkerTests": 4,
+    "headcountAppendCheck": 1,
+    "independentPythonChecks": 404,
+    "realReactChecks": 6,
+    "uiErrors": [],
+    "newProcessApiReopen": {
+      "productSha": "e603e8fc342d8d1e1f02b9ed8444aef1d9879463",
+      "results": [
+        {
+          "directory": "browser-state",
+          "beforeSha256": "d8566cd849807f7f12927740e5280ca40a4769c67e51207b2a9bf1a45398c15d",
+          "afterSha256": "d8566cd849807f7f12927740e5280ca40a4769c67e51207b2a9bf1a45398c15d",
+          "bytes": 1962009,
+          "plans": [
+            {
+              "id": "e28ee546-f26f-49d5-9bf6-05d3c008f3f5",
+              "snapshotHash": "bef39cad7f9b37121dc03744e737121f64865b3b9dbb58ec985c0a0bdd745e6c",
+              "inputVersionId": "ba35367885551b358800f5357e929807ee2c48c12b1b5a4c175ffcfa2c2f28bd"
+            },
+            {
+              "id": "35ce79b2-69a8-47e6-90cc-988325edfabe",
+              "snapshotHash": "67b47b4a785c6cdc51912e8deeb662e52e6738c3ba44a42b7b91e3fe22233878",
+              "inputVersionId": "83b8b10b914e41e3f6e7fdc0badc205391c3e2255691a1f40962b9b24acfd640"
+            }
+          ],
+          "revision": 2,
+          "newProcessApiReopenUnchanged": true
+        },
+        {
+          "directory": "browser-state15",
+          "beforeSha256": "f45f93bebe085c031abe04931234315e01be5786c98410b797f43416941cd942",
+          "afterSha256": "f45f93bebe085c031abe04931234315e01be5786c98410b797f43416941cd942",
+          "bytes": 1027385,
+          "plans": [
+            {
+              "id": "867bebe1-16c7-46a7-95e4-e9ec8fbf5ba9",
+              "snapshotHash": "3d05fdeb69982842894f36b42f5b79aeadb77b9f27117ec1187ae4f01e7850e7",
+              "inputVersionId": "f795c598388f15cc6342e88aa9b3bfe89832e19fe13308714b2340e7b10842f6"
+            }
+          ],
+          "revision": 1,
+          "newProcessApiReopenUnchanged": true
+        }
+      ],
+      "scope": "new isolated Node process reopening original private store via actual API; no QA runtime touched"
+    },
+    "groupsMayOverlap": true
+  },
+  "identity": "explicit test members/roles only; formal SSO not executed; QA verdict not claimed",
+  "data": "explicit replaceable legacy-model simulations with unchanged raw source bytes; not customer authority",
+  "originalBytes": {
+    "zipSha256": "01aa86f90d257e3e6c948531f1010d0a0fdf502a68266176991dc0fb8f107759",
+    "files": 114,
+    "allMatch": true
+  },
+  "earlierPasses": "preserved at respective historical SHAs; no whole-domain re-run or retroactive signing",
+  "newB09CR": {
+    "governanceSha": "88be84f4bf4cffab76c53df5aedb331383eb32aa",
+    "noticeDelivery": "dlv_06b891d1-10ea-447b-94ee-ccf54999148f",
+    "businessResolved": true,
+    "domainOwner": "APS-Test",
+    "subsequentSharedIntegrationOwner": "APS-Dev",
+    "implementedInThisLegacyCandidate": false
+  },
+  "privateRuntime": {
+    "containers": [
+      "aps-b15-lossless-private",
+      "aps-b15-lossless-private15"
+    ],
+    "ports": [
+      18231,
+      18232
+    ],
+    "status": "stopped after private verification",
+    "private17OOM": true,
+    "note": "After six browser checks completed, private17 was found OOMKilled/137. Stored completed runs stayed intact. Both stores independently reopened through actual API in a fresh one-shot Node process with heap280; exact bytes preserved. No production failure classification.",
+    "oldQaTouched": false,
+    "publication": false
+  },
+  "buildDiagnostic": {
+    "observed": [
+      "Two composite builds ended with Killed/exit137 before completing TypeScript; no source failure diagnostics.",
+      "Separate TypeScript with NODE_OPTIONS=--max-old-space-size=280 completed: memory used231574K, runtime peak377364480 bytes.",
+      "Probe cgroup memory.max=max; memory.events oom=0/oom_kill=0. Exact cause of earlier termination not proven.",
+      "Subsequent complete standard npm build with V8heap280 succeeded; final fixed-SHA build separately recorded."
+    ],
+    "productDefect": false,
+    "unrelatedQaContainersTouched": false
+  },
+  "wholePackage": "PARTIAL/NOT_READY",
+  "qa": "NOT_EXECUTED",
+  "productDefectRepairIncrement": 0,
+  "qaIssueLogsClosed": 0,
+  "FR031HistoricalDone": "PRESERVED",
+  "P1Enabled": false,
+  "publication": false
+}

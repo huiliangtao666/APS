@@ -1,0 +1,46 @@
+{
+  "event_key": "dlv_44957cda-4ca5-41d8-a44e-ddc3cbca11e6:r1",
+  "productSha": "e603e8fc342d8d1e1f02b9ed8444aef1d9879463",
+  "files": {
+    "B15-LOSSLESS-r1-REPORT.md": {
+      "bytes": 11222,
+      "sha256": "13859eedf41ee27b4f4f9cdffde14a8cb45621b53797d8d7e6c93aafa4563609"
+    },
+    "B15-LOSSLESS-r1-MATRIX.csv": {
+      "bytes": 18438,
+      "sha256": "b9e7c7a8ae057a4e980e85c16cbfc5fb8aea39db4a041d3e7b9f3dfdac378f23"
+    },
+    "B15-LOSSLESS-r1-CLOSURE.csv": {
+      "bytes": 46640,
+      "sha256": "e2c09a96b7300b7b2a9a81d713054dd4f41d6781c8a5c85c3e0559a1979ec9b7"
+    },
+    "B15-LOSSLESS-r1-B12-CLOSURE.csv": {
+      "bytes": 20546,
+      "sha256": "f2cf1c20155575836388f249537d2708279bd5d8ff68d742122b0774c36c5c01"
+    },
+    "B15-LOSSLESS-r1-INPUT-MAPPING.csv": {
+      "bytes": 96973,
+      "sha256": "736dd48c3212c721fe7c9fe8cfeb453b3bc4a3e1ec6099ad5eeef9dfe2f12d7d"
+    },
+    "B15-LOSSLESS-r1-ENVIRONMENT.json": {
+      "bytes": 8059,
+      "sha256": "24ec73aaa2f9dcceb9b316991dc4f8ed8df5ba20a6b253ab079a3ebcf847ceaf"
+    },
+    "B15-LOSSLESS-r1-REPLAY.txt": {
+      "bytes": 3696,
+      "sha256": "b27bbc6f0a8531fc6d999750582e840725ad9773968a8a1c76d12d1a5ee7d7fa"
+    },
+    "B15-LOSSLESS-r1-INPUTS.zip": {
+      "bytes": 169949,
+      "sha256": "659ef0097d64ae1b37fc3b8db63f7305f9874d58ce24816352aea95f02ce685b"
+    },
+    "B15-LOSSLESS-r1-EVIDENCE.zip": {
+      "bytes": 5643834,
+      "sha256": "8f4a2adfbcd1326fe7a0f49a4b453e3e56fc1b84b8fb8479045f9538f30ac439"
+    },
+    "B15-LOSSLESS-r1-HANDOFF.json": {
+      "bytes": 3629,
+      "sha256": "b314481e20e3bed2e2b7d60239409e62c9b9ce0a9e62379789f8c80f8360796b"
+    }
+  }
+}
