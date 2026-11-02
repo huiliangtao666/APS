@@ -1,0 +1,78 @@
+{
+  "00-交付说明.txt": {
+    "bytes": 3044,
+    "sha256": "1f05602f3df6492d87eaf7a5dee7ca367e9aa5592fa17cdb1b55fda709881110"
+  },
+  "01-业务交互与状态.txt": {
+    "bytes": 10406,
+    "sha256": "b725dc193c5d7a350bd259e2fee855b609e7348853d966423da1390ec06f5cbb"
+  },
+  "02-业务API导出一致性契约.txt": {
+    "bytes": 11473,
+    "sha256": "6abd39dcf74705bae43033846f836cdbf1b7ec837501eb4a27ccf88635b10294"
+  },
+  "03-性能容量与测量提案.txt": {
+    "bytes": 6030,
+    "sha256": "6aa7694a01ea23eae5e279c9d6a32ceb10a8a57a07bb07fdfab292c860f3926a"
+  },
+  "04-增量验收矩阵.csv": {
+    "bytes": 17429,
+    "sha256": "0cc2331f1db79468100781308a13137dcb4774a18b75142c06e8bee9bbb52c72"
+  },
+  "05-独立切片与待决.txt": {
+    "bytes": 3983,
+    "sha256": "ec3072fd3b333aa712fedaafec7ae843d43243f8b66abbf74eaf1cb28f2236c0"
+  },
+  "06-仿真与UAT预期.json": {
+    "bytes": 14981,
+    "sha256": "236310cd185ef29b7f533d4c31f75ba5449c2cad5e94b1c7fc941dfda9469617"
+  },
+  "06-生成仿真数据.py": {
+    "bytes": 1735,
+    "sha256": "76283eb78f4ff7479e869504cf02bb22e3631c5f494c9710c5b82051df816712"
+  },
+  "07-交互原型.html": {
+    "bytes": 23002,
+    "sha256": "b335297c3f1c9704d90ddc7a952f2c2991793e3d6acb76dd50a962613f37aced"
+  },
+  "08-来源与授权核验.json": {
+    "bytes": 4714,
+    "sha256": "ca3acee8cb0927ad2689f18dc67df45e55736e567f9cd2dee78ac3375df315c1"
+  },
+  "09-r1设计自检历史.json": {
+    "bytes": 2737,
+    "sha256": "fc9297eaf0d1ea877b06a2da1b436356695067037212b7ad4426df1eb924fccd"
+  },
+  "09-原型自检.cjs": {
+    "bytes": 6059,
+    "sha256": "d5905f7f9b4282008ef7ecbf8378e95b30048f49fd8fd065b08ca09bfc04911c"
+  },
+  "09-设计自检.json": {
+    "bytes": 1758,
+    "sha256": "a8c8e8b062179379d17cb52613b4e5e622e6ddce3214f36d36a8e854b0264f0e"
+  },
+  "10-G01-G02-G03逐项定位.csv": {
+    "bytes": 29088,
+    "sha256": "2f5d994de9810214140a71860b4e028ac76537e29caf33ff6ad2d64f9a40a75e"
+  },
+  "10b-G03来源业务键索引.csv": {
+    "bytes": 63561,
+    "sha256": "4bc2b78a56ae180770081676a1efdcfca448b07632b5c9b1ffbcfbbb846b327e"
+  },
+  "11-真实维护与就绪闭环.txt": {
+    "bytes": 14850,
+    "sha256": "21cd1667d5fef0a6e7f21ede4b14bbf8ebac214e030fbcdf40acbfde152a6e48"
+  },
+  "12-A2就绪定位原型.html": {
+    "bytes": 45548,
+    "sha256": "9dad55929e85c2ba6e97e3b360da3b9c7dc8ead85a947b440cd71fb9b7d6baea"
+  },
+  "13-就绪场景与独立预期.json": {
+    "bytes": 51888,
+    "sha256": "0af1dff649f9a1f3793d49c9a549bb9a11a39c9452e5f6e0169b2875ed0ce74d"
+  },
+  "14-就绪原型自检.cjs": {
+    "bytes": 3227,
+    "sha256": "4b3e8d59d270df837300eb9a11837c296ae157fceeb43ebee9a03dc93df65950"
+  }
+}

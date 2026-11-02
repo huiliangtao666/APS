@@ -1,0 +1,741 @@
+{
+  "revision": "large-preview:r2",
+  "effective": false,
+  "productSha": null,
+  "sourceVsMock": "报告1/20/9不是独立运行；原件坐标为XML核验；不造真实产线/路线/余量",
+  "issues": [
+    {
+      "issue_key": "G01-LINE",
+      "check_code": "G01",
+      "object": "数据集所选产线",
+      "missing_fields": "mapping.line.id；资源产线归属",
+      "current_value_and_evidence": "报告：未显式选择；真实值未知",
+      "expected_condition": "必须显式选择有来源的单条产线，资源同属该线；不启多线",
+      "source_sheet_physical_row_cells": "数据集映射，无原Excel对应行；row=null/sourceKind=dataset-mapping",
+      "unique_maintenance_position": "A1/生产/产线与资源映射/所选产线（设计拟建）",
+      "actual_entry_and_online_status": "真实导入/在线编辑/审批待实现；现mapping入口仅mock=true",
+      "provider_maintainer_reviewer": "生产负责人提供与复核，授权主数据维护员录入；角色绑定待批准",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF001",
+      "check_code": "G02",
+      "object": "SF001",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A13:D13；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF001",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF002",
+      "check_code": "G02",
+      "object": "SF002",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A14:D14；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF002",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF003",
+      "check_code": "G02",
+      "object": "SF003",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A15:D15；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF003",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF004",
+      "check_code": "G02",
+      "object": "SF004",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A16:D16；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF004",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF005",
+      "check_code": "G02",
+      "object": "SF005",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A17:D17；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF005",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF006",
+      "check_code": "G02",
+      "object": "SF006",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A18:D18；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF006",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF007",
+      "check_code": "G02",
+      "object": "SF007",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A19:D19；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF007",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF008",
+      "check_code": "G02",
+      "object": "SF008",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A20:D20；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF008",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF009",
+      "check_code": "G02",
+      "object": "SF009",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A21:D21；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF009",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF010",
+      "check_code": "G02",
+      "object": "SF010",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A22:D22；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF010",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF011",
+      "check_code": "G02",
+      "object": "SF011",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A23:D23；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF011",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF012",
+      "check_code": "G02",
+      "object": "SF012",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A24:D24；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF012",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF013",
+      "check_code": "G02",
+      "object": "SF013",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A25:D25；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF013",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF014",
+      "check_code": "G02",
+      "object": "SF014",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A26:D26；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF014",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF015",
+      "check_code": "G02",
+      "object": "SF015",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A27:D27；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF015",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF016",
+      "check_code": "G02",
+      "object": "SF016",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A28:D28；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF016",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF017",
+      "check_code": "G02",
+      "object": "SF017",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A29:D29；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF017",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF018",
+      "check_code": "G02",
+      "object": "SF018",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A30:D30；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF018",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF019",
+      "check_code": "G02",
+      "object": "SF019",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A31:D31；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF019",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G02-SF020",
+      "check_code": "G02",
+      "object": "SF020",
+      "missing_fields": "制造物料→工艺路线；成品编号/路线编号/路线工序编号/工序顺序/工序/前序/设备组/人员/工装/跨日历时等",
+      "current_value_and_evidence": "原件物料来源=制造；原工艺路线匹配0条；v2缺完整路线按报告",
+      "expected_condition": "按既有日profile补该SF完整适用路线及资源引用，不改成采购绕过",
+      "source_sheet_physical_row_cells": "B/物料主数据!A32:D32；工艺路线无匹配行，缺行不编坐标",
+      "unique_maintenance_position": "A1/生产/工艺路线/成品编号精确=SF020",
+      "actual_entry_and_online_status": "已有业务Excel重导与通用在线新增/编辑源码基础；正确深链未产品核验；非物料主数据修正",
+      "provider_maintainer_reviewer": "工艺负责人提供/复核；授权业务维护员填路线，不能由Design自动补",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G03-MAPPING",
+      "check_code": "G03",
+      "object": "投料点/物理工装池/WIP映射总项",
+      "missing_fields": "feed_mappings；tool_pools；wip_remaining",
+      "current_value_and_evidence": "报告：映射整体未完整；具体缺哪个子集需权威详情，不以缺项猜值",
+      "expected_condition": "三子区独立列缺失；每个BOM适用工序唯一，池内工装真实有限且不重复",
+      "source_sheet_physical_row_cells": "B/物料清单3–319行；设备与工装35–48行；期初在制3–10行；10b逐业务键索引；映射本身无原件行",
+      "unique_maintenance_position": "A1/生产/产线与资源映射（拟建）/投料点、物理池、WIP余量三子区",
+      "actual_entry_and_online_status": "真实映射导入/编辑/审批均待实现；不能采用仿真按钮清成真实",
+      "provider_maintainer_reviewer": "工艺负责人核投料点；设备/工装管理员核物理池；生产及库存负责人核WIP",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G03-WP001",
+      "check_code": "G03",
+      "object": "WP001",
+      "missing_fields": "剩余路线工序/待投BOM/当前占用半开日区间/剩余班组人数/工装类型数量",
+      "current_value_and_evidence": "报告：剩余映射缺；原件已有B=FG001；D=OP008；F=EQ024；G=200；H=千克；I=0；J=1；K=1；原件未提供mapping.wip_remaining",
+      "expected_condition": "唯一对应本WIP、产品、当前工序及资源；剩余工序/待投料显式且适用；不得重复扣历史料；未知不同于0或[]",
+      "source_sheet_physical_row_cells": "B/期初在制!A3:M3；原路线参考行=3,4,5,6,7,8,9,10,11",
+      "unique_maintenance_position": "A1/生产/产线与资源映射（拟建）/WIP剩余/WP001",
+      "actual_entry_and_online_status": "原期初在制基础字段可走已有业务维护；剩余映射导入/编辑/审批待实现",
+      "provider_maintainer_reviewer": "生产负责人提供剩余工作；库存负责人核已投/净账；授权维护员录入，业务负责人复核",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G03-WP002",
+      "check_code": "G03",
+      "object": "WP002",
+      "missing_fields": "剩余路线工序/待投BOM/当前占用半开日区间/剩余班组人数/工装类型数量",
+      "current_value_and_evidence": "报告：剩余映射缺；原件已有B=FG002；D=OP008；F=EQ025；G=200；H=千克；I=0；J=2；K=2；原件未提供mapping.wip_remaining",
+      "expected_condition": "唯一对应本WIP、产品、当前工序及资源；剩余工序/待投料显式且适用；不得重复扣历史料；未知不同于0或[]",
+      "source_sheet_physical_row_cells": "B/期初在制!A4:M4；原路线参考行=12,13,14,15,16,17,18,19,20",
+      "unique_maintenance_position": "A1/生产/产线与资源映射（拟建）/WIP剩余/WP002",
+      "actual_entry_and_online_status": "原期初在制基础字段可走已有业务维护；剩余映射导入/编辑/审批待实现",
+      "provider_maintainer_reviewer": "生产负责人提供剩余工作；库存负责人核已投/净账；授权维护员录入，业务负责人复核",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G03-WP003",
+      "check_code": "G03",
+      "object": "WP003",
+      "missing_fields": "剩余路线工序/待投BOM/当前占用半开日区间/剩余班组人数/工装类型数量",
+      "current_value_and_evidence": "报告：剩余映射缺；原件已有B=FG003；D=OP008；F=EQ026；G=200；H=千克；I=0；J=1；K=1；原件未提供mapping.wip_remaining",
+      "expected_condition": "唯一对应本WIP、产品、当前工序及资源；剩余工序/待投料显式且适用；不得重复扣历史料；未知不同于0或[]",
+      "source_sheet_physical_row_cells": "B/期初在制!A5:M5；原路线参考行=21,22,23,24,25,26,27,28,29",
+      "unique_maintenance_position": "A1/生产/产线与资源映射（拟建）/WIP剩余/WP003",
+      "actual_entry_and_online_status": "原期初在制基础字段可走已有业务维护；剩余映射导入/编辑/审批待实现",
+      "provider_maintainer_reviewer": "生产负责人提供剩余工作；库存负责人核已投/净账；授权维护员录入，业务负责人复核",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G03-WP004",
+      "check_code": "G03",
+      "object": "WP004",
+      "missing_fields": "剩余路线工序/待投BOM/当前占用半开日区间/剩余班组人数/工装类型数量",
+      "current_value_and_evidence": "报告：剩余映射缺；原件已有B=FG004；D=OP008；F=EQ024；G=200；H=千克；I=0；J=2；K=2；原件未提供mapping.wip_remaining",
+      "expected_condition": "唯一对应本WIP、产品、当前工序及资源；剩余工序/待投料显式且适用；不得重复扣历史料；未知不同于0或[]",
+      "source_sheet_physical_row_cells": "B/期初在制!A6:M6；原路线参考行=30,31,32,33,34,35,36,37,38",
+      "unique_maintenance_position": "A1/生产/产线与资源映射（拟建）/WIP剩余/WP004",
+      "actual_entry_and_online_status": "原期初在制基础字段可走已有业务维护；剩余映射导入/编辑/审批待实现",
+      "provider_maintainer_reviewer": "生产负责人提供剩余工作；库存负责人核已投/净账；授权维护员录入，业务负责人复核",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G03-WP005",
+      "check_code": "G03",
+      "object": "WP005",
+      "missing_fields": "剩余路线工序/待投BOM/当前占用半开日区间/剩余班组人数/工装类型数量",
+      "current_value_and_evidence": "报告：剩余映射缺；原件已有B=FG005；D=OP008；F=EQ025；G=200；H=千克；I=0；J=1；K=1；原件未提供mapping.wip_remaining",
+      "expected_condition": "唯一对应本WIP、产品、当前工序及资源；剩余工序/待投料显式且适用；不得重复扣历史料；未知不同于0或[]",
+      "source_sheet_physical_row_cells": "B/期初在制!A7:M7；原路线参考行=39,40,41,42,43,44,45,46,47",
+      "unique_maintenance_position": "A1/生产/产线与资源映射（拟建）/WIP剩余/WP005",
+      "actual_entry_and_online_status": "原期初在制基础字段可走已有业务维护；剩余映射导入/编辑/审批待实现",
+      "provider_maintainer_reviewer": "生产负责人提供剩余工作；库存负责人核已投/净账；授权维护员录入，业务负责人复核",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G03-WP006",
+      "check_code": "G03",
+      "object": "WP006",
+      "missing_fields": "剩余路线工序/待投BOM/当前占用半开日区间/剩余班组人数/工装类型数量",
+      "current_value_and_evidence": "报告：剩余映射缺；原件已有B=FG006；D=OP008；F=EQ026；G=200；H=千克；I=0；J=2；K=2；原件未提供mapping.wip_remaining",
+      "expected_condition": "唯一对应本WIP、产品、当前工序及资源；剩余工序/待投料显式且适用；不得重复扣历史料；未知不同于0或[]",
+      "source_sheet_physical_row_cells": "B/期初在制!A8:M8；原路线参考行=48,49,50,51,52,53,54,55",
+      "unique_maintenance_position": "A1/生产/产线与资源映射（拟建）/WIP剩余/WP006",
+      "actual_entry_and_online_status": "原期初在制基础字段可走已有业务维护；剩余映射导入/编辑/审批待实现",
+      "provider_maintainer_reviewer": "生产负责人提供剩余工作；库存负责人核已投/净账；授权维护员录入，业务负责人复核",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G03-WP007",
+      "check_code": "G03",
+      "object": "WP007",
+      "missing_fields": "剩余路线工序/待投BOM/当前占用半开日区间/剩余班组人数/工装类型数量",
+      "current_value_and_evidence": "报告：剩余映射缺；原件已有B=FG007；D=OP008；F=EQ024；G=200；H=千克；I=0；J=1；K=1；原件未提供mapping.wip_remaining",
+      "expected_condition": "唯一对应本WIP、产品、当前工序及资源；剩余工序/待投料显式且适用；不得重复扣历史料；未知不同于0或[]",
+      "source_sheet_physical_row_cells": "B/期初在制!A9:M9；原路线参考行=56,57,58,59,60,61,62,63,64,65",
+      "unique_maintenance_position": "A1/生产/产线与资源映射（拟建）/WIP剩余/WP007",
+      "actual_entry_and_online_status": "原期初在制基础字段可走已有业务维护；剩余映射导入/编辑/审批待实现",
+      "provider_maintainer_reviewer": "生产负责人提供剩余工作；库存负责人核已投/净账；授权维护员录入，业务负责人复核",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    },
+    {
+      "issue_key": "G03-WP008",
+      "check_code": "G03",
+      "object": "WP008",
+      "missing_fields": "剩余路线工序/待投BOM/当前占用半开日区间/剩余班组人数/工装类型数量",
+      "current_value_and_evidence": "报告：剩余映射缺；原件已有B=FG001；D=OP008；F=EQ025；G=200；H=千克；I=0；J=2；K=2；原件未提供mapping.wip_remaining",
+      "expected_condition": "唯一对应本WIP、产品、当前工序及资源；剩余工序/待投料显式且适用；不得重复扣历史料；未知不同于0或[]",
+      "source_sheet_physical_row_cells": "B/期初在制!A10:M10；原路线参考行=3,4,5,6,7,8,9,10,11",
+      "unique_maintenance_position": "A1/生产/产线与资源映射（拟建）/WIP剩余/WP008",
+      "actual_entry_and_online_status": "原期初在制基础字段可走已有业务维护；剩余映射导入/编辑/审批待实现",
+      "provider_maintainer_reviewer": "生产负责人提供剩余工作；库存负责人核已投/净账；授权维护员录入，业务负责人复核",
+      "source_file_hash": "原件B:c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "runtime_source_boundary": "v2问题按Test2报告；原件坐标仅在dataset.fileHash与本hash一致时认领，v2原文件身份未独立取得",
+      "save_and_return": "expectedVersion→新业务/映射版本→A2原范围重新检查；旧run冻结不变"
+    }
+  ],
+  "uatScenarios": [
+    {
+      "id": "R2-UAT-01",
+      "goal": "G01/02/03分类及证据层级",
+      "preconditions": [
+        "报告v2 1/20/9，截图仅前两类"
+      ],
+      "inputs": {
+        "reportedCheck": {
+          "datasetVersion": 2,
+          "G01": 1,
+          "G02": 20,
+          "G03": 9,
+          "verifiedRuntime": false
+        },
+        "sourceHash": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0"
+      },
+      "steps": [
+        "查看A2摘要和原始报告"
+      ],
+      "independentExpected": [
+        "三类共30；G03为报告且未冒签截图/独立检查；339来源不计为339问题"
+      ],
+      "assertions": [
+        "LP-25"
+      ],
+      "actual": "NOT_EXECUTED",
+      "responsibility": "PM核依赖并调度QA；QA准备/测试/确认，用户配合；Design提供预期",
+      "releaseGate": "无新增发布授权",
+      "relatedOriginalUATApplicablePart": "UAT-01/11：问题定位",
+      "baselinePassUnchanged": true
+    },
+    {
+      "id": "R2-UAT-02",
+      "goal": "G01实际缺项与入口",
+      "preconditions": [
+        "产线选择缺失",
+        "现映射仅mock=true"
+      ],
+      "inputs": {
+        "reportedCheck": {
+          "datasetVersion": 2,
+          "G01": 1,
+          "G02": 20,
+          "G03": 9,
+          "verifiedRuntime": false
+        },
+        "sourceHash": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0"
+      },
+      "steps": [
+        "打开G01",
+        "尝试真实维护及查看仿真按钮"
+      ],
+      "independentExpected": [
+        "无Excel行时row=null；显示单线/归属条件；真实入口待实现且无伪链接",
+        "UNAVAILABLE动作禁用；无产品URL；SIMULATION不变REAL/APPROVED；源码自报不当已验"
+      ],
+      "assertions": [
+        "LP-26",
+        "LP-29"
+      ],
+      "actual": "NOT_EXECUTED",
+      "responsibility": "PM核依赖并调度QA；QA准备/测试/确认，用户配合；Design提供预期",
+      "releaseGate": "无新增发布授权",
+      "relatedOriginalUATApplicablePart": "UAT-01/11：单线及缺项",
+      "baselinePassUnchanged": true
+    },
+    {
+      "id": "R2-UAT-03",
+      "goal": "20SF来源与工艺路线目标",
+      "preconditions": [
+        "原件同hash且20SF无路线"
+      ],
+      "inputs": {
+        "reportedCheck": {
+          "datasetVersion": 2,
+          "G01": 1,
+          "G02": 20,
+          "G03": 9,
+          "verifiedRuntime": false
+        },
+        "sourceHash": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0"
+      },
+      "steps": [
+        "搜索SF001和SF020并遍历组"
+      ],
+      "independentExpected": [
+        "20个唯一SF，原件物料行13–32；目标A1生产工艺路线按成品编号精确筛选；不只去物料表"
+      ],
+      "assertions": [
+        "LP-27"
+      ],
+      "actual": "NOT_EXECUTED",
+      "responsibility": "PM核依赖并调度QA；QA准备/测试/确认，用户配合；Design提供预期",
+      "releaseGate": "无新增发布授权",
+      "relatedOriginalUATApplicablePart": "UAT-01/11/12：路线输入与定位，不扩合炉",
+      "baselinePassUnchanged": true
+    },
+    {
+      "id": "R2-UAT-04",
+      "goal": "G03分区与逐WP定位",
+      "preconditions": [
+        "9条G03报告",
+        "合法独立映射夹具及重复/跨父项反例",
+        "WP原事实及显式余量夹具"
+      ],
+      "inputs": {
+        "reportedCheck": {
+          "datasetVersion": 2,
+          "G01": 1,
+          "G02": 20,
+          "G03": 9,
+          "verifiedRuntime": false
+        },
+        "sourceHash": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0"
+      },
+      "steps": [
+        "展开总项及WP001–008",
+        "核BOM→工序及工装成员",
+        "省略余料→显式[]→非法路线/资源/人数"
+      ],
+      "independentExpected": [
+        "总项含投料/物理池/WIP；8WP各有原件行3–10、已填事实、缺余量映射；不编值",
+        "每适用BOM唯一同父项工序；实物不重算容量；错误拒绝且保留有效版本",
+        "缺失不同[]；[]需声明来源；余工序/料/资源适用且有限；历史料不重复扣，预计非实物"
+      ],
+      "assertions": [
+        "LP-28",
+        "LP-31",
+        "LP-32"
+      ],
+      "actual": "NOT_EXECUTED",
+      "responsibility": "PM核依赖并调度QA；QA准备/测试/确认，用户配合；Design提供预期",
+      "releaseGate": "无新增发布授权",
+      "relatedOriginalUATApplicablePart": "UAT-03/04/06/08/09/15：工装人员物料/WIP输入及保护适用部分",
+      "baselinePassUnchanged": true
+    },
+    {
+      "id": "R2-UAT-05",
+      "goal": "真实草稿导入/编辑/复核角色",
+      "preconditions": [
+        "拟议真实入口和已授权角色，授权后才执行",
+        "同基底两写、只读、共享登录"
+      ],
+      "inputs": {
+        "reportedCheck": {
+          "datasetVersion": 2,
+          "G01": 1,
+          "G02": 20,
+          "G03": 9,
+          "verifiedRuntime": false
+        },
+        "sourceHash": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0"
+      },
+      "steps": [
+        "导入草稿→修改→复核→采用",
+        "冲突/超时查询/直调采用"
+      ],
+      "independentExpected": [
+        "字段来源齐全；未批/候选不生效；复核后修改使旧决定失效；缺角色阻动作",
+        "409无覆盖且草稿保留；同键同结果；只读不写，缺审批绑定不能伪造实名批准"
+      ],
+      "assertions": [
+        "LP-30",
+        "LP-35"
+      ],
+      "actual": "NOT_EXECUTED",
+      "responsibility": "PM核依赖并调度QA；QA准备/测试/确认，用户配合；Design提供预期",
+      "releaseGate": "无新增发布授权",
+      "relatedOriginalUATApplicablePart": "UAT-11/18：输入修改与权限，新增真实复核为CR提案",
+      "baselinePassUnchanged": true
+    },
+    {
+      "id": "R2-UAT-06",
+      "goal": "保存候选/取消/拒绝",
+      "preconditions": [
+        "A2仍旧有效映射",
+        "授权采用新映射/业务新版本"
+      ],
+      "inputs": {
+        "reportedCheck": {
+          "datasetVersion": 2,
+          "G01": 1,
+          "G02": 20,
+          "G03": 9,
+          "verifiedRuntime": false
+        },
+        "sourceHash": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0"
+      },
+      "steps": [
+        "草稿保存、取消或复核拒绝并返回",
+        "保存返回A2，检查旧响应及重查"
+      ],
+      "independentExpected": [
+        "有效指针不变，问题不清除；保留选择/范围/草稿/焦点；失败不增有效版本",
+        "旧ready过期；新check绑定版本/hash/原scope；旧响应丢弃；只适用范围及共享依赖检查"
+      ],
+      "assertions": [
+        "LP-33",
+        "LP-34"
+      ],
+      "actual": "NOT_EXECUTED",
+      "responsibility": "PM核依赖并调度QA；QA准备/测试/确认，用户配合；Design提供预期",
+      "releaseGate": "无新增发布授权",
+      "relatedOriginalUATApplicablePart": "UAT-11/18：重查与保留",
+      "baselinePassUnchanged": true
+    },
+    {
+      "id": "R2-UAT-07",
+      "goal": "冻结历史及源身份",
+      "preconditions": [
+        "旧run与当前映射新版本"
+      ],
+      "inputs": {
+        "reportedCheck": {
+          "datasetVersion": 2,
+          "G01": 1,
+          "G02": 20,
+          "G03": 9,
+          "verifiedRuntime": false
+        },
+        "sourceHash": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0"
+      },
+      "steps": [
+        "查旧run/当前问题/导出"
+      ],
+      "independentExpected": [
+        "旧run源/映射hash/模拟标签不改；不匹配原件hash不可认领原件行坐标"
+      ],
+      "assertions": [
+        "LP-36"
+      ],
+      "actual": "NOT_EXECUTED",
+      "responsibility": "PM核依赖并调度QA；QA准备/测试/确认，用户配合；Design提供预期",
+      "releaseGate": "无新增发布授权",
+      "relatedOriginalUATApplicablePart": "UAT-15/18：历史保护，不重开旧场景",
+      "baselinePassUnchanged": true
+    },
+    {
+      "id": "R2-UAT-08",
+      "goal": "有界问题查询及导出一致",
+      "preconditions": [
+        "30报告/339来源索引并与r1 G1/G2并存",
+        "两文件纠偏及已知CAL事实"
+      ],
+      "inputs": {
+        "reportedCheck": {
+          "datasetVersion": 2,
+          "G01": 1,
+          "G02": 20,
+          "G03": 9,
+          "verifiedRuntime": false
+        },
+        "sourceHash": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0"
+      },
+      "steps": [
+        "按SF/WP搜索、分页、详情、ALL导出",
+        "走缺项指引与导入说明"
+      ],
+      "independentExpected": [
+        "无漏重；总数/issueId/sourceRefs一致；首包无339详情；复用r1规模/性能提案不降门槛",
+        "G01/03不统称P缺值；CAL不删行/改假TM；引用P>B；未完成真实映射不称生产就绪"
+      ],
+      "assertions": [
+        "LP-37",
+        "LP-38"
+      ],
+      "actual": "NOT_EXECUTED",
+      "responsibility": "PM核依赖并调度QA；QA准备/测试/确认，用户配合；Design提供预期",
+      "releaseGate": "无新增发布授权",
+      "relatedOriginalUATApplicablePart": "UAT-01/11/18：查询导出与中文提示",
+      "baselinePassUnchanged": true
+    }
+  ],
+  "r1PerformanceAndData": "03与06原G1/G2保持；不重复执行",
+  "mockTransition": {
+    "initialVersion": 2,
+    "simulatedSavedVersion": 3,
+    "expectedReadiness": "STALE_RECHECK_REQUIRED",
+    "reportedIssuesRemain": 30,
+    "history": "R1 v2 mappingHash unchanged",
+    "realMappingStatus": "UNAVAILABLE"
+  }
+}
