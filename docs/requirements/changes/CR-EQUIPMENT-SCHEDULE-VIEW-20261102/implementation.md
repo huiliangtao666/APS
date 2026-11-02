@@ -205,3 +205,45 @@ these later solver fixes have no new runtime/bundle verdict. Remaining baseline
 and candidate budgets are exhausted, so no P-slot substitution, restart or QA
 readiness is inferred. A follow-on minimal calculation-worker bundle and a new
 immutable candidate/baseline attempt require explicit incremental runtime budget.
+
+## r8 changed-solver runtime and parameter-view continuation
+
+The explicitly added calculation-worker-only bundle at source
+`0ece1e0977b411177e27bb3cde0e2e39deb9e727` was built with the exact 81-input
+closure. The r7 server and r5 frontend/import artifacts were reused by hash.
+One new immutable candidate accepted real baseline run
+`fef9cde1-dced-4159-be8b-286f9a2c3e66`: partial, 700 demand records (94 scheduled,
+606 unplanned), 9 actual tasks, independent verification pass with no unchecked
+sections. Frozen input is
+`2e2cb1c76503ee0d680c9c8c1407b53368ee7d9b35b952bacdbfa6c923c0a6f8`;
+result is `5323495221c183734cc56f2c515169f5aa63fe4171faf561293ea0673e8b1e9c`.
+The former DAY-T2/T8 self-test rejection is resolved for this actual baseline;
+historical failed runs remain intact. Partial is not all-demand feasibility.
+
+Continuation reached the canonical parameter-maintenance GET, filtered to CP172
+and RT009. It timed out after 90 seconds before any parameter mutation or P
+calculation. The synchronous parameter projection repeatedly scanned every
+source row and recomputed semantic identities. The candidate was released before
+source changes. Parameter view now uses per-call effective/source identity maps
+and filters immutable CP/object identities before enriching display records.
+Source precedence, first-source values, validity intervals, trial scopes,
+candidates and pagination retain their previous meaning; no cache crosses calls.
+
+Two focused regressions passed. Twenty small before/after differential cases
+completed before a runner's narrow-count assertion was corrected (22 CP172 rows,
+not all 26 route parameters). The initial data-URL oracle import required a
+file-URL correction. These runner failures remain in evidence; unaffected tests
+were not replayed. The corrected full-input projection then passed at heap
+192 MiB: narrow view approximately 85 ms and full parameter page approximately
+398 ms, with all 29 tables, 181 definitions, 4862 original P instances and 9292
+combined parameter rows unchanged. This is not a new HTTP runtime verdict or a
+rerun of V2 import/adoption/readiness/calculation.
+
+The final parameter-view repair is absent from both worker bundles and frontend;
+it requires only a changed server bundle and a new immutable candidate to
+verify through HTTP. The new baseline allowance is exhausted (cumulative 3/3),
+so it must not be rerun. Preserve the accepted baseline state and use the
+original unused P calculation slot and browser context for remaining work.
+E1–E6, shared query/source/pagination/export, parameter-update contrast and UI
+save/reopen remain unverified. No READY_ENV, QA, main integration or publication
+is claimed. APS-Test retains the original package; APS-Dev is sole main writer.
