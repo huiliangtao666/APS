@@ -50,10 +50,17 @@ export function shiftWindows(d,crew,day){
  const definitions=rows(d,'生产班次').filter(r=>Math.floor(Number(r['开始分钟偏移'])/1440)===day).sort((a,b)=>Number(a['开始分钟偏移'])-Number(b['开始分钟偏移']));
  return definitions.slice(0,count).map((r,i)=>({start:day*1440+boundary(d,(i?'第二':'第一')+'班开始分钟',day,'CAL'),end:day*1440+boundary(d,(i?'第二':'第一')+'班结束分钟',day,'CAL'),source:{sheet:'生产班次',row:r._row,key:r['班次日历编号']}}));
 }
-export function laborSegments(route,start,end){return route['人员参与方式']==='首尾参与'?[{start,end:Math.min(end,start+Number(route['开始参与分钟']))},{start:Math.max(start,end-Number(route['结束参与分钟'])),end}].filter(x=>x.start<x.end):[{start,end}];}
+export function laborSegments(route,start,end){
+ if(route['人员参与方式']!=='首尾参与')return [{start,end}];
+ const head={start,end:Math.min(end,start+Number(route['开始参与分钟']))},tail={start:Math.max(start,end-Number(route['结束参与分钟'])),end};
+ // A short operation can have intersecting participation windows. These are
+ // the same crew members, so their intersection must not double the demand.
+ if(head.end>=tail.start)return [{start,end}];
+ return [head,tail].filter(x=>x.start<x.end);
+}
 export function routeMinutes(route,quantity){const base=integer(route['基准加工分钟'],'基准加工'),prepare=integer(route['固定准备分钟'],'准备'),minimum=integer(route['最短工艺分钟'],'最短工艺');const process=route['工时模型']==='固定连续历时'?base:Math.ceil(quantity/Number(route['基准加工量千克'])*base);const duration=Math.max(minimum,prepare+process);if(!(duration>0))throw Error('生产历时须>0');return duration;}
 export function knownMinuteStops(d,currentMinute){return rows(d,'停机安排').filter(r=>instantMinute(r['信息可知时刻'])<=currentMinute).map(r=>({id:r['停机编号'],resource:r['资源编号'],start:integer(r['开始分钟偏移'],'停机开始'),end:integer(r['结束分钟偏移'],'停机结束'),source:{sheet:'停机安排',row:r._row}}));}
-export function wipOccupations(d,start,end){return (d.mapping?.wip_remaining||[]).filter(w=>w.current_occupancy_minute_interval?.[1]>start).map(w=>{const [a,b]=w.current_occupancy_minute_interval;return {start:Math.max(a,start),end:b,resource:w.resource,quantity:w.quantity,crew:w.remaining_labor_pool,people:w.remaining_labor_count,labor:[{start:Math.max(a,b-w.labor_end_minutes,start),end:b}],tools:w.current_tools,toolEnd:w.tool_release,taskId:w.id,kind:'WIP物理保留',source:w.source};});}
+export function wipOccupations(d,start,end){return (d.mapping?.wip_remaining||[]).filter(w=>w.current_occupancy_minute_interval?.[0]<end&&Math.max(w.current_occupancy_minute_interval?.[1],w.tool_release??-Infinity)>start).map(w=>{const [a,b]=w.current_occupancy_minute_interval;return {start:Math.max(a,start),end:Math.max(b,start),resource:w.resource,quantity:w.quantity,crew:w.remaining_labor_pool,people:w.remaining_labor_count,labor:[{start:Math.max(a,b-w.labor_end_minutes,start),end:b}],tools:w.current_tools,toolEnd:w.tool_release,taskId:w.id,kind:'WIP物理保留',source:w.source};});}
 export function minuteResourceCandidate({d,route,quantity,earliest,end,occupancy,daily,resources,crew,pool,standardBatch,currentMinute}){
  const lower=Math.ceil(earliest*1440-1e-7),limit=end*1440,people=Number(route['需求人数']),count=Number(route['每批工装套数']),stops=knownMinuteStops(d,currentMinute),busy=occupancy.map(o=>({...o,start:Math.round(o.start*1440),end:Math.round(o.end*1440)}));
  const candidates=resources.filter(r=>r['资源类别']==='设备'&&r['资源组编号']===route['设备组编号']&&Number(r['可用数量'])>0),crewId=crew['班组编号'];
