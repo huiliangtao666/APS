@@ -1,0 +1,14 @@
+﻿编号,结论,固定源码路径,起始行,当前依据,对应修正/复用
+QR-G01,已有基础,server/workbook-router.mjs,40,版本化dataset元数据、fileHash、分类、readiness,复用并显式绑定context；不新建数据主账
+QR-G02,需后端扩展,server/workbook-router.mjs,41,已有q/sort/offset及exactField/exactValue单键定位；limit仍封顶100，单字段排序,结构化多选、BOM范围、稳定唯一键、100/200/500；全量total/分组与导出一致
+QR-G03,需后端扩展,server/workbook-runtime.mjs,29,冻结行接口固定25；有inputHash/resultHash身份,冻结范围同等查询能力，保留校验和权限；不静默取最新数据
+QR-G04,需后端及UI扩展,server/parameter-contract.mjs,133,parameterView有来源及P定义，limit最多100、对象单值,复用P/EDIT解析；参数及明细分页满足100/200/500和日历日期；不新造优先引擎
+QR-G05,部分已有，待行为验证,server/parameter-contract.mjs,48,businessDefinition合并P；候选/待补/来源已列,保留建议待评审，逐CP解释；不把源码准备当已部署，18DUAL沿原任务
+QR-G06,日期需呈现层转换,server/workbook-model.mjs,8,dayDate原点2026-10-31；源行日序；输入UI仍相对日,数据集/运行原点转换，界面11.01开始；输入窗含末日期→内部endDay排他；历史不改
+QR-G07,需补有效日期一致性,server/workbook-model.mjs,18,refreshDerived的children按全部BOM建图，未见有效日过滤,查询累计提前期/BOM必须同有效日期版本，不混失效边；候选冲突不猜；独立定向验证
+QR-G08,已有结果基础，需查询投影,server/workbook-plan.mjs,94,plan包含tasks/allocations/shortages/suggestions/demandResults及source,作为真实结果来源；工艺跨日start/end保精度，不凭总时长造待料损失或重复数量
+QR-G09,需UI通用适配,src/InputData.tsx,63,业务表普通select、固定25分页；各表直接映射字段,复用当前工作台上下文，新增搜索多选和逐表栏位，日期日历化；文件owner由PM统一
+QR-G10,需UI真实分页替代截断,src/InputData.tsx,81,"结果多处slice(0,100)/slice(0,50)，时间toFixed小数日",不能以截断冒充分页；按冻结结果分页、计数和全量导出并保持原结果精度
+QR-G11,冻结和完整性基础可复用,server/workbook-runtime.mjs,10,resultProblem检验source/版本/hash/conditions一致,新查询和来源定位必须沿已有冻结检验，损坏/未就绪返回错误不空表伪成功
+QR-G12,静态范围限制,src/ParameterPanel.tsx,23,现分层/领域/来源可查，按25偏移；普通筛选,参数UI纳同通用交互；真正产品行为/浏览器/性能待后续验证
+QR-G13,新main已有可复用基础,server/workbook-preview-query.mjs,19,677029d新增全快照搜索、fingerprint/filterHash游标分页及有界响应；WorkbookPreview.tsx仍25/50/100,复用指纹/游标/来源及流式导出，不重做已完成预览；通用100/200/500与栏位按当前CR排期，不降低字节保护

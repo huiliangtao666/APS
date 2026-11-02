@@ -1,0 +1,140 @@
+{
+  "reviewed_product_sha": "677029d2473b030bec5150b23eeae9488a0c4e84",
+  "new_product_sha": null,
+  "runtime_or_product_or_uat": "NOT_EXECUTED",
+  "query_issue": {
+    "number": 49,
+    "url": "https://github.com/huiliangtao666/APS/issues/49",
+    "observed_state": "Backlog / PLANNED_NOT_DISPATCHED（读取Issue正文，未写Project）",
+    "read_comments": [
+      6571514759,
+      6571998301,
+      6572061874
+    ]
+  },
+  "query_full_design": "https://github.com/huiliangtao666/APS/tree/d7d279e3ebb46fa9ff1c4eed4f76d895caeff3e3/docs/requirements/proposals/CR-QUERY-REPORTS-20261102/r1",
+  "query_default_all": "https://github.com/huiliangtao666/APS/tree/8836b5d4665d9de99e21708ba1cd3bc65161f385/docs/requirements/proposals/CR-QUERY-REPORTS-20261102/default-all-r2",
+  "equipment_prototype": "https://github.com/huiliangtao666/APS/tree/8836b5d4665d9de99e21708ba1cd3bc65161f385/docs/design/equipment-view-20261102/r1",
+  "equipment_cr": "CR-EQUIPMENT-SCHEDULE-VIEW-20261102",
+  "registration_owner": "APS-PM",
+  "product_sources": [
+    {
+      "path": "src/WorkbookRunView.tsx",
+      "git_blob": "9e9a0cffe847e94fa6ca502255dacfc287a95679",
+      "sha256": "78fdd380946b1318a3fe2f58e424967d153420e8f65cfa860c762f631696bc8f",
+      "bytes": 5296
+    },
+    {
+      "path": "server/workbook-runtime.mjs",
+      "git_blob": "d2cd622a9b24c039de827506e926ddea62a4215f",
+      "sha256": "034ba9c064009377693a2f81e4416ac5c9b8c127786586bcc5b9196a0691da00",
+      "bytes": 13311
+    },
+    {
+      "path": "server/workbook-plan.mjs",
+      "git_blob": "cb971e73d78c4d1d63c7ba336b84ec66a68bccb8",
+      "sha256": "0cdaefb411310f07a81c983fb9762e4491aa41e15ca4d558c42a1bd644d7f740",
+      "bytes": 28065
+    },
+    {
+      "path": "server/workbook-model.mjs",
+      "git_blob": "0e4f03e1437ce180ea26d4742ffeb7e34e864ce8",
+      "sha256": "09d4ea6d36979aa69041b60a31752dc3b2e931f76dbb8332f8ef452610ff68a3",
+      "bytes": 15502
+    },
+    {
+      "path": "server/parameter-contract.mjs",
+      "git_blob": "71b79ba2207c20f1a4675d3a346716f1e6d1b24a",
+      "sha256": "29adefda5c14f5581849252300f66b3a6c6c3c4ef97b76bf6aaa78c8a31beeb6",
+      "bytes": 30589
+    },
+    {
+      "path": "server/workbook-preview-query.mjs",
+      "git_blob": "f2aed78a08a6da9d05d4ae408c86e107c1810789",
+      "sha256": "d1939d8045588c67c50bf78237bdb6579b802bd33381e5a560a5b97f726a9485",
+      "bytes": 8995
+    },
+    {
+      "path": "server/workbook-router.mjs",
+      "git_blob": "5211978c5999f368bb0409cf32a62f8824cc99a3",
+      "sha256": "e8ab17a3a54c0aed03a66c4faff104d30dd906286143b79c6935a9fc1d9a0200",
+      "bytes": 20553
+    },
+    {
+      "path": "src/lib/workbook-view.mjs",
+      "git_blob": "5c0b95e9aebb411b67fa50887313b6cf9be11ba2",
+      "sha256": "a420d878fd40189b2cfadb583d682dd554f3309e660a1babe04aec36b19b9f11",
+      "bytes": 1150
+    },
+    {
+      "path": "docs/requirements/baselines/APS-BL-001-v0.3.json",
+      "git_blob": "bb9692f7a27a40fdc0f829915666687bef9cd59b",
+      "sha256": "e30733655359e71b0c98220910303aefbc922ac123b96fb3025c4976a4067e36",
+      "bytes": 117997
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json",
+      "git_blob": "4096f3f783a3789941bd2b75224a4c59e13f05e8",
+      "sha256": "41df3407b9c351782781ab8e5f4832b495317e54924d5ecd2320b424031fd52a",
+      "bytes": 241379
+    },
+    {
+      "path": "docs/requirements/uat-register.json",
+      "git_blob": "3cb463b73595eb70b6040045675d9dd38b08b74b",
+      "sha256": "09f81080335767eee44dbe62346b4fd11ee0de86aae9a8f170df363c819c3ef5",
+      "bytes": 34503
+    }
+  ],
+  "scope": "本包是Design完整性补充/独立CR提案，不替代Project2或受控登记，不迁签旧证据",
+  "private_files": [
+    {
+      "workspace": "APS-Design",
+      "path": "upload/肉食品仿真数据_202611_合并图示版.xlsx",
+      "bytes": 1672626,
+      "sha256": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+      "access": "praetor workspaces download-file APS-Design --path EXACT_PATH --out LOCAL_PATH（实际权限为准）"
+    },
+    {
+      "workspace": "APS-Design",
+      "path": "upload/APS配置参数梳理_20261101.xlsx",
+      "bytes": 247518,
+      "sha256": "e8b73e882e66b2e19ab7cb639c7a17e8830d08c0f485667484141837794f4d24",
+      "access": "praetor workspaces download-file APS-Design --path EXACT_PATH --out LOCAL_PATH（实际权限为准）"
+    },
+    {
+      "workspace": "APS-Design",
+      "path": "APS设备排程_紧凑展示原型_20261102.html",
+      "bytes": 1125954,
+      "sha256": "4f8e75e2b590572ce5d393b53841f7e26cf5bfd1e3e318127c49c29b1699551e",
+      "access": "praetor workspaces download-file APS-Design --path EXACT_PATH --out LOCAL_PATH（实际权限为准）"
+    },
+    {
+      "workspace": "APS-Design",
+      "path": "APS五类业务查询_设计原型_R3_默认全选_20261102.html",
+      "bytes": 3921449,
+      "sha256": "4c7b06d9c0f77471c5ddea7a72287eb68701f69a15448215ad7023294380a011",
+      "access": "praetor workspaces download-file APS-Design --path EXACT_PATH --out LOCAL_PATH（实际权限为准）"
+    },
+    {
+      "path": "APS设备排程_分钟排程半小时展示原型_20261102.html",
+      "bytes": 1250028,
+      "sha256": "7afd0c006a1013883acba475b2f404ebf82b034c97c3ae6d04f62047693f56be",
+      "tasks": 261,
+      "minute_origin": "2026-10-31T00:00:00+08:00",
+      "last_task_end": "2026.11.21 09:36",
+      "new_product_sha": null,
+      "meaning": "设计夹具；未运行APS，非全资源可行承诺"
+    },
+    {
+      "path": "肉食品仿真数据_生产分钟排程补充_20261102.xlsx",
+      "bytes": 42417,
+      "sha256": "3caaf87a9262526240a360e5e3f3ddacc1a2ea4910b9e44e533502f799797845",
+      "sheets": 6,
+      "tasks": 261,
+      "routes": 87,
+      "stops": 5,
+      "import_into_current_product": "NOT_VERIFIED; supplemental mock not existing upload schema"
+    }
+  ],
+  "minute_requirement": "用户最新修正；08覆盖原生产仅天说明；新增产品实现和UAT仍未执行"
+}

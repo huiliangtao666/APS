@@ -1,0 +1,16 @@
+﻿标识,业务对象,真实字段或依据,静态源码依据,当前符合性,实现须满足的业务条件,适用映射
+ES01,同运行身份,run/provenance/source及resultProblem/workbookView,runtime:inputHash/resultHash/source/conditions校验；lib/workbook-view.mjs,已有可复用,六视图/明细/导出沿相同校验；失配拒绝，不能latest补洞,FR-018/026/035；AC-32
+ES02,设备行与中文名称,冻结inputs设备与工装+mapping.resources,WorkbookRunView仅tasks.machine集合,需展示扩展,冻结范围内无任务资源仍可见；无已排不等现场空闲,FR-005/035；AC-17/31
+ES03,甘特任务与工序链,tasks:id/orderId/productId/productionId/routeStepId/operation/label/machine/start/end/predecessor/quantity,workbook-plan.mjs resourceJobs；原View已有条,已有字段，需升级展示,真实半开小数日；视觉短条不扩时长；前序按ID和批次定位,FR-004/019；AC-17
+ES04,实际生产状态/用户锁定,当前tasks缺现场progress/完整用户lock；运行status是计算状态,plan.tasks/schema；WIP mapping有物理保留,部分缺失，禁由时间猜,已排/未排用真实结果；生产中/完成/用户锁定缺事实则未提供；演示标识不移植,FR-024/027仅只读边界；AC-16/21
+ES05,WIP保留,冻结mapping.wip_remaining current_occupancy_day_interval/resource/remaining_labor_pool/count/remaining_tool_type/count +tool_pools,plan占用和verify锁定检查；不保证全部发为tasks,需补只读占用解释投影,包含原有物理保留；与续作去重；来源和并发保护可追,FR-022/024；AC-12/21；UAT-15
+ES06,需求交付,demandResults:id/productId/quantity/unit/status/readyDay/arrivalDay/latestArrivalDay/lateDays/source,plan demands/results；冻结DE/客户,已有可复用,库存满足可无新任务；未排保留；条件到货非实绩非全局最早,FR-023/024；AC-18
+ES07,设备日负荷,tasks.quantity按floor(start)；EQ/日历/有效参数/班组约束；WIP占用另口径,plan.daily/verify；parameterDayRatio；无独立审计热力结果,需只读指标/来源解释,自然日历时不称工作时利用率；跨日不重计/均摊量；分母未知不算比例,FR-005/008/022；AC-05/14
+ES08,人员工装,task.crew/people/tools及冻结TM/TL/mapping工具池/WIP,plan verify人员事件点和工装实体；模型占用语义,字段已有，需并发投影,峰值/可用分开；人数不乘班次；实体/类型不混；未知不猜,FR-006/007/022；AC-06/07
+ES09,停机与可知性,冻结DT开始/结束/可知日；conditions.currentDay,plan检查可知日；原View无叠加,需展示扩展,日历显示；未来未知不参与历史run扣减；定位日期不改采用上下文,FR-008；AC-05
+ES10,物料风险及条件,shortages:id/materialId/quantity/unit/needDay/need/source；findings；allocations；suggestions,plan物料供给及建议；冻结批次/供货/BOM,已有可复用，需关联投影,未排无task也显示；无taskId不造关系；条件/参考草案与实物分开,FR-020/024/035；AC-10/11
+ES11,物料与供给来源,allocations.need/materialId/supplyId/quantity/exactQuantity/feedDay/conditional/kind/consumer/source/taskId?/bomId?,plan分配/verify；冻结IN/WP/库存/采用草稿,已有可复用,按真实关联，非同日期即逐单分摊；已耗不重扣，批次仅可追不乱分配,FR-020；AC-08/10/11
+ES12,参数优先及来源,P businessDefinition/effectiveParameters/sourceFiles/parameterHash；scope及生效日,parameter-contract.mjs；runtime冻结参数上下文,已有基础，沿原任务行为验证,P定义范围缺失和值优先；候选待审不当默认；参数更新不改历史,FR-017/026；AC-32；原参数CR交集
+ES13,分页/栏位/筛选/来源,同run结果与冻结行；原rows固定25；预览已有fingerprint/有界/导出,runtime/preview-query；#49通用契约,复用#49并补设备结果投影,100/200/500全结果；全部选项非第一页；导出权限及校验保留,FR-035；AC-24/26/27/31
+ES14,原型夹具清除,DEMOA/B、261构造任务、5构造风险、TL分配、状态、0天画1日,原型设计8836b5d；私有HTML原身份保留,明确不能当生产数据,原型只作交互参考；真实run不追加演示任务或默认资源,全本CR；AC-17/26/32
+ES15,生产分钟新要求,tasks.startMinute/endMinute已有；timeUnit day/selection整数日窗/日历停机仍day,runtime日窗校验；model.dayMinute；plan duration,部分基础，需分钟模型配套升级,分对象粒度；生产分钟、详细轴30分钟；日业务保天；P CP001随最新用户修订，原点转换明确,本CR08；FR-004/008/018/019/022/035；AC-05/17/26/32

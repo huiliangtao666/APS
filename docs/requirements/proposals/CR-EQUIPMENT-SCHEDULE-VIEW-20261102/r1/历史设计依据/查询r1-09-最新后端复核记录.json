@@ -1,0 +1,114 @@
+{
+  "reviewed_main_sha": "677029d2473b030bec5150b23eeae9488a0c4e84",
+  "prior_candidate_sha": "38375ed8f93fe4431305bc9b7fd9674d10f8dc48",
+  "method": "独立GitHub固定SHA源码读取，仅静态审查，未执行产品",
+  "source_files": [
+    {
+      "path": "docs/requirements/baselines/APS-BL-001-v0.3.json",
+      "bytes": 117997,
+      "sha256": "e30733655359e71b0c98220910303aefbc922ac123b96fb3025c4976a4067e36",
+      "same_as_38375ed8": true,
+      "url": "https://github.com/huiliangtao666/APS/blob/677029d2473b030bec5150b23eeae9488a0c4e84/docs/requirements/baselines/APS-BL-001-v0.3.json"
+    },
+    {
+      "path": "docs/requirements/changes/change-register.json",
+      "bytes": 241379,
+      "sha256": "41df3407b9c351782781ab8e5f4832b495317e54924d5ecd2320b424031fd52a",
+      "same_as_38375ed8": true,
+      "url": "https://github.com/huiliangtao666/APS/blob/677029d2473b030bec5150b23eeae9488a0c4e84/docs/requirements/changes/change-register.json"
+    },
+    {
+      "path": "server/parameter-contract.mjs",
+      "bytes": 30589,
+      "sha256": "29adefda5c14f5581849252300f66b3a6c6c3c4ef97b76bf6aaa78c8a31beeb6",
+      "same_as_38375ed8": true,
+      "url": "https://github.com/huiliangtao666/APS/blob/677029d2473b030bec5150b23eeae9488a0c4e84/server/parameter-contract.mjs"
+    },
+    {
+      "path": "server/parameter-router.mjs",
+      "bytes": 2917,
+      "sha256": "449ce5bc2509e2033808b7e1e87aa0775839fa5a6586f9e67eb3796622c20331",
+      "same_as_38375ed8": true,
+      "url": "https://github.com/huiliangtao666/APS/blob/677029d2473b030bec5150b23eeae9488a0c4e84/server/parameter-router.mjs"
+    },
+    {
+      "path": "server/workbook-model.mjs",
+      "bytes": 15502,
+      "sha256": "09d4ea6d36979aa69041b60a31752dc3b2e931f76dbb8332f8ef452610ff68a3",
+      "same_as_38375ed8": true,
+      "url": "https://github.com/huiliangtao666/APS/blob/677029d2473b030bec5150b23eeae9488a0c4e84/server/workbook-model.mjs"
+    },
+    {
+      "path": "server/workbook-plan.mjs",
+      "bytes": 28065,
+      "sha256": "0cdaefb411310f07a81c983fb9762e4491aa41e15ca4d558c42a1bd644d7f740",
+      "same_as_38375ed8": true,
+      "url": "https://github.com/huiliangtao666/APS/blob/677029d2473b030bec5150b23eeae9488a0c4e84/server/workbook-plan.mjs"
+    },
+    {
+      "path": "server/workbook-preview-query.mjs",
+      "bytes": 8995,
+      "sha256": "d1939d8045588c67c50bf78237bdb6579b802bd33381e5a560a5b97f726a9485",
+      "same_as_38375ed8": null,
+      "url": "https://github.com/huiliangtao666/APS/blob/677029d2473b030bec5150b23eeae9488a0c4e84/server/workbook-preview-query.mjs"
+    },
+    {
+      "path": "server/workbook-preview-routes.mjs",
+      "bytes": 3323,
+      "sha256": "f026110a155ae2f35f602e0064e4ba9e096d2ec7911c6dfae99766a70f8505ca",
+      "same_as_38375ed8": null,
+      "url": "https://github.com/huiliangtao666/APS/blob/677029d2473b030bec5150b23eeae9488a0c4e84/server/workbook-preview-routes.mjs"
+    },
+    {
+      "path": "server/workbook-router.mjs",
+      "bytes": 20553,
+      "sha256": "e8ab17a3a54c0aed03a66c4faff104d30dd906286143b79c6935a9fc1d9a0200",
+      "same_as_38375ed8": false,
+      "url": "https://github.com/huiliangtao666/APS/blob/677029d2473b030bec5150b23eeae9488a0c4e84/server/workbook-router.mjs"
+    },
+    {
+      "path": "server/workbook-runtime.mjs",
+      "bytes": 13311,
+      "sha256": "034ba9c064009377693a2f81e4416ac5c9b8c127786586bcc5b9196a0691da00",
+      "same_as_38375ed8": true,
+      "url": "https://github.com/huiliangtao666/APS/blob/677029d2473b030bec5150b23eeae9488a0c4e84/server/workbook-runtime.mjs"
+    },
+    {
+      "path": "server/workbook-selection.mjs",
+      "bytes": 9125,
+      "sha256": "83428c38422c49227861a2ef7b492e791dd9e2e106db9760cf3ba68058b3661f",
+      "same_as_38375ed8": true,
+      "url": "https://github.com/huiliangtao666/APS/blob/677029d2473b030bec5150b23eeae9488a0c4e84/server/workbook-selection.mjs"
+    },
+    {
+      "path": "server/workbook-workbench.mjs",
+      "bytes": 7163,
+      "sha256": "0421131e93373739bd268894a85f1cc8926f5c1c42c82a379cefc1bbc6b16d4a",
+      "same_as_38375ed8": true,
+      "url": "https://github.com/huiliangtao666/APS/blob/677029d2473b030bec5150b23eeae9488a0c4e84/server/workbook-workbench.mjs"
+    },
+    {
+      "path": "src/InputData.tsx",
+      "bytes": 28524,
+      "sha256": "29c60b6dc9cb5f0c67eae40de7c18da9cd97be87b9a0ddaf26147e3b9ba92226",
+      "same_as_38375ed8": false,
+      "url": "https://github.com/huiliangtao666/APS/blob/677029d2473b030bec5150b23eeae9488a0c4e84/src/InputData.tsx"
+    },
+    {
+      "path": "src/ParameterPanel.tsx",
+      "bytes": 14580,
+      "sha256": "bad818adefa70f8ae96da9fa720f9b5ecf61dc31b7b961649aaaa2b995cb2918",
+      "same_as_38375ed8": true,
+      "url": "https://github.com/huiliangtao666/APS/blob/677029d2473b030bec5150b23eeae9488a0c4e84/src/ParameterPanel.tsx"
+    },
+    {
+      "path": "src/WorkbookPreview.tsx",
+      "bytes": 18927,
+      "sha256": "f21889c8d42d4ed0133f8a9ebf1281dadce4b21016172d77a6468c9c5e51c4d5",
+      "same_as_38375ed8": null,
+      "url": "https://github.com/huiliangtao666/APS/blob/677029d2473b030bec5150b23eeae9488a0c4e84/src/WorkbookPreview.tsx"
+    }
+  ],
+  "product_tests": "NOT_EXECUTED",
+  "browser_or_UAT": "NOT_EXECUTED"
+}

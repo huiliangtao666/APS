@@ -1,0 +1,138 @@
+{
+  "scope": "HTML原型逻辑/DOM桩；未使用真实浏览器、产品模块或运行服务",
+  "passed": 33,
+  "checks": [
+    {
+      "name": "六个视图可渲染并保留同方案身份",
+      "result": "PASS"
+    },
+    {
+      "name": "所有查询筛选默认全选",
+      "result": "PASS"
+    },
+    {
+      "name": "BOM开关只纳已有下属任务、不造排程条",
+      "result": "PASS"
+    },
+    {
+      "name": "搜索保留隐藏选择、显式清空为0匹配",
+      "result": "PASS"
+    },
+    {
+      "name": "默认14天日历日期",
+      "result": "PASS"
+    },
+    {
+      "name": "日历与负日期/跨月转换",
+      "result": "PASS"
+    },
+    {
+      "name": "设备/任务全部引用实际工艺资源",
+      "result": "PASS"
+    },
+    {
+      "name": "整数分钟时点和原0天路线不再扩成1天",
+      "result": "PASS"
+    },
+    {
+      "name": "半小时轴刻度48格且保原时点",
+      "result": "PASS"
+    },
+    {
+      "name": "分钟文本跨日及非半小时精确展示",
+      "result": "PASS"
+    },
+    {
+      "name": "32台设备一屏总览行高",
+      "result": "PASS"
+    },
+    {
+      "name": "任务条裁切几何均在窗口范围",
+      "result": "PASS"
+    },
+    {
+      "name": "任务链选中及来源明细联动",
+      "result": "PASS"
+    },
+    {
+      "name": "未排候选不计设备占用",
+      "result": "PASS"
+    },
+    {
+      "name": "基础方案无设备重叠/前序冲突",
+      "result": "PASS"
+    },
+    {
+      "name": "调整B显示停机与设备重叠，旧A不变",
+      "result": "PASS"
+    },
+    {
+      "name": "日槽位超负荷非Infinity显示",
+      "result": "PASS"
+    },
+    {
+      "name": "非计划停机可知日界限",
+      "result": "PASS"
+    },
+    {
+      "name": "周日日能力独立于自然日槽位",
+      "result": "PASS"
+    },
+    {
+      "name": "人员峰值按并发而非全日累加",
+      "result": "PASS"
+    },
+    {
+      "name": "班组和工装都可独立浏览",
+      "result": "PASS"
+    },
+    {
+      "name": "物料风险保持演示且有原件参考",
+      "result": "PASS"
+    },
+    {
+      "name": "需求使用DE且保持到货条件",
+      "result": "PASS"
+    },
+    {
+      "name": "默认全选日期表单接线",
+      "result": "PASS"
+    },
+    {
+      "name": "日期窗口前后移动及边界",
+      "result": "PASS"
+    },
+    {
+      "name": "任务明细分页100/200/500",
+      "result": "PASS"
+    },
+    {
+      "name": "所有主视图栏位控制",
+      "result": "PASS"
+    },
+    {
+      "name": "抽屉明细也具栏位及分页",
+      "result": "PASS"
+    },
+    {
+      "name": "来源及口径说明不冒充产品",
+      "result": "PASS"
+    },
+    {
+      "name": "导出为全部筛选任务且标记演示",
+      "result": "PASS"
+    },
+    {
+      "name": "明细表的分钟文本不会再按日字段误转为空",
+      "result": "PASS"
+    },
+    {
+      "name": "CSV全筛选行数及演示来源",
+      "result": "PASS"
+    },
+    {
+      "name": "无反馈入口、无后端请求或数据写入",
+      "result": "PASS"
+    }
+  ]
+}
