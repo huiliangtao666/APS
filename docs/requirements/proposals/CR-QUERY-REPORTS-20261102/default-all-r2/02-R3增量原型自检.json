@@ -1,0 +1,58 @@
+{
+  "scope": "R3默认全选增量逻辑及DOM桩；R2历史32项证据保持其原版本，非本轮产品验证",
+  "passed": 13,
+  "checks": [
+    {
+      "name": "五页全部子视图默认全选且无意外空表",
+      "result": "PASS"
+    },
+    {
+      "name": "物料BOM默认全部140种",
+      "result": "PASS"
+    },
+    {
+      "name": "需求默认全窗口及全客户",
+      "result": "PASS"
+    },
+    {
+      "name": "库存默认包含420批次及140SKU",
+      "result": "PASS"
+    },
+    {
+      "name": "风险全选不误排除无风险净算记录",
+      "result": "PASS"
+    },
+    {
+      "name": "制造建议不被隐藏供应商筛选误阻",
+      "result": "PASS"
+    },
+    {
+      "name": "已有采购在途默认全选无隐含风险筛选",
+      "result": "PASS"
+    },
+    {
+      "name": "显式清空客户返回0而非全部",
+      "result": "PASS"
+    },
+    {
+      "name": "全不选物料返回0",
+      "result": "PASS"
+    },
+    {
+      "name": "清空后仅选FG001与BOM开关联动保留",
+      "result": "PASS"
+    },
+    {
+      "name": "搜索保留隐藏选择且恢复不限为全选",
+      "result": "PASS"
+    },
+    {
+      "name": "表单提交保留全选并正确转换日期",
+      "result": "PASS"
+    },
+    {
+      "name": "日历、分页、栏位和无反馈入口保持",
+      "result": "PASS"
+    }
+  ]
+}

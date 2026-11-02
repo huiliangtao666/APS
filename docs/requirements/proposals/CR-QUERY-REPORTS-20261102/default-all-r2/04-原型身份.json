@@ -1,0 +1,32 @@
+{
+  "parent_design_sha": "d7d279e3ebb46fa9ff1c4eed4f76d895caeff3e3",
+  "parent_delivery": "dlv_fdb26c5a-b3d3-4a01-9d65-2750a6cdd2f0",
+  "event_key": "dlv_fdb26c5a-b3d3-4a01-9d65-2750a6cdd2f0:r2",
+  "cr_id": "CR-QUERY-REPORTS-20261102",
+  "issue": 49,
+  "prototype": {
+    "artifact": "APS五类业务查询_设计原型_R3_默认全选_20261102.html",
+    "bytes": 3921449,
+    "sha256": "4c7b06d9c0f77471c5ddea7a72287eb68701f69a15448215ad7023294380a011",
+    "status": "CR_DESIGN_PROPOSAL",
+    "cr_id": "CR-QUERY-REPORTS-20261102",
+    "new_product_sha": null,
+    "source_files": {
+      "B": {
+        "file": "肉食品仿真数据_202611_合并图示版.xlsx",
+        "sha256": "c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0",
+        "bytes": 1672626
+      },
+      "P": {
+        "file": "APS配置参数梳理_20261101.xlsx",
+        "sha256": "e8b73e882e66b2e19ab7cb639c7a17e8830d08c0f485667484141837794f4d24",
+        "bytes": 247518
+      },
+      "referenceProductSha": "677029d2473b030bec5150b23eeae9488a0c4e84",
+      "prototypeVersion": "QUERY-REPORTS-20261102-r3",
+      "status": "CR设计提案；待PM登记实施；未接入系统"
+    }
+  },
+  "new_product_sha": null,
+  "old_evidence": "R2历史32项保留，不迁签为R3产品结果"
+}
