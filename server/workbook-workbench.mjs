@@ -1,5 +1,5 @@
 import {hash,rows,workbookSchema,refreshDerived} from './workbook-model.mjs';
-import {scopeFor,tagParameterSources,sourceRole,precedenceVersion} from './parameter-contract.mjs';
+import {scopeFor,tagParameterSources,sourceRole,precedenceVersion,applyParameters,parameterSpec,objectKey,parameterDimension} from './parameter-contract.mjs';
 import {supplyReadiness} from './workbook-supply.mjs';
 
 // The new cards are strict. Omitted kind retains the legacy mixed-workbook API.
@@ -34,6 +34,7 @@ export function prepareBusinessImport(incoming,old) {
  const d=tagParameterSources(structuredClone(incoming));
  d.parameterContract='CR-PARAM-UI-20261101:r1';
  d.sourceFiles=[{kind:'business',fileHash:d.fileHash},...(old?.sourceFiles||[]).filter(p=>p.kind!=='business')];
+ compileBusinessBindings(d);
  if(!old)return d;
  const previous=tagParameterSources(structuredClone(old));
  for(const k of ['parameterContract','parameterCandidates','parameterDefinitions','parameterCandidateDefinitions','parameterCategories','parameterAnnotations','parameterCounts','parameterClassification','parameterSources','parameterTrials','parameterPending','bomLossProfiles'])if(previous[k]!==undefined)d[k]=structuredClone(previous[k]);
@@ -42,8 +43,36 @@ export function prepareBusinessImport(incoming,old) {
  d.tables['配置参数']=[...rows(d,'配置参数'),...rows(previous,'配置参数').filter(p=>sourceRole(p)!=='B')];
  d.parameterBaseFields=[];
  d.overlay=[...(previous.overlay||[]),{version:d.version,operation:'business-file-replacement',previousFileHash:old.fileHash,fileHash:d.fileHash}];
+ // P-first can retain an explicitly relative unit before the object exists.
+ // Resolve that placeholder once when B supplies the object; a concrete frozen
+ // dimension is never rebound by a later business replacement.
+ for(const p of rows(d,'配置参数'))if(['本行数量单位','本行容量单位'].includes(p._dimension)&&p['单位']===p._dimension){
+  const resolved=parameterDimension(d,p);
+  if(resolved!==p._dimension){p._dimensionBinding={relative:p._dimension,businessFileHash:d.fileHash};p._dimension=resolved;}
+ }
  d.checkedAt=null;d.checksInvalidated=true;
  return d;
+}
+// Compile approved object/field semantics before preserving the B fallback. Raw
+// formulas and position bindings remain unchanged for provenance. A stale row
+// address cannot redirect a supported field to an unrelated parameter.
+function compileBusinessBindings(d){
+ const active=applyParameters(d,0),byId=new Map(rows(d,'配置参数').map(p=>[p['参数编号'],p])),semanticIndex=new Map(),fieldSpecs=new Map();
+ for(const p of active){const spec=parameterSpec(p);if(!spec?.table||spec.factory)continue;fieldSpecs.set(spec.table+'|'+spec.name,spec);semanticIndex.set(JSON.stringify([spec.table,p['对象编号'],spec.name]),p);}
+ const factoryParameters=active.filter(p=>parameterSpec(p)?.factory);
+ for(const binding of d.bindings||[]){
+  const target=rows(d,binding.sheet).find(r=>binding.recordKey?(binding.sheet==='单位换算'?[r['物料编号'],r['换算前单位'],r['换算后单位']].join('|'):r[workbookSchema.tables[binding.sheet]?.key])===binding.recordKey:r._row===binding.row);
+  if(!target)continue;
+  const original=byId.get(binding.parameterId),factory=binding.sheet==='工厂日历'&&['生产班次数','日产能分子','日产能分母'].includes(binding.field);
+  const fieldSpec=fieldSpecs.get(binding.sheet+'|'+binding.field),semantic=fieldSpec&&semanticIndex.get(JSON.stringify([binding.sheet,objectKey(target,fieldSpec),binding.field]));
+  const factorySource=factory&&factoryParameters.find(p=>p['参数名称']===(binding.field==='日产能分母'||new Date(Date.UTC(2026,9,31)+Number(target['日序'])*86400000).getUTCDay()!==0?'标准日班次数':'周日班次数'));
+  const selected=semantic||factorySource;
+  if(!selected||selected===original)continue;
+  const value=target[binding.field];
+  if(semantic){const base=d.parameterBaseFields?.find(b=>b.table===binding.sheet&&b.object===selected['对象编号']&&b.field===binding.field);if(base){base.present=value!==undefined;base.value=value;}}
+  if(factory&&target._factoryBase)target._factoryBase={actual:target['生产班次数'],numerator:target['日产能分子'],denominator:target['日产能分母']};
+  d.warnings??=[];d.warnings.push({code:'PARAMETER_BINDING_SEMANTIC',sheet:binding.sheet,row:target._row,record:binding.recordKey,field:binding.field,originalParameterId:binding.parameterId,adoptedParameterId:selected['参数编号'],message:'位置引用与受控对象/字段不一致；保留原公式，采用B参数语义投影，后续有效P仍优先'});
+ }
 }
 export function importChanges(old,next) {
  const changes=[];

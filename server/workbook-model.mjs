@@ -14,7 +14,7 @@ const numeric=v=>v!==''&&v!==undefined&&Number.isFinite(Number(v));
 export function problem(sheet,row,field,message,code='INPUT_INVALID') {return {code,severity:'error',sheet,row:row?._row??0,record:row?.[workbookSchema.tables[sheet]?.key]||'',field,cell:row?._cells?.[field]||'',message,remedy:'打开该记录更正并重新检查'};}
 export function refreshDerived(d,atDay=0) {
  const active=d.parameterContract?applyParameters(d,atDay):null,params=index(d,'配置参数','参数编号');
- for(const b of d.bindings||[]){const row=rows(d,b.sheet).find(r=>b.recordKey?(b.sheet==='单位换算'?[r['物料编号'],r['换算前单位'],r['换算后单位']].join('|'):r[workbookSchema.tables[b.sheet].key])===b.recordKey:r._row===b.row),original=params.get(b.parameterId),p=original&&(active||rows(d,'配置参数')).find(p=>p['对象编号']===original['对象编号']&&p['参数名称']===original['参数名称']&&Number(p['生效日'])<=atDay&&atDay<Number(p['失效日']));if(row&&p&&!blockedParameter(p))row[b.field]=p['参数值'];}
+ for(const b of d.parameterContract?[]:d.bindings||[]){const row=rows(d,b.sheet).find(r=>b.recordKey?(b.sheet==='单位换算'?[r['物料编号'],r['换算前单位'],r['换算后单位']].join('|'):r[workbookSchema.tables[b.sheet].key])===b.recordKey:r._row===b.row),original=params.get(b.parameterId),p=original&&(active||rows(d,'配置参数')).find(p=>p['对象编号']===original['对象编号']&&p['参数名称']===original['参数名称']&&Number(p['生效日'])<=atDay&&atDay<Number(p['失效日']));if(row&&p&&!blockedParameter(p))row[b.field]=p['参数值'];}
  const materials=index(d,'物料主数据','物料编号'),suppliers=index(d,'供应商与供货条件','供货关系编号');
  const children=new Map();for(const b of rows(d,'物料清单')){if(!children.has(b['父项编号']))children.set(b['父项编号'],[]);children.get(b['父项编号']).push(b);}
  const memo=new Map(),visiting=new Set();
@@ -46,6 +46,10 @@ export function validateWorkbook(d,{completeness=true}={}) {
   for(const r of rows(d,t)){
    const id=t==='单位换算'?[r['物料编号'],r['换算前单位'],r['换算后单位']].join('|'):r[spec.key];if(t==='配置参数'&&d.parameterContract){}else if(id===undefined||id==='')add(t,r,spec.key,'缺少唯一编号');else if(seen.has(id))add(t,r,spec.key,'重复唯一编号');seen.add(id);
    for(const f of spec.fields){const v=r[f.name];if(v===undefined||v==='')continue;
+    // Typed parameter contracts validate numeric, enum and composite values
+    // below. The legacy workbook column's numeric hint must not reject a
+    // valid enum or minute identity before that contract can inspect it.
+    if(t==='配置参数'&&d.parameterContract&&f.name==='参数值')continue;
     if(/数字|整数|小数|数值|比例/.test(f.type)&&!numeric(v))add(t,r,f.name,'须为有限数值');
     if(/数量|用量|需求箱数|人数|套数|上限|容量|导期|提前期|净重|倍数|批量/.test(f.name)&&numeric(v)&&Number(v)<0)add(t,r,f.name,'数量不得小于0');
     if(/日$|天数$|需求日|日序/.test(f.name)&&numeric(v)&&!Number.isInteger(Number(v)))add(t,r,f.name,'日序和天数须为整数');

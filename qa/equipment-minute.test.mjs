@@ -165,11 +165,20 @@ test('P catalog relational boundary still rejects reversed temperatures and wait
  d.tables['库区库位']=[{'库位编号':'LOC','最低温度':'-25','最高温度':'-18'}];
  assert.deepEqual(parameterIssues(d,{completeness:false}),[]);
  d.tables['配置参数'].push({...d.tables['配置参数'][0],'参数编号':'FUTURE-LOW','参数值':'-10','生效日':'7','失效日':'8',_sourceRole:'EDIT'});
- assert.ok(parameterIssues(d,{completeness:false}).some(i=>i.code==='PARAMETER_RELATION'&&/日7/.test(i.message)));
+ const temperatureIssues=parameterIssues(d,{completeness:false});
+ assert.ok(temperatureIssues.some(i=>i.code==='PARAMETER_RELATION'&&i.record==='LOC'&&i.field==='最低温度'&&i.sheet==='库区库位'&&i.message==='最低温度不得大于最高温度；dataset，日7'));
+ assert.ok(!temperatureIssues.some(i=>i.code==='PARAMETER_INVALID'));
+ d.tables['配置参数'].pop();
+ d.tables['配置参数'].push({...d.tables['配置参数'][0],'参数编号':'TRIAL-LOW','参数值':'-10','生效日':'7','失效日':'8',_sourceRole:'EDIT',_scope:'trial:temperature'});
+ const scoped=parameterIssues(d,{completeness:false}).filter(i=>i.code==='PARAMETER_RELATION');
+ assert.deepEqual(scoped.map(i=>[i.record,i.field,i.message]),[['LOC','最低温度','最低温度不得大于最高温度；trial:temperature，日7']]);
+ console.log('REJECTION_FACTS '+JSON.stringify({temperatureIssues,scoped}));
  const waiting={parameterDefinitions:[{'参数编号':'CP093','最大值':'须≥最小等待'}],tables:{'工艺路线':[{'路线工序编号':'ROUTE','最小等待天数':'0','最大等待天数':'1'}],'配置参数':[
  {'参数编号':'MIN','对象编号':'ROUTE','参数名称':'最小等待天数','参数值':'2','单位':'天','生效日':'7','失效日':'8',_sourceRole:'P'},
  {'参数编号':'MAX','对象编号':'ROUTE','参数名称':'最大等待天数','参数值':'1','单位':'天','生效日':'0','失效日':'44',_sourceRole:'P'}]}};
- assert.ok(parameterIssues(waiting,{completeness:false}).some(i=>i.code==='PARAMETER_RELATION'&&/日7/.test(i.message)));
+ const waitingIssues=parameterIssues(waiting,{completeness:false});
+ assert.ok(waitingIssues.some(i=>i.code==='PARAMETER_RELATION'&&i.record==='ROUTE'&&i.field==='最小等待天数'&&i.message==='最小等待天数不得大于最大等待天数；dataset，日7'));
+ console.log('REJECTION_FACTS '+JSON.stringify({waitingIssues}));
  assert.ok(!parameterIssues(waiting,{completeness:false}).some(i=>i.code==='PARAMETER_INVALID'));
 });
 
@@ -183,9 +192,12 @@ test('V2 resource literals preserve weight-capacity sharing and tool set units w
  r.d.tables['设备与工装']=[{'资源编号':'EQ','资源类别':'设备'},{'资源编号':'TL','资源类别':'工装'}];
  assert.deepEqual(parameterIssues(r.d,{completeness:false}),[]);
  r.d.tables['设备与工装'][1]['资源类别']='设备';
- assert.ok(parameterIssues(r.d,{completeness:false}).some(i=>/套仅适用于/.test(i.message)));
+ const equipmentUnit=parameterIssues(r.d,{completeness:false});
+ assert.ok(equipmentUnit.some(i=>i.record==='TOOLS'&&i.field==='参数值'&&i.code==='PARAMETER_INVALID'&&i.message==='套仅适用于实体工装可用数量'));
  r.d.tables['设备与工装'][1]['资源类别']='工装';r.d.tables['配置参数'][1]['单位']='千克';
- assert.ok(parameterIssues(r.d,{completeness:false}).some(i=>i.code==='PARAMETER_INVALID'&&/单位不匹配|对象单位映射已变化/.test(i.message)));
+ const massUnit=parameterIssues(r.d,{completeness:false});
+ assert.ok(massUnit.some(i=>i.record==='TOOLS'&&i.field==='参数值'&&i.code==='PARAMETER_INVALID'&&['可用数量单位不匹配：千克','对象单位映射已变化，保留来源维度并拒绝静默重解释'].includes(i.message)));
+ console.log('REJECTION_FACTS '+JSON.stringify({equipmentUnit,massUnit}));
  assert.throws(()=>validateAtomic(specification('资源占用方式'),'任意共享'));
  assert.throws(()=>validateAtomic(specification('可用数量'),'1.5'));
 });

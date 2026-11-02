@@ -128,12 +128,35 @@ validation rejection, but was not re-executed because all three module calls
 are consumed. No final full selftest PASS is claimed. Actual execution
 results and final source identity are in the r3 workspace result/evidence.
 
-## Current gate
+## Current gate — continuous bounded V2 development selftest
 
-The sole full private V2 attempt is consumed. The scope remains E1–E6, EV01–28,
-DV01–17 and the original 45-row matrix. No repeated full-V2 attempt, build,
-candidate create/start, browser, actual calculation Worker, QA, main integration
-or publish follows the failed first segment. Corrected source may be ordinary
-pushed for preservation; it is not a validated integration candidate. Completing
-this gate needs a concrete bounded continuation for the changed source through
-P-first, forward/inverse and readiness; no heap uplift or data reduction.
+PM continuation 6584473186 replaces the module invocation-count stop. The
+corrected five regression modules, complete P-first adoption, both full B/P
+orders, both readiness checks and the effective-fact/minute-mapping comparison
+now pass, with every original row retained and 192 MiB heap limits. Prior
+failures, one controlled 120-second forward-stage timeout, runner fixture
+failures and earlier OOM evidence remain in the workspace r4 archive.
+
+The continuation fixes repeated parameter-identity serialization, delegates typed
+parameter values to the strict contract instead of the legacy numeric column,
+uses the physical tool as the tool-pool row key, and preserves unsupported B
+metadata as explicit candidates. B compilation retains original formulas and
+position bindings, records semantic-binding warnings, and preserves the B
+object/field projection before P precedence. Position references cannot overwrite
+effective P values or poison expiry fallback. P-first relative-unit placeholders
+resolve once when B first supplies the object; concrete frozen dimension drift
+continues to reject.
+
+Minute readiness uses explicit route minutes rather than pending legacy CP080 day
+lead proposals. CP080 remains blocked with no B fallback or suggested formula
+execution. Demanded products still require box weight; bulk semifinished inputs
+need no invented packaging weight. Day-profile checks and required actual minute
+parameters remain strict. The added tests include normal, invalid-value,
+source/scope/period, exact rejection-code, fallback, dimension-drift and tool-key
+checks. Full source/input hashes and unaffected artifact reuse are recorded in
+r4; an old PASS is never relabeled as a new source execution.
+
+E1–E6, EV01–28, DV01–17 and the 45-row acceptance scope remain. Build, isolated
+candidate, real Worker/browser evidence and independent QA are separate later
+gates; this first-segment PASS does not sign those results or user UAT. No main
+write, old deployment mutation or publication is authorized by this document.
