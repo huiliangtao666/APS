@@ -1,0 +1,17 @@
+.workbook-preview{border:1px solid #cbd5e1;border-radius:.6rem;padding:1rem;margin:1rem 0;background:#fff;color:#172033}
+.workbook-preview .wp-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin:.8rem 0;align-items:end}
+.workbook-preview label{display:block;line-height:1.6}
+.workbook-preview label>select,.workbook-preview label>input:not([type=checkbox]){display:block;max-width:100%}
+.workbook-preview button{min-height:2.25rem;border:1px solid #8293aa;border-radius:.3rem;padding:.35rem .7rem;background:#edf3fb;color:#172033}
+.workbook-preview button:disabled{opacity:.55;cursor:not-allowed}
+.workbook-preview button:focus-visible,.workbook-preview input:focus-visible,.workbook-preview select:focus-visible{outline:3px solid #186cb8;outline-offset:2px}
+.workbook-preview .wp-scroll{overflow:auto;max-height:60vh}
+.workbook-preview table{border-collapse:collapse;width:100%;font-size:.9rem}
+.workbook-preview th,.workbook-preview td{padding:.55rem;text-align:left;vertical-align:top;border-bottom:1px solid #dbe2ec;max-width:24rem;overflow-wrap:anywhere}
+.workbook-preview th{position:sticky;top:0;background:#edf3fb}
+.workbook-preview .wp-hash{font-size:.8rem;overflow-wrap:anywhere}
+.workbook-preview .wp-confirm{border:2px solid #186cb8;padding:1rem;margin-top:.8rem;border-radius:.4rem}
+.workbook-preview .wp-overlay{position:fixed;inset:0;background:#17203388;z-index:50;display:flex;justify-content:flex-end}
+.workbook-preview .wp-dialog{background:white;width:min(65rem,96vw);height:100%;overflow:auto;padding:1.2rem;box-shadow:0 0 2rem #17203355}
+.workbook-preview pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:20rem;overflow:auto}
+@media(max-width:600px){.workbook-preview{padding:.65rem}.workbook-preview .wp-actions{display:grid;grid-template-columns:1fr}.workbook-preview .wp-dialog{width:100vw;padding:.7rem}}
