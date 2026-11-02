@@ -160,3 +160,29 @@ E1–E6, EV01–28, DV01–17 and the 45-row acceptance scope remain. Build, iso
 candidate, real Worker/browser evidence and independent QA are separate later
 gates; this first-segment PASS does not sign those results or user UAT. No main
 write, old deployment mutation or publication is authorized by this document.
+
+## HTTP preparation memory continuation (original event r7)
+
+The current-version guard reads dataset metadata, avoiding a second full frozen
+snapshot load. Parameter preparation clones mutable input tables and root
+metadata; read-only reference tables retain their exact content and ordering in
+the frozen object. Readiness receives the same input-only evaluation view as
+calculation, so selection dependency checks do not deep-clone reference results.
+No reference table is removed from persisted input. Effective P precedence,
+source identity, selection/token checks and legacy day derivation remain intact.
+
+Targeted tests compare dataset/trial/expired-period projections and legacy day
+bindings against the previous full-clone semantics. A bounded complete-snapshot
+check retains the original 38,493,169-byte input and all tables, exactly matches
+the previous readiness response/token and an independent in-place preparation
+identity, and exercises the run route with a mock Worker (one dataset load plus
+one metadata read). The copied projection is 20,882,099 bytes; 17,611,070 bytes
+of reference results avoid each deep clone. Its measured maximum RSS is 458,340
+KiB with Node heap capped at 192 MiB; no new OOM or protection drift occurred.
+This is preparation validation, not a real calculation, browser or QA verdict.
+A missing mock terminate method was corrected; its original failure is retained.
+
+The subsequent candidate uses a newly bundled server and the unchanged r5
+frontend/calculation/import artifacts, each with separately recorded source and
+hash provenance. It is not represented as a new full build. Runtime budgets and
+first-resource-stop gates remain those of the latest original Issue #50 contract.

@@ -87,13 +87,23 @@ export function importChanges(old,next) {
  }
  return changes;
 }
+// Derived values only mutate input rows and root metadata. Reference tables
+// remain read-only and retain their exact order/content in the frozen object.
+export function computationInput(data) {
+ return {...data,tables:Object.fromEntries(Object.entries(data.tables).filter(([table])=>workbookSchema.tables[table]?.kind==='输入'))};
+}
+export function cloneForParameters(data) {
+ const d=structuredClone(computationInput(data));
+ d.tables=Object.fromEntries(Object.entries(data.tables).map(([table,values])=>[table,d.tables[table]??values]));
+ return d;
+}
 export function checkSelection(data,body,actor) {
- const d=structuredClone(data),selection=body.selection||{},scope=scopeFor(d,body.parameterScope,actor);
+ const d=cloneForParameters(data),selection=body.selection||{},scope=scopeFor(d,body.parameterScope,actor);
  if(Object.keys(selection).some(k=>!['startDay','endDay','currentDay','currentMinute','demandIds'].includes(k)))throw Error('运行选择包含未知字段');
  const {startDay:start,endDay:end,currentDay:current}=selection;
  if(![start,end,current].every(Number.isInteger)||start<current||current<0||end<=start||end>44)throw Error('日窗口无效');
  d.parameterContext={scope,effectiveDay:start};refreshDerived(d,start);
- const ready=supplyReadiness(d,selection),demands=rows(d,'每日需求').filter(r=>Number(r['需求日'])>=start&&Number(r['需求日'])<end);
+ const ready=supplyReadiness(computationInput(d),selection),demands=rows(d,'每日需求').filter(r=>Number(r['需求日'])>=start&&Number(r['需求日'])<end);
  if(!demands.length)ready.issues.push({code:'EMPTY_SELECTION',sheet:'每日需求',field:'需求日',message:'所选窗口无需求',severity:'error'});
  if(selection.demandIds!==undefined&&(!Array.isArray(selection.demandIds)||!selection.demandIds.length||new Set(selection.demandIds).size!==selection.demandIds.length||selection.demandIds.some(id=>!demands.some(r=>r['需求编号']===id))))ready.issues.push({code:'DEMAND_CHANGED',sheet:'每日需求',field:'需求编号',message:'所选需求已不存在或超出日窗，请显式重选',severity:'error'});
  const checkedRef={model:'workbook',datasetId:d.id,version:d.version,inputHash:hash(data),...sourceIdentity(d),scope,effectiveAt:start,selectionHash:hash(selection),actualRecordsHash:hash(d.effectiveParameters||rows(d,'配置参数'))};

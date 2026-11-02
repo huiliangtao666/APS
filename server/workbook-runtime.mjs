@@ -1,5 +1,5 @@
 import {minuteMode,MINUTE_ENGINE,MINUTE_ORIGIN,minuteTime} from './workbook-minute.mjs';
-import {checkSelection,sourceIdentity} from './workbook-workbench.mjs';
+import {checkSelection,sourceIdentity,cloneForParameters,computationInput} from './workbook-workbench.mjs';
 import {scopeFor,effectiveParameters,scopeOf} from './parameter-contract.mjs';
 import {supplyReadiness} from './workbook-supply.mjs';
 import {changeDraft,validateDraftRequest} from './workbook-drafts.mjs';
@@ -10,7 +10,7 @@ export function registerWorkbookRuns(router,ctx) {
  const {read,write,dataset,audit,handle,permission,workerFactory,workers,saveVersion}=ctx;
  const inputOf=r=>ctx.snapshot(r.inputRef);
  const publicRun=r=>{const {inputRef,...result}=r;return result;};
- const effectiveInput=r=>refreshDerived(structuredClone(inputOf(r)),r.selection.startDay);
+ const effectiveInput=r=>refreshDerived(cloneForParameters(inputOf(r)),r.selection.startDay);
  const resultProblem=r=>{
   const d=inputOf(r),p=r.result;
   if(hash(d)!==r.inputHash)return 'frozen_input_corrupt';
@@ -38,7 +38,7 @@ export function registerWorkbookRuns(router,ctx) {
   if(!Number.isSafeInteger(req.body.version)||req.body.version<1)return res.status(400).json({error:'explicit_version_required'});
   const s=read();let d=dataset(s,req.params.id,req.body.version);if(!d)return res.status(404).json({error:'dataset_not_found'});
   if(req.body.currentVersion===true||req.body.readinessToken){
-   const latest=dataset(s,req.params.id);if(latest?.version!==req.body.version)return res.status(409).json({error:'INPUT_CHANGED',actualVersion:latest?.version});
+   const latest=ctx.meta(s,req.params.id);if(latest?.version!==req.body.version)return res.status(409).json({error:'INPUT_CHANGED',actualVersion:latest?.version});
    const check=checkSelection(d,req.body,ctx.actorKey(req));if(!req.body.readinessToken||check.token!==req.body.readinessToken)return res.status(409).json({error:'READINESS_CHANGED'});
    if(!check.ready)return res.status(422).json({error:'not_ready',issues:check.issues});
   }
@@ -47,8 +47,8 @@ export function registerWorkbookRuns(router,ctx) {
   const scope=scopeFor(d,req.body.parameterScope,ctx.actorKey(req));const globals=d.parameterContract?effectiveParameters(d,selection.startDay??0,scope):[];const global=n=>globals.find(p=>p['对象编号']==='GLOBAL'&&p['参数名称']===n)?.['参数值'];
   const start=selection.startDay??Number(global('计划起始日')??1),end=selection.endDay??start+Number(global('窗口天数')??14),current=selection.currentDay??start;
   if(![start,end,current].every(Number.isInteger)||start<current||current<0||end<=start||end>44)throw Error('日窗口无效');
-  if(d.parameterContract){d=structuredClone(d);d.tables['配置参数']=rows(d,'配置参数').filter(p=>scopeOf(p)==='dataset'||scopeOf(p)===scope);d.parameterContext={scope,effectiveDay:start};delete d.parameterCandidates;delete d.parameterTrials;refreshDerived(d,start);}
-  const ready=supplyReadiness(d,{...selection,startDay:start,endDay:end,currentDay:current});if(!ready.ready)return res.status(422).json({error:'not_ready',issues:ready.issues});
+  if(d.parameterContract){d=cloneForParameters(d);d.tables['配置参数']=rows(d,'配置参数').filter(p=>scopeOf(p)==='dataset'||scopeOf(p)===scope);d.parameterContext={scope,effectiveDay:start};delete d.parameterCandidates;delete d.parameterTrials;refreshDerived(d,start);}
+  const ready=supplyReadiness(computationInput(d),{...selection,startDay:start,endDay:end,currentDay:current});if(!ready.ready)return res.status(422).json({error:'not_ready',issues:ready.issues});
   const inWindow=rows(d,'每日需求').filter(r=>Number(r['需求日'])>=start&&Number(r['需求日'])<end);
   if(Object.hasOwn(selection,'demandIds')&&(!Array.isArray(selection.demandIds)||!selection.demandIds.length||new Set(selection.demandIds).size!==selection.demandIds.length||selection.demandIds.some(id=>typeof id!=='string'||!inWindow.some(r=>r['需求编号']===id))))throw Error('需求选择须唯一且属于所选半开日窗');
   if(!inWindow.length)return res.status(422).json({error:'empty_demand_selection',message:'所选日窗没有需求，未创建成功运行'});
