@@ -1,0 +1,49 @@
+{
+  "scope": "DESIGN_ASSET_STATIC_AND_OFFLINE_STUB_ONLY",
+  "checks": 16,
+  "passed": [
+    "30 unique reported issues",
+    "G01/G02/G03 counts1/20/9",
+    "all20 SF identities exact",
+    "all8 WP identities exact",
+    "all issues have field condition source location role version boundary",
+    "SF source rows independent XML13..32",
+    "WP source rows independent XML3..10",
+    "339 source keys no duplicate;not copied raw original values",
+    "r1 24 assertion core cells retained",
+    "38 assertions unique and NOT_EXECUTED",
+    "new FR AC UAT mappings populated",
+    "all added FR/AC tokens exist in baseline",
+    "8 UAT proposals NOT_EXECUTED with original mapping",
+    "r1 performance and mock preserved",
+    "raw private inputs not copied",
+    "new offline DOM stub11 checks"
+  ],
+  "prototype": {
+    "scope": "OFFLINE_DESIGN_DOM_STUB_ONLY",
+    "checks": 11,
+    "passed": [
+      "30 report identities;1/20/9 groups",
+      "initial list bounded25",
+      "search SF020 across full report",
+      "SF target is production routes with exact material",
+      "WP008 distinct raw facts and missing mapping",
+      "G01 has no invented Excel row",
+      "G03 unavailable real action stays disabled",
+      "save demonstration invalidates;never passes real readiness",
+      "cancel retains version and original selection",
+      "10 page boundary and G03 filter",
+      "no product network, writes, or fake URLs"
+    ],
+    "syntax": "PASS",
+    "realBrowser": "NOT_EXECUTED",
+    "realProduct": "NOT_EXECUTED",
+    "performance": "NOT_EXECUTED",
+    "UAT": "NOT_EXECUTED"
+  },
+  "r1_checks": "HISTORICAL_NOT_RERUN",
+  "productRuntime": "NOT_EXECUTED",
+  "independentTest": "NOT_EXECUTED",
+  "UAT": "NOT_EXECUTED",
+  "effective": false
+}

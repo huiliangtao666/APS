@@ -1,0 +1,71 @@
+{
+  "algorithm": "SHA256",
+  "files": [
+    {
+      "path": "00-交付说明.txt",
+      "bytes": 2912,
+      "sha256": "913e907b6d2e888daf4aea6e5922639f5b494a21a9190fd37aa6fe06aec82858"
+    },
+    {
+      "path": "01-业务契约.txt",
+      "bytes": 7378,
+      "sha256": "34f3103931c7718bb9382baaab6c3fe662bd45ca14b8d064b04fc454e87a81e7"
+    },
+    {
+      "path": "02-流程与状态.txt",
+      "bytes": 9808,
+      "sha256": "4dba5aa0838a979b18906544f145c19842232aafacbca614cb8cb354ed0e722e"
+    },
+    {
+      "path": "03-数据流与转换契约.txt",
+      "bytes": 10366,
+      "sha256": "b001c2ff594c29ab157c782ab8e3a054a1483cf385eb2b8bbe15d28488ba1c3c"
+    },
+    {
+      "path": "04-实施切片与待决.txt",
+      "bytes": 8283,
+      "sha256": "0910014deb03eaaa09b425fe77e4a79a9d09979d73b3d9dfcca6c2a3b3154384"
+    },
+    {
+      "path": "05-新增验收矩阵.csv",
+      "bytes": 12751,
+      "sha256": "d0c3d0161beb0bed09c653f6d01b4bcb1fc2707675d74d9d6b07afd0c87f68dd"
+    },
+    {
+      "path": "06-字段级就绪.csv",
+      "bytes": 130897,
+      "sha256": "d803eec0410a70bef0566785ff7a520e75654c91bb2f69ae28feae7f18416c9b"
+    },
+    {
+      "path": "07-参数字段索引.csv",
+      "bytes": 97924,
+      "sha256": "da2d618c7179a1ed726a114ab48dc84386eea838887ef24dc2e420151dcff190"
+    },
+    {
+      "path": "08-影响映射.csv",
+      "bytes": 6795,
+      "sha256": "b91b7b24595205729bda3cb091a7354f3d0559fe4ac6d2d0acdc4f53b1004739"
+    },
+    {
+      "path": "09-场景与预期.json",
+      "bytes": 21041,
+      "sha256": "54fe4e4eb946dcf62a1cdf75c76b1612b942113322749ed73b6cc17953e7d378"
+    },
+    {
+      "path": "10-交互原型.html",
+      "bytes": 34346,
+      "sha256": "21d59153e2f3cd908c8abe64c82b958e9c18e5734728f0c795d5f39af9b16fcc"
+    },
+    {
+      "path": "11-来源核验.json",
+      "bytes": 8049,
+      "sha256": "a0088beafef66a93e2bbedbbf1188b159f8231df6ec7e1cc06dc3410b94ff808"
+    },
+    {
+      "path": "12-设计自检.json",
+      "bytes": 5882,
+      "sha256": "3876b2da73332a92ce9702563da9d17a5fcaf4ef1bf2bb07eab37d1936ac93ba"
+    }
+  ],
+  "manifestSelfExcluded": true
+}

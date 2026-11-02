@@ -1,0 +1,54 @@
+业务API/导出/一致性契约 / 待评审 / effective=false
+本文件规定可观察输入输出和拒绝条件；路由名是建议对照，不规定数据库、传输框架、缓存或算法。Dev可选等价实现，但必须保留全量业务可查和不可绕过校验。现有/api/workbooks/preview、/previews/:id和/commit路径应由Dev评估兼容，不直接部署本文件。
+
+A. 快照身份与不可变性
+previewRef={previewId,revision}。不可变绑定至少含fileHash(原件字节SHA256)、importKind、model、datasetId或newTargetToken、baseVersion、mode、scope、effectivePeriod、profileVersion、mappingHash、validationRulesVersion、effectiveParameterHash、overlayHash。权限/actor或sharedAccess范围单列校验。
+summaryFingerprint由服务端对规范化摘要+上述绑定+全量变更内容摘要+问题内容摘要计算。字段顺序/类型/空值编码有版本，算法建议SHA256；不能由客户端自报总数生成。旧previewFingerprint如果未覆盖全部绑定，必须新增/升级版本并由服务端判定，不能仅前端改名字。
+快照ready后，所有汇总/页/详情/导出只能读同一revision。维护、改文件/目标/用途/映射/校验规则或基底版本都须创建新previewRef和新确认，禁止原地改ready快照。列表排序固定tableId/key/operation/changeId，最终有唯一ID；翻页不能以可变当前数据为底。
+summary中countsComplete必须true才能确认，分页缓存/导出缓存须带previewRef及fingerprint；任何响应身份不符前端丢弃并提示重查，不混页。确认事务内再核目标当前版本和绑定，消除校验后竞争窗口。
+
+B. 行为与最小输入输出
+1 创建预览（建议沿用POST /api/workbooks/preview）
+输入：文件或已上传fileRef、fileName、importKind、datasetId/newTarget意图、expectedVersion、用途、scope/有效期及已有支持的采用意图。服务端核真实hash和既有12MB OOXML限制；候选不得借采用意图改写有效参数。
+返回：202 previewRef/status/statusRef（异步）或200完整摘要；不得返回全量changeSet/fields/issues。请求未取得ID而结果未知时，以clientRequestId查询创建结果，不自动重传占资源。
+2 状态/摘要（建议GET /previews/:id?revision=R）
+返回：binding、状态、expiresAt、countsComplete、29表汇总、对象/操作汇总、原始/去重错误计数、警告、canCommit/reasons、summaryFingerprint、exportAvailability和实际计算阶段。不携带记录字段数组。恢复返回committed/commitId/resultVersion时以此为准，不从sessionStorage重建成功。
+3 记录列表（建议GET /previews/:id/changes）
+输入：revision、tableId/objectType/operation/severity、q、pageSize、cursor；q上限200字符，受支持搜索列明确列出，默认主键/关键字段/工作表/行。复杂全文/正则本次不开放；空结果返回0及清除筛选入口。
+返回：previewRef/fingerprint、normalizedFilter/filterHash、matchedRecords/全批总数、items（changeId、table、typedKey、operation、最多2个有界关键字段、changedFieldCount、sourceRef、issueCount）、nextCursor/hasMore；cursor不透明并绑定快照、排序、筛选，过期/改筛选不能沿用。上一页可用前端保存同筛选cursor栈；不承诺任意跳页。
+4 完整记录与字段（建议GET /previews/:id/changes/:changeId；/fields?cursor）
+输入明确revision；返回记录身份、全字段总数/变化数、来源及字段页。每字段带fieldId/name/type/unit/before/after/presence/formula/sourceRefs/changed。全字段包含未变字段，用标记筛选；完整是可遍历取得，非单包无限加载。切记录关闭抽屉释放上一记录缓存。
+长值超过内联阈值返回valueRef、length/hash/truncated=true，单独分页取完整文本；不能截断后称完整。若字段缺来源，显示generated/derived及原始sourceRefs和推导依据；不得伪造Excel坐标。
+5 异常分组及位置（建议/issues/groups、/issues/:groupId/locations）
+分组页<=50、位置页<=100，默认阻塞在前；返回rawReportCount、uniqueLocationCount、groupCount和报告ID/校验器。位置含fileHash/sheet/row/cell/field/typedKey/sourceValue、关联changeId或readonlySourceRowRef、原因/期望/修正入口与支持状态。零变化错误行也能定位，不能依赖有changeId才可查看。重复校验报告保留reportIds和出现次数。
+6 提交（建议沿用POST /api/workbooks/commit）
+输入见C；返回commitId、resultVersion、真实采用状态、source refs、新ready失效提示。查询提交按previewRef/idempotencyKey获得权威结果。权限不足返回403，当前有效输入不变。
+7 已提交维护
+沿现有编辑API传expectedVersion/newReason/原权限；保存执行同导入校验，生成新版本及overlay来源链；不覆写原件fileHash，不更改历史run。返回newRef用于重查就绪。trial/批量在线候选修正不在本补充首批能力。
+
+C. 有界确认事务与失败结果
+确认payload至少：previewId/revision、fileHash、importKind、datasetId/newTargetToken、expectedVersion、mode/scope/effectivePeriod、summaryFingerprint、fullBatchScope（明确ALL_CHANGES，不接收前端隐藏过滤器）、acknowledgedWarnings、acknowledgedReplaceDelete、reason、idempotencyKey。客户端不上传采样明细作为待写全量；服务端从快照写整批。
+服务端顺序约束：
+① 按权限和完整请求指纹查幂等结果：同键同请求已完成则返回原结果，哪怕此后基底版本已变；同键异请求409 IDEMPOTENCY_CONFLICT。
+② 未完成请求重新验证授权、快照存在且ready、未过期、完整清单可取得、绑定及服务端fingerprint匹配、无阻塞、警告/覆盖/删除确认齐全、目标当前版本=expectedVersion、映射和校验版本未变。
+③ 在同一原子边界中验证与生成新版本、记录提交结果、更新有效指针（仅既有批准mode），任一步失败均不部分写入。两个不同preview竞争同一目标只有先完成者成功，后者409需重预览。新目标token一次消费，不创建重复数据集。
+④ 候选提交只存候选，已采用配置/就绪/旧run保持原身份；用途变candidate→dataset必须新预览并显式确认。业务提交不能自动采用混入参数。
+拒绝结果：422 VALIDATION_BLOCKED（含4次/2位置/1组），409 TARGET_CHANGED或BINDING_CHANGED或FINGERPRINT_MISMATCH，410 PREVIEW_EXPIRED/REMOVED，403 FORBIDDEN，413 INPUT_TOO_LARGE，429 CAPACITY_WAIT（含可重试时点），503 SERVICE_UNAVAILABLE。实际HTTP选择可等价，但业务code、无写入和恢复动作必须可区分。过期读取可能允许归档查看，但不能确认；完整内容不可得时不得伪装有清单。
+请求超时不是确定失败：用状态查询返回NOT_COMMITTED/COMMITTING/COMMITTED/REJECTED/UNKNOWN；UNKNOWN仅在确实无法核验时，保持按钮不可再次提交；NOT_COMMITTED且stillValid才原键重试。取消预览不能撤销已提交事务；提交中不承诺停止，先查结果。
+不得用force=true、ignoreIssues、前端删错项、筛选仅无错行、导出完成或阅读次数绕过阻塞。直接API、旧按钮、旧previewFingerprint兼容路径执行相同门禁，不能保留可绕过的旧全量提交入口。
+
+D. 完整差异导出与回算
+入口两个：“下载整批完整差异（确认范围）”和“下载当前筛选（仅查询，非确认范围）”；各有显式ALL/FILTERED标签。整批按钮始终可见，异常批也可导出便于修正。导出准备/失败/已过期不得假返回空文件。
+建议异步exportRef：创建时指定previewRef/fingerprint/scope/filterHash/format；状态可查询、重试同键不重复造任务。下载仍验权限，短期文件有效期独立显示；文件过期可在快照有效期间重建。完整导出可用指内容已完整且在容量内可取得，不要求用户实际下载。
+建议ZIP含manifest.json、records.csv、fields.csv、issue-locations.csv、issue-reports.csv、sources.csv、README.txt；也可等价XLSX/分片，不能Excel行限制截断。UTF-8、固定列、CSV引号换行转义、字符串安全显示避免公式注入，原公式作为文本和缓存值分列；null/缺失/空串/0有presence/type列，防止CSV空白歧义。危险公式字符串用安全编码并在manifest记录解码约定，原文hash另保留，不执行公式。
+records：changeId、tableId、typedKey、operation、changedFieldCount、recordHash、sourceRef。fields：changeId/fieldId/name、before/after类型/存在性/完整值或无损value分片引用、unit、changed、formula、sourceRefs。未变字段可置独立all-record-fields成员，主差异表只含changed=true且在manifest说明。长值不得省略，若分片须有长度/顺序/hash。
+issue-locations每个独立位置一行；issue-reports每个原始报告一行，保留重复报告ID→位置ID关系。整批4次报告映射2位置、1组可反算。没有changeId的错误原行用sourceRowRef，不丢校验失败行。
+manifest：schemaVersion、previewRef/binding/fingerprint、scope/filterHash、完整计数、exportId/generatedAt、source fileHash/业务及参数来源、model/profile/单位日期基准/simulation标记、各成员bytes/SHA256/分片顺序/总行数（不计表头）、contentDigest及完整性标记。每个成员完成并核验后才发COMPLETE；中断、取消和超限是INCOMPLETE，不提供为完整清单。
+
+E. 一致性不变量（前端列表/导出/提交相同）
+设C为snapshot所有规范化记录变更；K=(tableId,typedKey,operation,changeId)，唯一K数=recordChanges，=insert+update+delete；未变记录另计不混入C。每条changedFieldCount=sum(field.changed=true)；全批changedFieldCount=sum_C changedFieldCount。29表汇总、对象汇总、操作汇总各自完整分区回算同一全批值，不把这些维度互相相加。
+固定筛选F与排序下，逐页changeId的并集=C∩F，页间交集为空；matchedRecords=|C∩F|，nextCursor最终null。单记录全字段页的(fieldId)并集与export该记录完整字段一致，changed字段计数一致。
+rawReports为报告ID总数；uniqueLocations为独立位置ID总数；groups为分组ID总数。这三数不直接相等；两份不同fileHash相同坐标不合并。阻塞判定以原始有效校验结果为准，分组不会降低严重度。
+ALL导出records/fields及问题集应与上式一致；FILTERED仅对同filterHash子集回算，不能拿其总数替代全批确认。前端展示采样关键字段不作回算标准。
+summaryFingerprint、快照内容hash、导出manifest一致；提交结果记录同一fingerprint及binding。分页/导出生成期间目标新版本不会改变已有快照，但会使其提交拒绝；新预览重新比较当前版本。
+设计自检只能证明mock的这些等式，不证明真实服务满足。真实测量须从原件/独立变更期望清单核对，而非以被测摘要反证摘要正确。

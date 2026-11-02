@@ -1,0 +1,49 @@
+{
+  "event_key": "aps:user-cr:input-scheduling-unified-ux:large-preview:20261102:r1:design",
+  "sources": [
+    {
+      "path": "CR-INPUT-SCHED-UX-20261102-large-preview/APS-INPUT-SCHEDULING-UX-CR-LARGE-PREVIEW-ADDENDUM-20261102.md",
+      "bytes": 5499,
+      "sha256": "f627012e5094c2b6e60183f44674488e92a8c7a1a8fb637cd7b66628e7dc69b0",
+      "byte_equal": true,
+      "workspace": "APS-Design",
+      "publicRedistribution": false,
+      "method": "praetor workspaces download-file APS-Design --path CR-INPUT-SCHED-UX-20261102-large-preview/APS-INPUT-SCHEDULING-UX-CR-LARGE-PREVIEW-ADDENDUM-20261102.md --out LOCAL_FILE"
+    },
+    {
+      "path": "CR-INPUT-SCHED-UX-20261102-large-preview/CR-INPUT-SCHED-UX-20261102-LARGE-PREVIEW-设计补充合同.txt",
+      "bytes": 2235,
+      "sha256": "46c12965e8b8dd39cf5e381f6a17a223a9d2c433a4a298a8b4b6528ab54ee4fc",
+      "byte_equal": true,
+      "workspace": "APS-Design",
+      "publicRedistribution": false,
+      "method": "praetor workspaces download-file APS-Design --path CR-INPUT-SCHED-UX-20261102-large-preview/CR-INPUT-SCHED-UX-20261102-LARGE-PREVIEW-设计补充合同.txt --out LOCAL_FILE"
+    },
+    {
+      "path": "CR-INPUT-SCHED-UX-20261102-large-preview/large-preview-source.png",
+      "bytes": 339495,
+      "sha256": "3b83cc3b7bee87b3286c24fb07ad764ecefc9ce0cf7d3a58209d05732e13dc00",
+      "byte_equal": true,
+      "workspace": "APS-Design",
+      "publicRedistribution": false,
+      "method": "praetor workspaces download-file APS-Design --path CR-INPUT-SCHED-UX-20261102-large-preview/large-preview-source.png --out LOCAL_FILE"
+    }
+  ],
+  "scope_url": "https://github.com/huiliangtao666/APS/issues/45#issuecomment-6568078607",
+  "r2_design_sha": "3efbcce390b48104eaa2e6d46f984baa3ce08756",
+  "product_source_sha": "33fe82f4b52dac4c7f98490a5667605b9de6bab6",
+  "new_product_sha": null,
+  "effective": false,
+  "authority_reads": [
+    "issues/45",
+    "issues/comments/6568078607",
+    "docs/requirements/baselines/APS-BL-001-v0.3.json",
+    "docs/requirements/uat-register.json",
+    "docs/requirements/changes/change-register.json"
+  ],
+  "code_read": {
+    "path": "src/WorkbookImportCards.tsx",
+    "finding": "details内全量map changeSet及fields，issues也全量map；非唯一超时根因；changeSet.length被标字段变化"
+  },
+  "private_originals_in_design_package": false
+}

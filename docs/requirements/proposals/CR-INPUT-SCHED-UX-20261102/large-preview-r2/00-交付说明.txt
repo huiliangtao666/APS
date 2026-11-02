@@ -1,0 +1,23 @@
+CR-INPUT-SCHED-UX-20261102 / large-preview:r2 统一设计修订 / 2026-11-02
+DESIGN_REVIEW_PENDING；effective=false；未批准、未实现；新产品SHA=null。
+event_key=aps:user-cr:input-scheduling-unified-ux:large-preview:20261102:r2:design
+原设计dlv_2a099e86-819b-42c1-b5bc-ee0f8ef6d370；补充dlv_b6254a90-3869-401a-8c25-eaa76d4b4f6c。
+沿原#45 / Project2原item PVTI_lAHOFM9WU84BpE1czhE8v2M，同一CR/同一设计责任，不新建主账或第二个CR。
+设计前版SHA=41a0191a7814cec2cfbad1c15298c36ae8e345c4；其父整体r2=3efbcce390b48104eaa2e6d46f984baa3ce08756。
+本次只增加large-preview:r2内容，01–07保留r1有效契约及仿真；09-r1为原自检历史，不重复签产品通过。设计提交SHA见外部交付记录，不自引用。
+依据：https://github.com/huiliangtao666/APS/issues/45#issuecomment-6568122608
+静态参考产品SHA=33fe82f4b52dac4c7f98490a5667605b9de6bab6。
+
+本次处理：
+G01 1条所选产线；G02 20条SF001–SF020的工艺路线；G03 9条（总项+WP001–008）。10逐项定位30行，10b为339条关联来源锚点（317BOM/14工装/8WIP），不是新增339个问题。
+11给缺字段/已填事实/来源/页面/真实导入编辑复核采用路径和角色、接口字段与拒绝状态、保存增版及回A2同范围重查。真实生产映射入口缺失明确UNAVAILABLE，G02唯一目标为A1生产→工艺路线。
+12离线线框可按组、SF/WP搜索分页、逐项详情，所有生产维护按钮按缺能力禁用，无假产品链接。模拟增版只演示ready过期/返回，不清除真实报告。
+04追加LP-25..38共14行，整包共38行；13提供8组就绪UAT增量预期，全部NOT_EXECUTED。LP1–LP5仅细化R2-A/B/C，不派Dev/QA。
+原r1摘要、分页/导出/有界确认、G1/G2规模和工程性能提案保留，不以本次30项就绪替代7320规模。
+
+当前/来源区分：截图仅G01/G02；G03计数按Test2报告；Test2本地改动/build仅自报。本次只做原件XML坐标与固定main源码静态核对，没运行就绪检查。原件B行号不可冒签v2运行来源一致；需v2 fileHash/overlay/checkRef确认。私有原件/截图不入ZIP或公开Git。
+交叉设计bfa883857622a6ee4ed9970f4927872da9ecab0c明确P>B及CAL工厂日历事实；本包引用，避免旧指引冲突，不重做其18条DUAL验收。
+
+权限与边界：真实值、审批角色和实际入口仍待PM组织评审。此设计不自动批准新业务/现场默认/算法/多线/转换/审批权限。不修改产品、受控CR或Project状态，不启动应用/浏览器/Worker，不合并或发布，巡检保持paused。
+刷新恢复原FAIL及预算按#45最新6568340162/6568499687合同；不以r1旧2/2/browser1/1覆盖当前build2/2/start3/3/browser2/2耗尽。离线监测器原round1接续不增加运行许可。本次新增产品FAIL=0，修复轮次=0，运行预算=0。
+完整包SHA256清单、自检与ZIP见交付记录；接收人APS-PM按原event去重核收并组织设计评审，不把设计交付当UAT通过。

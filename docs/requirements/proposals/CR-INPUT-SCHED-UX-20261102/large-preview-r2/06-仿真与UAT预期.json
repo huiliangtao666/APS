@@ -1,0 +1,633 @@
+{
+  "status": "SIMULATION_ONLY_NOT_SITE_DEFAULTS",
+  "effective": false,
+  "original_screenshot_count_caveat": "旧UI 7320标签不证明字段口径；G1和G2分别覆盖字段/记录两种规模",
+  "generator": {
+    "records": [
+      1830,
+      7320
+    ],
+    "table": "T + twoDigit(1 + zeroBasedIndex % 29)",
+    "key": "R- + sixDigit(1 + zeroBasedIndex)",
+    "operation": [
+      "insert",
+      "update",
+      "delete"
+    ],
+    "operationIndex": "zeroBasedIndex % 3",
+    "fields": [
+      "f1",
+      "f2",
+      "f3",
+      "f4"
+    ],
+    "before": "insert: MISSING; otherwise f_j_before_i",
+    "after": "delete: MISSING; otherwise f_j_after_i",
+    "sheet": "仿真表_ + tableId",
+    "row": "2 + floor(zeroBasedIndex / 29)",
+    "cells": [
+      "B",
+      "C",
+      "D",
+      "E"
+    ],
+    "field_values": "全部仿真文本，无现场单位/默认/业务公式；真实产品验证须映射到已支持工作簿schema"
+  },
+  "G1": {
+    "tables": 29,
+    "records": 1830,
+    "changedFields": 7320,
+    "insert": 610,
+    "update": 610,
+    "delete": 610,
+    "tableOracle": [
+      {
+        "tableId": "T01",
+        "records": 64,
+        "changedFields": 256,
+        "insert": 22,
+        "delete": 21,
+        "update": 21
+      },
+      {
+        "tableId": "T02",
+        "records": 64,
+        "changedFields": 256,
+        "update": 22,
+        "insert": 21,
+        "delete": 21
+      },
+      {
+        "tableId": "T03",
+        "records": 64,
+        "changedFields": 256,
+        "delete": 22,
+        "update": 21,
+        "insert": 21
+      },
+      {
+        "tableId": "T04",
+        "records": 63,
+        "changedFields": 252,
+        "insert": 21,
+        "delete": 21,
+        "update": 21
+      },
+      {
+        "tableId": "T05",
+        "records": 63,
+        "changedFields": 252,
+        "update": 21,
+        "insert": 21,
+        "delete": 21
+      },
+      {
+        "tableId": "T06",
+        "records": 63,
+        "changedFields": 252,
+        "delete": 21,
+        "update": 21,
+        "insert": 21
+      },
+      {
+        "tableId": "T07",
+        "records": 63,
+        "changedFields": 252,
+        "insert": 21,
+        "delete": 21,
+        "update": 21
+      },
+      {
+        "tableId": "T08",
+        "records": 63,
+        "changedFields": 252,
+        "update": 21,
+        "insert": 21,
+        "delete": 21
+      },
+      {
+        "tableId": "T09",
+        "records": 63,
+        "changedFields": 252,
+        "delete": 21,
+        "update": 21,
+        "insert": 21
+      },
+      {
+        "tableId": "T10",
+        "records": 63,
+        "changedFields": 252,
+        "insert": 21,
+        "delete": 21,
+        "update": 21
+      },
+      {
+        "tableId": "T11",
+        "records": 63,
+        "changedFields": 252,
+        "update": 21,
+        "insert": 21,
+        "delete": 21
+      },
+      {
+        "tableId": "T12",
+        "records": 63,
+        "changedFields": 252,
+        "delete": 21,
+        "update": 21,
+        "insert": 21
+      },
+      {
+        "tableId": "T13",
+        "records": 63,
+        "changedFields": 252,
+        "insert": 21,
+        "delete": 21,
+        "update": 21
+      },
+      {
+        "tableId": "T14",
+        "records": 63,
+        "changedFields": 252,
+        "update": 21,
+        "insert": 21,
+        "delete": 21
+      },
+      {
+        "tableId": "T15",
+        "records": 63,
+        "changedFields": 252,
+        "delete": 21,
+        "update": 21,
+        "insert": 21
+      },
+      {
+        "tableId": "T16",
+        "records": 63,
+        "changedFields": 252,
+        "insert": 21,
+        "delete": 21,
+        "update": 21
+      },
+      {
+        "tableId": "T17",
+        "records": 63,
+        "changedFields": 252,
+        "update": 21,
+        "insert": 21,
+        "delete": 21
+      },
+      {
+        "tableId": "T18",
+        "records": 63,
+        "changedFields": 252,
+        "delete": 21,
+        "update": 21,
+        "insert": 21
+      },
+      {
+        "tableId": "T19",
+        "records": 63,
+        "changedFields": 252,
+        "insert": 21,
+        "delete": 21,
+        "update": 21
+      },
+      {
+        "tableId": "T20",
+        "records": 63,
+        "changedFields": 252,
+        "update": 21,
+        "insert": 21,
+        "delete": 21
+      },
+      {
+        "tableId": "T21",
+        "records": 63,
+        "changedFields": 252,
+        "delete": 21,
+        "update": 21,
+        "insert": 21
+      },
+      {
+        "tableId": "T22",
+        "records": 63,
+        "changedFields": 252,
+        "insert": 21,
+        "delete": 21,
+        "update": 21
+      },
+      {
+        "tableId": "T23",
+        "records": 63,
+        "changedFields": 252,
+        "update": 21,
+        "insert": 21,
+        "delete": 21
+      },
+      {
+        "tableId": "T24",
+        "records": 63,
+        "changedFields": 252,
+        "delete": 21,
+        "update": 21,
+        "insert": 21
+      },
+      {
+        "tableId": "T25",
+        "records": 63,
+        "changedFields": 252,
+        "insert": 21,
+        "delete": 21,
+        "update": 21
+      },
+      {
+        "tableId": "T26",
+        "records": 63,
+        "changedFields": 252,
+        "update": 21,
+        "insert": 21,
+        "delete": 21
+      },
+      {
+        "tableId": "T27",
+        "records": 63,
+        "changedFields": 252,
+        "delete": 21,
+        "update": 21,
+        "insert": 21
+      },
+      {
+        "tableId": "T28",
+        "records": 63,
+        "changedFields": 252,
+        "insert": 21,
+        "delete": 21,
+        "update": 21
+      },
+      {
+        "tableId": "T29",
+        "records": 63,
+        "changedFields": 252,
+        "update": 21,
+        "insert": 21,
+        "delete": 21
+      }
+    ]
+  },
+  "G2": {
+    "tables": 29,
+    "records": 7320,
+    "changedFields": 29280,
+    "insert": 2440,
+    "update": 2440,
+    "delete": 2440,
+    "tableOracle": [
+      {
+        "tableId": "T01",
+        "records": 253,
+        "changedFields": 1012,
+        "insert": 85,
+        "delete": 84,
+        "update": 84
+      },
+      {
+        "tableId": "T02",
+        "records": 253,
+        "changedFields": 1012,
+        "update": 85,
+        "insert": 84,
+        "delete": 84
+      },
+      {
+        "tableId": "T03",
+        "records": 253,
+        "changedFields": 1012,
+        "delete": 85,
+        "update": 84,
+        "insert": 84
+      },
+      {
+        "tableId": "T04",
+        "records": 253,
+        "changedFields": 1012,
+        "insert": 85,
+        "delete": 84,
+        "update": 84
+      },
+      {
+        "tableId": "T05",
+        "records": 253,
+        "changedFields": 1012,
+        "update": 85,
+        "insert": 84,
+        "delete": 84
+      },
+      {
+        "tableId": "T06",
+        "records": 253,
+        "changedFields": 1012,
+        "delete": 85,
+        "update": 84,
+        "insert": 84
+      },
+      {
+        "tableId": "T07",
+        "records": 253,
+        "changedFields": 1012,
+        "insert": 85,
+        "delete": 84,
+        "update": 84
+      },
+      {
+        "tableId": "T08",
+        "records": 253,
+        "changedFields": 1012,
+        "update": 85,
+        "insert": 84,
+        "delete": 84
+      },
+      {
+        "tableId": "T09",
+        "records": 253,
+        "changedFields": 1012,
+        "delete": 85,
+        "update": 84,
+        "insert": 84
+      },
+      {
+        "tableId": "T10",
+        "records": 253,
+        "changedFields": 1012,
+        "insert": 85,
+        "delete": 84,
+        "update": 84
+      },
+      {
+        "tableId": "T11",
+        "records": 253,
+        "changedFields": 1012,
+        "update": 85,
+        "insert": 84,
+        "delete": 84
+      },
+      {
+        "tableId": "T12",
+        "records": 253,
+        "changedFields": 1012,
+        "delete": 85,
+        "update": 84,
+        "insert": 84
+      },
+      {
+        "tableId": "T13",
+        "records": 252,
+        "changedFields": 1008,
+        "insert": 84,
+        "delete": 84,
+        "update": 84
+      },
+      {
+        "tableId": "T14",
+        "records": 252,
+        "changedFields": 1008,
+        "update": 84,
+        "insert": 84,
+        "delete": 84
+      },
+      {
+        "tableId": "T15",
+        "records": 252,
+        "changedFields": 1008,
+        "delete": 84,
+        "update": 84,
+        "insert": 84
+      },
+      {
+        "tableId": "T16",
+        "records": 252,
+        "changedFields": 1008,
+        "insert": 84,
+        "delete": 84,
+        "update": 84
+      },
+      {
+        "tableId": "T17",
+        "records": 252,
+        "changedFields": 1008,
+        "update": 84,
+        "insert": 84,
+        "delete": 84
+      },
+      {
+        "tableId": "T18",
+        "records": 252,
+        "changedFields": 1008,
+        "delete": 84,
+        "update": 84,
+        "insert": 84
+      },
+      {
+        "tableId": "T19",
+        "records": 252,
+        "changedFields": 1008,
+        "insert": 84,
+        "delete": 84,
+        "update": 84
+      },
+      {
+        "tableId": "T20",
+        "records": 252,
+        "changedFields": 1008,
+        "update": 84,
+        "insert": 84,
+        "delete": 84
+      },
+      {
+        "tableId": "T21",
+        "records": 252,
+        "changedFields": 1008,
+        "delete": 84,
+        "update": 84,
+        "insert": 84
+      },
+      {
+        "tableId": "T22",
+        "records": 252,
+        "changedFields": 1008,
+        "insert": 84,
+        "delete": 84,
+        "update": 84
+      },
+      {
+        "tableId": "T23",
+        "records": 252,
+        "changedFields": 1008,
+        "update": 84,
+        "insert": 84,
+        "delete": 84
+      },
+      {
+        "tableId": "T24",
+        "records": 252,
+        "changedFields": 1008,
+        "delete": 84,
+        "update": 84,
+        "insert": 84
+      },
+      {
+        "tableId": "T25",
+        "records": 252,
+        "changedFields": 1008,
+        "insert": 84,
+        "delete": 84,
+        "update": 84
+      },
+      {
+        "tableId": "T26",
+        "records": 252,
+        "changedFields": 1008,
+        "update": 84,
+        "insert": 84,
+        "delete": 84
+      },
+      {
+        "tableId": "T27",
+        "records": 252,
+        "changedFields": 1008,
+        "delete": 84,
+        "update": 84,
+        "insert": 84
+      },
+      {
+        "tableId": "T28",
+        "records": 252,
+        "changedFields": 1008,
+        "insert": 84,
+        "delete": 84,
+        "update": 84
+      },
+      {
+        "tableId": "T29",
+        "records": 252,
+        "changedFields": 1008,
+        "update": 84,
+        "insert": 84,
+        "delete": 84
+      }
+    ]
+  },
+  "parameterErrorPreview": {
+    "tables": 29,
+    "records": 0,
+    "changedFields": 0,
+    "mode": "candidate",
+    "rawReports": 4,
+    "uniqueLocations": 2,
+    "groups": 1,
+    "reports": [
+      {
+        "reportId": "CAL-1",
+        "groupId": "CAL-UNMAPPED-D-v1",
+        "locationId": "loc-3429",
+        "sheet": "配置参数",
+        "row": 3429,
+        "cell": "E3429",
+        "value": "CAL",
+        "validator": "simulated-1",
+        "severity": "blocking",
+        "sourceRowRef": "row-3429"
+      },
+      {
+        "reportId": "CAL-2",
+        "groupId": "CAL-UNMAPPED-D-v1",
+        "locationId": "loc-3430",
+        "sheet": "配置参数",
+        "row": 3430,
+        "cell": "E3430",
+        "value": "CAL",
+        "validator": "simulated-1",
+        "severity": "blocking",
+        "sourceRowRef": "row-3430"
+      },
+      {
+        "reportId": "CAL-3",
+        "groupId": "CAL-UNMAPPED-D-v1",
+        "locationId": "loc-3429",
+        "sheet": "配置参数",
+        "row": 3429,
+        "cell": "E3429",
+        "value": "CAL",
+        "validator": "simulated-2",
+        "severity": "blocking",
+        "sourceRowRef": "row-3429"
+      },
+      {
+        "reportId": "CAL-4",
+        "groupId": "CAL-UNMAPPED-D-v1",
+        "locationId": "loc-3430",
+        "sheet": "配置参数",
+        "row": 3430,
+        "cell": "E3430",
+        "value": "CAL",
+        "validator": "simulated-2",
+        "severity": "blocking",
+        "sourceRowRef": "row-3430"
+      }
+    ],
+    "note": "位置来自截图，reportId/validator为设计仿真，截图未提供真实报告ID/类型"
+  },
+  "uat": [
+    {
+      "id": "LP-UAT-01",
+      "maps": "UX-NEW-01；UX-UAT-01增量",
+      "goal": "大批量可理解且可响应",
+      "pre": "合法G1/G2仿真工作簿及独立oracle，固定授权产品版本",
+      "steps": "分别预览两卡→表摘要→搜索→遍历记录/字段→清筛",
+      "expect": "计数一致、有界首屏、无漏重、29表可达；按03真实测量",
+      "boundary": "不是原18场景整体通过"
+    },
+    {
+      "id": "LP-UAT-02",
+      "maps": "UX-NEW-01/03/07；UX-UAT-04增量",
+      "goal": "CAL可修且不可绕过",
+      "pre": "0变化/4报告/2位置参数候选、合法映射事实",
+      "steps": "摘要→分组→E3429/3430→原文件修正或现维护→新预览；直接API尝试绕过",
+      "expect": "旧批422且无写；全部位置可查，新批校验结果真实；不猜CAL类型"
+    },
+    {
+      "id": "LP-UAT-03",
+      "maps": "UX-NEW-01/03；UX-UAT-01增量",
+      "goal": "有限阅读下整批确认",
+      "pre": "G1包含覆盖/删除，仅查看1条",
+      "steps": "筛单条→ALL与FILTERED导出→看确认面板→显式确认；再试导出失败",
+      "expect": "ALL完整计数及hash；确认仍整批；失败无假成功/无部分写"
+    },
+    {
+      "id": "LP-UAT-04",
+      "maps": "UX-NEW-03/05/07；UX-UAT-07增量",
+      "goal": "竞争恢复一致",
+      "pre": "同D v1两个预览、过期副本、只读权限",
+      "steps": "竞争确认→旧页晚到→过期→响应丢失查询→同键重试→权限直调",
+      "expect": "仅一次原子提交；409/410/403有恢复；同键返回同commit；不重复数据"
+    },
+    {
+      "id": "LP-UAT-05",
+      "maps": "UX-NEW-03/05/07；UX-UAT-07增量",
+      "goal": "业务候选采用冻结可辨",
+      "pre": "业务B v1/参数候选P0/已采用P1/旧run R1",
+      "steps": "候选保存→显式采用支持参数→重新就绪→授权后新run→重开R1及导出",
+      "expect": "候选不参与；新输入影响新冻结；旧R1不变；真实Worker/甘特断点仍按r2",
+      "boundary": "本设计没有启动或计算许可"
+    },
+    {
+      "id": "LP-UAT-06",
+      "maps": "UX-NEW-01/07；UX-UAT-04及UAT-02/03体验部分",
+      "goal": "维护返回和可访问",
+      "pre": "A2选择与草稿；375/1280px；既有UAT-02/03固定数据",
+      "steps": "键盘定位问题→同D维护取消/保存→返回→抽屉完整文本",
+      "expect": "保存新版本/取消不写，保留上下文；原停机08:15合法/08:14非法、共享工装归还边界不变",
+      "boundary": "原18场景仅相关体验防回归，不重跑无变化范围"
+    }
+  ]
+}

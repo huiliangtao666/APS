@@ -1,0 +1,66 @@
+CR-INPUT-SCHED-UX-20261102 / large-preview:r2 统一修订
+DESIGN_REVIEW_PENDING；effective=false；仅设计评审，非已批准真实生产维护能力。
+event_key=aps:user-cr:input-scheduling-unified-ux:large-preview:20261102:r2:design
+原设计delivery=dlv_2a099e86-819b-42c1-b5bc-ee0f8ef6d370；本补充delivery=dlv_b6254a90-3869-401a-8c25-eaa76d4b4f6c。
+依据：https://github.com/huiliangtao666/APS/issues/45#issuecomment-6568122608
+
+1. 证据与适用边界
+本修订接续large-preview:r1设计SHA 41a0191a7814cec2cfbad1c15298c36ae8e345c4，整包保留摘要、分页、全快照搜索、字段差异、ALL/FILTERED导出、有界确认和性能提案。10/10b/11/12/13及LP-25以后的断言为本次新增；r1成果不重新宣称完成。
+当前静态参考产品main=33fe82f4b52dac4c7f98490a5667605b9de6bab6，新产品SHA=null。Test2本地说明、G02定位及build仅来源自报；未独立取得其产品SHA/构建/运行证据，不当已实现。
+截图直接可见G01和G02 SF001–SF020；G03的9条为Test2报告经PM转交，截图未覆盖。30条是此报告范围，不表示三种原因只允许30条，也不等于9条G03分别等于9个单元格。初始G03总项1条含三类映射，另有8条WIP；展开子来源不增加原始问题总数。
+本地原业务Excel hash=c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0，1672626bytes。XML物理坐标独立读取；SF物料13–32行、WIP3–10行，SF在原工艺路线中均无匹配。仅在v2来源fileHash核对一致后才能把这些坐标认领到v2；未取得v2原件身份/overlay/readiness快照，实际当前值仍以v2权威详情为准。10表逐行保留这个限制。
+缺行、数据集选择及独立映射没有原Excel单元格：sourceKind=missing-record/dataset-selection/mapping-record，row/cell=null并解释；不编造工艺路线第0行，不把应用新增行号当Excel物理行。
+同CR后续两文件纠偏设计bfa883857622a6ee4ed9970f4927872da9ecab0c及#45 comment-6568540855为交叉依赖：B业务/基础参数与P独立参数分别导入，P在同语义适用范围优先；CAL工厂日历已有原件确证，不要求改假TM/删行。原r1未知CAL仿真只保留为错误定位夹具，不能覆盖这项新事实。本补充不另创参数优先规则。
+
+2. A2分组和逐条位置
+A2顶部固定D、业务version/fileHash、mappingRef/hash、参数有效源/hash、profile、当前选定需求/规则scope与checkRef/checkFingerprint、检查时间及模拟/真实标识。
+首屏三张文字卡：“G01 产线未显式选择 1”“G02 制造物料缺路线 20”“G03 投料/物理池/WIP映射 9”，每类显示影响与入口可用性。展开走r1分页，默认25/最大100，不把20条全部错误文本当首屏；提供按SF/WP精确搜索及完整问题导出。筛选不改变检查范围，也不改变整批确认范围。对同代码按对象/字段/原因分组，保留原issueId与sourceRefs，不按代码直接吞并全部G03。
+问题抽屉固定四块：①要补的业务字段及当前值/未知原因；②期望条件与影响；③原文件/表/业务键/物理行/单元格及当前有效overlay来源；④唯一主维护入口、能否在线修改、提供/维护/复核人、保存增版和返回重查。
+主动作仅由权威entryCapability决定：SUPPORTED且有真实已注册位置才显示“前往维护”；READ_ONLY显示“查看来源”；UNAVAILABLE显示禁用“真实维护待实现”及缺口说明。原型页面位置是设计规格，不作为现网URL。允许从缺口卡导出待补清单；绝不出现点击后落到无关页或返回假成功的链接。
+
+3. G01：显式单线与资源归属
+缺的是所选数据集mapping.line.id及资源归属，不是P参数表的某个空值。期望仍为既有单条产线范围；禁止默认替用户选线或扩展多线调度。
+拟建唯一入口：A1→生产→产线与资源映射→所选产线。字段含产线标识/名称、资源ID→产线/工位归属、来源证明、适用范围/profile、有效区间、修改理由。标识用明确业务键；资源数量沿既有类型/单位/有限正值约束，不生成默认容量。
+真实值由生产负责人提供，资源归属由设备负责人核对，授权主数据维护员录入。复核采用现有有权业务负责人；人/角色映射和权限开通待确认，不由Design设账号。真实值及审批权限未确认前不能标APPROVED或READY_REAL。
+现状：workbook-router.mjs:81映射保存强制mock=true；没有完整真实导入/编辑/审批能力。演示“采用可替换仿真单线与补充路线”必须标SIMULATION，不可改标签为真实完成。真实模板导入/在线编辑/复核均列待实现，当前不给生产操作链接。
+
+4. G02：SF制造路线
+来源诊断锚点是B/物料主数据每个SF的制造属性；真正补值位置是A1→生产→工艺路线→成品编号=该SF。来源页可查看，不作为唯一修正入口；不能将SF改采购、删除SF或只补物料名称规避。
+逐SF输入至少复用既有工艺路线字段：路线工序编号、路线编号、成品编号、工序顺序/工序编号/前序、设备组、跨日历时天数/最大等待、允许中断、班组/需求人数、工装类型/套数、日粒度说明。完整条件沿既有profile和批准校验，不因存在一条记录就承诺路线完整；工序/引用/前序/设备人员工装等适用检查均可判定。真实路线由工艺负责人提供与复核，授权业务维护员维护，Design不从成品套造SF路线。
+当前可用基础：业务Excel工艺路线修正后，走A1业务卡→预览差异→整批确认，生成新版本；通用/datasets/:id/edit已具create/edit源码基础。正确A1工艺路线深链与本次界面未独立验证，产品能力标签必须写SOURCE_PRESENT_RUNTIME_UNVERIFIED。尚未注册入口时禁用跳转；明确提供“修正业务原Excel并重新预览”的路径，不给伪链接。新增在线记录标origin=online，Excel物理坐标=null，另保留关联SF来源锚点。
+G02的在线编辑沿原授权；新增真实审批工作流属于本次拟议能力，未实现不能声称线上已审批。补路线后要复核BOM投料点/WIP关联，不能只将G02数量减到0即断言就绪。
+
+5. G03：一个总项与八个WIP
+总项拆为三个维护子区，仍保留原总issueId。10b列339个原件来源锚点：317个BOM/14个物理工装/8个WIP，仅是逐键来源索引，不表示339条报告，也不泄露原工作簿内容。
+投料点：逐用量关系编号bom_id关联路线工序route_step_id；显示B/物料清单对应父项、子项、投料位置原文及行/格。投料位置文本不是唯一工序ID。必须核同父项/适用路线、唯一映射、有效区间；工艺负责人提供与复核。一个BOM在适用范围内无映射或多映射均不得自动挑第一个。
+物理池：以工装类型→实际资源ID清单及资源产线归属维护；来源B/设备与工装，另关联路线所需工装类型和套数。设备/工装管理员提供，生产负责人复核。ID必须存在且为工装，数量有限，不同池不得把同一实物复制出额外容量；修改遵循既有共享池语义，未知不补无限。新跨池重叠业务规则仍需另裁决。
+WIP：每个WP独立抽屉，原表已有产品/当前工序/占用设备/预计产出/日序/历史投料净账文字，但未据此自动知道剩余工序与待投料。逐WP维护id/product/resource、remaining_route_steps、remaining_material_bom_ids、current_occupancy_day_interval、remaining_labor_pool/count、remaining_tool_type/count。10表保留WP001–008各自来源行和原值，不将这些已填事实误报为空。
+期望：唯一匹配WIP/产品/当前工序/资源；余工序属于该产品路线；待投BOM属于该产品且落在余工序；[]必须由有权人明确声明“无后续投料”，缺失仍未知；占用日区间[a,b)采用现有日profile，不换成分钟；人员和工装有限且可追源；历史已投不重复扣、未放行预计产出仍条件供给，不充实物库存。无新增余量公式、收率、开始日默认或多线转换。
+拟建统一入口A1→生产→产线与资源映射，下有投料点/物理池/WIP剩余。WIP基础事实仍可在A1生产→期初在制既有编辑器维护；该位置不是剩余映射已完成。真实三子区的映射模板、在线编辑和审批入口当前待实现，全部显示UNAVAILABLE。
+
+6. 拟议真实值导入/编辑/复核生命周期
+同一入口二种取值方式：下载真实映射待补模板/导入已填模板，或新建在线草稿；二者都生成候选mappingRevision，不能覆盖原Excel或有效指针。模板为新设计附件语义，不宣称现有业务/参数Excel能解析。最少分产线归属、投料点、物理池成员、WIP余工序/余料/占用/人员工装子表，分别列主键、字段、类型单位、scope/profile/有效区间、来源；多值按明细行，不以逗号字符串模糊身份。
+DRAFT→VALIDATING→INVALID/VALIDATED→PENDING_REVIEW→REJECTED/APPROVED_CANDIDATE→EFFECTIVE。草稿/校验通过/审核通过均不自动采用；有权采用人明确确认目标/版本/hash/真实或模拟标签及覆盖影响后生成有效新版本。审批意见拒绝退回草稿，修改后新revision使旧批准失效。已有业务编辑路径不新增普遍审批门禁；这里是新增真实映射能力的评审提案。
+权限语义：只读者看问题/来源/获准导出；维护者可导入和编辑草稿；业务复核者核对来源并作决定；有权采用者确认有效版本。现角色无对应权限时动作disabled+role_binding_missing。是否允许同人复核/采用和具体账号授权由业务负责人决定，不能凭共享登录伪造实名审批。本设计不实现新身份系统。
+每次写入校验expectedDatasetVersion/expectedMappingRevision、scope、fileHash/sourceRefs及输入内容fingerprint，冲突无写入并保留草稿；模拟与真实不得跨标签复制批准。导出当前映射包括缺项/待批/真实或模拟状态；导入导出及在线编辑同一来源，不建第三套参数真源。
+采用结果未知先按操作ID查询；失败/取消无有效变化；重复同键同内容返回同结果，异内容拒绝。无可用真实入口时停在UNAVAILABLE而非自动退回模拟。
+
+7. 字段/API业务增量（语义契约，非现有端点承诺）
+readinessEnvelope={checkId,checkRevision,checkedAt,datasetId,businessVersion,businessFileHash,sourceFiles,profile,mappingRef,mappingHash,mappingOrigin,approvalRef,effectiveParameterHash,selectedScope,scopeHash,rulesVersion,checkFingerprint,status,countsComplete,groupCounts}。
+issue={issueId,code,objectType,objectId,field,currentValue,presence,evidenceLevel,reason,expectedCondition,affectedScope,sourceRefs,maintenanceTarget,remedyState}。presence取missing/null/empty/present/unknown，evidenceLevel区分SCREENSHOT/REPORTED/SOURCE_STATIC/RUNTIME_VERIFIED。仅有错误文字不可反推精确值。
+sourceRef={sourceKind,fileHash,fileName,sheet,physicalRow,cell,businessKey,overlayRef,mappingRef,relatedSourceRefs,absenceReason}。missing-record只有主键和相关锚点，无虚构cell。零变化来源行也可打开。
+maintenanceTarget={businessLocation,table,exactKeyFilter,focusField,entryId,capability(SUPPORTED/READ_ONLY/UNAVAILABLE),verificationLevel,requiresRole,unavailableReason,returnContext}。entryId由实际注册能力返回，无能力则null；客户端不得拼伪URL。G02table必须工艺路线、filter必须成品编号精确匹配，物料主数据仅relatedSource。
+映射草稿/导入预览/字段详情/复核/采用/操作结果查询最小输出均带datasetId/profile、mappingRevision/hash、sourceRefs、origin、approvalState和effective=false或确实生效状态；“字段已保存”不等于“真实已批准”。按r1分页/单记录加载/完整导出规则查询，G03来源多不能在首包塞全部339行。
+拒绝语义：FORBIDDEN、ENTRY_UNAVAILABLE、ROLE_BINDING_MISSING、VERSION_CONFLICT、SOURCE_MISMATCH、VALIDATION_BLOCKED、APPROVAL_REQUIRED、ORIGIN_MISMATCH、NOT_SUPPORTED。读写/导出/直调都核原权限。Dev决定实际接口和存储，不能把这些行为名当已上线API。
+
+8. 保存返回与版本一致
+问题→维护携returnContext={A2,checkRef,datasetRef,selectedDemandIds,scopeHash,ruleSelection,filter,cursorAnchor,focus,unsavedDraftRef}。取消原样返回；保存有效业务/映射新版本后保留选择和筛选，A2显示“输入已变，本结果过期，需重查”，旧check仅只读。保存候选/待审映射仍显示未采用，不能清除真实问题。
+点击重查时以当前有效业务/参数/映射版本与原选定范围产生新checkRef；响应元组或scope不符丢弃，禁止拿旧ready配新输入；范围已失效提示重选，不默认全选。只重跑本次受影响范围，沿同CR渐进完善设计包含BOM/资源/共享池/既有执行依赖闭包；范围外真正无关资料可保留待补，但不能藏共享资源冲突。
+每个问题标解决/仍缺/未检查/范围不适用；后两者不计为已解决。独立映射维护不能通过前端删问题绕过服务端运行门。旧run固定businessVersion/mappingHash/参数hash/scope与模拟标识，当前真实映射补齐不改旧run、旧来源和通过证据。
+
+9. 评审待决与切片
+LP2/LP5扩展R2-A：A2分组、30项定位和339来源索引；G02正确入口/只读预览、错误支持状态。完成只签定位断言，不称真实映射已实现。
+LP5扩展R2-B：真实映射导入/编辑草稿与来源/业务复核/采用能力。依赖真实线、工艺、物理池/WIP事实及有权角色绑定；未批准不派实施。真实资料缺失只阻相应业务范围，不用mock替代。
+LP4扩展R2-C：保存返回、版本重查、模拟/真实/冻结一致性；与LP1–LP5原范围合一。PM决定实施次序和写冲突，不由Design派工。
+待决项：真实值提供人及角色绑定、已有审批制度对应关系、实际生产入口是否纳入本CR批准范围、当前v2原文件/overlay/映射/check指纹、Test2本地产品SHA及可访问独立证据。PM组织业务/工程确认；缺入口时先如实展示，不阻本设计可评审交付。未决项不转写为默认值。
+保持原刷新恢复产品FAIL及当前预算耗尽。最新相关合同以#45 comment-6568340162、6568499687为准；后者只允许原round1的离线监测器修正，不增加运行额度。本补充不沿r1旧预算数字覆盖新合同，不新增FAIL/修复轮次/运行预算；不改main、不派Dev/Test/QA、不发布、不恢复巡检。

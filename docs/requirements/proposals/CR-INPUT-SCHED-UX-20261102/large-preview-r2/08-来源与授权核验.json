@@ -1,0 +1,107 @@
+{
+  "event_key": "aps:user-cr:input-scheduling-unified-ux:large-preview:20261102:r2:design",
+  "sources": [
+    {
+      "path": "CR-INPUT-SCHED-UX-20261102-large-preview/APS-INPUT-SCHEDULING-UX-CR-LARGE-PREVIEW-ADDENDUM-20261102.md",
+      "bytes": 5499,
+      "sha256": "f627012e5094c2b6e60183f44674488e92a8c7a1a8fb637cd7b66628e7dc69b0",
+      "byte_equal": true,
+      "workspace": "APS-Design",
+      "publicRedistribution": false,
+      "method": "praetor workspaces download-file APS-Design --path CR-INPUT-SCHED-UX-20261102-large-preview/APS-INPUT-SCHEDULING-UX-CR-LARGE-PREVIEW-ADDENDUM-20261102.md --out LOCAL_FILE"
+    },
+    {
+      "path": "CR-INPUT-SCHED-UX-20261102-large-preview/CR-INPUT-SCHED-UX-20261102-LARGE-PREVIEW-设计补充合同.txt",
+      "bytes": 2235,
+      "sha256": "46c12965e8b8dd39cf5e381f6a17a223a9d2c433a4a298a8b4b6528ab54ee4fc",
+      "byte_equal": true,
+      "workspace": "APS-Design",
+      "publicRedistribution": false,
+      "method": "praetor workspaces download-file APS-Design --path CR-INPUT-SCHED-UX-20261102-large-preview/CR-INPUT-SCHED-UX-20261102-LARGE-PREVIEW-设计补充合同.txt --out LOCAL_FILE"
+    },
+    {
+      "path": "CR-INPUT-SCHED-UX-20261102-large-preview/large-preview-source.png",
+      "bytes": 339495,
+      "sha256": "3b83cc3b7bee87b3286c24fb07ad764ecefc9ce0cf7d3a58209d05732e13dc00",
+      "byte_equal": true,
+      "workspace": "APS-Design",
+      "publicRedistribution": false,
+      "method": "praetor workspaces download-file APS-Design --path CR-INPUT-SCHED-UX-20261102-large-preview/large-preview-source.png --out LOCAL_FILE"
+    }
+  ],
+  "scope_url": "https://github.com/huiliangtao666/APS/issues/45#issuecomment-6568122608",
+  "r2_design_sha": "3efbcce390b48104eaa2e6d46f984baa3ce08756",
+  "product_source_sha": "33fe82f4b52dac4c7f98490a5667605b9de6bab6",
+  "new_product_sha": null,
+  "effective": false,
+  "authority_reads": [
+    "issues/45",
+    "issues/comments/6568078607",
+    "docs/requirements/baselines/APS-BL-001-v0.3.json",
+    "docs/requirements/uat-register.json",
+    "docs/requirements/changes/change-register.json"
+  ],
+  "code_read": {
+    "path": "src/WorkbookImportCards.tsx",
+    "finding": "details内全量map changeSet及fields，issues也全量map；非唯一超时根因；changeSet.length被标字段变化"
+  },
+  "private_originals_in_design_package": false,
+  "revision": "large-preview:r2",
+  "r2_private_inputs": [
+    {
+      "path": "CR-INPUT-SCHED-UX-20261102-large-preview-r2/APS-INPUT-SCHEDULING-UX-CR-LARGE-PREVIEW-ADDENDUM-20261102.md",
+      "bytes": 6953,
+      "sha256": "25a13f5837c48ba141f2d2a9643bae304eef28e06c70d58833a216e94baea418",
+      "publicOriginal": false
+    },
+    {
+      "path": "CR-INPUT-SCHED-UX-20261102-large-preview-r2/CR-INPUT-SCHED-UX-20261102-LARGE-PREVIEW-r2-设计补充合同.txt",
+      "bytes": 2406,
+      "sha256": "a021ac8d94c403dbeaa1484f27b83fefa0c912f0c50a04b59ca0fc4ad3144c8e",
+      "publicOriginal": false
+    },
+    {
+      "path": "CR-INPUT-SCHED-UX-20261102-large-preview-r2/readiness-source.png",
+      "bytes": 184883,
+      "sha256": "e0bdc4c5e7c9b0ad7be2c45537d7c3411d10b367bd92a3db951389a9be38cb23",
+      "publicOriginal": false
+    }
+  ],
+  "parent_design_sha": "41a0191a7814cec2cfbad1c15298c36ae8e345c4",
+  "two_file_correction_sha": "bfa883857622a6ee4ed9970f4927872da9ecab0c",
+  "static_sources": [
+    {
+      "path": "server/workbook-model.mjs",
+      "sha256": "e6646d38b6a50065a519dc6201b58aa66d1d08ce79afa2c5c7458b61defca98b",
+      "bytes": 14350,
+      "gitBlob": "e61ed8204c8c41ed46d0a489448ab8403c55174c"
+    },
+    {
+      "path": "server/workbook-supply.mjs",
+      "sha256": "91783d17c1de37e333be69ff971e7f040d18f1090b7419447338076f669ff81e",
+      "bytes": 7547,
+      "gitBlob": "f10fa6c5c6c98944aba323f75a1c064e9a948335"
+    },
+    {
+      "path": "server/workbook-router.mjs",
+      "sha256": "12113239971be3935d1f152427a9b31be90364cf86e49f2f50f3710b27ac4665",
+      "bytes": 18200,
+      "gitBlob": "876e24ff318954318d0a8881ec76bc39b2d20d87"
+    },
+    {
+      "path": "server/workbook-schema.json",
+      "sha256": "f8006d88d6b074d388226372f20b161735295961e0024b9345d5dd9520be2eb6",
+      "bytes": 69597,
+      "gitBlob": "b6f9aaeaaca17f368d0e6b600ef0c7ae4fc09011"
+    },
+    {
+      "path": "docs/requirements/baselines/APS-BL-001-v0.3.json",
+      "sha256": "e30733655359e71b0c98220910303aefbc922ac123b96fb3025c4976a4067e36",
+      "bytes": 117997,
+      "gitBlob": "bb9692f7a27a40fdc0f829915666687bef9cd59b"
+    }
+  ],
+  "runtime_dataset_v2": "NOT_INDEPENDENTLY_OBTAINED",
+  "Test2_local_build": "SOURCE_REPORTED_ONLY",
+  "source_row_method": "stdlib zipfile+XML物理坐标；未执行应用parser/公式/就绪/算法"
+}

@@ -1,0 +1,76 @@
+{
+  "kind": "DESIGN_ASSET_FINGERPRINTS",
+  "event_key": "dlv_0a7ce1ee-0df6-49fc-9517-75af1c2033d4:r2",
+  "files": [
+    {
+      "path": "00-交付说明.txt",
+      "bytes": 2479,
+      "sha256": "b02eb1f9c2815e30cfc4c9d0d3be6bf37be9d086682f8c9b6a8c59f644ab96e2"
+    },
+    {
+      "path": "01-业务契约.txt",
+      "bytes": 5426,
+      "sha256": "7a36d9c89bd1b3ee0bae6a011e06d4745544239d9c01d5579ed9ae3ec043fa95"
+    },
+    {
+      "path": "02-流程与状态.txt",
+      "bytes": 6168,
+      "sha256": "a0b6155c77298e5669ce2e1940ce87b5ed9730fb13a556bb7e9cbbb2080de3e2"
+    },
+    {
+      "path": "03-数据流与转换契约.txt",
+      "bytes": 9444,
+      "sha256": "6e1bdfd6d0a7d63f61ea4fcbac30442f64e48090dabf6b0cd12a501fd07c364c"
+    },
+    {
+      "path": "04-实施切片与待决.txt",
+      "bytes": 5588,
+      "sha256": "94450184f4811082a249e82ba92cf34290ed4d89b8492a668d34bc1c57ddfa17"
+    },
+    {
+      "path": "05-新增验收矩阵.csv",
+      "bytes": 23238,
+      "sha256": "e34daac78723e426107cc6ac58f12719b3d6198ff455022858c590ed29879370"
+    },
+    {
+      "path": "06-字段级就绪.csv",
+      "bytes": 169770,
+      "sha256": "e63ec18a97b7f7c07f59d4e0ee678425abc529bc1619073557d4f999e4d5681a"
+    },
+    {
+      "path": "07-参数字段索引.csv",
+      "bytes": 125494,
+      "sha256": "4c3249d7f87c10711f74ed214579e6e035d02ff980bc6a9c4965ed318e5794cc"
+    },
+    {
+      "path": "08-影响映射.csv",
+      "bytes": 9429,
+      "sha256": "09212924536f11e4df05fb28b7994feea08bd8234e8a92903482d2315b4fb260"
+    },
+    {
+      "path": "09-场景与预期.json",
+      "bytes": 39229,
+      "sha256": "00a05c29a01eab584c94e15408a87d8de3bf30d978c1a52a7f265b7407cae554"
+    },
+    {
+      "path": "10-交互原型.html",
+      "bytes": 35490,
+      "sha256": "75d5326f27002ba9852844479dd4d9840a3dae665d2d725dd7ea07cb522dcd37"
+    },
+    {
+      "path": "11-来源核验.json",
+      "bytes": 9220,
+      "sha256": "71cb36b7df7a8edb40549c888daaebb272b7dfc5847ae8528b6a121328417fc2"
+    },
+    {
+      "path": "12-设计自检.json",
+      "bytes": 5425,
+      "sha256": "1cf2c73f28513a7c0de9747da230cd1fc7f1cacb638d06ec05e7ac9e85bfcf86"
+    },
+    {
+      "path": "13-r2替代说明.txt",
+      "bytes": 1523,
+      "sha256": "27be4181dbc88a0e815dee0e9d843abdc49ac02ebb385bdf58f96ab135e30881"
+    }
+  ]
+}
