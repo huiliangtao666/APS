@@ -7,12 +7,12 @@
   "registration_owner": "APS-PM",
   "implementation_project": "Project2 PVT_kwHOFM9WU84BpE1c",
   "new_product_sha": null,
-  "reviewed_main_sha": "33fe82f4b52dac4c7f98490a5667605b9de6bab6",
+  "reviewed_main_sha": "677029d2473b030bec5150b23eeae9488a0c4e84",
   "reviewed_candidate_sha": "38375ed8f93fe4431305bc9b7fd9674d10f8dc48",
   "prototype": {
     "artifact": "APS五类业务查询_设计原型_R2_20261102.html",
     "bytes": 3920548,
-    "sha256": "6b7c632834c35b6e15ff95e953fcee8f08f58c2e51caf6ca3ef052ad7ceba5d6",
+    "sha256": "3bbd8d510125e2f67da3e80b8887f63deeb5354fe451a1851b6f32677f132ffb",
     "status": "CR_DESIGN_PROPOSAL",
     "cr_id": "CR-QUERY-REPORTS-20261102",
     "new_product_sha": null,
@@ -27,7 +27,7 @@
         "sha256": "e8b73e882e66b2e19ab7cb639c7a17e8830d08c0f485667484141837794f4d24",
         "bytes": 247518
       },
-      "referenceProductSha": "33fe82f4b52dac4c7f98490a5667605b9de6bab6",
+      "referenceProductSha": "677029d2473b030bec5150b23eeae9488a0c4e84",
       "prototypeVersion": "QUERY-REPORTS-20261102-r2",
       "status": "CR设计提案；待PM登记实施；未接入系统"
     }

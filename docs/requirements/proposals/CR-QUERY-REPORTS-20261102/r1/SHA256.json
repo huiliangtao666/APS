@@ -1,8 +1,8 @@
 [
   {
     "path": "01-需求变更与页面设计.txt",
-    "bytes": 10369,
-    "sha256": "c5de4a5f9a0e94441f67582d879596fd3b889d678ed22e5804ababd2d1fb2494"
+    "bytes": 10923,
+    "sha256": "b2df73e3b1f2a80eb11c8a39361ce2681f7d08bc6d32a237e22f917c82583807"
   },
   {
     "path": "02-字段与取数映射.csv",
@@ -11,8 +11,8 @@
   },
   {
     "path": "03-数据配置后端符合性核对.csv",
-    "bytes": 2682,
-    "sha256": "7c465e12f416bcdffcb81d70de8ab3f813f1702ded0124e5b4d55144608f73fc"
+    "bytes": 3048,
+    "sha256": "2db54f46d7797b07a91b840791470df1141479828f31d96584d50a19d03731e4"
   },
   {
     "path": "04-验收场景.csv",
@@ -27,7 +27,7 @@
   {
     "path": "06-原型及来源清单.json",
     "bytes": 3654,
-    "sha256": "7fc492d3d20dcc5da5e8643be1d1f64f682ecb978de5137f2ddc8c74d35dc415"
+    "sha256": "06e517b35380a32527681b3c67735e94196c6009d6d74967d04a6d6109a473e9"
   },
   {
     "path": "07-原型自检.json",
@@ -38,6 +38,11 @@
     "path": "08-APS通用界面规则.txt",
     "bytes": 3555,
     "sha256": "0f8251f76747e8889b8e8f5d21ce470821d50537bc0ebf0333984dcdbb26d606"
+  },
+  {
+    "path": "09-最新后端复核记录.json",
+    "bytes": 5231,
+    "sha256": "69e6f62230cabc0bd0664b53585ea53e50a47037ee5e83439c31e5260472ff0f"
   },
   {
     "path": "原型源/common.js",
