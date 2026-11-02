@@ -57,7 +57,16 @@ export function adoptDefinitionBounds(d,p){
  const spec=parameterSpec(p);if(!spec||blockedParameter(p)||p._candidate)return;
  if(spec.type==='enum')return;
  const c=businessDefinition(d,cpOf(p)),value=finiteNumber(p['参数值']);
- for(const [key,cmp]of [['最小值',(a,b)=>a<b],['最大值',(a,b)=>a>b]]){const text=String(c[key]??'').trim();if(!text)continue;const expression=/^(>=|<=|>|<)\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+))$/.exec(text);if(expression){const n=finiteNumber(expression[2]),op=expression[1];if(!(op==='>'?value>n:op==='>='?value>=n:op==='<'?value<n:value<=n))throw Error('P目录边界：'+key+' '+text);}else if(cmp(value,finiteNumber(text)))throw Error('P目录边界：'+key+' '+text);}
+ // A catalog boundary may be a comparison (SYSTEM CP016 uses ">0").
+ // Parse its operator separately; parameter values remain strict numeric literals.
+ for(const [key,defaultOperator]of [['最小值','>='],['最大值','<=']]){
+  const text=String(c[key]??'').trim();if(!text)continue;
+  const expression=/^(>=|<=|>|<|≥|≤)\s*(.*)$/.exec(text);
+  const operator=expression?.[1]||defaultOperator,bound=finiteNumber(expression?expression[2]:text);
+  const accepted=operator==='>'?value>bound:operator==='<'?value<bound:
+   operator==='>='||operator==='≥'?value>=bound:value<=bound;
+  if(!accepted)throw Error('P目录边界：'+key+' '+text);
+ }
 }
 export function tagParameterSources(d){
  const hashes=new Set((d.parameterSources||[]).filter(s=>s.mode==='dataset').map(s=>s.fileHash));

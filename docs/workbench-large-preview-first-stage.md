@@ -27,3 +27,9 @@ G01 产线资源映射、G03 投料/物理池/WIP 仍禁用，提示原 Excel �
 本次接缝入口一次，heap≤128MiB、120秒；必要标准 `npm run build` 一次，heap≤640MiB，使用已有 Linux 依赖，禁止 npx 网络 fallback。固定 38375ed8 的独立工程结果与新集成结果分列在根交付原件，不迁签。标准构建只编译 Worker 资产，不启动 Worker。真实新 application start/restart/browser/HTTP/Worker/import/calc 额度均为0，部署、独立 smoke、用户 UAT、G02 真实保存返回均未执行。原刷新缺陷及真实两文件路径不得用工程 PASS 关闭。
 
 仿真样例沿既有 `CR-INPUT-SCHED-UX-r2-Dev-r1-SAMPLE.zip`，原 hash 和私有客户原件保持不变。未来隔离运行窗应新 dataDir/空闲私有端口，先业务卡、再参数卡分别预览确认，从服务端版本重查；未知确认先查 commit-status，避免重复导入。旧0afa/18302、旧 source/dist/state、native、frozen、history、config 不切换、不恢复覆盖。精确 source→main、实际构建 manifest、实际断言/未验、cleanup 和 RELEASED 见该次根结果。CR effective=false，工程通过不签 QA 或最终用户 UAT。
+
+## 原45 CP016边界修复接续
+
+[连续修复合同](https://github.com/huiliangtao666/APS/issues/45#issuecomment-6578875599)要求保留参数值的严格有限数值字面量校验，将目录比较符与边界数值分开解析。目录支持 `>`、`>=`、`<`、`<=` 及 `≥`、`≤`；未带比较符的最小值和最大值分别按包含端点处理。合法 P 数值边界继续生效，CP016 的原子规则仍拒绝零和负值，上传实例中的 `>0` 仍不能充当数值。来源优先级、单位、原件和冻结版本不变。
+
+定向回归位于 `qa/parameter-definition-bounds.test.mjs`，原样例通过 `BOUNDS_BUSINESS_FIXTURE` 显式指定；没有原件时该项跳过，不据此声称原件已验证。浏览器后继工具按导入卡内包含 `option[value="issues"]` 的真实 select 定位；历史失败脚本及原刷新缺陷轮次保留。运行、自测、构建与主路径结论以本次固定候选的实际交付原件为准，本段源码说明不签 PASS。
