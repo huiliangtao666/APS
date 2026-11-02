@@ -247,3 +247,60 @@ original unused P calculation slot and browser context for remaining work.
 E1–E6, shared query/source/pagination/export, parameter-update contrast and UI
 save/reopen remain unverified. No READY_ENV, QA, main integration or publication
 is claimed. APS-Test retains the original package; APS-Dev is sole main writer.
+
+## Continuous r9 — actual parameter/P/six-view paths; shared-query resource stop
+
+Under PM contract 6587140957, only the server was bundled at source
+5a451e9f9eb67e20d1e19b5c717431cf00c0fd06; the r8 calculation worker and r5
+remaining artifacts were reused with their original hashes. The 129-input server
+closure and 246 dependencies matched. A new immutable candidate copied all 34
+files of the accepted r8 state, preserving baseline fef9cde1 and its full freeze.
+No baseline was recalculated. Candidate create/start were each one, restart zero.
+
+The original CP172/RT009 GET returned HTTP 200 in 0.47 s, with 22 rows and 11
+effective records. Four pages retained identical source rows. An explicit online
+EDIT changed CP172 from 96 to 120 minutes without reimporting P or changing B/P
+source files. The original P calculation slot produced partial run
+26eca6bc-e2c0-4c04-947e-03406e431241 at version 3 with nine real tasks and verifier
+pass, issues/notChecked empty. Two affected 200 kg tasks changed from 54 to 63
+minutes, matching the independent formula. Baseline v2 reopened unchanged. Both
+runs were persisted, reopened and exported through HTTP.
+
+The six views were exercised on the exact v2 run: E1 32, E2 700, E3 448, E4 322,
+E5 777 and E6 9 records. Every page, full/selected export and four detail sections
+retained the same identity; task fields matched the frozen result. An explicit
+empty selection returned zero. The runner initially used unsupported EXPLICIT
+instead of NONE, and later compared an internal persisted run including inputRef
+against its public representation; both runner errors are retained, with only
+unfinished checks continued. These are HTTP results, not browser assertions.
+
+The shared-report context failed with HTTP 413 PROJECTION_TOO_LARGE. Its 32 MiB
+projection guard counted the entire 38,069,482-byte input plus repeated frozen
+provenance; actual table/mapping/result sources are 32,955,199 bytes. The guard
+now counts these complete report sources while retaining the full immutable
+input and run for identity/source checks. Projection cap 32 MiB, response cap
+256 KiB and record cap 100,000 remain unchanged; no rows or fields are truncated.
+Three targeted regressions passed, including source identity and continued
+rejection of oversized projected table content.
+
+At heap 192 MiB, the complete same-hash module test accepted the snapshot and
+passed bom.materials: 140 records and a certified complete export. Continuing to
+the next view aborted with V8 heap OOM in structured-clone deserialization. The
+first-resource-anomaly latch stopped all further execution. The source guard
+repair is therefore WIP: no claim that the remaining 17 views, full HTTP path,
+or complete memory closure pass. No additional bundle/candidate/Worker was used.
+
+The platform browser rejected direct navigation to the candidate loopback URL
+with “URL host not allowed”. No alternative host, proxy, auth relaxation or
+browser bypass was attempted. The official VM preview helper would create/start
+a bound app, outside this immutable-candidate budget; it was not invoked. UI
+six-view/save-reopen checks remain blocked pending a platform-supported route.
+
+The candidate was stopped and sealed before source edits. The failed module
+also exited; all application/transient/Worker/monitor/event ownership and pending
+work are zero. Runtime service/P Worker had no OOM; the new module OOM is reported
+separately. READY_ENV, QA, main integration, user UAT and publication are absent.
+Next work must first resolve and revalidate full-source clone memory at the same
+heap limit, then explicitly admit only an affected server bundle and new fixed
+candidate using the already accepted v2/v3 state. Both baseline and P calculations
+are exhausted and must not be rerun. APS-Test remains owner; Dev is main writer.

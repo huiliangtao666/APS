@@ -48,7 +48,11 @@ export function createReportSnapshot({dataset,frozenInput,run,datasetId,version,
   }else if(d.dayZero&&dayZero&&d.dayZero!==dayZero)fail('CONTEXT_MISMATCH',409);
   dayZero=dayZero||d.dayZero;epoch(dayZero);
   if(!run&&scope!=='dataset'&&!d.parameterTrials?.some(t=>'trial:'+t.id===scope&&t.actor===actor))fail('FORBIDDEN',403);
-  const bytes=Buffer.byteLength(JSON.stringify(d))+Buffer.byteLength(JSON.stringify(run||null));
+  // Bound the actual report sources. Import/readiness explanations and frozen
+  // provenance repeat the same parameter facts; counting those copies rejected
+  // full V2 inputs before any report was projected. Keep the complete snapshots
+  // below for source/identity checks, with the existing projection/response caps.
+  const bytes=Buffer.byteLength(JSON.stringify({tables:d.tables||{},mapping:d.mapping||null,result:run?.result||null}));
   if(bytes>LIMITS.projectionBytes||Object.values(d.tables||{}).reduce((n,r)=>n+r.length,0)>LIMITS.records)fail('PROJECTION_TOO_LARGE',413);
   const identity={model:'workbook',datasetId:d.id,version:d.version,frozen:!!run,runId:run?.id||null,
     inputHash:run?.inputHash||hash(d),parameterHash:hash(table(d,'配置参数')),mappingHash:hash(d.mapping),resultHash:run?.resultHash||null,
