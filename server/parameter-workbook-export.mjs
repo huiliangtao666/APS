@@ -1,15 +1,31 @@
-import {parameterCatalog,cpOf,scopeOf} from './parameter-contract.mjs';
+import {parameterCatalog,cpOf,scopeOf,semanticIdentity,effectiveParameters,sourceRole,blockedParameter} from './parameter-contract.mjs';
+// A reimportable P workbook must not collapse B/P/EDIT into conflicting rows.
+// Flatten the selected source layers into nonoverlapping semantic intervals,
+// retaining source PA/role/hash separately from generated export row identity.
+export function resolvedExportRecords(records){
+ const groups=new Map(),out=[];
+ for(const p of records){const key=JSON.stringify([scopeOf(p),semanticIdentity(p)]);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(p);}
+ for(const group of groups.values()){
+  const active=group.filter(p=>!p._candidate),days=[...new Set(active.flatMap(p=>[Number(p['生效日']),Number(p['失效日'])]))].sort((a,b)=>a-b);
+  for(let i=0;i<days.length-1;i++){
+   const p=effectiveParameters({tables:{'配置参数':active}},days[i],scopeOf(group[0]))[0];if(!p)continue;
+   out.push({...p,'源PA编号':p['参数编号'],'来源层':sourceRole(p),'来源文件hash':p._source?.fileHash||p._source?.previous?.fileHash||'','来源profile':p._profile||'workbook-day','参数编号':'EXPORT-'+(out.length+1),'生效日':String(days[i]),'失效日':String(days[i+1]),'资料状态':blockedParameter(p)?'pending':'dataset'});
+  }
+  for(const p of group.filter(p=>p._candidate))out.push({...p,'源PA编号':p['参数编号'],'来源层':sourceRole(p),'来源文件hash':p._source?.fileHash||'','参数编号':'EXPORT-'+(out.length+1),'资料状态':blockedParameter(p)?'pending':'candidate'});
+ }
+ return out;
+}
 const xml=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
 const crcTable=Array.from({length:256},(_,n)=>{for(let i=0;i<8;i++)n=n&1?0xedb88320^(n>>>1):n>>>1;return n>>>0;});
 function crc32(buf){let n=0xffffffff;for(const b of buf)n=crcTable[(n^b)&255]^(n>>>8);return (n^0xffffffff)>>>0;}
 function zip(entries){const parts=[],central=[];let offset=0;for(const [name,text]of entries){const bytes=Buffer.from(text),file=Buffer.from(name),crc=crc32(bytes),local=Buffer.alloc(30);local.writeUInt32LE(0x04034b50,0);local.writeUInt16LE(20,4);local.writeUInt32LE(crc,14);local.writeUInt32LE(bytes.length,18);local.writeUInt32LE(bytes.length,22);local.writeUInt16LE(file.length,26);parts.push(local,file,bytes);const c=Buffer.alloc(46);c.writeUInt32LE(0x02014b50,0);c.writeUInt16LE(20,4);c.writeUInt16LE(20,6);c.writeUInt32LE(crc,16);c.writeUInt32LE(bytes.length,20);c.writeUInt32LE(bytes.length,24);c.writeUInt16LE(file.length,28);c.writeUInt32LE(offset,42);central.push(c,file);offset+=local.length+file.length+bytes.length;}const directory=Buffer.concat(central),end=Buffer.alloc(22);end.writeUInt32LE(0x06054b50);end.writeUInt16LE(entries.length,8);end.writeUInt16LE(entries.length,10);end.writeUInt32LE(directory.length,12);end.writeUInt32LE(offset,16);return Buffer.concat([...parts,directory,end]);}
 const col=i=>{let s='';do{s=String.fromCharCode(65+i%26)+s;i=Math.floor(i/26)-1;}while(i>=0);return s;};
 function sheet(headers,rows){return '<?xml version="1.0" encoding="UTF-8"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>'+[headers,...rows].map((r,i)=>'<row r="'+(i+2)+'">'+r.map((v,c)=>'<c r="'+col(c)+(i+2)+'" t="inlineStr"><is><t xml:space="preserve">'+xml(typeof v==='object'?JSON.stringify(v):v)+'</t></is></c>').join('')+'</row>').join('')+'</sheetData></worksheet>';}
-export function parameterWorkbook(records=[],version=0,annotations={}){
+export function parameterWorkbook(records=[],version=0,annotations={},definitions=parameterCatalog){
  const defs=['参数编号','业务领域','中文配置项','配置对象','类型与单位','规则与边界','依据性质','明确默认或样例','维护入口','依据链接','最小值','最大值','是否必填','缺失时行为','权威来源及校验备注'];
- const instances=['参数编号','对象编号','对象名称','参数名称','参数值','单位','生效日','失效日','参数说明','性质','CP编号','作用范围','来源版本','资料状态'];
+ const instances=['参数编号','对象编号','对象名称','参数名称','参数值','单位','生效日','失效日','参数说明','性质','CP编号','作用范围','来源版本','资料状态','来源层','源PA编号','来源文件hash','来源profile','对象类型'];
  const categories=[...new Set(records.map(p=>p['参数名称']))].map((name,i)=>['SP-EXPORT-'+(i+1),name,[...new Set(records.filter(p=>p['参数名称']===name).map(cpOf))].join('/')]);
- const tables=[['参数清单',defs,parameterCatalog.map(d=>defs.map(k=>d[k]))],['仿真参数分类',['分类编号','原Excel参数名称','归并条目引用'],categories],['仿真参数实例',instances,records.map(p=>instances.map(k=>k==='CP编号'?cpOf(p):k==='作用范围'?scopeOf(p):k==='来源版本'?version:k==='资料状态'?p._candidate?'candidate':'dataset':p[k]??''))]];
+ const tables=[['参数清单',defs,definitions.map(d=>defs.map(k=>d[k]))],['仿真参数分类',['分类编号','原Excel参数名称','归并条目引用'],categories],['仿真参数实例',instances,records.map(p=>instances.map(k=>k==='CP编号'?cpOf(p):k==='作用范围'?scopeOf(p):k==='来源版本'?version:k==='资料状态'?p['资料状态']||(p._candidate?'candidate':'dataset'):p[k]??''))]];
  for(const [name,key]of [['需补充及后续讨论','discussions'],['校验问题','questions']]){const values=annotations[key]||[],heads=values.length?Object.keys(values[0]).filter(k=>!k.startsWith('_')):[key==='discussions'?'讨论编号':'问题编号','说明'];tables.push([name,heads,values.map(r=>heads.map(k=>r[k]))]);}
  for(const name of ['阅读说明','业务领域总览','配套配置与业务数据','派生结果及只读信息','原69项语义追溯','依据与范围'])tables.push([name,['说明'],[['参数导出/空白模板；来源版本 '+version+'，候选不表示启用，范围和有效期须保留。']]]);
  return workbookTables(tables);

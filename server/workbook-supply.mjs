@@ -1,3 +1,4 @@
+import {selectionDataset,selectedFactIssues} from './workbook-selection.mjs';
 import {rows,problem,workbookReadiness} from './workbook-model.mjs';
 
 const number=v=>(typeof v==='number'||typeof v==='string'&&v.trim()!=='')&&Number.isFinite(Number(v));
@@ -52,7 +53,7 @@ export function transitIdentityIssues(records){
  }
  return issues;
 }
-export function supplyReadiness(d){const ready=workbookReadiness(d),issues=[...ready.issues,...supplyIssues(d)];return {...ready,ready:issues.length===0,issues};}
+export function supplyReadiness(d,selection){const selected=selectionDataset(d,selection),ready=workbookReadiness(selected),issues=[...ready.issues,...supplyIssues(selected),...selectedFactIssues(selected)],completenessIssues=selection?[...workbookReadiness(d).issues,...supplyIssues(d)]:issues;return {...ready,ready:issues.length===0,issues,completenessIssues,dependencyClosure:selected._selectionClosure||null};}
 
 export function supplyLots(d){
  const lots=[];
