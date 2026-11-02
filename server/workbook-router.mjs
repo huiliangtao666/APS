@@ -1,3 +1,4 @@
+import {registerWorkbookQueryReportRoutes} from './workbook-query-report-routes.mjs';
 import {readWorkbookPreview} from './workbook-preview-query.mjs';
 import {buildWorkbookPreview,PreviewError,fail} from './workbook-preview.mjs';
 import {registerWorkbookPreviewRoutes} from './workbook-preview-routes.mjs';
@@ -80,6 +81,7 @@ export function createWorkbookRouter({dataDir,permission,actorKey,requestId,work
  }));
  registerWorkbookPreviewRoutes(router,{read,write,permission,actorKey,access:previewAccess,applyImport});
  // Mutations, freeze/run, drafts and native exports are registered below.
+ registerWorkbookQueryReportRoutes(router,{read,dataset,snapshot,permission,actorKey});
  registerWorkbookConversions(router,{read,write,dataset,audit,summary,handle,permission,persist,snapshot,meta,tableRefs});
  return registerOperations(router,{read,write,dataset,audit,summary,handle,permission,workerFactory,workers,persist,snapshot,meta,tableRefs,actorKey});
 }

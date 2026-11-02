@@ -3749,6 +3749,55 @@
       "approval_boundary": "D01-D06 block only the corresponding unknown conversions. No invented formula/default/physical site pool/multiline/automatic period switching; no expansion of DEC04-06. Private originals excluded from Git.",
       "legacy_preservation": "Prior Done, fixed 0afa deployment, original-SHA evidence and defect rounds remain unchanged.",
       "new_product_failure_rounds": 0
+    },
+    {
+      "id": "CR-QUERY-REPORTS-20261102",
+      "title": "同版本五类业务查询与通用筛选、栏位、日历、来源规则",
+      "classification": "用户已批准的完整查询能力变更",
+      "baseline_id": "APS-BL-001",
+      "from_version": "v0.3及适用已批准CR",
+      "target_version": "v0.3+CR-QUERY-REPORTS-20261102",
+      "requested_by": "项目用户（会话授权）",
+      "requested_on": "2026-11-02",
+      "approval_status": "用户明确“#49可派工”；批准完整五类MVP开发与任务级自测",
+      "approved_by": "项目用户（未补造实名签批）",
+      "approved_on": "2026-11-02",
+      "effective": true,
+      "effective_scope": "已批准目标范围；不代表源码完成、部署、QA或最终用户UAT通过",
+      "implementation_status": "SOURCE_WIRED; canonical f33814d域、18子视图及QR-A/QR-B接线；实际命令/构建/最终SHA以原49正式交付为准；runtime/QA未执行",
+      "primary_issue": "https://github.com/huiliangtao666/APS/issues/49",
+      "implementation_contract": "https://github.com/huiliangtao666/APS/issues/49#issuecomment-6572536786",
+      "full_scope_contract": "https://github.com/huiliangtao666/APS/issues/49#issuecomment-6572747132",
+      "design_shas": [
+        "d7d279e3ebb46fa9ff1c4eed4f76d895caeff3e3",
+        "8836b5d4665d9de99e21708ba1cd3bc65161f385",
+        "4c56e27249eaa9c73c6708fd9c72eccd8b9697aa"
+      ],
+      "reference_product_sha": "677029d2473b030bec5150b23eeae9488a0c4e84",
+      "scope": [
+        "五类18子视图，QR-A同版本输入与QR-B冻结运行联动",
+        "G01—09及原QR-01—24/R3默认全选",
+        "按同一版本/指纹完整筛选排序、计数汇总分页、所选栏位全量导出",
+        "有效日期BOM向下递归只改查询范围；来源/参数P>B与未知值明确",
+        "日历日业务和真实生产分钟精度溯源，不改变历史hash"
+      ],
+      "exclusions": [
+        "设备六视图/新增生产分钟模型归独立Issue50，未由本CR开工",
+        "无采购下单、无新算法/数据维护主账",
+        "不借本CR增加45/47运行次数或覆盖旧0afa环境",
+        "部署、独立QA与最终用户UAT不由源码或夹具自测代签"
+      ],
+      "implementation_document": "docs/requirements/changes/CR-QUERY-REPORTS-20261102/implementation.md",
+      "integration_base_sha": "3705c76ed8696b8754553723b0fc11e0e1a5d4a0",
+      "canonical_domain_sha": "f33814d1592451d09997c9f8951b990fa42f668c",
+      "engineering_handoff": "https://github.com/huiliangtao666/APS/issues/49#issuecomment-6574320876",
+      "dataset_contract": {
+        "version": "APS-MEAT-202611-V2.0",
+        "design_sha": "55a063fcd9daf6d3d5fdf9b25147b32ae57ee5c0",
+        "business_sha256": "247423ea73d441e8ef6d03f538f393973287e17acb93d81ec1353abc4283d247",
+        "parameter_sha256": "f9a4fea37b2c50038cc7c7bd9ad513d2c73b981d8ef0cd1cc2d8f47a775b176e",
+        "adoption": "NOT_EXECUTED; no new import/run authorized; minute schema/model/frozen task dependency #50 remains explicit"
+      }
     }
   ]
 }
