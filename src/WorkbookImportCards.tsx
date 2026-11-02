@@ -1,3 +1,4 @@
+import { appPath } from './app-path';
 import {useCallback,useEffect,useState} from 'react';
 import {WorkbookPreview} from './WorkbookPreview';
 import type {PreviewMemory} from './WorkbookPreview';
@@ -17,7 +18,7 @@ function ImportCard({api,cardMemory,previewMemory,download,onMaintenance,sets,da
  return <section className="panel" aria-label={parameter?'配置参数Excel导入':'业务数据Excel导入'}><h3>{parameter?'配置参数 Excel':'业务数据 Excel'}</h3><p>{parameter?'导入到所选业务数据集；采用可用参数时第二份P优先于业务B。缺项保留资料层，按本次依赖检查。':'* 必做：导入日语义业务工作簿。更新已有数据集将显式替代业务表；预览列出删除与覆盖。'}</p>
  {parameter?<p>目标：{datasetId||'尚未建立'} / v{version||'—'}；{!datasetId&&'! 可先导入P建立隔离参数集，再导入B；生产输入未齐前不计算'}</p>:<label>目标数据集<select disabled={busy} value={target} onChange={e=>setTarget(e.target.value)}><option value="">新建隔离数据集</option>{sets.map(s=><option key={s.id} value={s.id}>{s.name} / v{s.version}</option>)}</select></label>}
  {parameter&&<><label>参数文件用途<select value={mode} disabled={busy} onChange={e=>setMode(e.target.value)}><option value="dataset">导入并采用可用参数（第二份优先）</option><option value="candidate">仅保存候选资料（不参与排程）</option><option disabled value="trial">仅本次试算批量导入（尚不支持）</option></select></label><label>重导P与在线修改<select value={overlayResolution} disabled={busy} onChange={e=>setOverlayResolution(e.target.value)}><option value="keep">保留已保存的在线修改</option><option value="replace">确认用新P替代匹配区间的在线修改</option></select></label><p>仅本次覆盖请用下方同源参数逐项维护；批量 trial 导入未开放。配置是否必需由所选范围检查决定，候选不代表已配置。</p></>}
- {canExport&&<a href={parameter?'/api/workbooks/parameters/template':'/api/workbooks/business/template'}>下载{parameter?'参数三层':'业务数据'}空白Excel模板（无现场默认）</a>}
+ {canExport&&<a href={appPath(parameter?'/api/workbooks/parameters/template':'/api/workbooks/business/template')}>下载{parameter?'参数三层':'业务数据'}空白Excel模板（无现场默认）</a>}
  <input aria-label={parameter?'配置参数Excel':'业务数据Excel'} disabled={busy||!canWrite} type="file" accept=".xlsx" onChange={e=>setFile(e.target.files?.[0])}/><p>12 MB 以内 .xlsx；当前文件 {file?.name||'未选择'}。业务模板使用既有 profile；参数模板在统一配置页下载。原模板/仿真样例不代表现场默认。</p>
  <button disabled={!allowed||!file} onClick={()=>perform(inspect)}>预览（不写有效输入）</button>{!allowed&&<p>! {!canWrite?'当前角色只读':!reason.trim()?'请先填写操作原因':busy?'正在处理':'可先导入P建立隔离参数集，再导入B；生产输入未齐前不计算'}</p>}
  <button disabled={busy} onClick={()=>perform(async()=>{const raw=sessionStorage.getItem('aps-workbench-'+kind);if(!raw)throw Error('没有可恢复预览');const saved=JSON.parse(raw),p=await api('/workbooks/previews/'+saved.id);setPreview({...p,_binding:saved.binding});setMessage('已查回提交状态；绑定变化时须重新预览。');})}>恢复预览 / 查询提交结果</button>

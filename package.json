@@ -4,15 +4,18 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently -k -n vite,api -c blue,green \"vite\" \"node --experimental-strip-types server/index.mjs\"",
+    "dev": "node scripts/dev.mjs",
     "build": "tsc --noEmit && vite build && npx esbuild server/index.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs && npx esbuild server/calculation-worker.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/calculation-worker.mjs && npx esbuild server/workbook-import-worker.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/workbook-import-worker.mjs && cp server/workbook-schema.json server/workbook-simulation.json dist/",
     "test": "node --test src/lib/*.test.mjs && node --experimental-strip-types --test server/auth/auth.test.mjs server/business.test.mjs",
     "test:verification": "node --test src/lib/independent-verification.test.mjs",
-    "start": "NODE_ENV=production node dist/server.mjs",
+    "start": "NODE_ENV=production node --max-old-space-size=192 dist/server.mjs",
     "preview": "vite preview",
     "test:auth": "node --test server/auth/auth.test.mjs",
     "test:shared": "node --experimental-strip-types --test server/shared-access.test.mjs",
-    "test:query-ui": "esbuild src/query-ui.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-query-ui.cjs && node --test .qa-query-ui.cjs"
+    "test:query-ui": "esbuild src/query-ui.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-query-ui.cjs && node --test .qa-query-ui.cjs",
+    "build:frontend": "tsc --noEmit && vite build",
+    "build:server": "esbuild server/index.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs",
+    "test:hosting": "esbuild src/app-path.ts --bundle --platform=node --format=esm --packages=external --outfile=.qa-app-path.mjs && node --max-old-space-size=192 qa/hosting-paths.mjs"
   },
   "dependencies": {
     "@praetor/lite-app-runtime": "file:../../.praetor/sdk/lite-app-runtime.tgz",

@@ -1,3 +1,4 @@
+import { appPath } from './app-path';
 import {useEffect,useRef,useState} from 'react';
 import {QueryLongValue,QueryMultiselect,QuerySourceDrawer,QueryTable} from './QueryReportsControls';
 import {queryInitial,queryReports,queryUrl,sameQueryIdentity,type QueryApi,type QueryCatalog,type QueryContext,type QueryDraft,type QueryPage,type QueryRecord,type QueryView} from './QueryReportsTypes';
@@ -55,7 +56,7 @@ function QueryReportView({api,catalog,view,memory,canExport,onNavigate,onMainten
   function move(offset:number){const next={...applied,offset};setApplied(next);setDraft(next);}
   function download(scope:'ALL'|'SELECTED') {
     if(!page||dirty)return;
-    try{const url=queryUrl('export',{...request,queryFingerprint:page.queryFingerprint,columns:visible,scope,...(scope==='SELECTED'?{ids:selected}:{})});const a=document.createElement('a');a.href='/api'+url;a.download=view.label+'.ndjson';document.body.appendChild(a);a.click();a.remove();}catch(e){setError((e as Error).message);}
+    try{const url=queryUrl('export',{...request,queryFingerprint:page.queryFingerprint,columns:visible,scope,...(scope==='SELECTED'?{ids:selected}:{})});const a=document.createElement('a');a.href=appPath('/api'+url);a.download=view.label+'.ndjson';document.body.appendChild(a);a.click();a.remove();}catch(e){setError((e as Error).message);}
   }
   return <div className="qr-body"><form className="qr-filters" onSubmit={e=>{e.preventDefault();apply();}}>
     <label>编号 / 名称 / 关键词<input value={draft.q} maxLength={200} onChange={e=>change({q:e.target.value})}/></label>

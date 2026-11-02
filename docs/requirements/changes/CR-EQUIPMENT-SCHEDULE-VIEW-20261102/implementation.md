@@ -337,3 +337,18 @@ Impact is server-only: 130 local server inputs (one new pure helper), unchanged
 No new package, worker/frontend/full build or calculation is needed. Conditional
 server bundle and candidate HTTP evidence, if executed, are recorded separately
 in the fixed-version r10 delivery; module results cannot stand in for HTTP/UI.
+
+
+## r13 official Vite/Express hosting adapter
+
+The app uses the official Vite/React development stack and existing Express business router. `npm run dev` runs `scripts/dev.mjs`, which starts Vite from the locked package and the precompiled `dist/server.mjs`. Any child exit stops both groups; SIGINT/SIGTERM stops the group and escalates after two seconds. Both runtime Node processes use a 192 MiB old-space limit.
+
+The runtime SDK 0.5.0 owns the injected base and Vite port/API proxy. Defaults are Vite 4318 and Express 4319. The official sidecar overrides them with `PRAETOR_DEV_VITE_PORT` and `API_PORT` (4328/4329 for this binding). Server SDK 0.4.1 reads `API_PORT` and binds 0.0.0.0. Data defaults to isolated `validation-state`/`validation-uploads`; explicit existing env values retain priority. The shared business access contract is unchanged.
+
+Production is built for the injected bare base; dev adds `/dev/`. Production edge strips that base before Express; dev passes it to Vite, whose SDK proxy strips it for API requests. App navigation is state based, with SDK/Vite SPA fallback for direct client paths. Existing fetch runtime wiring remains. API download anchors explicitly use the SDK base through `appPath`; blob downloads and public BASE_URL links retain their existing behavior.
+
+`build:frontend` and `build:server` allow directed work without rebuilding workers. The old Vite closeBundle worker hook duplicated the package build and has been removed. Existing full `build` remains available for separately authorized future work. The #50 transfer reuses previously verified calculation/import workers and schema/simulation JSON byte for byte. No solver, importer, business mapping, or parameter calculation changes are included.
+
+Validation is an official-container finite local path simulation, with explicit synthetic base, independent frozen state, no network route registration or browser. It checks prefixed production HTML/assets/MIME, real dev Vite module transforms, SDK API rewrite, limited existing query/selected export, template/source downloads, both accepted frozen identities, SPA fallback, JSON404, and lifecycle port cleanup. This does not assert browser rendering, bridge operation, QA or user UAT.
+
+The directed frontend typecheck/build and API bundle passed in the official app-exec runtime. The local route attempt passed 25 production/dev content, MIME, identity and download checks; its immediate npm-parent-exit port probe was too early for asynchronous child shutdown. The corrected bounded lifecycle-only continuation passed six checks, including all descendant processes gone and both dev ports released (109ms/0ms observed). Existing unsupported_action JSON404 is retained. Both ordinary failed attempts are preserved; no additional QA repair round is claimed. No browser, managed binding, preview, calculation or publication was performed.

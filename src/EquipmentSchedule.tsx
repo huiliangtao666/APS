@@ -1,3 +1,4 @@
+import { appPath } from './app-path';
 import {useEffect,useMemo,useRef,useState} from 'react';
 import {QueryColumns,QueryMultiselect,QueryTable} from './QueryReportsControls';
 import {sameQueryIdentity,queryValue,type QueryColumn,type QueryApi,type QueryIdentity,type QueryRecord,type QuerySelection} from './QueryReportsTypes';
@@ -25,7 +26,7 @@ export function EquipmentSchedule({run,api,canExport}:{run:any;api:QueryApi;canE
  function reset(){const next=initial();setDraft(next);setApplied(next);memory.current.set(view,next);setReload(n=>n+1);}
  function move(offset:number){const q={...applied,offset};setDraft(q);setApplied(q);}
  const dirty=JSON.stringify(draft)!==JSON.stringify(applied);
- function exportRows(scope:'ALL'|'SELECTED'){if(!identity||!page||dirty||page._signature!==signature)return;const a=document.createElement('a');a.href='/api'+request('export',{identity,...query,queryFingerprint:page.queryFingerprint,columns:visible,scope,ids:selected});a.download='设备排程-'+view+'-'+run.id+'.ndjson';document.body.appendChild(a);a.click();a.remove();}
+ function exportRows(scope:'ALL'|'SELECTED'){if(!identity||!page||dirty||page._signature!==signature)return;const a=document.createElement('a');a.href=appPath('/api'+request('export',{identity,...query,queryFingerprint:page.queryFingerprint,columns:visible,scope,ids:selected}));a.download='设备排程-'+view+'-'+run.id+'.ndjson';document.body.appendChild(a);a.click();a.remove();}
  function locateTask(id:string){choose('E6');const q={...initial(),q:'',taskId:id};setDraft(q);setApplied(q);setRecord(undefined);}
  return <section className={'qr-workspace equipment-schedule '+(focus?'equipment-focus':'')} aria-label="设备排程六视图" data-run-id={run.id} data-input-hash={run.inputHash} data-result-hash={run.resultHash}>
  <header className="qr-heading"><div><h3>设备排程 · 六视图</h3><p>冻结 v{run.version} / {run.id} · {run.result.timeUnit==='minute'?'生产整数分钟 · 半开区间 [开始,结束)':'历史日模型 · 按原冻结语义解释'}</p></div><button onClick={()=>setFocus(!focus)}>{focus?'退出专注':'专注模式'}</button></header>
