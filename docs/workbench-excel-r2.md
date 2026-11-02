@@ -44,3 +44,7 @@ CSV/分钟能力从显式兼容入口打开，不写 Excel 数据集。`?mode=na
 ## 2026-11-02 双原件纠偏接续
 
 本文件前述工程 PASS 是原 e1828ced 等历史固定源码的记录，不适用于新来源层候选。当前纠偏仅完成源码准备与静态核验；采用范围/来源、目录和CAL、scope依赖及在线覆盖详见[最新工程说明](workbench-two-file-precedence.md)。新源的构建、产品测试和真实UI/Worker均NOT_EXECUTED，main整合/部署未授权，CR effective=false。
+
+## 2026-11-02 首版大预览接线
+
+后续首版范围与main精确整合已由 #45 comment6570898699 授权，覆盖上文此范围的旧“main未授权”快照。新预览用不可变摘要、服务端分页/全文筛选、完整导出及同事务整批确认；工程结果按最终完整SHA单列，不迁签原源或真实运行。详见 [首版接线及未验边界](workbench-large-preview-first-stage.md)。CR effective=false、旧0afa/18302及原SHA证据保留。

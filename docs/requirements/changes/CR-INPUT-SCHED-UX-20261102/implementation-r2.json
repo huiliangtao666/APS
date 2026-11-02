@@ -49,7 +49,7 @@
   "runtime_result": "NOT_EXECUTED: new app start/restart/Worker/browser budget is zero",
   "qa_result": "NOT_EXECUTED",
   "user_final_uat": "NOT_SIGNED_BY_DEV",
-  "main_integration": "NOT_AUTHORIZED_THIS_DELIVERY",
+  "main_integration": "APPROVED_PREVIEW_FIRST_STAGE_ONLY_6570898699",
   "product_sha": null,
   "product_sha_binding": "Full source SHA and parent of the containing engineering commit are recorded in the root delivery:r1 result; design SHA is separate.",
   "approval_boundary": "D01-D06 block only the corresponding unknown conversions. No invented formula/default/physical site pool/multiline/automatic period switching; no expansion of DEC04-06. Private originals excluded from Git.",
@@ -99,5 +99,29 @@
     "main_merge": "NOT_AUTHORIZED",
     "acceptance": "NOT_READY; no DUAL or user UAT PASS claimed",
     "refresh_defect": "REFRESH_DATASET_READ_200_CLIENT_GENERATION_REJECTED; OPEN; round1/max2 retained"
+  },
+  "large_preview_first_stage": {
+    "authority": "https://github.com/huiliangtao666/APS/issues/45#issuecomment-6569968703",
+    "integration_contract": "https://github.com/huiliangtao666/APS/issues/45#issuecomment-6570898699",
+    "design_sha": "5ec83a3185926db332178288b92954f536d7f549",
+    "module_source_sha": "9cc4719d53c7da1edb50d9155bdff6cd6e89d686",
+    "module_parent_sha": "84225dfc69bc55c375eb44f80c3abaaa40996c2d",
+    "base_product_sha": "38375ed8f93fe4431305bc9b7fd9674d10f8dc48",
+    "integration_owner": "APS-Dev",
+    "module_evidence": "17/17 PASS on original fixed module source; no rerun",
+    "status": "SOURCE_WIRED_ENGINEERING_RESULT_IN_ROOT_DELIVERY",
+    "scope": [
+      "Bounded immutable summary/pages/search/source locations and lossless ALL/FILTERED NDJSON",
+      "Existing authenticated/CSRF router and clone-only atomic confirm; legacy module bypass rejected",
+      "Two independent import cards with workbench memory and invalidation after authoritative commit"
+    ],
+    "maintenance": {
+      "G01": "UNAVAILABLE",
+      "G02": "Existing route editor and exact SF filter wired; disabled until real runtime verification",
+      "G03": "UNAVAILABLE"
+    },
+    "runtime": "NOT_EXECUTED; new start/restart/browser/HTTP/Worker/import/calc budgets zero",
+    "qa": "NOT_EXECUTED",
+    "document": "docs/workbench-large-preview-first-stage.md"
   }
 }
