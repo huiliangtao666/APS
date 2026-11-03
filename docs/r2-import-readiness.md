@@ -49,3 +49,17 @@ Read-only full-month calculation against the actual repaired input returned
 12 demand records, 9,982 kg, 3 scheduled / 9 unplanned, 65 tasks, and a passing
 independent check. The original failed run remains recorded; new results require
 a new frozen run and do not overwrite it.
+
+Production confirmation on implementation d626baa: input v10, simulation mapping
+SIM-INPUT-SC2-R2-20261103, new run
+1205fb33-825f-40dd-a239-5377064201c7 returned `partial` with 3 scheduled / 9
+unplanned demands, 65 tasks, and independent verification `pass`. Scope is
+2026-11-01 through 2026-11-30 inclusive. Original business tables, prior version
+entries and prior frozen runs matched their pre-repair hashes. No message or
+request was sent to Design. Published HTML and assets passed verification after
+the calculation had completed.
+
+Cleanup: 6,068,642 bytes of task-only comparison, mapping and result copies in
+temp/wip-import-repair were removed after checking open handles. Source Excel,
+production mapping, saved run inputs/results, audit and unrelated files were
+retained. The platform removed disposable validation copies.
