@@ -16,7 +16,7 @@ const attrs=s=>Object.fromEntries([...s.matchAll(/([\w:]+)\s*=\s*(?:"([^"]*)"|'(
 const text=s=>[...s.matchAll(/<(?:\w+:)?t(?:\s[^>]*)?>([\s\S]*?)<\/(?:\w+:)?t>/g)].map(m=>unescape(m[1])).join('');
 const exactText=q=>{let n=q.n,d=q.d,sign=n<0n?'-':'';if(n<0n)n=-n;let out=String(n/d),r=n%d,places=0;if(r)out+='.';while(r&&places++<18){r*=10n;out+=String(r/d);r%=d;}return sign+out;};
 const asQ=v=>typeof v==='object'?v:/^\d+(?:\.\d+)?$/.test(v||'')?Q.q(v):v;
-export function parseWorkbook(buffer,schema,{dayBusinessOnly=false}={}){
+export function parseWorkbook(buffer,schema,{dayBusinessOnly=false,onlySheets=null,literalFields=null}={}){
  const zip=unzip(buffer);const xml=name=>{const entry=zip.get(name);if(!entry)throw Error('缺少OOXML条目 '+name);const raw=entry.method===8?inflateRawSync(entry.source,{maxOutputLength:Math.max(1,entry.expanded)}):entry.source;if(raw.length!==entry.expanded||crc32(raw)!==entry.crc)throw Error('ZIP条目校验失败');const s=raw.toString('utf8');if(/<!DOCTYPE|<!ENTITY/i.test(s))throw Error('不支持XML实体');return s.replace(/(<\/?)[A-Za-z_][\w.-]*:/g,'$1');};
  const strings=zip.has('xl/sharedStrings.xml')?[...xml('xl/sharedStrings.xml').matchAll(/<si(?:\s[^>]*)?>([\s\S]*?)<\/si>/g)].map(m=>text(m[1])):[];
  const rels=new Map([...xml('xl/_rels/workbook.xml.rels').matchAll(/<Relationship\b([^>]*)\/?\s*>/g)].map(m=>attrs(m[1])).filter(a=>a.TargetMode!=='External').map(a=>[a.Id,a.Target]));
@@ -27,7 +27,7 @@ export function parseWorkbook(buffer,schema,{dayBusinessOnly=false}={}){
  }
  const isV2=names.includes('版本与使用')&&[...getCells('版本与使用').values()].some(c=>c.value==='APS-MEAT-202611-V2.0');
  if(dayBusinessOnly&&isV2)throw Error('该文件是 APS-MEAT-202611-V2.0 分钟版；当前业务数据入口只接收按日工作簿。请改选“肉食品仿真数据_202611_合并图示版.xlsx”（v4），文件尚未导入。');
- if(names.includes('参数清单')||names.includes('仿真参数实例'))return {...parseParameterSheets(names,getCells),...(isV2?{productionContract:'workbook-minute-v2',datasetVersion:'APS-MEAT-202611-V2.0'}:{})};
+ if(!onlySheets&&(names.includes('参数清单')||names.includes('仿真参数实例')))return {...parseParameterSheets(names,getCells),...(isV2?{productionContract:'workbook-minute-v2',datasetVersion:'APS-MEAT-202611-V2.0'}:{})};
  // Resolve parameter identity by Chinese headers, independently of sheet/column order.
  const headerCache=new Map();
  function headersFor(sheet){if(headerCache.has(sheet))return headerCache.get(sheet);const h=new Map();for(const [a,c]of getCells(sheet))if(a.match(/\d+$/)?.[0]==='2')h.set(a.replace(/\d/g,''),c.value);headerCache.set(sheet,h);return h;}
@@ -50,15 +50,15 @@ export function parseWorkbook(buffer,schema,{dayBusinessOnly=false}={}){
   }const v=expr();if(i!==tokens.length)throw Error('未解释的公式尾部');return typeof v==='object'?exactText(v):String(v);
  }
  const tables={},classification=[],bindings=[],issues=[],warnings=[];const issue=(sheet,row,field,cell,message,code='WORKBOOK_INPUT')=>issues.push({severity:'error',code,sheet,row,field,cell,message,remedy:'更正该记录后重新预览'});
- for(const name of names){const spec=schema.tables[name],sc=getCells(name);if(!spec){if([...sc.values()].some(c=>c.value||c.formula))issue(name,0,'','','未知非空工作表，须明确忽略或补映射','UNKNOWN_SHEET');classification.push({sheet:name,kind:'未知',rows:0});continue;}
+ for(const name of names){if(onlySheets&&!onlySheets.includes(name))continue;const spec=schema.tables[name],sc=getCells(name);if(!spec){if([...sc.values()].some(c=>c.value||c.formula))issue(name,0,'','','未知非空工作表，须明确忽略或补映射','UNKNOWN_SHEET');classification.push({sheet:name,kind:'未知',rows:0});continue;}
   if(!['输入','参考结果'].includes(spec.kind)){classification.push({sheet:name,kind:spec.kind,rows:0});continue;}const headers=new Map(),known=new Set(spec.fields.map(f=>f.name));
   for(const [a,c]of sc)if(a.match(/\d+$/)?.[0]==='2'&&c.value){if([...headers.values()].includes(c.value))issue(name,2,c.value,a,'重复中文表头','DUPLICATE_HEADER');headers.set(a.replace(/\d/g,''),c.value);if(!known.has(c.value))issue(name,2,c.value,a,'未知非空业务列，须明确忽略或补映射','UNKNOWN_FIELD');}
   for(const field of known)if(!spec.fields.find(f=>f.name===field)?.optional&&![...headers.values()].includes(field))issue(name,2,field,'','缺少字段','MISSING_FIELD');const rs=new Map();
   for(const [a,c]of sc){const m=a.match(/^([A-Z]+)(\d+)$/);if(!m||Number(m[2])<3||(!c.value&&c.formula===null))continue;const row=Number(m[2]),field=headers.get(m[1]);if(!field){issue(name,row,'',a,'无表头非空业务列','UNKNOWN_FIELD');continue;}if(!rs.has(row))rs.set(row,{_row:row,_cells:{},_formulas:{}});const r=rs.get(row);r._cells[field]=a;
-   try{let v=c.value;if(c.formula!==null){r._formulas[field]=c.formula;if(name==='配置参数'&&field==='参数值')throw Error('参数值必须为字面值，不接受公式');v=value(name,a);if(Number.isFinite(Number(v))&&Number(v)!==Number(c.value)||!Number.isFinite(Number(v))&&v!==c.value)warnings.push({code:'STALE_CACHE',sheet:name,row,field,cell:a,message:'缓存差异，采用权威参数重算值',cached:c.value,value:v});const f=c.formula.match(/^'配置参数'!\$?([A-Z]+)\$?(\d+)$/);if(f){const parameterId=parameterAt(f[1]+f[2]);if(!parameterId)throw Error('集中参数引用缺少参数值列或参数编号');bindings.push({sheet:name,row,field,parameterId});}}r[field]=v;}catch(e){issue(name,row,field,a,e.message,'INVALID_FORMULA');r[field]='';}
+   try{let v=c.value;if(c.formula!==null&&literalFields){if(literalFields.includes(field))throw Error('插单业务输入须为字面值');r._formulas[field]=c.formula;}if(c.formula!==null&&!literalFields){r._formulas[field]=c.formula;if(name==='配置参数'&&field==='参数值')throw Error('参数值必须为字面值，不接受公式');v=value(name,a);if(Number.isFinite(Number(v))&&Number(v)!==Number(c.value)||!Number.isFinite(Number(v))&&v!==c.value)warnings.push({code:'STALE_CACHE',sheet:name,row,field,cell:a,message:'缓存差异，采用权威参数重算值',cached:c.value,value:v});const f=c.formula.match(/^'配置参数'!\$?([A-Z]+)\$?(\d+)$/);if(f){const parameterId=parameterAt(f[1]+f[2]);if(!parameterId)throw Error('集中参数引用缺少参数值列或参数编号');bindings.push({sheet:name,row,field,parameterId});}}r[field]=v;}catch(e){issue(name,row,field,a,e.message,'INVALID_FORMULA');r[field]='';}
   }tables[name]=[...rs.values()];for(const b of bindings.filter(b=>b.sheet===name)){const r=rs.get(b.row);b.recordKey=name==='单位换算'?[r['物料编号'],r['换算前单位'],r['换算后单位']].join('|'):r[spec.key];}classification.push({sheet:name,kind:spec.kind,rows:rs.size});if(!['配置参数','物料主数据','供应商与供货条件'].includes(name))cells.delete(name);
  }
- for(const [name,spec]of Object.entries(schema.tables))if(spec.kind==='输入'&&(!spec.v2Only||isV2)&&!names.includes(name))issue(name,0,'','','缺少本版必填输入表','MISSING_SHEET');
+ for(const [name,spec]of Object.entries(schema.tables))if((!onlySheets||onlySheets.includes(name))&&spec.kind==='输入'&&(!spec.v2Only||isV2)&&!names.includes(name))issue(name,0,'','','缺少本版必填输入表','MISSING_SHEET');
  for(const i of issues){const spec=schema.tables[i.sheet],r=tables[i.sheet]?.find(r=>r._row===i.row);i.record=r?.[spec?.key]||'';}
  return {tables,bindings,classification,issues,warnings,schemaVersion:schema.version,...(isV2?{productionContract:'workbook-minute-v2',datasetVersion:'APS-MEAT-202611-V2.0'}:{})};
 }

@@ -1,0 +1,58 @@
+import {hash,rows,dayDate} from './workbook-model.mjs';
+import {minuteTime,overlap} from './workbook-minute.mjs';
+import {urgentError} from './urgent-order-input.mjs';
+const kg=r=>({completed:r?.completedQuantity||0,scheduled:r?.scheduledQuantity??(r?.status==='scheduled'?r.quantity:0),unplanned:r?.unplannedQuantity??(r?.status==='unplanned'?r.quantity:0)});
+const taskKey=t=>[t.orderId,t.productId,t.productionId,t.routeStepId].join('|');
+const labelMinute=n=>n===null||n===undefined?null:minuteTime(n);
+export function urgentImpact(d,base,result,runId){
+ const original=new Map(base.demandResults.map(r=>[r.id,r])),u=d.urgentOrder,byDemand=new Map(rows(d,'每日需求').map(r=>[r['需求编号'],r])),urgentIds=new Set(rows(d,'每日需求').filter(r=>r._urgent).map(r=>r['需求编号']));
+ const causeTasks=result.tasks.filter(t=>urgentIds.has(t.orderId));
+ const changes=[],beforeGroups=new Map(),afterGroups=new Map();
+ // Match stable business lineage before task IDs. Newly generated ordinary
+ // batches match by order/product/route; split/merge stays explicit as arrays.
+ const lineage=t=>[t.orderId,t.productId,t.routeStepId].join('|');
+ for(const t of base.tasks)(beforeGroups.get(lineage(t))||beforeGroups.set(lineage(t),[]).get(lineage(t))).push(t);
+ for(const t of result.tasks)(afterGroups.get(lineage(t))||afterGroups.set(lineage(t),[]).get(lineage(t))).push(t);
+ for(const key of new Set([...beforeGroups.keys(),...afterGroups.keys()])){
+  const a=beforeGroups.get(key)||[],b=afterGroups.get(key)||[],t=a[0]||b[0],isNew=urgentIds.has(t.orderId)&&!original.has(t.orderId),beforeQty=a.reduce((n,t)=>n+t.quantity,0),afterQty=b.reduce((n,t)=>n+t.quantity,0);
+  const sig=ts=>hash(ts.map(t=>({start:t.start,end:t.end,machine:t.machine,crew:t.crew,people:t.people,tools:t.tools,quantity:t.quantity})).sort((x,y)=>x.start-y.start||x.end-y.end));
+  const changed=sig(a)!==sig(b),beforeStart=a.length?Math.min(...a.map(t=>t.start)):null,afterStart=b.length?Math.min(...b.map(t=>t.start)):null;
+  const direct=causeTasks.filter(x=>a.some(y=>y.machine===x.machine&&overlap(x,y)||y.crew===x.crew&&overlap(x,y)||y.tools.some(id=>x.tools.includes(id))&&overlap(x,y)));
+  const predecessorIds=new Set(b.map(t=>t.predecessor).filter(Boolean)),chain=result.tasks.filter(x=>predecessorIds.has(x.id)&&x.orderId===t.orderId);
+  const reasons=direct.map(x=>({kind:'direct',urgentDemandId:x.orderId,resource:x.machine,taskId:x.id,start:x.start,end:x.end,message:`插单 ${x.orderId} 占用 ${x.machine} ${minuteTime(x.start)}—${minuteTime(x.end)}`}));
+  if(changed&&!isNew&&!reasons.length)reasons.push({kind:'replan_difference',predecessorTaskIds:chain.map(t=>t.id),evidence:result.allocations.filter(x=>x.need===t.orderId),message:'完整剩余工作共同重排；前序和供给分配证据列出，未证明直接资源因果'});
+  changes.push({id:key,demandId:t.orderId,materialId:t.productId,customerId:byDemand.get(t.orderId)?.['客户编号'],routeStepId:t.routeStepId,unit:'千克',isNew,changed,type:!changed?'未变化':isNew?'新增插单工序':!b.length?'减少剩余工作':!a.length?'新增剩余工序':a.length>b.length?'合并':a.length<b.length?'拆分':a.some(x=>!b.some(y=>x.machine===y.machine))?'换设备':'移动',beforeTasks:a.map(x=>({...x,lineage:taskKey(x)})),afterTasks:b.map(x=>({...x,lineage:taskKey(x)})),beforeQuantity:beforeQty,afterQuantity:afterQty,beforeStart:labelMinute(beforeStart),afterStart:labelMinute(afterStart),deltaMinutes:beforeStart!==null&&afterStart!==null?afterStart-beforeStart:null,beforeEnd:labelMinute(a.length?Math.max(...a.map(t=>t.end)):null),afterEnd:labelMinute(b.length?Math.max(...b.map(t=>t.end)):null),resources:[...new Set([...a,...b].flatMap(t=>[t.machine,t.crew,...t.tools]))],reasons,quantityExplanation:{beforeKg:beforeQty,afterKg:afterQty,completedDemandKg:u.completed[t.orderId]||0,preexistingExecutedKg:a.filter(x=>u.seedTasks.some(s=>s.id===x.id)).reduce((n,x)=>n+x.quantity,0)}});
+ }
+ for(let pass=0;pass<changes.length;pass++){let changed=false;for(const c of changes.filter(c=>c.changed&&!c.isNew&&!c.reasons.some(r=>['direct','chain'].includes(r.kind)))){const links=new Set(c.afterTasks.flatMap(t=>[t.predecessor,...(t.source.blockingTaskIds||[])].filter(Boolean))),parents=changes.filter(x=>x.id!==c.id&&x.afterTasks.some(t=>links.has(t.id))&&(x.isNew||x.reasons.some(r=>['direct','chain'].includes(r.kind))));if(parents.length){c.reasons=[{kind:'chain',parentChangeIds:parents.map(x=>x.id),urgentDemandIds:[...new Set(parents.flatMap(x=>x.isNew?[x.demandId]:x.reasons.flatMap(r=>r.urgentDemandId?[r.urgentDemandId]:r.urgentDemandIds||[])))],message:'前序或资源释放链导致后续变化，见关联工序证据'}];changed=true;}}if(!changed)break;}
+ const allocationChanges=[];for(const r of base.demandResults){const oldClaims=(base.allocations||[]).filter(a=>a.need===r.id),newClaims=result.allocations.filter(a=>a.need===r.id);for(const supplyId of new Set([...oldClaims,...newClaims].map(a=>a.supplyId))){const before=oldClaims.filter(a=>a.supplyId===supplyId).reduce((n,a)=>n+a.quantity,0),after=newClaims.filter(a=>a.supplyId===supplyId).reduce((n,a)=>n+a.quantity,0);if(Math.abs(before-after)>1e-6)allocationChanges.push({demandId:r.id,supplyId,before,after,delta:after-before,newUrgentClaims:result.allocations.filter(a=>a.supplyId===supplyId&&urgentIds.has(a.need))});}}
+ for(const c of changes)if(c.changed&&u.baseParameterHash!==hash(rows(d,'配置参数')))c.reasons.push({kind:'parameter_change',beforeHash:u.baseParameterHash,afterHash:hash(rows(d,'配置参数')),changes:u.configurationChanges.filter(x=>x.changes.some(v=>['GLOBAL',c.materialId,c.routeStepId,...c.resources].includes(v.object)))});
+ const urgent=[],orders=[],unplanned=[];
+ for(const r of result.demandResults){const old=original.get(r.id),source=byDemand.get(r.id),quantities=kg(r),before=kg(old),related=changes.filter(t=>t.demandId===r.id),beforeShip=old?.readyDay===null||old?.readyDay===undefined?null:dayDate(Math.floor(old.readyDay)),afterShip=r.readyDay===null?null:dayDate(Math.floor(r.readyDay));
+  const row={id:r.id,demandId:r.id,materialId:r.productId,customerId:source?.['客户编号'],unit:r.unit,quantity:r.quantity,completedQuantity:quantities.completed,scheduledQuantity:quantities.scheduled,unplannedQuantity:quantities.unplanned,previousUnplannedQuantity:before.unplanned,beforeShip,afterShip,beforeArrival:old?.arrivalDay===null||old?.arrivalDay===undefined?null:dayDate(old.arrivalDay),afterArrival:r.arrivalDay===null?null:dayDate(r.arrivalDay),requiredDate:dayDate(Number(source?.['需求日'])),latestArrival:dayDate(r.latestArrivalDay),lateDays:r.lateDays,previousLateDays:old?.lateDays??null,lateDelta:old?.lateDays!==null&&old?.lateDays!==undefined&&r.lateDays!==null?r.lateDays-old.lateDays:null,classification:quantities.unplanned>before.unplanned?'未排量增加':(r.lateDays||0)>(old?.lateDays||0)?old?.lateDays?'延期扩大':'新增迟交':(r.lateDays||0)<(old?.lateDays||0)||quantities.unplanned<before.unplanned?'改善':related.some(t=>t.changed)?'调整但未迟交':'未变化',transportDays:source?rows(d,'客户与交付').find(c=>c['客户编号']===source['客户编号'])?.['运输天数']:null,remainingShelfDays:source?.['到货剩余保质天数'],relatedChanges:related.map(t=>t.id),allocationChanges:allocationChanges.filter(a=>a.demandId===r.id),previousQuantity:old?.quantity??null,sources:[source?._source||{sheet:'每日需求',row:source?._row},...result.allocations.filter(a=>a.need===r.id).map(a=>a.source)],reasons:related.flatMap(t=>t.reasons)};
+  if(urgentIds.has(r.id))urgent.push(row);if(old)orders.push(row);
+  if(quantities.unplanned>0)unplanned.push({...row,id:'UNPLANNED-'+r.id,type:urgentIds.has(r.id)?'插单':'原单',reasons:[...result.findings.filter(f=>f.need===r.id),...result.shortages.filter(f=>f.need===r.id)],classification:'当前约束下未找到完整候选',message:'本次搜索未排，不推断业务必然无解'});
+ }
+ for(const f of result.findings.filter(f=>f.code==='WIP_REMAINING')){const w=d.mapping.wip_remaining.find(w=>w.id===f.need);unplanned.push({id:'WIP-'+f.need,demandId:f.need,materialId:w?.product,unit:'千克',quantity:f.evidence?.quantity,unplannedQuantity:f.evidence?.quantity,type:'在制余工序',classification:'当前约束冲突/未找到续作',reasons:[f],sources:[w?.source],resources:[w?.resource].filter(Boolean)});}
+ return {contract:u.contract,runId,baseRunId:u.baseRunId,baseResultHash:u.baseResultHash,planId:u.planId,revision:u.revision,factsRevision:u.factsRevision,factsHash:u.factsHash,batchIds:u.batchIds,inputHash:hash(d),parameterHash:hash(rows(d,'配置参数')),mappingHash:hash(d.mapping),sourceChanges:{facts:{before:base.urgentOrder?.factsHash||null,after:u.factsHash},parameters:{before:u.baseParameterHash,after:hash(rows(d,'配置参数')),changed:u.baseParameterHash!==hash(rows(d,'配置参数')),changes:u.configurationChanges},allocationChanges},tabs:{urgent,orders,changes,unplanned},stats:{urgentDemands:urgent.length,affectedOriginalDemands:orders.filter(r=>r.relatedChanges.some(id=>changes.find(t=>t.id===id)?.changed)).length,changedOriginalOperations:changes.filter(t=>!t.isNew&&t.changed).length,newLateOriginalDemands:orders.filter(r=>(r.lateDays||0)>0&&!(r.previousLateDays>0)).length,unplannedByUnit:[{unit:'千克',urgent:urgent.reduce((n,r)=>n+r.unplannedQuantity,0),original:orders.reduce((n,r)=>n+r.unplannedQuantity,0)}]}};
+}
+
+export function queryUrgentImpact(impact,query={},d){
+ const tab=query.tab||'urgent';if(!Object.hasOwn(impact.tabs,tab))throw urgentError('URGENT_QUERY_TAB','未知结果页签');
+ let records=impact.tabs[tab];const allowed=['demandId','materialId','customerId','classification','type','resources'];
+ const filters=query.filters||{};if(Object.keys(filters).some(k=>!allowed.includes(k)))throw urgentError('URGENT_QUERY_FILTER','未知筛选字段');
+ const asOf=query.bomDay??null;
+ for(const [key,values]of Object.entries(filters)){if(!Array.isArray(values)||values.some(v=>typeof v!=='string'))throw urgentError('URGENT_QUERY_FILTER','筛选值须为明确列表，缺省为全部');let chosen=new Set(values);
+  if(key==='materialId'&&query.includeBom){if(!Number.isSafeInteger(asOf))throw urgentError('URGENT_BOM_DATE','根据BOM显示须明确有效日');const visit=id=>{for(const b of rows(d,'物料清单').filter(b=>b['父项编号']===id&&Number(b['生效日'])<=asOf&&asOf<Number(b['失效日'])))if(!chosen.has(b['子项编号'])){chosen.add(b['子项编号']);visit(b['子项编号']);}};for(const id of values)visit(id);}
+  records=records.filter(r=>key==='resources'?r.resources?.some(x=>chosen.has(x)):chosen.has(String(r[key]??'')));
+ }
+ if(query.q)records=records.filter(r=>JSON.stringify(r).toLocaleLowerCase().includes(String(query.q).toLocaleLowerCase()));
+ const options=Object.fromEntries(allowed.map(k=>[k,[...new Set(impact.tabs[tab].flatMap(r=>k==='resources'?r.resources||[]:r[k]===undefined?[]:[String(r[k])]))].sort()]));
+ return {tab,total:records.length,records,options,identity:{runId:impact.runId,inputHash:impact.inputHash,baseRunId:impact.baseRunId,planId:impact.planId,factsHash:impact.factsHash,parameterHash:impact.parameterHash,mappingHash:impact.mappingHash}};
+}
+
+export function urgentCsv(page,columns){
+ const defaults=['id','demandId','materialId','customerId','quantity','unit','completedQuantity','scheduledQuantity','unplannedQuantity','beforeShip','afterShip','beforeArrival','afterArrival','lateDays','classification','type','beforeStart','afterStart','deltaMinutes','beforeEnd','afterEnd','beforeQuantity','afterQuantity','beforeTasks','afterTasks','sources','reasons','routeStepId','resources','requiredDate','latestArrival','previousUnplannedQuantity','previousLateDays','lateDelta','transportDays','remainingShelfDays'];
+ const selected=columns?.length?[...new Set([...columns,'beforeTasks','afterTasks','sources','reasons'])]:defaults;if(!Array.isArray(selected)||selected.some(k=>!defaults.includes(k)))throw urgentError('URGENT_EXPORT_COLUMNS','未知导出栏位');
+ const quote=v=>'"'+String(typeof v==='object'&&v!==null?JSON.stringify(v):v??'').replaceAll('"','""')+'"';
+ return '\ufeff'+[selected.concat('冻结来源'),...page.records.map(r=>[...selected.map(k=>r[k]),page.identity])].map(r=>r.map(quote).join(',')).join('\r\n');
+}
