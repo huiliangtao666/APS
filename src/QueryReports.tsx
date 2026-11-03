@@ -59,7 +59,7 @@ function QueryReportView({api,catalog,view,memory,canExport,onNavigate,onMainten
     if(!page||dirty)return;
     try{const url=queryUrl('export',{...request,queryFingerprint:page.queryFingerprint,columns:visible,scope,...(scope==='SELECTED'?{ids:selected}:{})});const a=document.createElement('a');a.href=appPath('/api'+url);a.download=view.label+'.ndjson';document.body.appendChild(a);a.click();a.remove();}catch(e){setError((e as Error).message);}
   }
-  return <div className="qr-body"><form className="qr-filters" onSubmit={e=>{e.preventDefault();apply();}}>
+  return <div className={'qr-body'+(['bom.relations','bom.paths'].includes(view.id)?' qr-body-with-bom':'')}><form className="qr-filters" onSubmit={e=>{e.preventDefault();apply();}}>
     <div className="qr-filter-line"><label className="qr-keyword"><span className="sr-only">编号、名称或关键词</span><input aria-label="编号、名称或关键词" placeholder="搜索编号、名称或关键词" value={draft.q} maxLength={200} onChange={e=>change({q:e.target.value})}/></label>
       <div className="qr-dates">{view.report!=='bom'&&<><label>开始 <input type="date" value={draft.fromDate} onChange={e=>change({fromDate:e.target.value,bomAsOfDate:e.target.value})}/></label><label>结束 <input type="date" value={draft.toDateInclusive} onChange={e=>change({toDateInclusive:e.target.value})}/></label></>}{view.report==='demand'&&<label>单位 <select value={draft.unit||'千克'} onChange={e=>change({unit:e.target.value})}><option>千克</option><option>箱</option></select></label>}{view.report==='bom'&&<label>BOM有效日 <input type="date" value={draft.bomAsOfDate} onChange={e=>change({bomAsOfDate:e.target.value})}/></label>}{view.report==='capacity'&&<label>信息截至 <input type="date" value={draft.knownAsOfDate} onChange={e=>change({knownAsOfDate:e.target.value})}/></label>}</div>
       {view.filters.length>0&&<div className="qr-filter-groups">{view.filters.map(f=><QueryMultiselect key={f.key} api={api} identity={catalog.identity} view={view.id} field={f.key} label={f.label} query={{view:view.id,...draft}} value={draft.filters[f.key]||{mode:'ALL'}} onChange={value=>setDraft(current=>({...current,filters:{...current.filters,[f.key]:value},offset:0}))}/>)}</div>}
@@ -68,8 +68,8 @@ function QueryReportView({api,catalog,view,memory,canExport,onNavigate,onMainten
     </div>
   </form>{error&&<p role="alert">{error}</p>}{!page&&!error&&<p role="status">正在读取完整结果的当前页…</p>}
     {page&&<>
-      {view.report==='bom'&&<QueryBomPreview view={view.id} page={page} identity={catalog.identity} onOpen={setRecord}/>}
       <QueryTable rowActions={onMaintenance?r=>{const targets=editableQuerySources(r,maintenanceTables);return targets.length?<button onClick={()=>targets.length===1?onMaintenance(targets[0]):setRecord(r)}>{targets.length===1?'维护':'维护来源'}</button>:<span className="qr-note">参考 / 汇总</span>;}:undefined} identity={catalog.identity} id={catalog.preferenceScope+':'+view.id+':main'} columns={page.columns} records={page.records} selected={selected} onSelected={setSelected} onOpen={setRecord} onLong={(id,field)=>setLong({id,field})} sort={applied.sort} direction={applied.direction} onVisible={setVisible} onSort={sort=>{const next={...draft,sort,direction:applied.sort===sort&&applied.direction==='asc'?'desc' as const:'asc' as const,offset:0};setDraft(next);setApplied(next);}} header={<div className="qr-result-bar"><b>结果 {page.total} 条 · {page.total?`${page.offset+1}–${page.offset+page.records.length}`:'无匹配'}</b><span className="qr-result-note" title={`${view.note} ${page.note}`}>{page.note}</span><details className="qr-result-info"><summary>来源与提示</summary><p>{view.note}</p>{page.diagnostics?.map(d=><p key={d.code}>{d.code} · {d.message}</p>)}{page.notProvided?.map(n=><p key={n}>未提供：{n}</p>)}</details><label>每页 <select value={applied.pageSize} onChange={e=>{const next={...draft,pageSize:Number(e.target.value),offset:0};setDraft(next);setApplied(next);}}>{[100,200,500].map(n=><option key={n} value={n}>{n}</option>)}</select></label><button disabled={dirty||!applied.offset} onClick={()=>move(Math.max(0,applied.offset-applied.pageSize))}>上一页</button><button disabled={dirty||page.nextOffset===null} onClick={()=>move(page.nextOffset!)}>下一页</button><button disabled={!canExport||dirty} onClick={()=>download('ALL')}>导出全部</button><button disabled={!canExport||dirty||!selected.length} onClick={()=>download('SELECTED')}>导出所选 {selected.length}</button></div>}/>
+      {view.report==='bom'&&<QueryBomPreview view={view.id} page={page} identity={catalog.identity} onOpen={setRecord}/>}
       {!page.total&&<p>当前条件没有业务记录；没有补造数量或来源。</p>}
       {long&&<QueryLongValue api={api} identity={catalog.identity} query={request} fingerprint={page.queryFingerprint} id={long.id} field={long.field} onClose={()=>setLong(undefined)}/>}
       {record&&<QuerySourceDrawer preferenceScope={catalog.preferenceScope} api={api} identity={catalog.identity} query={request} pageFingerprint={page.queryFingerprint} view={view.id} record={record} onClose={()=>setRecord(undefined)} onNavigate={(v,q)=>onNavigate(v,q,applied)} onMaintenance={onMaintenance}/>}
@@ -104,19 +104,21 @@ export function QueryBomPreview({view,page,identity,onOpen}:{view:string;page:Qu
   const parents=[...new Set(edges.map(e=>e.parent))],children=new Set(edges.map(e=>e.child));
   const roots=parents.filter(id=>!children.has(id));
   const graphRoots=roots.length?roots:parents;
-  const root=graphRoots.includes(chosenRoot)?chosenRoot:graphRoots[0];
+  const root=graphRoots.includes(chosenRoot)?chosenRoot:'';
+  const selectedRoots=root?[root]:graphRoots;
   const levels=new Map<string,number>();
-  if(root){levels.set(root,0);for(let depth=0;depth<=edges.length;depth++){
+  for(const id of selectedRoots)levels.set(id,0);
+  for(let depth=0;depth<=edges.length;depth++){
     let changed=false;for(const edge of edges){if(levels.get(edge.parent)===depth&&!levels.has(edge.child)){levels.set(edge.child,depth+1);changed=true;}}
     if(!changed)break;
-  }}
+  }
   const columns=new Map<number,string[]>();for(const [id,depth] of levels){const list=columns.get(depth)||[];list.push(id);columns.set(depth,list);}
   const maxDepth=Math.max(0,...columns.keys()),rowCount=Math.max(1,...[...columns.values()].map(list=>list.length));
-  const nodeWidth=174,columnGap=72,rowHeight=76,pad=26;
+  const nodeWidth=128,columnGap=40,rowHeight=38,pad=12;
   const graphWidth=pad*2+(maxDepth+1)*nodeWidth+maxDepth*columnGap;
-  const graphHeight=Math.max(210,pad*2+rowCount*rowHeight);
+  const graphHeight=pad*2+rowCount*rowHeight;
   const position=new Map<string,{x:number;y:number}>();for(const [depth,list] of columns){
-    const top=pad+(rowCount-list.length)*rowHeight/2;
+    const top=pad;
     list.forEach((id,index)=>position.set(id,{x:pad+depth*(nodeWidth+columnGap),y:top+index*rowHeight}));
   }
   const outgoing=new Set(edges.filter(e=>levels.has(e.parent)&&levels.has(e.child)).map(e=>e.parent));
@@ -124,14 +126,13 @@ export function QueryBomPreview({view,page,identity,onOpen}:{view:string;page:Qu
     const key=textValue(record.values.root)||'根物料未提供';const group=pathGroups.get(key)||[];group.push(record);pathGroups.set(key,group);
   }
   return <figure className="qr-bom-figure">
-    <figcaption><strong>{paths?'累计提前期关键路径时序图（非实际开工）':'有效BOM有向关系图'}</strong><span>当前页 {page.records.length} / 完整匹配 {page.total} 条</span></figcaption>
-    {page.total>page.records.length&&<p className="qr-bom-scope">图中只包含当前页记录。切换页码或缩小查询范围，可查看其他关系；此图不代表完整 BOM。</p>}
+    <figcaption title={`数据集 ${identity.datasetId} v${identity.version}`}><strong>{paths?'累计提前期关键路径时序图（非实际开工）':'有效BOM有向关系图'}</strong>{!paths&&<label>根项 <select aria-label="BOM图示根项" value={root} onChange={e=>setChosenRoot(e.target.value)}><option value="">全选（{graphRoots.length} 个根项）</option>{graphRoots.map(id=><option key={id} value={id}>{id}</option>)}</select></label>}<span>当前页 {page.records.length} / 匹配 {page.total} 条 · 图示仅含本页{page.total>page.records.length?'，其余请翻页查看':''}</span></figcaption>
     {!paths&&<>
-      <div className="qr-bom-toolbar"><label>查看根项 <select value={root||''} onChange={e=>setChosenRoot(e.target.value)}>{graphRoots.map(id=><option key={id} value={id}>{id}</option>)}</select></label><span>蓝色：根项　浅蓝：有子件　浅绿：当前页末级　·　点击连线或物料查看来源</span></div>
-      <div className="qr-bom-canvas"><svg width={graphWidth} height={graphHeight} role="img" aria-label={`${root} 的当前页有效 BOM 层级图`}>
-        {edges.filter(e=>position.has(e.parent)&&position.has(e.child)).map(e=>{const a=position.get(e.parent)!,b=position.get(e.child)!;const x1=a.x+nodeWidth,x2=b.x,y1=a.y+27,y2=b.y+27;return <g key={e.record.id} className="qr-bom-edge" onClick={()=>onOpen(e.record)} role="button" tabIndex={0} aria-label={`${e.parent} 指向 ${e.child}，查看用量关系`} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();onOpen(e.record);}}}><path d={`M${x1} ${y1} C${x1+columnGap/2} ${y1},${x2-columnGap/2} ${y2},${x2} ${y2}`} fill="none"/><path className="qr-bom-edge-hit" d={`M${x1} ${y1} C${x1+columnGap/2} ${y1},${x2-columnGap/2} ${y2},${x2} ${y2}`} fill="none"/></g>;})}
-        {[...position].map(([id,p])=>{const source=edges.find(e=>e.parent===id||e.child===id)?.record;const kind=id===root?'root':outgoing.has(id)?'parent':'leaf';return <g key={id} className={`qr-bom-node qr-bom-node-${kind}`} role="button" tabIndex={0} aria-label={`${id}，查看关联记录`} onClick={()=>source&&onOpen(source)} onKeyDown={event=>{if((event.key==='Enter'||event.key===' ')&&source){event.preventDefault();onOpen(source);}}}><rect x={p.x} y={p.y} width={nodeWidth} height="54" rx="8"/><text x={p.x+12} y={p.y+23} className="qr-bom-node-id">{id}</text><text x={p.x+12} y={p.y+43} className="qr-bom-node-meta">{id===root?'根项':outgoing.has(id)?'含子件':'当前页末级'}</text></g>;})}
-      </svg></div><p className="qr-bom-scope">物料名称、类别和关键路径未包含在用量关系结果中；可在“物料与BOM”和“提前期路径”查看对应信息。</p>
+      <div className="qr-bom-toolbar"><span>蓝：根项 · 浅蓝：有子件 · 绿：本页末级 · 点击物料或连线查看来源</span></div>
+      <div className="qr-bom-canvas"><svg width={graphWidth} height={graphHeight} role="img" aria-label={`${root||'全部根项'} 的当前页有效 BOM 层级图`}>
+        {edges.filter(e=>position.has(e.parent)&&position.has(e.child)).map(e=>{const a=position.get(e.parent)!,b=position.get(e.child)!;const x1=a.x+nodeWidth,x2=b.x,y1=a.y+14,y2=b.y+14;return <g key={e.record.id} className="qr-bom-edge" onClick={()=>onOpen(e.record)} role="button" tabIndex={0} aria-label={`${e.parent} 指向 ${e.child}，查看用量关系`} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();onOpen(e.record);}}}><path d={`M${x1} ${y1} C${x1+columnGap/2} ${y1},${x2-columnGap/2} ${y2},${x2} ${y2}`} fill="none"/><path className="qr-bom-edge-hit" d={`M${x1} ${y1} C${x1+columnGap/2} ${y1},${x2-columnGap/2} ${y2},${x2} ${y2}`} fill="none"/></g>;})}
+        {[...position].map(([id,p])=>{const source=edges.find(e=>e.parent===id||e.child===id)?.record;const kind=selectedRoots.includes(id)?'root':outgoing.has(id)?'parent':'leaf';return <g key={id} className={`qr-bom-node qr-bom-node-${kind}`} role="button" tabIndex={0} aria-label={`${id}，查看关联记录`} onClick={()=>source&&onOpen(source)} onKeyDown={event=>{if((event.key==='Enter'||event.key===' ')&&source){event.preventDefault();onOpen(source);}}}><title>{id} · {kind==='root'?'根项':kind==='parent'?'含子件':'当前页末级'}</title><rect x={p.x} y={p.y} width={nodeWidth} height="28" rx="4"/><text x={p.x+8} y={p.y+18} className="qr-bom-node-id">{id.length>17?id.slice(0,16)+'…':id}</text></g>;})}
+      </svg></div>
     </>}
     {paths&&<div className="qr-bom-paths">{[...pathGroups].map(([key,records])=>{
       const sorted=[...records].sort((a,b)=>Number(a.values.cumulativeLeadDays)-Number(b.values.cumulativeLeadDays));
@@ -144,7 +145,6 @@ export function QueryBomPreview({view,page,identity,onOpen}:{view:string;page:Qu
         </div><p className="qr-bom-path-order">物料顺序：{sorted.map(r=>textValue(r.values.materialId)||'未提供').join(' → ')}</p>
       </section>;
     })}</div>}
-    <small className="qr-bom-foot">数据集 {identity.datasetId} v{identity.version} · 图中仅使用当前查询记录；点击图形查看原始字段和来源。</small>
   </figure>;
 }
 

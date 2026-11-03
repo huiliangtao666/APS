@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {renderToStaticMarkup} from 'react-dom/server';
 import App from './App';
-import {QueryReports,editableQuerySources} from './QueryReports';
+import {QueryReports,QueryBomPreview,editableQuerySources} from './QueryReports';
 import {QueryTable} from './QueryReportsControls';
 const api=async()=>{throw Error('Static rendering must not call any API');};
 test('active app exposes only four consolidated workbench pages and no independent legacy data source',()=>{
@@ -25,4 +25,19 @@ test('read-only tables have no write column; current-source action is rendered o
  const props={id:'SYN',columns:[{key:'id',label:'编号',fixed:true}],records:[{id:'DE1',values:{id:'DE1'}}]};
  assert.ok(!renderToStaticMarkup(<QueryTable {...props}/>).includes('<th>维护</th>'));
  assert.ok(renderToStaticMarkup(<QueryTable {...props} rowActions={()=> <button>维护来源</button>}/>).includes('<th>维护</th>'));
+});
+test('BOM diagram defaults to all current-page roots, retains shared/disconnected nodes and discloses pagination',()=>{
+ const identity={datasetId:'SYN',version:1,fingerprint:'Q',dayZero:'2026-10-31'};
+ const records=[['FG001','SF001'],['FG002','SF001'],['SF001','RM001'],['FG003','PK001']].map(([parent,child],i)=>({id:'B'+i,values:{父项编号:parent,子项编号:child}}));
+ const html=renderToStaticMarkup(<QueryBomPreview view="bom.relations" identity={identity} page={{identity,view:'bom.relations',queryFingerprint:'Q',total:10,offset:0,nextOffset:4,columns:[],records}} onOpen={()=>{}}/>);
+ assert.match(html,/<option value="" selected="">全选（3 个根项）/);
+ for(const id of ['FG001','FG002','FG003','SF001','RM001','PK001'])assert.ok(html.includes('aria-label="'+id+'，查看关联记录"'),id);
+ assert.equal((html.match(/class="qr-bom-edge"/g)||[]).length,4);
+ assert.ok(html.includes('图示仅含本页，其余请翻页查看'));
+});
+test('compact lead-time diagram preserves fractional durations and reference meaning',()=>{
+ const identity={datasetId:'SYN',version:1,fingerprint:'Q',dayZero:'2026-10-31'};
+ const record={id:'P1',values:{root:'FG001',materialId:'SF001',sequence:1,ownLeadDays:0.5,cumulativeLeadDays:1.25}};
+ const html=renderToStaticMarkup(<QueryBomPreview view="bom.paths" identity={identity} page={{identity,view:'bom.paths',queryFingerprint:'Q',total:1,offset:0,nextOffset:null,columns:[],records:[record]}} onOpen={()=>{}}/>);
+ assert.ok(html.includes('0.5天'));assert.ok(html.includes('结束偏移1.25天'));assert.ok(html.includes('非实际开工'));
 });

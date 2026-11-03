@@ -109,3 +109,27 @@
 .qr-business .qr-scroll{max-height:calc(100vh - 300px);border-radius:0 0 5px 5px}
 .equipment-result-bar{display:flex;align-items:center;flex-wrap:nowrap;gap:6px;padding:3px 7px;border:1px solid #dce2e9;background:#f7fafc;white-space:nowrap}
 @media(max-width:1100px){.qr-table-toolbar,.equipment-result-bar{overflow-x:auto}.qr-table-toolbar .qr-result-bar{flex:none}.qr-result-note{max-width:180px}}
+/* BOM results lead with the table; the diagram remains a compact supporting view. */
+.qr-body-with-bom>.qr-scroll{max-height:clamp(140px,26vh,280px);min-height:0}
+.qr-bom-figure{margin:0;padding:7px 9px;border-radius:5px;min-width:0}
+.qr-bom-figure figcaption{justify-content:flex-start;flex-wrap:wrap;gap:5px 12px;margin:0 0 5px;font-size:12px}
+.qr-bom-figure figcaption strong{font-size:13px}
+.qr-bom-figure figcaption label{display:inline-flex;align-items:center;gap:4px;margin:0;white-space:nowrap}
+.qr-bom-figure figcaption select{max-width:200px}
+.qr-bom-figure figcaption>span{margin-left:auto;font-size:11px}
+.qr-bom-toolbar{margin:2px 0 5px;gap:6px;font-size:11px;line-height:1.3}
+.qr-bom-canvas{max-height:clamp(110px,22vh,240px);background-size:12px 12px}
+.qr-bom-node-id{font-size:12px;font-weight:600}
+.qr-bom-paths{grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:7px;max-height:clamp(140px,26vh,280px);overflow:auto}
+.qr-bom-path-group{min-width:0;overflow:auto}
+.qr-bom-path-group header{padding:5px 7px;font-size:12px}
+.qr-bom-timeline{min-width:420px;padding:6px 7px}
+.qr-bom-axis,.qr-bom-path-row{grid-template-columns:100px minmax(180px,1fr) 80px;gap:7px}
+.qr-bom-axis{height:21px}
+.qr-workspace .qr-bom-path-row{min-width:420px;padding:4px 0}
+.qr-bom-path-label,.qr-bom-path-days{display:flex;align-items:baseline;gap:5px;font-size:12px;white-space:nowrap}
+.qr-bom-track{height:20px;margin-right:8px}
+.qr-bom-axis>div{margin-right:8px}
+.qr-bom-bar{top:4px;height:12px}
+.qr-bom-path-order{padding:5px 7px;font-size:11px}
+@media(max-width:760px){.qr-bom-figure figcaption{flex-direction:row;align-items:center}.qr-bom-figure figcaption>span{margin-left:0}}
