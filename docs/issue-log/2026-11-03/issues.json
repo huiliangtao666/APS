@@ -1,0 +1,2194 @@
+[
+  {
+    "seq": 1,
+    "event_key": "APS-USER-20261103-log-64",
+    "timestamp": "2026-11-03T01:26:13.597Z",
+    "local_time": "2026-11-03T09:26:13.597000+08:00",
+    "title": "[今日问题 2026-11-03 01/77] 再次检查分支并合并到 main",
+    "content": "再次检查分支并合并到main",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已重新检查并完成合并：[PR #58](https://github.com/huiliangtao666/APS/pull/58) 已进入 `main`，当前提交为 `d8a0426`。远端和本地均只剩 `main`；两个已合并分支已清理。\n\n构建、项目测试及相关 QA 测试通过，Worker 和配置文件也已确认进入构建产物。临时验证工作树已清理，释放约 384 MB；`server/data/` 运行数据已保留。本次完成的是代码合并，未重新发布应用。",
+    "commits": [
+      "d8a042682fc95b91c929391053fda2f88a97c9cd"
+    ],
+    "attachments": [],
+    "number": 60,
+    "url": "https://github.com/huiliangtao666/APS/issues/60",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:57:44Z",
+    "closed_at": "2026-11-03T14:57:46Z"
+  },
+  {
+    "seq": 2,
+    "event_key": "APS-USER-20261103-log-66",
+    "timestamp": "2026-11-03T01:29:28.394Z",
+    "local_time": "2026-11-03T09:29:28.394000+08:00",
+    "title": "[今日问题 2026-11-03 02/77] 拉取最新 main 并构建应用",
+    "content": "拉最新main代码build应用",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已同步并核对最新 `main`：提交为 `d8a0426`。容器内的隔离构建通过，服务端、两个 Worker 和 Workbook 配置文件均已生成；`server/data/` 运行数据已保留。\n\n这次构建未更新线上应用。现有发布配置仍使用旧构建命令，正式重新发布前需要同步该配置。",
+    "commits": [
+      "d8a042682fc95b91c929391053fda2f88a97c9cd"
+    ],
+    "attachments": [],
+    "number": 61,
+    "url": "https://github.com/huiliangtao666/APS/issues/61",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:57:48Z",
+    "closed_at": "2026-11-03T14:57:50Z"
+  },
+  {
+    "seq": 3,
+    "event_key": "APS-USER-20261103-log-68",
+    "timestamp": "2026-11-03T01:31:22.746Z",
+    "local_time": "2026-11-03T09:31:22.746000+08:00",
+    "title": "[今日问题 2026-11-03 03/77] CR 的五类查询和六类设备视图没有体现",
+    "content": "CR中已经更新的五类查询和六类设备视图都没有在应用中体现？",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "初次处理因额度中断；在紧接的“继续”对话中完成定位：五类查询和六视图已在源码中接入，查询依赖所选数据集，六视图依赖已完成的冻结运行，旧线上包早于 main。已说明两组入口，随后在工作台导航改版及 activate 修复中更新应用。此条关闭范围为入口与版本原因排查完成，不表示两份原 CR 的全部 UAT 已通过。",
+    "commits": [
+      "d8a042682fc95b91c929391053fda2f88a97c9cd"
+    ],
+    "attachments": [],
+    "number": 62,
+    "url": "https://github.com/huiliangtao666/APS/issues/62",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:57:53Z",
+    "closed_at": "2026-11-03T14:57:54Z"
+  },
+  {
+    "seq": 4,
+    "event_key": "APS-USER-20261103-log-70",
+    "timestamp": "2026-11-03T01:32:25.475Z",
+    "local_time": "2026-11-03T09:32:25.475000+08:00",
+    "title": "[今日问题 2026-11-03 04/77] 继续核查查询与六视图的入口及线上版本",
+    "content": "继续",
+    "completion_scope": "咨询／核查答复完成",
+    "solution": "查明了：**两组功能已接入源码，当前工作区的已发布包中也能找到页面代码，但入口不明显；线上包仍早于最新 `main`。**\n\n| 功能 | 当前入口 |\n|---|---|\n| 五类业务查询 | 进入 `aps-test2-r1` 的“排程工作台”，先选择 Excel 数据集，再点“物料BOM / 需求 / 库存 / 产能 / 补料查询”。未选数据集时按钮不可用。 |\n| 六类设备视图 | 在工作台选择数据集，重开一个**已完成的冻结运行**，进入 A4“计算”、A5“结果核对”或 A6“保存导出”；结果区内可切换设备甘特、需求交付、设备负荷、人员工装、物料风险、任务明细。 |\n\n当前工作区有一条已完成的历史运行，但六视图不会作为首页独立页签出现。入口分别由 [InputData.tsx](https://github.com/huiliangtao666/APS/blob/5a23d75f1e7c80114fc14e7c5a674c376e376e00/src/InputData.tsx#L59) 和 [EquipmentSchedule.tsx](https://github.com/huiliangtao666/APS/blob/5a23d75f1e7c80114fc14e7c5a674c376e376e00/src/EquipmentSchedule.tsx#L7) 控制。\n\n**版本差异也确实存在：**线上 `dist` 的生成时间是 11 月 2 日，最新 `main` 提交 `d8a0426` 于 11 月 3 日合并。上次我完成的是隔离构建验证，没有将新构建发布到应用。因此目前不能把线上页面视为最新 `main` 的验证结果。线上入口与首屏资源检查通过，但这不等于五类查询和六视图的实际操作验收通过。",
+    "commits": [
+      "d8a042682fc95b91c929391053fda2f88a97c9cd"
+    ],
+    "attachments": [],
+    "number": 63,
+    "url": "https://github.com/huiliangtao666/APS/issues/63",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:57:57Z",
+    "closed_at": "2026-11-03T14:57:59Z"
+  },
+  {
+    "seq": 5,
+    "event_key": "APS-USER-20261103-log-72",
+    "timestamp": "2026-11-03T01:37:13.622Z",
+    "local_time": "2026-11-03T09:37:13.622000+08:00",
+    "title": "[今日问题 2026-11-03 05/77] 创建运行按钮无法点击的前提条件",
+    "content": "[Uploaded: upload/pasted-2026-11-03T01-36-51.png]\n这个按键一直无法点击，需要什么前提条件",
+    "completion_scope": "咨询／核查答复完成",
+    "solution": "截图中的“创建运行并冻结输入”只有在以下条件**同时满足**时才能点击：\n\n1. 在工作台选择了 Excel 数据集，并填写页面顶部的“操作原因（必填）”。\n2. 在 A3 设置本次的模拟当前日、开始日、窗口天数及需要的需求编号。\n3. 点击“检查本次范围 / 重新检查”，结果显示“✓ 本次范围就绪”。\n4. 检查后没有再修改数据、参数或本次范围；改动后须重新检查。\n\n按钮正下方的 `!` 提示会指出当前卡在哪一步，例如“须先检查当前范围”或“须解除本次阻塞”。若显示阻塞，点击上方的问题条目，可查看需要补的数据或配置位置。\n\n**查看已有六类设备视图无需点击这个按钮：**选中对应数据集，在“重开冻结运行”中选择已完成的运行，再进入 A5“结果核对”。截图只包含按钮，无法判断你当前具体缺少哪项前提。\n\n历史界面说明：本条保留当时入口及前提；当天后续已移除手填操作原因、旧CSV入口，并将日期改为日历选择、业务查询并入查询与维护页。当前操作应以这些后续更新为准。",
+    "commits": [],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T01-36-51.png",
+        "name": "pasted-2026-11-03T01-36-51.png",
+        "sha256": "b7b2a820e5c4b17a5a2865e0430da0a48ded74c4852bcc729523f45996c4e831",
+        "bytes": 6718,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T01-36-51.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 64,
+    "url": "https://github.com/huiliangtao666/APS/issues/64",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:58:01Z",
+    "closed_at": "2026-11-03T14:58:03Z"
+  },
+  {
+    "seq": 6,
+    "event_key": "APS-USER-20261103-log-74",
+    "timestamp": "2026-11-03T01:39:33.149Z",
+    "local_time": "2026-11-03T09:39:33.149000+08:00",
+    "title": "[今日问题 2026-11-03 06/77] 如何配置并检查当前排程范围",
+    "content": "[Uploaded: upload/pasted-2026-11-03T01-39-26.png]\n当前范围如何配置",
+    "completion_scope": "咨询／核查答复完成",
+    "solution": "红框提示“**须先检查当前范围**”，表示这次数据集和排程范围尚未完成检查；无需另建配置文件。\n\n在“排程工作台”按以下顺序操作：\n\n1. 选择“当前数据集”，并填写页面顶部的“操作原因”。\n2. 到 A3“本次配置”，填写“模拟当前日”“开始日”“本次窗口天数”；“需求编号”留空表示检查窗口内全部需求。\n3. 点击同一行的“**检查本次范围 / 重新检查**”。\n4. 看到“✓ 本次范围就绪”后，“创建运行并冻结输入”才可点击。若显示“本次范围阻塞”，点击上方的问题条目，按提示补齐数据或参数后重新检查。\n\n页面默认的开始日 `1`、窗口 `14` 天表示检查 `[1,15)`，即第 1 至第 14 天。**检查后只要更换数据集、参数采用范围或上述日期与需求选择，就需要重新检查。**\n\n历史界面说明：本条保留当时入口及前提；当天后续已移除手填操作原因、旧CSV入口，并将日期改为日历选择、业务查询并入查询与维护页。当前操作应以这些后续更新为准。",
+    "commits": [],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T01-39-26.png",
+        "name": "pasted-2026-11-03T01-39-26.png",
+        "sha256": "ddd2ebc88ef11f0d09236968399bfbcc857d019826e4f0846eb87720f63c87ce",
+        "bytes": 14177,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T01-39-26.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 65,
+    "url": "https://github.com/huiliangtao666/APS/issues/65",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:58:06Z",
+    "closed_at": "2026-11-03T14:58:08Z"
+  },
+  {
+    "seq": 7,
+    "event_key": "APS-USER-20261103-log-76",
+    "timestamp": "2026-11-03T01:40:16.656Z",
+    "local_time": "2026-11-03T09:40:16.656000+08:00",
+    "title": "[今日问题 2026-11-03 07/77] DEMAND_CHANGED 报错如何修正",
+    "content": "[Uploaded: upload/pasted-2026-11-03T01-40-09.png]\n这个错误如何修改",
+    "completion_scope": "咨询／核查答复完成",
+    "solution": "这个 `DEMAND_CHANGED` 错误指向 **A3“需求编号（空为全窗）”**：填入的需求编号在当前数据集版本中不存在，或它的“需求日”不在所选日窗内。\n\n最快的修正方法：\n\n1. 清空“需求编号”，表示选择窗口内全部需求。\n2. 点击“检查本次范围 / 重新检查”。\n3. 显示“✓ 本次范围就绪”后再创建运行。\n\n如果只想排某条需求，先在“需求”→“每日需求”查到它的**准确需求编号和需求日**，再把 A3 的“开始日”和“窗口天数”设为覆盖该日，填回编号并重新检查。当前数据集中有第 1–43 天的需求；改过数据或日窗后，旧检查结果也会失效。\n\n历史界面说明：本条保留当时入口及前提；当天后续已移除手填操作原因、旧CSV入口，并将日期改为日历选择、业务查询并入查询与维护页。当前操作应以这些后续更新为准。",
+    "commits": [],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T01-40-09.png",
+        "name": "pasted-2026-11-03T01-40-09.png",
+        "sha256": "6f92da3db851abd0b153e9375e6cbdb5d9973f918cd268d902bf84309d113e36",
+        "bytes": 14995,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T01-40-09.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 66,
+    "url": "https://github.com/huiliangtao666/APS/issues/66",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:58:10Z",
+    "closed_at": "2026-11-03T14:58:12Z"
+  },
+  {
+    "seq": 8,
+    "event_key": "APS-USER-20261103-log-78",
+    "timestamp": "2026-11-03T01:42:25.011Z",
+    "local_time": "2026-11-03T09:42:25.011000+08:00",
+    "title": "[今日问题 2026-11-03 08/77] 每日需求的查询入口在哪里",
+    "content": "先在“需求”→“每日需求”查到它的准确需求编号和需求日\n入口在哪里",
+    "completion_scope": "咨询／核查答复完成",
+    "solution": "从当前 A3 页面，可以这样找：\n\n1. 向上滚动到“**当前数据集**”区域，确认已选中数据集。\n2. 点击旁边的“**同数据集查询**”。\n3. 在出现的“四类输入”中点“**需求**”，将“**业务表**”选为“**每日需求**”。\n4. 在“查询”框搜索需求编号，核对该行的“**需求编号**”和“**需求日**”。\n5. 点击“**返回原步骤（保留选择）**”，回到 A3 填写编号并重新检查。\n\n也可以直接点 A1“数据准备”，在同一区域查看“需求”→“每日需求”。\n\n历史界面说明：本条保留当时入口及前提；当天后续已移除手填操作原因、旧CSV入口，并将日期改为日历选择、业务查询并入查询与维护页。当前操作应以这些后续更新为准。",
+    "commits": [],
+    "attachments": [],
+    "number": 68,
+    "url": "https://github.com/huiliangtao666/APS/issues/68",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:58:14Z",
+    "closed_at": "2026-11-03T14:58:16Z"
+  },
+  {
+    "seq": 9,
+    "event_key": "APS-USER-20261103-log-80",
+    "timestamp": "2026-11-03T01:46:16.173Z",
+    "local_time": "2026-11-03T09:46:16.173000+08:00",
+    "title": "[今日问题 2026-11-03 09/77] 两套入口与工作台页面及交互逻辑梳理",
+    "content": "我看到了两个入口。\n\n总体来说现在的页面嵌套太复杂了，UI要重新设计。你能归纳一下目前整个排程工作太的页面设计以及交互逻辑吗",
+    "completion_scope": "咨询／核查答复完成",
+    "solution": "可以。按当前 `main` 源码看，**“排程工作台”表面是六步流程，实际是一个长页面，叠加了步骤切换、内嵌查询、参数页、维护子视图和运行结果**。这正是入口难找的主要原因。以下是现状梳理，供 UI 重设计使用；不代表这些场景已经完成 UAT。\n\n### 一、当前页面结构\n\n```text\n应用顶栏\n├─ 排程工作台（Excel 主线）\n├─ CSV / 分钟兼容模式\n└─ 范围与待决\n\n排程工作台\n├─ 共享操作与记录：操作原因、刷新、操作日志\n├─ 五类业务查询入口\n├─ A1–A6 步骤导航\n├─ Excel 导入：业务数据文件、配置参数文件分别预览和确认\n├─ 当前数据集：版本、来源、下载原件\n│  ├─ 同数据集查询 → 四类输入 → 业务表 → 记录\n│  └─ 同数据集工装维护\n├─ 参数维护：步骤关键参数 / 统一配置参数，两处共用数据\n├─ 数据就绪与本次范围：日期、窗口、需求编号、检查、创建运行\n└─ 冻结运行结果\n   └─ 六类设备视图\n```\n\n结构主要在 [InputData.tsx](https://github.com/huiliangtao666/APS/blob/5a23d75f1e7c80114fc14e7c5a674c376e376e00/src/InputData.tsx#L58)；顶栏切换在 [App.tsx](https://github.com/huiliangtao666/APS/blob/5a23d75f1e7c80114fc14e7c5a674c376e376e00/src/App.tsx#L129)。\n\n### 二、六步目前各做什么\n\n| 步骤 | 当前用途 | 实际交互 |\n|---|---|---|\n| A1 数据准备 | 建立或选择数据集 | 业务 Excel、参数 Excel 分别选择文件、预览差异、确认导入；还可查询和维护原表 |\n| A2 就绪补缺 | 处理数据、参数问题 | 点击问题定位到原表或参数记录，修改后生成新版本 |\n| A3 本次配置 | 确定运行范围 | 填模拟当前日、开始日、窗口天数、需求编号和参数作用范围；检查本次范围 |\n| A4 计算 | 创建运行 | “创建运行并冻结输入”在共用的就绪区域；创建后切到 A4，后台计算并显示状态 |\n| A5 结果核对 | 查看冻结结果 | 在运行结果中查看六类设备视图、明细与独立检查 |\n| A6 保存导出 | 回看、导出 | 运行结果本身已持久化，可按运行编号重开并导出；页面没有清晰独立的“保存”动作 |\n\n**步骤按钮并没有把每一步严格做成独立页面。** 数据集、参数和就绪区域在多个步骤反复出现；A5、A6又隐藏了包含“重开冻结运行”的区域，需要退回前面的步骤操作。\n\n### 三、两套容易混淆的查询入口\n\n| 入口 | 当前目的 |\n|---|---|\n| “同数据集查询” →“需求/库存/生产/补单”→“业务表” | 查 Excel 原始输入记录，必要时定位维护，例如“每日需求”的需求编号和需求日 |\n| “物料BOM / 需求 / 库存 / 产能 / 补料查询” | CR 的五类业务分析查询，含子视图、筛选、来源和导出；需先选择数据集 |\n\n它们使用同一数据集，却分别提供“原表记录”和“业务分析”两种视角；页面没有在入口处说明区别。[QueryReports.tsx](https://github.com/huiliangtao666/APS/blob/5a23d75f1e7c80114fc14e7c5a674c376e376e00/src/QueryReports.tsx#L33) 定义了五类查询。\n\n### 四、运行与六视图的触发链\n\n```text\n选择数据集\n  → 导入或维护业务数据、参数\n  → 设置本次日窗和需求\n  → 检查本次范围\n  → 就绪后创建冻结运行\n  → 运行完成\n  → 结果区显示六视图\n```\n\n六视图分别是**设备甘特、需求交付、设备负荷、人员工装、物料风险、任务明细**。它们目前嵌在“冻结运行结果”里，没有独立且明显的“排程结果”导航入口。[EquipmentSchedule.tsx](https://github.com/huiliangtao666/APS/blob/5a23d75f1e7c80114fc14e7c5a674c376e376e00/src/EquipmentSchedule.tsx#L7)\n\n### 五、重设计应优先解决的交互问题\n\n1. **固定主线与常用入口。** 数据集、当前版本、本次范围、运行状态和“查看结果”应始终可见；查询和维护不应藏在长页中间。\n2. **把三种对象说清楚。** “原始业务表查询”“五类业务分析查询”“六类排程结果视图”应有不同名称和明确入口。\n3. **把前置条件放在操作旁。** 创建运行按钮旁直接列出：操作原因、数据集、范围检查、当前阻塞项，以及可点击的修复位置。\n4. **缩短返回路径。** 从问题或查询进入原表/参数维护后，一步返回原运行范围；版本变化时明确提示重新检查。\n5. **让结果可直接重开。** 已完成运行应从工作台主入口直接选择并进入六视图，不需要先猜测该返回 A4 还是 A5。\n6. **区分状态。** “已导入”“已检查”“已就绪”“已冻结”“计算完成”“独立核对完成”应分别显示，避免把有数据误读为可运行或已验收。\n\n当前已发布应用包仍早于最新 `main` 合并提交；这份梳理以源码中的交互为准，重设计前还应在目标发布版本上逐页核对。",
+    "commits": [],
+    "attachments": [],
+    "number": 69,
+    "url": "https://github.com/huiliangtao666/APS/issues/69",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:58:18Z",
+    "closed_at": "2026-11-03T14:58:20Z"
+  },
+  {
+    "seq": 10,
+    "event_key": "APS-USER-20261103-log-82",
+    "timestamp": "2026-11-03T01:52:50.165Z",
+    "local_time": "2026-11-03T09:52:50.165000+08:00",
+    "title": "[今日问题 2026-11-03 10/77] 同数据集的含义、实例与分类",
+    "content": "[Uploaded: upload/pasted-2026-11-03T01-52-29.png]\n同据集是什么意思，一共有几类数据集？",
+    "completion_scope": "咨询／核查答复完成",
+    "solution": "截图里的“**同数据集**”指上方“当前数据集”选中的那一份数据。它不是一种新的数据集类型：\n\n- **同数据集查询**：查看这份数据集中的 Excel 原表记录。\n- **同数据集工装维护**：维护这份数据集里的工装相关记录；保存会产生新版本。\n- 截图中的 **v4 是版本号**，不是第 4 类数据集。\n\n当前工作区保存了 **2 个数据集实例**：“Excel仿真数据”（v3）和截图中的“肉食品仿真数据_202611_合并图示版.xlsx”（v4）。每个实例的业务输入按**需求、库存、生产、补单**四类展示；配置参数由另一份 Excel 导入，并关联到选中的数据集。\n\n页面另有**五类业务查询**和**六类设备结果视图**，那是查看数据与运行结果的方式，也不是数据集类别。这里把“数据集实例、输入类别、查询类别”放在相邻位置且都用了“数据”一词，确实容易混淆。",
+    "commits": [],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T01-52-29.png",
+        "name": "pasted-2026-11-03T01-52-29.png",
+        "sha256": "fba0215517ce0b18609350d5925399abd561626fc0ec9a329c4c373aefccfe70",
+        "bytes": 44217,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T01-52-29.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 70,
+    "url": "https://github.com/huiliangtao666/APS/issues/70",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:58:23Z",
+    "closed_at": "2026-11-03T14:58:25Z"
+  },
+  {
+    "seq": 11,
+    "event_key": "APS-USER-20261103-log-84",
+    "timestamp": "2026-11-03T01:59:53.492Z",
+    "local_time": "2026-11-03T09:59:53.492000+08:00",
+    "title": "[今日问题 2026-11-03 11/77] 独立功能页、步骤路标及仅保留 v4 数据入口",
+    "content": "[Uploaded: upload/pasted-2026-11-03T01-56-21.png]\n1. 整体页面风格给你一些示意，单独功能可以如图中红框1的形式，作为点击页面。操作步骤可以用红框2的路标形式。按键、提示、操作框不要退叠在一起，参照红框3内的形式优化。\n2. 页面中不在需要excel仿真数据（v3）包括相关入口、页面；只保留““肉食品仿真数据_202611_合并图示版.xlsx”（v4）”相关入口和页面。\n\n你就自己修改处理，之后再合回main。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已按示意图修改，并通过 [PR #59](https://github.com/huiliangtao666/APS/pull/59) 合回 `main`，当前提交为 `63cf40f`。\n\n工作台现有独立功能入口、六步路标；本次范围的填写、检查提示和创建运行按钮也分区显示。已保存运行可从固定入口打开六类设备视图。界面只展示“肉食品仿真数据_202611_合并图示版.xlsx”这一数据集，业务 Excel 导入也只指向它；v3 的底层历史数据已保留。\n\n容器隔离构建通过，现有查询 UI 测试 **6/6 通过**，导航布局已在开发预览中检查。预览容器没有 v4 数据，因此尚未验证真实记录操作。临时文件已清理约 135 KB，运行数据未删除。**线上应用尚未重新发布，当前页面不会立即显示这次改动。**",
+    "commits": [
+      "4c7c3017e83b87ed91c1b10b9d03666dc409c2fc",
+      "63cf40f53befa19c644f794329432cf0f702d695"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T01-56-21.png",
+        "name": "pasted-2026-11-03T01-56-21.png",
+        "sha256": "0bd3d067e69f6acd8c55df78f9d097a340a2c298e113fd26f199f5409c07de39",
+        "bytes": 90198,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T01-56-21.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 71,
+    "url": "https://github.com/huiliangtao666/APS/issues/71",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:58:27Z",
+    "closed_at": "2026-11-03T14:58:29Z"
+  },
+  {
+    "seq": 12,
+    "event_key": "APS-USER-20261103-log-86",
+    "timestamp": "2026-11-03T02:13:21.148Z",
+    "local_time": "2026-11-03T10:13:21.148000+08:00",
+    "title": "[今日问题 2026-11-03 12/77] 应用 activate 超时",
+    "content": "activate超时，请检查",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "`activate` 超时已修复。原因有两处：发布构建漏掉工作簿配置文件和 worker；补齐后，生产进程又监听了 `4318`，与应用绑定的 `3000` 端口不一致。\n\n已修复构建与端口配置，重新发布，并将修复同步到 Git `main`（`4eba30e`）。目前发布状态为**成功**，容器健康状态为 `up`、重启次数为 0；生产入口返回 200，首屏 JS/CSS 均通过验证。",
+    "commits": [
+      "5723af2c8bcd85e0528d4ac3490ff58c9f461462",
+      "a9e364cc8f0f55519305a1d11c5e0d3f15d95d31",
+      "4eba30e351b708f0e8d03f70c254a0cbd07a809c"
+    ],
+    "attachments": [],
+    "number": 72,
+    "url": "https://github.com/huiliangtao666/APS/issues/72",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:58:32Z",
+    "closed_at": "2026-11-03T14:58:34Z"
+  },
+  {
+    "seq": 13,
+    "event_key": "APS-USER-20261103-log-88",
+    "timestamp": "2026-11-03T02:29:17.163Z",
+    "local_time": "2026-11-03T10:29:17.163000+08:00",
+    "title": "[今日问题 2026-11-03 13/77] 旧 CSV／分钟模式入口的含义",
+    "content": "[Uploaded: upload/pasted-2026-11-03T02-29-08.png]\n这是什么意思，是指什么功能",
+    "completion_scope": "咨询／核查答复完成",
+    "solution": "红框里是一个**可点击的可选入口**，用于进入旧版「CSV／分钟」排程模式。该模式使用 CSV 输入、按分钟计算，并提供对应的原生数据维护、查询和历史方案页面。\n\n你现在使用的 **v4 Excel／按日排程主线不需要点击它**。括号里的“保留工作台上下文”表示返回时仍停留在原来的 Excel 工作台步骤；点击它不会把 Excel 数据自动转换为 CSV，也不会把两套数据合并。这个入口的文案确实容易误解。\n\n历史界面说明：本条保留当时入口及前提；当天后续已移除手填操作原因、旧CSV入口，并将日期改为日历选择、业务查询并入查询与维护页。当前操作应以这些后续更新为准。",
+    "commits": [],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T02-29-08.png",
+        "name": "pasted-2026-11-03T02-29-08.png",
+        "sha256": "35d4ef49486c3dc8de9a098dff1148cd41ce05b86a03f8211afb17319bb2398d",
+        "bytes": 62057,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T02-29-08.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 73,
+    "url": "https://github.com/huiliangtao666/APS/issues/73",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:58:37Z",
+    "closed_at": "2026-11-03T14:58:39Z"
+  },
+  {
+    "seq": 14,
+    "event_key": "APS-USER-20261103-log-90",
+    "timestamp": "2026-11-03T02:30:29.471Z",
+    "local_time": "2026-11-03T10:30:29.471000+08:00",
+    "title": "[今日问题 2026-11-03 14/77] 隐藏旧版 CSV／分钟页面及入口",
+    "content": "请把旧版cvs/分钟相关页面及入口隐去，不要再体现了",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已将旧版 CSV／分钟模式的页面入口隐藏，移除了工作台中的兼容模式按钮和迁移入口。现在界面以 Excel 按日排程为主线。\n\n改动已合入 `main`（`883b1ec`）并更新已发布应用。构建和发布成功，生产入口及首屏资源验证通过。历史数据与接口保留。",
+    "commits": [
+      "883b1eccb4d85860492df9d2a903313b2e1c0560"
+    ],
+    "attachments": [],
+    "number": 74,
+    "url": "https://github.com/huiliangtao666/APS/issues/74",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:58:41Z",
+    "closed_at": "2026-11-03T14:58:43Z"
+  },
+  {
+    "seq": 15,
+    "event_key": "APS-USER-20261103-log-92",
+    "timestamp": "2026-11-03T02:34:44.903Z",
+    "local_time": "2026-11-03T10:34:44.903000+08:00",
+    "title": "[今日问题 2026-11-03 15/77] Excel 上传、预览、确认及成功提示",
+    "content": "[Uploaded: upload/pasted-2026-11-03T02-30-58.png]\n上传文件后如何检查结果，或者提示是否成功？",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "截图中只是**选中了文件，还没有上传**。当时“预览”不可点，是因为页面顶部的「操作原因（必填）」尚未填写。\n\n现在可按这个顺序检查：\n\n1. 填写页面顶部的操作原因，选择业务数据 Excel，点击**上传并预览**。\n2. 在预览中查看新增、替代、删除及异常记录。此时数据**尚未导入**。\n3. 核对后点击**查看整批确认范围 → 确认整批**。页面显示“✓ 导入成功”和新数据集版本，才表示已保存。\n4. 若提交时超时，点**查询上次预览／导入结果**核实，避免重复导入。配置参数文件需单独走同样流程。\n\n我已将这些状态和按钮禁用原因显示在上传卡片中，更新了应用；生产入口验证通过。截图中的文件名看起来是“完整分钟版 V2.0”，按当前工作台范围，请选择 v4 的 **`肉食品仿真数据_202611_合并图示版.xlsx`**。\n\n历史界面说明：本条保留当时入口及前提；当天后续已移除手填操作原因、旧CSV入口，并将日期改为日历选择、业务查询并入查询与维护页。当前操作应以这些后续更新为准。",
+    "commits": [
+      "8553661eb17f913bd712e908f034024fe40449ed"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T02-30-58.png",
+        "name": "pasted-2026-11-03T02-30-58.png",
+        "sha256": "ad87bbc60e634437c519192153d88d29b9f19e152b01126d8e9909ef0c57d87c",
+        "bytes": 178368,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T02-30-58.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 75,
+    "url": "https://github.com/huiliangtao666/APS/issues/75",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:58:45Z",
+    "closed_at": "2026-11-03T14:58:47Z"
+  },
+  {
+    "seq": 16,
+    "event_key": "APS-USER-20261103-log-94",
+    "timestamp": "2026-11-03T02:39:02.087Z",
+    "local_time": "2026-11-03T10:39:02.087000+08:00",
+    "title": "[今日问题 2026-11-03 16/77] 配置参数 Excel 采用方式及在线修改冲突策略",
+    "content": "[Uploaded: upload/pasted-2026-11-03T02-31-42.png, upload/pasted-2026-11-03T02-31-50.png]\n配置参数excel这里的选择是什么意义，有什么影响",
+    "completion_scope": "咨询／核查答复完成",
+    "solution": "这两个下拉框决定**参数文件确认导入后的用途**。截图中只是选好了文件和选项，尚未上传或生效。\n\n| 选择 | 含义与影响 |\n|---|---|\n| **导入并采用可用参数** | 将可采用的参数作为 **P 层**写入所选数据集，参与之后的按日排程；同一参数有业务文件 B 层值时，P 层优先。仍需检查参数是否缺失、有效期和本次排程范围，不能把“已导入”当成“配置完整”。 |\n| **仅保存候选资料** | 保存文件供查看，**不参与排程计算**，也不表示参数已配置。 |\n| **仅本次计算批量导入** | 当前未支持，不能选择。 |\n\n第二个下拉框“重导 P 与在线修改”只在**导入并采用可用参数**、且已有在线修改时有实际影响：选“保留”时，已保存的在线修改继续优先；选“替代”时，新 P 会替代**匹配对象和有效期区间**内的在线修改，其他区间不受影响。通常先选“保留”，确实要以新文件覆盖在线修改时，再核对预览中的差异后选“替代”。\n\n操作时先填写页面顶部的**操作原因**，点击**上传并预览**，核对差异，再确认整批；确认成功后查看新的数据集版本，并重新做本次范围检查。\n\n历史界面说明：本条保留当时入口及前提；当天后续已移除手填操作原因、旧CSV入口，并将日期改为日历选择、业务查询并入查询与维护页。当前操作应以这些后续更新为准。",
+    "commits": [],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T02-31-42.png",
+        "name": "pasted-2026-11-03T02-31-42.png",
+        "sha256": "6d0990651b69a5cd030b49245ec23406247d8de40be8f1f2594df5481d576728",
+        "bytes": 148077,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T02-31-42.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/pasted-2026-11-03T02-31-50.png",
+        "name": "pasted-2026-11-03T02-31-50.png",
+        "sha256": "c1c79e5f34e2796b647c4e8f682224f67cbeaa449e10b54543007345d3c7b158",
+        "bytes": 90855,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T02-31-50.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 76,
+    "url": "https://github.com/huiliangtao666/APS/issues/76",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:58:50Z",
+    "closed_at": "2026-11-03T14:58:52Z"
+  },
+  {
+    "seq": 17,
+    "event_key": "APS-USER-20261103-log-96",
+    "timestamp": "2026-11-03T02:50:50.557Z",
+    "local_time": "2026-11-03T10:50:50.557000+08:00",
+    "title": "[今日问题 2026-11-03 17/77] 共享操作区与操作记录的用途",
+    "content": "[Uploaded: upload/pasted-2026-11-03T02-50-38.png]\n这个页面有什么用处？",
+    "completion_scope": "咨询／核查答复完成",
+    "solution": "这是页面顶部的**共享操作区**。其中「操作原因」是上传并确认 Excel、修改数据或参数、创建排程等写入操作的必填说明；截图中的 `123` 只是已填写的原因，不代表操作成功。\n\n这里的「操作记录（0）」和「刷新数据与记录」目前读取的是旧工作台的记录，**不能用来判断 Excel 是否导入成功**。Excel 导入结果应在上传卡片查看“预览／已提交”状态和新数据集版本；排程结果则在「排程结果与六视图」查看。这个区块把旧记录和当前工作台放在一起，确实容易误导。\n\n历史界面说明：本条保留当时入口及前提；当天后续已移除手填操作原因、旧CSV入口，并将日期改为日历选择、业务查询并入查询与维护页。当前操作应以这些后续更新为准。",
+    "commits": [],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T02-50-38.png",
+        "name": "pasted-2026-11-03T02-50-38.png",
+        "sha256": "ed963229df652db7c42e6c4cfff5ee5f81223a65ea8b9b69dc6f2bbb1b8f932e",
+        "bytes": 35799,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T02-50-38.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 77,
+    "url": "https://github.com/huiliangtao666/APS/issues/77",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:58:54Z",
+    "closed_at": "2026-11-03T14:58:56Z"
+  },
+  {
+    "seq": 18,
+    "event_key": "APS-USER-20261103-log-98",
+    "timestamp": "2026-11-03T02:51:54.282Z",
+    "local_time": "2026-11-03T10:51:54.282000+08:00",
+    "title": "[今日问题 2026-11-03 18/77] 删除共享操作区及手填操作说明要求",
+    "content": "这个工作区也可以删去了，没有必要必输说明",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已移除截图中的「共享操作与记录」区块，上传、参数维护和排程操作不再要求手填说明。应用会自动附上操作标记。\n\n改动已合入 `main`（`2552b56`）并更新应用；构建、生产入口和容器健康检查均通过。",
+    "commits": [
+      "2552b565c2ada543f0e6c1c394dd78d31d892189"
+    ],
+    "attachments": [],
+    "number": 78,
+    "url": "https://github.com/huiliangtao666/APS/issues/78",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:58:58Z",
+    "closed_at": "2026-11-03T14:59:00Z"
+  },
+  {
+    "seq": 19,
+    "event_key": "APS-USER-20261103-log-100",
+    "timestamp": "2026-11-03T02:53:42.213Z",
+    "local_time": "2026-11-03T10:53:42.213000+08:00",
+    "title": "[今日问题 2026-11-03 19/77] 导入失败原因不可追踪",
+    "content": "[Uploaded: upload/pasted-2026-11-03T02-52-04.png]\n导入数据报错，具体什么原因无法跟踪",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "查明了：截图中选的是 **V2.0 完整分钟版**，它在解析子进程的 **180 MiB 内存上限**下溢出，因此之前只显示“解析进程中断”。这次**没有生成预览，也没有提交数据**。\n\n请改用当前工作台的 `肉食品仿真数据_202611_合并图示版.xlsx`（v4）。我已更新应用：业务数据入口会明确指出 V2.0 文件不适用；其他解析失败会显示具体错误及追踪号，供查服务端日志。修复已发布，生产入口验证通过。",
+    "commits": [
+      "40daffad156cfb2377390fd38fcf625f0337ba80"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T02-52-04.png",
+        "name": "pasted-2026-11-03T02-52-04.png",
+        "sha256": "20b1401ebfb5e912583ab9fd514a2dead7e2ee2125767c9941413f5bb44bfc66",
+        "bytes": 120867,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T02-52-04.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 79,
+    "url": "https://github.com/huiliangtao666/APS/issues/79",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:59:03Z",
+    "closed_at": "2026-11-03T14:59:05Z"
+  },
+  {
+    "seq": 20,
+    "event_key": "APS-USER-20261103-log-102",
+    "timestamp": "2026-11-03T03:00:28.700Z",
+    "local_time": "2026-11-03T11:00:28.700000+08:00",
+    "title": "[今日问题 2026-11-03 20/77] 修改日数据文件后 INPUT_TOO_LARGE 报错",
+    "content": "[Uploaded: upload/pasted-2026-11-03T03-00-20.png]\n我改动了日数据的文件，但是报错",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "截图中的 `INPUT_TOO_LARGE` 指**导入预览生成的差异明细超过 32 MB 上限**，不表示 Excel 文件本身超过 12 MB。修改日数据后，若大量行、主键或公式结果发生变化，就可能触发此限制。本次预览失败，**没有提交新数据版本**。\n\n我已将错误提示改为显示超限指标，并让服务端按追踪号记录细节；修订已合入 `main`、重新构建并发布，应用健康检查通过。请刷新页面，重新选择文件并点击“上传并预览”。\n\n要判断您改动的**具体哪张表、哪些行**造成超限，请把修改后的 Excel 文件上传到聊天中；目前只有截图，无法核对文件内容。\n\n后续容量处理：同日大文件导入问题进一步在d3e52b7中压缩差异重复信息并将32MB上限扩为128MB，见当日第61条；本条当时仅凭截图无法核对用户Excel的具体改动行。",
+    "commits": [
+      "83be8225cbe9f36d8105f630baf6a0792e186271",
+      "d3e52b71d73104155c2662d0d7a344d5dbf88f4e"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T03-00-20.png",
+        "name": "pasted-2026-11-03T03-00-20.png",
+        "sha256": "c6d5a77f372d7cd5771f2000ba7e4f62117a31c4b6f883aaff170d6e1e71b2c6",
+        "bytes": 119722,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-00-20.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 80,
+    "url": "https://github.com/huiliangtao666/APS/issues/80",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:59:07Z",
+    "closed_at": "2026-11-03T14:59:09Z"
+  },
+  {
+    "seq": 21,
+    "event_key": "APS-USER-20261103-log-104",
+    "timestamp": "2026-11-03T03:04:08.510Z",
+    "local_time": "2026-11-03T11:04:08.510000+08:00",
+    "title": "[今日问题 2026-11-03 21/77] 已导入 v4 历史版本没有显示",
+    "content": "[Uploaded: upload/pasted-2026-11-03T03-01-57.png]\nv4不是已经导入过吗，作为历史版本，没有显示进来",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "对，**v4 已导入过**。我查到原数据集保留了 v1–v4；页面显示“尚未导入”，是因为应用读取了空的数据目录，而历史记录保存在另一目录。\n\n我已修复读取路径，并增加“查看已导入版本”入口。修订已合入 `main`、重新发布，应用健康检查通过。请刷新排程工作台：当前数据集应显示 v4，可展开版本历史核对 v1–v4。您刚修改的日数据文件仍未导入成功，它不会覆盖这些历史版本。",
+    "commits": [
+      "59e7fbbd7198d961e1ee1fbfb19d039008bbb036"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T03-01-57.png",
+        "name": "pasted-2026-11-03T03-01-57.png",
+        "sha256": "8d6eee00ca533a497d03ca69293eaa8fcf6592ee4003c37de22928be8b52381d",
+        "bytes": 10372,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-01-57.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 81,
+    "url": "https://github.com/huiliangtao666/APS/issues/81",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:59:11Z",
+    "closed_at": "2026-11-03T14:59:13Z"
+  },
+  {
+    "seq": 22,
+    "event_key": "APS-USER-20261103-log-106",
+    "timestamp": "2026-11-03T03:09:28.165Z",
+    "local_time": "2026-11-03T11:09:28.165000+08:00",
+    "title": "[今日问题 2026-11-03 22/77] 用业务语言说明检查能力与可选操作",
+    "content": "[Uploaded: upload/pasted-2026-11-03T03-09-14.png]\n这是提醒还是可选择性，是否能用业务语言描述",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "红框里是**说明信息，不需要选择**。它列出系统目前能检查的排程规则，不表示这份数据已经检查通过；实际结果要看“检查本次范围”。\n\n我已把英文代码改成业务用语，并在标题标明“无需选择”。旁边会修改数据版本的按钮也已标明“仅仿真”。更新已发布，刷新页面即可查看。",
+    "commits": [
+      "b95c94c4e65e641c10dd06c8e46c393f8e74eb15"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T03-09-14.png",
+        "name": "pasted-2026-11-03T03-09-14.png",
+        "sha256": "54b1c3b73f8371558f3507b1f37fd6866f70bc7f99c0da8d755eff2826849393",
+        "bytes": 91139,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-09-14.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 82,
+    "url": "https://github.com/huiliangtao666/APS/issues/82",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:59:15Z",
+    "closed_at": "2026-11-03T14:59:18Z"
+  },
+  {
+    "seq": 23,
+    "event_key": "APS-USER-20261103-log-108",
+    "timestamp": "2026-11-03T03:11:19.664Z",
+    "local_time": "2026-11-03T11:11:19.664000+08:00",
+    "title": "[今日问题 2026-11-03 23/77] 设备甘特对照原型提高可读性",
+    "content": "[Uploaded: upload/pasted-2026-11-03T03-10-33.png]\n设备甘特页面无法清晰显示，请检查原型设计，比这个清晰多了",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "截图里的问题主要是设备信息把行撑高、任务条挤在顶部，短任务编号又被裁断。我参照原型的时间轴和任务明细方式，统一了设备行高、加宽日期轴，并让短任务通过点击显示完整编号、订单、工序和起止时间；点击日期可放大到半小时刻度。\n\n修订已合入 `main` 并发布，构建和应用健康检查通过。请刷新后打开同一运行对照查看。预览环境没有这组生产运行记录，因此我还无法确认该组任务的最终视觉效果。",
+    "commits": [
+      "8f8a3327e579b5415fea086995bcfa3900a3cf77"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T03-10-33.png",
+        "name": "pasted-2026-11-03T03-10-33.png",
+        "sha256": "409a531ec0f501e9b51b25dddcc716b60b1a040cb534296c68decd3494a677a2",
+        "bytes": 223773,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-10-33.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 83,
+    "url": "https://github.com/huiliangtao666/APS/issues/83",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:59:20Z",
+    "closed_at": "2026-11-03T14:59:22Z"
+  },
+  {
+    "seq": 24,
+    "event_key": "APS-USER-20261103-log-110",
+    "timestamp": "2026-11-03T03:18:54.468Z",
+    "local_time": "2026-11-03T11:18:54.468000+08:00",
+    "title": "[今日问题 2026-11-03 24/77] 参照五类查询原型整体压缩页面嵌套",
+    "content": "[Uploaded: upload/APS五类业务查询_设计原型_R2_20261102.html]\n整体页面嵌套多，不紧凑，请查找UI设计做一个整体更新。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "以用户上传的五类查询原型为参考，将工作台和查询页从多层卡片收敛为“页面入口→数据来源与筛选→结果表”，压缩导航和间距；在下一条“不要改逻辑”的连续处理要求中完成修改、构建及应用更新。导入、查询、保存和排程业务逻辑保持原有含义。",
+    "commits": [
+      "2ade63427269b745f186c9e9e0c48bc26302170e"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/APS五类业务查询_设计原型_R2_20261102.html",
+        "name": "APS五类业务查询_设计原型_R2_20261102.html",
+        "sha256": "3bbd8d510125e2f67da3e80b8887f63deeb5354fe451a1851b6f32677f132ffb",
+        "bytes": 3920548,
+        "repository_path": null,
+        "kind": "参考HTML（原件保留工作区，未公开内嵌数据）"
+      }
+    ],
+    "number": 84,
+    "url": "https://github.com/huiliangtao666/APS/issues/84",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:59:24Z",
+    "closed_at": "2026-11-03T14:59:26Z"
+  },
+  {
+    "seq": 25,
+    "event_key": "APS-USER-20261103-log-112",
+    "timestamp": "2026-11-03T03:20:10.979Z",
+    "local_time": "2026-11-03T11:20:10.979000+08:00",
+    "title": "[今日问题 2026-11-03 25/77] 全应用参照 UI 样式调整且保持业务逻辑",
+    "content": "注意这是参照，包括其他功能也可以一起做UI调整，但是不要改动逻辑",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已参照您上传的原型更新工作台 UI：压缩功能导航和步骤区，将五类查询整理为“页面入口 → 数据来源与筛选 → 结果表”，次要筛选与来源说明可展开查看；业务数据、配置参数和结果页也沿用更紧凑的布局。\n\n**导入、查询、保存和排程逻辑未改。** 修订已合入 `main` 并发布；隔离构建、6 项查询界面测试和发布健康检查均通过。请刷新应用查看。",
+    "commits": [
+      "2ade63427269b745f186c9e9e0c48bc26302170e"
+    ],
+    "attachments": [],
+    "number": 85,
+    "url": "https://github.com/huiliangtao666/APS/issues/85",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:59:28Z",
+    "closed_at": "2026-11-03T14:59:30Z"
+  },
+  {
+    "seq": 26,
+    "event_key": "APS-USER-20261103-log-114",
+    "timestamp": "2026-11-03T03:24:44.741Z",
+    "local_time": "2026-11-03T11:24:44.741000+08:00",
+    "title": "[今日问题 2026-11-03 26/77] BOM 与提前期图对照设计稿修改",
+    "content": "[Uploaded: upload/pasted-2026-11-03T03-20-16.png, upload/pasted-2026-11-03T03-20-45.png, upload/pasted-2026-11-03T03-21-36.png, upload/pasted-2026-11-03T03-21-50.png]\n这是设计的BOM图和提前工序图示例（图1/2），和你展示的区别很大（图3/4），请检查修改",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已按图1/2调整并发布：BOM 关系改为横向分层图，提前期路径改为按根物料分组的共用时间轴；点击图形仍可查看原始记录。查询和计算逻辑未改。\n\n代码已合入 `main`（`2da3b71`）。容器内构建及 124 项测试通过，发布入口和资源检查通过，应用状态为 `up`。\n\n当前用量关系结果没有物料名称、类别和关键路径标记，因此图中只按可确认的层级着色，并注明仅展示当前查询页；这些部分还不能与设计示例完全一致。",
+    "commits": [
+      "2da3b7158884a0b190ea440566c9a3c42a5cef39"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T03-20-16.png",
+        "name": "pasted-2026-11-03T03-20-16.png",
+        "sha256": "4bd6bca5ea5c0dc6d07aab0f58caf980c23638804512e41afc0a7d6589e07e3d",
+        "bytes": 204675,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-20-16.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/pasted-2026-11-03T03-20-45.png",
+        "name": "pasted-2026-11-03T03-20-45.png",
+        "sha256": "9f5c786c05247d693c23ad71046d9a3477d89b29e4060d9fb0b7244f744794b9",
+        "bytes": 80834,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-20-45.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/pasted-2026-11-03T03-21-36.png",
+        "name": "pasted-2026-11-03T03-21-36.png",
+        "sha256": "032c6af476fd2984a860fa378dc9f7476edac75c548dd3f24b6332ad597f4b23",
+        "bytes": 94935,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-21-36.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/pasted-2026-11-03T03-21-50.png",
+        "name": "pasted-2026-11-03T03-21-50.png",
+        "sha256": "d0288b10860d965322507bb7ca6a519126ad0395ac1c1588ea5bd33b0c860b0e",
+        "bytes": 108941,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-21-50.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 86,
+    "url": "https://github.com/huiliangtao666/APS/issues/86",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:59:33Z",
+    "closed_at": "2026-11-03T14:59:34Z"
+  },
+  {
+    "seq": 27,
+    "event_key": "APS-USER-20261103-log-116",
+    "timestamp": "2026-11-03T03:33:41.480Z",
+    "local_time": "2026-11-03T11:33:41.480000+08:00",
+    "title": "[今日问题 2026-11-03 27/77] 筛选区多行分散、选择操作范围过大",
+    "content": "[Uploaded: upload/企业微信截图_17936763231400.png, upload/企业微信截图_17936763414985.png, upload/企业微信截图_17936763652619.png, upload/企业微信截图_17936763807352.png]\n图1/3是你的，图2/4是我想要的。还是老问题，页面结构不紧凑，选择项太多（没有尽量在一个范围内操作）",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "将分散的搜索、日期、BOM 勾选及物料筛选收在同一操作带，候选项使用下拉层；随后按连续对话扩大到整个应用并在 42922a5 交付。保留筛选含义及提交方式。",
+    "commits": [
+      "42922a510504cbc8cfdfeb7b14fd6314ba95b9c4"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/企业微信截图_17936763231400.png",
+        "name": "企业微信截图_17936763231400.png",
+        "sha256": "a7243fa043b254003dd740a58154833c1390a4b744f0b59a5aa088c579247ca0",
+        "bytes": 70842,
+        "repository_path": "docs/issue-log/2026-11-03/assets/企业微信截图_17936763231400.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/企业微信截图_17936763414985.png",
+        "name": "企业微信截图_17936763414985.png",
+        "sha256": "5cc5981975776397e5645db04f08568b2efbd082aee17fcdce19d03e0a1c9214",
+        "bytes": 21875,
+        "repository_path": "docs/issue-log/2026-11-03/assets/企业微信截图_17936763414985.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/企业微信截图_17936763652619.png",
+        "name": "企业微信截图_17936763652619.png",
+        "sha256": "36f78c6d00e8efae3387b362f4dbd85d8261ca9ab776c64cb2fca3c2eb6aee9e",
+        "bytes": 32832,
+        "repository_path": "docs/issue-log/2026-11-03/assets/企业微信截图_17936763652619.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/企业微信截图_17936763807352.png",
+        "name": "企业微信截图_17936763807352.png",
+        "sha256": "b0f5011e9b54fd897fa9e1a1fe97e528250e96e2e9324d7e49f4605d6acac29d",
+        "bytes": 50188,
+        "repository_path": "docs/issue-log/2026-11-03/assets/企业微信截图_17936763807352.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 87,
+    "url": "https://github.com/huiliangtao666/APS/issues/87",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:59:37Z",
+    "closed_at": "2026-11-03T14:59:39Z"
+  },
+  {
+    "seq": 28,
+    "event_key": "APS-USER-20261103-log-118",
+    "timestamp": "2026-11-03T03:34:28.312Z",
+    "local_time": "2026-11-03T11:34:28.312000+08:00",
+    "title": "[今日问题 2026-11-03 28/77] 将紧凑设计要求覆盖应用所有页面",
+    "content": "不仅仅是bom和提前期，是整个应用里的所有页面都要参照以上说的设计思路",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "将紧凑布局范围明确扩展到工作台、导入、业务查询、参数维护及结果六视图；与下一条“一行一格”一并在 42922a5 交付，业务流程不变。",
+    "commits": [
+      "42922a510504cbc8cfdfeb7b14fd6314ba95b9c4"
+    ],
+    "attachments": [],
+    "number": 88,
+    "url": "https://github.com/huiliangtao666/APS/issues/88",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:59:41Z",
+    "closed_at": "2026-11-03T14:59:43Z"
+  },
+  {
+    "seq": 29,
+    "event_key": "APS-USER-20261103-log-120",
+    "timestamp": "2026-11-03T03:35:14.660Z",
+    "local_time": "2026-11-03T11:35:14.660000+08:00",
+    "title": "[今日问题 2026-11-03 29/77] 能一行不多行、能一格不拆格",
+    "content": "能一行就不要分多行，能一个格就一个单元格",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已按“**能一行就不分多行、能一个格就不拆开**”调整整个 APS 应用的主要页面：排程流程、Excel 导入、业务数据、配置参数、五类查询和六类设备视图。筛选集中到操作带，候选项在下拉层中选择；导入规则收起，文件选择、预览和结果查询放在同一行。查询与排程计算逻辑未改。\n\n改动已合入 `main`（`42922a5`）并更新应用。构建和 124 项测试通过，发布入口正常、容器状态为 `up`。开发预览中已检查导入页；其他页面的完整数据展示仍需在已导入数据集上核对。",
+    "commits": [
+      "42922a510504cbc8cfdfeb7b14fd6314ba95b9c4"
+    ],
+    "attachments": [],
+    "number": 89,
+    "url": "https://github.com/huiliangtao666/APS/issues/89",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:59:46Z",
+    "closed_at": "2026-11-03T14:59:47Z"
+  },
+  {
+    "seq": 30,
+    "event_key": "APS-USER-20261103-log-122",
+    "timestamp": "2026-11-03T03:43:27.649Z",
+    "local_time": "2026-11-03T11:43:27.649000+08:00",
+    "title": "[今日问题 2026-11-03 30/77] 设备甘特按原型实现紧凑清晰的一屏总览",
+    "content": "[Uploaded: upload/pasted-2026-11-03T03-38-32.png, upload/APS设备排程_分钟排程半小时展示原型_20261102.html]\n图1是你的甘特图，图2是设计稿；请严格选择设计稿中的原则，紧凑、清晰、一屏可视、信息量大等等。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已按上传原型调整设备甘特并更新应用：默认使用“一屏总览”行高，日期轴按屏幕宽度铺开；点击日期可查看半小时刻度。任务条在宽度允许时显示产品和工序，重叠任务分轨显示，选中任务的分钟数也已修正。原始记录表默认收起，可随时展开核对。\n\n改动已合入 `main`（`916781a`）。构建及 124 项业务测试通过，发布入口正常，容器状态为 `up`。实际能否在一屏显示全部设备仍取决于设备数量和屏幕高度；超出时图内可滚动。",
+    "commits": [
+      "916781a7ad58a7f0d54a5727cff5a4aa140fa75b"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T03-38-32.png",
+        "name": "pasted-2026-11-03T03-38-32.png",
+        "sha256": "48e8b00b79f7c4a21c0aae9ee1940e9888b2f4cbe55442d51f65a50a0485e3c3",
+        "bytes": 196731,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-38-32.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/APS设备排程_分钟排程半小时展示原型_20261102.html",
+        "name": "APS设备排程_分钟排程半小时展示原型_20261102.html",
+        "sha256": "7afd0c006a1013883acba475b2f404ebf82b034c97c3ae6d04f62047693f56be",
+        "bytes": 1250028,
+        "repository_path": null,
+        "kind": "参考HTML（原件保留工作区，未公开内嵌数据）"
+      }
+    ],
+    "number": 90,
+    "url": "https://github.com/huiliangtao666/APS/issues/90",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:59:50Z",
+    "closed_at": "2026-11-03T14:59:52Z"
+  },
+  {
+    "seq": 31,
+    "event_key": "APS-USER-20261103-log-124",
+    "timestamp": "2026-11-03T03:49:32.344Z",
+    "local_time": "2026-11-03T11:49:32.344000+08:00",
+    "title": "[今日问题 2026-11-03 31/77] 标题说明和数据来源控件同排减少高度",
+    "content": "[Uploaded: upload/pasted-2026-11-03T03-45-55.png]\n以这个页面为例：\n1. 红框1里的第2行描述可以列在第1行之后，字体保持不变小于标题\n2. 红框2里数据来源和选择框可以在一行，这样空间高度就减少了。\n3. 红框3的第2行表述也挪到标题第1行后面，字体不变。\n\n请检查应用里所有的信息展示，减少空间（高度）的占用。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已按截图调整全应用的同类布局：标题与简短说明并排，数据来源的标签、选择框和切换按钮同排；导入预览等页面也压缩了说明和操作区的高度。字号层级与业务逻辑保持不变。\n\n改动已合入 `main`（`d634eb1`）并更新应用。构建及 124 项测试通过，发布入口正常、容器状态为 `up`。开发预览已核对工作台布局；其中没有已导入数据，五类查询页的实际数据展示尚未完成截图核对。",
+    "commits": [
+      "d634eb15020e740bc7e1cf4279e67d6b993526e4"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T03-45-55.png",
+        "name": "pasted-2026-11-03T03-45-55.png",
+        "sha256": "f5b6e726b6fc67d329adba5b44f67cf1d4ddfd169da70a57dc93365e8afd6dd5",
+        "bytes": 89529,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-45-55.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 91,
+    "url": "https://github.com/huiliangtao666/APS/issues/91",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:59:54Z",
+    "closed_at": "2026-11-03T14:59:56Z"
+  },
+  {
+    "seq": 32,
+    "event_key": "APS-USER-20261103-log-126",
+    "timestamp": "2026-11-03T03:53:32.848Z",
+    "local_time": "2026-11-03T11:53:32.848000+08:00",
+    "title": "[今日问题 2026-11-03 32/77] 合并结果表头、筛选、每页及翻页操作",
+    "content": "[Uploaded: upload/pasted-2026-11-03T03-49-44.png]\n以这个页面为例：\n1. 红框1展示在同一行中，不要分行\n2. 红框2是同一个展示区域，把空框3/4中的信息尽量合并到这个区域的页眉中。核心是显示结果，不是3/4这些辅助信息。\n3. 红框3里的“完整结果汇总”并没有作用，删除，其他合并入整体区域。\n4. 红框4“每页”和数字在同一行，合并入整体区域。\n\n请检查应用里所有的信息展示，减少页面空间（高度和宽度）的占用。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已按截图调整结果区域，并更新已发布应用：\n\n- 筛选条件和“含 BOM 下属”放在同一行。\n- 结果数量、来源提示、显示栏位、每页条数、翻页和导出收进结果表头；“每页”与数字同排。\n- 删除页面上的“完整结果汇总”入口。设备六视图的同类结果区域也已压缩。\n\n代码已合入并推送 `main`（`7c0b264`）。构建、124 项测试及 6 项查询界面测试通过；生产入口返回 200，资源加载正常。",
+    "commits": [
+      "7c0b26408eaca35d41588504d4ee12b7b2dfaed7"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T03-49-44.png",
+        "name": "pasted-2026-11-03T03-49-44.png",
+        "sha256": "868351b186faff0952fd0c8ee1ff77a262b31632f9efd2d3b1b368396ff92247",
+        "bytes": 267405,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-49-44.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 92,
+    "url": "https://github.com/huiliangtao666/APS/issues/92",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T14:59:59Z",
+    "closed_at": "2026-11-03T15:00:01Z"
+  },
+  {
+    "seq": 33,
+    "event_key": "APS-USER-20261103-log-128",
+    "timestamp": "2026-11-03T03:58:17.012Z",
+    "local_time": "2026-11-03T11:58:17.012000+08:00",
+    "title": "[今日问题 2026-11-03 33/77] 日期选择显示真实日历日期",
+    "content": "[Uploaded: upload/pasted-2026-11-03T03-53-13.png]\n日期类信息，根据之前的要求，按照日期进行选择（如2026-11-01），不要用相对日期（如：1）很容易混淆",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已改好并更新应用。截图中的“模拟当前日”和“开始日”现在用日历日期选择，例如 **2026-11-01**；参数有效期、补单草稿和运行结果中的日期也显示为日历日期。“窗口天数”仍表示时长。\n\n代码已推送到 `main`（`237339c`）。构建与测试通过，已发布应用重建完成，入口及资源加载正常。",
+    "commits": [
+      "237339c15a9d37559b1d2b43eb72df84c2d9e103"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T03-53-13.png",
+        "name": "pasted-2026-11-03T03-53-13.png",
+        "sha256": "613200276f806ed304352b839eec21700695bd915fda80ebc53e3341809b7845",
+        "bytes": 107231,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-53-13.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 93,
+    "url": "https://github.com/huiliangtao666/APS/issues/93",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:00:03Z",
+    "closed_at": "2026-11-03T15:00:05Z"
+  },
+  {
+    "seq": 34,
+    "event_key": "APS-USER-20261103-log-130",
+    "timestamp": "2026-11-03T05:43:55.403Z",
+    "local_time": "2026-11-03T13:43:55.403000+08:00",
+    "title": "[今日问题 2026-11-03 34/77] 全应用筛选和分页控件字体与间距统一",
+    "content": "[Uploaded: upload/pasted-2026-11-03T03-56-41.png]\n这里的展示区域页面很紧凑，但是“每页”，筛选等还是有字体过大、间距过大，显示不匹配的情况。请整体应用再梳理一遍",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已统一全应用的控件比例：常规控件采用 12px 字号、28px 高度，缩小间距；“每页”、筛选、“行高/配色”标签与控件同排对齐。同时修复甘特图的按钮样式冲突和窄区域撑宽问题。\n\n已推送 `main`（`67a5aff`）并重建发布。构建、6 项界面测试及两种宽度的布局检查通过，生产入口正常。",
+    "commits": [
+      "67a5aff1961f0e2c776236c1da79a05127e5ba13"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T03-56-41.png",
+        "name": "pasted-2026-11-03T03-56-41.png",
+        "sha256": "46e671be4084dd76941997ffb6c874a560cc88f58390dbfb5ca614b6dbb0fe64",
+        "bytes": 336387,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-56-41.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 94,
+    "url": "https://github.com/huiliangtao666/APS/issues/94",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:00:07Z",
+    "closed_at": "2026-11-03T15:00:09Z"
+  },
+  {
+    "seq": 35,
+    "event_key": "APS-USER-20261103-log-132",
+    "timestamp": "2026-11-03T05:56:18.108Z",
+    "local_time": "2026-11-03T13:56:18.108000+08:00",
+    "title": "[今日问题 2026-11-03 35/77] 核查业务数据、参数、查询与工装的数据源和重叠",
+    "content": "[Uploaded: upload/pasted-2026-11-03T05-55-54.png]\n请检查这几个功能中，数据源是否一致都来自于导入数据，以及展示内容上是否有重叠",
+    "completion_scope": "咨询／核查答复完成",
+    "solution": "已核查当前 `main`（`67a5aff`）：**主链以导入数据集为基础，但尚未完全统一，确实存在重复入口和旧数据源残留。**\n\n| 功能 | 实际数据来源 | 展示重叠情况 |\n|---|---|---|\n| 业务数据 | 业务 Excel、参数采用后的有效数据及在线修订 | 提供原表查询与维护，也包含“配置参数”“设备与工装” |\n| 配置参数 | 同一数据集的业务基础值、参数 Excel、在线修改与试算覆盖 | 与业务原表中的参数字段重叠，部分维护操作已共用后台记录 |\n| 五类业务查询 | 指定数据集版本，或所选运行的冻结输入与结果 | 与原表展示部分重叠，但增加了汇总、关联和推算，属于业务查询视角 |\n| 工装配置 | **业务数据→生产→设备与工装，同一张表、同一接口** | **直接重复的快捷入口，并非另一套工装配置** |\n\n发现三处需要整理：\n\n1. **配置页还残留独立旧数据源。**  \n   “物料、BOM与损耗”主题及 A3 步骤可展开“标准投入损耗”模块，它读取旧版 `/state`、`/trials`、`/bom-loss`，与当前 Excel 数据集独立。在那里修改，不能作为当前 Excel 排程参数已修改的依据。[源码](</Users/sg_cbb_mac_1/praetor-workspaces/APS-Test2/apps/aps-latest-current/src/StandardLossParameters.tsx:6>)\n\n2. **“配置参数”存在重复且不顺畅的维护入口。**  \n   业务数据下拉框仍提供配置参数原表，但启用统一参数契约后，从原表保存会被后台拦截，要求使用配置参数页。这应统一成跳转到同一个编辑入口。[源码](</Users/sg_cbb_mac_1/praetor-workspaces/APS-Test2/apps/aps-latest-current/src/InputData.tsx:57>)\n\n3. **四个页面没有共享完整的查看范围。**  \n   版本、日期、参数作用范围及所选运行没有全部联动。例如参数页选择“仅本次试算”，五类查询默认仍查看数据集共享配置；选择历史运行后，查询读取的是当时的冻结版本。因此，同源数据也可能显示不同内容。\n\n建议收敛为：**业务数据负责原表维护，配置参数负责统一参数维护，五类查询负责只读分析；工装配置并入生产数据作为快捷定位，同时移除旧损耗模块，并统一展示版本、日期和作用范围。** CP 目录等程序内置说明也应与“已导入且有效的参数值”明确区分。",
+    "commits": [
+      "67a5aff1961f0e2c776236c1da79a05127e5ba13"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T05-55-54.png",
+        "name": "pasted-2026-11-03T05-55-54.png",
+        "sha256": "b389644df18b07349feade84b417e037cd3dd6ad23a60bfbf544e975a7bb1a7b",
+        "bytes": 34151,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T05-55-54.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 95,
+    "url": "https://github.com/huiliangtao666/APS/issues/95",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:00:12Z",
+    "closed_at": "2026-11-03T15:00:14Z"
+  },
+  {
+    "seq": 36,
+    "event_key": "APS-USER-20261103-log-134",
+    "timestamp": "2026-11-03T06:03:20.386Z",
+    "local_time": "2026-11-03T14:03:20.386000+08:00",
+    "title": "[今日问题 2026-11-03 36/77] 合并查询维护页面并删除工装及旧配置入口",
+    "content": "合并页面，保持简洁：\n1. 删除“工装配置”页面。\n2. “五类业务查询”改为“业务数据查询与维护”，以此为基础整合“业务数据”，增加维护功能。“业务数据”页面删除。\n3. \"配置参数“改为“配置参数查询与维护”，页面风格与互动，尽量参照“业务数据查询与维护”。\n4. 旧配相关的功能请删除。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已完成合并并更新应用：\n\n- 删除“工装配置”“业务数据”独立页面。\n- “五类业务查询”改为“业务数据查询与维护”，支持查询来源记录及新增、修改、删除。\n- “配置参数”改为“配置参数查询与维护”，统一紧凑布局和侧栏编辑方式。\n- 移除旧版 CSV／分钟相关页面及入口。\n\n维护后自动刷新数据版本与查询结果，并重新检查排程准备状态。\n\n已推送 main：`fc86bfc`。构建、回归检查和正式入口检查通过；未修改实际业务数据。",
+    "commits": [
+      "fc86bfcb355766febebf534a9abef11c9554a2fe"
+    ],
+    "attachments": [],
+    "number": 96,
+    "url": "https://github.com/huiliangtao666/APS/issues/96",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:00:16Z",
+    "closed_at": "2026-11-03T15:00:18Z"
+  },
+  {
+    "seq": 37,
+    "event_key": "APS-USER-20261103-log-136",
+    "timestamp": "2026-11-03T06:28:15.805Z",
+    "local_time": "2026-11-03T14:28:15.805000+08:00",
+    "title": "[今日问题 2026-11-03 37/77] BOM 移除日期区间且下拉框同时只展开一个",
+    "content": "[Uploaded: upload/pasted-2026-11-03T06-09-53.png, upload/pasted-2026-11-03T06-11-47.png]\n物料BOM表中，筛选不需要开始、结束日期；注意下拉框每次只有一个生效（图中可以多个同时下拉，就无法操作了，整个程序的其他页面也注意下拉框都是这样处理）。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已修复并更新应用，刷新页面即可查看：\n\n- 物料 BOM 移除“开始、结束日期”，保留“BOM 有效日”。\n- 全应用共用下拉框统一为同时只展开一个，打开另一个自动收起前一个。\n- 点击外部或按 Esc 可收起，已选筛选条件保留。\n\n已推送 main：`d91bd2d`。构建、五类查询及设备六视图交互检查通过，正式入口正常。",
+    "commits": [
+      "d91bd2de8fd40d17d0b577ceabbfbdf9ac96c12f"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T06-09-53.png",
+        "name": "pasted-2026-11-03T06-09-53.png",
+        "sha256": "6fc2d5bf8715c11049d59fb45814dfabb136e99b2f256c2d541ba054bc02fa58",
+        "bytes": 241992,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T06-09-53.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/pasted-2026-11-03T06-11-47.png",
+        "name": "pasted-2026-11-03T06-11-47.png",
+        "sha256": "f224d1ac35ba1f0c0748b4294c06b1cd4d89578697fc0c6e05041566ad74c76c",
+        "bytes": 263843,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T06-11-47.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 97,
+    "url": "https://github.com/huiliangtao666/APS/issues/97",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:00:21Z",
+    "closed_at": "2026-11-03T15:00:23Z"
+  },
+  {
+    "seq": 38,
+    "event_key": "APS-USER-20261103-log-138",
+    "timestamp": "2026-11-03T06:34:48.939Z",
+    "local_time": "2026-11-03T14:34:48.939000+08:00",
+    "title": "[今日问题 2026-11-03 38/77] BOM 先表后图、紧凑图示及默认全选",
+    "content": "[Uploaded: upload/pasted-2026-11-03T06-14-26.png]\n物料与BOM，筛选不需要开始、结束日期；先形式表再显示图，图的显示小一些紧凑一些，简洁直观。图的显示模式是全选。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已修改并更新应用，刷新页面即可查看：\n\n- BOM 筛选仅保留“BOM 有效日”，不显示开始、结束日期。\n- 先显示表格，再显示图示。\n- 缩小图示节点、间距和说明区域，采用紧凑布局。\n- 图示默认“全选”当前页根项，随表格翻页联动。\n\n已合入 main：`34041e7`。构建、回归及正式入口检查通过。",
+    "commits": [
+      "34041e753a4ff30672f33b010a997c374c962f56"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T06-14-26.png",
+        "name": "pasted-2026-11-03T06-14-26.png",
+        "sha256": "a78cde55a471a6d9767513147f27d73e9d4363cefa115b526c6e8a0f185acce0",
+        "bytes": 170590,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T06-14-26.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 98,
+    "url": "https://github.com/huiliangtao666/APS/issues/98",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:00:25Z",
+    "closed_at": "2026-11-03T15:00:27Z"
+  },
+  {
+    "seq": 39,
+    "event_key": "APS-USER-20261103-log-140",
+    "timestamp": "2026-11-03T06:41:52.430Z",
+    "local_time": "2026-11-03T14:41:52.430000+08:00",
+    "title": "[今日问题 2026-11-03 39/77] 提前期路径先表后图、成品多选及默认全选",
+    "content": "[Uploaded: upload/pasted-2026-11-03T06-18-09.png]\n提前期路径，筛选删除开始、结束；先显示表后显示图；图智能选择成品进行展示，筛选框可多选，默认全选。图显示紧凑，简洁。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已完成并更新应用，刷新页面即可查看：\n\n- 删除开始、结束日期，仅保留 BOM 有效日。\n- 先显示表格，再显示紧凑路径图。\n- 按导入数据中的“物料类别”识别成品。\n- 新增“图示成品”多选框，默认全选当前页成品，支持搜索、清空和恢复全选。\n\n已合入 main：`1015472`。构建、回归及正式入口检查通过。",
+    "commits": [
+      "1015472fb0e1a35606bcdb44d8992a6b45123317"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T06-18-09.png",
+        "name": "pasted-2026-11-03T06-18-09.png",
+        "sha256": "71ee7d735b55004dde740bbd6e7af2bf9368f63235758a8cca2da7fe73c34e4d",
+        "bytes": 166528,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T06-18-09.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 99,
+    "url": "https://github.com/huiliangtao666/APS/issues/99",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:00:29Z",
+    "closed_at": "2026-11-03T15:00:31Z"
+  },
+  {
+    "seq": 40,
+    "event_key": "APS-USER-20261103-log-142",
+    "timestamp": "2026-11-03T06:47:55.984Z",
+    "local_time": "2026-11-03T14:47:55.984000+08:00",
+    "title": "[今日问题 2026-11-03 40/77] 删除重复标题、上移信息及固定导航",
+    "content": "[Uploaded: upload/pasted-2026-11-03T06-33-53.png]\n整体页面\n1. 红框1信息删除\n2. 红框2挪到上一行位置\n3. 红框4挪到抬头位置\n4. 红框3的区域固定指定，不受滚动条下拉影响",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已按四处红框调整并更新应用：\n\n1. 删除重复的“排程工作台”标题和说明。\n2. 数据集、数据来源移到业务页标题同一行。\n3. 四个主入口移入顶部栏。\n4. 顶部栏、页面标题和两级查询导航固定，向下滚动时保持可见。\n\n已合入 main：`439836c`。构建、滚动交互及正式入口检查通过，刷新页面即可查看。",
+    "commits": [
+      "439836cf6d8e536fbf2836bcefe07e7d35b22326"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T06-33-53.png",
+        "name": "pasted-2026-11-03T06-33-53.png",
+        "sha256": "c736e3d13fcbc59907102466d1ebd65c39ad1796116a967a6d2024b913f173ab",
+        "bytes": 182965,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T06-33-53.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 100,
+    "url": "https://github.com/huiliangtao666/APS/issues/100",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:00:33Z",
+    "closed_at": "2026-11-03T15:00:35Z"
+  },
+  {
+    "seq": 41,
+    "event_key": "APS-USER-20261103-log-144",
+    "timestamp": "2026-11-03T06:57:57.670Z",
+    "local_time": "2026-11-03T14:57:57.670000+08:00",
+    "title": "[今日问题 2026-11-03 41/77] 需求明细移除非成品和客户等级筛选",
+    "content": "[Uploaded: upload/pasted-2026-11-03T06-44-36.png]\n需求明细：\n1. 筛选中不需要半成品、原辅料、包装材料，因为需求只可能是成品；不需要客户等级作为筛选条件。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已修改“需求明细”并更新应用：\n\n- 移除半成品、原辅料、包装材料及客户等级筛选。\n- 保留成品、客户、区域，以及日期、单位和关键词。\n- 清除旧缓存中已删除的筛选条件，避免影响查询和导出。\n\n已合入 main：`430f976`。构建及相关回归检查通过，刷新页面即可查看。",
+    "commits": [
+      "430f97695d18586ac0154085f41b2fcc9f733c8f"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T06-44-36.png",
+        "name": "pasted-2026-11-03T06-44-36.png",
+        "sha256": "ff6e7deed4bc53bde838e84de45177e77c13e0df42277bb261cb17ea67a2d63a",
+        "bytes": 260686,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T06-44-36.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 101,
+    "url": "https://github.com/huiliangtao666/APS/issues/101",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:00:38Z",
+    "closed_at": "2026-11-03T15:00:40Z"
+  },
+  {
+    "seq": 42,
+    "event_key": "APS-USER-20261103-log-146",
+    "timestamp": "2026-11-03T07:02:22.741Z",
+    "local_time": "2026-11-03T15:02:22.741000+08:00",
+    "title": "[今日问题 2026-11-03 42/77] 按日需求简化筛选及隐藏业务键",
+    "content": "[Uploaded: upload/pasted-2026-11-03T06-49-34.png]\n按日需求\n1. 筛选中不需要半成品、原辅料、包装材料，因为需求只可能是成品；不需要客户等级作为筛选条件。\n2.不需要显示业务键",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已修改“按日需求”并更新应用：\n\n- 移除半成品、原辅料、包装材料和客户等级筛选。\n- 移除结果表及栏位选择中的“业务键”。\n- 清理旧筛选条件，保留来源查看、行选择和导出功能。\n\n已合入 main：`3def377`。构建及相关检查通过，刷新页面即可查看。",
+    "commits": [
+      "3def3770547fac580b4a3bd38e646b22367542c6"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T06-49-34.png",
+        "name": "pasted-2026-11-03T06-49-34.png",
+        "sha256": "bbeccb17e1a1e6cb4fca3278660774a03ac040e8bf169aaaeee335413d0ea1ea",
+        "bytes": 165435,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T06-49-34.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 102,
+    "url": "https://github.com/huiliangtao666/APS/issues/102",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:00:42Z",
+    "closed_at": "2026-11-03T15:00:44Z"
+  },
+  {
+    "seq": 43,
+    "event_key": "APS-USER-20261103-log-148",
+    "timestamp": "2026-11-03T07:06:57.485Z",
+    "local_time": "2026-11-03T15:06:57.485000+08:00",
+    "title": "[今日问题 2026-11-03 43/77] 库存按物料质量状态分行、日期横向显示",
+    "content": "[Uploaded: upload/pasted-2026-11-03T06-59-53.png]\n库存汇总：\n1. 不需要“业务键”\n2. 按照物料编码分质量状态显示，横向显示日期。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已更新“库存汇总”：\n\n- 移除“业务键”列。\n- 按“物料编码＋质量状态＋单位”分行，库存快照日期横向展开。\n- 每个日期格显示“库存／预留／可用”，未知值显示“—”。\n- 横向滚动时，左侧三个维度保持固定。\n\n已合入 main：`5f8edbb`。构建、汇总及导出检查通过，刷新页面即可查看。",
+    "commits": [
+      "df0024d6d8e1d00a65c1566b1db343eba7ae0b55",
+      "5f8edbb4ff94031c3b53cc9d78fe89153f407a7c"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T06-59-53.png",
+        "name": "pasted-2026-11-03T06-59-53.png",
+        "sha256": "a4a72fca97d7fec4936f76e2a8ba6488d60d04988354dd86ec8a86e933b4120e",
+        "bytes": 215976,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T06-59-53.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 103,
+    "url": "https://github.com/huiliangtao666/APS/issues/103",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:00:46Z",
+    "closed_at": "2026-11-03T15:00:48Z"
+  },
+  {
+    "seq": 44,
+    "event_key": "APS-USER-20261103-log-150",
+    "timestamp": "2026-11-03T07:25:39.047Z",
+    "local_time": "2026-11-03T15:25:39.047000+08:00",
+    "title": "[今日问题 2026-11-03 44/77] 工艺与班组简化筛选并增加路线编号",
+    "content": "[Uploaded: upload/pasted-2026-11-03T07-06-51.png]\n工艺与班组：\n1. 筛选不需要开始、结束、信息截至，半成品、原辅料、包装材料； 增加路线编号。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已修改“工艺与班组”筛选栏：\n\n- 移除开始、结束、信息截至，以及半成品、原辅料、包装材料。\n- 新增“路线编号”，读取导入 Excel 中的对应字段。\n- 保留关键词、成品、设备组、班组筛选，旧隐藏条件不再影响查询。\n\n已同步 main（`b17d191`），完成构建、相关测试和应用更新。刷新页面即可查看。",
+    "commits": [
+      "b17d19114c2dcc6a55bdf034304f4b0227eb853f"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T07-06-51.png",
+        "name": "pasted-2026-11-03T07-06-51.png",
+        "sha256": "2e3927be3b0920da6bb1d1e240cc7c303cc410791bc5ce7e32cd14d2c5058b98",
+        "bytes": 243797,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T07-06-51.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 104,
+    "url": "https://github.com/huiliangtao666/APS/issues/104",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:00:50Z",
+    "closed_at": "2026-11-03T15:00:52Z"
+  },
+  {
+    "seq": 45,
+    "event_key": "APS-USER-20261103-log-152",
+    "timestamp": "2026-11-03T07:33:24.124Z",
+    "local_time": "2026-11-03T15:33:24.124000+08:00",
+    "title": "[今日问题 2026-11-03 45/77] 停机安排仅保留资源、开始和结束筛选",
+    "content": "[Uploaded: upload/pasted-2026-11-03T07-10-24.png]\n停机安排的筛选只需要保留“资源”、“开始”、“结束”三项。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已修改：“停机安排”筛选栏仅保留 **资源、开始、结束**，同一行紧凑展示，旧隐藏条件不再影响查询。\n\n已同步 main（`5481702`），构建、相关测试及应用更新完成。刷新页面即可查看。",
+    "commits": [
+      "5481702ca85a6e8978f6d37220dee90c03d9a0d3"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T07-10-24.png",
+        "name": "pasted-2026-11-03T07-10-24.png",
+        "sha256": "2956357197a05d655d14ee4fb1e2bcf1925e6e0b64382d731f784c324e1e9cce",
+        "bytes": 158024,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T07-10-24.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 105,
+    "url": "https://github.com/huiliangtao666/APS/issues/105",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:00:55Z",
+    "closed_at": "2026-11-03T15:00:57Z"
+  },
+  {
+    "seq": 46,
+    "event_key": "APS-USER-20261103-log-154",
+    "timestamp": "2026-11-03T07:38:14.475Z",
+    "local_time": "2026-11-03T15:38:14.475000+08:00",
+    "title": "[今日问题 2026-11-03 46/77] 设备能力仅保留资源、资源组和资源类别",
+    "content": "[Uploaded: upload/pasted-2026-11-03T07-12-31.png]\n设备能力筛选只保留空框中的三项",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已修改：“设备能力”筛选仅保留 **资源、资源组、资源类别**，同一行紧凑展示，旧隐藏条件不再影响查询。\n\n已同步 main（`6f1b5e8`），构建、相关测试和应用更新完成。刷新页面即可查看。",
+    "commits": [
+      "6f1b5e80597fa53680f370aca5c11168fec3bd48"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T07-12-31.png",
+        "name": "pasted-2026-11-03T07-12-31.png",
+        "sha256": "7b01a4221b7398de4da350fbb4bc5881861320683e22e013fe3224b4e82d6ea3",
+        "bytes": 174709,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T07-12-31.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 106,
+    "url": "https://github.com/huiliangtao666/APS/issues/106",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:00:59Z",
+    "closed_at": "2026-11-03T15:01:01Z"
+  },
+  {
+    "seq": 47,
+    "event_key": "APS-USER-20261103-log-156",
+    "timestamp": "2026-11-03T07:42:56.529Z",
+    "local_time": "2026-11-03T15:42:56.529000+08:00",
+    "title": "[今日问题 2026-11-03 47/77] 人员工装增加逐日可视化图表",
+    "content": "[Uploaded: upload/pasted-2026-11-03T07-20-23.png]\n人员工装也可靠参照设备负荷这个形式，增加一个可视化图表",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已在“人员工装”增加与“设备负荷”同风格的逐日热力图：\n\n- 可切换并发峰值、可用数量、余量。\n- 人员、工装分别标明单位，超占标红。\n- 点击日期格查看对应冻结明细与来源。\n- 原始表格保留在下方，可展开查看。\n\n已同步 main（`98b6704`），完成构建、相关测试和应用更新。刷新后进入“排程结果与六视图 → 人员工装”即可查看。",
+    "commits": [
+      "98b6704e2efd7ae65e65e4576d200871906f972c"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T07-20-23.png",
+        "name": "pasted-2026-11-03T07-20-23.png",
+        "sha256": "3835be4a952b8672bec5c2944d44e0f8957c8278d09dde72ed05173ecdf931d0",
+        "bytes": 319054,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T07-20-23.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 107,
+    "url": "https://github.com/huiliangtao666/APS/issues/107",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:01:03Z",
+    "closed_at": "2026-11-03T15:01:05Z"
+  },
+  {
+    "seq": 48,
+    "event_key": "APS-USER-20261103-log-158",
+    "timestamp": "2026-11-03T07:51:12.727Z",
+    "local_time": "2026-11-03T15:51:12.727000+08:00",
+    "title": "[今日问题 2026-11-03 48/77] 配置参数基线、日志、筛选、当前值与对象化展示",
+    "content": "[Uploaded: upload/pasted-2026-11-03T07-44-41.png, upload/pasted-2026-11-03T07-49-43.png, upload/pasted-2026-11-03T07-50-18.png, upload/pasted-2026-11-03T07-50-59.png]\n配置参数页面的逻辑，核对一下\n1. 数据集指什么，建议取导入的配置参数作为基线版本，在线修改只记录修改日志，不调整数据集版本\n2. 红框1/2的筛选好像是重复的，没有联动起来。\n3. 每个子页签的配置项，默认都应该按序号升序显示，如果没有维护或者控制也可以显示；每一项都单独显示，有变更则显示最新（如红框3其实一行即可）；变更可以通过日志显示。\n4. 配置页面也紧凑简洁。\n5. 注意有些是全局参数，有些是和其他细分项有关（比如物料/SKU、客户、工序等），请在不同的子页签上设计相应的展示方式，不要全部塞在一张表中。给你一个附图2-4看看样式（不用完全参照，理解思路），比如图2、3是按照物料的配置，图4有按日期的样式。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已核对并完成调整：\n\n1. **数据集与基线分开**：数据集指业务 Excel 及关联资料；配置基线采用正式导入的参数 Excel，标识为 P1、P2…。配置在线维护记录修改日志，不再增加业务数据版本，旧历史保留。\n2. **筛选统一联动**：移除重复的主题、业务领域、数据层筛选，改为对象分类、配置项、对象、状态和关键词。\n3. **当前值去重**：按 CP 序号升序，同一配置项、对象、字段只显示所选日期的当前值；未维护、只读项仍显示，旧值通过日志查看。\n4. **布局紧凑**：标题、筛选、结果及操作集中展示。\n5. **按对象展示**：全局用清单；物料/SKU、客户、工序等用对象表格；工厂日历用日期网格。\n\n已同步 main（`3233bcc`）并更新应用，构建及 44 项相关检查通过。请刷新应用查看。验证使用演示数据，不作为真实验收结果。",
+    "commits": [
+      "3233bccdbdac6a8e0960d620ea83c261e5cdc859"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T07-44-41.png",
+        "name": "pasted-2026-11-03T07-44-41.png",
+        "sha256": "7b96c3d876571ac59aa0e25a28db7b8e33f5a5255e2c57363f118cfb236f94ef",
+        "bytes": 250764,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T07-44-41.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/pasted-2026-11-03T07-49-43.png",
+        "name": "pasted-2026-11-03T07-49-43.png",
+        "sha256": "a8caf2b5620e87462ed6e15de62cc785c0d84fd7f5e3247eeaac95ec1a9cf63d",
+        "bytes": 375917,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T07-49-43.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/pasted-2026-11-03T07-50-18.png",
+        "name": "pasted-2026-11-03T07-50-18.png",
+        "sha256": "19451fc9fb37001d25f767c66d03581bec66b3f78d551ad096eaa7acc205434a",
+        "bytes": 303467,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T07-50-18.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/pasted-2026-11-03T07-50-59.png",
+        "name": "pasted-2026-11-03T07-50-59.png",
+        "sha256": "b56e007eb39d56a98bde441eb0c5542eb4b9ec1f2556ef160ecc34aeffdfd63a",
+        "bytes": 179845,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T07-50-59.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 108,
+    "url": "https://github.com/huiliangtao666/APS/issues/108",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:01:07Z",
+    "closed_at": "2026-11-03T15:01:09Z"
+  },
+  {
+    "seq": 49,
+    "event_key": "APS-USER-20261103-log-160",
+    "timestamp": "2026-11-03T08:41:44.281Z",
+    "local_time": "2026-11-03T16:41:44.281000+08:00",
+    "title": "[今日问题 2026-11-03 49/77] 汇总排程问题、影响和计算说明",
+    "content": "[Uploaded: upload/pasted-2026-11-03T08-00-56.png, upload/pasted-2026-11-03T08-04-28.png]\n“排程结果与六视图””现在页面上会显示问题，建议汇总成一个显示区域，先说明整体情况，然后有形式说明；把问题、计算逻辑都讲清楚。请参考一下图2样式，进行整理。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已按图2的思路整理，并合入 main（`1eba6cf`）、重建更新应用。\n\n“排程结果与六视图”现在先显示统一汇总区：\n\n- **整体情况**：已排、未排、预计迟交及独立检查结论。\n- **分类问题**：同类问题合并计数，展开可分页查看、定位来源。\n- **计算与处理说明**：说明判定逻辑、缺少哪些依据、到哪里维护。\n\n已区分“候选撤销”和“最终未排”，排程算法未改动。构建及25项检查通过，应用入口和资源加载正常；演示数据不代表真实验收结果。",
+    "commits": [
+      "1eba6cfa2d03e8589d6c755e257879c19f0e1c12"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T08-00-56.png",
+        "name": "pasted-2026-11-03T08-00-56.png",
+        "sha256": "ead16d70eeaf931784ea390d05bd067749d5396cfdf14d94c613c036bc1ee7cc",
+        "bytes": 223338,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T08-00-56.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/pasted-2026-11-03T08-04-28.png",
+        "name": "pasted-2026-11-03T08-04-28.png",
+        "sha256": "7ed3e0a42a4ed8d77c103544541a6b53a0b4dcada0af9427eada1e5812968520",
+        "bytes": 249694,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T08-04-28.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 109,
+    "url": "https://github.com/huiliangtao666/APS/issues/109",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:01:12Z",
+    "closed_at": "2026-11-03T15:01:14Z"
+  },
+  {
+    "seq": 50,
+    "event_key": "APS-USER-20261103-log-162",
+    "timestamp": "2026-11-03T08:55:30.256Z",
+    "local_time": "2026-11-03T16:55:30.256000+08:00",
+    "title": "[今日问题 2026-11-03 50/77] 核查已排任务与 WIP 保留的计算及明细缺口",
+    "content": "[Uploaded: upload/pasted-2026-11-03T08-14-39.png]\n选择一个已排任务、一个WIP保留，说说计算逻辑，以及”明细“的各个页签是否能够提供相应地信息（或者缺少），保住用户理解是否准确",
+    "completion_scope": "咨询／核查答复完成",
+    "solution": "核对了截图对应的**冻结 v4 运行（454458ec…）**及七个明细页签的返回数据。结论是：**可以核对部分结果，但目前还不足以让用户完整理解“为什么这样排”。** 以下均为演示数据。\n\n## 1. 已排任务：DAY-T43\n\n这是 EQ001 上的“备料解冻”任务。\n\n| 项目 | 本次计算依据与结果 |\n|---|---|\n| 需求 | DE029，FG009 五香酱卤猪蹄；13箱 × 5千克＝**65千克** |\n| 物料 | 按BOM计算投料。例如 RM021：65 × 244.318182 ÷ 1000＝**15.88068183千克**，分配自库存批次 LT151 |\n| 设备能力 | EQ001 单批上限600千克；11月1日为周日，日能力＝2000 × 1/2＝**1000千克**，本批65千克满足 |\n| 人员工装 | TM01班组，2人，实体料车 TL001 |\n| 占用时间 | **2026-11-01 00:00—11-02 00:00，结束时刻不含**。路线配置固定历时1天，因此不是按65÷1000换算加工时间 |\n| 工序衔接 | 这是首工序，没有前序；后序为 DAY-T44“修整分切” |\n\n**“已排”不等于按期交付。** DE029整条生产链虽然排入，但预计11月8日到货，最晚要求11月2日，最终记录为迟交6天。\n\n另外，这个运行是**历史日模型**：24小时表示模型中的自然占用区间，不能解释为现场2名员工连续作业24小时。\n\n## 2. WIP保留：WP004\n\n选择 EQ024 上的 WP004，因为它在截图的11月1日窗口内仍然占用设备。\n\n- **对象**：FG004 香辣炭烤肠，预计合格产出200千克，当前处于冷却工序。\n- **保留区间**：2026-10-31 00:00—11-02 00:00，结束时刻不含。因此11月1日仍占用EQ024；这是已有在制占用，不是新下达的生产任务。\n- **续作**：冷却之后还要包装检验。冻结结果生成了 DAY-T4，安排在11月2日00:58—01:56。\n- **物料**：历史已投原料不重复扣减；包装所需物料另行分配，例如PK010、PK011各500个。\n- **供给**：该历史日模型将续作完成向上取整，供给可用日为11月3日，仍属于计划中的**条件供给**，不能当成已经入库的成品。\n\n截图右侧列出的WP001、WP007在11月1日00:00已经结束保留。**右侧有3条WIP记录，不代表当前窗口仍有3条WIP占用。**\n\n## 3. 七个“明细”页签是否够用\n\n首先，截图右侧标题是 **“EQ024 · 同run详情”**，它是设备汇总，未定位到DAY-T43或某一个WIP。\n\n| 页签 | 当前能提供什么 | 影响理解的缺口 |\n|---|---|---|\n| 任务/对象明细 | DAY-T43能看到数量、时间、设备、人、工装 | 选设备时显示设备汇总；不能直接看到单个WIP的200千克、当前工序及保留原因 |\n| 前后工序 | DAY-T43能查到同生产批次的8道工序 | WIP保留没有与“当前工序→续作DAY-T4”串起来；设备入口会混合多个批次 |\n| 资源需求 | 有任务、人员、工装及WIP占用记录 | DAY-T43明细实际返回同设备6条任务；EQ024返回6条任务＋3条WIP，范围超出所选对象。WIP实体工装缺失还被标成“已知”，不能将空列表理解为无需工装 |\n| 日历与计算依据 | 有设备、班组、路线及独立检查结论 | 本例未带出任务当天的工厂日历，无法直接核对“2000×1/2”；缺少代入数值后的公式说明 |\n| 物料风险 | DAY-T43入口能查到DE029关联分配 | 是整条需求的记录，未突出本工序；设备入口没有完整带出WP004的待投料及后续供给 |\n| 数据来源 | 有文件指纹、表名、行号和映射版本 | WP004的期初在制第6行、具体映射内容没有完整关联进来 |\n| 冻结有效参数 | 本运行返回0条 | 原因是历史快照未保存该页签读取的结构化参数，**不代表当时没有配置参数**；应明确解释并展示可追溯的冻结字段 |\n\n**需要优先补齐的是：明确“当前查看对象和范围”，并把“输入值 → 计算公式 → 排程结果 → 来源”连起来。** 目前尤其不能把空参数页、空工装列表或设备汇总记录，直接解释成“无需配置、无需工装或该任务全部明细”。",
+    "commits": [],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T08-14-39.png",
+        "name": "pasted-2026-11-03T08-14-39.png",
+        "sha256": "cd9786306d42aae8aaee12fe96be0644cc77ec23989d2b522ebf4d1744f11fca",
+        "bytes": 514220,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T08-14-39.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 110,
+    "url": "https://github.com/huiliangtao666/APS/issues/110",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:01:16Z",
+    "closed_at": "2026-11-03T15:01:18Z"
+  },
+  {
+    "seq": 51,
+    "event_key": "APS-USER-20261103-log-164",
+    "timestamp": "2026-11-03T09:05:02.925Z",
+    "local_time": "2026-11-03T17:05:02.925000+08:00",
+    "title": "[今日问题 2026-11-03 51/77] 删除已归集到结果及六视图的重复信息区域",
+    "content": "[Uploaded: upload/pasted-2026-11-03T09-00-00.png]\n这些信息是否也归集到了排程结果显示以及问题提示中了；如果是可以删除",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已核对并删除截图中的四个重复区域，信息统一保留在：\n\n- **设备甘特／任务明细**：任务与占用。\n- **需求交付**：已排、未排、到货及迟交。\n- **物料风险**：缺料、供应来源及采购建议。\n- **结果汇总**：整体情况和分类问题说明。\n\n采购建议的“复制为模拟草稿”按钮已迁至**物料风险 → 建议记录明细**，原操作能力保留。\n\n已合入 main（`903c1b0`）并更新应用，构建及访问检查通过。",
+    "commits": [
+      "903c1b0df9292410ebc20fa4d77fafe2657a9106"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T09-00-00.png",
+        "name": "pasted-2026-11-03T09-00-00.png",
+        "sha256": "ff8cd7ecab329b369b934c88df0bcfadab77a44d98248c0550eee0465459968e",
+        "bytes": 40325,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T09-00-00.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 111,
+    "url": "https://github.com/huiliangtao666/APS/issues/111",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:01:20Z",
+    "closed_at": "2026-11-03T15:01:22Z"
+  },
+  {
+    "seq": 52,
+    "event_key": "APS-USER-20261103-log-166",
+    "timestamp": "2026-11-03T09:13:45.785Z",
+    "local_time": "2026-11-03T17:13:45.785000+08:00",
+    "title": "[今日问题 2026-11-03 52/77] 设备甘特节点打开计算分析悬浮窗",
+    "content": "[Uploaded: upload/pasted-2026-11-03T09-12-51.png]\n在设备甘特中，点击某个节点，不仅显示关联，也可以打开一个窗口体现节点的逻辑是如何计算分析的以及有什么问题，这个窗口可以悬浮显示。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已实现并更新应用，合入 main（`ac154f5`）。\n\n- **单击任务节点**：保留工序关联高亮，同时打开计算分析悬浮窗。\n- **窗口内容**：数量与工时公式、产能依据、前后工序、人员工装、投料来源及关联问题；缺失依据明确提示。\n- **窗口操作**：可拖动、关闭、按 Esc 关闭，点击其他节点切换内容。WIP和停机节点也支持。\n\n构建及35项检查通过，应用访问正常。",
+    "commits": [
+      "ac154f5ab1f999a8756ad1439af148c32058c1e3"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T09-12-51.png",
+        "name": "pasted-2026-11-03T09-12-51.png",
+        "sha256": "84497a9668dd08fcee719b59b2473d7f437f8446c5e29133d3b93c225e8d8c68",
+        "bytes": 364350,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T09-12-51.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 112,
+    "url": "https://github.com/huiliangtao666/APS/issues/112",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:01:25Z",
+    "closed_at": "2026-11-03T15:01:27Z"
+  },
+  {
+    "seq": 53,
+    "event_key": "APS-USER-20261103-log-168",
+    "timestamp": "2026-11-03T09:36:57.129Z",
+    "local_time": "2026-11-03T17:36:57.129000+08:00",
+    "title": "[今日问题 2026-11-03 53/77] DE620 为什么未排并计入结果问题",
+    "content": "[Uploaded: upload/pasted-2026-11-03T09-24-43.png]\n这条为什么算入未排，并出现在结果的错误信息中",
+    "completion_scope": "咨询／核查答复完成",
+    "solution": "**DE620被计入未排，是因为计划投料时原料已经过期，并非截图中的需求字段填写错误。** 我用冻结输入隔离复算，完整复现了原结果。\n\n| 核对项 | 具体情况 |\n|---|---|\n| 需求 | DE620，FG010，14箱 × 5千克＝70千克 |\n| 涉及原料 | RM017「冷鲜牛腱子肉」 |\n| 初选供应 | 库存批次 **LT139**，分配约11.4015千克 |\n| 批次失效日期 | **2026-11-02** |\n| 排入资源后的计划投料时间 | **2026-11-07 01:56**，历史日模型按11月7日校验 |\n| 判定 | 投料日期已超过批次有效期，候选方案被撤销 |\n\n其他已有RM017库存最晚到期为11月5日，在途IN009预计到期为11月6日，也无法覆盖这次投料日期。\n\n程序撤销该需求的候选任务后，**整条70千克需求计入未排**。所以它出现在问题区，应理解为“本次排程的供给有效期不满足”，不是“需求记录格式错误”。\n\n另外，截图是**当前v6维护页**，上述结论来自**冻结v4运行**。补充有效供应或调整排程安排后，需要创建新运行，旧结果不会自动改变。",
+    "commits": [],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T09-24-43.png",
+        "name": "pasted-2026-11-03T09-24-43.png",
+        "sha256": "0053bfa1d433892fad45508a516140c68d27d38808bdd171122f49654bf925c7",
+        "bytes": 147008,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T09-24-43.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 113,
+    "url": "https://github.com/huiliangtao666/APS/issues/113",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:01:29Z",
+    "closed_at": "2026-11-03T15:01:31Z"
+  },
+  {
+    "seq": 54,
+    "event_key": "APS-USER-20261103-log-170",
+    "timestamp": "2026-11-03T09:49:27.444Z",
+    "local_time": "2026-11-03T17:49:27.444000+08:00",
+    "title": "[今日问题 2026-11-03 54/77] 55kg、600kg 批量与 1440 分钟占用的区别",
+    "content": "[Uploaded: upload/pasted-2026-11-03T09-48-04.png]\n这个例子中，加工55kg，最小批600kg，为什么要占用1440分钟",
+    "completion_scope": "咨询／核查答复完成",
+    "solution": "这里有两个不同的口径。核对 `DAY-T86` 的冻结数据后：\n\n| 参数 | 实际含义 |\n|---|---|\n| 加工量55kg | 本任务需要加工的数量 |\n| **单批上限600kg** | 一批最多600kg，**不是最小批量**，所以55kg可以单独成批 |\n| 工艺固定历时1天 | RT072“备料解冻”配置的“跨日历时天数＝1”，因此占用 **1 × 1440＝1440分钟** |\n\n当前规则采用固定解冻历时，不随加工数量缩短，也不按55÷600折算时间。\n\n**更值得检查的是资源占用方式：**这个历史模型把EQ002作为独占机位，因此55kg也会独占一天。如果现场允许多批原料同时进入解冻区，应该按共享容量安排多批重叠占用；当前模型就会低估设备可用能力。\n\n所以，1440分钟符合这次冻结配置，但“固定1天＋机位独占”只是当前仿真模型的设定，不能直接视为已经确认的现场工艺规则。",
+    "commits": [],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T09-48-04.png",
+        "name": "pasted-2026-11-03T09-48-04.png",
+        "sha256": "4d90c7d41b008dd7d1bfab1be919d64d52ba51737c32ff9425c9aedfd70ae3c6",
+        "bytes": 613526,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T09-48-04.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 114,
+    "url": "https://github.com/huiliangtao666/APS/issues/114",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:01:34Z",
+    "closed_at": "2026-11-03T15:01:36Z"
+  },
+  {
+    "seq": 55,
+    "event_key": "APS-USER-20261103-log-172",
+    "timestamp": "2026-11-03T09:52:31.843Z",
+    "local_time": "2026-11-03T17:52:31.843000+08:00",
+    "title": "[今日问题 2026-11-03 55/77] 固定一天与机位独占规则在哪里维护",
+    "content": "固定1天＋机位独占，是在哪里配置的",
+    "completion_scope": "咨询／核查答复完成",
+    "solution": "两项来源不同，需要更正我上一条的表述：**“固定1天”是配置，“机位独占”在这次历史日模型中是程序规则。**\n\n### 1. 固定1天：可以维护\n\n入口：**配置参数查询与维护 → 07 工艺与工序 → CP092「跨日历时天数」**\n\n选择对象 **RT072「备料解冻」**，该冻结运行采用的值为 **1天**。\n\nExcel来源也已核对：\n\n- 参数记录：**PA2947**，参数值为1。\n- “工艺路线”单元格 **K74**，引用“配置参数” **E2949**。\n\n### 2. 机位独占：该历史模型没有配置开关\n\n冻结v4中，EQ002的“资源占用方式”为空。历史日算法直接规定：**同一机位已有重叠占用时，不再安排其他任务。**\n\n因此，当前这次运行的独占行为不是来自某个“独占”参数。要支持多批共享容量，需要让该模型读取并执行资源占用方式，不能仅修改600kg批量上限。\n\n以上是冻结v4的来源；维护当前参数后，仍需创建新运行，旧结果不会自动变化。",
+    "commits": [],
+    "attachments": [],
+    "number": 115,
+    "url": "https://github.com/huiliangtao666/APS/issues/115",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:01:38Z",
+    "closed_at": "2026-11-03T15:01:40Z"
+  },
+  {
+    "seq": 56,
+    "event_key": "APS-USER-20261103-log-174",
+    "timestamp": "2026-11-03T10:02:34.191Z",
+    "local_time": "2026-11-03T18:02:34.191000+08:00",
+    "title": "[今日问题 2026-11-03 56/77] RT072 的 CP092 修改为 0.5 是否生效",
+    "content": "如果RT072 CP092维护为0.5，是否有改变",
+    "completion_scope": "咨询／核查答复完成",
+    "solution": "**当前版本不能直接将CP092维护为0.5生效**：它被限定为“非负整数天”，保存时会报“跨日历时天数须为整数”。\n\n如果正式支持小数天，则会有以下变化：\n\n- **固定历时**：0.5 × 1440＝**720分钟，即12小时**。\n- **机位占用**：这12小时仍然独占，不会自动变成多批共享。\n- **运行结果**：需要创建新运行；原冻结v4仍保持1440分钟。\n\n另外，**改成0不能代替0.5**：0表示切换为按量计算的同日加工段，含义不同。",
+    "commits": [],
+    "attachments": [],
+    "number": 116,
+    "url": "https://github.com/huiliangtao666/APS/issues/116",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:01:42Z",
+    "closed_at": "2026-11-03T15:01:44Z"
+  },
+  {
+    "seq": 57,
+    "event_key": "APS-USER-20261103-log-176",
+    "timestamp": "2026-11-03T10:05:09.229Z",
+    "local_time": "2026-11-03T18:05:09.229000+08:00",
+    "title": "[今日问题 2026-11-03 57/77] 非独占机位的通用准备及加工时间配置建议",
+    "content": "机位不独占，那就要考虑一些转换时间（比如setup time, process time等），你有什么建议做成通用配置",
+    "completion_scope": "咨询／核查答复完成",
+    "solution": "建议做成 **“资源共享方式＋工序阶段工时＋换型规则”** 三部分配置。核心是分别描述：**物料需要处理多久、占用多少机位容量、哪些操作需要人员，以及何时释放资源。**\n\n下面是建议方案，现有应用还没有完整支持所有规则。\n\n## 1. 先明确“不独占”是哪一种共享\n\n| 资源模式 | 排程方式 | 适用情形举例 |\n|---|---|---|\n| 独占 | 同时只能处理一批 | 单机加工 |\n| 容量共享 | 多批分别开始、结束，合计占用不超过容量 | 可独立进出的解冻区、冷却区 |\n| 合批加工 | 多批合成一炉或一缸，共同开始、结束 | 必须执行同一温度、时间程序的设备 |\n\n**容量共享和合批加工要分开配置。** 能同时放进去，不代表可以随时加入，也不代表不同产品可以混放。\n\n共享资源应同时维护：\n\n- **容量及单位**：kg、托盘、机位等。\n- **最大并行批数**：重量没超限，也可能没有空机位。\n- **混放条件**：产品类别、温度、过敏原、卫生等级等。\n- **分区**：各区能否独立运行、清洗。\n\n容量共享的基本约束是：任意时刻，所有在制批次占用量之和不超过可用容量。这对应常见排程中的累计资源约束。[OR-Tools 官方文档](https://github.com/google/or-tools/blob/stable/ortools/sat/docs/scheduling.md)\n\n> 现有的“单批上限600kg”和“设备共享总容量”是两个参数，不能直接混用。\n\n## 2. 把工序拆成可配置的阶段\n\n建议在工艺路线下，用一张紧凑表维护：\n\n| 阶段 | 工时计算方式 | 需要明确的占用 |\n|---|---|---|\n| 准备／Setup | 固定时间，或按换型规则计算 | 占整机、分区，还是只占人员 |\n| 上料 | 每批固定时间，或按数量计算 | 人员、上料设备、工装 |\n| 加工／Process | 固定历时，或按数量与速度计算 | 独占机位或占部分容量 |\n| 保温／静置 | 固定历时 | 留在设备内继续占用，移出则占缓冲区 |\n| 下料 | 固定或按数量计算 | 人员、搬运设备；何时释放机位 |\n| 清洗 | 按产品转换、批次或周期触发 | 整机／分区停用，以及清洗人员 |\n\n每个阶段统一配置：**时间模型、时间值、资源占用量、人员需求、执行日历、能否中断、释放条件**。\n\n还要区分：\n\n- **自然历时**：例如连续解冻12小时，夜间也计时。\n- **工作时间**：例如人工上料20分钟，需要在可工作的班次内安排。\n- **等待时间**：等待本身不等于加工；物料未移出设备时，仍可能占用容量。\n\n## 3. Setup 建议用“转换规则表”\n\n不建议每个产品只维护一个固定 setup time，因为不同转换方向可能不同。\n\n| 设备／分区 | 原产品组或状态 | 目标产品组或状态 | 准备分钟 | 清洗分钟 | 占用范围 |\n|---|---|---|---:|---:|---|\n| 某设备组 | A类 | A类 | 按现场维护 | 按现场维护 | 指定机位 |\n| 某设备组 | A类 | B类 | 按现场维护 | 按现场维护 | 整机或分区 |\n| 某设备组 | 已清洁 | B类 | 按现场维护 | 按现场维护 | 指定范围 |\n\n配套明确三点：\n\n1. **何时触发**：每批、产品组变化、连续生产达到一定时长，还是累计一定批数。\n2. **首次开机状态**：已清洁、上次生产产品、当前已有WIP。\n3. **是否允许提前准备**：外部备料可以与上一批加工重叠；需要停机的准备必须等待资源释放。\n\n对于共享设备，不能简单拿“上一条完成任务”计算换型。要看**当前分区内所有批次是否兼容**；整机清洗通常还需要等待相关批次全部退出。\n\n同时避免“固定准备时间”和“换型清洗时间”重复计时。\n\n## 4. 用刚才的55kg举例\n\n**以下仅说明规则，时间需要现场确认：**\n\n假设该工序配置为：\n\n- 固定加工历时：12小时；\n- 按重量共享，允许兼容批次独立进出；\n- 上料、下料分别占人员和相应操作资源。\n\n那么55kg仍然需要加工12小时，但只占用55kg对应的共享容量；其他兼容批次在容量允许时可以同时处理。\n\n**共享可以减少等待机位的时间，不会自动缩短工艺所需的12小时。** 如果物料到时后未能及时下料，还应继续占用容量，直到释放条件满足。\n\n## 5. 在现有应用中如何安排\n\n保持现有“配置参数查询与维护”入口，按对象维护：\n\n| 位置 | 建议维护内容 |\n|---|---|\n| **06 设备与工装** | 共享方式、总容量、并行批数、分区、混放条件 |\n| **07 工艺与工序** | 各阶段工时、占用方式、释放条件、换型规则 |\n| **08 班组人员** | 阶段所需人数、技能 |\n| **09 工厂日历** | 人工操作班次、设备连续运行日历 |\n\n继续由**配置参数Excel导入基线，在线维护记录修改日志**；业务数据Excel单独导入。关键参数未维护应提示缺失，明确填0才表示无需该项时间。\n\n排程甘特节点中应直接展示：\n\n**准备 → 上料 → 加工 → 下料 → 清洗**，并说明每段时长依据、容量占用及等待原因。\n\n## 6. 对当前版本的建议\n\n现有代码已有部分准备时间、加工工时、换型清洗、重量共享和人员参与能力，但**共享兼容规则、分阶段资源占用，以及整机清洗锁定仍需补齐**；之前讨论的旧版按日排程分支也没有完整应用这些规则。\n\n建议优先落地：**容量共享＋固定／按量加工工时＋上料下料＋分区换型清洗**，再扩展合批加工。统一以分钟存储工时，页面允许按小时填写；这需要正式扩展配置和计算逻辑，当前直接把 CP092 改为0.5仍不能实现。",
+    "commits": [],
+    "attachments": [],
+    "number": 117,
+    "url": "https://github.com/huiliangtao666/APS/issues/117",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:01:47Z",
+    "closed_at": "2026-11-03T15:01:49Z"
+  },
+  {
+    "seq": 58,
+    "event_key": "APS-USER-20261103-log-178",
+    "timestamp": "2026-11-03T10:17:21.618Z",
+    "local_time": "2026-11-03T18:17:21.618000+08:00",
+    "title": "[今日问题 2026-11-03 58/77] 确定容量共享及准备、运行两阶段配置方案",
+    "content": "1. 采用“容量共享”原则。\n2.简单一点，阶段分为准备-运行两个阶段。\n3. 分别按照固定历时或者按量计算进行配置，默认全部为固定历时；暂时不考虑其他细项。",
+    "completion_scope": "用户设计决定记录及答复完成；应用代码未实现该新增模型",
+    "solution": "按你的决定，方案收敛为 **“容量共享＋准备、运行两阶段”**。\n\n### 1. 工时配置\n\n每个路线工序一行：\n\n| 工序 | 准备计算方式 | 准备时长 | 准备基准量 | 运行计算方式 | 运行时长 | 运行基准量 |\n|---|---|---:|---:|---|---:|---:|\n| 示例 | 固定历时 | 待维护 | — | 固定历时 | 待维护 | — |\n\n- 两个阶段均可选择 **固定历时／按量计算**，默认固定历时。\n- 固定历时：直接采用填写的时长，不随批量变化。\n- 按量计算：`阶段时间＝实际批量 ÷ 基准量 × 基准时长`，结果向上取整到分钟。\n- 准备时间允许明确填 **0**；运行时间须大于0。未填写不自动当作0。\n- 页面允许按小时填写，例如 **12小时＝720分钟**。\n\n### 2. 排程顺序与容量\n\n每批执行：**准备 → 运行 → 释放容量**。\n\n- 总历时＝准备时间＋运行时间。\n- 两个阶段都按本批数量占用共享容量。\n- 多批可以重叠，但任意时刻的占用总量不能超过设备共享容量，已有WIP也计入。\n- 每个拆分批次分别计算一次准备时间。\n- **共享总容量与单批上限分别维护**，现有“单批上限600kg”不能直接视为共享总容量。\n\n### 3. 维护位置\n\n- **06 设备与工装**：维护共享总容量、单批上限。\n- **07 工艺与工序**：维护准备和运行的计算方式、时长、按量基准。\n- 甘特节点详情显示两个阶段的时间、计算公式和容量占用。\n\n本次新增模型只配置这两个阶段。以上是确定后的设计口径，**应用代码尚未修改**。",
+    "commits": [],
+    "attachments": [],
+    "number": 118,
+    "url": "https://github.com/huiliangtao666/APS/issues/118",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:01:51Z",
+    "closed_at": "2026-11-03T15:01:53Z"
+  },
+  {
+    "seq": 59,
+    "event_key": "APS-USER-20261103-log-180",
+    "timestamp": "2026-11-03T10:19:54.294Z",
+    "local_time": "2026-11-03T18:19:54.294000+08:00",
+    "title": "[今日问题 2026-11-03 59/77] 将 DE620 等处理规则写入明细说明",
+    "content": "刚才分析的原因（DE620未排），提醒你把这些处理规则的逻辑都写到明细信息说明中，否则难以理解",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已补入明细并更新应用，代码已同步 main：`1007796`。\n\n入口：**排程结果与六视图 → 需求交付 → DE620 → 明细 → 处理规则说明**。\n\n现在会说明：\n\n- 先分配供给、再安排资源、最后复查实际投料有效期的顺序。\n- 校验失败后的撤销范围，以及当前不会自动换批重排的处理。\n- 判定依据、相关配置和完善位置。\n\n其他未排原因也采用同样说明方式。**DE620 历史记录缺少的批次和时点明确标注未保存；新运行会记录这些依据。**\n\n46 项任务级测试及构建通过，另1项私有输入检查跳过。cleanup：无新增本地临时文件。",
+    "commits": [
+      "10077964cdca37f210032b0a2efc5c1dd1a4c1bf"
+    ],
+    "attachments": [],
+    "number": 119,
+    "url": "https://github.com/huiliangtao666/APS/issues/119",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:01:56Z",
+    "closed_at": "2026-11-03T15:01:57Z"
+  },
+  {
+    "seq": 60,
+    "event_key": "APS-USER-20261103-log-182",
+    "timestamp": "2026-11-03T10:33:44.599Z",
+    "local_time": "2026-11-03T18:33:44.599000+08:00",
+    "title": "[今日问题 2026-11-03 60/77] 每项配置参数补充含义、影响及取值维护提示",
+    "content": "[Uploaded: upload/pasted-2026-11-03T10-21-05.png]\n参数维护界面（每一个都是）要简单说明这个参数的含义以及对什么有影响，可维护参数也要有提示（通过感叹号提醒悬浮展示）。比如这个是如何维护，1代表什么0代表什么等。请检查每个配置参数。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已逐项补齐并更新应用，main：`a981544`。\n\n- 覆盖 **181 类配置、77 个参数字段**。\n- 参数值及维护框旁增加 **“！”悬浮说明**：含义、影响、维护方法、单位、取值范围，以及 **0、1、空值**的区别。\n- 枚举参数改为下拉选择，并标明当前排程模型是否采用该参数。\n\n截图中的“资源占用方式”应选择“独占／重量共享”等明确选项，不能填写0或1。\n\n38项任务级检查、构建及页面交互核对通过。现有业务参数未修改。\n\ncleanup：临时测试文件已清理。",
+    "commits": [
+      "a98154446e4399d3366c7c27170a14ca34e6d636"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T10-21-05.png",
+        "name": "pasted-2026-11-03T10-21-05.png",
+        "sha256": "cbd4f5baf41225c9c4bc69911a7c24abbf13cb7ef8ce0f6ef020f13ed3bf2067",
+        "bytes": 74824,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T10-21-05.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 120,
+    "url": "https://github.com/huiliangtao666/APS/issues/120",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:02:00Z",
+    "closed_at": "2026-11-03T15:02:02Z"
+  },
+  {
+    "seq": 61,
+    "event_key": "APS-USER-20261103-log-184",
+    "timestamp": "2026-11-03T10:56:14.014Z",
+    "local_time": "2026-11-03T18:56:14.014000+08:00",
+    "title": "[今日问题 2026-11-03 61/77] 提高大文件导入容量且不增加交互功能",
+    "content": "[Uploaded: upload/pasted-2026-11-03T10-23-12.png]\n新导入一个数据，请帮助处理，提高容量或者分批操作导入。我只需要结果，不要增加交互功能。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "容量问题已修复并上线：上限由 **32 MB 提高到 128 MB**，同时减少重复明细占用，未增加交互功能。\n\n已重试新文件，**尚未正式导入**，剩余 46 项校验阻塞：\n\n- **6 条需求**在 12 月底，超出应用当前支持至 **2026-12-13** 的日期窗口。\n- **40 项“最大等待天数”**单位填为“整数”，要求为“天”。\n\n当前有效数据仍为 **v7**，历史排程结果未改变。",
+    "commits": [
+      "d3e52b71d73104155c2662d0d7a344d5dbf88f4e",
+      "54a0a60aece8aff486cf5997a4457b8863906464"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T10-23-12.png",
+        "name": "pasted-2026-11-03T10-23-12.png",
+        "sha256": "99c7eb838bbb57337a0798c04475902f1c597845a36b790b99be8e32905d0444",
+        "bytes": 124592,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T10-23-12.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 121,
+    "url": "https://github.com/huiliangtao666/APS/issues/121",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:02:04Z",
+    "closed_at": "2026-11-03T15:02:06Z"
+  },
+  {
+    "seq": 62,
+    "event_key": "APS-USER-20261103-log-186",
+    "timestamp": "2026-11-03T11:07:11.885Z",
+    "local_time": "2026-11-03T19:07:11.885000+08:00",
+    "title": "[今日问题 2026-11-03 62/77] 参数帮助提示去重并统一感叹号样式",
+    "content": "[Uploaded: upload/pasted-2026-11-03T11-01-11.png, upload/pasted-2026-11-03T11-02-26.png, upload/pasted-2026-11-03T11-05-22.png]\n如果是同一个信息的提示，那么一个界面上在合适的配置（比如配置项名称上显示一次就行了）， 如图 1、2。\n图3所示的感叹号提示和其他的不一样，请调整，请保持一致。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已修改并合回 main，应用已重新构建上线：\n\n- 相同说明只在配置项名称或字段列名旁显示一次，移除日历、数据单元格中的重复提示。\n- 维护窗口的感叹号已统一为相同的圆形样式和悬浮行为。\n\n相关检查和页面核对通过，参数值与排程逻辑未改动。",
+    "commits": [
+      "ac055c0e7ef0c54a38252edcf37773442c52f8cf"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T11-01-11.png",
+        "name": "pasted-2026-11-03T11-01-11.png",
+        "sha256": "e84daad80338bd565dde49b517cbdee356bff7c8b186ff3f886aa1b764b4a2c4",
+        "bytes": 250185,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T11-01-11.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/pasted-2026-11-03T11-02-26.png",
+        "name": "pasted-2026-11-03T11-02-26.png",
+        "sha256": "42d23a49d9e6b8fd185d0a2c9f2755931206ed0de9d4676479d04c988a7796ac",
+        "bytes": 561461,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T11-02-26.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/pasted-2026-11-03T11-05-22.png",
+        "name": "pasted-2026-11-03T11-05-22.png",
+        "sha256": "4ab2ef1149f10461d8c21cbd003e0bc232db97fbb19e103508e58f3b3f074ad3",
+        "bytes": 81028,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T11-05-22.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 122,
+    "url": "https://github.com/huiliangtao666/APS/issues/122",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:02:08Z",
+    "closed_at": "2026-11-03T15:02:10Z"
+  },
+  {
+    "seq": 63,
+    "event_key": "APS-USER-20261103-log-188",
+    "timestamp": "2026-11-03T11:19:50.496Z",
+    "local_time": "2026-11-03T19:19:50.496000+08:00",
+    "title": "[今日问题 2026-11-03 63/77] 修复新导入文件的 WIP 映射并使其生效",
+    "content": "[Uploaded: upload/pasted-2026-11-03T11-19-40.png]\n看看导入问题，帮我修复生效",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "初次处理遭运行中断，后续按用户“自行处理”的要求完成：补齐新文件 WP2001～WP2005 的5条WIP映射，按Excel提供的路线移除40条旧演示重复路线，关联162个投料点；修正半成品装箱重量及旧文件等待下限的误报，并修复实际投料时已过期的制造供给未撤销问题。配置已生效到 v10，新运行返回65任务、3条已排和9条未排，独立复核通过。没有把未排需求改成已排来消除提示。",
+    "commits": [
+      "fca0a3e414d45e490468b79b68bf04ed7cfc8d4f",
+      "d626baa4234a09ed0bb1ce20212a23e133b1925a",
+      "bbba7f5f26bf680d5e0303d233328c4b008e0bf1"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T11-19-40.png",
+        "name": "pasted-2026-11-03T11-19-40.png",
+        "sha256": "2cd4ec125f95d218c0f798d666669623f2ac462e5d3c2ac1c42cc8ca3709d20c",
+        "bytes": 244765,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T11-19-40.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 123,
+    "url": "https://github.com/huiliangtao666/APS/issues/123",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:02:13Z",
+    "closed_at": "2026-11-03T15:02:15Z"
+  },
+  {
+    "seq": 64,
+    "event_key": "APS-USER-20261103-log-190",
+    "timestamp": "2026-11-03T11:22:43.528Z",
+    "local_time": "2026-11-03T19:22:43.528000+08:00",
+    "title": "[今日问题 2026-11-03 64/77] v8 导入后如何使排程计算生效",
+    "content": "我已经导入了（v8），如何让排程计算生效，该怎么操作",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "说明“导入成功”不会自动更新历史冻结运行：需重新检查本次范围，再创建新运行。初次处理被中断，后续自行补齐 WIP/路线/投料映射和校验后，已在 v10 完成 2026-11-01～11-30 的新运行；用户可从“打开已保存运行”选择最新 v10。结果12条需求中3已排、9未排，65任务，独立复核通过；未排原因保留，历史结果不改写。",
+    "commits": [
+      "fca0a3e414d45e490468b79b68bf04ed7cfc8d4f",
+      "d626baa4234a09ed0bb1ce20212a23e133b1925a",
+      "bbba7f5f26bf680d5e0303d233328c4b008e0bf1"
+    ],
+    "attachments": [],
+    "number": 124,
+    "url": "https://github.com/huiliangtao666/APS/issues/124",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:02:17Z",
+    "closed_at": "2026-11-03T15:02:19Z"
+  },
+  {
+    "seq": 65,
+    "event_key": "APS-USER-20261103-log-192",
+    "timestamp": "2026-11-03T11:27:05.158Z",
+    "local_time": "2026-11-03T19:27:05.158000+08:00",
+    "title": "[今日问题 2026-11-03 65/77] 整理导入问题并要求修复 Excel 的处理去向",
+    "content": "[Uploaded: upload/pasted-2026-11-03T11-24-18.png]\n你把检查的所有问题发给aps-design，让它修复重新生成excel文件",
+    "completion_scope": "按后续用户指令改为自行处理并完成",
+    "solution": "用户随后明确改为“不要给design，你自己处理”，该最新指令替代本条转交方式。因此未把“发给Design或重新生成Excel”写成已执行；改为在应用内自行补齐5条WIP映射、移除40条重复演示路线、关联162个投料点，修正校验及投料效期检查，生效到v10并完成新的11月排程。此条以用户调整后的处理方式闭环。",
+    "commits": [
+      "fca0a3e414d45e490468b79b68bf04ed7cfc8d4f",
+      "d626baa4234a09ed0bb1ce20212a23e133b1925a",
+      "bbba7f5f26bf680d5e0303d233328c4b008e0bf1"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T11-24-18.png",
+        "name": "pasted-2026-11-03T11-24-18.png",
+        "sha256": "422715e8d0993ae801c4b9d8bad683c5f493f3654667afcdd7f945daa0ba0459",
+        "bytes": 212935,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T11-24-18.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 125,
+    "url": "https://github.com/huiliangtao666/APS/issues/125",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:02:22Z",
+    "closed_at": "2026-11-03T15:02:24Z"
+  },
+  {
+    "seq": 66,
+    "event_key": "APS-USER-20261103-log-194",
+    "timestamp": "2026-11-03T11:27:46.139Z",
+    "local_time": "2026-11-03T19:27:46.139000+08:00",
+    "title": "[今日问题 2026-11-03 66/77] 继续导入校验和数据修复进程",
+    "content": "[Uploaded: upload/pasted-2026-11-03T11-27-39.png]\n继续这个进程",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "承接前面中断的导入问题处理；随后服从用户“不要给design”的最新要求自行完成，未另行派发Design。v10映射及有效期检查修复后完成新的11月全月排程：12需求、3已排、9未排、65任务，独立复核通过。",
+    "commits": [
+      "fca0a3e414d45e490468b79b68bf04ed7cfc8d4f",
+      "d626baa4234a09ed0bb1ce20212a23e133b1925a",
+      "bbba7f5f26bf680d5e0303d233328c4b008e0bf1"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T11-27-39.png",
+        "name": "pasted-2026-11-03T11-27-39.png",
+        "sha256": "a166e750cedeaa642e52fd4e893d9106a6e468342f5e384405f843bdf4c1a025",
+        "bytes": 176960,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T11-27-39.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 126,
+    "url": "https://github.com/huiliangtao666/APS/issues/126",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:02:26Z",
+    "closed_at": "2026-11-03T15:02:28Z"
+  },
+  {
+    "seq": 67,
+    "event_key": "APS-USER-20261103-log-196",
+    "timestamp": "2026-11-03T11:28:59.954Z",
+    "local_time": "2026-11-03T19:28:59.954000+08:00",
+    "title": "[今日问题 2026-11-03 67/77] 按最新要求自行修复并完成新排程运行",
+    "content": "不要给design,你自己处理",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "自行补齐5条WIP映射，移除40条与新Excel重复的旧演示路线，关联162个投料点，修正半成品装箱重量及旧文件最小等待下限误报；再修复半成品实际投料时已过期却未撤销候选的问题。配置生效v10，11月全月就绪检查通过，创建新运行1205fb33-825f-40dd-a239-5377064201c7：12需求、3已排、9未排、65任务，独立复核通过。无需重新导入Excel；原业务数据及历史结果保留。以上是演示场景运行结果，不是真实业务验收结论。",
+    "commits": [
+      "fca0a3e414d45e490468b79b68bf04ed7cfc8d4f",
+      "d626baa4234a09ed0bb1ce20212a23e133b1925a",
+      "bbba7f5f26bf680d5e0303d233328c4b008e0bf1"
+    ],
+    "attachments": [],
+    "number": 127,
+    "url": "https://github.com/huiliangtao666/APS/issues/127",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:02:30Z",
+    "closed_at": "2026-11-03T15:02:32Z"
+  },
+  {
+    "seq": 68,
+    "event_key": "APS-USER-20261103-log-198",
+    "timestamp": "2026-11-03T12:56:47.548Z",
+    "local_time": "2026-11-03T20:56:47.548000+08:00",
+    "title": "[今日问题 2026-11-03 68/77] 需求交付增加甘特图及节点分析",
+    "content": "[Uploaded: upload/pasted-2026-11-03T12-55-46.png]\n六视图的“需求交付”，增加类似的甘特展示，更为直观，然后再看明细；相关细节也请参照“设备甘特”",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已完成，已合入 main 并重建应用。\n\n刷新后进入 **“排程结果与六视图”→“需求交付”**：\n\n- 先看甘特：每行一条需求，显示关联工序、交付状态和到货日期。\n- 点击日期：查看半小时刻度。\n- 点击工序：打开与设备甘特一致的计算分析浮窗。\n- 点击需求：查看交付明细、未排原因及处理规则；下方明细表默认收起。\n\n无需重新导入或排程，现有运行可直接查看。构建及只读核对已通过，排程逻辑未改变。",
+    "commits": [
+      "83b228aa900d56ca1bec6de72a5df59a977dd94d",
+      "b51b48d6a097abd1838dcbd55fc2f68aefd405b9"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T12-55-46.png",
+        "name": "pasted-2026-11-03T12-55-46.png",
+        "sha256": "4a959507f3fcc2aeaad2a11f7fd9682d2e6490f02d803eddf6ff9698ea1952c7",
+        "bytes": 385214,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T12-55-46.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 128,
+    "url": "https://github.com/huiliangtao666/APS/issues/128",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:02:35Z",
+    "closed_at": "2026-11-03T15:02:37Z"
+  },
+  {
+    "seq": 69,
+    "event_key": "APS-USER-20261103-log-200",
+    "timestamp": "2026-11-03T13:12:22.110Z",
+    "local_time": "2026-11-03T21:12:22.110000+08:00",
+    "title": "[今日问题 2026-11-03 69/77] 物料风险增加甘特图及节点分析",
+    "content": "[Uploaded: upload/pasted-2026-11-03T12-57-34.png]\n六视图的“物料风险”，增加类似的甘特展示，更为直观，然后再看明细；相关细节也请参照“设备甘特”",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已完成，已合入 main 并重建应用。\n\n刷新后进入 **“六视图 → 物料风险”**：\n\n- 先看甘特，再展开下方明细。\n- 按颜色区分缺口、待料、条件供给和采购参考。\n- 点击日期查看半小时刻度；点击记录打开计算分析浮窗，再进入明细与来源。\n- 未保存时点的记录明确提示，不推测风险发生或解除日期。\n\n构建和只读核对已通过。无需重新导入或排程，原有计算逻辑和冻结结果未改变。",
+    "commits": [
+      "d409fa40afe9b7cdec31f30eb5a6aa94bea5a907",
+      "939c7fbe9f61758ff5b18ffa010a8ad3c1338d20"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T12-57-34.png",
+        "name": "pasted-2026-11-03T12-57-34.png",
+        "sha256": "17b520e71955b76863e9f723c83e03c6431c9429823b5a3012f52c4a395287ac",
+        "bytes": 118715,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T12-57-34.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 129,
+    "url": "https://github.com/huiliangtao666/APS/issues/129",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:02:39Z",
+    "closed_at": "2026-11-03T15:02:41Z"
+  },
+  {
+    "seq": 70,
+    "event_key": "APS-USER-20261103-log-202",
+    "timestamp": "2026-11-03T13:29:07.435Z",
+    "local_time": "2026-11-03T21:29:07.435000+08:00",
+    "title": "[今日问题 2026-11-03 70/77] 人员工装按参考图改为紧凑资源日期矩阵",
+    "content": "[Uploaded: upload/pasted-2026-11-03T12-59-08.png]\n六视图的“人员工装”中的图形化展示，参照附图修改。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已按附图修改，合入 main 并重建应用。刷新 **“六视图 → 人员工装”** 即可查看：\n\n- 名称、编号、可用数量、任务数在同一行展示。\n- 日期格默认显示“占用峰值/可用数量”，超占标红。\n- 支持日期列高亮，点击格子查看明细。\n- 完整展示所有匹配资源的日期，不再被明细分页截断。\n\n已核对现有 v10 的 20 个资源、280 个日期格，数值与原查询一致；排程逻辑未改变。",
+    "commits": [
+      "5458271e14dbc42671823521094df95b9928c16c",
+      "506194eed60d4c25d4a8bcef9b6c4c761e0f0807"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T12-59-08.png",
+        "name": "pasted-2026-11-03T12-59-08.png",
+        "sha256": "a80ccbfe9e414d0373c6fb630c1922498ed39a19411034c6b6ce2c33a010f241",
+        "bytes": 117928,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T12-59-08.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 130,
+    "url": "https://github.com/huiliangtao666/APS/issues/130",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:02:43Z",
+    "closed_at": "2026-11-03T15:02:45Z"
+  },
+  {
+    "seq": 71,
+    "event_key": "APS-USER-20261103-log-204",
+    "timestamp": "2026-11-03T13:42:04.982Z",
+    "local_time": "2026-11-03T21:42:04.982000+08:00",
+    "title": "[今日问题 2026-11-03 71/77] 需求交付悬停摘要及五页签悬浮窗",
+    "content": "[Uploaded: upload/pasted-2026-11-03T13-20-53.png, upload/pasted-2026-11-03T13-22-11.png, upload/pasted-2026-11-03T13-22-19.png, upload/pasted-2026-11-03T13-22-28.png, upload/pasted-2026-11-03T13-22-39.png, upload/pasted-2026-11-03T13-22-54.png]\n需求交付每一项悬停可以显示基本信息（图1参照）。悬浮弹窗页面显示信息参照其他贴图。",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已按附图完成，合入 **main** 并重建生效。\n\n- **悬停工序条**：显示任务、物料、需求数量、设备及起止时间。\n- **点击工序条**：打开可拖动浮窗，含“任务明细、前后工序、资源需求、物料风险、数据来源”五个页签。\n- 保留计算依据和问题说明；缺失数据标为“未提供”，不将“已排”显示为“已完成”。\n\n构建及入口检查通过。刷新进入 **排程结果与六视图 → 需求交付** 即可，无需重新排程。",
+    "commits": [
+      "0c5e40b04db9c5482bb2dc85318076c16f683890",
+      "9f1e784cfc20491bec40153edc05030084f1158e",
+      "210dac2d7988e411300e70cd542b6da8301ecae9"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T13-20-53.png",
+        "name": "pasted-2026-11-03T13-20-53.png",
+        "sha256": "e827a9e9209022096e28cf36db8ffe766e2716bce2e42fa5e423047524adcb87",
+        "bytes": 241354,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T13-20-53.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/pasted-2026-11-03T13-22-11.png",
+        "name": "pasted-2026-11-03T13-22-11.png",
+        "sha256": "4a96ba218b80fc398151e90ede51850a1ea402ce226ebcc192ef76c6b979e889",
+        "bytes": 131975,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T13-22-11.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/pasted-2026-11-03T13-22-19.png",
+        "name": "pasted-2026-11-03T13-22-19.png",
+        "sha256": "30b18cafa80d0b0014dfd65bf74ed8ef04926702be075974a25ce13a3f52cc99",
+        "bytes": 134579,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T13-22-19.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/pasted-2026-11-03T13-22-28.png",
+        "name": "pasted-2026-11-03T13-22-28.png",
+        "sha256": "b785d649e902f41d0a0a40aef1db0c48fd91ba0f074384c1911798d8dfc6dd57",
+        "bytes": 83438,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T13-22-28.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/pasted-2026-11-03T13-22-39.png",
+        "name": "pasted-2026-11-03T13-22-39.png",
+        "sha256": "4f0cbf5466c87542bcb63f470a1925e367d802dc3ac2566da56181321e581839",
+        "bytes": 130968,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T13-22-39.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/pasted-2026-11-03T13-22-54.png",
+        "name": "pasted-2026-11-03T13-22-54.png",
+        "sha256": "09a8495d6a6f4a9533a34e7de1387dca268c6cad1109801c01859c264de43ee4",
+        "bytes": 163954,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T13-22-54.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 131,
+    "url": "https://github.com/huiliangtao666/APS/issues/131",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:02:47Z",
+    "closed_at": "2026-11-03T15:02:49Z"
+  },
+  {
+    "seq": 72,
+    "event_key": "APS-USER-20261103-log-206",
+    "timestamp": "2026-11-03T14:12:23.026Z",
+    "local_time": "2026-11-03T22:12:23.026000+08:00",
+    "title": "[今日问题 2026-11-03 72/77] 设备负荷按参考图改为逐日矩阵",
+    "content": "[Uploaded: upload/pasted-2026-11-03T14-11-39.png]\n“设备负荷”参照附图",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已按附图调整“设备负荷”，合入 **main** 并重建生效。\n\n- 一行一台设备，名称、编号、窗口占用率、任务数集中显示。\n- 每日显示百分比和占用条，突出观察日、周末及停机。\n- 表头、设备列固定，支持紧凑行高及点击日期格查看明细。\n- 补齐全部设备与日期，已核对 **32台设备、448个日期格**，数值与原明细一致。\n\n刷新页面即可查看，无需重新排程。",
+    "commits": [
+      "26c480f90396c77186c2c20a263d0d1b54a98145",
+      "bf03837c037feef48a1872716b1d37f5b293b3fb",
+      "ad282e2afc0413933a2d579b9f98b72b87461c0c"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T14-11-39.png",
+        "name": "pasted-2026-11-03T14-11-39.png",
+        "sha256": "57a175913aa809249390bce312f9cf16aa50b1335f15dfcb9fe160683a862442",
+        "bytes": 321880,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T14-11-39.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 132,
+    "url": "https://github.com/huiliangtao666/APS/issues/132",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:02:52Z",
+    "closed_at": "2026-11-03T15:02:54Z"
+  },
+  {
+    "seq": 73,
+    "event_key": "APS-USER-20261103-log-208",
+    "timestamp": "2026-11-03T14:25:11.435Z",
+    "local_time": "2026-11-03T22:25:11.435000+08:00",
+    "title": "[今日问题 2026-11-03 73/77] 设备甘特悬停摘要及统一五页签浮窗",
+    "content": "[Uploaded: upload/pasted-2026-11-03T14-15-56.png]\n“设备甘特”的甘特图悬停可以观察主要信息，弹窗悬浮也按照附图的形式组织",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已按附图调整“设备甘特”，合入 **main** 并重建生效。\n\n- **悬停任务条**：显示任务、物料、需求数量、设备和起止时间。\n- **点击任务条**：打开可拖动的五页签浮窗，保留计算依据和问题说明。\n- WIP、停机采用相同风格，并修复停机条被任务遮挡、无法点击的问题。\n\n正式接口及入口检查通过。刷新“设备甘特”即可，无需重新排程。",
+    "commits": [
+      "73332e6e37ab0399fe6f61820cd0348d13bb1fb4",
+      "67950f723fcb804b95a8d073d8fea329484c7cb6"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T14-15-56.png",
+        "name": "pasted-2026-11-03T14-15-56.png",
+        "sha256": "8af44fc017ff2f630602652a7149651fd7ec1535f11ffc08a51159ab61c3c3c1",
+        "bytes": 321192,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T14-15-56.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 133,
+    "url": "https://github.com/huiliangtao666/APS/issues/133",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:02:56Z",
+    "closed_at": "2026-11-03T15:02:57Z"
+  },
+  {
+    "seq": 74,
+    "event_key": "APS-USER-20261103-log-210",
+    "timestamp": "2026-11-03T14:37:07.258Z",
+    "local_time": "2026-11-03T22:37:07.258000+08:00",
+    "title": "[今日问题 2026-11-03 74/77] 删除同 run 等重复描述",
+    "content": "[Uploaded: upload/pasted-2026-11-03T14-19-36.png, upload/pasted-2026-11-03T14-19-53.png]\n所有这类描述（同run xxx）都不要",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "已统一删除“同run详情”“全部为同run冻结结果”等重复说明，包括结果栏、明细标题及浮窗页眉、页脚。\n\n已合入 **main** 并重建生效，刷新即可。",
+    "commits": [
+      "45930887c58904f5fd7e0ce1366ebe2bc93e92d7",
+      "2ad7cc268a90092ac689d71120f7888c66a39e88"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T14-19-36.png",
+        "name": "pasted-2026-11-03T14-19-36.png",
+        "sha256": "7adceb3b0a136f786757dd0f87467cb93a328c0c232d1cad060c848e2cbdd757",
+        "bytes": 27874,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T14-19-36.png",
+        "kind": "截图"
+      },
+      {
+        "original_path": "upload/pasted-2026-11-03T14-19-53.png",
+        "name": "pasted-2026-11-03T14-19-53.png",
+        "sha256": "1a9ef8a88543c32010626438fede8d0a706b59e06ccb03360f847a4edd42ec31",
+        "bytes": 28727,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T14-19-53.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 134,
+    "url": "https://github.com/huiliangtao666/APS/issues/134",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:03:00Z",
+    "closed_at": "2026-11-03T15:03:02Z"
+  },
+  {
+    "seq": 75,
+    "event_key": "APS-USER-20261103-log-212",
+    "timestamp": "2026-11-03T14:41:27.716Z",
+    "local_time": "2026-11-03T22:41:27.716000+08:00",
+    "title": "[今日问题 2026-11-03 75/77] 结果主页面保留指标并以下划线数字打开明细弹窗",
+    "content": "[Uploaded: upload/pasted-2026-11-03T14-22-48.png]\n排程结果信息中，主要保留指标结果，红框2内信息不在主页面显示，通过点击红框1的指标数据（通过下划线标识可以点击）弹窗显示，注意保持两者信息口径的一致性",
+    "completion_scope": "实现／处理交付完成",
+    "solution": "主页面只保留4组指标及紧凑标题。将问题分类、筛选、分组明细、计算口径和来源移入弹窗；“计算问题记录”和“缺料记录”的数字以下划线按钮打开对应记录范围。主指标和弹窗共用一个汇总模型，计算过程记录、缺料、最终需求异常及独立检查分别统计，防止17条过程记录打开37条混合记录却仍标17。弹窗可切范围、筛选、分页、定位来源，支持Esc及焦点返回。已提交main 59ea8a963faf3ce35b2530bef02419cf3b9f5679并重建生效；12项任务级测试、TypeScript/Vite/API/两Worker构建通过，浏览器合成夹具核对17计算记录、8缺料、12需求异常、全部37条，正式入口HTML200及JS/CSS通过，容器health up/restartCount0。未修改排程规则、参数或历史数据。",
+    "commits": [
+      "59ea8a963faf3ce35b2530bef02419cf3b9f5679"
+    ],
+    "attachments": [
+      {
+        "original_path": "upload/pasted-2026-11-03T14-22-48.png",
+        "name": "pasted-2026-11-03T14-22-48.png",
+        "sha256": "bff3463df2cb70d2c6709d800540dd7aaf8bff9f67dd2c35b1a00ffab9a0fa9c",
+        "bytes": 432822,
+        "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T14-22-48.png",
+        "kind": "截图"
+      }
+    ],
+    "number": 135,
+    "url": "https://github.com/huiliangtao666/APS/issues/135",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:03:04Z",
+    "closed_at": "2026-11-03T15:03:06Z"
+  },
+  {
+    "seq": 76,
+    "event_key": "APS-USER-20261103-log-214",
+    "timestamp": "2026-11-03T14:41:59.189Z",
+    "local_time": "2026-11-03T22:41:59.189000+08:00",
+    "title": "[今日问题 2026-11-03 76/77] 四类图表如何直观显示排程问题与风险",
+    "content": "设备甘特、需求交付、物料风险、设备负荷等，如何能够反映出当然排程出现的问题与风险，在图上就能更直观地显示出来？",
+    "completion_scope": "风险展示建议答复完成；新增统一图上标记未实现",
+    "solution": "已完成方案答复：统一红色表示已确认问题、橙色表示预计迟交/待料等风险、灰色表示缺少检查依据，配短标签说明原因。设备甘特定位任务/区间，需求交付突出迟交及未排原因，物料风险突出缺口与供给可用日期，设备负荷标出超占/停机冲突。点击标记应打开同一份问题明细，统计沿用结果汇总；候选撤销等过程记录不得直接当最终错误。此条关闭范围为咨询与展示方案答复完成，新增统一风险标记尚未实现，不宣称已经上线。",
+    "commits": [],
+    "attachments": [],
+    "number": 136,
+    "url": "https://github.com/huiliangtao666/APS/issues/136",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:03:08Z",
+    "closed_at": "2026-11-03T15:03:10Z"
+  },
+  {
+    "seq": 77,
+    "event_key": "APS-USER-20261103-log-216",
+    "timestamp": "2026-11-03T14:46:40.208Z",
+    "local_time": "2026-11-03T22:46:40.208000+08:00",
+    "title": "[今日问题 2026-11-03 77/77] 逐条登记今日对话和截图为已完成 GitHub Issue",
+    "content": "你把我今天所有提出的问题（包括截图）都记录到GITHUB的issue log里，每一个对话提出的问题算一个单独issue，并且描述你如何解决的。状态是已完成。",
+    "completion_scope": "日志登记完成",
+    "solution": "按2026-11-03（Asia/Singapore）本会话的77条用户对话逐条建立GitHub Issue，包含继续/范围澄清/处理去向等单独指令，本条为登记任务自身。保留原始问题、准确时间、对应截图、处理方法、固定代码提交和当时验证限制；咨询或方案类明确标为答复/决策记录完成。上传74张对应原始截图，两个参考HTML记录文件名及SHA256并关联受控设计来源；逐条查重，以稳定event_key防重复。最终逐一读回核对state=closed及state_reason=completed，并提供索引。此日志关闭不替代正式QA/UAT，也不修改已有需求主卡状态。",
+    "commits": [],
+    "attachments": [],
+    "number": 137,
+    "url": "https://github.com/huiliangtao666/APS/issues/137",
+    "state": "closed",
+    "state_reason": "completed",
+    "created_at": "2026-11-03T15:03:12Z",
+    "closed_at": "2026-11-03T15:03:14Z"
+  }
+]

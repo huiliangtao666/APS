@@ -1,0 +1,56 @@
+{
+  "verified_at": "2026-11-03T15:03:27.394567+00:00",
+  "dialog_count": 77,
+  "issue_count": 77,
+  "closed_completed_count": 77,
+  "unique_event_key_count": 77,
+  "published_screenshot_count": 74,
+  "reference_html_manifest_count": 2,
+  "attachment_count": 76,
+  "asset_commit": "5a23d75f1e7c80114fc14e7c5a674c376e376e00",
+  "checked": [
+    "every issue read back from GitHub REST",
+    "unique event_key/title/body equality",
+    "state closed and state_reason completed for all 77",
+    "each original attachment mapped to its dialogue",
+    "all 74 remote Git blob SHA1 and byte size match original screenshot bytes",
+    "original screenshot SHA256 matches attachment manifest",
+    "public raw PNG MIME and bytes checked for first screenshot"
+  ],
+  "completion_scopes": {
+    "咨询／核查答复完成": 17,
+    "实现／处理交付完成": 56,
+    "按后续用户指令改为自行处理并完成": 1,
+    "日志登记完成": 1,
+    "用户设计决定记录及答复完成；应用代码未实现该新增模型": 1,
+    "风险展示建议答复完成；新增统一图上标记未实现": 1
+  },
+  "source": "APS-Test2 active conversation; 2026-11-03 Asia/Singapore",
+  "not_uat": true,
+  "cleanup": {
+    "scope": "Only read-only exports created for this task; original uploads, platform history, app state and final log retained",
+    "removed_scratch": [
+      {
+        "path": "temp/today-full-messages.json",
+        "bytes": 9315146,
+        "sha256": "76c4e34dda0494a395a92cbd4610929f38877f34d919b00f923a7c9010a0ec42"
+      },
+      {
+        "path": "temp/workspace-readonly.json",
+        "bytes": 5206,
+        "sha256": "7d2f6f24e64919dc6c19363e69cb8f9bcb8f20754b705f5cd387a86f518de3bf"
+      },
+      {
+        "path": "temp/today-thread-log.json",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "temp/today-chat-runs.json",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "released_file_bytes": 9320352
+  }
+}
