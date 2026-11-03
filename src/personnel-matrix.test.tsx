@@ -5,7 +5,7 @@ const identity={datasetId:'SYN',version:1,runId:'R',fingerprint:'F',dayZero:'202
 const cell=(resource='C1',day=1)=>({id:resource+'|'+day,values:{resource,day,name:'调配灌装组',dimension:'人',peak:4,available:20,remaining:16},resourceSummary:{taskCount:95}});
 test('personnel matrix shows inline metadata, task count, peak/capacity and frozen observation day',()=>{
  const html=renderToStaticMarkup(<PersonnelToolHeatmap rows={[cell(),cell('C1',2)]} from={1} to={3} observationDay={2} onOpen={()=>{}} identity={identity} preferenceScope="SYN"/>);
- for(const s of ['调配灌装组','>20人<','>95<','>4/20<','personnel-active-day','2026-11-02；点击高亮','任务数','图示全资源，明细按日分页'])assert.ok(html.includes(s),s);
+ for(const s of ['调配灌装组','>20<','>人<','>95<','>4/20<','personnel-active-day','2026-11-02；点击高亮','任务数','图示全资源，明细按日分页'])assert.ok(html.includes(s),s);
  assert.equal(personnelLoad(0,0),'idle');assert.equal(personnelLoad(12,10),'over');assert.equal(personnelLoad(8,10),'high');assert.equal(personnelLoad(6,10),'medium');assert.equal(personnelLoad(4,20),'low');assert.equal(personnelLoad(null,20),'unknown');
 });
 test('complete matrix loader binds frozen identity and resource ownership across bounded pages',async()=>{

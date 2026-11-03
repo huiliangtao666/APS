@@ -1,12 +1,12 @@
 import { appPath } from './app-path';
 import {useEffect,useId,useMemo,useRef,useState} from 'react';
 import {QueryColumns,QueryMultiselect,QueryTable} from './QueryReportsControls';
-import {sameQueryIdentity,queryValue,type QueryColumn,type QueryApi,type QueryIdentity,type QueryRecord,type QuerySelection} from './QueryReportsTypes';
+import {sameQueryIdentity,queryValue,type QueryApi,type QueryIdentity,type QueryRecord,type QuerySelection} from './QueryReportsTypes';
 import './QueryReports.css';
 import './EquipmentSchedule.css';
 import {type GanttNode} from './EquipmentNodeAnalysis';
 import {WorkbookFindingExplanation,WorkbookRuleDetails} from './WorkbookFindingExplanation';
-import {useChartColumns,EquipmentGanttAxis} from './EquipmentChartControls';
+import {useChartColumns,EquipmentGanttAxis,ChartFieldCells,chartFieldLayout,type ChartField} from './EquipmentChartControls';
 import {MaterialRiskGantt} from './MaterialRiskGantt';
 import {PersonnelToolChart} from './PersonnelToolHeatmap';
 import {EquipmentLoadChart} from './EquipmentLoadMatrix';
@@ -81,10 +81,11 @@ function DemandGantt(props:any){
  if(!tasks)return <p role="status">正在加载本页需求在所选日期内的工序甘特…</p>;
  return <EquipmentGantt {...props} demand rows={props.rows.map((r:any)=>({...r,tasks:tasks.filter(t=>t.orderId===r.id)}))}/>;
 }
-const metadata:QueryColumn[]=[{key:'id',label:'设备编号',fixed:true},{key:'name',label:'设备名称'},{key:'group',label:'设备组'}];
+const metadata:ChartField[]=[{key:'id',label:'设备编号',fixed:true,width:80},{key:'name',label:'设备名称',width:150},{key:'group',label:'设备组',width:76}];
 export function EquipmentGantt({rows,from,to,focusDay,onDay,density,color,onTask,onResource,identity,preferenceScope,api,query,fingerprint,analysisIdentity,demand=false}:any){
- const chartColumns:QueryColumn[]=demand?[{key:'id',label:'需求编号',fixed:true},{key:'product',label:'成品编号 / 名称'},{key:'delivery',label:'交付状态'},{key:'taskCount',label:'真实任务数'}]:[...metadata,{key:'taskCount',label:'真实任务数'},{key:'wipCount',label:'WIP保留数'}];
- const {visible,save}=useChartColumns(preferenceScope,demand?'E2':'E1',chartColumns),[active,setActive]=useState<string>(),[analysisNode,setAnalysisNode]=useState<GanttNode>(),[hover,setHover]=useState<{task:any;anchor:HoverAnchor}>();
+ const chartColumns:ChartField[]=demand?[{key:'id',label:'需求编号',fixed:true,width:92},{key:'productId',label:'成品编号',width:82},{key:'productName',label:'成品名称',width:180},{key:'quantity',label:'需求数量',width:82},{key:'unit',label:'单位',width:58},{key:'delivery',label:'交付状态',width:100},{key:'taskCount',label:'真实任务数',width:80}]:[...metadata,{key:'taskCount',label:'真实任务数',width:80},{key:'wipCount',label:'WIP保留数',width:80}];
+ const {visible,save}=useChartColumns(preferenceScope,demand?'E2':'E1',chartColumns,{product:['productId','productName']}),[active,setActive]=useState<string>(),[analysisNode,setAnalysisNode]=useState<GanttNode>(),[hover,setHover]=useState<{task:any;anchor:HoverAnchor}>();
+ const fieldLayout=chartFieldLayout(chartColumns,visible);
  const hoverId=useId();
  useEffect(()=>{if(!hover)return;const hide=()=>setHover(undefined);window.addEventListener('scroll',hide,true);window.addEventListener('resize',hide);return()=>{window.removeEventListener('scroll',hide,true);window.removeEventListener('resize',hide);};},[!!hover]);
  useEffect(()=>setHover(undefined),[fingerprint,focusDay,density]);
@@ -96,19 +97,20 @@ export function EquipmentGantt({rows,from,to,focusDay,onDay,density,color,onTask
  const start=(focusDay??from)*1440,end=(focusDay!==null?focusDay+1:to)*1440,span=end-start,count=focusDay!==null?48:to-from;
  const viewportHeight=viewport.height,viewportWidth=viewport.width;
  const rowHeight=density==='fit'?Math.max(16,Math.min(30,Math.floor((viewportHeight-335)/Math.max(1,rows.length)))):density==='compact'?28:42;
- const leftWidth=demand?340:178,availableWidth=containerWidth===undefined?viewportWidth-240-leftWidth:Math.max(0,containerWidth-leftWidth);
+ const leftWidth=fieldLayout.width,availableWidth=containerWidth===undefined?viewportWidth-240-leftWidth:Math.max(0,containerWidth-leftWidth);
  const chartWidth=focusDay!==null?Math.max(48*27,Math.min(48*34,availableWidth)):Math.max(count*(demand?44:65),availableWidth);
  const layouts=rows.map((r:any)=>{const tasks=(r.tasks||[]).filter((t:any)=>t.start<end&&t.end>start).sort((a:any,b:any)=>a.start-b.start||a.end-b.end||String(a.id).localeCompare(String(b.id)));const laneEnds:number[]=[],lanes=new Map<string,number>();for(const t of tasks){let lane=laneEnds.findIndex(value=>value<=t.start);if(lane<0)lane=laneEnds.length;laneEnds[lane]=t.end;lanes.set(t.id,lane);}const layers=(r.layers||[]).filter((l:any)=>l.start<end&&l.end>start).sort((a:any,b:any)=>a.start-b.start||a.end-b.end),layerEnds:number[]=[],layerLanes=new Map<string,number>();for(const l of layers){let lane=layerEnds.findIndex(value=>value<=l.start);if(lane<0)lane=layerEnds.length;layerEnds[lane]=l.end;layerLanes.set(l.kind+':'+l.id,lane);}const layerHeight=layerEnds.length*8,height=demand?Math.max(24,rowHeight,laneEnds.length*12+2):Math.max(rowHeight,laneEnds.length*6+2+layerHeight);return {tasks,lanes,height,layers,layerLanes,layerHeight,laneHeight:(height-2-layerHeight)/Math.max(1,laneEnds.length)};});
  let rowTop=0;const taskMap=new Map<string,any>();layouts.forEach((layout:any,index:number)=>{layout.tasks.forEach((t:any)=>taskMap.set(t.id,{...t,index,y:rowTop+1+(layout.lanes.get(t.id)+.5)*layout.laneHeight}));layout.top=rowTop;rowTop+=layout.height;});
  const nodeFor=(t:any):GanttNode=>({id:t.id,kind:'task',resource:demand?t.machine:rows[t.index].id,recordId:t.orderId});
  const selected=active?taskMap.get(active):undefined;
- return <><QueryColumns columns={chartColumns} value={visible} onChange={save}/>
+ return <><QueryColumns popover columns={chartColumns} value={visible} onChange={save}/>
  {selected&&<div className="equipment-selected-task" role="status"><strong>{selected.id}</strong><span>设备 {demand?selected.machine:rows[selected.index]?.id} · 需求 {selected.orderId} · {selected.productId} / {selected.label}</span><span>{time(selected.start,identity)}—{time(selected.end,identity)} · {Math.round((selected.end-selected.start)*100)/100} 分钟</span><button onClick={()=>setAnalysisNode(nodeFor(selected))}>任务明细与分析</button><button onClick={()=>onTask(selected.id)}>明细与来源</button><button onClick={()=>{setActive(undefined);setAnalysisNode(undefined);}}>取消高亮</button></div>}
- <div ref={chartContainer} className={'equipment-gantt '+density+(demand?' demand-gantt':'')} role="region" aria-label={(focusDay!==null?'半小时':'日期')+(demand?'需求交付甘特':'设备甘特')}>
- <EquipmentGanttAxis heading={demand?'成品 / 需求编号 / 交付 / 工序数':'设备'} from={from} to={to} focusDay={focusDay} onDay={onDay} width={chartWidth} dayZero={identity.dayZero}/>
+ <div ref={chartContainer} className={'equipment-gantt chart-field-gantt '+density+(demand?' demand-gantt':'')} style={{'--chart-field-template':fieldLayout.template+' '+chartWidth+'px'} as React.CSSProperties} role="region" aria-label={(focusDay!==null?'半小时':'日期')+(demand?'需求交付甘特':'设备甘特')}>
+ <EquipmentGanttAxis fields={chartColumns} visible={visible} from={from} to={to} focusDay={focusDay} onDay={onDay} width={chartWidth} dayZero={identity.dayZero}/>
 
  {rows.map((r:any,index:number)=>{const {tasks,lanes:laneById,laneHeight,height:height,layers,layerLanes,layerHeight,top}=layouts[index];const delivery=demand?demandDelivery(r):'';return <div className="equipment-resource" key={r.id}>
- {demand?<button className="equipment-name demand-name" style={{height}} onClick={()=>onResource(r)} title={`${r.values.productId} · ${r.values.productName||''} / ${r.id} / ${delivery} / 要求 ${r.values.latestArrivalDate||r.values.requiredDate||'未提供'} / 计划到货 ${r.values.arrivalDate||'未形成'} / ${r.values.reason||''}`} aria-label={`需求 ${r.id}，${delivery}，查看交付明细与规则`}>{visible.includes('product')&&<span className="demand-product"><b>{r.values.productId}</b> {r.values.productName}</span>}<strong>{r.id}</strong>{visible.includes('delivery')&&<span className={'demand-status '+(r.values.status==='unplanned'||Number(r.values.lateDays)>0?'demand-warning':'')}>{delivery}</span>}{visible.includes('taskCount')&&<small>{r.values.taskCount}项</small>}</button>:<button className="equipment-name" style={{height}} onClick={()=>onResource(r)} title={`${r.id} · ${r.values.name||''} · ${r.values.group||''} · ${r.values.taskCount||0} 项任务`}><strong>{r.id}</strong>{visible.includes('name')&&<span>{r.values.name}</span>}<small>{[visible.includes('group')&&r.values.group,visible.includes('taskCount')&&`${r.values.taskCount}项`,visible.includes('wipCount')&&`WIP ${r.values.wipCount}`].filter(Boolean).join(' · ')}</small></button>}
+ <ChartFieldCells columns={chartColumns} visible={visible} height={height} values={{...r.values,id:r.id,delivery}} onOpen={()=>onResource(r)} label={demand?`需求 ${r.id}，${delivery}，查看交付明细与规则`:`设备 ${r.id}，查看设备明细`}/>
+
  <div className="equipment-track" style={{width:chartWidth,height,backgroundSize:`${chartWidth/count}px 100%`}}>
  {layers.map((l:any)=><button key={l.kind+':'+l.id} className={(l.kind==='可知停机'?'equipment-stop':'equipment-wip')+(analysisNode?.id===l.id?' equipment-node-selected':'')} aria-label={`${l.kind} ${l.id}，${time(l.start,identity)} 至 ${time(l.end,identity)}`} onMouseEnter={e=>showHover(e,l)} onMouseLeave={()=>setHover(undefined)} onFocus={e=>showHover(e,l)} onBlur={()=>setHover(undefined)} aria-describedby={hover?.task.id===l.id?hoverId:undefined} onKeyDown={e=>{if(e.key==='Escape'&&hover){e.stopPropagation();setHover(undefined);}}} onClick={()=>{setHover(undefined);setActive(undefined);setAnalysisNode({id:l.id,kind:l.kind==='可知停机'?'stop':'wip',resource:r.id});}} style={{top:height-1-layerHeight+(layerLanes.get(l.kind+':'+l.id)||0)*8,height:7,padding:0,left:((Math.max(start,l.start)-start)/span*100)+'%',width:((Math.min(end,l.end)-Math.max(start,l.start))/span*100)+'%'}}>{l.kind==='可知停机'?'停':'W'}</button>)}
  {selected&&<svg className="equipment-chain" viewBox={`0 0 1000 ${height}`} preserveAspectRatio="none" aria-label="真实前序连接">{tasks.filter((t:any)=>t.productionId===selected.productionId).map((t:any)=>{const previous=taskMap.get(t.predecessor),current=taskMap.get(t.id);if(!previous||previous.productionId!==t.productionId||previous.end<start||previous.end>end||t.start<start||t.start>end)return null;const x1=(previous.end-start)/span*1000,x2=(t.start-start)/span*1000,y1=previous.y-top,y2=current.y-top;return <path key={t.id} d={`M ${x1} ${y1} H ${(x1+x2)/2} V ${y2} H ${x2}`} fill="none" stroke="#7c3aed" strokeWidth="2" vectorEffect="non-scaling-stroke"><title>{previous.id} → {t.id}</title></path>;})}</svg>}

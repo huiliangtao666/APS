@@ -1,0 +1,18 @@
+/* Shared field columns: headers and row cells use the same selected widths. */
+.equipment-gantt.chart-field-gantt .equipment-axis,.equipment-gantt.chart-field-gantt .equipment-resource{grid-template-columns:var(--chart-field-template)}
+.chart-field-gantt .chart-field-cell{box-sizing:border-box;display:flex;align-items:center;min-width:0;padding:0 7px;border-right:1px solid #cddce6;border-bottom:1px solid #e2eaf0;background:#f6fafc;color:#345a72;font-size:11px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chart-field-gantt .equipment-axis>.chart-field-cell{background:#e8f0f4;font-weight:600}
+.app-shell .input-workspace .chart-field-gantt button.chart-field-cell{position:sticky;left:0;z-index:5;min-height:0;padding:0 7px;border-radius:0;border-top:0;border-left:0;border-right:1px solid #bdd1de;font-size:11px;text-align:left;justify-content:flex-start;box-shadow:1px 0 #cbdce5}
+.chart-field-gantt .equipment-axis>.chart-field-id{position:sticky;left:0;z-index:10;box-shadow:1px 0 #bdd1de}
+.chart-field-gantt .equipment-resource:nth-child(odd)>.chart-field-cell{background-color:#f1f7fb}
+.chart-field-gantt.risk-gantt .equipment-resource.risk-related>.chart-field-id{box-shadow:inset 3px 0 #7c3aed,1px 0 #cbdce5}
+.app-shell .input-workspace .equipment-heatmap.chart-field-matrix tr>th[data-chart-field]{min-width:0;max-width:none;padding:0 7px;vertical-align:middle;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;font-weight:400}
+.app-shell .input-workspace .chart-field-matrix tbody th[data-chart-field]:not(:first-child){position:static;left:auto;z-index:auto;background:#f6fafc}
+.app-shell .input-workspace .chart-field-matrix tr>th[data-chart-field]:first-child{min-width:0;max-width:none;box-shadow:1px 0 #bdd1de}
+.app-shell .input-workspace .chart-field-matrix thead th[data-chart-field]{font-weight:600;background:#e8f0f4}
+.app-shell .input-workspace .chart-field-matrix tbody th[data-chart-field]{border-right:1px solid #dce7ee}
+.app-shell .input-workspace .chart-field-matrix tr>td[data-chart-field]{min-width:0;padding:0 7px;text-align:left;vertical-align:middle;background:#f6fafc;border-right:1px solid #dce7ee;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.chart-columns-picker>.qr-columns-panel{position:fixed;z-index:1200;box-sizing:border-box;width:328px;max-width:calc(100vw - 16px);max-height:min(420px,calc(100vh - 24px));overflow:auto;background:white;border:1px solid #b8cddc;border-radius:5px;padding:7px 10px;box-shadow:0 6px 24px #294d6633;white-space:normal}
+.chart-columns-picker>.qr-columns-panel>p{margin:2px 0 7px;font-size:11px;color:#6d879a}
+.app-shell .chart-columns-picker>.qr-columns-panel>label{display:flex;align-items:center;gap:5px;margin:4px 0;font-size:12px;white-space:nowrap}
