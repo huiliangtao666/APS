@@ -36,3 +36,11 @@ main{max-width:none;padding:14px clamp(12px,2vw,30px) 20px}
 .equipment-schedule .equipment-gantt,.equipment-schedule .equipment-heatmap{margin:6px 0}
 .equipment-schedule .equipment-selected-task{flex-wrap:nowrap;overflow-x:auto;padding:6px 8px}
 @media(max-width:650px){.topbar{min-height:48px;height:auto}.hero h1{font-size:17px}.panel{padding:10px}.equipment-schedule .equipment-selected-task{flex-wrap:wrap}}
+/* Keep short explanations on the title line throughout the application. */
+.hero>div:first-child{display:flex;align-items:baseline;flex-wrap:wrap;gap:3px 10px}
+.hero h1{flex:none;margin:0}.hero .sub{flex:1 1 auto;min-width:260px;line-height:1.4}
+.panel>h2:has(+p),.panel>h3:has(+p),.panel-head>div>h2:has(+p),.panel-head>div>h3:has(+p),.workbook-data-page>h2:has(+p){display:inline;margin:0 9px 0 0;vertical-align:baseline}
+.panel>h2+p,.panel>h3+p,.panel-head>div>h2+p,.panel-head>div>h3+p,.workbook-data-page>h2+p{display:inline;margin:0;vertical-align:baseline;line-height:1.45}
+.panel>h2+p+*,.panel>h3+p+*,.workbook-data-page>h2+p+*{margin-top:6px}
+.panel-head>div>h2+p,.panel-head>div>h3+p{font-size:11px;color:#708395}
+@media(max-width:620px){.hero .sub{min-width:100%}.panel>h2:has(+p),.panel>h3:has(+p){display:block;margin-bottom:2px}}

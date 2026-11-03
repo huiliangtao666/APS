@@ -82,3 +82,13 @@
 .equipment-schedule .qr-filter-line .qr-select{max-width:170px}
 @media(max-width:1100px){.qr-filter-line{flex-wrap:wrap}.qr-filter-line .qr-filter-groups{flex:1 1 100%;order:2}.qr-filter-line>.qr-actions{order:1}.qr-filter-line .qr-select{max-width:none}}
 @media(max-width:850px){.qr-filter-line .qr-dates{overflow-x:auto;max-width:100%}.qr-filter-line .qr-filter-groups{flex-wrap:wrap;min-height:38px}.qr-filter-line .qr-select{flex:1 1 150px}}
+.qr-heading>div{display:flex;align-items:baseline;gap:4px 10px;flex-wrap:wrap;min-width:0}
+.qr-heading>div h2,.qr-heading>div h3{flex:none;margin:0}
+.qr-heading>div p{flex:1 1 auto;margin:0;color:#617082;font-size:12px;line-height:1.4}
+.qr-business .qr-heading{min-height:34px}
+.qr-business .qr-context{display:flex;align-items:center;flex-wrap:nowrap;gap:8px;padding:5px 9px;min-height:38px;overflow-x:auto;white-space:nowrap}
+.input-workspace .qr-context label,.qr-business .qr-context label{display:inline-flex;align-items:center;flex-direction:row;gap:5px;min-width:0;margin:0;white-space:nowrap}
+.qr-business .qr-context select{width:min(34vw,310px);max-width:none;height:30px;padding:3px 6px}
+.qr-business .qr-context button{flex:none;padding:4px 8px}
+.qr-business .qr-context>span{overflow:hidden;text-overflow:ellipsis;min-width:0}
+@media(max-width:760px){.qr-business .qr-context{overflow-x:auto}.qr-business .qr-context select{width:220px}.qr-heading>div p{flex-basis:100%}}

@@ -115,3 +115,10 @@ main:has(.input-workspace) .hero-source{display:none}
 .input-workspace .workbook-import-actionline input[type=file]{flex:1 1 180px;min-width:150px}
 .input-workspace .workbook-import-actionline button{flex:none;white-space:nowrap}
 .input-workspace .workbook-import-actionline button:first-of-type:not(:disabled){background:#194e77;border-color:#194e77;color:#fff}
+.input-workspace .workbook-dataset{display:inline-flex;align-items:baseline;gap:6px;min-width:0;max-width:36vw;white-space:nowrap}
+.input-workspace .workbook-dataset span{flex:none}.input-workspace .workbook-dataset strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.input-workspace .workbook-data-page>h2,.input-workspace .parameter-panel>h2{font-size:15px}
+.input-workspace .workbook-data-page>.workbook-page-hint,.input-workspace .parameter-panel>h2+p{font-size:11px;color:#607789}
+.input-workspace .workbook-import-cards .panel>h3{display:inline;margin-right:8px;vertical-align:baseline}
+.input-workspace .workbook-import-cards .panel>.workbook-import-help{float:none;display:inline-block;margin:0 0 4px;vertical-align:baseline}
+.input-workspace .workbook-import-cards .panel>.workbook-import-help[open]{display:block;margin:4px 0}
