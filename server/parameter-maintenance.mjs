@@ -1,4 +1,5 @@
 import {parameterCatalog,businessDefinition,atomicFields,sourceTable,isImmutable,parameterSpec,objectKey,scopeFor,scopeOf,sourceRole,canonicalCp,cpOf,effectiveParameters,blockedParameter} from './parameter-contract.mjs';
+import {parameterHelp} from './parameter-help.mjs';
 export const parameterTabs=[['global','01 全局与排程'],['material','02 物料与SKU'],['bom','03 BOM与损耗'],['customer','04 客户与交付'],['supplier','05 供应商与采购'],['resource','06 设备与工装'],['route','07 工艺与工序'],['crew','08 班组人员'],['calendar','09 工厂日历'],['storage','10 库区与仓储'],['rules','11 规则与其他']].map(([id,label])=>({id,label}));
 const tableTabs={'物料主数据':'material','单位换算':'material','物料清单':'bom','每日需求':'customer','客户与交付':'customer','供应商与供货条件':'supplier','设备与工装':'resource','工艺路线':'route','班组资源':'crew','工厂日历':'calendar','停机安排':'calendar','库区库位':'storage','期初库存':'storage'};
 const tableKeys={'物料主数据':'物料编号','物料清单':'用量关系编号','每日需求':'需求编号','客户与交付':'客户编号','供应商与供货条件':'供货关系编号','设备与工装':'资源编号','工艺路线':'路线工序编号','班组资源':'班组编号','工厂日历':'日序','停机安排':'停机编号','库区库位':'库位编号','期初库存':'库存批次编号','单位换算':'_unitKey'};
@@ -26,10 +27,11 @@ export function parameterMaintenanceView(d,q={},actor=''){
  const activeCache=new Map(),getActive=at=>{if(!activeCache.has(at))activeCache.set(at,new Map(effectiveParameters(d,at,scope).map(p=>[[canonicalCp(cpOf(p)),p['对象编号'],p['参数名称'],parameterSpec(p)?.table||'global'].join('|'),p])));return activeCache.get(at);};
  const baseFields=new Map((d.parameterBaseFields||[]).map(b=>[[b.table,b.object,b.field].join('|'),b]));
  const index=new Map();for(const p of raw){const key=[canonicalCp(cpOf(p)),p['对象编号'],p['参数名称']].join('|');const bucket=index.get(key)||[];bucket.push(p);index.set(key,bucket);}
- const records=[];
+ const records=[],helpByField={};
  for(const c of chosen){
   const cp=c['参数编号'],fields=c.fields.length?c.fields:[{name:c['中文配置项'],table:sourceTable(cp),key:tableKeys[sourceTable(cp)],readonly:true}];
   for(const [fieldOrder,spec] of fields.entries()){
+   helpByField[cp+'|'+spec.name]=parameterHelp(c,spec,{productionContract:d.productionContract});
    const table=spec.table,key=spec.key||tableKeys[table],source=table?(d.tables[table]||[]):[{GLOBAL:'GLOBAL'}];
    const objects=source.length?source:[{[key||'GLOBAL']:table?'未提供对象':'GLOBAL',_missing:true}];
    for(const row of objects){
@@ -55,5 +57,5 @@ export function parameterMaintenanceView(d,q={},actor=''){
  const groups=new Map();for(const p of filtered){const key=list?p.recordKey:p.objectTable+'|'+p['对象编号'],group=groups.get(key)||{id:key,object:p['对象编号'],name:p['对象名称'],date:p.objectDate,cells:[]};group.cells.push(p);groups.set(key,group);}
  const objects=[...groups.values()],offset=Math.max(0,Number(q.offset)||0),limit=tab==='calendar'?100:Math.min(100,Math.max(1,Number(q.limit)||25)),page=objects.slice(offset,offset+limit);
  return {datasetId:d.id,version:d.version,parameterRevision:d.parameterRevision||0,baseline:parameterBaseline(d),historyCount:parameterHistory(d,{scope,limit:1},actor).total,scope,day,tab,layout:list?'list':tab==='calendar'?'calendar':'objects',cp:selected?.['参数编号']||'',definitions,tabs:parameterTabs,objectOptions,month,objectRows:page,records:page.flatMap(r=>r.cells),total:objects.length,offset,limit,
-  fields:[...new Set(filtered.map(p=>p['参数名称']))],trials:(d.parameterTrials||[]).filter(t=>t.actor===actor),sources:d.parameterSources||[]};
+  fields:[...new Set(filtered.map(p=>p['参数名称']))],helpByField,trials:(d.parameterTrials||[]).filter(t=>t.actor===actor),sources:d.parameterSources||[]};
 }

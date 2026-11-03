@@ -12,6 +12,16 @@ function fixture(){const dir=fs.mkdtempSync(path.join(base,'routes-')),store=pat
  return {dir,statePath,call,bytes:()=>fs.readFileSync(statePath),version:()=>JSON.parse(fs.readFileSync(statePath)).datasets[0].versions.at(-1).version};}
 const edit=(version,extra={})=>({expectedVersion:1,expectedParameterRevision:version-1,cp:'CP074',objectId:'MOCK-SUP',field:'检验天数',value:'2',unit:'天',from:0,to:44,scope:'dataset',...extra});
 
+test('parameter help is returned by maintenance and structured rows without writing configuration',async()=>{
+ const f=fixture(),before=f.bytes();
+ const page=await f.call('GET','/datasets/:id/parameters',{}, {mode:'maintenance',tab:'resource',cp:'CP179',day:1});
+ assert.equal(page.status,200);assert.deepEqual(page.value.helpByField['CP179|资源占用方式'].inputSpec.values,['独占','重量共享','重量容量共享']);
+ assert.ok(page.value.helpByField['CP179|资源占用方式'].usage.includes('当前数据按日模型'));
+ const rows=await f.call('GET','/datasets/:id/rows',{}, {table:'设备与工装',help:'parameters'});assert.equal(rows.status,200);
+ assert.ok(rows.value.fieldHelp['可用数量'].zero.includes('不可分配'));assert.ok(rows.value.fieldHelp['资源编号'].maintain.includes('唯一身份'));
+ assert.deepEqual(f.bytes(),before);
+});
+
 test('PCU06/07/10/19 registered query/save: persisted reverse reads, stale conflict and all denied writes preserve bytes',async()=>{
  const f=fixture(),first=await f.call('POST','/datasets/:id/parameters',edit(1));assert.equal(first.status,200,JSON.stringify(first));assert.equal(first.value.version,1);assert.equal(first.value.parameterRevision,1);
  const step=await f.call('GET','/datasets/:id/parameters',{}, {cp:'CP063',step:'A3',day:1});assert.equal(step.status,200);assert.equal(step.value.records[0]['参数值'],'2');const id=step.value.records[0]['参数编号'];
