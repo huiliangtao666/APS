@@ -265,3 +265,24 @@ test('E4 matrix pages large resource lists without splitting a resource date row
  const query=equipmentQuery('E4',{toDateInclusive:'2026-11-14'}),fp=equipmentDomain.query(v,query).queryFingerprint,seen=new Set();let offset=0;
  do{const p=equipmentDomain.detail(v,{query,queryFingerprint:fp,table:'personnel-matrix',offset});assert.equal(p.total,205);assert.ok(Buffer.byteLength(JSON.stringify(p))<181000);for(const r of p.resources){assert.ok(!seen.has(r.id));seen.add(r.id);assert.equal(r.records.length,14);assert.equal(r.taskCount,0);}if(p.nextOffset===null)break;assert.ok(p.nextOffset>offset);offset=p.nextOffset;}while(true);assert.equal(seen.size,205);
 });
+
+test('E3 matrix preserves every original value, union occupancy, exact task count and known-stop unions',()=>{
+ const v=equipmentExample();v.input.tables['停机安排']=[{id:'A',resource:'EQ2',startMinute:1440,endMinute:2000,knownMinute:1440},{id:'B',resource:'EQ2',startMinute:1900,endMinute:2880,knownMinute:1440}];
+ // Use the actual source headers for frozen known-minute downtime.
+ v.input.tables['停机安排']=v.input.tables['停机安排'].map(s=>({'停机编号':s.id,'资源编号':s.resource,'开始分钟偏移':String(s.startMinute),'结束分钟偏移':String(s.endMinute),'信息可知时刻':minuteTime(s.knownMinute)}));
+ const query=equipmentQuery('E3',{toDateInclusive:'2026-11-02'}),before=hash(v),page=equipmentDomain.query(v,query),get=(extra={})=>equipmentDomain.detail(v,{query,queryFingerprint:page.queryFingerprint,table:'equipment-load-matrix',...extra}),matrix=get();
+ assert.equal(matrix.total,2);const eq1=matrix.resources.find(r=>r.id==='EQ1'),eq2=matrix.resources.find(r=>r.id==='EQ2');
+ assert.equal(eq1.taskCount,2);assert.equal(eq1.windowOccupancy,61/2880);assert.equal(eq2.taskCount,0);assert.equal(eq2.windowOccupancy,0);
+ assert.equal(eq2.records[0].downtimeMinutes,1440);assert.equal(eq2.records[1].downtimeMinutes,0);
+ for(const resource of matrix.resources)for(const cell of resource.records)assert.deepEqual(cell.values,page.records.find(r=>r.id===cell.id).values);
+ assert.equal(hash(v),before);assert.throws(()=>get({offset:-1}),/INVALID_PAGE/);assert.throws(()=>equipmentDomain.detail(v,{query,queryFingerprint:'stale',table:'equipment-load-matrix'}),/QUERY_CHANGED/);
+ const empty=equipmentQuery('E3',{filters:{productId:{mode:'NONE'}}}),emptyFp=equipmentDomain.query(v,empty).queryFingerprint;
+ assert.equal(equipmentDomain.detail(v,{query:empty,queryFingerprint:emptyFp,table:'equipment-load-matrix'}).total,0);
+});
+test('E3 matrix pages all devices without splitting dates, including zero-load equipment after the first 100 detail rows',()=>{
+ const v=equipmentExample();v.input.mapping.wip_remaining=[];v.run.result.tasks=[];v.input.tables['设备与工装']=Array.from({length:205},(_,i)=>({'资源编号':'EQ'+i,'资源名称':'设备'+i,'资源类别':'设备'}));
+ const query=equipmentQuery('E3',{toDateInclusive:'2026-11-14'}),page=equipmentDomain.query(v,query);assert.equal(page.total,2870);assert.equal(page.records.length,100);
+ let offset=0;const seen=new Set();do{const p=equipmentDomain.detail(v,{query,queryFingerprint:page.queryFingerprint,table:'equipment-load-matrix',offset});assert.equal(p.total,205);assert.ok(Buffer.byteLength(JSON.stringify(p))<181000);for(const resource of p.resources){assert.ok(!seen.has(resource.id));seen.add(resource.id);assert.equal(resource.records.length,14);assert.equal(resource.taskCount,0);assert.equal(resource.windowOccupancy,0);}if(p.nextOffset===null)break;assert.ok(p.nextOffset>offset);offset=p.nextOffset;}while(true);assert.equal(seen.size,205);
+ const partial=equipmentQuery('E3',{toDateInclusive:'2026-11-14',q:'"day":1,'}),fp=equipmentDomain.query(v,partial).queryFingerprint;
+ const part=equipmentDomain.detail(v,{query:partial,queryFingerprint:fp,table:'equipment-load-matrix'});assert.ok(part.resources.length);assert.equal(part.resources[0].windowOccupancy,null);
+});

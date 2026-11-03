@@ -120,6 +120,20 @@ export const equipmentDomain={
   const query=q.query||q,{records,fp,a,c}=checked(v,{...query,queryFingerprint:q.queryFingerprint});
   // Gantt tasks are paged separately: a large demand must not inflate one
   // summary record beyond the transport limit or silently lose its task chain.
+  if(q.table==='equipment-load-matrix'){
+   if(query.view!=='E3')error('MATRIX_REQUIRES_EQUIPMENT_LOAD');
+   const offset=q.offset??0;if(!Number.isSafeInteger(offset)||offset<0)error('INVALID_PAGE');
+   const grouped=new Map();for(const row of records){const id=row.values.machine;if(!grouped.has(id))grouped.set(id,[]);grouped.get(id).push(row);}
+   const real=new Set(a.tasks.map(t=>t.id));
+   const matrix=[...grouped].map(([id,cells])=>{
+    const ids=new Set(cells.flatMap(r=>r.taskIds||[])),days=new Set(cells.map(r=>r.values.day));
+    const complete=days.size===c.to-c.from&&cells.every(r=>r.values.day>=c.from&&r.values.day<c.to);
+    const occupied=cells.reduce((sum,r)=>sum+r.values.occupiedMinutes,0),stops=a.stops.filter(s=>s.resource===id);
+    return {id,taskCount:[...ids].filter(id=>real.has(id)).length,windowOccupancy:complete?occupied/((c.to-c.from)*1440):null,records:cells.map(r=>({id:r.id,values:r.values,downtimeMinutes:unionMinutes(stops,r.values.day*1440,(r.values.day+1)*1440)}))};
+   });
+   const part=[];let bytes=0;for(const row of matrix.slice(offset,offset+100)){const n=Buffer.byteLength(JSON.stringify(row));if(n>120000)error('DETAIL_RECORD_LIMIT',413);if(bytes+n>180000)break;part.push(row);bytes+=n;}
+   return {queryFingerprint:fp,resources:part,total:matrix.length,nextOffset:offset+part.length<matrix.length?offset+part.length:null};
+  }
   if(q.table==='personnel-matrix'){
    if(query.view!=='E4')error('MATRIX_REQUIRES_PERSONNEL');
    const offset=q.offset??0;if(!Number.isSafeInteger(offset)||offset<0)error('INVALID_PAGE');
