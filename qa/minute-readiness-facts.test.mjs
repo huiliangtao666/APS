@@ -13,3 +13,12 @@ test('minute readiness requires demanded box weight but not boxed semifinished o
  d.tables['物料主数据'][0]['每箱净重千克']='';const bad=selectedFactIssues(d);assert.equal(bad.length,1);assert.equal(bad[0].record,'FG');assert.equal(bad[0].field,'每箱净重千克');
  delete d.productionContract;assert.ok(selectedFactIssues(d).some(i=>i.record==='SF'&&i.field==='生产提前期天数'));
 });
+test('day readiness accepts bulk semifinished and legacy optional minimum wait without inventing input values',()=>{
+ const d={_selectionClosure:{materialIds:['FG','SF']},tables:{'每日需求':[{'成品编号':'FG','需求箱数':'1','需求千克':'6','最早到货日':'1','最晚到货日':'2','按要求日最晚发运日':'1','到货剩余保质天数':'1'}],'物料主数据':[{'物料编号':'FG','物料来源':'制造','保质天数':'7','每箱净重千克':'6','生产提前期天数':'1'},{'物料编号':'SF','物料来源':'制造','保质天数':'2','生产提前期天数':'1'}],'工艺路线':[{'路线工序编号':'R','工序顺序':'1','跨日历时天数':'0','最大等待天数':'1','每批工装套数':'0','需求人数':'2'}]}};
+ const original=JSON.stringify(d);assert.deepEqual(selectedFactIssues(d),[]);assert.equal(JSON.stringify(d),original);
+ const route=d.tables['工艺路线'][0];route['最小等待天数']='-1';assert.ok(selectedFactIssues(d).some(i=>i.field==='最小等待天数'));
+ route['最小等待天数']='';route['最大等待天数']='';assert.ok(selectedFactIssues(d).some(i=>i.field==='最大等待天数'));
+ d.tables['物料主数据'][0]['每箱净重千克']='';assert.ok(selectedFactIssues(d).some(i=>i.record==='FG'&&i.field==='每箱净重千克'));
+ const p={tables:{'配置参数':[blocked('WAIT-LOW','R','最小等待天数','天')],'工艺路线':[{'路线工序编号':'R'}]}};
+ assert.ok(parameterIssues(p).some(i=>i.record==='WAIT-LOW'&&i.code==='PARAMETER_REQUIRED'));
+});

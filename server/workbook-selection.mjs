@@ -67,10 +67,14 @@ export function selectedFactIssues(d){
  // pending. Box weight is needed for demanded products, not bulk semifinished
  // ingredients. No unknown value is filled or adopted here.
  const minute=minuteMode(d),demanded=new Set(rows(d,'每日需求').map(r=>r['成品编号']));
- for(const r of rows(d,'物料主数据').filter(r=>d._selectionClosure.materialIds.includes(r['物料编号'])))needed('物料主数据',r,['保质天数',...(r['物料来源']==='制造'?[...(!minute?['生产提前期天数']:[]),...(!minute||demanded.has(r['物料编号'])?['每箱净重千克']:[])]:[])]);
+ for(const r of rows(d,'物料主数据').filter(r=>d._selectionClosure.materialIds.includes(r['物料编号'])))needed('物料主数据',r,['保质天数',...(r['物料来源']==='制造'?[...(!minute?['生产提前期天数']:[]),...(demanded.has(r['物料编号'])?['每箱净重千克']:[])]:[])]);
  for(const r of rows(d,'客户与交付'))needed('客户与交付',r,['运输天数','允许提前天数','允许延后天数','到货剩余保质比例']);
  for(const r of rows(d,'供应商与供货条件'))needed('供应商与供货条件',r,['采购优先级','采购导期天数','检验天数','最小订货量','订货倍数']);
- for(const r of [...rows(d,'工艺路线'),...(d.mapping?.sfRoutes||[])])needed('工艺路线',r,['工序顺序',...(minuteMode(d)?['基准加工分钟','固定准备分钟','最短工艺分钟','最大等待分钟']:['跨日历时天数','最小等待天数','最大等待天数']),'每批工装套数','需求人数']);
+ // Legacy day workbooks omit the optional minimum-wait lower bound. Match the
+ // planner and parameter pair validator's existing zero additional wait policy;
+ // validate an explicitly supplied bound, and never default the mandatory max.
+ // Explicit P suspensions still block in parameterIssues before this check.
+ for(const r of [...rows(d,'工艺路线'),...(d.mapping?.sfRoutes||[])])needed('工艺路线',r,['工序顺序',...(minute?['基准加工分钟','固定准备分钟','最短工艺分钟','最大等待分钟']:['跨日历时天数',...(String(r['最小等待天数']??'').trim()?['最小等待天数']:[]),'最大等待天数']),'每批工装套数','需求人数']);
  for(const r of rows(d,'设备与工装'))needed('设备与工装',r,['可用数量',...(r['资源类别']==='设备'?['单次批量上限千克','标准日产能千克']:[])]);
  for(const r of rows(d,'班组资源'))needed('班组资源',r,['每班可用人数','标准日班次数','周日班次数']);
  for(const r of rows(d,'工厂日历'))needed('工厂日历',r,['生产班次数','日产能分子','日产能分母']);
