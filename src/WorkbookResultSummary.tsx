@@ -16,7 +16,7 @@ export function WorkbookResultSummary({run,onLocate,actions,sourceLink}:{run:any
    <div><span>需求 / 已排 / 未排</span><b>{model.demands.length} / {model.scheduled} / {model.unplanned} 条</b></div>
    <div><span>数量：总量 / 已排 / 未排</span>{model.quantities.length?model.quantities.map(q=><b key={q.unit}>{q.known?`${q.unknown?'已知数量 ':''}${number(q.total)} / ${number(q.scheduled)} / ${number(q.unplanned)} ${q.unit}`:'数量未提供'}{q.unknown>0?`（${q.unknown} 条数量未提供）`:''}</b>):<b>未提供</b>}</div>
    <div><span>有限占用任务 / 预计迟交需求</span><b>{(p.tasks||[]).length} 个 / {model.late} 条</b></div>
-   <div><span>计算问题记录 / 缺料记录</span><b><button className="result-metric-link" aria-label={`计算问题记录 ${model.findingCount} 条，查看明细`} aria-haspopup="dialog" onClick={()=>setAnalysis({identity,scope:'findings'})}>{model.findingCount}</button> / <button className="result-metric-link" aria-label={`缺料记录 ${model.shortageCount} 条，查看明细`} aria-haspopup="dialog" onClick={()=>setAnalysis({identity,scope:'shortages'})}>{model.shortageCount}</button> 条</b></div>
+   <div className="result-issue-metric"><span title="错误：最终未排、独立检查问题及明确标为错误的计算记录。提醒：预计迟交、其他计算和缺料记录。同一需求可有多条记录。">结果问题 ⓘ</span><b><button className="result-metric-link result-error-link" aria-label={`错误 ${model.errorCount} 条，查看明细`} aria-haspopup="dialog" onClick={()=>setAnalysis({identity,scope:'errors'})}>错误 {model.errorCount} 条</button><em> / </em><button className="result-metric-link result-warning-link" aria-label={`提醒 ${model.warningCount} 条，查看明细`} aria-haspopup="dialog" onClick={()=>setAnalysis({identity,scope:'warnings'})}>提醒 {model.warningCount} 条</button></b></div>
   </div>
   {analysis?.identity===identity&&<ResultAnalysisDialog key={identity} run={run} model={model} initialScope={analysis.scope} onClose={()=>setAnalysis(undefined)} onLocate={onLocate} sourceLink={sourceLink}/>}
  </section>;
@@ -28,7 +28,7 @@ function IssueGroup({group,origin,onLocate}:{group:ResultGroup;origin:string;onL
    <div className="result-occurrences"><table><thead><tr><th>需求 / 物料</th><th>最终状态 / 预计到货</th><th>原记录 / 来源</th></tr></thead><tbody>{group.entries.slice(safePage*size,(safePage+1)*size).map((e,i)=><tr key={safePage*size+i}>
     <td>{e.need||'未关联需求'}{(e.productId||e.demand?.productId)&&<span>{e.productId||e.demand?.productId}</span>}</td>
     <td>{e.demand?(e.demand.status==='scheduled'?'已排':e.demand.status==='unplanned'?'未排':'状态未识别'):'无对应需求结果'}<span>{workbookDate(e.demand?.arrivalDay,origin)||'到货未记录'}</span></td>
-    <td><p>{e.detail}</p>{e.explanation&&<WorkbookFindingExplanation explanation={e.explanation}/ >}{e.source?.sheet&&<button onClick={()=>onLocate(e.source.message?e.source:{...e.source,message:e.detail})} title="打开来源维护入口；冻结结果保持不变">定位来源：{e.source.sheet}{e.source.row?` · 第${e.source.row}行`:''}{e.source.field?` · ${e.source.field}`:''}</button>}</td>
+    <td><span className={'result-entry-level result-level-'+e.level}>{e.level==='error'?'错误':'提醒'}</span><p>{e.detail}</p>{e.explanation&&<WorkbookFindingExplanation explanation={e.explanation}/ >}{e.source?.sheet&&<button onClick={()=>onLocate(e.source.message?e.source:{...e.source,message:e.detail})} title="打开来源维护入口；冻结结果保持不变">定位来源：{e.source.sheet}{e.source.row?` · 第${e.source.row}行`:''}{e.source.field?` · ${e.source.field}`:''}</button>}</td>
    </tr>)}</tbody></table></div>
    {pages>1&&<div className="result-pager"><span>{safePage*size+1}–{Math.min((safePage+1)*size,count)} / {count} 条</span><button disabled={safePage===0} onClick={()=>setPage(safePage-1)}>上一页</button><button disabled={safePage+1>=pages} onClick={()=>setPage(safePage+1)}>下一页</button></div>}
   </details></td><td>{group.action}</td></tr>;
@@ -38,7 +38,7 @@ export function ResultAnalysisDialog({run,model,initialScope,onClose,onLocate,so
  const [category,setCategory]=useState('all'),[kind,setKind]=useState('all'),[query,setQuery]=useState(''),[page,setPage]=useState(0);
  const [scope,setScope]=useState(initialScope);
  const base=resultGroupsForScope(model.groups,scope),total=base.reduce((n,g)=>n+g.entries.length,0),matched=filterResultGroups(base,category,kind,query),matchedTotal=matched.reduce((n,g)=>n+g.entries.length,0);
- const scopes:[ResultRecordScope,string][]=[['findings','计算问题记录'],['shortages','缺料记录'],['outcomes','需求结果异常'],['verification','独立检查问题'],['all','全部分析记录']];
+ const scopes:[ResultRecordScope,string][]=[['errors','错误'],['warnings','提醒'],['findings','计算问题记录'],['shortages','缺料记录'],['outcomes','需求结果异常'],['verification','独立检查问题'],['all','全部分析记录']];
  function chooseScope(value:ResultRecordScope){setScope(value);setCategory('all');setKind('all');setQuery('');setPage(0);}
  const close=useRef<HTMLButtonElement>(null),title=useId();
  useEffect(()=>{const previous=document.activeElement as HTMLElement;close.current?.focus();return()=>{if(previous?.isConnected)previous.focus();};},[]);
@@ -49,7 +49,7 @@ export function ResultAnalysisDialog({run,model,initialScope,onClose,onLocate,so
   <header className="result-summary-heading"><h2 id={title}>{scopes.find(s=>s[0]===scope)?.[1]} · {total} 条</h2><span>{range}</span><button ref={close} onClick={onClose} aria-label="关闭结果指标明细">关闭</button></header>
   <div className="result-analysis-body">
   <nav className="result-record-scopes" aria-label="分析记录范围">{scopes.map(([key,label])=><button key={key} aria-pressed={scope===key} onClick={()=>chooseScope(key)}>{label} <b>{resultGroupsForScope(model.groups,key).reduce((n,g)=>n+g.entries.length,0)}</b></button>)}</nav>
-  <p className="result-scope-meaning">{scope==='findings'?'逐条展示计算过程记录；同一需求可能有多条记录，含在制等未关联需求的记录。':scope==='shortages'?'逐条展示缺料记录；不同需求、物料和需料时点分别统计，数量按原单位保留。':scope==='outcomes'?'展示最终未排需求与已排但预计迟交需求；与计算问题、缺料记录分开统计。':scope==='verification'?'展示独立检查的问题记录；具体检查范围见计算说明。':'合并展示需求结果异常、计算问题、缺料及检查问题；总条数不是未排需求数量。'}</p>
+  <p className="result-scope-meaning">{scope==='errors'?'按记录展示最终未排需求、独立检查问题及明确标为错误的计算记录；错误表示本次排程结果的问题，不等于程序异常。':scope==='warnings'?'按记录展示预计迟交需求、未标为错误的计算过程记录和缺料记录；过程记录不等于最终未排，同一需求可出现多条。':scope==='findings'?'逐条展示计算过程记录；同一需求可能有多条记录，含在制等未关联需求的记录。':scope==='shortages'?'逐条展示缺料记录；不同需求、物料和需料时点分别统计，数量按原单位保留。':scope==='outcomes'?'展示最终未排需求与已排但预计迟交需求；与计算问题、缺料记录分开统计。':scope==='verification'?'展示独立检查的问题记录；具体检查范围见计算说明。':'合并展示需求结果异常、计算问题、缺料及检查问题；总条数不是未排需求数量。'}</p>
   <details className="result-basis"><summary>计算口径、检查范围与来源</summary>
    <dl><dt>结果与记录</dt><dd>已排、未排和迟交按最终需求结果统计；任务数为工序任务数。同一需求可有多条计算记录，各类记录与受影响需求存在重叠，不能相加作为错误批次数。未关联需求的在制等记录不计入受影响需求数。</dd>
     <dt>需求与供给</dt><dd>按冻结输入的BOM、供给质量、放行/到期和余额分配物料。采购在途、在制续作、采用的模拟草稿属于条件供给；采购参考建议不会自动成为供给。缺料按记录的需求、物料及需料日期核对，不同单位分别显示。</dd>

@@ -80,7 +80,7 @@ test('parameter object matrix uses one row per object with current value and vis
 test('active app exposes only four consolidated workbench pages and no independent legacy data source',()=>{
  const html=renderToStaticMarkup(<App/>);
  assert.ok(!html.includes('class="hero"'));assert.ok(html.includes('class="workbook-navigation-host"'));
- for(const name of ['排程流程','业务数据查询与维护','配置参数查询与维护','排程结果与六视图'])assert.ok(html.includes('>'+name+'</button>'),name);
+ for(const name of ['排程流程','业务数据查询与维护','配置参数查询与维护','排程结果'])assert.ok(html.includes('>'+name+'</button>'),name);
  for(const name of ['>工装配置</button>','>业务数据</button>','>五类业务查询</button>','标准投入作用范围','原生CSV与输入维护','原生报表','兼容历史模式'])assert.ok(!html.includes(name),name);
 });
 test('maintenance targets require real editable source keys and deduplicate repeated references',()=>{

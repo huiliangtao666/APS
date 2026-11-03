@@ -8,8 +8,10 @@ export function QueryColumns({columns,value,onChange,popover=false}:{columns:Que
   return <DropdownDetails className={'qr-columns'+(popover?' chart-columns-picker':'')} onToggle={e=>{if(!popover)return;const el=e.currentTarget;picker.current=el;setOpen(el.open);if(el.open){const r=el.querySelector('summary')!.getBoundingClientRect();setPosition({left:Math.max(8,Math.min(r.left,window.innerWidth-336)),top:Math.max(8,Math.min(r.bottom+3,window.innerHeight-260))});}}}><summary>显示栏位（{value.length}/{columns.length}）</summary><div className="qr-columns-panel" style={popover?position:undefined}><p>{columns.some(c=>c.fixed)?'编号列固定；':''}勾选后立即显示，选择会自动记住。</p>{columns.map(c=><label key={c.key}><input type="checkbox" checked={c.fixed||value.includes(c.key)} disabled={c.fixed} onChange={e=>onChange(e.target.checked?[...value,c.key]:value.filter(k=>k!==c.key))}/>{c.label}{c.fixed?'（'+(c.fixedLabel||(popover?'编号固定':'业务键固定'))+'）':''}</label>)}</div></DropdownDetails>;
 }
 
-export function QueryMultiselect({api,identity,view,field,label,value,onChange,query}:{api:QueryApi;identity:QueryIdentity;view:string;field:string;label:string;value:QuerySelection;onChange:(v:QuerySelection)=>void;query?:object}) {
+export function QueryMultiselect({api,identity,view,field,label,value,onChange,query,popover=false}:{popover?:boolean;api:QueryApi;identity:QueryIdentity;view:string;field:string;label:string;value:QuerySelection;onChange:(v:QuerySelection)=>void;query?:object}) {
   const [search,setSearch]=useState(''),[offset,setOffset]=useState(0),[page,setPage]=useState<QueryOptions>(),[error,setError]=useState(''),[open,setOpen]=useState(false);
+  const [position,setPosition]=useState({left:8,top:8}),picker=useRef<HTMLDetailsElement>();
+  useEffect(()=>{if(!popover||!open)return;const close=(event:Event)=>{if(event.type==='scroll'&&event.target instanceof Node&&picker.current?.contains(event.target))return;if(picker.current)picker.current.open=false;};window.addEventListener('resize',close);window.addEventListener('scroll',close,true);return()=>{window.removeEventListener('resize',close);window.removeEventListener('scroll',close,true);};},[popover,open]);
   const sequence=useRef(0),actionSequence=useRef(0),key=JSON.stringify([value,query]);
   const actionDomain=JSON.stringify([identity.fingerprint,view,field,{...query,filters:undefined}]);
   // Dismissing a menu cancels candidate loading, but must retain an in-flight selection.
@@ -27,9 +29,9 @@ export function QueryMultiselect({api,identity,view,field,label,value,onChange,q
       if(seq!==actionSequence.current)return;if(!sameQueryIdentity(identity,r.identity))throw Error('筛选候选版本已变化');setPage(r);onChange(r.selection);
     }).catch(e=>{if(seq===actionSequence.current)setError(e.message);});
   }
-  return <DropdownDetails className="qr-select" onToggle={e=>setOpen(e.currentTarget.open)}>
+  return <DropdownDetails className={"qr-select"+(popover?" equipment-filter-picker":"")} onToggle={e=>{const el=e.currentTarget;setOpen(el.open);picker.current=el;if(popover&&el.open){const r=el.getBoundingClientRect();setPosition({left:Math.max(8,Math.min(r.left,window.innerWidth-316)),top:Math.max(8,Math.min(r.bottom+3,window.innerHeight-380))});}}}>
     <summary><span>{label}</span><b>{open&&page?`${page.selectedTotal}/${page.total}`:value.mode==='ALL'&&!value.exclude?.length?'全部':value.mode==='NONE'?'0 项':'已筛选'}</b><span aria-hidden="true">⌄</span></summary>
-    {open&&<div className="qr-select-panel">
+    {open&&<div className="qr-select-panel" style={popover?position:undefined}>
       <label className="qr-select-search"><span className="sr-only">搜索{label.replace(/编号$/,'')}编号或名称</span><input aria-label={'搜索'+label.replace(/编号$/,'')+'编号或名称'} placeholder="搜索编号或名称" value={search} maxLength={200} onChange={e=>{setSearch(e.target.value);setOffset(0);}}/></label>
       <div className="qr-select-actions"><button type="button" onClick={()=>operation({kind:'searchAll',query:search})}>全选匹配</button><button type="button" onClick={()=>operation({kind:'none'})}>清空</button><button type="button" onClick={()=>operation({kind:'restore'})}>恢复不限</button></div>
       {error&&<p role="alert">{error}</p>}

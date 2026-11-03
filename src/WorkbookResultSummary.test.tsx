@@ -4,7 +4,7 @@ import {renderToStaticMarkup} from 'react-dom/server';
 import {buildResultSummary,filterResultGroups,resultGroupsForScope,type ResultRecordScope} from './WorkbookResultSummaryModel';
 import {WorkbookResultSummary,ResultAnalysisDialog} from './WorkbookResultSummary';
 import {WorkbookResult} from './InputData';
-import {SuggestionDraftAction} from './EquipmentSchedule';
+import {equipmentFilterFields,SuggestionDraftAction} from './EquipmentSchedule';
 import {WorkbookRuleDetails} from './WorkbookFindingExplanation';
 import {explainFinding} from './lib/workbook-explanations.mjs';
 
@@ -41,7 +41,7 @@ test('WIP and unrecognized codes retain records without inventing affected deman
 test('main result section shows only metrics and underlined detail entries, with analysis in a dialog',()=>{
  const run=makeRun({findings:[{code:'MAX_WAIT',message:'测试记录',need:'D1',sheet:'工艺路线',row:9}]});
  const html=renderToStaticMarkup(<WorkbookResultSummary run={run} onLocate={()=>{}} actions={<button>重新检查</button>}/>),dialog=renderDialog(run);
- for(const text of ['排程结果汇总','result-metric-link','aria-haspopup="dialog"','计算问题记录 1 条，查看明细','缺料记录 0 条，查看明细','重新检查'])assert.ok(html.includes(text),text);
+ for(const text of ['排程结果汇总','result-metric-link','aria-haspopup="dialog"','错误 1 条，查看明细','提醒 2 条，查看明细','重新检查'])assert.ok(html.includes(text),text);
  for(const text of ['问题分类','result-groups','工序间等待超过上限','role="dialog"','计算口径、检查范围与来源'])assert.ok(!html.includes(text),text);
  for(const text of ['role="dialog"','计算口径、检查范围与来源','工序间等待超过上限','定位来源：工艺路线','原记录未保存的候选实际等待时长','维护业务数据或配置后创建新运行'])assert.ok(dialog.includes(text),text);
 });
@@ -84,4 +84,25 @@ test('metric counts and scoped records stay consistent: 17 findings, 8 shortages
  assert.ok(shortageHtml.includes('data-record-total="8"'));assert.ok(shortageHtml.includes('排程时记录的缺料'));assert.ok(!shortageHtml.includes('工序间等待超过上限'));
  const filtered=filterResultGroups(resultGroupsForScope(model.groups,'findings'),'resource','计算记录','D0');assert.equal(filtered.reduce((n,g)=>n+g.entries.length,0),1);
  assert.equal(JSON.stringify(run),before);
+});
+
+test('error and reminder metrics partition records without treating every process finding as an error',()=>{
+ const run=makeRun({findings:[{code:'MAX_WAIT',need:'D1',message:'过程记录'},{code:'FUTURE_RULE',need:'WIP-X',severity:'error',message:'显式错误'}],shortages:[{need:'D1',materialId:'M',quantity:3,unit:'个',needDay:1}],verification:{status:'problem',issues:['核对失败']}}),before=JSON.stringify(run),model=buildResultSummary(run);
+ assert.equal(model.errorCount,3);assert.equal(model.warningCount,3);
+ for(const [scope,count] of [['errors',model.errorCount],['warnings',model.warningCount]] as const){const groups=resultGroupsForScope(model.groups,scope);assert.equal(groups.reduce((n,g)=>n+g.entries.length,0),count);const html=renderDialog(run,scope);assert.ok(html.includes('data-record-total="'+count+'"'));assert.ok(groups.every(g=>g.entries.every(e=>e.level===(scope==='errors'?'error':'warning'))));}
+ assert.equal(model.errorCount+model.warningCount,resultGroupsForScope(model.groups,'all').reduce((n,g)=>n+g.entries.length,0));
+ const main=renderToStaticMarkup(<WorkbookResultSummary run={run} onLocate={()=>{}}/>);assert.ok(main.includes('错误 3 条'));assert.ok(main.includes('提醒 3 条'));assert.equal(JSON.stringify(run),before);
+ const empty=buildResultSummary(makeRun({demandResults:[],findings:[],shortages:[],verification:undefined}));assert.equal(empty.errorCount,0);assert.equal(empty.warningCount,0);
+});
+
+test('six view filters expose only relevant fields and remove the repeated visible heading',()=>{
+ assert.deepEqual(equipmentFilterFields('E1').map(f=>f[0]),['machine','group']);
+ assert.deepEqual(equipmentFilterFields('E2').map(f=>f[0]),['productId','orderId','status']);
+ assert.deepEqual(equipmentFilterFields('E3').map(f=>f[0]),['machine','group']);
+ assert.deepEqual(equipmentFilterFields('E4'),[]);
+ assert.deepEqual(equipmentFilterFields('E5').map(f=>f[0]),['productId','orderId']);
+ assert.deepEqual(equipmentFilterFields('E6').map(f=>f[0]),['machine','status']);
+ const run={...makeRun({source:{datasetId:'SYNTHETIC',version:6},allocations:[],suggestions:[]}),selection:{startDay:1,endDay:15}};
+ const html=renderToStaticMarkup(<WorkbookResult run={run} canWrite={false} canExport={false} api={async()=>{throw Error('static fixture');}}/>);
+ assert.ok(!html.includes('设备排程 · 六视图'));assert.ok(!html.includes('>总览 <select'));assert.ok(html.includes('equipment-focus-toggle'));
 });

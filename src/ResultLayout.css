@@ -1,0 +1,39 @@
+/* Result page: one header row, four compact metrics, one row per filter bar. */
+.app-shell .workbook-navigation-host{flex:1;min-width:0}
+.app-shell .workbook-page-toolbar{display:flex;align-items:center;gap:8px;min-width:0;width:100%}
+.app-shell .workbook-page-toolbar .workbook-feature-nav{flex:0 1 auto;min-width:0;flex-wrap:nowrap;overflow-x:auto;margin:0;gap:4px}
+.app-shell .workbook-page-toolbar .workbook-feature-nav button{flex:none;white-space:nowrap}
+.app-shell .workbook-page-toolbar .workbook-run-picker{display:flex;flex:0 1 330px;min-width:150px;margin:0;font-size:12px}
+.app-shell .workbook-page-toolbar .workbook-run-picker select{width:100%;height:28px;min-width:0;padding:3px 5px;border:1px solid #cadbe6;border-radius:4px;background:white;color:#315a73;font-size:12px}
+.app-shell .input-workspace .workbook-result-panel{padding:6px;margin-bottom:6px}
+.app-shell .input-workspace .workbook-result-summary:not(.result-analysis-dialog){margin:0 0 5px}
+.app-shell .input-workspace .workbook-result-summary:not(.result-analysis-dialog)>.result-summary-heading{gap:6px;padding:4px 8px;min-height:32px}
+.app-shell .input-workspace .workbook-result-summary:not(.result-analysis-dialog)>.result-summary-heading h2{font-size:13px}
+.app-shell .input-workspace .workbook-result-summary>.result-metrics{margin:4px 6px;flex-wrap:nowrap}
+.app-shell .input-workspace .result-metrics>div{padding:4px 8px;flex:1 1 0;min-width:0}
+.app-shell .input-workspace .result-metrics span{margin-bottom:1px;font-size:11px}
+.app-shell .input-workspace .result-metrics b{font-size:14px;line-height:1.35}
+.app-shell .input-workspace .result-issue-metric b{display:flex;align-items:center;gap:3px;white-space:nowrap}
+.app-shell .input-workspace .result-issue-metric em{font-size:12px;font-style:normal;color:#8495a1}
+.app-shell .input-workspace .result-issue-metric .result-error-link{color:#c33330;font-size:15px;padding:0;min-height:22px}
+.app-shell .input-workspace .result-issue-metric .result-warning-link{color:#ab7600;font-size:15px;padding:0;min-height:22px}
+.result-entry-level{display:inline-block;padding:0 4px;margin:0 4px 2px 0;font-size:11px;border-radius:3px}
+.result-level-error{color:#b52d29;background:#ffefed}.result-level-warning{color:#996800;background:#fff5d6}
+.app-shell .input-workspace .equipment-schedule{padding:4px 6px}
+.app-shell .input-workspace .equipment-schedule>.qr-fixed-heading{display:flex;align-items:center;gap:8px;padding:0 0 4px}
+.app-shell .input-workspace .equipment-schedule>.qr-fixed-heading>nav{display:flex;flex:1;min-width:0;flex-wrap:nowrap;overflow-x:auto;gap:4px;margin:0}
+.app-shell .input-workspace .equipment-schedule>.qr-fixed-heading>nav>button{flex:none;white-space:nowrap}
+.app-shell .equipment-focus-toggle{flex:none;margin:0}
+.app-shell .input-workspace .equipment-schedule .qr-filters{container-type:normal;padding:3px 5px;margin:0}
+.app-shell .input-workspace .equipment-schedule .qr-filter-line{display:flex;flex-wrap:nowrap;gap:5px;min-height:32px;overflow-x:auto;overflow-y:hidden;padding:1px 0}
+.app-shell .input-workspace .equipment-schedule .qr-filter-line>.qr-keyword{flex:0 0 145px;min-width:145px}
+.app-shell .input-workspace .equipment-schedule .qr-filter-line>.qr-dates{flex:none;max-width:none;overflow:visible;gap:5px;flex-wrap:nowrap}
+.app-shell .input-workspace .equipment-schedule .qr-filter-line .qr-dates input[type=date]{width:124px}
+.app-shell .input-workspace .equipment-schedule .qr-filter-line>.qr-filter-groups{flex:0 0 auto;order:0;flex-wrap:nowrap;min-height:0;gap:5px;margin:0}
+.app-shell .input-workspace .equipment-schedule .qr-filter-line .qr-select{flex:0 0 110px;width:110px;min-width:110px;max-width:110px;margin:0}
+.app-shell .input-workspace .equipment-schedule .qr-filter-line>.qr-actions{order:0;margin:0 0 0 auto;flex:none}
+.app-shell .input-workspace .equipment-schedule .qr-filter-line>.risk-scope{display:flex;align-items:center;gap:3px;flex:none;margin:0}
+.app-shell .input-workspace .equipment-schedule .qr-filter-line>.risk-scope select{width:135px}
+.app-shell .input-workspace .equipment-schedule .equipment-filter-picker>.qr-select-panel{position:fixed;z-index:1200;box-sizing:border-box;width:308px;max-width:calc(100vw - 16px);max-height:calc(100vh - 24px);overflow:auto;margin:0}
+@media(max-width:700px){.app-shell .input-workspace .workbook-result-summary>.result-metrics{overflow-x:auto}.app-shell .input-workspace .result-metrics>div{flex:1 0 200px}.app-shell .workbook-page-toolbar .workbook-run-picker{flex-basis:200px;min-width:140px}}
+.app-shell .input-workspace .equipment-schedule .qr-filter-line>.qr-actions{position:sticky;right:0;z-index:2;background:white;padding-left:4px;box-shadow:-4px 0 5px #ffffffd9}
