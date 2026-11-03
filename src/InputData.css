@@ -2,3 +2,33 @@
 .parameter-tabs{display:flex;gap:.35rem;overflow-x:auto;padding:.5rem 0;flex-wrap:wrap}.parameter-tabs button{white-space:nowrap}.parameter-panel small{display:block;overflow-wrap:anywhere;max-width:32rem}.parameter-panel dl{font-size:.85rem;max-width:44rem}.parameter-panel dt{font-weight:600}.parameter-panel dd{margin:0 0 .3rem;white-space:normal}.workbook-steps{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}.workbook-steps button[aria-current=step]{font-weight:700;background:#e6f2fa}
 /* Workbench import states and the frozen day-axis share the existing palette. */
 .workbook-import-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}.workbook-import-cards .panel{min-width:0}.workbook-import-cards input,.workbook-import-cards select{max-width:100%}.workbook-import-cards p,.workbook-run-view p{overflow-wrap:anywhere}.input-workspace pre{max-height:340px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f6fa;padding:12px}.workbook-steps button[aria-current=step]{background:#194e77;color:white}.input-workspace button:focus-visible{outline:3px solid #d59b22;outline-offset:3px}.workbook-gantt{overflow:auto;min-width:0;margin:16px 0}.day-axis,.day-resource{display:grid;grid-template-columns:150px minmax(550px,1fr);gap:10px;min-width:710px}.day-axis>div{height:30px;position:relative;border-bottom:1px solid #afbac6}.day-axis span{position:absolute;top:0;font-size:12px}.day-resource>b{padding:14px 6px}.day-track{height:52px;position:relative;background:repeating-linear-gradient(90deg,#f5f8fb 0,#f5f8fb calc(100% / 14 - 1px),#dfe6ed calc(100% / 14 - 1px),#dfe6ed calc(100% / 14));border-bottom:1px solid #c9d3df}.day-track .day-task{position:absolute;top:12px;height:28px;min-width:2px;overflow:hidden;white-space:nowrap;background:#225d83;color:white;border:1px solid #fff;padding:0;font-size:11px}.day-track .day-task.selected{background:#985c12;outline:2px solid #dca232}.workbook-run-view nav{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.workbook-run-view nav button[aria-pressed=true]{background:#194e77;color:white}
+
+/* Clear page, journey and form levels for the Excel workbench. */
+.input-workspace [hidden]{display:none!important}
+.input-workspace .workbook-feature-nav{display:flex;flex-wrap:wrap;gap:4px;margin:0;padding:6px;background:#edf2f6;border:1px solid #d6e0e9;border-radius:10px}
+.workbook-feature-nav button{border:0;border-radius:7px;background:transparent;color:#244b68;padding:12px 16px;font-weight:600}
+.workbook-feature-nav button[aria-current=page]{background:#194e77;color:#fff}
+.workbook-feature-nav button:disabled{opacity:.45;cursor:not-allowed}
+.input-workspace .workbook-journey{padding:16px 20px}
+.input-workspace .workbook-steps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin:14px 0 0}
+.workbook-steps button{min-height:50px;border:1px solid #cbd7e3;border-radius:7px;background:#edf2f6;color:#48637b;font-weight:600;line-height:1.3}
+.workbook-steps button[aria-current=step]{background:#194e77;border-color:#194e77;color:#fff}
+.workbook-steps button:disabled{opacity:.55}
+.workbook-source-panel>.input-actions{align-items:center;gap:18px;margin:0}
+.workbook-dataset{display:grid;gap:4px;min-width:min(100%,320px)}
+.workbook-dataset span{color:#64748b;font-size:12px}
+.workbook-dataset strong{font-size:16px;color:#173d5a;overflow-wrap:anywhere}
+.workbook-run-picker{min-width:min(100%,300px)}
+.workbook-source-panel>div>button{white-space:nowrap}
+.workbook-data-page,.workbook-parameter-page{margin-top:20px;border-top:1px solid #dbe3ee;padding-top:18px}
+.workbook-page-hint{color:#536a7b}
+.workbook-range-panel>button{display:block;margin:12px 0}
+.workbook-range-fields{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:14px;padding:16px;background:#f4f7fa;border:1px solid #dbe3ee;border-radius:8px;margin:18px 0}
+.workbook-range-fields input{width:100%;box-sizing:border-box}
+.workbook-range-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.workbook-readiness{margin:0;padding:8px 12px;border-radius:6px;background:#edf2f6}
+.workbook-run-action{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:16px;border:1px solid #cbd7e3;border-radius:8px;background:#fff}
+.workbook-run-action p{margin:0;color:#9f1239}
+.workbook-run-action button{min-height:42px}
+@media(max-width:900px){.input-workspace .workbook-steps{grid-template-columns:repeat(3,minmax(0,1fr))}.workbook-range-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.input-workspace .workbook-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.workbook-range-fields{grid-template-columns:1fr}.workbook-feature-nav button{flex:1 1 45%}}
