@@ -19,6 +19,7 @@ export function DemandTaskDetails({api,identity,tableIdentity,query,fingerprint,
  const [tab,setTab]=useState('overview'),[offset,setOffset]=useState(0),[data,setData]=useState<any>(),[error,setError]=useState(''),[position,setPosition]=useState(()=>({left:Math.max(12,((typeof window==='undefined'?1200:window.innerWidth)-1040)/2),top:72}));
  const panel=useRef<HTMLElement>(null),close=useRef<HTMLButtonElement>(null),body=useRef<HTMLDivElement>(null),nav=useRef<HTMLElement>(null),drag=useRef<{x:number;y:number;left:number;top:number}>(),id=useId();
  const pages=useRef<number[]>([]);
+ useEffect(()=>{pages.current=[];setTab('overview');setOffset(0);},[node.id]);
  const signature=JSON.stringify([identity,fingerprint,query,node,tab,offset]);
  useEffect(()=>{const previous=document.activeElement as HTMLElement;close.current?.focus();return()=>{if(previous?.isConnected)previous.focus();};},[]);
  useEffect(()=>{const escape=(e:globalThis.KeyboardEvent)=>{if(e.key==='Escape'&&!e.defaultPrevented)onClose();};document.addEventListener('keydown',escape);return()=>document.removeEventListener('keydown',escape);},[onClose]);
