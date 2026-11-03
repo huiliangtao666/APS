@@ -100,3 +100,5 @@
 首次77条及其核对记录保留原截点；本次追加1条、2张原始截图，当前索引累计78条Issue。
 
 - [#138 物料风险甘特浮窗：基本信息和受影响需求](https://github.com/huiliangtao666/APS/issues/138) — 已完成（Closed / completed）；13项任务级检查、构建及正式入口检查通过，非真实业务UAT。
+
+- [#139 运行问题含义与WIP导入来源核对](https://github.com/huiliangtao666/APS/issues/139) — 已完成（咨询/只读核查答复），附原截图；本次未修改代码或运行。后续追加现为2条、3张截图，索引累计79条Issue。
