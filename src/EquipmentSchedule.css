@@ -13,3 +13,28 @@
 .equipment-wip{top:52px;height:22px;font-size:11px}
 .equipment-selected-task{display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;margin:8px 0;padding:10px 12px;background:#eef5fb;border:1px solid #c9dceb;border-radius:6px;color:#183e5b}
 .equipment-selected-task span{font-size:13px}
+/* Dense minute-Gantt presentation following the supplied design prototype. */
+.equipment-view-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;margin:5px 0;padding:5px 8px;background:#f4f8fa;border:1px solid #dce7ed;border-radius:5px;white-space:nowrap;font-size:11px}
+.equipment-view-toolbar strong{font-size:13px;color:#24536c}.equipment-view-toolbar label{display:flex;align-items:center;gap:4px;white-space:nowrap}.equipment-view-toolbar select{height:28px;padding:2px 5px}.equipment-view-toolbar button{padding:4px 7px}.equipment-view-toolbar>span{margin-left:auto;color:#6b7e8d}
+.equipment-schedule .qr-columns{display:inline-block;margin:2px 0;padding:2px 6px;font-size:11px;color:#607789}
+.equipment-gantt{height:calc(100vh - 345px);min-height:350px;max-height:none;margin:5px 0;border-color:#cddde5}
+.equipment-axis,.equipment-resource{grid-template-columns:178px max-content}
+.equipment-axis{height:30px}.equipment-axis>b{width:178px;min-width:178px;padding:6px 7px;font-size:11px}
+.equipment-axis button{height:30px;padding:1px;font-size:10px;font-weight:500}
+.equipment-name{width:178px;display:flex;flex-direction:row;align-items:center;gap:4px;padding:0 6px;border-radius:0;border-top:0;border-bottom:1px solid #e8eef3;overflow:hidden}
+.equipment-name strong{flex:none;font-size:10px;line-height:1.1}.equipment-name span{flex:1;min-width:0;font-size:10px}.equipment-name small{flex:none;max-width:52px;font-size:9px;line-height:1.1}
+.equipment-resource:nth-child(odd) .equipment-name,.equipment-resource:nth-child(odd) .equipment-track{background-color:#f8fbfd}
+.equipment-track{background-image:linear-gradient(to right,#e2eaf0 1px,transparent 1px)}
+.equipment-task{min-width:2px;padding:0 2px;line-height:1.1;font-size:9px;font-weight:500;border:1px solid #4d91bc;border-left-width:2px;border-radius:2px;background:#dcecf8;color:#214e69;box-shadow:none;z-index:3}
+.equipment-task[aria-pressed=true]{background:#bfe2f5;color:#153d58;outline:2px solid #193f66;outline-offset:1px;z-index:6}
+.equipment-wip{top:auto;bottom:1px;height:8px;min-width:2px;padding:0;font-size:8px;line-height:7px;z-index:2}
+.equipment-stop{top:0;height:100%;min-width:2px;border-radius:0;opacity:.7;z-index:1}
+.equipment-chain{z-index:4}
+.equipment-selected-task{gap:7px;margin:4px 0;padding:5px 7px;font-size:11px;white-space:nowrap}
+.equipment-selected-task strong{font-size:11px}.equipment-selected-task span{font-size:11px}.equipment-selected-task button{padding:3px 6px;font-size:11px}
+.equipment-legend{display:flex;align-items:center;gap:12px;flex-wrap:nowrap;overflow-x:auto;padding:2px 5px;color:#617789;font-size:10px;white-space:nowrap}
+.equipment-legend span{display:inline-flex;align-items:center;gap:4px}.equipment-legend i{display:inline-block;width:12px;height:8px;border:1px solid #79a4bc;border-radius:1px}.equipment-legend-task{background:#dcecf8}.equipment-legend-stop{background:repeating-linear-gradient(135deg,#e8c9ae 0,#e8c9ae 2px,#fff1e0 2px,#fff1e0 4px)}.equipment-legend-wip{background:#fff0cd}
+.equipment-legend small{margin-left:auto;font-size:10px}
+.equipment-data-table{border-top:1px solid #e1eaf0;margin:4px 0;font-size:11px}.equipment-data-table summary{cursor:pointer;padding:5px 3px;color:#506d80}.equipment-data-table[open] summary{font-weight:600}
+.equipment-focus .equipment-gantt{height:calc(100vh - 210px)}
+@media(max-width:750px){.equipment-gantt{height:calc(100vh - 380px)}.equipment-view-toolbar>span,.equipment-legend small{display:none}}
