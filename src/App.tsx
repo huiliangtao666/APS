@@ -78,7 +78,7 @@ export default function App() {
   const [issues,setIssues]=useState<Finding[]>([]);
   const [inputVersion,setInputVersion]=useState(0);
   const [reason,setReason]=useState('');
-  const [workbookWorkbench,setWorkbookWorkbench]=useState(()=>new URLSearchParams(window.location.search).get('mode')!=='native'),[workbookOpened,setWorkbookOpened]=useState(true);
+  const [workbookWorkbench,setWorkbookWorkbench]=useState(true),[workbookOpened,setWorkbookOpened]=useState(true);
   useEffect(()=>{if(view==='input'||workbookWorkbench)setWorkbookOpened(true);},[view,workbookWorkbench]);
   const [busy,setBusy]=useState(false);
   // This lite app is mounted in shared mode by server/index.mjs; avoid a false
@@ -126,14 +126,14 @@ export default function App() {
   function locate(f:Finding){if(!f.taskIds.length){setRecordProblem(f);setRecordProblemOpen(n=>n+1);return;}setRecordProblem(f.relatedRecords?.length?f:null);setRecordProblemOpen(n=>n+1);setFocusedProblem(f);setSelected(f.taskIds);setView('schedule');}
 
   return <div className="app-shell">
-    <header className={`topbar ${embedded?'embedded-topbar':''}`}><div className="brandmark">APS</div><div className="brand"><b>APS · 排程工作台</b><span>R1 原型 / v0.3 需求基线</span></div>{<nav><button className={view==='schedule'&&workbookWorkbench?'active':''} onClick={()=>{setView('schedule');setWorkbookWorkbench(true);}}>排程工作台</button><button onClick={()=>{setView('schedule');setWorkbookWorkbench(false);}}>CSV / 分钟兼容模式</button><button onClick={()=>setView('decisions')}>范围与待决</button></nav>}<div className="top-status"><i/>预览环境</div></header>
+    <header className={`topbar ${embedded?'embedded-topbar':''}`}><div className="brandmark">APS</div><div className="brand"><b>APS · 排程工作台</b><span>R1 原型 / v0.3 需求基线</span></div>{<nav><button className={view==='schedule'&&workbookWorkbench?'active':''} onClick={()=>{setView('schedule');setWorkbookWorkbench(true);}}>排程工作台</button></nav>}<div className="top-status"><i/>预览环境</div></header>
     <main>
       <section className="panel"><h2>共享操作与记录</h2><p>当前无需应用账号，所有访问者共用数据及操作权限。记录仅标记共享工作台，不代表个人身份或独立审批。所有质量状态均为模拟数据；确认仅在本系统支持范围内生效。</p><label>操作原因（必填）<input aria-label="操作原因" value={reason} onChange={e=>setReason(e.target.value)}/></label><button onClick={()=>perform(refresh)}>刷新数据与记录</button><details><summary>操作记录（{operations.length}）</summary>{operations.map(r=><p key={r.id}>{r.at} · {r.actor} · {r.action} · {r.reason}</p>)}</details></section>
-      <section className="hero"><div><p className="eyebrow">单线排程 · R1 最小模式 / 已有支持模式</p><h1>{view==='schedule'?(workbookWorkbench?'Excel 日语义排程工作台':'兼容历史分钟排程'):view==='input'?'输入数据与整本采用':view==='data'?'日历与排程数据':view==='query'?'模拟数据与关联查询':view==='reports'?'查询报表与文件导出':'实现范围与业务决策'}</h1><p className="sub">基于 v0.3 UAT-02 / 2026-11-02 08:00（Asia/Shanghai）；样例业务值均为虚构，仅用于软件验证。</p></div><div className="hero-source"><span>追溯基线</span><b>FR-008 · UAT-02 · AC-05</b><small>工厂窗口继承 · 设备停机例外 · 连续工作窗口</small></div></section>
+      <section className="hero"><div><p className="eyebrow">Excel 数据源 · 按日排程</p><h1>排程工作台</h1><p className="sub">以已导入的 Excel 业务数据和配置参数为准；样例数据仅用于软件验证。</p></div><div className="hero-source"><span>工作流程</span><b>数据准备 → 检查配置 → 计算 → 核对结果</b><small>业务数据和配置参数分别导入、确认</small></div></section>
       {message&&<div className="toast" role="status" aria-live="polite" aria-atomic="true"><span>{message}</span><button aria-label="关闭提示" onClick={()=>setMessage('')}>×</button></div>}
       {recordProblem&&<ProblemRecords key={recordProblemOpen} finding={recordProblem} data={data} identityContext={{inputVersionId:currentInputId,operations}} canWrite={!!session?.canWrite&&!busy} onClose={()=>setRecordProblem(null)} onQuery={(ref,current)=>{const resolved=current?currentRecord(ref,data,{inputVersionId:currentInputId,operations}):null;if(current&&!resolved)return;const id=ref.origin?.inputVersionId;const original=id?(checkedInputs[id]||plans.find(p=>(p as any).inputVersionId===id)?.inputSnapshot):undefined;if(!current&&!original){setMessage('原输入版本不可用；上方保留原检查值，不能使用当前同位记录替代。');return;}setQuerySnapshot(!current&&original&&id?{data:original,id}:undefined);setQueryOccurrence(current?resolved?.index:ref.origin?.occurrence.index);setQueryHistorical(!current);setQueryInputTable(ref.table);setQueryInputRow(current?resolved!.row:ref.row);setView('query');}} onEdit={ref=>{setTableKey(ref.table);setEditRecord(ref);setView('data');}}/>}
       {(view==='data'||view==='query'||view==='schedule'&&!workbookWorkbench)&&<section className="panel"><p>兼容历史模式 · 原生分钟 / CSV；此处操作不写Excel数据集。</p><button onClick={()=>{setView('schedule');setWorkbookWorkbench(true);}}>返回Excel工作台原步骤</button><button onClick={()=>setView('data')}>原生CSV与输入维护</button><button onClick={()=>setView('query')}>原生冻结查询</button><button onClick={openTools}>原生工装</button><button onClick={()=>setView('reports')}>原生报表</button><button onClick={()=>{setView('schedule');setWorkbookWorkbench(false);}}>原生排程与历史方案</button></section>}
-      {workbookOpened&&<div hidden={view!=='input'&&!(view==='schedule'&&workbookWorkbench)}><InputData api={api} canWrite={!!session?.canWrite} canExport={!!session?.canExport} reason={reason} onCompatibility={()=>{setView('schedule');setWorkbookWorkbench(false);}}/></div>}
+      {workbookOpened&&<div hidden={view!=='input'&&!(view==='schedule'&&workbookWorkbench)}><InputData api={api} canWrite={!!session?.canWrite} canExport={!!session?.canExport} reason={reason}/></div>}
       {view==='data'&&<BomApplication api={api} data={data} canWrite={!!session?.canWrite&&!busy&&!!reason.trim()} onSaved={refresh}/>}
       {view==='reports'&&<ReportPanel plans={plans} api={api} onExport={session?.canExport&&!busy&&!!reason.trim()?download:undefined}/>}
       {view==='schedule'&&!workbookWorkbench&&<>
@@ -207,7 +207,7 @@ export default function App() {
           ['D-08','BOM 生效与收率/损耗','FR-003 保存产品/版本/生效日期/投料工序/物料及配置用量。生效日的区间边界、历史版本追溯方式、订单适用版本选择、用量基准，以及总收率与逐工序收率/损耗的口径均待 APS-Design 确认；当前仅做结构校验，不选版本、不展开或计算需求。'],
         ].map(([id,title,body])=><article className="decision" key={id}><b>{id} · {title}</b><p>{body}</p></article>)}</section>
         <section className="panel"><h2>待决与未实现（不作隐式默认）</h2><ul className="not-in">{['跨班任务：是否允许跨日历窗口衔接，待业务确认；当前要求单个连续窗口容纳完整工序。','可中断工序：是否允许拆分、最小连续段和中断恢复规则待确认；当前不拆分任务。','人员按已配置组、技能、班次及参与偏移检查；支持显式单跳有向替代；自动人员优化未实现。','工装与空间仅执行明确启用的表23逐生产批声明；工装参数来源、整工序/明确窗口与归还均可配置；最大等待仅支持显式kg固定程序加工/冷却配对；动态下游释放与多线未实现。','工厂日历的有效日期/周循环、节假日优先级和跨日窗口表达尚待确认；当前时间为 v0.3 单日分钟轴。','全局优化、真实工艺/质量参数、主管确认和外部 ERP/MES/WMS 集成不在此切片。'] .map(x=><li key={x}>{x}</li>)}</ul></section></div>}
-      <footer>APS-Dev 原型 · R2.1 阶段预览 · 未发布上线 · v0.3 UAT-02 虚构数据</footer>
+      <footer>APS 排程工作台 · 演示数据仅用于软件验证</footer>
     </main>
   </div>;
 }
