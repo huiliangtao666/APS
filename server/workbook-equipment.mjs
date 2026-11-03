@@ -5,6 +5,7 @@ import {selectionPredicate,changeSelection,candidatePage,searchText} from './que
 import {minuteMode,minuteTime,knownMinuteStops,wipOccupations,eventPeak,unionMinutes,shiftWindows} from './workbook-minute.mjs';
 import {explainEquipmentNode} from './workbook-node-analysis.mjs';
 import {riskTimeline,explainRiskNode} from './workbook-risk-timeline.mjs';
+import {riskCard} from './workbook-risk-card.mjs';
 import {taskCard} from './workbook-task-card.mjs';
 import {explainFinding,explainShortage} from '../src/lib/workbook-explanations.mjs';
 const rows=(d,t)=>d.tables?.[t]||[],error=(code,status=422)=>{throw Object.assign(Error(code),{code,status});};
@@ -152,6 +153,10 @@ export const equipmentDomain={
    return {queryFingerprint:fp,tasks:part,total:tasks.length,nextOffset:offset+part.length<tasks.length?offset+part.length:null};
   }
   const record=records.find(r=>r.id===q.id);if(!record)error('RECORD_NOT_FOUND',404);
+  if(q.table==='risk-card'){
+   if(query.view!=='E5')error('RISK_CARD_REQUIRES_MATERIAL');
+   return {queryFingerprint:fp,...riskCard(v,{record,node:q.node,section:q.section,offset:q.offset})};
+  }
   if(q.table==='task-card'){
    if(!['E1','E2'].includes(query.view))error('TASK_CARD_REQUIRES_GANTT');
    let parent=record;

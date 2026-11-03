@@ -1,7 +1,8 @@
 import {useEffect,useRef,useState} from 'react';
 import {QueryColumns} from './QueryReportsControls';
 import {EquipmentGanttAxis,useChartColumns} from './EquipmentChartControls';
-import {EquipmentNodeAnalysis,type GanttNode} from './EquipmentNodeAnalysis';
+import {type GanttNode} from './EquipmentNodeAnalysis';
+import {MaterialRiskDetails} from './MaterialRiskDetails';
 import {queryValue,type QueryApi,type QueryColumn,type QueryIdentity,type QueryRecord} from './QueryReportsTypes';
 import './MaterialRiskGantt.css';
 type RiskEvent={quantity?:number|null;key:string;label:string;at:number;end:number|null;precision:'day'|'minute';tone:string};
@@ -21,13 +22,13 @@ export function MaterialRiskGantt({rows,from,to,focusDay,onDay,density,onTask,on
  const nodeFor=(r:QueryRecord):GanttNode=>({id:r.id,kind:'risk',resource:String(r.values.materialId||r.need||r.id),recordId:r.id});
  const pointTime=(n:number,precision:string)=>precision==='day'?new Date(Date.parse(identity.dayZero+'T00:00:00Z')+Math.floor(n/1440)*86400000).toISOString().slice(0,10):queryValue(n,{key:'start',label:'时刻',format:'instant',timeUnit:'minute'},identity);
  return <><QueryColumns columns={columns} value={visible} onChange={save}/>
- {selected&&<div className="equipment-selected-task" role="status"><strong>{selected.id}</strong><span>{String(selected.values.sourceKind)} · {String(selected.values.materialId||'未指定物料')} · 需求/在制 {String(selected.need||'未提供')}</span><button onClick={()=>setNode(nodeFor(selected))}>计算分析</button><button onClick={()=>onOpen(selected)}>明细与来源</button>{typeof selected.values.taskId==='string'&&<button onClick={()=>onTask(selected.values.taskId as string)}>定位关联任务</button>}<button onClick={()=>{setActive(undefined);setNode(undefined);}}>取消高亮</button></div>}
+ {selected&&<div className="equipment-selected-task" role="status"><strong>{selected.id}</strong><span>{String(selected.values.sourceKind)} · {String(selected.values.materialId||'未指定物料')} · 需求/在制 {String(selected.need||'未提供')}</span><button onClick={()=>setNode(nodeFor(selected))}>基本信息与受影响需求</button><button onClick={()=>onOpen(selected)}>明细与来源</button>{typeof selected.values.taskId==='string'&&<button onClick={()=>onTask(selected.values.taskId as string)}>定位关联任务</button>}<button onClick={()=>{setActive(undefined);setNode(undefined);}}>取消高亮</button></div>}
  <div ref={container} className={'equipment-gantt risk-gantt '+density} role="region" aria-label={(focusDay===null?'日期':'半小时')+'物料风险甘特'}>
  <EquipmentGanttAxis heading="物料 / 记录编号 / 类型 / 数量" from={from} to={to} focusDay={focusDay} onDay={onDay} width={chartWidth} dayZero={identity.dayZero}/>
  {rows.map(r=>{const t=r.timeline as Timeline|undefined,events=(t?.events||[]).filter(e=>riskEventVisible(e,start,end)),height=Math.max(baseHeight,events.length*13+2),laneHeight=(height-2)/Math.max(1,events.length),kind=r.id.split(':')[0],category=r.values.sourceKind==='条件供给分配'?'条件供给':kindName(kind);
  const related=selected&&selected.need&&selected.need===r.need;
  return <div className={'equipment-resource '+(related?'risk-related':'')} key={r.id}>
- <button className="equipment-name risk-name" style={{height}} onClick={()=>{setActive(r.id);setNode(nodeFor(r));}} title={`${t?.materialId||'未指定物料'} · ${t?.materialName||''} / ${r.id} / ${r.values.sourceKind} / ${t?amount(t):'数量未提供'}`} aria-label={`${r.id} ${r.values.sourceKind}，查看计算分析`}>
+ <button className="equipment-name risk-name" style={{height}} onClick={()=>{setActive(r.id);setNode(nodeFor(r));}} title={`${t?.materialId||'未指定物料'} · ${t?.materialName||''} / ${r.id} / ${r.values.sourceKind} / ${t?amount(t):'数量未提供'}`} aria-label={`${r.id} ${r.values.sourceKind}，查看物料风险明细`}>
  {visible.includes('material')&&<span className="risk-material"><b>{t?.materialId||String(r.need||'未关联物料')}</b> {t?.materialName||(!t?.materialId?'（运行问题）':'')}</span>}<strong>{r.id}</strong>{visible.includes('kind')&&<span className="risk-kind">{category}</span>}{visible.includes('quantity')&&<small>{t?amount(t):'未提供'}</small>}</button>
  <div className="equipment-track" style={{width:chartWidth,height,backgroundSize:`${chartWidth/count}px 100%`}}>
  {events.map((event,i)=>{const eventData=t?{...t,quantity:event.quantity===undefined?t.quantity:event.quantity}:undefined;const interval=eventSpan(event),point=interval.start===interval.end,left=(Math.max(start,interval.start)-start)/span*100,width=point?8:(Math.min(end,interval.end)-Math.max(start,interval.start))/span*chartWidth;
@@ -38,6 +39,6 @@ export function MaterialRiskGantt({rows,from,to,focusDay,onDay,density,onTask,on
  </div></div>;
  })}
  </div>
- {node&&<EquipmentNodeAnalysis api={api} identity={analysisIdentity} query={query} fingerprint={fingerprint} node={node} onClose={()=>setNode(undefined)} onDetails={()=>{setNode(undefined);const record=rows.find(r=>r.id===node.recordId);if(record)onOpen(record);}}/>}
+ {node&&<MaterialRiskDetails key={node.id} api={api} identity={analysisIdentity} tableIdentity={identity} query={query} fingerprint={fingerprint} node={node} onTask={onTask} preferenceScope={preferenceScope} onClose={()=>setNode(undefined)} onDetails={()=>{setNode(undefined);const record=rows.find(r=>r.id===node.recordId);if(record)onOpen(record);}}/>}
  </>;
 }
