@@ -27,3 +27,16 @@
 .result-occurrences{overflow:auto;max-height:280px;margin:5px 0;border:1px solid #d3e1e9}.result-occurrences table{min-width:510px;table-layout:auto}.result-occurrences th{background:#f3f7fa}.result-occurrences td,.result-occurrences th{padding:5px 7px}.result-occurrences td>span{font-size:11px;color:#6d8190}.result-occurrences button{margin-top:3px;text-align:left;color:#28648a;background:#fff}
 .input-workspace .result-empty{margin:0;padding:10px 12px;color:#617b8b}
 @media(max-width:700px){.result-basis dl{grid-template-columns:1fr;gap:3px}.result-metrics>div{flex-basis:45%}.result-summary-actions{margin-left:0}.result-summary-heading{align-items:flex-start}}
+.input-workspace .result-metrics{margin-top:8px}
+.input-workspace .workbook-result-summary .result-metric-link{display:inline;padding:0 2px;min-height:24px;border:0;border-radius:2px;background:transparent;color:#236585;font-size:14px;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.result-metric-link:hover{background:#dcecf5!important}.result-metric-link:focus-visible{outline:2px solid #15858e;outline-offset:2px}
+.result-dialog-backdrop{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;padding:16px;background:#18344766}
+.input-workspace .result-analysis-dialog{display:flex;flex-direction:column;width:min(1440px,100%);max-height:calc(100dvh - 32px);margin:0;box-shadow:0 12px 50px #15344650}
+.result-analysis-dialog>.result-summary-heading{flex:none}.result-analysis-dialog>.result-summary-heading>button{margin-left:auto}
+.result-analysis-body{overflow:auto;min-height:140px;overscroll-behavior:contain}
+.result-record-scopes{display:flex!important;gap:5px!important;flex-wrap:wrap!important;padding:8px 12px!important;margin:0!important;border-bottom:1px solid #dce8ee}
+.result-record-scopes button{background:#f3f8fa;color:#456d84}.input-workspace .result-record-scopes button[aria-pressed=true]{background:#245975;color:white;border-color:#245975}
+.input-workspace .result-scope-meaning{margin:0;padding:6px 12px;color:#6c8391;font-size:11px;line-height:1.5}
+.result-analysis-dialog>footer{display:flex;align-items:center;gap:8px;flex:none;padding:6px 12px;background:#f4f9fb;border-top:1px solid #d6e4eb}
+.result-analysis-dialog>footer>span{font-size:11px;color:#6c8391;margin-right:auto}
+@media(max-width:700px){.result-dialog-backdrop{padding:8px}.input-workspace .result-analysis-dialog{max-height:calc(100dvh - 16px)}.result-check-status{font-size:11px!important}.result-record-scopes{gap:3px!important}.result-record-scopes button{font-size:11px!important}}

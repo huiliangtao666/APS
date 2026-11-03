@@ -5,6 +5,10 @@ export type ResultCategory='delivery'|'material'|'resource'|'verification'|'othe
 export const resultCategories:Record<ResultCategory,string>={delivery:'需求与交付',material:'物料与供给',resource:'资源与工序',verification:'独立检查',other:'其他记录'};
 export type ResultEntry={need?:string;productId?:string;detail:string;source?:any;demand?:any;explanation?:FindingExplanation};
 export type ResultGroup={id:string;category:ResultCategory;kind:'结果异常'|'计算记录'|'检查问题';title:string;logic:string;action:string;entries:ResultEntry[];affected:number};
+export type ResultRecordScope='findings'|'shortages'|'outcomes'|'verification'|'all';
+export function resultGroupsForScope(groups:ResultGroup[],scope:ResultRecordScope){
+ return groups.filter(g=>scope==='all'||scope==='findings'&&g.id.startsWith('FINDING:')||scope==='shortages'&&g.id==='SHORTAGE'||scope==='outcomes'&&g.kind==='结果异常'||scope==='verification'&&g.kind==='检查问题');
+}
 export function filterResultGroups(groups:ResultGroup[],category:string,kind:string,query:string){
  const q=query.trim().toLowerCase();
  return groups.filter(g=>(category==='all'||g.category===category)&&(kind==='all'||g.kind===kind)).flatMap(g=>{
