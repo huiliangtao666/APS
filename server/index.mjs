@@ -4,7 +4,7 @@ import express from 'express';
 import { createLiteAppServer } from '@praetor/lite-app-server';
 import { createBusinessRouter } from './business.mjs';
 const __dirname=path.dirname(fileURLToPath(import.meta.url));
-const {app,listen,dataDir}=createLiteAppServer({port:3000,apiPort:4319,distDir:path.join(__dirname,'..','dist'),dataDir:process.env.PRAETOR_APP_DATA_DIR||path.resolve('validation-state'),uploadsDir:process.env.PRAETOR_APP_UPLOADS_DIR||path.resolve('validation-uploads')});
+const {app,listen,dataDir}=createLiteAppServer({port:3000,apiPort:4319,distDir:path.join(__dirname,'..','dist'),dataDir:process.env.PRAETOR_APP_DATA_DIR,uploadsDir:process.env.PRAETOR_APP_UPLOADS_DIR||path.resolve('validation-uploads')});
 app.use(express.json({limit:'20mb'}));
 app.use('/api',createBusinessRouter({dataDir,accessMode:'shared'}));
 listen();
