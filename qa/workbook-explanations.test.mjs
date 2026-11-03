@@ -29,6 +29,18 @@ test('actual-feed expiry records the rejected allocation before demand rollback;
  d.tables['期初库存'].find(l=>l['物料编号']==='MOCK-REM')['到期日']='3';
  const valid=calculateWorkbook(d,select);assert.equal(valid.demandResults[0].status,'scheduled');assert.equal(valid.findings.length,0);
 });
+test('newly manufactured semifinished supply expires at actual parent feed, with clean rollback and independent verification',()=>{
+ const d=input(),material=d.tables['物料主数据'].find(r=>r['物料编号']==='MOCK-REM');
+ material['物料来源']='制造';material['保质天数']='1';
+ d.tables['期初库存'].find(l=>l['物料编号']==='MOCK-REM')['当前数量']='0';
+ const route=d.tables['工艺路线'][0];d.tables['工艺路线'].push({...route,'路线工序编号':'CHILD-RS','成品编号':'MOCK-REM','工序编号':'CHILD-OP','工序顺序':'1','设备组编号':'CHILD-G','每批工装套数':'0','所需工装类型':'无专用工装'});
+ d.tables['设备与工装'].push({...d.tables['设备与工装'][0],'资源编号':'CHILD-E','资源组编号':'CHILD-G'});d.mapping.tool_pools['无专用工装']=[];
+ d.tables['停机安排'][0]['结束日']='3';
+ const before=JSON.stringify(d),p=calculateWorkbook(d,select),f=p.findings.find(f=>f.code==='MATERIAL_AT_ACTUAL_FEED');
+ assert.equal(p.demandResults[0].status,'unplanned');assert.equal(p.verification.status,'pass');assert.equal(p.tasks.length,0);assert.equal(p.allocations.length,0);
+ assert.equal(f.materialId,'MOCK-REM');assert.ok(f.evidence.supplyId.startsWith('production:'));assert.equal(f.evidence.actualFeed,3);assert.equal(f.evidence.ready,1.1);assert.equal(f.evidence.expiry,2.1);assert.equal(JSON.stringify(d),before);
+ material['保质天数']='3';const valid=calculateWorkbook(d,select);assert.equal(valid.demandResults[0].status,'scheduled');assert.equal(valid.verification.status,'pass');assert.ok(!valid.findings.some(f=>f.code==='MATERIAL_AT_ACTUAL_FEED'));
+});
 test('E2 with no generated tasks still has demand-scoped risks, readable rules and frozen route parameters',()=>{
  const d=input();d.tables['期初库存'].find(l=>l['物料编号']==='MOCK-REM')['到期日']='2';
  const p=calculateWorkbook(d,select),v=context(d,p);v.input.effectiveParameters={values:[{object:'MOCK-RS',field:'最大等待天数',value:'0'}]};

@@ -25,3 +25,27 @@ weight, missing maximum wait, explicit suspended P, and frozen workflow core
 checks (six tests) passed, as did the build. Before persistence, the actual R2
 input with repaired mapping passed both overall and Nov 1–30 scope readiness.
 This is task verification with simulation data, not real UAT acceptance.
+
+## Actual calculation follow-up
+
+The applied mapping also removes 40 obsolete supplementary semifinished route
+steps that duplicate routes now supplied by Excel, and rebinds 162 feed points
+to the matching Excel product/step identities. Source business table contents
+and all previous version entries/frozen runs were compared by hash and preserved.
+
+An actual v10 run was safely rejected by independent verification: two newly
+manufactured SF005 supplies had expired before their parent operation's eventual
+start. Actual-feed validation checked inventory/transit lots but skipped new
+production supplies because those do not live in the inventory lot array.
+The calculator now derives their availability/expiry from the final production
+step and the material's existing shelf life. An invalid candidate is rolled back
+with MATERIAL_AT_ACTUAL_FEED evidence; independent verification remains enforced.
+No shelf life, stock amount, waiting limit or capacity was loosened.
+
+The new manufactured-input regression checks rejection and full rollback,
+unchanged inputs, successful scheduling with an independently valid expiry,
+and passing independent verification. All 16 affected checks and the build passed.
+Read-only full-month calculation against the actual repaired input returned
+12 demand records, 9,982 kg, 3 scheduled / 9 unplanned, 65 tasks, and a passing
+independent check. The original failed run remains recorded; new results require
+a new frozen run and do not overwrite it.
