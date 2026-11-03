@@ -21,4 +21,6 @@
 
 官方隔离容器17项结果/图表检查及1项四入口检查通过（18项）；TypeScript、Vite、API与两个Worker构建通过。浏览器使用纯合成fixture，实际InputData入口核对顶部运行选择、结果页来源块删除、四项指标、六个视图单行筛选及原图表；错误4条/提醒18条分别进入total=4/18的弹窗。另核对960px区域保持单行，窄区不声称全部筛选同时可见；按需横向滚动。菜单展开测试不以空的合成候选代替真实候选数据验收。截图位于 evidence/result-layout，均为合成数据，不是真实业务UAT。
 
-部署、Issue与cleanup在完成后追加实际记录。
+产品提交 `121a72b` 已推送main并由官方app-restart --rebuild激活；verify-published返回HTML 200、2项初始资源通过；容器running，health up，restartCount=0。正式办公域名在本次代理浏览器入口返回网关401；有身份的正式页面业务验收未执行。浏览器展示检查为官方dev预览合成数据。
+
+cleanup：删除本任务验证副本及合成fixture，合计 5916825 bytes；原始上传、正式数据、平台dist和证据均保留。隔离验证已退出，lsof未发现本地验证副本打开进程；浏览器已离开fixture。待清理项0，详见 evidence/result-layout/cleanup.json。

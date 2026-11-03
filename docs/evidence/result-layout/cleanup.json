@@ -1,0 +1,27 @@
+{
+  "at": "2026-11-03T16:11:35.009300+00:00",
+  "items": [
+    {
+      "path": "temp/result-layout-validation",
+      "beforeBytes": 3409683,
+      "afterBytes": 0,
+      "releasedBytes": 3409683,
+      "reason": "本任务验证副本或纯合成fixture；验证已结束，浏览器已离开，可由保留的源码重建"
+    },
+    {
+      "path": "qa/demand-gantt-preview/fixture.json",
+      "beforeBytes": 2507142,
+      "afterBytes": 0,
+      "releasedBytes": 2507142,
+      "reason": "本任务验证副本或纯合成fixture；验证已结束，浏览器已离开，可由保留的源码重建"
+    }
+  ],
+  "releasedBytes": 5916825,
+  "preserved": [
+    "原始upload截图",
+    "全部本任务源码、QA生成器和截图证据",
+    "实际server/data、server/data-dev、validation-state",
+    "平台dist版本"
+  ],
+  "pending": []
+}

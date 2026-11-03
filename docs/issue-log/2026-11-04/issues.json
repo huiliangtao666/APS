@@ -1,0 +1,14 @@
+[
+  {
+    "event_key": "APS-USER-20261104-RESULT-PAGE-COMPACT",
+    "number": 145,
+    "url": "https://github.com/huiliangtao666/APS/issues/145",
+    "state": "closed",
+    "state_reason": "completed",
+    "closed_at": "2026-11-03T16:12:17Z",
+    "productSha": "121a72b",
+    "testsPassed": 18,
+    "verifiedAt": "2026-11-03T16:12:18.450249+00:00",
+    "originalScreenshot": "assets/scheduling-result-layout-original.png"
+  }
+]
