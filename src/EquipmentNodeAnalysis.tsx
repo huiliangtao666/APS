@@ -2,7 +2,7 @@ import {useEffect,useRef,useState} from 'react';
 import {sameQueryIdentity,type QueryIdentity,type QueryApi} from './QueryReportsTypes';
 import './EquipmentNodeAnalysis.css';
 
-export type GanttNode={id:string;kind:'task'|'wip'|'stop';resource:string;recordId?:string};
+export type GanttNode={id:string;kind:'task'|'wip'|'stop'|'risk';resource:string;recordId?:string};
 export function EquipmentNodeAnalysis({api,identity,query,fingerprint,node,onClose,onDetails}:{api:QueryApi;identity:QueryIdentity;query:object;fingerprint:string;node:GanttNode;onClose:()=>void;onDetails:()=>void}){
  const [data,setData]=useState<any>(),[error,setError]=useState(''),[position,setPosition]=useState(()=>({x:Math.max(12,(typeof window==='undefined'?1000:window.innerWidth)-660),y:110}));
  const drag=useRef<{x:number;y:number;left:number;top:number}>(),panel=useRef<HTMLElement>(null),close=useRef<HTMLButtonElement>(null),body=useRef<HTMLDivElement>(null);
@@ -37,6 +37,6 @@ export function EquipmentNodeAnalysis({api,identity,query,fingerprint,node,onClo
     </details>
    </>}
   </div>
-  <footer><span>只读冻结依据 · 点击其他节点可切换</span><button onClick={onDetails}>{node.kind==='task'?'查看任务明细与来源':'查看设备关联明细'}</button></footer>
+  <footer><span>只读冻结依据 · 点击其他节点可切换</span><button onClick={onDetails}>{node.kind==='task'?'查看任务明细与来源':node.kind==='risk'?'查看风险明细与来源':'查看设备关联明细'}</button></footer>
  </aside>;
 }

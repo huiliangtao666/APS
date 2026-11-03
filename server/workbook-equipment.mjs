@@ -4,6 +4,7 @@ import {effectiveBom,expandBom} from './query-reports/bom.mjs';
 import {selectionPredicate,changeSelection,candidatePage,searchText} from './query-reports/selections.mjs';
 import {minuteMode,minuteTime,knownMinuteStops,wipOccupations,eventPeak,unionMinutes,shiftWindows} from './workbook-minute.mjs';
 import {explainEquipmentNode} from './workbook-node-analysis.mjs';
+import {riskTimeline,explainRiskNode} from './workbook-risk-timeline.mjs';
 import {explainFinding,explainShortage} from '../src/lib/workbook-explanations.mjs';
 const rows=(d,t)=>d.tables?.[t]||[],error=(code,status=422)=>{throw Object.assign(Error(code),{code,status});};
 export const EQUIPMENT_VIEWS={E1:'设备甘特',E2:'需求交付',E3:'设备负荷',E4:'人员工装',E5:'物料风险',E6:'任务明细'};
@@ -82,12 +83,16 @@ function project(v,q){const date=n=>Number.isFinite(n)?dateAt(n,v.identity.dayZe
   }
  }
  if(q.view==='E5'){
-  const risk=(id,kind,r,values)=>rec(id,{sourceKind:kind,materialId:r.materialId??null,quantity:r.quantity??null,unit:r.unit??materials.get(r.materialId)?.['基础单位']??null,need:r.need??null,needDate:finite(r.needDay??r.feedDay)===null?null:date(Math.floor(r.needDay??r.feedDay)),taskId:r.taskId??null,productionId:r.source?.productionId??null,...values},{need:r.need,taskIds:r.taskId?[r.taskId]:[],refs:[r.source].filter(Boolean)});
+  const risk=(id,kind,r,values)=>rec(id,{sourceKind:kind,materialId:r.materialId??null,quantity:r.quantity??null,unit:r.unit??materials.get(r.materialId)?.['基础单位']??null,need:r.need??null,needDate:finite(r.needDay??r.feedDay)===null?null:date(Math.floor(r.needDay??r.feedDay)),taskId:r.taskId??null,productionId:r.source?.productionId??null,...values},{need:r.need,taskIds:r.taskId?[r.taskId]:[],refs:[r.source].filter(Boolean),timeline:riskTimeline(v,id.split(':')[0],r)});
   out=[...(p.shortages||[]).map(r=>risk('shortage:'+r.id,'真实净缺口',r,{conditional:null,meaning:'未排需求也保留真实缺口'})),...(p.findings||[]).map((r,i)=>risk('finding:'+i,'运行问题',r,{code:r.code,message:r.message,quantity:null,unit:null,meaning:'未测待料/损耗保持未知'})),...(p.allocations||[]).map((r,i)=>risk('allocation:'+i,r.conditional?'条件供给分配':'供给分配',r,{conditional:r.conditional===true,meaning:r.supplyId,supplyId:r.supplyId})),...(p.suggestions||[]).map((r,i)=>risk('suggestion:'+i,'参考采购建议（未采用非实物）',r,{conditional:true,meaning:'建议不自动下达，不回填供给',suggestionId:r.id??null,relationId:r.relationId??null,supplierId:r.supplierId??null,orderDate:finite(r.orderDay)===null?null:date(r.orderDay),availableDate:finite(r.availableDay)===null?null:date(r.availableDay),lateDays:r.lateDays??null,netGap:r.netGap??r.quantity??null}))].filter(r=>{
    const demand=p.demandResults.find(x=>x.id===r.need),source=rows(d,'每日需求').find(x=>x['需求编号']===r.need),material=r.values.materialId||demand?.productId;
    const eventDate=r.values.needDate,filterDate=eventDate||(source?date(Number(source['需求日'])):null);
    return (!material||c.scope.ids.has(material))&&(!r.need||c.matches('orderId',r.need))&&c.matches('status',demand?.status)&&(!filterDate||filterDate>=date(c.from)&&filterDate<date(c.to));
   });
+ }
+ if(q.view==='E5'&&q.riskScope!==undefined){
+  if(!['risk','supply','all'].includes(q.riskScope))error('INVALID_RISK_SCOPE');
+  if(q.riskScope!=='all')out=out.filter(r=>q.riskScope==='risk'?r.id.startsWith('shortage:')||r.id.startsWith('finding:'):r.id.startsWith('allocation:')||r.id.startsWith('suggestion:'));
  }
  if(empty)out=[];
  if(out.length>50000)error('PROJECTION_LIMIT',413);
@@ -141,6 +146,7 @@ export const equipmentDomain={
   if(Number.isInteger(day))for(const sheet of ['工厂日历','生产班次'])for(const r of rows(v.input,sheet))if(sheet==='工厂日历'?Number(r['日序'])===day:Math.floor(Number(r['开始分钟偏移'])/1440)===day)sourceRows.push(sourceRef(sheet,r,r['班次日历编号']||String(day)));
   let values=[];const tab=q.table||'record';
   if(tab==='analysis'){
+   if(query.view==='E5')return {queryFingerprint:fp,analysis:explainRiskNode(v,{record,node:q.node})};
    if(!['E1','E2'].includes(query.view))error('NODE_ANALYSIS_REQUIRES_GANTT');
    let nodeRecord=record;
    if(query.view==='E2'){

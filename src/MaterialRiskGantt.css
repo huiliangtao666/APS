@@ -1,0 +1,21 @@
+.risk-gantt .equipment-axis,.risk-gantt .equipment-resource{grid-template-columns:430px max-content}
+.risk-gantt .equipment-axis>b,.risk-gantt .equipment-name{width:430px;min-width:430px}
+.risk-gantt .risk-name{gap:6px;justify-content:flex-start}
+.risk-gantt .risk-material{flex:1;min-width:0;font-size:10px}.risk-material b{font-weight:600}
+.risk-gantt .risk-name>strong{width:92px;overflow:hidden;text-overflow:ellipsis}
+.risk-gantt .risk-kind{width:60px;flex:none;font-size:10px}.risk-gantt .risk-name>small{max-width:90px;min-width:70px;text-align:right;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.risk-related .equipment-name{box-shadow:inset 3px 0 #7c3aed}
+.app-shell .input-workspace .risk-gantt .risk-node,.risk-gantt .risk-node{position:absolute;min-height:0;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;border-radius:2px;padding:0 3px;font-size:10px;line-height:1.1;text-align:center;z-index:3}
+.app-shell .input-workspace .risk-gantt .risk-gap,.risk-gantt .risk-gap,.risk-gap-key{background:#fee2e2;color:#b42318;border:1px solid #f3a0a0}
+.app-shell .input-workspace .risk-gantt .risk-issue,.risk-gantt .risk-issue,.risk-issue-key{background:#ffead5;color:#9a3412;border:1px solid #f7bb83}
+.app-shell .input-workspace .risk-gantt .risk-conditional,.risk-gantt .risk-conditional,.risk-conditional-key{background:#fef3c7;color:#92400e;border:1px solid #d6ae44}
+.app-shell .input-workspace .risk-gantt .risk-supply,.risk-gantt .risk-supply,.risk-supply-key{background:#e1f3ea;color:#166534;border:1px solid #91bea2}
+.app-shell .input-workspace .risk-gantt .risk-reference,.risk-gantt .risk-reference,.risk-reference-key{background:repeating-linear-gradient(135deg,#fef9ec 0,#fef9ec 4px,#f8e7c7 4px,#f8e7c7 6px);color:#896123;border:1px dashed #b78942}
+.app-shell .input-workspace .risk-gantt .risk-point{padding:0;background:transparent;border:0;overflow:visible;line-height:12px}
+.app-shell .input-workspace .risk-gantt .risk-undated{position:absolute;left:6px;top:50%;transform:translateY(-50%);max-width:calc(100% - 12px);padding:0 3px;min-height:0;line-height:18px;border:0;background:transparent;color:#8c6133;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.risk-scope{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-size:12px}
+
+.app-shell .qr-workspace .qr-filter-line>.risk-scope{display:inline-flex;flex-direction:row;align-items:center;flex:none;gap:4px;margin:0;font-size:12px;white-space:nowrap}
+.app-shell .qr-workspace .risk-scope select{width:142px;font-size:12px}
+.risk-gantt{height:auto;min-height:0;max-height:calc(100vh - 345px)}
+.equipment-focus .risk-gantt{height:auto;max-height:calc(100vh - 210px)}
