@@ -21,3 +21,4 @@
 .equipment-focus .risk-gantt{height:auto;max-height:calc(100vh - 210px)}
 .risk-reference-group{border-top:1px solid #dce8ee;padding-top:6px}.risk-reference-group>summary{font-size:12px;font-weight:600;color:#31586f;cursor:pointer}
 .material-risk-details .risk-relation-note,.material-risk-details .risk-reference-group>p{color:#758c9d;font-size:11px}.material-risk-details>footer{flex-wrap:wrap}
+.material-risk-details section.task-detail-group .qr-scroll td:last-child{white-space:normal;min-width:130px;max-width:190px}
