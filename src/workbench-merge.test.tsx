@@ -57,10 +57,10 @@ test('personnel and tool heatmap preserves each frozen daily value and separates
 });
 test('personnel chart distinguishes known zero, unknown values, missing capacity and unloaded page cells',()=>{
  const html=heatHtml([heatRow('ZERO',1,'人',0,5),heatRow('UNKNOWN',1,'人',null,5),heatRow('NOBASE',1,'实体套',2,null)]);
- const zero=heatButton(html,'ZERO / 2026-11-01 / 并发峰值：0 人');assert.ok(zero.includes('>0</button>'));assert.ok(!zero.includes('equipment-unknown'));
+ const zero=heatButton(html,'ZERO / 2026-11-01 / 并发峰值：0 人');assert.ok(zero.includes('>0/5</button>'));assert.ok(!zero.includes('equipment-unknown'));
  const unknown=heatButton(html,'UNKNOWN / 2026-11-01 / 并发峰值：未提供');assert.ok(unknown.includes('equipment-unknown'));assert.ok(!unknown.includes('disabled'));
  const unloaded=heatButton(html,'ZERO / 2026-11-02 / 并发峰值：本页未加载');assert.ok(unloaded.includes('disabled'));assert.ok(unloaded.includes('equipment-unknown'));
- const noBase=heatButton(html,'NOBASE / 2026-11-01 / 并发峰值：2 实体套');assert.ok(!noBase.includes('style='));assert.ok(noBase.includes('可用数量：未提供'));
+ const noBase=heatButton(html,'NOBASE / 2026-11-01 / 并发峰值：2 实体套');assert.ok(noBase.includes('>2/—</button>'));assert.ok(noBase.includes('personnel-load-unknown'));assert.ok(noBase.includes('可用数量：未提供'));
 });
 test('personnel chart warns about overcapacity including zero capacity and preserves negative remaining quantity',()=>{
  const html=heatHtml([heatRow('CREW',1,'人',6,5),heatRow('TOOL',1,'实体套',1,0),heatRow('EMPTY',1,'实体套',0,0)]);

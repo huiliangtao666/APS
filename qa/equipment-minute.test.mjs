@@ -251,3 +251,17 @@ test('E2 timeline paginates large single-demand chains and rejects hidden, inval
  assert.throws(()=>equipmentDomain.detail(v,{query:q,queryFingerprint:'stale',table:'timeline',orderIds:['DE1']}),/QUERY_CHANGED/);
  assert.throws(()=>equipmentDomain.detail(v,{query:q,queryFingerprint:page.queryFingerprint,table:'timeline',orderIds:['DE1'],offset:-1}),/INVALID_PAGE/);
 });
+
+test('E4 complete matrix keeps all dates and counts real task IDs once per resource, excluding WIP reservations',()=>{
+ const v=equipmentExample(),before=hash(v),query=equipmentQuery('E4',{toDateInclusive:'2026-11-02'}),page=equipmentDomain.query(v,query);
+ const matrix=equipmentDomain.detail(v,{query,queryFingerprint:page.queryFingerprint,table:'personnel-matrix'});
+ assert.equal(matrix.total,3);for(const r of matrix.resources)assert.equal(r.records.length,2);
+ assert.equal(matrix.resources.find(r=>r.id==='C').taskCount,2);assert.equal(matrix.resources.find(r=>r.id==='TL1').taskCount,2);assert.equal(matrix.resources.find(r=>r.id==='TL2').taskCount,0);
+ assert.equal(matrix.resources.find(r=>r.id==='C').records.find(r=>r.values.day===1).values.peak,4);
+ assert.throws(()=>equipmentDomain.detail(v,{query,queryFingerprint:'stale',table:'personnel-matrix'}),/QUERY_CHANGED/);assert.throws(()=>equipmentDomain.detail(v,{query,queryFingerprint:page.queryFingerprint,table:'personnel-matrix',offset:-1}),/INVALID_PAGE/);assert.equal(hash(v),before);
+});
+test('E4 matrix pages large resource lists without splitting a resource date row',()=>{
+ const v=equipmentExample();v.input.mapping.wip_remaining=[];v.run.result.tasks=[];v.input.tables['设备与工装']=[];v.input.tables['班组资源']=Array.from({length:205},(_,i)=>({'班组编号':'C'+i,'班组名称':'组'+i,'每班可用人数':'20'}));
+ const query=equipmentQuery('E4',{toDateInclusive:'2026-11-14'}),fp=equipmentDomain.query(v,query).queryFingerprint,seen=new Set();let offset=0;
+ do{const p=equipmentDomain.detail(v,{query,queryFingerprint:fp,table:'personnel-matrix',offset});assert.equal(p.total,205);assert.ok(Buffer.byteLength(JSON.stringify(p))<181000);for(const r of p.resources){assert.ok(!seen.has(r.id));seen.add(r.id);assert.equal(r.records.length,14);assert.equal(r.taskCount,0);}if(p.nextOffset===null)break;assert.ok(p.nextOffset>offset);offset=p.nextOffset;}while(true);assert.equal(seen.size,205);
+});

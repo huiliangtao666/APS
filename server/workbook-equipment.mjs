@@ -119,6 +119,14 @@ export const equipmentDomain={
   const query=q.query||q,{records,fp,a,c}=checked(v,{...query,queryFingerprint:q.queryFingerprint});
   // Gantt tasks are paged separately: a large demand must not inflate one
   // summary record beyond the transport limit or silently lose its task chain.
+  if(q.table==='personnel-matrix'){
+   if(query.view!=='E4')error('MATRIX_REQUIRES_PERSONNEL');
+   const offset=q.offset??0;if(!Number.isSafeInteger(offset)||offset<0)error('INVALID_PAGE');
+   const groups=new Map();for(const row of records){const id=row.values.resource;if(!groups.has(id))groups.set(id,[]);groups.get(id).push(row);}
+   const real=new Set(a.tasks.map(t=>t.id)),matrix=[...groups].map(([id,cells])=>{const ids=new Set(cells.flatMap(r=>r.taskIds||[]));return {id,taskCount:[...ids].filter(id=>real.has(id)).length,records:cells.map(r=>({id:r.id,values:r.values}))};});
+   const part=[];let bytes=0;for(const row of matrix.slice(offset,offset+100)){const n=Buffer.byteLength(JSON.stringify(row));if(n>120000)error('DETAIL_RECORD_LIMIT',413);if(bytes+n>180000)break;part.push(row);bytes+=n;}
+   return {queryFingerprint:fp,resources:part,total:matrix.length,nextOffset:offset+part.length<matrix.length?offset+part.length:null};
+  }
   if(q.table==='timeline'){
    if(query.view!=='E2')error('TIMELINE_REQUIRES_DEMAND');
    if(!Array.isArray(q.orderIds)||q.orderIds.length>500||q.orderIds.some(id=>typeof id!=='string'||!records.some(r=>r.id===id)))error('RECORD_NOT_FOUND',404);

@@ -1,0 +1,25 @@
+.personnel-chart .equipment-view-toolbar strong{display:flex;align-items:center;gap:8px}.personnel-chart .equipment-view-toolbar strong small{font-size:11px;font-weight:400;color:#71899b;white-space:nowrap}
+.personnel-chart .personnel-matrix{margin:4px 0;max-height:calc(100vh - 345px);height:auto;overflow:auto}
+.equipment-focus .personnel-chart .personnel-matrix{max-height:calc(100vh - 210px)}
+.personnel-matrix table{width:100%;table-layout:fixed;font-variant-numeric:tabular-nums}
+.app-shell .input-workspace .personnel-matrix tr>th:first-child,.personnel-matrix tr>th:first-child{width:340px;min-width:340px;max-width:340px;padding:0 6px;vertical-align:middle;z-index:4}
+.personnel-resource-head,.personnel-resource-meta{display:grid;align-items:center;gap:5px;white-space:nowrap;font-size:10px;line-height:1.2}
+.personnel-resource-head{color:#658298;font-weight:500}
+.personnel-resource-meta{font-weight:400}.personnel-resource-meta>span,.personnel-resource-meta>strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.personnel-resource-meta>strong{font-size:10px;font-weight:500;color:#7992a4}.personnel-resource-name{color:#355f7b}.personnel-resource-available,.personnel-resource-count{text-align:right}
+.personnel-matrix th,.personnel-matrix td{padding:0;min-width:44px;border-color:#e0e9ef}
+.app-shell .input-workspace .personnel-matrix thead th button{width:100%;min-height:0;height:42px;padding:3px 0;border:0;border-radius:0;background:transparent;color:#65869b;font-size:11px;line-height:1.3}
+.app-shell .input-workspace .personnel-matrix thead th small{display:block;margin:2px 0 0;font-size:9px;font-weight:400;color:inherit}
+.personnel-matrix thead th{background:#f7fafc}.personnel-matrix thead th.personnel-weekend{background:#eaf3fa}
+.app-shell .input-workspace .personnel-matrix th.personnel-active-day{background:#208e93}
+.app-shell .input-workspace .personnel-matrix th.personnel-active-day button{color:#fff}
+.app-shell .input-workspace .personnel-matrix .personnel-cell{display:block;width:100%;min-height:0;padding:0 2px;border:0;border-radius:0;font-size:11px;line-height:1.2;color:#42677f;white-space:nowrap;box-shadow:none;background:#f5f7f9}
+.app-shell .input-workspace .personnel-matrix .personnel-load-idle,.app-shell .input-workspace .personnel-matrix .personnel-load-low,.personnel-low-key{background:#edf7f1}
+.app-shell .input-workspace .personnel-matrix .personnel-load-medium,.personnel-medium-key{background:#fff0d9}
+.app-shell .input-workspace .personnel-matrix .personnel-load-high,.personnel-high-key{background:#deedf8}
+.app-shell .input-workspace .personnel-matrix .personnel-load-over,.personnel-over-key{background:#fbd5d5;color:#b64444}
+.app-shell .input-workspace .personnel-matrix .equipment-unknown{background:repeating-linear-gradient(135deg,#f4f6f8 0,#f4f6f8 4px,#e4e9ee 4px,#e4e9ee 6px);color:#7a8d9b}
+.personnel-matrix td.personnel-active-day{box-shadow:inset 1px 0 #269da3,inset -1px 0 #269da3}.personnel-matrix td.personnel-active-day .personnel-cell{box-shadow:inset 0 0 0 1px #269da3}
+.app-shell .input-workspace .personnel-matrix .personnel-cell-selected{outline:2px solid #187a83;outline-offset:-2px}
+.personnel-matrix button:focus-visible{outline:2px solid #176a76;outline-offset:-2px}
+.personnel-legend{margin:3px 0}.personnel-legend i{border-color:#c2d5dd}
+.app-shell .input-workspace .personnel-matrix td.personnel-active-day .personnel-cell{box-shadow:inset 0 0 0 1px #269da3}
