@@ -8,7 +8,7 @@ export function QueryColumns({columns,value,onChange}:{columns:QueryColumn[];val
 export function QueryMultiselect({api,identity,view,field,label,value,onChange,query}:{api:QueryApi;identity:QueryIdentity;view:string;field:string;label:string;value:QuerySelection;onChange:(v:QuerySelection)=>void;query?:object}) {
   const [search,setSearch]=useState(''),[offset,setOffset]=useState(0),[page,setPage]=useState<QueryOptions>(),[error,setError]=useState(''),[open,setOpen]=useState(false);
   const sequence=useRef(0),key=JSON.stringify([value,query]);
-  useEffect(()=>{const seq=++sequence.current;setPage(undefined);setError('');const timer=window.setTimeout(()=>{
+  useEffect(()=>{const seq=++sequence.current;setPage(undefined);setError('');if(!open)return;const timer=window.setTimeout(()=>{
     api(queryUrl('options',{identity,view,field,search,offset,limit:100,query:query||{view,fromDate:identity.dayZero,toDateInclusive:identity.dayZero}})).then(r=>{
       if(seq!==sequence.current)return;
       if(!sameQueryIdentity(identity,r.identity))throw Error('筛选候选版本已变化，请重新进入查询');
@@ -22,13 +22,14 @@ export function QueryMultiselect({api,identity,view,field,label,value,onChange,q
     }).catch(e=>{if(seq===sequence.current)setError(e.message);});
   }
   return <details className="qr-select" onToggle={e=>setOpen(e.currentTarget.open)}>
-    <summary>{label} · {page?`${page.selectedTotal}/${page.total} 项`:value.mode==='ALL'&&!value.exclude?.length?'全部（展开显示数量）':value.mode==='NONE'?'0 项':'已调整'}</summary>
-    <label>搜索{label}编号 / 名称<input value={search} maxLength={200} onChange={e=>{setSearch(e.target.value);setOffset(0);}}/></label>
-    <div className="qr-actions"><button type="button" onClick={()=>operation({kind:'searchAll',query:search})}>全选搜索结果</button><button type="button" onClick={()=>operation({kind:'none'})}>清空（0项）</button><button type="button" onClick={()=>operation({kind:'restore'})}>恢复不限</button></div>
-    <p>搜索保留隐藏选择；全选搜索覆盖全部匹配候选。</p>
-    {error&&<p role="alert">{error}</p>}
-    {!page&&!error&&<p role="status">{open?'正在读取当前版本全部数量…':'展开后读取数量'}</p>}
-    {page&&<><div className="qr-option-list">{page.items.map(o=><label key={o.id}><input type="checkbox" checked={o.selected} onChange={e=>operation({kind:'toggle',id:o.id,checked:e.target.checked})}/><span>{o.label}</span></label>)}</div><div className="qr-actions"><button type="button" disabled={!offset} onClick={()=>setOffset(Math.max(0,offset-100))}>前100项</button><span>候选 {page.total?offset+1:0}–{offset+page.items.length} / {page.matched}</span><button type="button" disabled={page.nextOffset===null} onClick={()=>setOffset(page.nextOffset!)}>后100项</button></div></>}
+    <summary><span>{label}</span><b>{open&&page?`${page.selectedTotal}/${page.total}`:value.mode==='ALL'&&!value.exclude?.length?'全部':value.mode==='NONE'?'0 项':'已筛选'}</b><span aria-hidden="true">⌄</span></summary>
+    {open&&<div className="qr-select-panel">
+      <label className="qr-select-search"><span className="sr-only">搜索{label}编号或名称</span><input aria-label={'搜索'+label+'编号或名称'} placeholder="搜索编号或名称" value={search} maxLength={200} onChange={e=>{setSearch(e.target.value);setOffset(0);}}/></label>
+      <div className="qr-select-actions"><button type="button" onClick={()=>operation({kind:'searchAll',query:search})}>全选匹配</button><button type="button" onClick={()=>operation({kind:'none'})}>清空</button><button type="button" onClick={()=>operation({kind:'restore'})}>恢复不限</button></div>
+      {error&&<p role="alert">{error}</p>}
+      {!page&&!error&&<p role="status">正在读取候选…</p>}
+      {page&&<><div className="qr-option-list">{page.items.map(o=><label key={o.id}><input type="checkbox" checked={o.selected} onChange={e=>operation({kind:'toggle',id:o.id,checked:e.target.checked})}/><span>{o.label}</span></label>)}</div><div className="qr-select-pager"><button type="button" disabled={!offset} onClick={()=>setOffset(Math.max(0,offset-100))}>上一页</button><span>{page.total?offset+1:0}–{offset+page.items.length} / {page.matched}</span><button type="button" disabled={page.nextOffset===null} onClick={()=>setOffset(page.nextOffset!)}>下一页</button></div></>}
+    </div>}
   </details>;
 }
 

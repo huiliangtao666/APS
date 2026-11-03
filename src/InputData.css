@@ -65,3 +65,53 @@ main:has(.input-workspace) .hero-source{display:none}
 .input-workspace .equipment-schedule{max-width:none;margin:0;padding:12px}
 @media(max-width:760px){main:has(.input-workspace){padding:12px}.input-workspace .workbook-feature-nav{flex-wrap:nowrap}.workbook-feature-nav button{flex:none}.input-workspace .workbook-steps{grid-template-columns:repeat(3,minmax(0,1fr))}main:has(.input-workspace) .hero-source{display:none}}
 @media(max-width:560px){.input-workspace .workbook-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Shared compact operation zones for every Excel workbench page. */
+.input-workspace .workbook-journey{display:flex;align-items:center;gap:9px;padding:6px 10px;min-width:0}
+.input-workspace .workbook-journey h2{flex:none;margin:0;font-size:13px;white-space:nowrap}
+.input-workspace .workbook-steps{display:flex;flex:1;min-width:0;gap:4px;margin:0;overflow-x:auto;flex-wrap:nowrap}
+.input-workspace .workbook-steps button{flex:1 0 auto;min-height:32px;padding:4px 8px;font-size:12px;white-space:nowrap}
+.input-workspace .workbook-status-key{flex:none;padding:0;font-size:11px;position:relative}
+.input-workspace .workbook-status-key[open] p{position:absolute;z-index:8;right:0;top:100%;width:min(390px,80vw);padding:10px;background:#fff;border:1px solid #d5e1ea;box-shadow:0 8px 22px #1b365324;border-radius:5px}
+.input-workspace .workbook-source-panel>.input-actions{display:flex;align-items:center;flex-wrap:nowrap;gap:8px;margin:0;min-width:0;overflow-x:auto}
+.input-workspace .workbook-source-panel>.input-actions>*{flex:none;white-space:nowrap}
+.input-workspace .workbook-source-panel>.input-actions label{display:flex;align-items:center;gap:5px}
+.input-workspace .workbook-source-panel>.input-actions select{max-width:260px;min-width:170px}
+.input-workspace .workbook-data-page{margin-top:9px;padding-top:9px}
+.input-workspace .workbook-data-page>nav{display:flex;align-items:center;margin:5px 0;overflow-x:auto;flex-wrap:nowrap}
+.input-workspace .workbook-data-page>.input-actions,.input-workspace .parameter-panel>.input-actions{display:flex;align-items:center;flex-wrap:nowrap;gap:6px;margin:7px 0;overflow-x:auto;min-height:42px}
+.input-workspace .workbook-data-page>.input-actions>*,.input-workspace .parameter-panel>.input-actions>*{flex:none;white-space:nowrap}
+.input-workspace .workbook-data-page>.input-actions label,.input-workspace .parameter-panel>.input-actions label{display:flex;align-items:center;gap:5px}
+.input-workspace .workbook-data-page>.input-actions input{width:210px}
+.input-workspace .parameter-tabs{flex-wrap:nowrap;overflow-x:auto;margin:5px 0;padding:2px 0}
+.input-workspace .parameter-tabs button{flex:none;padding:6px 9px}
+.input-workspace .parameter-panel>p:first-of-type,.input-workspace .workbook-data-page>.workbook-page-hint{font-size:11px;line-height:1.4;margin:2px 0 5px}
+.input-workspace .workbook-range-fields{display:flex;align-items:center;flex-wrap:nowrap;gap:6px;padding:7px;margin:7px 0;overflow-x:auto}
+.input-workspace .workbook-range-fields label{display:flex;align-items:center;flex:none;gap:5px;white-space:nowrap}
+.input-workspace .workbook-range-fields input{width:90px;min-width:60px}
+.input-workspace .workbook-range-fields label:last-child input{width:165px}
+.input-workspace .workbook-range-actions,.input-workspace .workbook-run-action{display:flex;align-items:center;flex-wrap:nowrap;gap:7px;margin:5px 0;padding:6px;overflow-x:auto}
+.input-workspace .workbook-range-actions>*,.input-workspace .workbook-run-action>*{flex:none}
+.input-workspace .workbook-run-action button{min-height:34px}
+.input-workspace .workbook-import-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.input-workspace .workbook-import-cards .panel{padding:10px 12px}
+.input-workspace .workbook-import-cards .panel h3{margin:0 0 4px}
+.input-workspace .workbook-import-cards .panel>p{font-size:11px;line-height:1.4;margin:3px 0}
+.input-workspace .workbook-import-cards .panel>button{margin:4px 5px 4px 0}
+.input-workspace .workbook-run-view nav{flex-wrap:nowrap;overflow-x:auto;gap:4px}
+.input-workspace .workbook-run-view nav button{flex:none;white-space:nowrap}
+@media(max-width:860px){.input-workspace .workbook-import-cards{grid-template-columns:1fr}.input-workspace .workbook-journey{overflow-x:auto}.input-workspace .workbook-steps button{flex:none}}
+.input-workspace button{border:1px solid #cbd7e3;border-radius:5px;background:#fff;color:#244b68;padding:6px 9px}
+.input-workspace button.primary,.input-workspace .workbook-feature-nav button[aria-current=page],.input-workspace .workbook-steps button[aria-current=step]{background:#194e77;border-color:#194e77;color:#fff}
+.input-workspace button:disabled{opacity:.48}
+.input-workspace .workbook-import-cards .panel>button:not(:disabled):first-of-type{background:#194e77;border-color:#194e77;color:#fff}
+.input-workspace .workbook-import-help{display:inline-block;float:right;padding:0;margin-top:-24px;color:#577186;font-size:11px}
+.input-workspace .workbook-import-help[open]{float:none;display:block;margin:0 0 4px}
+.input-workspace .workbook-import-help p{margin:4px 0 6px;line-height:1.5}
+.input-workspace .workbook-import-cards input[type=file]{max-width:100%;padding:5px}
+.input-workspace .workbook-import-cards .panel>p[role=status]{color:#225d76;font-weight:600}
+.input-workspace .workbook-import-cards .panel>label{display:inline-flex;align-items:center;gap:5px;vertical-align:middle;width:calc(50% - 5px);min-width:0;margin:4px 5px 4px 0;white-space:nowrap}
+.input-workspace .workbook-import-cards .panel>label select{flex:1;min-width:0}
+.input-workspace .workbook-import-actionline{display:flex;align-items:center;gap:5px;min-width:0;overflow-x:auto;margin:6px 0}
+.input-workspace .workbook-import-actionline input[type=file]{flex:1 1 180px;min-width:150px}
+.input-workspace .workbook-import-actionline button{flex:none;white-space:nowrap}
+.input-workspace .workbook-import-actionline button:first-of-type:not(:disabled){background:#194e77;border-color:#194e77;color:#fff}

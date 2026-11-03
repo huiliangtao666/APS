@@ -15,3 +15,24 @@
 .toast>span{min-width:0;white-space:pre-wrap;overflow-wrap:anywhere}
 .toast button{flex-shrink:0;min-width:32px;min-height:32px;padding:0;line-height:1}
 @media(max-width:650px){.toast{top:12px;right:12px;max-width:calc(100vw - 24px)}}
+/* Application-wide compact shell; keep one operation in one visual cell. */
+.topbar{height:52px;padding:0 clamp(12px,2vw,30px);gap:9px}
+.brandmark{width:30px;height:30px;border-radius:7px;font-size:12px}
+.brand{min-width:0}.brand span{display:none}
+.topbar nav{margin-left:8px}.topbar nav button{padding:7px 10px}
+main{max-width:none;padding:14px clamp(12px,2vw,30px) 20px}
+.hero{align-items:center;margin:0 0 10px;gap:12px}
+.hero .eyebrow{display:none}.hero h1{font-size:19px;margin:0 0 2px}.hero .sub{font-size:11px}
+.hero-source{display:none}
+.panel{padding:12px 14px;margin-bottom:9px;border-radius:6px;box-shadow:none}
+.panel-head{align-items:center;margin-bottom:9px}
+.panel h2{font-size:15px}
+.input-workspace .panel,.equipment-schedule{box-shadow:none}
+.equipment-schedule{padding:9px 10px;border-radius:6px}
+.equipment-schedule nav{flex-wrap:nowrap;overflow-x:auto;gap:3px;margin:6px 0}
+.equipment-schedule nav button{white-space:nowrap;padding:6px 10px}
+.equipment-schedule .qr-result-bar{margin:6px 0}
+.equipment-schedule .qr-actions{margin:5px 0;gap:5px}
+.equipment-schedule .equipment-gantt,.equipment-schedule .equipment-heatmap{margin:6px 0}
+.equipment-schedule .equipment-selected-task{flex-wrap:nowrap;overflow-x:auto;padding:6px 8px}
+@media(max-width:650px){.topbar{min-height:48px;height:auto}.hero h1{font-size:17px}.panel{padding:10px}.equipment-schedule .equipment-selected-task{flex-wrap:wrap}}
