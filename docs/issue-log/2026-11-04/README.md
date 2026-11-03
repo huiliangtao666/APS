@@ -7,3 +7,9 @@
 | [#145](https://github.com/huiliangtao666/APS/issues/145) | 排程结果页标题、顶部运行选择、紧凑指标及六视图单行筛选 | Closed / completed | main产品提交121a72b；18项任务级检查通过并重新构建 |
 
 核对时间（UTC）：2026-11-03T16:12:18.450249+00:00。合成页面检查不代表真实业务UAT通过。待批准或未实施的其他CR保留原状态。
+
+## 后续追加
+
+- [#148 生产排程Ontology三层HTML示例](https://github.com/huiliangtao666/APS/issues/148) — Closed / completed；独立HTML生成，结构、算术、浏览器及保存/导出检查通过。交付范围为示例文件，不是应用引擎改造。
+
+本日索引累计2条；原始参考HTML与交付HTML均未上传公开仓库。

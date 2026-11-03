@@ -10,5 +10,17 @@
     "testsPassed": 18,
     "verifiedAt": "2026-11-03T16:12:18.450249+00:00",
     "originalScreenshot": "assets/scheduling-result-layout-original.png"
+  },
+  {
+    "event_key": "APS-USER-20261104-ONTOLOGY-HTML-EXAMPLE",
+    "number": 148,
+    "url": "https://github.com/huiliangtao666/APS/issues/148",
+    "state": "closed",
+    "state_reason": "completed",
+    "closed_at": "2026-11-03T16:44:36Z",
+    "deliverable": "APS_生产排程_Ontology_三层示例_v1.html",
+    "sha256": "22f979f49df62faa1f9e9ca99efa0c40fce84eb3e3c2dbfb3624c94461b5385d",
+    "bytes": 171169,
+    "scope": "HTML示例交付；非应用功能实现或真实业务UAT"
   }
 ]
