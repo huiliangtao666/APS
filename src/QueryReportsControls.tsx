@@ -1,4 +1,4 @@
-import {useEffect,useRef,useState} from 'react';
+import {useEffect,useRef,useState,type ReactNode} from 'react';
 import {queryUrl,sameQueryIdentity,queryValue,type QueryApi,type QueryColumn,type QueryIdentity,type QueryOptions,type QueryRecord,type QuerySelection} from './QueryReportsTypes';
 
 export function QueryColumns({columns,value,onChange}:{columns:QueryColumn[];value:string[];onChange:(v:string[])=>void}) {
@@ -33,7 +33,7 @@ export function QueryMultiselect({api,identity,view,field,label,value,onChange,q
   </details>;
 }
 
-export function QueryTable({id,columns,records,selected,onSelected,onOpen,sort,direction,onSort,onVisible,identity,onLong}:{id:string;identity?:QueryIdentity;onLong?:(id:string,field:string)=>void;columns:QueryColumn[];records:QueryRecord[];selected?:string[];onSelected?:(v:string[])=>void;onOpen?:(r:QueryRecord)=>void;sort?:string;direction?:string;onSort?:(key:string)=>void;onVisible?:(keys:string[])=>void}) {
+export function QueryTable({id,columns,records,selected,onSelected,onOpen,sort,direction,onSort,onVisible,identity,onLong,header}:{id:string;identity?:QueryIdentity;header?:ReactNode;onLong?:(id:string,field:string)=>void;columns:QueryColumn[];records:QueryRecord[];selected?:string[];onSelected?:(v:string[])=>void;onOpen?:(r:QueryRecord)=>void;sort?:string;direction?:string;onSort?:(key:string)=>void;onVisible?:(keys:string[])=>void}) {
   const prefKey='aps-query-columns:r1:'+id;
   const [visible,setVisible]=useState<string[]>(()=>{
     try{const a=JSON.parse(localStorage.getItem(prefKey)||'null');if(Array.isArray(a))return columns.filter(c=>c.fixed||a.includes(c.key)).map(c=>c.key);}catch{}
@@ -45,7 +45,7 @@ export function QueryTable({id,columns,records,selected,onSelected,onOpen,sort,d
   const shown=columns.filter(c=>c.fixed||visible.includes(c.key));
   const visibleKey=shown.map(c=>c.key).join('|');
   useEffect(()=>onVisible?.(shown.map(c=>c.key)),[visibleKey]);
-  return <><QueryColumns columns={columns} value={shown.map(c=>c.key)} onChange={save}/><div className="qr-scroll"><table><thead><tr>{onSelected&&<th>选择</th>}{shown.map(c=><th key={c.key}>{onSort?<button onClick={()=>onSort(c.key)} aria-label={'按'+c.label+'排序'}>{c.label}{sort===c.key?(direction==='desc'?' ↓':' ↑'):''}</button>:c.label}</th>)}</tr></thead><tbody>{records.map(r=><tr key={r.id}>{onSelected&&<td><input type="checkbox" aria-label={'选择 '+r.id} checked={selected?.includes(r.id)||false} onChange={e=>onSelected(e.target.checked?[...(selected||[]),r.id]:(selected||[]).filter(k=>k!==r.id))}/></td>}{shown.map((c,i)=><td key={c.key}>{(r.values[c.key] as any)?.longValue&&onLong?<button onClick={()=>onLong(r.id,c.key)}>查看完整长值（{String((r.values[c.key] as any).bytes)}字节）</button>:onOpen&&(i===0||c.fixed)?<button className="qr-link" onClick={()=>onOpen(r)}>{queryValue(r.values[c.key],c,identity)}</button>:queryValue(r.values[c.key],c,identity)}</td>)}</tr>)}</tbody></table></div></>;
+  return <><div className="qr-table-toolbar">{header}<QueryColumns columns={columns} value={shown.map(c=>c.key)} onChange={save}/></div><div className="qr-scroll"><table><thead><tr>{onSelected&&<th>选择</th>}{shown.map(c=><th key={c.key}>{onSort?<button onClick={()=>onSort(c.key)} aria-label={'按'+c.label+'排序'}>{c.label}{sort===c.key?(direction==='desc'?' ↓':' ↑'):''}</button>:c.label}</th>)}</tr></thead><tbody>{records.map(r=><tr key={r.id}>{onSelected&&<td><input type="checkbox" aria-label={'选择 '+r.id} checked={selected?.includes(r.id)||false} onChange={e=>onSelected(e.target.checked?[...(selected||[]),r.id]:(selected||[]).filter(k=>k!==r.id))}/></td>}{shown.map((c,i)=><td key={c.key}>{(r.values[c.key] as any)?.longValue&&onLong?<button onClick={()=>onLong(r.id,c.key)}>查看完整长值（{String((r.values[c.key] as any).bytes)}字节）</button>:onOpen&&(i===0||c.fixed)?<button className="qr-link" onClick={()=>onOpen(r)}>{queryValue(r.values[c.key],c,identity)}</button>:queryValue(r.values[c.key],c,identity)}</td>)}</tr>)}</tbody></table></div></>;
 }
 
 export function QuerySourceDrawer({preferenceScope,api,identity,query,pageFingerprint,view,record,onClose,onNavigate,onMaintenance}:{api:QueryApi;identity:QueryIdentity;query:object;preferenceScope:string;pageFingerprint:string;view:string;record:QueryRecord;onClose:()=>void;onNavigate:(view:string,q:string)=>void;onMaintenance?:(target:{table:string;key:string})=>void}) {
