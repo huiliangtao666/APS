@@ -5,7 +5,15 @@ import App from './App';
 import {QueryReports,QueryBomPreview,editableQuerySources} from './QueryReports';
 import {QueryTable} from './QueryReportsControls';
 import {pathProducts} from './BomPathProducts';
+import {queryDraftForView,queryInitial,type QueryCatalog} from './QueryReportsTypes';
 const api=async()=>{throw Error('Static rendering must not call any API');};
+test('demand detail drops removed cached filters and preserves product/customer/region selection',()=>{
+ const catalog={identity:{datasetId:'SYN',version:1,fingerprint:'Q',dayZero:'2026-10-31'},preferenceScope:'SYN',views:[],fromDate:'2026-11-01',toDateInclusive:'2026-11-14'} as QueryCatalog;
+ const draft={...queryInitial(catalog),filters:Object.fromEntries(['material:成品','material:半成品','material:原辅料','material:包装材料','客户等级','客户编号','区域编号'].map(key=>[key,{mode:'NONE' as const}]))};
+ const view={id:'demand.details',report:'demand',label:'需求明细',key:'id',columns:[],filters:['material:成品','客户编号','区域编号'].map(key=>({key,label:key}))};
+ assert.deepEqual(Object.keys(queryDraftForView(view,draft).filters),['material:成品','客户编号','区域编号']);
+ assert.equal(queryDraftForView({...view,id:'bom.materials'},draft),draft);
+});
 test('active app exposes only four consolidated workbench pages and no independent legacy data source',()=>{
  const html=renderToStaticMarkup(<App/>);
  assert.ok(!html.includes('class="hero"'));assert.ok(html.includes('class="workbook-navigation-host"'));

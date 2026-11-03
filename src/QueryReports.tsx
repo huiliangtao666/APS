@@ -2,7 +2,7 @@ import { appPath } from './app-path';
 import {BomPathProductPicker,pathProducts} from './BomPathProducts';
 import {useEffect,useRef,useState} from 'react';
 import {QueryLongValue,QueryMultiselect,QuerySourceDrawer,QueryTable} from './QueryReportsControls';
-import {queryInitial,queryReports,queryUrl,sameQueryIdentity,type QueryApi,type QueryCatalog,type QueryContext,type QueryDraft,type QueryPage,type QueryRecord,type QueryView} from './QueryReportsTypes';
+import {queryInitial,queryDraftForView,queryReports,queryUrl,sameQueryIdentity,type QueryApi,type QueryCatalog,type QueryContext,type QueryDraft,type QueryPage,type QueryRecord,type QueryView} from './QueryReportsTypes';
 import './QueryReports.css';
 
 type Memory={draft:QueryDraft;applied:QueryDraft};
@@ -20,7 +20,7 @@ export function QueryReports({api,context,canExport,onClose,onMaintenance,onMana
   function chooseReport(id:string){setReport(id);setView(catalog?.views.find(v=>v.report===id)?.id||'');}
   async function navigate(next:string,q:string,inherit:QueryDraft){
     const v=catalog?.views.find(v=>v.id===next);if(!v||!catalog)return;
-    const draft={...inherit,filters:Object.fromEntries(Object.entries(inherit.filters).filter(([key])=>key.startsWith('material:'))),q,offset:0};
+    const draft=queryDraftForView(v,{...inherit,filters:Object.fromEntries(Object.entries(inherit.filters).filter(([key])=>key.startsWith('material:'))),q,offset:0});
     try{
       for(const [field,selection]of Object.entries(inherit.filters).filter(([key])=>!key.startsWith('material:')&&v.filters.some(f=>f.key===key))){
         const options=await api(queryUrl('options',{identity:catalog.identity,view:v.id,field,query:{view:v.id,...draft}}));
@@ -45,8 +45,8 @@ export function QueryReports({api,context,canExport,onClose,onMaintenance,onMana
 }
 
 function QueryReportView({api,catalog,view,memory,canExport,onNavigate,onMaintenance,maintenanceTables}:{api:QueryApi;catalog:QueryCatalog;view:QueryView;memory:Map<string,Memory>;canExport:boolean;onNavigate:(v:string,q:string,inherit:QueryDraft)=>void;onMaintenance?:(target:{table:string;key:string})=>void;maintenanceTables:string[]}) {
-  const memoryKey=catalog.identity.fingerprint+':'+view.id,saved=memory.get(memoryKey)||memory.get('last:'+view.id),initial=saved?.draft||queryInitial(catalog);
-  const [draft,setDraft]=useState<QueryDraft>(initial),[applied,setApplied]=useState<QueryDraft>(saved?.applied||initial),[page,setPage]=useState<QueryPage>(),[error,setError]=useState(''),[selected,setSelected]=useState<string[]>([]),[record,setRecord]=useState<QueryRecord>(),[visible,setVisible]=useState<string[]>(view.columns.map(c=>c.key)),[long,setLong]=useState<{id:string;field:string}>();
+  const memoryKey=catalog.identity.fingerprint+':'+view.id,saved=memory.get(memoryKey)||memory.get('last:'+view.id),initial=queryDraftForView(view,saved?.draft||queryInitial(catalog));
+  const [draft,setDraft]=useState<QueryDraft>(initial),[applied,setApplied]=useState<QueryDraft>(queryDraftForView(view,saved?.applied||initial)),[page,setPage]=useState<QueryPage>(),[error,setError]=useState(''),[selected,setSelected]=useState<string[]>([]),[record,setRecord]=useState<QueryRecord>(),[visible,setVisible]=useState<string[]>(view.columns.map(c=>c.key)),[long,setLong]=useState<{id:string;field:string}>();
   const [refresh,setRefresh]=useState(0);
   const signature=JSON.stringify(applied),dirty=JSON.stringify(draft)!==signature;
   const request={identity:catalog.identity,view:view.id,...applied};

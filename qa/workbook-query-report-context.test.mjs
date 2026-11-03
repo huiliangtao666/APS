@@ -99,6 +99,20 @@ test('canonical adapter exposes all 18 wired views, full candidates, NONE/toggle
  const page=domain.query(f.value,{...query,filters:{'material:成品':chosen.selection,'material:原料':{...domain.options(f.value,{query:f.draft,field:'material:原料',action:{kind:'none'}}).selection}}});
  assert.equal(page.total,5);assert.equal(hash(f.old),before);assert.equal(f.writes(),0);
 });
+test('demand details exposes product/customer/region only and ignores removed legacy filters for query and export',()=>{
+ const f=connected(),catalog=domain.catalog(f.value),details={...f.draft,view:'demand.details'};
+ assert.deepEqual(catalog.views.find(v=>v.id==='demand.details').filters.map(f=>f.key),['material:成品','客户编号','区域编号']);
+ assert.ok(catalog.views.find(v=>v.id==='bom.materials').filters.some(f=>f.key==='material:原料'));
+ const legacy={...details,filters:{'material:半成品':{mode:'NONE'},'material:原辅料':{mode:'NONE'},'material:包装材料':{mode:'NONE'},'客户等级':{mode:'NONE'}}};
+ const clean=domain.query(f.value,details),old=domain.query(f.value,legacy);
+ assert.equal(clean.total,1);assert.equal(old.total,clean.total);assert.equal(old.queryFingerprint,clean.queryFingerprint);
+ for(const field of ['material:成品','客户编号']){
+  const selection=domain.options(f.value,{query:details,field,action:{kind:'none'}}).selection;
+  assert.equal(domain.query(f.value,{...legacy,filters:{...legacy.filters,[field]:selection}}).total,0,field);
+ }
+ const text=[...domain.export(f.value,{...legacy,queryFingerprint:old.queryFingerprint,scope:'ALL'})].join('');
+ assert.equal(JSON.parse(text.trim().split('\n').at(-1)).total,1);
+});
 test('canonical adapter stable pages, bounded long value and complete/selected exports share the original query',()=>{
  const f=connected();const a=domain.query(f.value,f.draft),b=domain.query(f.value,{...f.draft,offset:100,queryFingerprint:a.queryFingerprint});
  assert.equal(a.total,205);assert.equal(a.records.length,100);assert.equal(b.records.length,100);assert.equal(a.queryFingerprint,b.queryFingerprint);assert.notEqual(a.records[0].id,b.records[0].id);
