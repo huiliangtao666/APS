@@ -64,6 +64,21 @@ test('repeated workbook names no longer amplify field storage beyond the former 
     expandedBytes+=Buffer.byteLength(JSON.stringify(f));
   assert(expandedBytes>32*1024*1024);assert.equal(v.limits.maxProjectionBytes,128*1024*1024);
 });
+test('a batch larger than 32 MiB confirms, persists and reopens with an idempotent receipt',()=>{
+  const {p,data}=fixture(0);data.businessFileName='业务来源'.repeat(20)+'.xlsx';
+  data.tables['每日需求']=Array.from({length:18000},(_,i)=>row('D'+i,i));
+  p.changeSet=importChanges(null,data);p.snapshotHash=hash(data);bindPreview(p);
+  p.previewModule=buildWorkbookPreview(p,{data,now:1000});
+  assert(p.previewModule.projectionBytes>32*1024*1024);
+  const body=bodyOf(p),out=confirmWorkbookPreview(stateOf(p),body,access,applyImport);
+  const reopened=JSON.parse(JSON.stringify(out.state));
+  assert.equal(reopened.datasets[0].versions.length,1);assert.equal(reopened.previews[0].previewModule.counts.records,18000);
+  assert.deepEqual(reopened.runs,[{id:'old-run',frozen:'unchanged'}]);
+  const retry=confirmWorkbookPreview(reopened,body,access,applyImport);assert.equal(retry.write,false);assert.equal(retry.result.idempotent,true);
+  const v=reopened.previews[0].previewModule,r=v.records.find(r=>r.key==='D17999');
+  assert.equal(previewFields(v,q(v,{changeId:r.changeId})).items.find(f=>f.name==='需求箱数').after.value,'18000');
+  console.log('WORKBOOK_LARGE_CONFIRM '+JSON.stringify({projectionBytes:v.projectionBytes,records:v.counts.records,peakRssKiB:process.resourceUsage().maxRSS}));
+});
 test('101 records traverse 25-page boundaries exactly once; global search finds last record',()=>{
   const {v}=fixture();let cursor=null,ids=[];
   do{const p=previewRecords(v,q(v,{cursor,pageSize:25}));assert(p.items.length<=25);ids.push(...p.items.map(r=>r.changeId));cursor=p.nextCursor;}while(cursor);
