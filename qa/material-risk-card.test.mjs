@@ -22,3 +22,8 @@ test('cards enforce query fingerprint, E5 ownership, node identity and page/sect
  const v=fixture(),page=equipmentDomain.query(v,query),request={query,queryFingerprint:page.queryFingerprint,id:'shortage:S',table:'risk-card',node:{id:'shortage:S',kind:'risk',resource:'CORN'}};
  assert.throws(()=>equipmentDomain.detail(v,{...request,node:{...request.node,resource:'FG'}}),/NODE_NOT_IN_QUERY/);assert.throws(()=>equipmentDomain.detail(v,{...request,node:{...request.node,id:'suggestion:0'}}),/NODE_NOT_IN_QUERY/);assert.throws(()=>equipmentDomain.detail(v,{...request,queryFingerprint:'BAD'}),/QUERY_CHANGED/);assert.throws(()=>equipmentDomain.detail(v,{...request,section:'other'}),/INVALID_DETAIL_SECTION/);assert.throws(()=>equipmentDomain.detail(v,{...request,offset:-1}),/INVALID_PAGE/);
 });
+
+test('minute evidence dates use the saved local minute origin even when it differs from day zero',()=>{
+ const v=fixture();v.identity.minuteOrigin='2026-11-02T08:00:00+08:00';v.run.result.findings=[{need:'D',materialId:'CORN',code:'MATERIAL_AT_ACTUAL_FEED',evidence:{kind:'material-at-feed',timeUnit:'minute',actualFeed:960,ready:1440,expiry:2880}}];
+ const c=card(v,'finding:0');assert.equal(c.fields.find(f=>f.label==='候选投料日期').value,'2026-11-03');assert.equal(c.fields.find(f=>f.label==='预计可用日期').value,'2026-11-03');
+});
