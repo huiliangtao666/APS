@@ -1,0 +1,28 @@
+{
+  "at": "2026-11-03T15:59:21.639130+00:00",
+  "items": [
+    {
+      "path": "temp/chart-column-validation",
+      "beforeBytes": 3373848,
+      "afterBytes": 0,
+      "releasedBytes": 3373848,
+      "reason": "本任务验证源副本/纯合成fixture可由已保留源码重建；隔离验证已退出，浏览器已离开fixture页面"
+    },
+    {
+      "path": "qa/demand-gantt-preview/fixture.json",
+      "beforeBytes": 2456299,
+      "afterBytes": 0,
+      "releasedBytes": 2456299,
+      "reason": "本任务验证源副本/纯合成fixture可由已保留源码重建；隔离验证已退出，浏览器已离开fixture页面"
+    }
+  ],
+  "releasedBytes": 5830147,
+  "preserved": [
+    "原始upload截图",
+    "src与qa生成器",
+    "本任务浏览器截图",
+    "实际server/data与validation-state",
+    "平台dist各版本"
+  ],
+  "pending": []
+}

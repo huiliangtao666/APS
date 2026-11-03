@@ -25,4 +25,6 @@
 
 ## 生效和清理
 
-待完成构建激活、正式入口核查与临时文件清理后补记实际结果。
+产品提交 `13adaf0` 已推送 main；官方 app-restart --rebuild 成功。正式入口核查 HTML 200、2项初始JS/CSS资源通过；容器running、readiness up、restartCount=0。浏览器五视图检查在官方dev预览的合成数据页面执行；浏览器访问正式办公域名入口收到网关401，因此不声称已完成有身份的正式页面业务验收。
+
+cleanup：清理本任务验证副本和可重建合成fixture，合计 5830147 bytes；隔离容器验证已退出，lsof未见本地验证副本持有进程，浏览器已离开fixture。保留实际数据、原始截图、产品、平台构建版本及结果证据，未处理项0；详见 evidence/chart-columns/cleanup.json。

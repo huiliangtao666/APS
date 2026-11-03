@@ -102,3 +102,7 @@
 - [#138 物料风险甘特浮窗：基本信息和受影响需求](https://github.com/huiliangtao666/APS/issues/138) — 已完成（Closed / completed）；13项任务级检查、构建及正式入口检查通过，非真实业务UAT。
 
 - [#139 运行问题含义与WIP导入来源核对](https://github.com/huiliangtao666/APS/issues/139) — 已完成（咨询/只读核查答复），附原截图；本次未修改代码或运行。后续追加现为2条、3张截图，索引累计79条Issue。
+
+- [#143 五类排程图表按字段分列并选择显示栏位](https://github.com/huiliangtao666/APS/issues/143) — 已完成（Closed / completed）；附原截图与实现提交，15项相关检查、构建和正式资源核查通过。
+
+- [#144 继续登记新交互并关闭已完成事项](https://github.com/huiliangtao666/APS/issues/144) — 本次日志登记与状态核对。后续追加累计4条、4张原始截图，索引累计81条Issue。待批准/未实施CR保留原状态。
