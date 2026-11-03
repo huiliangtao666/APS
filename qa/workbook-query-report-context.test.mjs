@@ -171,6 +171,23 @@ test('stop query exposes resource and interval only; legacy hidden controls cann
  const exported=[...domain.export(value,{...selected,queryFingerprint:page.queryFingerprint,scope:'ALL'})].join('').trim().split('\n').map(JSON.parse);assert.equal(exported.at(-1).total,2);
  assert.equal(hash(f.old),before);assert.equal(f.writes(),0);
 });
+test('equipment master uses resource, group and category only across candidates, query, details and export',()=>{
+ const f=connected();f.old.tables.设备与工装=[{资源编号:'EQ1',资源组编号:'G1',资源类别:'设备'},{资源编号:'EQ2',资源组编号:'G1',资源类别:'工装'},{资源编号:'EQ3',资源组编号:'G2',资源类别:'设备'}];
+ const value=workbookQueryContext(f.ctx,{datasetId:'fixture',version:1},'synthetic-actor'),before=hash(f.old),q={...f.draft,view:'capacity.equipment'};
+ assert.deepEqual(domain.catalog(value).views.find(v=>v.id===q.view).filters.map(f=>[f.key,f.label]),[['资源编号','资源'],['资源组编号','资源组'],['资源类别','资源类别']]);
+ const clean=domain.query(value,q),legacy={...q,q:'HIDDEN-OLD-TEXT',includeBom:true,fromDate:'invalid',toDateInclusive:'',bomAsOfDate:'invalid',knownAsOfDate:'invalid',filters:{'material:成品':{mode:'NONE'},'material:半成品':{mode:'NONE'},'material:原辅料':{mode:'NONE'},'material:包装材料':{mode:'NONE'},停机类型:{mode:'NONE'}}};
+ assert.equal(clean.total,3);assert.equal(domain.query(value,legacy).queryFingerprint,clean.queryFingerprint);
+ const chosen={};for(const [field,term,total]of [['资源编号','EQ1',3],['资源组编号','G1',2],['资源类别','设备',2]]){
+  const options=domain.options(value,{query:legacy,field});assert.equal(options.total,total);
+  const none=domain.options(value,{query:legacy,field,action:{kind:'none'}}).selection;
+  assert.equal(domain.query(value,{...legacy,filters:{...legacy.filters,[field]:none}}).total,0,field);
+  chosen[field]=domain.options(value,{query:{...legacy,filters:{[field]:none}},field,action:{kind:'searchAll',query:term}}).selection;
+ }
+ const selected={...legacy,filters:{...legacy.filters,...chosen}},page=domain.query(value,selected);assert.equal(page.total,1);assert.equal(page.records[0].values.资源编号,'EQ1');
+ assert.ok(domain.detail(value,{query:selected,queryFingerprint:page.queryFingerprint,id:page.records[0].id,table:'sources'}).total>0);
+ const text=[...domain.export(value,{...selected,queryFingerprint:page.queryFingerprint,scope:'ALL'})].join('').trim().split('\n').map(JSON.parse);assert.equal(text.at(-1).total,1);
+ assert.equal(hash(f.old),before);assert.equal(f.writes(),0);
+});
 test('inventory summary exposes fixed dimensions and real date cells without business-key display',()=>{
  const f=connected();f.old.tables.期初库存=[{库存批次编号:'L1',物料编号:'M000',质量状态:'合格',数量单位:'千克',当前数量:'10',期初已占用量:'2',快照日:'0',放行日:'0',到期日:'9'},{库存批次编号:'L2',物料编号:'M000',质量状态:'待检',数量单位:'千克',当前数量:'5',期初已占用量:'0',快照日:'1',放行日:'0',到期日:'9'}];
  const value=workbookQueryContext(f.ctx,{datasetId:'fixture',version:1},'synthetic-actor'),q={...f.draft,view:'inventory.summary'},result=domain.query(value,q);

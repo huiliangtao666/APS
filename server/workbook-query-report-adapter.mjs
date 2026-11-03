@@ -9,14 +9,14 @@ function column(key,identity,view){if(view==='inventory.summary'){const dimensio
 const compactDemand=id=>['demand.daily','demand.details'].includes(id);
 const productOnly=id=>compactDemand(id)||id==='capacity.routes';
 const reportDates=v=>({fromDate:dayCalendar(v.identity.dayZero,v.run?.selection.startDay??1),toDateInclusive:dayCalendar(v.identity.dayZero,(v.run?.selection.endDay??15)-1)});
-function filters(v,id){const categories=[...new Set((v.input.tables['物料主数据']||[]).map(r=>r['物料类别']||'未提供类别'))];return [...categories.filter(c=>id!=='capacity.stops'&&(!productOnly(id)||c==='成品')).map(c=>({key:'material:'+c,label:c,kind:'material'})),...(filterFields[id]||filterFields[id.split('.')[0]]||[]).filter(key=>!compactDemand(id)||key!=='客户等级').map(key=>({key,label:key==='路线编号'?key:key.replace(/编号$/,''),kind:'business'}))];}
+function filters(v,id){const categories=[...new Set((v.input.tables['物料主数据']||[]).map(r=>r['物料类别']||'未提供类别'))];return [...categories.filter(c=>!['capacity.stops','capacity.equipment'].includes(id)&&(!productOnly(id)||c==='成品')).map(c=>({key:'material:'+c,label:c,kind:'material'})),...(filterFields[id]||filterFields[id.split('.')[0]]||[]).filter(key=>!compactDemand(id)||key!=='客户等级').map(key=>({key,label:key==='路线编号'?key:key.replace(/编号$/,''),kind:'business'}))];}
 function query(q,v){
   const f=q.filters||{},materialSelections={},business={};
-  for(const [k,s]of Object.entries(f)){if(q.view==='capacity.stops'&&k!=='资源编号')continue;if(productOnly(q.view)&&k.startsWith('material:')&&k!=='material:成品'||compactDemand(q.view)&&k==='客户等级')continue;if(k.startsWith('material:'))materialSelections[k.slice(9)]=s;else business[k]=s;}
-  // Routes describe master data. Discard dates retained by earlier UI versions.
-  if(q.view==='capacity.routes'){const dates=reportDates(v);q={...q,...dates,bomAsOfDate:dates.fromDate,knownAsOfDate:dates.fromDate};}
-  // Stop queries use only resource and interval; legacy invisible controls cannot restrict them.
-  if(q.view==='capacity.stops'){const dates=reportDates(v);q={...q,q:'',includeBom:false,bomAsOfDate:dates.fromDate,knownAsOfDate:dates.fromDate};}
+  for(const [k,s]of Object.entries(f)){if(q.view==='capacity.stops'&&k!=='资源编号')continue;if(q.view==='capacity.equipment'&&!filterFields[q.view].includes(k))continue;if(productOnly(q.view)&&k.startsWith('material:')&&k!=='material:成品'||compactDemand(q.view)&&k==='客户等级')continue;if(k.startsWith('material:'))materialSelections[k.slice(9)]=s;else business[k]=s;}
+  // Routes and equipment describe master data. Discard dates retained by earlier UI versions.
+  if(['capacity.routes','capacity.equipment'].includes(q.view)){const dates=reportDates(v);q={...q,...dates,bomAsOfDate:dates.fromDate,knownAsOfDate:dates.fromDate};}
+  // Resource queries discard legacy keyword/BOM controls; stops retain the selected interval.
+  if(['capacity.stops','capacity.equipment'].includes(q.view)){const dates=reportDates(v);q={...q,q:'',includeBom:false,bomAsOfDate:dates.fromDate,knownAsOfDate:dates.fromDate};}
   return {view:q.view,fromDate:q.fromDate,toDateInclusive:q.toDateInclusive,asOfDate:q.bomAsOfDate,knownAtDate:q.knownAsOfDate,includeBom:q.includeBom===true,q:q.q||'',materialSelections,filters:business,pageSize:q.pageSize||100,...(q.unit?{unit:q.unit}:{}),...(q.sort?{sort:[{field:q.sort,direction:q.direction||'asc'}]}:{})};
 }
 function detailQuery(q,v){return {...query(q.query||q,v),fingerprint:q.queryFingerprint};}

@@ -36,6 +36,13 @@ test('stop query clears hidden keyword, BOM and filters while retaining resource
  const clean=queryDraftForView(view,draft);assert.deepEqual(clean,{...draft,q:'',includeBom:false,filters:{资源编号:{mode:'NONE'}}});
  assert.equal(clean.fromDate,'2026-11-02');assert.equal(clean.toDateInclusive,'2026-11-08');
 });
+test('equipment query keeps only resource/group/category selections in cached navigation',()=>{
+ const catalog={fromDate:'2026-11-01',toDateInclusive:'2026-11-14'} as QueryCatalog;
+ const keys=['资源编号','资源组编号','资源类别'],view={id:'capacity.equipment',report:'capacity',label:'设备能力',key:'id',columns:[],filters:keys.map(key=>({key,label:key}))};
+ const draft={...queryInitial(catalog),q:'OLD',includeBom:true,filters:Object.fromEntries([...keys,'material:成品','material:半成品','停机类型'].map(key=>[key,{mode:'NONE' as const}]))};
+ const clean=queryDraftForView(view,draft);assert.equal(clean.q,'');assert.equal(clean.includeBom,false);assert.deepEqual(Object.keys(clean.filters),keys);
+ assert.equal(queryDraftForView({...view,id:'capacity.daily'},draft),draft);
+});
 test('active app exposes only four consolidated workbench pages and no independent legacy data source',()=>{
  const html=renderToStaticMarkup(<App/>);
  assert.ok(!html.includes('class="hero"'));assert.ok(html.includes('class="workbook-navigation-host"'));
