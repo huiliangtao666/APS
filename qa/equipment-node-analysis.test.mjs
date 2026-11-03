@@ -89,3 +89,14 @@ test('task card paginates a long BOM without losing records and rejects invalid 
  let offset=0;const seen=new Set();do{const page=equipmentDomain.detail(v,{...request,offset});assert.ok(Buffer.byteLength(JSON.stringify(page))<185000);for(const r of page.groups.find(g=>g.id==='bom').records){assert.ok(!seen.has(r.id));seen.add(r.id);}if(page.nextOffset===null)break;assert.ok(page.nextOffset>offset);offset=page.nextOffset;}while(true);assert.equal(seen.size,205);
  assert.throws(()=>equipmentDomain.detail(v,{...request,section:'fake'}),/INVALID_TASK_SECTION/);assert.throws(()=>equipmentDomain.detail(v,{...request,offset:-1}),/INVALID_PAGE/);
 });
+
+test('E1 task cards match E2 and bind to the visible machine, task and demand without changing frozen data',()=>{
+ const v=make(),before=JSON.stringify(v),q=query(),page=equipmentDomain.query(v,q),node={kind:'task',id:'T43',resource:'EQ1',recordId:'DE'},request={query:q,queryFingerprint:page.queryFingerprint,table:'task-card',id:'EQ1',node};
+ const hover=page.records.find(r=>r.id==='EQ1').tasks[0];assert.equal(hover.machine,'EQ1');assert.equal(hover.physicalStatus,null);assert.equal(hover.unit,'千克');
+ const dq=query({view:'E2'}),dfp=equipmentDomain.query(v,dq).queryFingerprint;
+ for(const section of ['overview','chain','resources','materials','sources']){const a=equipmentDomain.detail(v,{...request,section}),b=equipmentDomain.detail(v,{...request,id:'DE',query:dq,queryFingerprint:dfp,section});assert.deepEqual({...a,queryFingerprint:''},{...b,queryFingerprint:''});}
+ const overview=equipmentDomain.detail(v,request);assert.deepEqual(overview.analysis,explain(v,{kind:'task',id:'T43'},'EQ1'));
+ assert.throws(()=>equipmentDomain.detail(v,{...request,id:'EQ2'}),/NODE_NOT_IN_QUERY/);assert.throws(()=>equipmentDomain.detail(v,{...request,node:{...node,resource:'EQ2'}}),/NODE_NOT_IN_QUERY/);assert.throws(()=>equipmentDomain.detail(v,{...request,node:{...node,recordId:'OTHER'}}),/NODE_NOT_IN_QUERY/);
+ const narrow=query({fromDate:'2026-11-02'}),fp=equipmentDomain.query(v,narrow).queryFingerprint;assert.throws(()=>equipmentDomain.detail(v,{...request,query:narrow,queryFingerprint:fp}),/NODE_NOT_IN_QUERY/);
+ const eq2=page.records.find(r=>r.id==='EQ2');const wip=eq2.layers.find(l=>l.id==='WP4');assert.equal(wip.quantity,200);assert.equal(wip.productId,'FG');assert.equal(wip.machine,'EQ2');assert.equal(eq2.layers.find(l=>l.id==='STOP').machine,'EQ2');assert.equal(JSON.stringify(v),before);
+});
