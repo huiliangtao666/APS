@@ -53,3 +53,16 @@ test('material explanation retains the frozen BOM ratio and separates process ne
  const out=explain(v,{kind:'task',id:'T43'});assert.ok(out.materials[0].calculation.includes('65 千克 × 子项基准 244.318182 ÷ 父项基准 1000'));assert.ok(out.materials[0].calculation.includes('多批供给'));assert.equal(out.materials[0].bomSource.row,9);
  v.input.tables['物料清单'].push({...v.input.tables['物料清单'][0]});assert.ok(explain(v,{kind:'task',id:'T43'}).materials[0].calculation.includes('未找到唯一'));
 });
+
+test('demand Gantt analysis matches equipment Gantt and rejects tasks from other demands or machines',()=>{
+ const v=make(),q=query({view:'E2'}),page=equipmentDomain.query(v,q),request={query:q,queryFingerprint:page.queryFingerprint,table:'analysis',id:'DE',node:{kind:'task',id:'T43',resource:'EQ1'}};
+ const result=equipmentDomain.detail(v,request).analysis;
+ assert.deepEqual(result,explain(v,{kind:'task',id:'T43'},'EQ1'));
+ assert.equal(result.node.resource,'EQ1');assert.ok(result.sources.some(s=>s.sheet==='设备与工装'&&s.key==='EQ1'));
+ assert.throws(()=>equipmentDomain.detail(v,{...request,node:{...request.node,resource:'EQ2'}}),/NODE_NOT_IN_QUERY/);
+ assert.throws(()=>equipmentDomain.detail(v,{...request,node:{...request.node,kind:'wip',id:'WP4'}}),/NODE_NOT_IN_QUERY/);
+ v.run.result.tasks.push({...v.run.result.tasks[0],id:'FOREIGN',orderId:'OTHER'});
+ assert.throws(()=>equipmentDomain.detail(v,{...request,node:{...request.node,id:'FOREIGN'}}),/NODE_NOT_IN_QUERY/);
+ const narrow=query({view:'E2',toDateInclusive:'2026-11-01'}),fp=equipmentDomain.query(v,narrow).queryFingerprint;
+ assert.throws(()=>equipmentDomain.detail(v,{...request,query:narrow,queryFingerprint:fp,node:{kind:'task',id:'NEXT',resource:'EQ2'}}),/NODE_NOT_IN_QUERY/);
+});

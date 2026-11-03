@@ -225,3 +225,29 @@ test('E5 procurement references retain former preview fields and remain nonphysi
  const detail=equipmentDomain.detail(v,{query:q,queryFingerprint:page.queryFingerprint,id:row.id,table:'record'});assert.equal(detail.records[0].values.relationId,'REL1');assert.equal(detail.records[0].values.availableDate,'2026-11-03');
  v.run.result.suggestions[0].availableDay=null;assert.equal(equipmentDomain.query(v,q).records.find(r=>r.id===row.id).values.availableDate,null);
 });
+
+test('E2 timeline retains real component tasks, boundary clipping and empty demands without changing frozen input',()=>{
+ const v=equipmentExample();v.input.mapping.wip_remaining=[];
+ v.run.result.tasks.push({...v.run.result.tasks[0],id:'COMPONENT',productId:'M2',start:1400,end:1450},{...v.run.result.tasks[0],id:'OUT',start:2880,end:2900});
+ const before=hash(v),q=equipmentQuery('E2',{filters:{productId:{mode:'VALUES',values:['M1']}}}),page=equipmentDomain.query(v,q);
+ assert.equal(page.records.find(r=>r.id==='DE1').values.taskCount,4);
+ assert.equal(page.records.find(r=>r.id==='DE0').values.taskCount,0);
+ assert.equal(page.records.find(r=>r.id==='DE1').tasks,undefined);
+ const timeline=equipmentDomain.detail(v,{query:q,queryFingerprint:page.queryFingerprint,table:'timeline',orderIds:['DE1','DE0']});
+ assert.deepEqual(timeline.tasks.map(t=>t.id),['T1','T2','COMPONENT']);
+ assert.equal(timeline.tasks.find(t=>t.id==='COMPONENT').start,1400);
+ assert.equal(timeline.tasks[0].machine,'EQ1');assert.equal(timeline.tasks[1].predecessor,'T1');
+ const empty=equipmentDomain.detail(v,{query:q,queryFingerprint:page.queryFingerprint,table:'timeline',orderIds:['DE0']});assert.equal(empty.total,0);assert.equal(empty.nextOffset,null);
+ assert.equal(hash(v),before);
+});
+test('E2 timeline paginates large single-demand chains and rejects hidden, invalid and stale requests',()=>{
+ const v=equipmentExample();v.input.mapping.wip_remaining=[];
+ const template=v.run.result.tasks[0];v.run.result.tasks=Array.from({length:2101},(_,i)=>({...template,id:'TASK'+i,predecessor:i?'TASK'+(i-1):null}));
+ const q=equipmentQuery('E2'),page=equipmentDomain.query(v,q);assert.equal(page.records.find(r=>r.id==='DE1').values.taskCount,2101);
+ assert.ok(Buffer.byteLength(JSON.stringify(page.records))<5000);
+ let offset=0;const seen=new Set();do{const part=equipmentDomain.detail(v,{query:q,queryFingerprint:page.queryFingerprint,table:'timeline',orderIds:['DE1'],offset});assert.ok(Buffer.byteLength(JSON.stringify(part))<181000);assert.ok(part.tasks.length<=500);for(const t of part.tasks){assert.ok(!seen.has(t.id));seen.add(t.id);}if(part.nextOffset===null)break;assert.ok(part.nextOffset>offset);offset=part.nextOffset;}while(true);assert.equal(seen.size,2101);
+ const selected=equipmentQuery('E2',{filters:{orderId:{mode:'VALUES',values:['DE0']}}}),fp=equipmentDomain.query(v,selected).queryFingerprint;
+ assert.throws(()=>equipmentDomain.detail(v,{query:selected,queryFingerprint:fp,table:'timeline',orderIds:['DE1']}),/RECORD_NOT_FOUND/);
+ assert.throws(()=>equipmentDomain.detail(v,{query:q,queryFingerprint:'stale',table:'timeline',orderIds:['DE1']}),/QUERY_CHANGED/);
+ assert.throws(()=>equipmentDomain.detail(v,{query:q,queryFingerprint:page.queryFingerprint,table:'timeline',orderIds:['DE1'],offset:-1}),/INVALID_PAGE/);
+});

@@ -2,7 +2,7 @@ import {useEffect,useRef,useState} from 'react';
 import {sameQueryIdentity,type QueryIdentity,type QueryApi} from './QueryReportsTypes';
 import './EquipmentNodeAnalysis.css';
 
-export type GanttNode={id:string;kind:'task'|'wip'|'stop';resource:string};
+export type GanttNode={id:string;kind:'task'|'wip'|'stop';resource:string;recordId?:string};
 export function EquipmentNodeAnalysis({api,identity,query,fingerprint,node,onClose,onDetails}:{api:QueryApi;identity:QueryIdentity;query:object;fingerprint:string;node:GanttNode;onClose:()=>void;onDetails:()=>void}){
  const [data,setData]=useState<any>(),[error,setError]=useState(''),[position,setPosition]=useState(()=>({x:Math.max(12,(typeof window==='undefined'?1000:window.innerWidth)-660),y:110}));
  const drag=useRef<{x:number;y:number;left:number;top:number}>(),panel=useRef<HTMLElement>(null),close=useRef<HTMLButtonElement>(null),body=useRef<HTMLDivElement>(null);
@@ -10,7 +10,7 @@ export function EquipmentNodeAnalysis({api,identity,query,fingerprint,node,onClo
  useEffect(()=>{const previous=document.activeElement as HTMLElement;close.current?.focus();return()=>{if(previous?.isConnected)previous.focus();};},[]);
  useEffect(()=>{const escape=(e:KeyboardEvent)=>{if(e.key==='Escape'&&!e.defaultPrevented)onClose();};document.addEventListener('keydown',escape);return()=>document.removeEventListener('keydown',escape);},[onClose]);
  useEffect(()=>{let live=true;setData(undefined);setError('');body.current?.scrollTo?.(0,0);
-  api('/workbooks/equipment/detail?request='+encodeURIComponent(JSON.stringify({identity,query,queryFingerprint:fingerprint,id:node.resource,table:'analysis',node}))).then(r=>{
+  api('/workbooks/equipment/detail?request='+encodeURIComponent(JSON.stringify({identity,query,queryFingerprint:fingerprint,id:node.recordId??node.resource,table:'analysis',node}))).then(r=>{
    if(!live)return;
    if(!sameQueryIdentity(identity,r.identity)||r.queryFingerprint!==fingerprint||r.analysis?.node?.id!==node.id||r.analysis?.node?.kind!==node.kind||r.analysis?.node?.resource!==node.resource)throw Error('节点或冻结运行身份不一致，已停止展示');
    setData({signature,value:r.analysis});

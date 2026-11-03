@@ -48,3 +48,20 @@
 .equipment-personnel-heatmap button{min-height:30px;font-size:12px;background:#f3f6f9;color:#526374}
 .equipment-schedule .equipment-personnel-heatmap .equipment-over-capacity{background:#fee2e2;color:#991b1b;border-color:#f0a0a0}
 .equipment-personnel-heatmap .equipment-over-capacity strong{font-weight:700}
+
+/* Demand rows reuse the equipment axis, lanes, predecessor links and node panel. */
+.demand-gantt .equipment-axis,.demand-gantt .equipment-resource{grid-template-columns:340px max-content}
+.demand-gantt .equipment-axis>b,.demand-gantt .equipment-name{width:340px;min-width:340px}
+.demand-gantt .demand-name{gap:6px;justify-content:flex-start}
+.demand-gantt .demand-product{flex:1;min-width:0;font-size:10px}
+.demand-gantt .demand-product b{font-weight:600}
+.demand-gantt .demand-name>strong{width:66px;overflow:hidden;text-overflow:ellipsis}
+.demand-gantt .demand-status{flex:none;width:65px;font-size:10px;color:#197147}
+.demand-gantt .demand-status.demand-warning{color:#b45309}
+.demand-gantt .demand-name>small{width:30px;text-align:right}
+.demand-gantt .demand-milestone{position:absolute;top:0;bottom:0;transform:translateX(-50%);width:10px;min-width:0;padding:0;border:0;border-left:1px dashed currentColor;border-radius:0;background:transparent;z-index:5;font-size:10px;line-height:10px}
+.demand-gantt .demand-milestone span{position:absolute;left:-5px;top:0;background:white}
+.demand-gantt .demand-arrival span{top:auto;bottom:0}
+.demand-gantt .demand-due,.demand-due-key{color:#d97706}
+.demand-gantt .demand-arrival,.demand-arrival-key{color:#15803d}
+.demand-gantt .demand-empty{position:absolute;left:6px;top:50%;transform:translateY(-50%);max-width:calc(100% - 18px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 4px;border:0;background:#ffffffd9;color:#8c6133;font-size:10px;line-height:18px;z-index:2}

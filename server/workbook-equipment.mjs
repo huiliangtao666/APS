@@ -14,6 +14,7 @@ const dateAt=(d,zero='2026-10-31')=>new Date(Date.parse(zero+'T00:00:00Z')+d*864
 const day=(s,zero)=>{if(typeof s!=='string'||!/^\d{4}-\d\d-\d\d$/.test(s))error('INVALID_DATE');const n=(Date.parse(s+'T00:00:00Z')-Date.parse(zero+'T00:00:00Z'))/86400000;if(!Number.isInteger(n)||dateAt(n,zero)!==s)error('INVALID_DATE');return n;};
 const sourceRef=(sheet,r,key)=>({sheet,row:r?._row??null,key});
 const rec=(id,values,extra={})=>({id,values:{id,...values},...extra});
+const chartTask=t=>Object.fromEntries(['id','orderId','productionId','productId','machine','label','start','end','quantity','predecessor'].map(k=>[k,t[k]??null]));
 const publicRow=r=>Object.fromEntries(Object.entries(r||{}).filter(([k])=>!k.startsWith('_')));
 function universe(v,field){const d=v.input,ds=rows(d,'每日需求');let opts;
  if(field==='machine')opts=rows(d,'设备与工装').filter(r=>r['资源类别']==='设备').map(r=>({id:r['资源编号'],name:r['资源名称']}));
@@ -50,7 +51,7 @@ function project(v,q){const date=n=>Number.isFinite(n)?dateAt(n,v.identity.dayZe
  let out=[];
  if(!p)return {records:[],c,a,note:v.run?'运行'+v.run.status+'；尚无可用结果。':'无run；输入参考与实际排程分开。'};
  if(q.view==='E1')out=rows(d,'设备与工装').filter(r=>r['资源类别']==='设备'&&c.matches('machine',r['资源编号'])&&c.matches('group',r['资源组编号'])&&(!limited||resourceIds.has(r['资源编号']))).map(r=>{const id=r['资源编号'],ts=tasks.filter(t=>t.machine===id),w=occupations.filter(o=>o.resource===id&&o.kind==='WIP物理保留'&&o.start<c.end&&o.end>c.start);return rec(id,{machine:id,name:r['资源名称'],group:r['资源组编号'],taskCount:ts.length,wipCount:w.length,status:ts.length?'本运行有已排任务':'本运行无已排任务；不代表现场空闲'}, {resource:id,taskIds:ts.map(t=>t.id),refs:[sourceRef('设备与工装',r,id)],tasks:ts.map(t=>({id:t.id,orderId:t.orderId,productionId:t.productionId,productId:t.productId,label:t.label,start:t.start,end:t.end,quantity:t.quantity,predecessor:t.predecessor})),layers:[...w.map(o=>({id:o.taskId,start:o.start,end:o.end,kind:o.kind})),...a.stops.filter(s=>s.resource===id&&s.start<c.end&&s.end>c.start).map(s=>({...s,kind:'可知停机'}))]});});
- if(q.view==='E2')out=p.demandResults.filter(r=>c.scope.ids.has(r.productId)&&c.matches('orderId',r.id)&&c.matches('status',r.status)).filter(r=>{const de=rows(d,'每日需求').find(x=>x['需求编号']===r.id);return Number(de?.['需求日'])>=c.from&&Number(de?.['需求日'])<c.to;}).map(r=>{const source=rows(d,'每日需求').find(x=>x['需求编号']===r.id),customer=rows(d,'客户与交付').find(x=>x['客户编号']===source?.['客户编号']);return rec(r.id,{orderId:r.id,productId:r.productId,productName:materials.get(r.productId)?.['物料名称'],customer:customer?.['客户名称']??null,region:customer?.['区域名称']??null,grade:customer?.['客户等级']??null,quantity:r.quantity,unit:r.unit,requiredDate:source?date(Number(source['需求日'])):null,earliestArrivalDate:source&&finite(source['最早到货日'])!==null?date(Number(source['最早到货日'])):null,latestArrivalDate:source&&finite(source['最晚到货日'])!==null?date(Number(source['最晚到货日'])):null,readyDate:finite(r.readyDay)===null?null:date(Math.floor(r.readyDay)),arrivalDate:finite(r.arrivalDay)===null?null:date(r.arrivalDay),lateDays:r.lateDays,status:r.status,reason:p.findings.filter(f=>f.need===r.id).map(f=>f.message).join('；')||'计划/条件结果；无实际交付实绩'}, {taskIds:a.tasks.filter(t=>t.orderId===r.id).map(t=>t.id),refs:[{sheet:'每日需求',row:source?._row??null,key:r.id}]});});
+ if(q.view==='E2')out=p.demandResults.filter(r=>c.scope.ids.has(r.productId)&&c.matches('orderId',r.id)&&c.matches('status',r.status)).filter(r=>{const de=rows(d,'每日需求').find(x=>x['需求编号']===r.id);return Number(de?.['需求日'])>=c.from&&Number(de?.['需求日'])<c.to;}).map(r=>{const source=rows(d,'每日需求').find(x=>x['需求编号']===r.id),customer=rows(d,'客户与交付').find(x=>x['客户编号']===source?.['客户编号']);return rec(r.id,{orderId:r.id,productId:r.productId,productName:materials.get(r.productId)?.['物料名称'],customer:customer?.['客户名称']??null,region:customer?.['区域名称']??null,grade:customer?.['客户等级']??null,quantity:r.quantity,unit:r.unit,requiredDate:source?date(Number(source['需求日'])):null,earliestArrivalDate:source&&finite(source['最早到货日'])!==null?date(Number(source['最早到货日'])):null,latestArrivalDate:source&&finite(source['最晚到货日'])!==null?date(Number(source['最晚到货日'])):null,readyDate:finite(r.readyDay)===null?null:date(Math.floor(r.readyDay)),arrivalDate:finite(r.arrivalDay)===null?null:date(r.arrivalDay),lateDays:r.lateDays,status:r.status,taskCount:a.tasks.filter(t=>t.orderId===r.id).length,reason:p.findings.filter(f=>f.need===r.id).map(f=>f.message).join('；')||'计划/条件结果；无实际交付实绩'}, {refs:[{sheet:'每日需求',row:source?._row??null,key:r.id}]});});
  if(q.view==='E6')out=tasks.map(t=>rec(t.id,{...Object.fromEntries(['orderId','productId','productionId','routeStepId','operation','label','machine','start','end','duration','quantity','crew','people','tools','predecessor','toolEndMinute'].map(k=>[k,t[k]??null])),productName:materials.get(t.productId)?.['物料名称'],unit:'千克',physicalStatus:t.physicalStatus||'未提供'}, {taskIds:[t.id],refs:[{sheet:t.source?.sheet,row:t.source?.row??null,key:t.routeStepId}]}));
  if(q.view==='E3')for(const r of rows(d,'设备与工装').filter(r=>r['资源类别']==='设备'&&c.matches('machine',r['资源编号'])&&c.matches('group',r['资源组编号'])&&(!limited||resourceIds.has(r['资源编号'])))){
   const id=r['资源编号'],own=occupations.filter(o=>o.resource===id),full=a.occ.filter(o=>o.resource===id),task=own.filter(o=>o.kind==='真实任务'),wip=own.filter(o=>o.kind==='WIP物理保留');
@@ -110,8 +111,19 @@ export const equipmentDomain={
  query(v,q){const {records,c,fp,note}=checked(v,q),size=q.pageSize??100,offset=q.chunkOffset??q.offset??0;if(![100,200,500].includes(size)||!Number.isSafeInteger(offset)||offset<0)error('INVALID_PAGE');const part=[];let bytes=0;for(const r of records.slice(offset,offset+size)){const n=Buffer.byteLength(JSON.stringify(r));if(n>120000)error('RECORD_LIMIT',413);if(bytes+n>180000)break;part.push(r);bytes+=n;}const summary={};for(const r of records){const u=r.values.unit;if(u&&typeof r.values.quantity==='number'){const kind=r.values.sourceKind||(q.view==='E6'?'任务加工量（跨工序不等于交付量）':'需求量');summary[kind]??={};summary[kind][u]=(summary[kind][u]||0)+r.values.quantity;}}
  return {view:q.view,queryFingerprint:fp,records:part,total:records.length,offset,nextOffset:offset+part.length<records.length?offset+part.length:null,columns:cols(records),summaryByUnit:summary,diagnostics:c.graph.diagnostics,note,notProvided:!v.run?.result?['真实运行结果']:[]};},
  detail(v,q){
-  const query=q.query||q,{records,fp,a}=checked(v,{...query,queryFingerprint:q.queryFingerprint}),record=records.find(r=>r.id===q.id);if(!record)error('RECORD_NOT_FOUND',404);
-  const p=v.run.result,ids=new Set(record.taskIds||[]),selectedTasks=a.tasks.filter(t=>ids.has(t.id)),task=selectedTasks[0],resource=record.resource||record.values.resource||record.values.machine,day=record.day??record.values.day;
+  const query=q.query||q,{records,fp,a,c}=checked(v,{...query,queryFingerprint:q.queryFingerprint});
+  // Gantt tasks are paged separately: a large demand must not inflate one
+  // summary record beyond the transport limit or silently lose its task chain.
+  if(q.table==='timeline'){
+   if(query.view!=='E2')error('TIMELINE_REQUIRES_DEMAND');
+   if(!Array.isArray(q.orderIds)||q.orderIds.length>500||q.orderIds.some(id=>typeof id!=='string'||!records.some(r=>r.id===id)))error('RECORD_NOT_FOUND',404);
+   const offset=q.offset??0;if(!Number.isSafeInteger(offset)||offset<0)error('INVALID_PAGE');
+   const wanted=new Set(q.orderIds),tasks=a.tasks.filter(t=>wanted.has(t.orderId)&&t.start<c.end&&t.end>c.start),part=[];let bytes=0;
+   for(const t of tasks.slice(offset,offset+500)){const row=chartTask(t),n=Buffer.byteLength(JSON.stringify(row));if(n>120000)error('DETAIL_RECORD_LIMIT',413);if(bytes+n>180000)break;part.push(row);bytes+=n;}
+   return {queryFingerprint:fp,tasks:part,total:tasks.length,nextOffset:offset+part.length<tasks.length?offset+part.length:null};
+  }
+  const record=records.find(r=>r.id===q.id);if(!record)error('RECORD_NOT_FOUND',404);
+  const p=v.run.result,ids=new Set(query.view==='E2'?a.tasks.filter(t=>t.orderId===record.id).map(t=>t.id):record.taskIds||[]),selectedTasks=a.tasks.filter(t=>ids.has(t.id)),task=selectedTasks[0],resource=record.resource||record.values.resource||record.values.machine,day=record.day??record.values.day;
   // An unplanned E2 demand has no task IDs. Bind its details by the real demand
   // ID as well; otherwise risks and route/parameter sources disappear entirely.
   const needs=new Set([record.need,record.values.need,record.values.orderId,...selectedTasks.map(t=>t.orderId)].filter(Boolean));
@@ -129,8 +141,14 @@ export const equipmentDomain={
   if(Number.isInteger(day))for(const sheet of ['工厂日历','生产班次'])for(const r of rows(v.input,sheet))if(sheet==='工厂日历'?Number(r['日序'])===day:Math.floor(Number(r['开始分钟偏移'])/1440)===day)sourceRows.push(sourceRef(sheet,r,r['班次日历编号']||String(day)));
   let values=[];const tab=q.table||'record';
   if(tab==='analysis'){
-   if(query.view!=='E1')error('NODE_ANALYSIS_REQUIRES_GANTT');
-   return {queryFingerprint:fp,analysis:explainEquipmentNode(v,{record,a,c:setup(v,query),node:q.node})};
+   if(!['E1','E2'].includes(query.view))error('NODE_ANALYSIS_REQUIRES_GANTT');
+   let nodeRecord=record;
+   if(query.view==='E2'){
+    const selected=selectedTasks.find(t=>t.id===q.node?.id);
+    if(q.node?.kind!=='task'||!selected||q.node.resource!==selected.machine)error('NODE_NOT_IN_QUERY',404);
+    nodeRecord={...record,resource:selected.machine,tasks:selectedTasks};
+   }
+   return {queryFingerprint:fp,analysis:explainEquipmentNode(v,{record:nodeRecord,a,c,node:q.node})};
   }
   if(tab==='record')values=[record];
   else if(tab==='rules')values=explanations.map((e,i)=>rec('rule:'+i,{'需求/在制':e.need,'问题类型':e.title,'处理规则':e.logic,'本次判定依据':e.facts.join('；')||'本记录未保存具体候选数值','结果处理':e.effect,'完善位置':e.action,'证据说明':e.limitation}));
