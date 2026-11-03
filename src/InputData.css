@@ -123,3 +123,21 @@ main:has(.input-workspace) .hero-source{display:none}
 .input-workspace .workbook-import-cards .panel>h3{display:inline;margin-right:8px;vertical-align:baseline}
 .input-workspace .workbook-import-cards .panel>.workbook-import-help{float:none;display:inline-block;margin:0 0 4px;vertical-align:baseline}
 .input-workspace .workbook-import-cards .panel>.workbook-import-help[open]{display:block;margin:4px 0}
+.input-workspace .workbook-parameter-page{margin:0;padding:0;border:0}
+.maintenance-overlay{position:fixed;inset:0;z-index:1300;background:#142d4760}
+.maintenance-overlay .maintenance-dialog{inset:0 0 0 auto;width:min(1120px,96vw);height:100dvh;border-radius:0;box-shadow:-4px 0 24px #142d4733;padding:12px 16px}
+.maintenance-dialog>header{position:sticky;top:-12px;z-index:2;background:#fff;padding:8px 0;border-bottom:1px solid #dce5ee;margin-bottom:8px}
+.maintenance-dialog>header h3{font-size:15px;margin:0}
+.maintenance-dialog .input-scroll{max-height:calc(100dvh - 170px)}
+.maintenance-dialog .input-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin:8px 0}
+.maintenance-dialog .input-grid label{min-width:0}
+.maintenance-dialog .input-grid input{width:100%}
+.parameter-filter-line{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.parameter-filter-line label{display:inline-flex!important;align-items:center;gap:4px;white-space:nowrap}
+.parameter-filter-line input{width:125px}.parameter-filter-line select{max-width:165px}
+.parameter-result-bar{margin:0!important;padding:3px 7px;background:#f7fafc;border:1px solid #dce2e9;border-radius:5px}
+.parameter-result-bar a{font-size:12px;white-space:nowrap;padding:3px 6px}
+.input-workspace .parameter-trial{padding:0;font-size:11px}
+.input-workspace .parameter-trial summary{padding:3px 0}
+.parameter-panel .input-scroll table{background:#fff}
+@media(max-width:650px){.maintenance-overlay .maintenance-dialog{width:100vw;padding:10px}.maintenance-dialog .input-actions{flex-wrap:wrap}.maintenance-dialog .input-grid{grid-template-columns:1fr 1fr}}

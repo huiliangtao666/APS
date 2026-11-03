@@ -3,7 +3,7 @@ type Props={api:(path:string,body?:object)=>Promise<any>;datasetId:string;versio
 export function ParameterRelationEditor({api,datasetId,version,table,canWrite,memory,onBusy,onSaved,onClose}:Props){
  const cacheKey='relation:'+datasetId+':'+table,saved=memory.get(cacheKey)||{};
  const [schema,setSchema]=useState<any>(),[page,setPage]=useState<any>(),[q,setQ]=useState<string>(saved.q||''),[offset,setOffset]=useState<number>(saved.offset||0),[draft,setDraft]=useState<any>(saved.draft),[message,setMessage]=useState(''),[busy,setBusy]=useState(false);
- async function load(){setPage(await api('/workbooks/datasets/'+datasetId+'/rows?'+new URLSearchParams({table,q,offset:String(offset)})));}
+ async function load(){setPage(await api('/workbooks/datasets/'+datasetId+'/rows?'+new URLSearchParams({version:String(version),table,q,offset:String(offset)})));}
  useEffect(()=>{api('/workbooks/schema').then(setSchema).catch(e=>setMessage(e.message));},[]);
  useEffect(()=>{load().catch(e=>setMessage(e.message));},[datasetId,version,table,q,offset]);
  useEffect(()=>{memory.set(cacheKey,{q,offset,draft});},[cacheKey,q,offset,draft,memory]);

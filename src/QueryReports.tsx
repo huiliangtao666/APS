@@ -5,7 +5,7 @@ import {queryInitial,queryReports,queryUrl,sameQueryIdentity,type QueryApi,type 
 import './QueryReports.css';
 
 type Memory={draft:QueryDraft;applied:QueryDraft};
-export function QueryReports({api,context,canExport,onClose,onMaintenance}:{api:QueryApi;context:QueryContext;canExport:boolean;onClose:()=>void;onMaintenance?:(target:{table:string;key:string})=>void}) {
+export function QueryReports({api,context,canExport,onClose,onMaintenance,onManageData,onRefresh,maintenanceTables=[]}:{api:QueryApi;context:QueryContext;canExport:boolean;onClose:()=>void;onMaintenance?:(target:{table:string;key:string})=>void;onManageData?:(report:string)=>void;onRefresh?:()=>Promise<void>;maintenanceTables?:string[]}) {
   const [catalog,setCatalog]=useState<QueryCatalog>(),[error,setError]=useState(''),[report,setReport]=useState('bom'),[view,setView]=useState(''),[runId,setRunId]=useState(context.runId||''),[runs,setRuns]=useState<any[]>([]),[pendingRun,setPendingRun]=useState(context.runId||''),[navRev,setNavRev]=useState(0);
   const memory=useRef(new Map<string,Memory>());
   const activeContext={...context,version:runId?(runs.find(r=>r.id===runId)?.version??context.version):context.version,runId:runId||undefined};
@@ -30,23 +30,24 @@ export function QueryReports({api,context,canExport,onClose,onMaintenance}:{api:
     }catch(e){setError((e as Error).message);}
   }
 
-  return <section className="qr-workspace qr-business" aria-label="五类业务查询">
-    <header className="qr-heading"><div><h2>五类业务查询</h2><p>物料、需求、库存、产能与补料 · 同一数据版本</p></div><button onClick={onClose}>返回排程流程</button></header>
+  const catalogReady=catalog?.identity.datasetId===activeContext.datasetId&&catalog?.identity.version===activeContext.version&&(catalog?.identity.runId||undefined)===activeContext.runId;
+  return <section className="qr-workspace qr-business" aria-label="业务数据查询与维护">
+    <header className="qr-heading"><div><h2>业务数据查询与维护</h2><p>物料、需求、库存、产能与补料 · 同一导入数据集</p></div><div className="qr-actions">{onRefresh&&!runId&&<button onClick={()=>void onRefresh()}>刷新数据版本</button>}{onManageData&&<button disabled={!!runId} title={runId?'历史运行只读；切回已导入数据后维护':'查询、新增或维护同版本的原始业务表'} onClick={()=>onManageData(report)}>原始数据维护</button>}<button onClick={onClose}>返回排程流程</button></div></header>
     <div className="qr-context"><b>数据集 v{activeContext.version}</b><label>数据来源<select aria-label="业务查询来源" value={pendingRun} onChange={e=>setPendingRun(e.target.value)}><option value="">已导入数据 v{context.version}</option>{runs.map(r=><option key={r.id} value={r.id}>已保存运行 · v{r.version} · {r.id}</option>)}</select></label><button onClick={()=>setRunId(pendingRun)}>切换来源</button><span>{runId?'查看该次运行冻结的输入与结果':'查看已导入的输入数据与参考计算'}</span></div>
     {error&&<p role="alert">{error}</p>}{!catalog&&!error&&<p role="status">正在核对数据版本…</p>}
-    {catalog&&<><nav className="qr-reports" aria-label="五类报表">{queryReports.map(([id,label])=><button key={id} aria-pressed={report===id} onClick={()=>chooseReport(id)}>{label}</button>)}</nav><nav className="qr-views" aria-label="业务查询子视图">{views.map(v=><button key={v.id} aria-pressed={view===v.id} onClick={()=>setView(v.id)}>{v.label}</button>)}</nav><details className="qr-scope-note"><summary>查询口径与来源说明</summary><p>{catalog.note}</p><p>数据集 {activeContext.datasetId} · v{activeContext.version}。{runId?'冻结输入与运行结果一起读取；不使用当前参数补填历史。':'指定版本输入及参考演算；不代表实际计算结果或交付实绩。'}</p></details>
-      {current&&<QueryReportView key={catalog.identity.fingerprint+':'+current.id+':'+navRev} api={api} catalog={catalog} view={current} memory={memory.current} canExport={canExport} onNavigate={navigate} onMaintenance={!catalog.identity.runId?onMaintenance:undefined}/>}
+    {catalog&&catalogReady&&<><nav className="qr-reports" aria-label="五类报表">{queryReports.map(([id,label])=><button key={id} aria-pressed={report===id} onClick={()=>chooseReport(id)}>{label}</button>)}</nav><nav className="qr-views" aria-label="业务查询子视图">{views.map(v=><button key={v.id} aria-pressed={view===v.id} onClick={()=>setView(v.id)}>{v.label}</button>)}</nav><details className="qr-scope-note"><summary>查询口径与来源说明</summary><p>{catalog.note}</p><p>数据集 {activeContext.datasetId} · v{activeContext.version}。{runId?'冻结输入与运行结果一起读取；不使用当前参数补填历史。':'指定版本输入及参考演算；不代表实际计算结果或交付实绩。'}</p></details>
+      {current&&<QueryReportView key={catalog.identity.fingerprint+':'+current.id+':'+navRev} api={api} catalog={catalog} view={current} memory={memory.current} canExport={canExport} onNavigate={navigate} maintenanceTables={maintenanceTables} onMaintenance={!catalog.identity.runId?onMaintenance:undefined}/>}
     </>}
   </section>;
 }
 
-function QueryReportView({api,catalog,view,memory,canExport,onNavigate,onMaintenance}:{api:QueryApi;catalog:QueryCatalog;view:QueryView;memory:Map<string,Memory>;canExport:boolean;onNavigate:(v:string,q:string,inherit:QueryDraft)=>void;onMaintenance?:(target:{table:string;key:string})=>void}) {
-  const memoryKey=catalog.identity.fingerprint+':'+view.id,saved=memory.get(memoryKey),initial=saved?.draft||queryInitial(catalog);
+function QueryReportView({api,catalog,view,memory,canExport,onNavigate,onMaintenance,maintenanceTables}:{api:QueryApi;catalog:QueryCatalog;view:QueryView;memory:Map<string,Memory>;canExport:boolean;onNavigate:(v:string,q:string,inherit:QueryDraft)=>void;onMaintenance?:(target:{table:string;key:string})=>void;maintenanceTables:string[]}) {
+  const memoryKey=catalog.identity.fingerprint+':'+view.id,saved=memory.get(memoryKey)||memory.get('last:'+view.id),initial=saved?.draft||queryInitial(catalog);
   const [draft,setDraft]=useState<QueryDraft>(initial),[applied,setApplied]=useState<QueryDraft>(saved?.applied||initial),[page,setPage]=useState<QueryPage>(),[error,setError]=useState(''),[selected,setSelected]=useState<string[]>([]),[record,setRecord]=useState<QueryRecord>(),[visible,setVisible]=useState<string[]>(view.columns.map(c=>c.key)),[long,setLong]=useState<{id:string;field:string}>();
   const [refresh,setRefresh]=useState(0);
   const signature=JSON.stringify(applied),dirty=JSON.stringify(draft)!==signature;
   const request={identity:catalog.identity,view:view.id,...applied};
-  useEffect(()=>{memory.set(memoryKey,{draft,applied});},[draft,applied,memoryKey]);
+  useEffect(()=>{memory.set(memoryKey,{draft,applied});memory.set('last:'+view.id,{draft:{...draft,filters:{},offset:0},applied:{...applied,filters:{},offset:0}});},[draft,applied,memoryKey]);
   useEffect(()=>{let live=true;setPage(undefined);setRecord(undefined);setSelected([]);setError('');
     readQueryPage(api,request).then(r=>{if(!live)return;if(!sameQueryIdentity(catalog.identity,r.identity)||r.view!==view.id)throw Error('结果版本不符，请返回并重新选择来源');setPage(r);}).catch(e=>{if(live)setError(e.message);});return()=>{live=false;};
   },[signature,catalog.identity.fingerprint,view.id,refresh]);
@@ -68,7 +69,7 @@ function QueryReportView({api,catalog,view,memory,canExport,onNavigate,onMainten
   </form>{error&&<p role="alert">{error}</p>}{!page&&!error&&<p role="status">正在读取完整结果的当前页…</p>}
     {page&&<>
       {view.report==='bom'&&<QueryBomPreview view={view.id} page={page} identity={catalog.identity} onOpen={setRecord}/>}
-      <QueryTable identity={catalog.identity} id={catalog.preferenceScope+':'+view.id+':main'} columns={page.columns} records={page.records} selected={selected} onSelected={setSelected} onOpen={setRecord} onLong={(id,field)=>setLong({id,field})} sort={applied.sort} direction={applied.direction} onVisible={setVisible} onSort={sort=>{const next={...draft,sort,direction:applied.sort===sort&&applied.direction==='asc'?'desc' as const:'asc' as const,offset:0};setDraft(next);setApplied(next);}} header={<div className="qr-result-bar"><b>结果 {page.total} 条 · {page.total?`${page.offset+1}–${page.offset+page.records.length}`:'无匹配'}</b><span className="qr-result-note" title={`${view.note} ${page.note}`}>{page.note}</span><details className="qr-result-info"><summary>来源与提示</summary><p>{view.note}</p>{page.diagnostics?.map(d=><p key={d.code}>{d.code} · {d.message}</p>)}{page.notProvided?.map(n=><p key={n}>未提供：{n}</p>)}</details><label>每页 <select value={applied.pageSize} onChange={e=>{const next={...draft,pageSize:Number(e.target.value),offset:0};setDraft(next);setApplied(next);}}>{[100,200,500].map(n=><option key={n} value={n}>{n}</option>)}</select></label><button disabled={dirty||!applied.offset} onClick={()=>move(Math.max(0,applied.offset-applied.pageSize))}>上一页</button><button disabled={dirty||page.nextOffset===null} onClick={()=>move(page.nextOffset!)}>下一页</button><button disabled={!canExport||dirty} onClick={()=>download('ALL')}>导出全部</button><button disabled={!canExport||dirty||!selected.length} onClick={()=>download('SELECTED')}>导出所选 {selected.length}</button></div>}/>
+      <QueryTable rowActions={onMaintenance?r=>{const targets=editableQuerySources(r,maintenanceTables);return targets.length?<button onClick={()=>targets.length===1?onMaintenance(targets[0]):setRecord(r)}>{targets.length===1?'维护':'维护来源'}</button>:<span className="qr-note">参考 / 汇总</span>;}:undefined} identity={catalog.identity} id={catalog.preferenceScope+':'+view.id+':main'} columns={page.columns} records={page.records} selected={selected} onSelected={setSelected} onOpen={setRecord} onLong={(id,field)=>setLong({id,field})} sort={applied.sort} direction={applied.direction} onVisible={setVisible} onSort={sort=>{const next={...draft,sort,direction:applied.sort===sort&&applied.direction==='asc'?'desc' as const:'asc' as const,offset:0};setDraft(next);setApplied(next);}} header={<div className="qr-result-bar"><b>结果 {page.total} 条 · {page.total?`${page.offset+1}–${page.offset+page.records.length}`:'无匹配'}</b><span className="qr-result-note" title={`${view.note} ${page.note}`}>{page.note}</span><details className="qr-result-info"><summary>来源与提示</summary><p>{view.note}</p>{page.diagnostics?.map(d=><p key={d.code}>{d.code} · {d.message}</p>)}{page.notProvided?.map(n=><p key={n}>未提供：{n}</p>)}</details><label>每页 <select value={applied.pageSize} onChange={e=>{const next={...draft,pageSize:Number(e.target.value),offset:0};setDraft(next);setApplied(next);}}>{[100,200,500].map(n=><option key={n} value={n}>{n}</option>)}</select></label><button disabled={dirty||!applied.offset} onClick={()=>move(Math.max(0,applied.offset-applied.pageSize))}>上一页</button><button disabled={dirty||page.nextOffset===null} onClick={()=>move(page.nextOffset!)}>下一页</button><button disabled={!canExport||dirty} onClick={()=>download('ALL')}>导出全部</button><button disabled={!canExport||dirty||!selected.length} onClick={()=>download('SELECTED')}>导出所选 {selected.length}</button></div>}/>
       {!page.total&&<p>当前条件没有业务记录；没有补造数量或来源。</p>}
       {long&&<QueryLongValue api={api} identity={catalog.identity} query={request} fingerprint={page.queryFingerprint} id={long.id} field={long.field} onClose={()=>setLong(undefined)}/>}
       {record&&<QuerySourceDrawer preferenceScope={catalog.preferenceScope} api={api} identity={catalog.identity} query={request} pageFingerprint={page.queryFingerprint} view={view.id} record={record} onClose={()=>setRecord(undefined)} onNavigate={(v,q)=>onNavigate(v,q,applied)} onMaintenance={onMaintenance}/>}
@@ -145,4 +146,11 @@ export function QueryBomPreview({view,page,identity,onOpen}:{view:string;page:Qu
     })}</div>}
     <small className="qr-bom-foot">数据集 {identity.datasetId} v{identity.version} · 图中仅使用当前查询记录；点击图形查看原始字段和来源。</small>
   </figure>;
+}
+
+/** Maintenance is limited to real source keys in editable workbook tables. */
+export function editableQuerySources(record:QueryRecord,tables:string[]):{table:string;key:string}[]{
+ const targets=new Map<string,{table:string;key:string}>();
+ for(const r of Array.isArray(record.refs)?record.refs:[])if(r&&tables.includes(r.table)&&typeof r.key==='string'&&r.key)targets.set(r.table+'|'+r.key,{table:r.table,key:r.key});
+ return [...targets.values()];
 }

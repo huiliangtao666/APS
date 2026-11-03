@@ -15,7 +15,8 @@
     "test:query-ui": "esbuild src/query-ui.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-query-ui.cjs && node --test .qa-query-ui.cjs",
     "build:frontend": "tsc --noEmit && vite build",
     "build:server": "esbuild server/index.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs",
-    "test:hosting": "esbuild src/app-path.ts --bundle --platform=node --format=esm --packages=external --outfile=.qa-app-path.mjs && node --max-old-space-size=192 qa/hosting-paths.mjs"
+    "test:hosting": "esbuild src/app-path.ts --bundle --platform=node --format=esm --packages=external --outfile=.qa-app-path.mjs && node --max-old-space-size=192 qa/hosting-paths.mjs",
+    "test:workbench-ui": "esbuild src/workbench-merge.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=esm --outfile=.qa-workbench-merge.mjs && node --test .qa-workbench-merge.mjs"
   },
   "dependencies": {
     "@praetor/lite-app-runtime": "file:../../.praetor/sdk/lite-app-runtime.tgz",
