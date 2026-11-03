@@ -5,6 +5,7 @@ import {selectionPredicate,changeSelection,candidatePage,searchText} from './que
 import {minuteMode,minuteTime,knownMinuteStops,wipOccupations,eventPeak,unionMinutes,shiftWindows} from './workbook-minute.mjs';
 import {explainEquipmentNode} from './workbook-node-analysis.mjs';
 import {riskTimeline,explainRiskNode} from './workbook-risk-timeline.mjs';
+import {taskCard} from './workbook-task-card.mjs';
 import {explainFinding,explainShortage} from '../src/lib/workbook-explanations.mjs';
 const rows=(d,t)=>d.tables?.[t]||[],error=(code,status=422)=>{throw Object.assign(Error(code),{code,status});};
 export const EQUIPMENT_VIEWS={E1:'设备甘特',E2:'需求交付',E3:'设备负荷',E4:'人员工装',E5:'物料风险',E6:'任务明细'};
@@ -15,7 +16,7 @@ const dateAt=(d,zero='2026-10-31')=>new Date(Date.parse(zero+'T00:00:00Z')+d*864
 const day=(s,zero)=>{if(typeof s!=='string'||!/^\d{4}-\d\d-\d\d$/.test(s))error('INVALID_DATE');const n=(Date.parse(s+'T00:00:00Z')-Date.parse(zero+'T00:00:00Z'))/86400000;if(!Number.isInteger(n)||dateAt(n,zero)!==s)error('INVALID_DATE');return n;};
 const sourceRef=(sheet,r,key)=>({sheet,row:r?._row??null,key});
 const rec=(id,values,extra={})=>({id,values:{id,...values},...extra});
-const chartTask=t=>Object.fromEntries(['id','orderId','productionId','productId','machine','label','start','end','quantity','predecessor'].map(k=>[k,t[k]??null]));
+const chartTask=(t,materials,resources)=>({...Object.fromEntries(['id','orderId','productionId','productId','machine','label','start','end','quantity','predecessor'].map(k=>[k,t[k]??null])),productName:materials.get(t.productId)?.['物料名称']??null,machineName:resources.get(t.machine)?.['资源名称']??null,physicalStatus:t.physicalStatus??null,unit:'千克'});
 const publicRow=r=>Object.fromEntries(Object.entries(r||{}).filter(([k])=>!k.startsWith('_')));
 function universe(v,field){const d=v.input,ds=rows(d,'每日需求');let opts;
  if(field==='machine')opts=rows(d,'设备与工装').filter(r=>r['资源类别']==='设备').map(r=>({id:r['资源编号'],name:r['资源名称']}));
@@ -131,11 +132,16 @@ export const equipmentDomain={
    if(query.view!=='E2')error('TIMELINE_REQUIRES_DEMAND');
    if(!Array.isArray(q.orderIds)||q.orderIds.length>500||q.orderIds.some(id=>typeof id!=='string'||!records.some(r=>r.id===id)))error('RECORD_NOT_FOUND',404);
    const offset=q.offset??0;if(!Number.isSafeInteger(offset)||offset<0)error('INVALID_PAGE');
+   const materials=new Map(rows(v.input,'物料主数据').map(r=>[r['物料编号'],r])),resources=new Map(rows(v.input,'设备与工装').map(r=>[r['资源编号'],r]));
    const wanted=new Set(q.orderIds),tasks=a.tasks.filter(t=>wanted.has(t.orderId)&&t.start<c.end&&t.end>c.start),part=[];let bytes=0;
-   for(const t of tasks.slice(offset,offset+500)){const row=chartTask(t),n=Buffer.byteLength(JSON.stringify(row));if(n>120000)error('DETAIL_RECORD_LIMIT',413);if(bytes+n>180000)break;part.push(row);bytes+=n;}
+   for(const t of tasks.slice(offset,offset+500)){const row=chartTask(t,materials,resources),n=Buffer.byteLength(JSON.stringify(row));if(n>120000)error('DETAIL_RECORD_LIMIT',413);if(bytes+n>180000)break;part.push(row);bytes+=n;}
    return {queryFingerprint:fp,tasks:part,total:tasks.length,nextOffset:offset+part.length<tasks.length?offset+part.length:null};
   }
   const record=records.find(r=>r.id===q.id);if(!record)error('RECORD_NOT_FOUND',404);
+  if(q.table==='task-card'){
+   if(query.view!=='E2')error('TASK_CARD_REQUIRES_DEMAND');
+   return {queryFingerprint:fp,...taskCard(v,{record,a,c,node:q.node,section:q.section,offset:q.offset})};
+  }
   const p=v.run.result,ids=new Set(query.view==='E2'?a.tasks.filter(t=>t.orderId===record.id).map(t=>t.id):record.taskIds||[]),selectedTasks=a.tasks.filter(t=>ids.has(t.id)),task=selectedTasks[0],resource=record.resource||record.values.resource||record.values.machine,day=record.day??record.values.day;
   // An unplanned E2 demand has no task IDs. Bind its details by the real demand
   // ID as well; otherwise risks and route/parameter sources disappear entirely.

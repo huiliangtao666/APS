@@ -66,3 +66,26 @@ test('demand Gantt analysis matches equipment Gantt and rejects tasks from other
  const narrow=query({view:'E2',toDateInclusive:'2026-11-01'}),fp=equipmentDomain.query(v,narrow).queryFingerprint;
  assert.throws(()=>equipmentDomain.detail(v,{...request,query:narrow,queryFingerprint:fp,node:{kind:'task',id:'NEXT',resource:'EQ2'}}),/NODE_NOT_IN_QUERY/);
 });
+
+test('demand task card exposes real task fields and named resources without inventing physical progress',()=>{
+ const v=make();Object.assign(v.input.tables['物料主数据'][0],{'物料名称':'测试成品'});v.input.tables['设备与工装'].push({'资源编号':'TL1','资源名称':'挂架一','资源类别':'工装','可用数量':'1','单次批量上限千克':'500'});
+ const q=query({view:'E2'}),page=equipmentDomain.query(v,q),request={query:q,queryFingerprint:page.queryFingerprint,table:'task-card',id:'DE',node:{kind:'task',id:'T43',resource:'EQ1'}},before=JSON.stringify(v);
+ const info=equipmentDomain.detail(v,request);assert.equal(info.task.productName,'测试成品');assert.equal(info.task.physicalStatus,null);assert.equal(info.fields.find(f=>f.label==='现场进度').value,null);assert.equal(info.task.start,1440);assert.equal(info.task.end,2880);assert.ok(info.analysis.basis.some(b=>b.logic.includes('固定跨日历时')));
+ const resources=equipmentDomain.detail(v,{...request,section:'resources'});assert.equal(resources.fields.find(f=>f.label==='任务需求人数').value,'2 人');assert.equal(resources.groups[0].records[0].values.name,'挂架一');assert.equal(resources.groups[0].records[0].values.batch,500);
+ const timeline=equipmentDomain.detail(v,{query:q,queryFingerprint:page.queryFingerprint,table:'timeline',orderIds:['DE']});assert.equal(timeline.tasks[0].productName,'测试成品');assert.equal(timeline.tasks[0].unit,'千克');assert.equal(timeline.tasks[0].physicalStatus,null);assert.equal(JSON.stringify(v),before);
+ assert.throws(()=>equipmentDomain.detail(v,{...request,node:{...request.node,resource:'EQ2'}}),/NODE_NOT_IN_QUERY/);assert.throws(()=>equipmentDomain.detail(v,{...request,node:{...request.node,id:'FOREIGN'}}),/NODE_NOT_IN_QUERY/);assert.throws(()=>equipmentDomain.detail(v,{...request,queryFingerprint:'stale'}),/QUERY_CHANGED/);
+});
+test('task card separates actual predecessor edges, per-task allocations, other feeding BOMs and frozen source fields',()=>{
+ const v=make();v.input.tables['物料清单']=[{'用量关系编号':'BM1','父项编号':'FG','子项编号':'RM','子项基准用量':'2','父项基准产出千克':'100','数量单位':'千克','投料位置':'包装',_row:20}];v.input.mapping.feed_mappings=[{bom_id:'BM1',route_step_id:'RT2'}];v.input.tables['工艺路线'][0]._cells={'跨日历时天数':'H74'};
+ const q=query({view:'E2'}),fp=equipmentDomain.query(v,q).queryFingerprint,request={query:q,queryFingerprint:fp,table:'task-card',id:'DE',node:{kind:'task',id:'T43',resource:'EQ1'}};
+ const chain=equipmentDomain.detail(v,{...request,section:'chain'});assert.equal(chain.groups[0].records.find(r=>r.id==='NEXT').values.linkedPredecessor,'T43');
+ const materials=equipmentDomain.detail(v,{...request,section:'materials'});assert.equal(materials.groups.find(g=>g.id==='allocations').records.length,1);assert.equal(materials.groups.find(g=>g.id==='allocations').records[0].values.supply,'inventory:L1');assert.equal(materials.groups.find(g=>g.id==='bom').records[0].values.mapping,'其他工序');assert.ok(!JSON.stringify(materials).includes('其他需求问题'));
+ const sources=equipmentDomain.detail(v,{...request,section:'sources'});assert.ok(sources.fields.find(f=>f.label==='工艺来源').value.includes('第 74 行'));assert.equal(sources.groups.find(g=>g.id==='route').records.find(r=>r.id==='跨日历时天数').values.cell,'H74');
+ const narrow=query({view:'E2',toDateInclusive:'2026-11-01'}),nfp=equipmentDomain.query(v,narrow).queryFingerprint;
+ const outside=equipmentDomain.detail(v,{...request,query:narrow,queryFingerprint:nfp,node:{kind:'task',id:'NEXT',resource:'EQ2'}});assert.equal(outside.task.outsideWindow,true);assert.equal(outside.task.id,'NEXT');
+});
+test('task card paginates a long BOM without losing records and rejects invalid sections',()=>{
+ const v=make();v.input.tables['物料清单']=Array.from({length:205},(_,i)=>({'用量关系编号':'B'+i,'父项编号':'FG','子项编号':'RM'}));const q=query({view:'E2'}),fp=equipmentDomain.query(v,q).queryFingerprint,request={query:q,queryFingerprint:fp,table:'task-card',id:'DE',node:{kind:'task',id:'T43',resource:'EQ1'},section:'materials'};
+ let offset=0;const seen=new Set();do{const page=equipmentDomain.detail(v,{...request,offset});assert.ok(Buffer.byteLength(JSON.stringify(page))<185000);for(const r of page.groups.find(g=>g.id==='bom').records){assert.ok(!seen.has(r.id));seen.add(r.id);}if(page.nextOffset===null)break;assert.ok(page.nextOffset>offset);offset=page.nextOffset;}while(true);assert.equal(seen.size,205);
+ assert.throws(()=>equipmentDomain.detail(v,{...request,section:'fake'}),/INVALID_TASK_SECTION/);assert.throws(()=>equipmentDomain.detail(v,{...request,offset:-1}),/INVALID_PAGE/);
+});

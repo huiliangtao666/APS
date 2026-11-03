@@ -1,0 +1,13 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {renderToStaticMarkup} from 'react-dom/server';
+import {DemandTaskHoverContent} from './DemandTaskHover';import {DemandTaskDetails,TaskFields,TaskChainCards,loadTaskCard} from './DemandTaskDetails';
+import type {QueryIdentity} from './QueryReportsTypes';
+const identity={datasetId:'SYN',version:1,runId:'R',fingerprint:'F',dayZero:'2026-10-31',minuteOrigin:'2026-10-31T00:00:00+08:00'} as QueryIdentity;
+const node={id:'T1',kind:'task' as const,resource:'EQ1',recordId:'DE1'},task={id:'T1',label:'热加工',orderId:'DE1',productId:'FG',productName:'鸡肉香肠',quantity:132,start:1440,end:2880,machine:'EQ1',machineName:'热加工机位'};
+test('hover shows task, product, quantity, time and equipment with no fabricated progress',()=>{const html=renderToStaticMarkup(<DemandTaskHoverContent task={task} identity={identity}/>);for(const text of ['T1 · 热加工','鸡肉香肠','132 千克','2026.11.01 00:00','2026.11.02 00:00','EQ1','现场进度：未提供'])assert.ok(html.includes(text),text);assert.ok(!html.includes('已完成'));assert.ok(!html.includes('进行中'));});
+test('task popup exposes five tabs and chain cards retain explicit predecessor references and batch boundaries',()=>{
+ const html=renderToStaticMarkup(<DemandTaskDetails api={async()=>({})} identity={identity} tableIdentity={identity} query={{}} fingerprint="Q" node={node} onClose={()=>{}} onSelect={()=>{}} onTask={()=>{}} onDemand={()=>{}} preferenceScope="SYN"/>);
+ for(const tab of ['任务明细','前后工序','资源需求','物料风险','数据来源'])assert.ok(html.includes(tab));assert.equal((html.match(/role="tab"/g)||[]).length,5);
+ const fields=renderToStaticMarkup(<TaskFields fields={[{label:'现场进度',value:null},{label:'需求人数',value:0}]}/>);assert.ok(fields.includes('未提供'));assert.ok(fields.includes('>0<'));
+ const chain=renderToStaticMarkup(<TaskChainCards selected="T1" records={[{id:'T1',values:{...task,productionId:'B1'}},{id:'T2',values:{...task,productionId:'B2',predecessor:'T1',linkedPredecessor:null}}]} identity={identity} onSelect={()=>{}}/>);assert.ok(chain.includes('生产批次 B1'));assert.ok(chain.includes('生产批次 B2'));assert.ok(chain.includes('未关联到同批任务'));
+});
+test('task card loader rejects foreign task, demand, resource and stale identity',async()=>{const response={identity,queryFingerprint:'Q',task:{...task},section:'overview'};const load=(r:any)=>loadTaskCard(async()=>r,identity,{},'Q',node,'overview',0);assert.equal((await load(response)).task.id,'T1');for(const change of [{id:'OTHER'},{orderId:'OTHER'},{machine:'OTHER'}])await assert.rejects(load({...response,task:{...task,...change}}),/身份不一致/);await assert.rejects(load({...response,queryFingerprint:'OTHER'}),/身份不一致/);});
