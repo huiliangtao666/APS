@@ -10,5 +10,50 @@
     "title": "[今日问题 2026-11-03 追加] 继续登记新交互并关闭已完成事项"
   },
   "productSha": "13adaf0",
-  "dailyIndexCount": 81
+  "dailyIndexCount": 81,
+  "verifiedAt": "2026-11-03T16:01:02.899570+00:00",
+  "checkedCount": 81,
+  "closedCompletedCount": 81,
+  "unrelatedPendingCRs": [
+    {
+      "number": 140,
+      "state": "open",
+      "title": "[CR][Backlog] CR-MPS-REPORT-20261103 生产主计划综合报表（待批准）"
+    },
+    {
+      "number": 141,
+      "state": "open",
+      "title": "[CR][Backlog] CR-SOLVER-CHOICE-20261103 基础求解器默认、CP-SAT可选（待实施批准）"
+    }
+  ],
+  "latestStates": [
+    {
+      "number": 138,
+      "html_url": "https://github.com/huiliangtao666/APS/issues/138",
+      "state": "closed",
+      "state_reason": "completed",
+      "closed_at": "2026-11-03T15:19:30Z"
+    },
+    {
+      "number": 139,
+      "html_url": "https://github.com/huiliangtao666/APS/issues/139",
+      "state": "closed",
+      "state_reason": "completed",
+      "closed_at": "2026-11-03T15:23:28Z"
+    },
+    {
+      "number": 143,
+      "html_url": "https://github.com/huiliangtao666/APS/issues/143",
+      "state": "closed",
+      "state_reason": "completed",
+      "closed_at": "2026-11-03T16:00:10Z"
+    },
+    {
+      "number": 144,
+      "html_url": "https://github.com/huiliangtao666/APS/issues/144",
+      "state": "closed",
+      "state_reason": "completed",
+      "closed_at": "2026-11-03T16:00:58Z"
+    }
+  ]
 }

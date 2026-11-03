@@ -105,4 +105,6 @@
 
 - [#143 五类排程图表按字段分列并选择显示栏位](https://github.com/huiliangtao666/APS/issues/143) — 已完成（Closed / completed）；附原截图与实现提交，15项相关检查、构建和正式资源核查通过。
 
-- [#144 继续登记新交互并关闭已完成事项](https://github.com/huiliangtao666/APS/issues/144) — 本次日志登记与状态核对。后续追加累计4条、4张原始截图，索引累计81条Issue。待批准/未实施CR保留原状态。
+- [#144 继续登记新交互并关闭已完成事项](https://github.com/huiliangtao666/APS/issues/144) — 已完成（Closed / completed）；本次日志登记与状态核对。后续追加累计4条、4张原始截图，索引累计81条Issue。待批准/未实施CR保留原状态。
+
+最新GitHub回读：索引81条均为 closed / completed（咨询、设计决定及代码实现仍分别保留各自完成口径）；#140、#141待批准CR保持open。核对时间（UTC）：2026-11-03T16:01:02.899570+00:00。
