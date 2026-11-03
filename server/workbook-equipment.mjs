@@ -3,6 +3,7 @@ import {parameterDayRatio} from './parameter-contract.mjs';
 import {effectiveBom,expandBom} from './query-reports/bom.mjs';
 import {selectionPredicate,changeSelection,candidatePage,searchText} from './query-reports/selections.mjs';
 import {minuteMode,minuteTime,knownMinuteStops,wipOccupations,eventPeak,unionMinutes,shiftWindows} from './workbook-minute.mjs';
+import {explainEquipmentNode} from './workbook-node-analysis.mjs';
 const rows=(d,t)=>d.tables?.[t]||[],error=(code,status=422)=>{throw Object.assign(Error(code),{code,status});};
 export const EQUIPMENT_VIEWS={E1:'设备甘特',E2:'需求交付',E3:'设备负荷',E4:'人员工装',E5:'物料风险',E6:'任务明细'};
 const labels={suggestionId:'采购建议编号',relationId:'供货关系',supplierId:'供应商',orderDate:'建议下单日期',availableDate:'建议可用日期',netGap:'原缺口',id:'业务键',machine:'设备编号',earliestArrivalDate:'最早要求到货日',latestArrivalDate:'最晚要求到货日',cleaningMinutes:'清洗自然分钟',dailyCapacityKg:'冻结日投产能力（kg）',workingOccupiedMinutes:'工作窗内占用分钟',peakOccupancy:'占用峰值',occupancyDimension:'占用量纲',occupancyCapacity:'占用容量',overlap:'超占提示',name:'名称',group:'设备组',taskCount:'真实任务数',wipCount:'WIP保留数',status:'结果状态',orderId:'需求编号',productId:'物料编号',productName:'物料名称',productionId:'生产批次',routeStepId:'路线工序',operation:'工序',label:'工序名称',start:'开始时刻',end:'结束时刻（不含）',duration:'历时（分钟）',quantity:'数量',unit:'单位',crew:'班组',people:'参与人数',tools:'实体工装',predecessor:'真实前序',physicalStatus:'现场进度',customer:'客户',region:'区域',grade:'等级',requiredDate:'需求日期',readyDate:'计划就绪日期',arrivalDate:'计划到货日期',lateDays:'迟到（天）',reason:'未排/条件原因',day:'日期',taskMinutes:'任务自然分钟',wipMinutes:'WIP自然分钟',occupiedMinutes:'自然占用并集分钟',startedBatchKg:'开工日投产量（kg）',availableWorkMinutes:'可用工作分钟',utilization:'工时利用率',peak:'并发峰值',available:'可用数量',remaining:'余量',dimension:'量纲',need:'需求/在制',materialId:'物料',needDate:'需料日期',sourceKind:'风险来源',conditional:'条件供给',meaning:'口径',source:'来源',key:'业务键',sheet:'工作表',row:'原行',fileHash:'文件hash',mappingHash:'映射hash',parameterHash:'参数hash',resultHash:'结果hash',inputHash:'输入hash',startDay:'开始日',endDay:'结束日',timeUnit:'时间单位',toolEndMinute:'工装释放时刻',resource:'资源',kind:'占用性质',code:'问题代码',message:'说明'};
@@ -116,6 +117,10 @@ export const equipmentDomain={
   for(const [sheet,key]of [['设备与工装','资源编号'],['班组资源','班组编号'],['工艺路线','路线工序编号']])for(const r of rows(v.input,sheet))if(keys.has(r[key]))sourceRows.push(sourceRef(sheet,r,r[key]));
   if(Number.isInteger(day))for(const sheet of ['工厂日历','生产班次'])for(const r of rows(v.input,sheet))if(sheet==='工厂日历'?Number(r['日序'])===day:Math.floor(Number(r['开始分钟偏移'])/1440)===day)sourceRows.push(sourceRef(sheet,r,r['班次日历编号']||String(day)));
   let values=[];const tab=q.table||'record';
+  if(tab==='analysis'){
+   if(query.view!=='E1')error('NODE_ANALYSIS_REQUIRES_GANTT');
+   return {queryFingerprint:fp,analysis:explainEquipmentNode(v,{record,a,c:setup(v,query),node:q.node})};
+  }
   if(tab==='record')values=[record];
   else if(tab==='chain'){
    // Follow real predecessor edges inside one production batch, never list order.
