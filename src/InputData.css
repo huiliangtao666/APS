@@ -32,3 +32,36 @@
 .workbook-run-action button{min-height:42px}
 @media(max-width:900px){.input-workspace .workbook-steps{grid-template-columns:repeat(3,minmax(0,1fr))}.workbook-range-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.input-workspace .workbook-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.workbook-range-fields{grid-template-columns:1fr}.workbook-feature-nav button{flex:1 1 45%}}
+/* Compact workbench shell follows the uploaded business-query prototype. */
+main:has(.input-workspace){max-width:none;padding:18px clamp(14px,2vw,30px)}
+main:has(.input-workspace) .hero{margin:0 0 12px;align-items:center}
+main:has(.input-workspace) .hero h1{font-size:24px;margin-bottom:3px}
+main:has(.input-workspace) .hero .eyebrow{margin-bottom:2px}
+main:has(.input-workspace) .hero-source{display:none}
+.input-workspace{gap:8px}
+.input-workspace .panel{padding:14px 16px;margin-bottom:0;border-radius:7px;box-shadow:none}
+.input-workspace .panel h2{margin:0 0 4px}
+.input-workspace nav{margin:7px 0;gap:4px}
+.input-workspace .workbook-feature-nav{flex-wrap:nowrap;overflow-x:auto;padding:4px;border-radius:7px}
+.workbook-feature-nav button{padding:8px 11px;white-space:nowrap;font-size:13px}
+.input-workspace .workbook-journey{padding:10px 14px}
+.input-workspace .workbook-journey h2{font-size:15px}
+.input-workspace .workbook-journey>p{font-size:12px;margin:2px 0}
+.input-workspace .workbook-steps{gap:4px;margin:7px 0 0}
+.workbook-steps button{min-height:39px;font-size:12px;padding:5px 7px}
+.input-workspace .workbook-status-key{padding:5px 0 0;font-size:12px;color:#607789}
+.input-workspace .workbook-source-details{padding:5px 0;color:#64748b}
+.workbook-source-panel>.input-actions{gap:10px;margin:0}
+.workbook-dataset{min-width:min(100%,250px);gap:1px}
+.workbook-dataset strong{font-size:14px}
+.workbook-range-fields{gap:9px;margin:10px 0;padding:11px}
+.workbook-run-action{padding:10px}
+.input-workspace .input-actions{gap:7px;margin:8px 0}
+.input-workspace .input-scroll{max-height:65vh}
+.input-workspace .workbook-import-cards{align-items:start;gap:10px}
+.input-workspace .workbook-import-cards .panel{align-self:start}
+.workbook-import-cards .panel>label{display:inline-grid;vertical-align:top;width:calc(50% - 6px);min-width:min(100%,220px);margin:5px 6px 5px 0}
+.workbook-import-cards .panel>label select{width:100%}
+.input-workspace .equipment-schedule{max-width:none;margin:0;padding:12px}
+@media(max-width:760px){main:has(.input-workspace){padding:12px}.input-workspace .workbook-feature-nav{flex-wrap:nowrap}.workbook-feature-nav button{flex:none}.input-workspace .workbook-steps{grid-template-columns:repeat(3,minmax(0,1fr))}main:has(.input-workspace) .hero-source{display:none}}
+@media(max-width:560px){.input-workspace .workbook-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
