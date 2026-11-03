@@ -7,7 +7,7 @@ import {sourceRole} from './parameter-contract.mjs';
 // Engineering limits, not business defaults or measured production SLOs.
 export const previewLimits=Object.freeze({pageSize:25,maxPageSize:100,maxGroups:50,
   inlineBytes:1024,valueChunk:4096,responseBytes:256*1024,summaryBytes:128*1024,
-  maxRecords:100000,maxFields:2000000,maxProjectionBytes:32*1024*1024,ttlMs:30*60*1000});
+  maxRecords:100000,maxFields:2000000,maxProjectionBytes:128*1024*1024,ttlMs:30*60*1000});
 export const PREVIEW_RULES='workbook-preview-first-stage:1';
 export class PreviewError extends Error {
   constructor(code,status=409,detail={}){super(code);this.code=code;this.status=status;this.detail=detail;}
@@ -41,6 +41,15 @@ export function sourceRef(data,table,row,field){
     physicalRow:!online&&excelRow&&Number.isSafeInteger(row?._source?.row??row?._row)?(row?._source?.row??row._row):null,cell:online?null:cell,
     businessKey:row?keyOf(table,row,workbookSchema.tables[table]):null,
     overlayRef:row?._overlayRef||null,absenceReason:online?'应用维护记录，无Excel物理坐标':cell?null:'来源未提供物理单元格'};
+}
+// Row identity, workbook hashes and file names repeat for every cell. Store those
+// once per changed row; restore the original public field shape only for a page
+// or one export line. Legacy persisted projections keep working unchanged.
+export function expandPreviewField(record,field){
+  if(!field.sourceCells)return field;
+  const {sourceCells,...value}=field;
+  return {...value,sourceRefs:sourceCells.map(([cell,absenceReason],i)=>({
+    ...record.rowSourceRefs[i],cell,absenceReason}))};
 }
 function freeze(v){if(v&&typeof v==='object'){Object.freeze(v);Object.values(v).forEach(freeze);}return v;}
 export function bindingOf(p){return {previewId:p.id,revision:1,model:'workbook',datasetId:p.datasetId,
@@ -90,16 +99,18 @@ export function buildWorkbookPreview(p,{data,before=null,now=Date.now(),limits=p
     if(operation!==c.operation)fail('CHANGE_OPERATION_MISMATCH',422);
     // Full union of fields actually present in either row. Schema-only optional
     // fields absent on BOTH sides have no record value and need no serialized row.
+    const rowSourceRefs=[sourceRef(data,c.table,b,spec.key),...(a?[sourceRef(before,c.table,a,spec.key)]:[])];
     const fields=spec.fields.filter(f=>own(a,f.name)||own(b,f.name)).map(f=>{const av=own(a,f.name),bv=own(b,f.name);return {
       fieldId:digest([c.table,c.key,f.name]),name:f.name,type:f.type||'text',unit:f.unit??null,
       before:{present:av,value:av?copy(a[f.name]):null},after:{present:bv,value:bv?copy(b[f.name]):null},
       changed:f.name!==spec.key&&(av!==bv||canonical(a?.[f.name])!==canonical(b?.[f.name])),
       formula:b?._formulas?.[f.name]??a?._formulas?.[f.name]??null,
-      sourceRefs:[sourceRef(data,c.table,b,f.name),...(a?[sourceRef(before,c.table,a,f.name)]:[])]};});
+      sourceCells:[sourceRef(data,c.table,b,f.name),...(a?[sourceRef(before,c.table,a,f.name)]:[])]
+        .map(ref=>[ref.cell,ref.absenceReason])};});
     const count=fields.filter(f=>f.changed).length;
     const source=sourceRef(b?data:before,c.table,b||a,spec.key);
     const record={changeId:digest([c.layer,c.table,c.key,operation]),layer:c.layer,table:c.table,key:c.key,operation,
-      changedFieldCount:count,sourceRef:source,fields};
+      changedFieldCount:count,sourceRef:source,rowSourceRefs,fields};
     record.recordHash=digest(record);records.push(record);changedFieldCount+=count;fieldCount+=fields.length;
     recordBytes+=Buffer.byteLength(JSON.stringify(record));
     if(recordBytes>limits.maxProjectionBytes)fail('INPUT_TOO_LARGE',413,{recordBytes,limit:limits.maxProjectionBytes});

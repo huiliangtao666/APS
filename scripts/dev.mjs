@@ -32,7 +32,7 @@ function stop(code) {
 }
 
 for (const entry of [resolve(require.resolve('vite/package.json'), '..', 'bin/vite.js'), resolve('dist/server.mjs')]) {
-  const child = spawn(process.execPath, ['--max-old-space-size=192', entry], {
+  const child = spawn(process.execPath, ['--max-old-space-size=512', entry], {
     env, stdio: 'inherit', detached: true,
   });
   children.push(child);

@@ -1,4 +1,4 @@
-import {assertProjection,canonical,digest,fail,previewSummary} from './workbook-preview.mjs';
+import {assertProjection,canonical,digest,fail,previewSummary,expandPreviewField} from './workbook-preview.mjs';
 import {createHash} from 'node:crypto';
 
 const clip=(v,n=160)=>String(v??'').slice(0,n);
@@ -40,7 +40,7 @@ export function previewFields(v,q){
   const id=identify(v,q),r=v.records.find(r=>r.changeId===q.changeId);if(!r)fail('RECORD_NOT_FOUND',404);
   const p=page(v,r.fields,q,'fields');
   return bounded({...id,...p,changeId:r.changeId,key:r.key,table:r.table,changedFieldCount:r.changedFieldCount,
-    items:p.items.map(f=>({...f,before:inlineValue(v,f.before,f.fieldId,'before'),after:inlineValue(v,f.after,f.fieldId,'after'),
+    items:p.items.map(f=>({...expandPreviewField(r,f),before:inlineValue(v,f.before,f.fieldId,'before'),after:inlineValue(v,f.after,f.fieldId,'after'),
       formula:inlineValue(v,{present:f.formula!==null,value:f.formula},f.fieldId,'formula')}))},v.limits.responseBytes);
 }
 export function previewValue(v,q){
@@ -85,7 +85,7 @@ export function* exportWorkbookPreview(v,q){
   yield line({kind:'manifest',schemaVersion:1,binding:v.binding,summaryFingerprint:v.summaryFingerprint,scope:q.scope,
     filter:q.scope==='ALL'?null:filter,filterHash:digest(q.scope==='ALL'?null:filter),counts,sourceFiles:v.sourceFiles,simulation:v.simulation,
     allRecordFields:true,valueEncoding:'typed-json-with-presence',reportSelection:'ALL or issue-filter plus matching-record identities',complete:false});
-  for(const r of records){yield line({kind:'record',...r,fields:undefined});for(const f of r.fields)yield line({kind:'field',changeId:r.changeId,...f});}
+  for(const r of records){yield line({kind:'record',...r,fields:undefined,rowSourceRefs:undefined});for(const f of r.fields)yield line({kind:'field',changeId:r.changeId,...expandPreviewField(r,f)});}
   for(const report of reports)yield line({kind:'report',...report});
   for(const anchor of v.anchors)if(reportIds.has(anchor.reportId))yield line({kind:'source',...anchor});
   yield JSON.stringify({kind:'completion',complete:true,counts,contentBytes:bytes,contentSha256:sha.digest('hex'),recordIdentityDigest:digest([...ids])})+'\n';

@@ -8,7 +8,7 @@
     "build": "tsc --noEmit && vite build && npx esbuild server/index.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs && npx esbuild server/calculation-worker.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/calculation-worker.mjs && npx esbuild server/workbook-import-worker.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/workbook-import-worker.mjs && cp server/workbook-schema.json server/workbook-simulation.json dist/",
     "test": "node --test src/lib/*.test.mjs && node --experimental-strip-types --test server/auth/auth.test.mjs server/business.test.mjs",
     "test:verification": "node --test src/lib/independent-verification.test.mjs",
-    "start": "NODE_ENV=production node --max-old-space-size=192 dist/server.mjs",
+    "start": "NODE_ENV=production node --max-old-space-size=512 dist/server.mjs",
     "preview": "vite preview",
     "test:auth": "node --test server/auth/auth.test.mjs",
     "test:shared": "node --experimental-strip-types --test server/shared-access.test.mjs",

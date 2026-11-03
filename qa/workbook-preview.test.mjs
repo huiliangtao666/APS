@@ -31,6 +31,39 @@ test('summary separates record count, non-key changed fields, import blockers an
   assert.equal(s.counts.blockingReports,0);assert.equal(s.canCommit,true);assert.equal(s.simulation,true);
   const raw=JSON.stringify(s);assert(!raw.includes('changeSet'));assert(!raw.includes('fields'));assert(Buffer.byteLength(raw)<128*1024);
 });
+test('compact row sources round-trip every field, including deletes, absent cells and online edits',()=>{
+  const {p,data,before}=fixture(3,{replace:true});
+  before.tables['每日需求'].push({...row('deleted',7),_origin:'应用维护',_overlayRef:'edit-7'});
+  data.tables['每日需求'][1]._cells={};
+  data.tables['每日需求'][1]._source={kind:'EDIT',fileName:'在线更正',row:4};
+  data.businessFileName='新业务文件.xlsx';before.businessFileName='旧业务文件.xlsx';
+  p.changeSet=importChanges(before,data);p.snapshotHash=hash(data);bindPreview(p);
+  const v=JSON.parse(JSON.stringify(buildWorkbookPreview(p,{data,before,now:1000})));
+  for(const r of v.records){
+    const a=before.tables[r.table].find(x=>x['需求编号']===r.key),b=data.tables[r.table].find(x=>x['需求编号']===r.key);
+    const result=previewFields(v,q(v,{changeId:r.changeId,pageSize:100}));
+    for(const f of result.items){
+      assert.deepEqual(f.sourceRefs,[sourceRef(data,r.table,b,f.name),...(a?[sourceRef(before,r.table,a,f.name)]:[])]);
+      assert(!('sourceCells' in f));
+    }
+  }
+  const exported=[...exportWorkbookPreview(v,q(v,{scope:'ALL'}))].map(line=>JSON.parse(line));
+  for(const f of exported.filter(x=>x.kind==='field'))assert.deepEqual(f.sourceRefs,
+    previewFields(v,q(v,{changeId:f.changeId,pageSize:100})).items.find(x=>x.fieldId===f.fieldId).sourceRefs);
+  // Old persisted records still return their full source references.
+  const legacy=structuredClone(v),r=legacy.records[0];
+  r.fields=previewFields(v,q(v,{changeId:r.changeId,pageSize:100})).items.map(f=>({...f,formula:f.formula.value}));delete r.rowSourceRefs;
+  assert.deepEqual(previewFields(legacy,q(legacy,{changeId:r.changeId})).items[0].sourceRefs,r.fields[0].sourceRefs);
+});
+test('repeated workbook names no longer amplify field storage beyond the former 32 MiB ceiling',()=>{
+  const {p,data}=fixture(1200);data.businessFileName='完整来源'.repeat(500)+'.xlsx';
+  p.snapshotHash=hash(data);bindPreview(p);const v=buildWorkbookPreview(p,{data,now:1000});
+  assert.equal(v.counts.records,1200);assert.equal(v.counts.fieldCount,6000);
+  assert(v.projectionBytes<32*1024*1024);
+  let expandedBytes=0;for(const r of v.records)for(const f of previewFields(v,q(v,{changeId:r.changeId})).items)
+    expandedBytes+=Buffer.byteLength(JSON.stringify(f));
+  assert(expandedBytes>32*1024*1024);assert.equal(v.limits.maxProjectionBytes,128*1024*1024);
+});
 test('101 records traverse 25-page boundaries exactly once; global search finds last record',()=>{
   const {v}=fixture();let cursor=null,ids=[];
   do{const p=previewRecords(v,q(v,{cursor,pageSize:25}));assert(p.items.length<=25);ids.push(...p.items.map(r=>r.changeId));cursor=p.nextCursor;}while(cursor);
@@ -119,7 +152,7 @@ test('bounded G1/G2 mock measurements; no application, import, Worker or browser
   for(const n of [1830,7320]){const start=performance.now(),{v,p}=scaleFixture(n),built=performance.now();
     const page=previewRecords(v,q(v,{q:'K'+(n-1)})),end=performance.now();
     assert.equal(v.counts.records,n);assert.equal(v.counts.changedFieldCount,4*n);assert.equal(page.total,1);
-    assert.equal(v.tables.length,29);for(const operation of ['create','replace','delete'])assert.equal(v.records.filter(r=>r.operation===operation).length,n/3);
+    assert.equal(v.tables.length,Object.keys(workbookSchema.tables).length);for(const operation of ['create','replace','delete'])assert.equal(v.records.filter(r=>r.operation===operation).length,n/3);
     const summaryBytes=Buffer.byteLength(JSON.stringify(previewSummary(p,{now:1000})));assert(summaryBytes<128*1024);
     measurements.push({mockRecords:n,expectedNonKeyFields:4*n,projectionBytes:v.projectionBytes,summaryBytes,buildMs:built-start,searchMs:end-built});
   }
