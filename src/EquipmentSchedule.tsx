@@ -59,17 +59,20 @@ const metadata:QueryColumn[]=[{key:'id',label:'设备编号',fixed:true},{key:'n
 function EquipmentGantt({rows,from,to,focusDay,onDay,density,color,onTask,onResource,identity,preferenceScope}:any){
  const chartColumns=[...metadata,{key:'taskCount',label:'真实任务数'},{key:'wipCount',label:'WIP保留数'}];
  const {visible,save}=useChartColumns(preferenceScope,'E1',chartColumns),[active,setActive]=useState<string>();
+ const chartContainer=useRef<HTMLDivElement>(null),[containerWidth,setContainerWidth]=useState<number>();
+ useEffect(()=>{const element=chartContainer.current;if(!element)return;const resize=()=>setContainerWidth(element.clientWidth);resize();const observer=new ResizeObserver(resize);observer.observe(element);return()=>observer.disconnect();},[]);
  const [viewport,setViewport]=useState(()=>({width:typeof window==='undefined'?1440:window.innerWidth,height:typeof window==='undefined'?800:window.innerHeight}));
  useEffect(()=>{const resize=()=>setViewport({width:window.innerWidth,height:window.innerHeight});window.addEventListener('resize',resize);return()=>window.removeEventListener('resize',resize);},[]);
  const start=(focusDay??from)*1440,end=(focusDay!==null?focusDay+1:to)*1440,span=end-start,count=focusDay!==null?48:to-from;
  const viewportHeight=viewport.height,viewportWidth=viewport.width;
  const rowHeight=density==='fit'?Math.max(16,Math.min(30,Math.floor((viewportHeight-335)/Math.max(1,rows.length)))):density==='compact'?28:42;
- const chartWidth=focusDay!==null?Math.max(48*27,Math.min(48*34,viewportWidth-240)):Math.max(count*65,viewportWidth-240);
+ const availableWidth=containerWidth===undefined?viewportWidth-240:Math.max(0,containerWidth-178);
+ const chartWidth=focusDay!==null?Math.max(48*27,Math.min(48*34,availableWidth)):Math.max(count*65,availableWidth);
  const taskMap=new Map<string,any>();rows.forEach((r:any,index:number)=>(r.tasks||[]).forEach((t:any)=>taskMap.set(t.id,{...t,index})));
  const selected=active?taskMap.get(active):undefined;
  return <><QueryColumns columns={chartColumns} value={visible} onChange={save}/>
  {selected&&<div className="equipment-selected-task" role="status"><strong>{selected.id}</strong><span>设备 {rows[selected.index]?.id} · 需求 {selected.orderId} · {selected.productId} / {selected.label}</span><span>{time(selected.start,identity)}—{time(selected.end,identity)} · {Math.round((selected.end-selected.start)*100)/100} 分钟</span><button onClick={()=>onTask(selected.id)}>明细与来源</button><button onClick={()=>setActive(undefined)}>取消高亮</button></div>}
- <div className={'equipment-gantt '+density} role="region" aria-label={focusDay!==null?'半小时设备甘特':'日期设备甘特'}>
+ <div ref={chartContainer} className={'equipment-gantt '+density} role="region" aria-label={focusDay!==null?'半小时设备甘特':'日期设备甘特'}>
  <div className="equipment-axis"><b>设备 / {focusDay===null?'日期':'半小时'}</b><div style={{width:chartWidth}}>{Array.from({length:count},(_,i)=><button key={i} style={{left:(i/count*100)+'%',width:(100/count)+'%'}} onClick={()=>focusDay===null&&onDay(from+i)} disabled={focusDay!==null} title={focusDay===null?'点击查看 '+date(from+i,identity.dayZero)+' 的半小时刻度':undefined}>{focusDay!==null?String(Math.floor(i/2)).padStart(2,'0')+':'+(i%2?'30':'00'):date(from+i,identity.dayZero).slice(5).replace('-','.')}</button>)}</div></div>
  {rows.map((r:any,index:number)=>{const tasks=(r.tasks||[]).filter((t:any)=>t.start<end&&t.end>start).sort((a:any,b:any)=>a.start-b.start||a.end-b.end||String(a.id).localeCompare(String(b.id)));const laneEnds:number[]=[],laneById=new Map<string,number>();for(const task of tasks){let lane=laneEnds.findIndex(value=>value<=task.start);if(lane<0)lane=laneEnds.length;laneEnds[lane]=task.end;laneById.set(task.id,lane);}const laneHeight=(rowHeight-2)/Math.max(1,laneEnds.length);return <div className="equipment-resource" key={r.id}>
  <button className="equipment-name" style={{height:rowHeight}} onClick={()=>onResource(r)} title={`${r.id} · ${r.values.name||''} · ${r.values.group||''} · ${r.values.taskCount||0} 项任务`}><strong>{r.id}</strong>{visible.includes('name')&&<span>{r.values.name}</span>}<small>{[visible.includes('group')&&r.values.group,visible.includes('taskCount')&&`${r.values.taskCount}项`,visible.includes('wipCount')&&`WIP ${r.values.wipCount}`].filter(Boolean).join(' · ')}</small></button>

@@ -1,0 +1,214 @@
+/* Loaded after page styles so every workbench uses the same control scale. */
+.app-shell {
+  --aps-control-height: 28px;
+  --aps-control-font: 12px;
+  --aps-control-gap: 6px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.app-shell .input-workspace {
+  min-width: 0;
+}
+.app-shell .input-workspace > *,
+.app-shell .input-workspace :is(.panel, .qr-workspace, .qr-body) { min-width: 0; max-width: 100%; }
+.app-shell .input-workspace .qr-filters { container: aps-filters / inline-size; }
+
+.app-shell main label {
+  font-size: var(--aps-control-font);
+  line-height: 1.3;
+  gap: 4px;
+}
+.app-shell main button:where(:not(.equipment-gantt button, .equipment-heatmap button, .qr-link, .qr-bom-path-row, .fr033-task, .task-bar, .day-task)) {
+  min-height: var(--aps-control-height);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: var(--aps-control-font);
+  line-height: 1.3;
+}
+.app-shell main :is(input, select, textarea) {
+  font-family: inherit;
+  font-size: var(--aps-control-font);
+  line-height: 1.3;
+}
+.app-shell .input-workspace :is(input, select) {
+  height: var(--aps-control-height);
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: var(--aps-control-font);
+  line-height: 1.3;
+}
+.app-shell main input:is([type=checkbox], [type=radio]) {
+  flex: none;
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  padding: 0;
+  vertical-align: middle;
+}
+.app-shell .input-workspace input[type=file] {
+  height: auto;
+  min-height: var(--aps-control-height);
+  padding: 2px 4px;
+}
+.app-shell input[type=file]::file-selector-button {
+  margin-right: 6px;
+  padding: 3px 7px;
+  font: inherit;
+}
+
+/* Toolbars share inline labels, including nested equipment and query pages. */
+.app-shell main :is(.input-actions, .wp-actions, .query-controls, .timeline-controls, .qr-result-bar, .qr-context, .qr-dates, .equipment-view-toolbar, .workbook-range-fields) label {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  font-size: var(--aps-control-font);
+  white-space: nowrap;
+}
+.app-shell main :is(.input-actions, .wp-actions, .query-controls, .timeline-controls) {
+  align-items: center;
+  gap: var(--aps-control-gap);
+  margin: 5px 0;
+}
+.app-shell .input-workspace :is(.workbook-data-page, .parameter-panel) > .input-actions {
+  min-height: 32px;
+  margin: 5px 0;
+}
+.app-shell .input-workspace .workbook-parameter-page > label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+.app-shell .input-workspace .workbook-parameter-page > label input { width: 145px; }
+.app-shell .input-workspace .workbook-run-action button { min-height: 30px; }
+.app-shell .input-workspace .workbook-feature-nav button { padding: 5px 9px; }
+.app-shell .input-workspace .workbook-steps button { min-height: 28px; padding: 4px 7px; }
+.app-shell .input-workspace .parameter-tabs button { padding: 4px 7px; }
+.app-shell .parameter-panel dl { font-size: 12px; }
+.app-shell .parameter-panel > .input-actions input { width: 120px; }
+.app-shell .parameter-panel > .input-actions input[aria-label="参数查询"] { width: 150px; }
+.app-shell .parameter-panel select[aria-label="参数状态筛选"] { max-width: 130px; }
+.app-shell .qr-workspace .qr-scope-note { padding: 2px 0; font-size: 11px; line-height: 1.3; }
+
+.app-shell .qr-workspace .qr-filter-line { min-height: 28px; gap: 5px; }
+.app-shell .qr-workspace .qr-filter-line input,
+.app-shell .qr-workspace .qr-filter-line select,
+.app-shell .qr-workspace .qr-filter-line > .qr-actions button { height: 28px; }
+.app-shell .qr-workspace .qr-filter-line input[type=checkbox] { height: 13px; }
+.app-shell .qr-workspace .qr-filter-line .qr-select { height: 28px; }
+.app-shell .qr-workspace .qr-filter-line > .qr-keyword { min-width: 116px; flex-basis: 170px; }
+.app-shell .qr-workspace .qr-filter-line .qr-select { min-width: 120px; flex-basis: 130px; max-width: 160px; }
+.app-shell .qr-workspace .qr-filter-line .qr-select summary {
+  height: 26px;
+  padding: 0 6px;
+  font-size: 12px;
+  line-height: 1.3;
+}
+.app-shell .qr-workspace .qr-filter-line > .qr-actions { gap: 4px; }
+.app-shell .qr-workspace .qr-select-panel label { font-size: 12px; }
+
+.app-shell .qr-table-toolbar {
+  min-height: 32px;
+  padding: 2px 6px;
+  gap: 6px;
+}
+.app-shell :is(.qr-table-toolbar, .equipment-result-bar) { overflow-x: auto; }
+.app-shell .qr-workspace .qr-result-bar {
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0;
+  font-size: 12px;
+}
+.app-shell .qr-table-toolbar .qr-result-bar { margin: 0; }
+.app-shell .qr-workspace .qr-result-bar :is(label, b, button, select) { font-size: 12px; }
+.app-shell .qr-workspace .qr-result-bar select { height: 28px; width: 62px; padding: 2px 5px; }
+.app-shell .qr-workspace :is(.qr-columns, .qr-result-info) { margin: 0; padding: 0; }
+.app-shell .qr-workspace :is(.qr-columns, .qr-result-info) > summary {
+  padding: 3px 0;
+  font-size: 11px;
+  line-height: 1.3;
+}
+.app-shell .qr-workspace .qr-columns label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 3px 8px 3px 0;
+}
+.app-shell .qr-table-toolbar:has(.qr-columns[open]) { flex-wrap: wrap; }
+.app-shell .qr-table-toolbar .qr-columns[open] { flex-basis: 100%; white-space: normal; }
+.app-shell .qr-workspace .qr-result-note { font-size: 11px; }
+.app-shell .qr-workspace .qr-scroll th button { min-height: 0; padding: 0; font-size: 12px; line-height: 1.3; }
+.app-shell .equipment-schedule .equipment-view-toolbar {
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  margin: 4px 0;
+  padding: 2px 6px;
+}
+.app-shell .equipment-view-toolbar strong { font-size: 12px; }
+.app-shell .equipment-view-toolbar > span { font-size: 11px; }
+.app-shell .equipment-schedule .equipment-view-toolbar select { height: 28px; padding: 2px 5px; }
+.app-shell .equipment-selected-task button { min-height: 24px; padding: 2px 6px; font-size: 11px; }
+
+/* Chart buttons represent data and retain the chart's compact geometry. */
+.app-shell .input-workspace .equipment-gantt .equipment-name {
+  padding: 0 6px;
+  border: 0;
+  border-bottom: 1px solid #e8eef3;
+  border-radius: 0;
+  line-height: 1.1;
+}
+.app-shell .input-workspace .equipment-axis button {
+  height: 30px;
+  min-height: 0;
+  padding: 1px;
+  border: 0;
+  border-left: 1px solid #bacbd4;
+  border-radius: 0;
+  background: transparent;
+  font-size: 10px;
+  line-height: 1.2;
+  opacity: 1;
+}
+.app-shell .input-workspace .equipment-gantt .equipment-task {
+  min-height: 0;
+  padding: 0 2px;
+  border-radius: 2px;
+  font-size: 9px;
+  line-height: 1.1;
+  border: 1px solid #4d91bc;
+  border-left-width: 2px;
+  background: #dcecf8;
+  color: #214e69;
+}
+.app-shell .input-workspace .equipment-gantt .equipment-task[aria-pressed=true] { background: #bfe2f5; color: #153d58; }
+.app-shell .input-workspace .equipment-gantt .equipment-wip {
+  min-height: 0;
+  padding: 0;
+  font-size: 8px;
+  border: 2px solid #c77700;
+  background: #fff1cf;
+}
+.app-shell .input-workspace .equipment-gantt .equipment-stop {
+  padding: 0;
+  border: 1px solid #bc5760;
+  border-radius: 0;
+  background: repeating-linear-gradient(45deg,#f4dfe5,#f4dfe5 3px,#bb6c7b 4px,#bb6c7b 5px);
+}
+.app-shell .input-workspace .equipment-heatmap button { padding: 3px 4px; font-size: 12px; line-height: 1.3; }
+
+.app-shell .workbook-preview :is(th, td) { padding: 5px 7px; font-size: 12px; }
+.app-shell .workbook-preview button { min-height: 28px; padding: 4px 8px; }
+.app-shell .bom-loss-config { padding: 12px; margin: 8px 0; font-size: 13px; line-height: 1.4; }
+.app-shell .bom-loss-config fieldset { gap: 8px; padding: 8px; }
+.app-shell .bom-loss-config :is(th, td) { padding: 6px 8px; font-size: 12px; }
+.app-shell .bom-loss-actions { gap: 6px; }
+
+@container aps-filters (max-width: 1380px) {
+  .app-shell .qr-workspace .qr-filter-line { flex-wrap: wrap; }
+  .app-shell .qr-workspace .qr-filter-groups { flex: 1 1 100%; order: 2; }
+  .app-shell .qr-workspace .qr-filter-line > .qr-actions { order: 1; }
+  .app-shell .qr-workspace .qr-filter-line .qr-select { max-width: 180px; }
+}
