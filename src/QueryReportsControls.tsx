@@ -1,13 +1,17 @@
 import {useEffect,useRef,useState,type ReactNode} from 'react';
+import {DropdownDetails} from './DropdownDetails';
 import {queryUrl,sameQueryIdentity,queryValue,type QueryApi,type QueryColumn,type QueryIdentity,type QueryOptions,type QueryRecord,type QuerySelection} from './QueryReportsTypes';
 
 export function QueryColumns({columns,value,onChange}:{columns:QueryColumn[];value:string[];onChange:(v:string[])=>void}) {
-  return <details className="qr-columns"><summary>显示栏位（{value.length}/{columns.length}）</summary><p>业务标识列固定；隐藏栏位保留在原始记录。</p>{columns.map(c=><label key={c.key}><input type="checkbox" checked={c.fixed||value.includes(c.key)} disabled={c.fixed} onChange={e=>onChange(e.target.checked?[...value,c.key]:value.filter(k=>k!==c.key))}/>{c.label}{c.fixed?'（业务键固定）':''}</label>)}</details>;
+  return <DropdownDetails className="qr-columns"><summary>显示栏位（{value.length}/{columns.length}）</summary><p>业务标识列固定；隐藏栏位保留在原始记录。</p>{columns.map(c=><label key={c.key}><input type="checkbox" checked={c.fixed||value.includes(c.key)} disabled={c.fixed} onChange={e=>onChange(e.target.checked?[...value,c.key]:value.filter(k=>k!==c.key))}/>{c.label}{c.fixed?'（业务键固定）':''}</label>)}</DropdownDetails>;
 }
 
 export function QueryMultiselect({api,identity,view,field,label,value,onChange,query}:{api:QueryApi;identity:QueryIdentity;view:string;field:string;label:string;value:QuerySelection;onChange:(v:QuerySelection)=>void;query?:object}) {
   const [search,setSearch]=useState(''),[offset,setOffset]=useState(0),[page,setPage]=useState<QueryOptions>(),[error,setError]=useState(''),[open,setOpen]=useState(false);
-  const sequence=useRef(0),key=JSON.stringify([value,query]);
+  const sequence=useRef(0),actionSequence=useRef(0),key=JSON.stringify([value,query]);
+  const actionDomain=JSON.stringify([identity.fingerprint,view,field,{...query,filters:undefined}]);
+  // Dismissing a menu cancels candidate loading, but must retain an in-flight selection.
+  useEffect(()=>()=>{actionSequence.current++;},[actionDomain]);
   useEffect(()=>{const seq=++sequence.current;setPage(undefined);setError('');if(!open)return;const timer=window.setTimeout(()=>{
     api(queryUrl('options',{identity,view,field,search,offset,limit:100,query:query||{view,fromDate:identity.dayZero,toDateInclusive:identity.dayZero}})).then(r=>{
       if(seq!==sequence.current)return;
@@ -16,12 +20,12 @@ export function QueryMultiselect({api,identity,view,field,label,value,onChange,q
     }).catch(e=>{if(seq===sequence.current)setError(e.message);});
   },150);return()=>{clearTimeout(timer);sequence.current++;};},[open,identity.fingerprint,view,field,search,offset,key]);
   function operation(action:object) {
-    const seq=++sequence.current;setError('');
+    const seq=++actionSequence.current;setError('');
     api(queryUrl('options',{identity,view,field,search,offset,query,action})).then(r=>{
-      if(seq!==sequence.current)return;if(!sameQueryIdentity(identity,r.identity))throw Error('筛选候选版本已变化');setPage(r);onChange(r.selection);
-    }).catch(e=>{if(seq===sequence.current)setError(e.message);});
+      if(seq!==actionSequence.current)return;if(!sameQueryIdentity(identity,r.identity))throw Error('筛选候选版本已变化');setPage(r);onChange(r.selection);
+    }).catch(e=>{if(seq===actionSequence.current)setError(e.message);});
   }
-  return <details className="qr-select" onToggle={e=>setOpen(e.currentTarget.open)}>
+  return <DropdownDetails className="qr-select" onToggle={e=>setOpen(e.currentTarget.open)}>
     <summary><span>{label}</span><b>{open&&page?`${page.selectedTotal}/${page.total}`:value.mode==='ALL'&&!value.exclude?.length?'全部':value.mode==='NONE'?'0 项':'已筛选'}</b><span aria-hidden="true">⌄</span></summary>
     {open&&<div className="qr-select-panel">
       <label className="qr-select-search"><span className="sr-only">搜索{label}编号或名称</span><input aria-label={'搜索'+label+'编号或名称'} placeholder="搜索编号或名称" value={search} maxLength={200} onChange={e=>{setSearch(e.target.value);setOffset(0);}}/></label>
@@ -30,7 +34,7 @@ export function QueryMultiselect({api,identity,view,field,label,value,onChange,q
       {!page&&!error&&<p role="status">正在读取候选…</p>}
       {page&&<><div className="qr-option-list">{page.items.map(o=><label key={o.id}><input type="checkbox" checked={o.selected} onChange={e=>operation({kind:'toggle',id:o.id,checked:e.target.checked})}/><span>{o.label}</span></label>)}</div><div className="qr-select-pager"><button type="button" disabled={!offset} onClick={()=>setOffset(Math.max(0,offset-100))}>上一页</button><span>{page.total?offset+1:0}–{offset+page.items.length} / {page.matched}</span><button type="button" disabled={page.nextOffset===null} onClick={()=>setOffset(page.nextOffset!)}>下一页</button></div></>}
     </div>}
-  </details>;
+  </DropdownDetails>;
 }
 
 export function QueryTable({id,columns,records,selected,onSelected,onOpen,sort,direction,onSort,onVisible,identity,onLong,header,rowActions}:{id:string;rowActions?:(record:QueryRecord)=>ReactNode;identity?:QueryIdentity;header?:ReactNode;onLong?:(id:string,field:string)=>void;columns:QueryColumn[];records:QueryRecord[];selected?:string[];onSelected?:(v:string[])=>void;onOpen?:(r:QueryRecord)=>void;sort?:string;direction?:string;onSort?:(key:string)=>void;onVisible?:(keys:string[])=>void}) {
