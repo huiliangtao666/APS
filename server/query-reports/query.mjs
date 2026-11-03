@@ -8,7 +8,7 @@ const fields={
   'demand.daily':['客户编号','区域编号','客户等级'],'demand.details':['客户编号','区域编号','客户等级'],'demand.customers':['客户编号','区域编号','客户等级'],
   'inventory.summary':['仓库编号','质量状态'],'inventory.batches':['仓库编号','质量状态'],
   'capacity.daily':['资源编号','资源组编号','资源类别'],'capacity.equipment':['资源编号','资源组编号','资源类别'],
-  'capacity.stops':['资源编号','停机类型'],'capacity.routes':['设备组编号','班组编号'],
+  'capacity.stops':['资源编号','停机类型'],'capacity.routes':['路线编号','设备组编号','班组编号'],
   'replenishment.purchase':['供应商编号','时序风险'],'replenishment.net':['供应商编号','时序风险'],
   'replenishment.manufacture':['时序风险'],'replenishment.incoming':['供应商编号']};
 const allFields=new Set(Object.values(fields).flat());

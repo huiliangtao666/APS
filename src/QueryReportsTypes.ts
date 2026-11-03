@@ -26,10 +26,10 @@ export function sameQueryIdentity(a:QueryIdentity,b:QueryIdentity) {
 export function queryInitial(c:QueryCatalog):QueryDraft {
   return {q:'',filters:{},includeBom:false,fromDate:c.fromDate,toDateInclusive:c.toDateInclusive,bomAsOfDate:c.fromDate,knownAsOfDate:c.fromDate,sort:'',direction:'asc',pageSize:100,offset:0};
 }
-/** Removed demand filters must not survive in cached drafts or inherited navigation. */
+/** Removed filters must not survive in cached drafts or inherited navigation. */
 export function queryDraftForView(view:QueryView,draft:QueryDraft):QueryDraft{
   if(view.id==='inventory.summary'&&!['materialId','质量状态','unit'].includes(draft.sort))return {...draft,sort:'',direction:'asc'};
-  if(!['demand.daily','demand.details'].includes(view.id))return draft;
+  if(!['demand.daily','demand.details','capacity.routes'].includes(view.id))return draft;
   const allowed=new Set(view.filters.map(f=>f.key));
   return {...draft,filters:Object.fromEntries(Object.entries(draft.filters).filter(([key])=>allowed.has(key)))};
 }

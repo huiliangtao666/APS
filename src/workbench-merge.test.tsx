@@ -21,6 +21,14 @@ test('daily and detailed demand drop removed cached filters and preserves produc
  for(const id of ['demand.daily','demand.details'])assert.deepEqual(Object.keys(queryDraftForView({...view,id},draft).filters),['material:成品','客户编号','区域编号']);
  assert.equal(queryDraftForView({...view,id:'bom.materials'},draft),draft);
 });
+test('route master drops hidden cached categories and preserves route, product, equipment and crew selections',()=>{
+ const catalog={fromDate:'2026-11-01',toDateInclusive:'2026-11-14'} as QueryCatalog;
+ const keys=['material:成品','路线编号','设备组编号','班组编号'];
+ const view={id:'capacity.routes',report:'capacity',label:'工艺与班组',key:'id',columns:[],filters:keys.map(key=>({key,label:key}))};
+ const draft={...queryInitial(catalog),filters:Object.fromEntries([...keys,'material:半成品','material:原辅料','material:包装材料'].map(key=>[key,{mode:'NONE' as const}]))};
+ assert.deepEqual(Object.keys(queryDraftForView(view,draft).filters),keys);
+ assert.equal(queryDraftForView({...view,id:'capacity.daily'},draft),draft);
+});
 test('active app exposes only four consolidated workbench pages and no independent legacy data source',()=>{
  const html=renderToStaticMarkup(<App/>);
  assert.ok(!html.includes('class="hero"'));assert.ok(html.includes('class="workbook-navigation-host"'));

@@ -28,7 +28,7 @@ export function QueryMultiselect({api,identity,view,field,label,value,onChange,q
   return <DropdownDetails className="qr-select" onToggle={e=>setOpen(e.currentTarget.open)}>
     <summary><span>{label}</span><b>{open&&page?`${page.selectedTotal}/${page.total}`:value.mode==='ALL'&&!value.exclude?.length?'全部':value.mode==='NONE'?'0 项':'已筛选'}</b><span aria-hidden="true">⌄</span></summary>
     {open&&<div className="qr-select-panel">
-      <label className="qr-select-search"><span className="sr-only">搜索{label}编号或名称</span><input aria-label={'搜索'+label+'编号或名称'} placeholder="搜索编号或名称" value={search} maxLength={200} onChange={e=>{setSearch(e.target.value);setOffset(0);}}/></label>
+      <label className="qr-select-search"><span className="sr-only">搜索{label.replace(/编号$/,'')}编号或名称</span><input aria-label={'搜索'+label.replace(/编号$/,'')+'编号或名称'} placeholder="搜索编号或名称" value={search} maxLength={200} onChange={e=>{setSearch(e.target.value);setOffset(0);}}/></label>
       <div className="qr-select-actions"><button type="button" onClick={()=>operation({kind:'searchAll',query:search})}>全选匹配</button><button type="button" onClick={()=>operation({kind:'none'})}>清空</button><button type="button" onClick={()=>operation({kind:'restore'})}>恢复不限</button></div>
       {error&&<p role="alert">{error}</p>}
       {!page&&!error&&<p role="status">正在读取候选…</p>}
