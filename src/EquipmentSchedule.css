@@ -38,3 +38,13 @@
 .equipment-data-table{border-top:1px solid #e1eaf0;margin:4px 0;font-size:11px}.equipment-data-table summary{cursor:pointer;padding:5px 3px;color:#506d80}.equipment-data-table[open] summary{font-weight:600}
 .equipment-focus .equipment-gantt{height:calc(100vh - 210px)}
 @media(max-width:750px){.equipment-gantt{height:calc(100vh - 380px)}.equipment-view-toolbar>span,.equipment-legend small{display:none}}
+
+/* Same date matrix as equipment load, with separate people/tool units. */
+.equipment-heatmap-note{margin:4px 0;color:#657789;font-size:11px}
+.equipment-personnel-heatmap{margin:5px 0}
+.equipment-personnel-heatmap th,.equipment-personnel-heatmap td{min-width:56px;padding:2px}
+.equipment-personnel-heatmap tr>th:first-child{min-width:160px;max-width:200px;padding:3px 6px}
+.equipment-personnel-heatmap th small{max-width:188px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px}
+.equipment-personnel-heatmap button{min-height:30px;font-size:12px;background:#f3f6f9;color:#526374}
+.equipment-schedule .equipment-personnel-heatmap .equipment-over-capacity{background:#fee2e2;color:#991b1b;border-color:#f0a0a0}
+.equipment-personnel-heatmap .equipment-over-capacity strong{font-weight:700}

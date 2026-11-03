@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {renderToStaticMarkup} from 'react-dom/server';
 import App from './App';
+import {PersonnelToolHeatmap} from './EquipmentSchedule';
 import {QueryReports,QueryBomPreview,editableQuerySources} from './QueryReports';
 import {QueryTable} from './QueryReportsControls';
 import {pathProducts} from './BomPathProducts';
@@ -42,6 +43,28 @@ test('equipment query keeps only resource/group/category selections in cached na
  const draft={...queryInitial(catalog),q:'OLD',includeBom:true,filters:Object.fromEntries([...keys,'material:成品','material:半成品','停机类型'].map(key=>[key,{mode:'NONE' as const}]))};
  const clean=queryDraftForView(view,draft);assert.equal(clean.q,'');assert.equal(clean.includeBom,false);assert.deepEqual(Object.keys(clean.filters),keys);
  assert.equal(queryDraftForView({...view,id:'capacity.daily'},draft),draft);
+});
+const heatRow=(resource:string,day:number,dimension:string,peak:number|null,available:number|null)=>({id:resource+'|'+day,values:{resource,name:'演示'+resource,day,dimension,peak,available,remaining:peak===null||available===null?null:available-peak}});
+const heatHtml=(rows:ReturnType<typeof heatRow>[])=>renderToStaticMarkup(<PersonnelToolHeatmap rows={rows} from={1} to={4} identity={{datasetId:'SYN',version:1,runId:'FROZEN',fingerprint:'Q',dayZero:'2026-10-31'}} preferenceScope="SYN" onOpen={()=>{}}/>);
+const heatButton=(html:string,label:string)=>(html.match(/<button\b[^>]*>[\s\S]*?<\/button>/g)||[]).find(button=>button.includes('aria-label="'+label))||'';
+test('personnel and tool heatmap preserves each frozen daily value and separates people from physical sets',()=>{
+ const rows=[heatRow('C1',1,'人',3,5),heatRow('T1',1,'实体套',2,3)],before=JSON.stringify(rows),html=heatHtml(rows);
+ assert.ok(html.includes('人员工装逐日占用热力图'));assert.ok(html.includes('人员 · 人'));assert.ok(html.includes('工装 · 实体套'));
+ assert.ok(heatButton(html,'C1 / 2026-11-01 / 并发峰值：3 人').includes('余量：2 人'));
+ assert.ok(heatButton(html,'T1 / 2026-11-01 / 并发峰值：2 实体套').includes('余量：1 实体套'));
+ assert.equal(JSON.stringify(rows),before);
+});
+test('personnel chart distinguishes known zero, unknown values, missing capacity and unloaded page cells',()=>{
+ const html=heatHtml([heatRow('ZERO',1,'人',0,5),heatRow('UNKNOWN',1,'人',null,5),heatRow('NOBASE',1,'实体套',2,null)]);
+ const zero=heatButton(html,'ZERO / 2026-11-01 / 并发峰值：0 人');assert.ok(zero.includes('>0</button>'));assert.ok(!zero.includes('equipment-unknown'));
+ const unknown=heatButton(html,'UNKNOWN / 2026-11-01 / 并发峰值：未提供');assert.ok(unknown.includes('equipment-unknown'));assert.ok(!unknown.includes('disabled'));
+ const unloaded=heatButton(html,'ZERO / 2026-11-02 / 并发峰值：本页未加载');assert.ok(unloaded.includes('disabled'));assert.ok(unloaded.includes('equipment-unknown'));
+ const noBase=heatButton(html,'NOBASE / 2026-11-01 / 并发峰值：2 实体套');assert.ok(!noBase.includes('style='));assert.ok(noBase.includes('可用数量：未提供'));
+});
+test('personnel chart warns about overcapacity including zero capacity and preserves negative remaining quantity',()=>{
+ const html=heatHtml([heatRow('CREW',1,'人',6,5),heatRow('TOOL',1,'实体套',1,0),heatRow('EMPTY',1,'实体套',0,0)]);
+ for(const id of ['CREW','TOOL']){const button=heatButton(html,id+' / 2026-11-01 /');assert.ok(button.includes('equipment-over-capacity'));assert.ok(button.includes('超占提示'));assert.ok(button.includes('余量：-1'));}
+ assert.ok(!heatButton(html,'EMPTY / 2026-11-01 /').includes('equipment-over-capacity'));
 });
 test('active app exposes only four consolidated workbench pages and no independent legacy data source',()=>{
  const html=renderToStaticMarkup(<App/>);
