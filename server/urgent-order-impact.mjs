@@ -51,8 +51,8 @@ export function queryUrgentImpact(impact,query={},d){
 }
 
 export function urgentCsv(page,columns){
- const defaults=['id','demandId','materialId','customerId','quantity','unit','completedQuantity','scheduledQuantity','unplannedQuantity','beforeShip','afterShip','beforeArrival','afterArrival','lateDays','classification','type','beforeStart','afterStart','deltaMinutes','beforeEnd','afterEnd','beforeQuantity','afterQuantity','beforeTasks','afterTasks','sources','reasons','routeStepId','resources','requiredDate','latestArrival','previousUnplannedQuantity','previousLateDays','lateDelta','transportDays','remainingShelfDays'];
- const selected=columns?.length?[...new Set([...columns,'beforeTasks','afterTasks','sources','reasons'])]:defaults;if(!Array.isArray(selected)||selected.some(k=>!defaults.includes(k)))throw urgentError('URGENT_EXPORT_COLUMNS','未知导出栏位');
+ const defaults=['id','demandId','materialId','customerId','quantity','unit','completedQuantity','scheduledQuantity','unplannedQuantity','beforeShip','afterShip','beforeArrival','afterArrival','lateDays','classification','type','beforeStart','afterStart','deltaMinutes','beforeEnd','afterEnd','beforeQuantity','afterQuantity','beforeTasks','afterTasks','sources','reasons','routeStepId','resources','requiredDate','latestArrival','previousUnplannedQuantity','previousLateDays','lateDelta','transportDays','remainingShelfDays','previousQuantity','allocationChanges','relatedChanges'];
+ const selected=columns?.length?[...new Set([...columns,'beforeTasks','afterTasks','sources','reasons','allocationChanges'])]:defaults;if(!Array.isArray(selected)||selected.some(k=>!defaults.includes(k)))throw urgentError('URGENT_EXPORT_COLUMNS','未知导出栏位');
  const quote=v=>'"'+String(typeof v==='object'&&v!==null?JSON.stringify(v):v??'').replaceAll('"','""')+'"';
  return '\ufeff'+[selected.concat('冻结来源'),...page.records.map(r=>[...selected.map(k=>r[k]),page.identity])].map(r=>r.map(quote).join(',')).join('\r\n');
 }
