@@ -217,3 +217,11 @@ test('V2 weight-capacity sharing independently limits allocator and frozen WIP c
  d.mapping.wip_remaining[1].quantity=2001;assert.ok(verifyMinutePlan(d,plan).issues.includes('共享重量超占 EQ'));
  d.mapping.wip_remaining[1].quantity=2000;resource['资源占用方式']='独占';assert.ok(verifyMinutePlan(d,plan).issues.includes('独占设备超占 EQ'));
 });
+
+test('E5 procurement references retain former preview fields and remain nonphysical suggestions',()=>{
+ const v=equipmentExample();v.run.result.suggestions=[{id:'SUG-RELOCATE',need:'DE0',materialId:'RM',quantity:23,unit:'千克',needDay:1,relationId:'REL1',supplierId:'SUP1',orderDay:1,availableDay:3,lateDays:2,netGap:20}];
+ const q=equipmentQuery('E5'),page=equipmentDomain.query(v,q),row=page.records.find(r=>r.values.suggestionId==='SUG-RELOCATE');
+ assert.ok(row);assert.equal(row.values.sourceKind,'参考采购建议（未采用非实物）');assert.equal(row.values.relationId,'REL1');assert.equal(row.values.availableDate,'2026-11-03');assert.equal(row.values.orderDate,'2026-11-01');assert.equal(row.values.lateDays,2);assert.equal(row.values.quantity,23);assert.equal(row.values.netGap,20);
+ const detail=equipmentDomain.detail(v,{query:q,queryFingerprint:page.queryFingerprint,id:row.id,table:'record'});assert.equal(detail.records[0].values.relationId,'REL1');assert.equal(detail.records[0].values.availableDate,'2026-11-03');
+ v.run.result.suggestions[0].availableDay=null;assert.equal(equipmentDomain.query(v,q).records.find(r=>r.id===row.id).values.availableDate,null);
+});

@@ -4,6 +4,7 @@ import {renderToStaticMarkup} from 'react-dom/server';
 import {buildResultSummary,filterResultGroups} from './WorkbookResultSummaryModel';
 import {WorkbookResultSummary} from './WorkbookResultSummary';
 import {WorkbookResult} from './InputData';
+import {SuggestionDraftAction} from './EquipmentSchedule';
 
 const demand=(id:string,status='unplanned',extra={})=>({id,productId:'FG-'+id,status,quantity:20,unit:'千克',arrivalDay:status==='scheduled'?4:null,latestArrivalDay:3,lateDays:status==='scheduled'?1:null,source:{sheet:'每日需求',row:2},...extra});
 const makeRun=(result={})=>({id:'SYNTHETIC-RESULT-ONLY',datasetId:'SYNTHETIC',version:6,status:'partial',inputHash:'fixture',result:{dayZero:'2026-10-31',timeUnit:'day',conditions:{startDay:1,endDay:15},tasks:[],demandResults:[demand('D1'),demand('D2','scheduled')],findings:[],shortages:[],verification:{status:'pass',scope:['测试范围'],notChecked:['未覆盖项目'],issues:[]},...result}});
@@ -46,5 +47,11 @@ test('search links demand and material matches to source records while keeping c
 test('frozen result page shows the unified summary before six views and removes the repeated problem button list',()=>{
  const run={...makeRun({source:{datasetId:'SYNTHETIC',version:6},allocations:[],suggestions:[],findings:[{code:'MAX_WAIT',message:'候选撤销',need:'D1'}]}),selection:{startDay:1,endDay:15}};
  const html=renderToStaticMarkup(<WorkbookResult run={run} canWrite={false} canExport={false} api={async()=>{throw Error('must not fetch while rendering');}} perform={()=>{}} onRun={()=>{}} onLocate={()=>{}} onDraft={()=>{}} onExport={()=>{}}/>);
- assert.ok(html.indexOf('排程结果汇总')<html.indexOf('设备排程六视图'));assert.ok(!html.includes('class="input-problem"'));assert.ok(!html.includes('<details open'));assert.ok(html.includes('完整明细见需求交付视图'));
+ assert.ok(html.indexOf('排程结果汇总')<html.indexOf('设备排程六视图'));assert.ok(!html.includes('class="input-problem"'));assert.ok(!html.includes('<details open'));for(const label of ['任务与日占用','需求状态与交付','缺料与供应来源','采购参考建议（预览'])assert.ok(!html.includes(label));assert.ok(html.includes('设备甘特'));assert.ok(html.includes('需求交付'));assert.ok(html.includes('物料风险'));
+});
+
+test('suggestion action remains explicit and respects write permission and missing handler',()=>{
+ const suggestion={id:'SYNTHETIC-SUGGESTION'};
+ const render=(canWrite:boolean,onDraft?:()=>void)=>renderToStaticMarkup(<SuggestionDraftAction suggestion={suggestion} canWrite={canWrite} onDraft={onDraft}/>);
+ assert.ok(render(false,()=>{}).includes('disabled'));assert.ok(render(true).includes('disabled'));assert.ok(!render(true,()=>{}).includes('disabled'));assert.ok(render(true,()=>{}).includes('复制为模拟草稿'));assert.ok(render(true,()=>{}).includes('需显式纳入新试算'));
 });
