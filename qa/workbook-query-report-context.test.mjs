@@ -74,6 +74,20 @@ function connected(){
  const draft={view:'bom.materials',fromDate:'2026-11-01',toDateInclusive:'2026-11-14',bomAsOfDate:'2026-11-01',knownAsOfDate:'2026-11-01',pageSize:100,offset:0,filters:{},q:''};
  return {...f,value,draft};
 }
+test('path root classification and names follow the requested input or frozen version without changing query columns',()=>{
+ const f=connected(),before=hash(f.old),q={...f.draft,view:'bom.paths'};
+ f.latest.tables.物料主数据=structuredClone(f.old.tables.物料主数据);
+ Object.assign(f.latest.tables.物料主数据[0],{'物料名称':'当前改名','物料类别':'原辅料'});
+ const current=workbookQueryContext(f.ctx,{datasetId:'fixture',version:2},'synthetic-actor');
+ const frozen=workbookQueryContext(f.ctx,{datasetId:'fixture',version:1,runId:'frozen'},'synthetic-actor');
+ const oldResult=domain.query(f.value,q),newResult=domain.query(current,q),frozenResult=domain.query(frozen,q);
+ const root=result=>result.records.find(r=>r.values.root==='M000').rootMaterial;
+ assert.deepEqual(root(oldResult),{id:'M000',name:'物料 0',category:'成品'});
+ assert.deepEqual(root(frozenResult),root(oldResult));
+ assert.deepEqual(root(newResult),{id:'M000',name:'当前改名',category:'原辅料'});
+ assert.ok(!oldResult.columns.some(c=>c.key==='rootMaterial'));
+ assert.equal(hash(f.old),before);assert.equal(f.writes(),0);
+});
 test('canonical adapter exposes all 18 wired views, full candidates, NONE/toggle and search selection tokens',()=>{
  const f=connected(),before=hash(f.old),catalog=domain.catalog(f.value);
  assert.equal(catalog.views.length,18);assert.equal(catalog.fromDate,'2026-11-01');assert.equal(catalog.toDateInclusive,'2026-11-14');

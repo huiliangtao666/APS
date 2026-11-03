@@ -4,6 +4,7 @@ import {renderToStaticMarkup} from 'react-dom/server';
 import App from './App';
 import {QueryReports,QueryBomPreview,editableQuerySources} from './QueryReports';
 import {QueryTable} from './QueryReportsControls';
+import {pathProducts} from './BomPathProducts';
 const api=async()=>{throw Error('Static rendering must not call any API');};
 test('active app exposes only four consolidated workbench pages and no independent legacy data source',()=>{
  const html=renderToStaticMarkup(<App/>);
@@ -37,7 +38,15 @@ test('BOM diagram defaults to all current-page roots, retains shared/disconnecte
 });
 test('compact lead-time diagram preserves fractional durations and reference meaning',()=>{
  const identity={datasetId:'SYN',version:1,fingerprint:'Q',dayZero:'2026-10-31'};
- const record={id:'P1',values:{root:'FG001',materialId:'SF001',sequence:1,ownLeadDays:0.5,cumulativeLeadDays:1.25}};
+ const record={id:'P1',rootMaterial:{id:'FG001',name:'演示成品',category:'成品'},values:{root:'FG001',materialId:'SF001',sequence:1,ownLeadDays:0.5,cumulativeLeadDays:1.25}};
  const html=renderToStaticMarkup(<QueryBomPreview view="bom.paths" identity={identity} page={{identity,view:'bom.paths',queryFingerprint:'Q',total:1,offset:0,nextOffset:null,columns:[],records:[record]}} onOpen={()=>{}}/>);
  assert.ok(html.includes('0.5天'));assert.ok(html.includes('结束偏移1.25天'));assert.ok(html.includes('非实际开工'));
+});
+test('path products use imported category, retain descendant records and never infer finished products from ID prefixes',()=>{
+ const record=(id:string,category:string)=>({id,rootMaterial:{id,name:id,category},values:{root:id,materialId:'RM'}});
+ const items=[record('CUSTOM-ID','成品'),record('FG-looking','半成品'),record('RAW','原辅料'),{...record('UNKNOWN',''),rootMaterial:null},{...record('BAD','成品'),values:{root:'OTHER',materialId:'RM'}}];
+ assert.deepEqual(pathProducts(items).map(p=>[p.id,p.records.length]),[['CUSTOM-ID',1]]);
+ const identity={datasetId:'SYN',version:1,fingerprint:'Q',dayZero:'2026-10-31'};
+ const html=renderToStaticMarkup(<QueryBomPreview view="bom.paths" identity={identity} page={{identity,view:'bom.paths',queryFingerprint:'Q',total:items.length,offset:0,nextOffset:null,columns:[],records:items}} onOpen={()=>{}}/>);
+ assert.ok(html.includes('图示成品'));assert.ok(html.includes('全选（1）'));assert.equal((html.match(/class="qr-bom-path-group"/g)||[]).length,1);
 });

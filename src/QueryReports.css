@@ -133,3 +133,10 @@
 .qr-bom-bar{top:4px;height:12px}
 .qr-bom-path-order{padding:5px 7px;font-size:11px}
 @media(max-width:760px){.qr-bom-figure figcaption{flex-direction:row;align-items:center}.qr-bom-figure figcaption>span{margin-left:0}}
+.qr-bom-figure .qr-path-product-select,.qr-bom-figure .qr-path-product-select[open]{flex:none;width:200px;min-width:0;height:28px;padding:0}
+.qr-path-product-select summary{display:flex;align-items:center;gap:6px;height:26px;padding:0 7px;list-style:none;font-size:12px;white-space:nowrap}
+.qr-path-product-select summary::-webkit-details-marker{display:none}
+.qr-path-product-select summary b{margin-left:auto;font-weight:500;color:#137285}
+.qr-path-product-select .qr-select-panel{width:min(320px,80vw)}
+.qr-bom-path-group header strong{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qr-bom-path-group header>span{flex:none;font-size:11px}

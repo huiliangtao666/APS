@@ -1,4 +1,5 @@
 import { appPath } from './app-path';
+import {BomPathProductPicker,pathProducts} from './BomPathProducts';
 import {useEffect,useRef,useState} from 'react';
 import {QueryLongValue,QueryMultiselect,QuerySourceDrawer,QueryTable} from './QueryReportsControls';
 import {queryInitial,queryReports,queryUrl,sameQueryIdentity,type QueryApi,type QueryCatalog,type QueryContext,type QueryDraft,type QueryPage,type QueryRecord,type QueryView} from './QueryReportsTypes';
@@ -93,6 +94,7 @@ export async function readQueryPage(api:QueryApi,request:any):Promise<QueryPage>
 /** Render only the relationships and durations returned by this query page. */
 export function QueryBomPreview({view,page,identity,onOpen}:{view:string;page:QueryPage;identity:QueryCatalog['identity'];onOpen:(r:QueryRecord)=>void}){
   const [chosenRoot,setChosenRoot]=useState('');
+  const [productSelection,setProductSelection]=useState<{scope:string;excluded:string[]}>({scope:'',excluded:[]});
   if(!['bom.relations','bom.paths'].includes(view)||!page.records.length)return null;
   const paths=view==='bom.paths';
   const finite=(v:unknown)=>v!==null&&v!==''&&v!==undefined&&Number.isFinite(Number(v));
@@ -122,11 +124,13 @@ export function QueryBomPreview({view,page,identity,onOpen}:{view:string;page:Qu
     list.forEach((id,index)=>position.set(id,{x:pad+depth*(nodeWidth+columnGap),y:top+index*rowHeight}));
   }
   const outgoing=new Set(edges.filter(e=>levels.has(e.parent)&&levels.has(e.child)).map(e=>e.parent));
-  const pathGroups=new Map<string,QueryRecord[]>();if(paths)for(const record of page.records){
-    const key=textValue(record.values.root)||'根物料未提供';const group=pathGroups.get(key)||[];group.push(record);pathGroups.set(key,group);
-  }
+  const products=paths?pathProducts(page.records):[];
+  const productScope=identity.fingerprint+':'+page.queryFingerprint+':'+page.offset;
+  const excluded=productSelection.scope===productScope?productSelection.excluded:[];
+  const shownProducts=products.filter(p=>!excluded.includes(p.id));
   return <figure className="qr-bom-figure">
-    <figcaption title={`数据集 ${identity.datasetId} v${identity.version}`}><strong>{paths?'累计提前期关键路径时序图（非实际开工）':'有效BOM有向关系图'}</strong>{!paths&&<label>根项 <select aria-label="BOM图示根项" value={root} onChange={e=>setChosenRoot(e.target.value)}><option value="">全选（{graphRoots.length} 个根项）</option>{graphRoots.map(id=><option key={id} value={id}>{id}</option>)}</select></label>}<span>当前页 {page.records.length} / 匹配 {page.total} 条 · 图示仅含本页{page.total>page.records.length?'，其余请翻页查看':''}</span></figcaption>
+    <figcaption title={`数据集 ${identity.datasetId} v${identity.version}`}><strong>{paths?'累计提前期关键路径时序图（非实际开工）':'有效BOM有向关系图'}</strong>{paths&&products.length>0&&<BomPathProductPicker products={products} excluded={excluded} onChange={excluded=>setProductSelection({scope:productScope,excluded})}/>}
+    {!paths&&<label>根项 <select aria-label="BOM图示根项" value={root} onChange={e=>setChosenRoot(e.target.value)}><option value="">全选（{graphRoots.length} 个根项）</option>{graphRoots.map(id=><option key={id} value={id}>{id}</option>)}</select></label>}<span>当前页 {page.records.length} / 匹配 {page.total} 条 · 图示仅含本页{page.total>page.records.length?'，其余请翻页查看':''}</span></figcaption>
     {!paths&&<>
       <div className="qr-bom-toolbar"><span>蓝：根项 · 浅蓝：有子件 · 绿：本页末级 · 点击物料或连线查看来源</span></div>
       <div className="qr-bom-canvas"><svg width={graphWidth} height={graphHeight} role="img" aria-label={`${root||'全部根项'} 的当前页有效 BOM 层级图`}>
@@ -134,12 +138,14 @@ export function QueryBomPreview({view,page,identity,onOpen}:{view:string;page:Qu
         {[...position].map(([id,p])=>{const source=edges.find(e=>e.parent===id||e.child===id)?.record;const kind=selectedRoots.includes(id)?'root':outgoing.has(id)?'parent':'leaf';return <g key={id} className={`qr-bom-node qr-bom-node-${kind}`} role="button" tabIndex={0} aria-label={`${id}，查看关联记录`} onClick={()=>source&&onOpen(source)} onKeyDown={event=>{if((event.key==='Enter'||event.key===' ')&&source){event.preventDefault();onOpen(source);}}}><title>{id} · {kind==='root'?'根项':kind==='parent'?'含子件':'当前页末级'}</title><rect x={p.x} y={p.y} width={nodeWidth} height="28" rx="4"/><text x={p.x+8} y={p.y+18} className="qr-bom-node-id">{id.length>17?id.slice(0,16)+'…':id}</text></g>;})}
       </svg></div>
     </>}
-    {paths&&<div className="qr-bom-paths">{[...pathGroups].map(([key,records])=>{
+    {paths&&!products.length&&<p className="qr-note">当前页没有可识别的成品路径；可翻页查看，或在“原始数据维护 → 物料主数据”核对物料类别。</p>}
+    {paths&&products.length>0&&!shownProducts.length&&<p className="qr-note">未选择成品，请在“图示成品”中勾选或点击“全选”。</p>}
+    {paths&&shownProducts.length>0&&<div className="qr-bom-paths">{shownProducts.map(({id:key,name,records})=>{
       const sorted=[...records].sort((a,b)=>Number(a.values.cumulativeLeadDays)-Number(b.values.cumulativeLeadDays));
       const totals=sorted.flatMap(r=>finite(r.values.cumulativeLeadDays)?[Number(r.values.cumulativeLeadDays)]:[]);
-      const rootTotal=sorted.find(r=>r.values.materialId===key)?.values.rootLeadDays;
+      const rootTotal=sorted.find(r=>finite(r.values.rootLeadDays))?.values.rootLeadDays;
       const max=Math.max(1,...totals,...(finite(rootTotal)?[Number(rootTotal)]:[]));
-      return <section className="qr-bom-path-group" key={key}><header><strong>{key} · 代表关键路径</strong><span>累计提前期 {finite(rootTotal)?String(rootTotal):max} 天</span></header>
+      return <section className="qr-bom-path-group" key={key}><header><strong title={key+(name?' · '+name:'')}>{key}{name?' · '+name:' · 代表关键路径'}</strong><span>累计提前期 {finite(rootTotal)?String(rootTotal):max} 天</span></header>
         <div className="qr-bom-timeline"><div className="qr-bom-axis"><span></span><div>{Array.from({length:5},(_,i)=><span key={i} style={{left:`${i*25}%`}}>{Number((max*i/4).toFixed(2))}天</span>)}</div><span></span></div>
           {sorted.map(r=>{const v=r.values,valid=finite(v.cumulativeLeadDays)&&finite(v.ownLeadDays),own=Number(v.ownLeadDays),end=Number(v.cumulativeLeadDays),start=end-own;return <button className="qr-bom-path-row" key={r.id} onClick={()=>onOpen(r)}><span className="qr-bom-path-label"><b>{textValue(v.materialId)||'物料未提供'}</b><small>路径第 {textValue(v.sequence)||'—'} 项</small></span><span className="qr-bom-track" role="img" aria-label={valid?`参考路径开始偏移${start}天，结束偏移${end}天`:'有效路径历时未提供'}>{valid&&<span className="qr-bom-bar" style={{left:`${Math.max(0,start/max*100)}%`,width:`${Math.max(0,own/max*100)}%`}}/>}</span><span className="qr-bom-path-days">{valid?<><b>{own}天</b><small>累计{end}天</small></>:'历时未提供'}</span></button>;})}
         </div><p className="qr-bom-path-order">物料顺序：{sorted.map(r=>textValue(r.values.materialId)||'未提供').join(' → ')}</p>
