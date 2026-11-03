@@ -1,0 +1,37 @@
+.parameter-panel .parameter-object-tabs{display:flex;gap:3px;flex-wrap:nowrap;overflow-x:auto;margin:4px 0;padding-bottom:3px}
+.parameter-object-tabs button{flex:none;white-space:nowrap;font-size:12px;padding:4px 7px}
+.parameter-maintenance-layout{display:grid;grid-template-columns:208px minmax(0,1fr);gap:8px;margin-top:6px;align-items:start}
+.parameter-definition-list{display:flex;flex-direction:column;gap:2px;position:sticky;top:145px;max-height:calc(100vh - 170px);overflow:auto;padding:3px;background:#f5f9fc;border:1px solid #dce6ed;border-radius:4px}
+.parameter-definition-list button{text-align:left;white-space:normal;line-height:1.25;font-size:12px;padding:5px 6px}
+.parameter-definition-list button small{font-size:10px;margin-left:3px;opacity:.7}
+.parameter-content{min-width:0}.parameter-filter-bar{display:flex;align-items:center;gap:5px;flex-wrap:wrap;padding:5px 6px;background:white;border:1px solid #dce6ed;border-radius:4px}
+.parameter-filter-bar label{display:inline-flex;align-items:center;gap:4px;margin:0;white-space:nowrap}
+.parameter-filter-bar select{max-width:270px}.parameter-filter-bar>input{width:190px}
+.parameter-panel .parameter-result-bar{margin:5px 0;padding:4px 6px;gap:6px;min-height:28px}
+.parameter-section-title{display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:#edf5f9;padding:5px 7px;border:1px solid #dce6ed;font-size:12px}
+.parameter-section-title small{font-size:11px;color:#657b8b}.parameter-section-title button:first-of-type{margin-left:auto}
+.parameter-current-values .qr-scroll{max-height:calc(100vh - 285px);min-height:180px}
+.parameter-panel .parameter-current-values table{font-size:12px;min-width:100%}
+.parameter-panel .parameter-current-values td,.parameter-panel .parameter-current-values th{padding:4px 7px;white-space:nowrap;line-height:1.3}
+.parameter-panel .parameter-current-values td small,.parameter-panel .parameter-current-values th small{display:inline;margin-left:5px;color:#6b7d8a;font-size:11px}
+.parameter-value-cell{display:flex;align-items:center;gap:7px;min-height:26px}.parameter-value-cell>span:first-child{min-width:50px}
+.parameter-value-cell button{margin-left:auto;padding:2px 7px;font-size:11px}
+.parameter-state{font-size:10px;color:#6e8190}.parameter-unset{color:#a37136;font-size:11px}
+.parameter-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(100px,1fr));gap:3px;min-width:760px}
+.parameter-calendar{overflow:auto;max-height:calc(100vh - 280px);padding:5px;background:white;border:1px solid #dce6ed}
+.parameter-weekday{font-size:11px;background:#edf5f9;text-align:center;padding:4px}
+.parameter-calendar-day{min-height:72px;border:1px solid #e2eaf0;padding:4px;background:#f8fbfd;font-size:11px}
+.parameter-calendar-day>b{font-size:11px;color:#3c657d}.parameter-calendar-day>div>small{font-size:10px;color:#6e8190}
+.parameter-calendar-day .parameter-value-cell{gap:3px;flex-wrap:wrap;min-height:23px}.parameter-calendar-day .parameter-value-cell>span:first-child{min-width:0}.parameter-calendar-day .parameter-state{display:none}
+.parameter-calendar-blank{background:#f7f9fb}
+.parameter-panel .qr-context>details{position:relative}.parameter-panel .qr-context>details[open]{position:absolute;right:6px;top:35px;z-index:10;max-width:540px;background:white;padding:9px;border:1px solid #cddce5;white-space:normal;box-shadow:0 4px 16px #1232}
+@media(max-width:900px){.parameter-maintenance-layout{grid-template-columns:165px minmax(0,1fr)}.parameter-definition-list{top:150px}.parameter-filter-bar select{max-width:170px}.parameter-calendar{max-height:65vh}}
+.parameter-panel .parameter-filter-bar label{display:inline-flex!important;align-items:center;gap:4px}
+.parameter-panel .parameter-definition-list button small{display:inline;max-width:none;white-space:nowrap}
+.parameter-panel .parameter-value-cell button{margin-left:0}
+.parameter-panel .parameter-current-values th:first-child{min-width:160px}
+.parameter-panel .parameter-object-matrix th:first-child{width:240px;max-width:320px}
+.parameter-panel .parameter-value-cell>span:first-child{display:inline-flex;align-items:center;gap:3px}
+.parameter-panel .parameter-value-cell small{display:inline;max-width:none}
+.parameter-calendar-day{min-height:58px}
+.parameter-calendar-day .parameter-value-cell{flex-wrap:nowrap}

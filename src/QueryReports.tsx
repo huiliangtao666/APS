@@ -6,11 +6,11 @@ import {queryInitial,queryDraftForView,queryReports,queryUrl,sameQueryIdentity,t
 import './QueryReports.css';
 
 type Memory={draft:QueryDraft;applied:QueryDraft};
-export function QueryReports({api,context,canExport,onClose,onMaintenance,onManageData,onRefresh,maintenanceTables=[]}:{api:QueryApi;context:QueryContext;canExport:boolean;onClose:()=>void;onMaintenance?:(target:{table:string;key:string})=>void;onManageData?:(report:string)=>void;onRefresh?:()=>Promise<void>;maintenanceTables?:string[]}) {
+export function QueryReports({api,context,canExport,onClose,onMaintenance,onManageData,onRefresh,refreshKey,maintenanceTables=[]}:{api:QueryApi;context:QueryContext;canExport:boolean;onClose:()=>void;onMaintenance?:(target:{table:string;key:string})=>void;onManageData?:(report:string)=>void;onRefresh?:()=>Promise<void>;refreshKey?:number|string;maintenanceTables?:string[]}) {
   const [catalog,setCatalog]=useState<QueryCatalog>(),[error,setError]=useState(''),[report,setReport]=useState('bom'),[view,setView]=useState(''),[runId,setRunId]=useState(context.runId||''),[runs,setRuns]=useState<any[]>([]),[pendingRun,setPendingRun]=useState(context.runId||''),[navRev,setNavRev]=useState(0);
   const memory=useRef(new Map<string,Memory>());
   const activeContext={...context,version:runId?(runs.find(r=>r.id===runId)?.version??context.version):context.version,runId:runId||undefined};
-  const key=JSON.stringify(activeContext);
+  const key=JSON.stringify([activeContext,refreshKey]);
   useEffect(()=>{let live=true;setCatalog(undefined);setError('');
     api(queryUrl('context',activeContext)).then(c=>{if(!live)return;if(c.identity.datasetId!==activeContext.datasetId||c.identity.version!==activeContext.version||(c.identity.runId||undefined)!==activeContext.runId)throw Error('查询上下文不一致，请返回工作台重选版本');setCatalog(c);setView(v=>c.views.some((x:QueryView)=>x.id===v)?v:c.views[0]?.id||'');}).catch(e=>{if(live)setError(e.message);});
     return()=>{live=false;};

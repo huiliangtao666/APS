@@ -18,7 +18,7 @@ export function importBinding(body,{id,expectedVersion,exists,actor}) {
 }
 export function bindPreview(p) {
  if(!p.requestedKind)return;
- p.previewFingerprint=hash({id:p.id,target:p.datasetId,version:p.expectedVersion,file:p.fileHash,kind:p.requestedKind,mode:p.mode,scope:p.scope,owner:p.owner,snapshot:p.snapshotHash,changes:p.changeSet,precedenceVersion,overlayResolution:p.overlayResolution,threeWay:p.parameterThreeWay});
+ p.previewFingerprint=hash({id:p.id,target:p.datasetId,version:p.expectedVersion,parameterRevision:p.expectedParameterRevision||0,file:p.fileHash,kind:p.requestedKind,mode:p.mode,scope:p.scope,owner:p.owner,snapshot:p.snapshotHash,changes:p.changeSet,precedenceVersion,overlayResolution:p.overlayResolution,threeWay:p.parameterThreeWay});
 }
 export function commitBinding(p,b,actor) {
  if(!p.requestedKind)return null;
@@ -37,7 +37,7 @@ export function prepareBusinessImport(incoming,old) {
  compileBusinessBindings(d);
  if(!old)return d;
  const previous=tagParameterSources(structuredClone(old));
- for(const k of ['parameterContract','parameterCandidates','parameterDefinitions','parameterCandidateDefinitions','parameterCategories','parameterAnnotations','parameterCounts','parameterClassification','parameterSources','parameterTrials','parameterPending','bomLossProfiles'])if(previous[k]!==undefined)d[k]=structuredClone(previous[k]);
+ for(const k of ['parameterBaseline','parameterRevision','parameterChangeLog','parameterContract','parameterCandidates','parameterDefinitions','parameterCandidateDefinitions','parameterCategories','parameterAnnotations','parameterCounts','parameterClassification','parameterSources','parameterTrials','parameterPending','bomLossProfiles'])if(previous[k]!==undefined)d[k]=structuredClone(previous[k]);
  // The new B level always comes from this workbook. Preserve only P/EDIT, so
  // uncovered B parameters continue receiving updates and business rows replace.
  d.tables['配置参数']=[...rows(d,'配置参数'),...rows(previous,'配置参数').filter(p=>sourceRole(p)!=='B')];
@@ -94,6 +94,8 @@ export function computationInput(data) {
 }
 export function cloneForParameters(data) {
  const d=structuredClone(computationInput(data));
+ // Run snapshots contain adopted configuration, not private maintenance/trial history.
+ delete d.parameterChangeLog;
  d.tables=Object.fromEntries(Object.entries(data.tables).map(([table,values])=>[table,d.tables[table]??values]));
  return d;
 }

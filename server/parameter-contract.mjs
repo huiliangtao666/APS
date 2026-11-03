@@ -169,19 +169,23 @@ export function parameterView(d,query={},actor=''){
  if(query.layer==='discussions')records=d.parameterAnnotations?.discussions||[];
  if(query.layer==='questions')records=d.parameterAnnotations?.questions||[];
  if(!['instances','catalog',undefined].includes(query.layer)&&filter)records=records.filter(p=>JSON.stringify(p).includes(filter));
- return {datasetId:d.id,businessLinked:d.profile!=='parameter-catalog-202611-r1',version:d.version,scope,day,total:records.length,offset,records:records.slice(offset,offset+limit),catalog,topics:[...new Set(parameterCatalog.map(d=>d['统一配置页签']))],domains:[...new Set(parameterCatalog.map(d=>d['业务领域']))],trials:(d.parameterTrials||[]).filter(t=>t.actor===actor),sources:d.parameterSources||[],candidateSources:d.parameterCandidateSources||[],precedenceVersion,mappingVersion:'CR-PARAM-UI-20261101:r1',checksInvalidated:!!d.checksInvalidated};
+ return {parameterRevision:d.parameterRevision||0,datasetId:d.id,businessLinked:d.profile!=='parameter-catalog-202611-r1',version:d.version,scope,day,total:records.length,offset,records:records.slice(offset,offset+limit),catalog,topics:[...new Set(parameterCatalog.map(d=>d['统一配置页签']))],domains:[...new Set(parameterCatalog.map(d=>d['业务领域']))],trials:(d.parameterTrials||[]).filter(t=>t.actor===actor),sources:d.parameterSources||[],candidateSources:d.parameterCandidateSources||[],precedenceVersion,mappingVersion:'CR-PARAM-UI-20261101:r1',checksInvalidated:!!d.checksInvalidated};
+}
+function logParameterChange(d,body,actor,before,after){
+ const take=p=>p?Object.fromEntries(['参数编号','参数值','单位','生效日','失效日'].map(k=>[k,structuredClone(p[k])])):null;
+ (d.parameterChangeLog??=[]).push({id:randomUUID(),at:new Date().toISOString(),actor,revision:(d.parameterRevision||0)+1,datasetVersion:body.configuration?d.version:d.version+1,baselineHash:d.parameterBaseline?.fileHash||(d.parameterSources||[]).filter(s=>s.mode==='dataset').at(-1)?.fileHash||null,cp:canonicalCp(body.cp),table:parameterSpec({'对象编号':body.objectId,'参数名称':body.field,_cp:body.cp})?.table,object:body.objectId,field:body.field,scope:body.scope||'dataset',operation:body.operation==='inherit'?'恢复继承':'维护参数',before:take(before),after:take(after)});
 }
 export function changeParameter(d,body,actor){
- tagParameterSources(d);
  const {cp,objectId,field,value,from,to,id,operation='save',candidate=false}=body,c=businessDefinition(d,cp),canonical=canonicalCp(cp),scope=scopeFor(d,body.scope,actor),spec=parameterSpec({'对象编号':objectId,'参数名称':field,_cp:canonical});
  if(isImmutable(cp)&&!(cp==='CP036'&&d.profile==='excel-qualified-output-202611-r1'))throw Error('派生/系统/固定契约只读，请维护其来源');
+ tagParameterSources(d);
  if(!String(objectId||'').trim()||typeof field!=='string')throw Error('对象及参数字段必填');
  const start=finiteNumber(from),end=finiteNumber(to);if(!Number.isInteger(start)||!Number.isInteger(end)||end<=start)throw Error('有效期须为整数非空半开区间');
  if(scope!=='dataset'&&(!spec||spec.global||spec.candidate))throw Error('此参数不支持仅本次试算覆盖');
  const target=candidate?(d.parameterCandidates??=[]):(d.tables['配置参数']??=[]),existing=id?target.find(p=>p['参数编号']===id&&(!body.sourceRole||sourceRole(p)===body.sourceRole)&&(!body.sourceFrom||p['生效日']===body.sourceFrom)):undefined;
  if(id&&!existing)throw Error('原参数记录不存在');
  if(existing&&(scopeOf(existing)!==scope||canonicalCp(cpOf(existing))!==canonical||existing['对象编号']!==objectId||existing['参数名称']!==field))throw Error('不能改变既有参数身份或作用范围');
- if(operation==='inherit'){if(scope==='dataset')throw Error('撤销覆盖仅适用于试算覆盖；共享来源不能无声删除');if(!existing)throw Error('覆盖不存在');target.splice(target.indexOf(existing),1);return {changedRecord:id,inherited:true,checksInvalidated:true};}
+ if(operation==='inherit'){if(scope==='dataset')throw Error('撤销覆盖仅适用于试算覆盖；共享来源不能无声删除');if(!existing)throw Error('覆盖不存在');target.splice(target.indexOf(existing),1);logParameterChange(d,body,actor,existing,null);return {changedRecord:id,inherited:true,checksInvalidated:true};}
  if(operation!=='save')throw Error('未知参数操作');
  let stored;
  if(candidate){if(!spec&&/关系\/组合/.test(c['呈现与编辑模式'])&&typeof value!=='object')throw Error('关系/组合参数须使用业务结构化表单，不能保存任意数值');if(/^CP03[0-5]$/.test(cp)&&!(finiteNumber(value)>=0&&finiteNumber(value)<1))throw Error('损耗比例须≥0且<1；空白不能当继承或0');if(body.enable===true)throw Error('候选资料不能显示已启用');stored=typeof value==='object'?validateComposite(cp,value):(spec?validateAtomic(spec,value):String(value??'').trim());if(stored==='')throw Error('候选值不能为空');}
@@ -195,8 +199,10 @@ export function changeParameter(d,body,actor){
  if(target.some(p=>p!==own&&sourceRole(p)==='EDIT'&&parameterIdentity(p)===parameterIdentity(probe)&&start<Number(p['失效日'])&&Number(p['生效日'])<end))throw Error('同在线层/对象/语义/作用范围有效期重叠');
  const nextId=own?.['参数编号']||body.newId||'P-'+randomUUID();
  if(target.some(p=>p!==own&&sourceRole(p)==='EDIT'&&p['参数编号']===nextId))throw Error('在线参数编号已存在');
- const p={...(existing||{}),...probe,'参数编号':nextId,'对象编号':objectId,'对象名称':existing?.['对象名称']||objectId,'参数名称':field,'参数值':stored,'单位':unit,'生效日':String(start),'失效日':String(end),_cp:canonical,_scope:scope,_candidate:!!candidate,_blocked:false,_pendingReason:undefined,'资料状态':candidate?'candidate':'dataset',_source:{role:'EDIT',kind:'维护',actor,reason:body.reason,version:d.version+1,previous:existing?._source},_formulas:{}};
+ const p={...(existing||{}),...probe,'参数编号':nextId,'对象编号':objectId,'对象名称':existing?.['对象名称']||objectId,'参数名称':field,'参数值':stored,'单位':unit,'生效日':String(start),'失效日':String(end),_cp:canonical,_scope:scope,_candidate:!!candidate,_blocked:false,_pendingReason:undefined,'资料状态':candidate?'candidate':'dataset',_source:{role:'EDIT',kind:'维护',actor,reason:body.reason,version:body.configuration?d.version:d.version+1,parameterRevision:(d.parameterRevision||0)+1,previous:existing?._source},_formulas:{}};
  adoptDefinitionBounds(d,p);
+ const previous=existing||effectiveParameters(d,start,scope).find(old=>parameterIdentity(old)===parameterIdentity(probe))||((spec?.table&&(d.tables[spec.table]||[]).find(r=>objectKey(r,spec)===objectId))?{'参数值':(d.parameterBaseFields||[]).find(b=>b.table===spec.table&&b.object===objectId&&b.field===field)?.value??(d.tables[spec.table]||[]).find(r=>objectKey(r,spec)===objectId)?.[field],'单位':unit}:null);
+ logParameterChange(d,body,actor,previous,p);
  if(own)Object.assign(own,p);else target.push(p);
  d.parameterContract='CR-PARAM-UI-20261101:r1';d.checkedAt=null;d.checksInvalidated=true;
  return {changedRecord:p['参数编号'],sourceRole:'EDIT',checksInvalidated:true,scope,entry:c['中文配置项']};

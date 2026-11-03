@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {renderToStaticMarkup} from 'react-dom/server';
 import App from './App';
 import {PersonnelToolHeatmap} from './EquipmentSchedule';
+import {rebaseParameterDraft,ParameterMaintenanceView} from './ParameterMaintenanceView';
 import {QueryReports,QueryBomPreview,editableQuerySources} from './QueryReports';
 import {QueryTable} from './QueryReportsControls';
 import {pathProducts} from './BomPathProducts';
@@ -65,6 +66,16 @@ test('personnel chart warns about overcapacity including zero capacity and prese
  const html=heatHtml([heatRow('CREW',1,'人',6,5),heatRow('TOOL',1,'实体套',1,0),heatRow('EMPTY',1,'实体套',0,0)]);
  for(const id of ['CREW','TOOL']){const button=heatButton(html,id+' / 2026-11-01 /');assert.ok(button.includes('equipment-over-capacity'));assert.ok(button.includes('超占提示'));assert.ok(button.includes('余量：-1'));}
  assert.ok(!heatButton(html,'EMPTY / 2026-11-01 /').includes('equipment-over-capacity'));
+});
+test('parameter conflict rebase binds the new winning source without losing the user value or period',()=>{
+ const draft={cp:'CP006',objectId:'GLOBAL',field:'窗口天数',id:'P6',sourceRole:'P',sourceFrom:'0',value:'17',from:'1',to:'15',expectedVersion:6,expectedParameterRevision:0};
+ const view={version:6,parameterRevision:1,records:[{cp:'CP006','对象编号':'GLOBAL','参数名称':'窗口天数','参数编号':'EDIT6','生效日':'0',sourceRole:'EDIT',adoptable:true,scope:'dataset'}]};
+ const rebased=rebaseParameterDraft(draft,view,'dataset');assert.equal(rebased.id,'EDIT6');assert.equal(rebased.expectedVersion,6);assert.equal(rebased.expectedParameterRevision,1);assert.equal(rebased.sourceRole,'EDIT');assert.equal(rebased.value,'17');assert.equal(rebased.from,'1');assert.equal(rebased.to,'15');
+ assert.equal(rebaseParameterDraft(draft,view,'trial:own').id,undefined,'inherited shared source must create a trial override');
+});
+test('parameter object matrix uses one row per object with current value and visible missing state',()=>{
+ const view={layout:'objects',cp:'CP016',fields:['每箱净重千克'],definitions:[{'参数编号':'CP016','中文配置项':'每箱净重'}],objectRows:[{id:'SKU1',object:'SKU1',name:'成品一',cells:[{recordKey:'S1','参数名称':'每箱净重千克',effectiveValue:'6','单位':'千克/箱',status:'当前有效',editable:true}]},{id:'SKU2',object:'SKU2',name:'成品二',cells:[{recordKey:'S2','参数名称':'每箱净重千克',status:'未维护',editable:true}]}]};
+ const html=renderToStaticMarkup(<ParameterMaintenanceView view={view} canWrite onEdit={()=>{}} onRelation={()=>{}}/>);assert.ok(html.includes('SKU1'));assert.ok(html.includes('SKU2'));assert.ok(html.includes('填写'));assert.ok(html.includes('6'));assert.equal((html.match(/<tbody><tr|<\/tr><tr/g)||[]).length,2);
 });
 test('active app exposes only four consolidated workbench pages and no independent legacy data source',()=>{
  const html=renderToStaticMarkup(<App/>);

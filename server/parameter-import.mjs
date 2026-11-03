@@ -31,6 +31,7 @@ export function integrateParameterImport(parsed,old,{id,name,expectedVersion,fil
  const source={fileHash,mappingVersion:parsed.schemaVersion,mode:adoptParameters?'dataset':'candidate',role:'P',counts:parsed.parameterCounts};
  d.parameterSources=[...(old?.parameterSources||[]),source];
  if(adoptParameters){
+  d.parameterBaseline={fileHash,version:(d.parameterBaseline?.version||new Set((old?.parameterSources||[]).filter(s=>s.mode==='dataset').map(s=>s.fileHash)).size)+1,importedAt:d.createdAt,datasetVersion:d.version};d.parameterRevision=0;
   const definitions=new Map((d.parameterDefinitions||[]).map(p=>[p['参数编号'],p]));
   for(const p of parsed.parameterDefinitions)definitions.set(p['参数编号'],p);
   d.parameterDefinitions=[...definitions.values()];
