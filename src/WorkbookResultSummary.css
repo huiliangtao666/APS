@@ -1,0 +1,29 @@
+.input-workspace .workbook-result-summary{border:1px solid #cadce6;border-radius:6px;overflow:hidden;margin:0 0 10px;background:white;font-size:12px;color:#355366}
+.result-summary-heading{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:9px 12px;border-bottom:1px solid #dae5ec;background:#f4f9fb}
+.input-workspace .result-summary-heading h2{margin:0;font-size:15px;color:#255774}
+.result-summary-heading>span{color:#617887;font-size:12px}
+.result-summary-actions{display:flex;gap:5px;margin-left:auto}
+.input-workspace .workbook-result-summary button,.input-workspace .workbook-result-summary input,.input-workspace .workbook-result-summary select{font-size:12px;min-height:28px;padding:3px 7px;border:1px solid #cbdce5;border-radius:4px}
+.input-workspace .result-conclusion{margin:0;padding:8px 12px;color:#36566b;line-height:1.6}
+.result-metrics{display:flex;flex-wrap:wrap;gap:0;background:#eff6f9;margin:0 12px 7px;border-radius:4px}
+.result-metrics>div{flex:1 1 190px;padding:8px 10px;border-right:1px solid #dce8ee}
+.result-metrics>div:last-child{border:0}.result-metrics span,.result-metrics b{display:block}.result-metrics span{color:#637f90;font-size:11px;margin-bottom:3px}.result-metrics b{font-size:14px;color:#285a74;line-height:1.55}
+.input-workspace .result-basis{margin:0 12px;padding:6px 0;border-bottom:1px solid #dce7ed}
+.result-basis summary{font-weight:600;color:#3e6f88}.result-basis dl{display:grid;grid-template-columns:115px minmax(0,1fr);gap:6px 12px;margin:9px 0;line-height:1.65}.result-basis dt{font-weight:600}.result-basis dd{margin:0;overflow-wrap:anywhere}
+.result-categories{display:flex;gap:5px;padding:8px 12px 4px;overflow-x:auto}
+.input-workspace .result-categories button{flex:1 0 auto;text-align:left;background:#f1f7fa;padding:6px 8px;border-color:#cbdfe8;color:#3a5d72;white-space:nowrap}
+.result-categories b{margin-left:5px}.result-categories span{margin-left:3px;font-size:11px;font-weight:normal}
+.input-workspace .result-categories button.chosen{background:#235875;color:white;border-color:#235875}
+.result-summary-filters{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:6px 12px;color:#5a7484}
+.input-workspace .result-summary-filters label{display:flex;align-items:center;gap:4px;font-size:12px;margin:0;white-space:nowrap}
+.result-summary-filters input{width:175px}.result-pager{display:flex;align-items:center;gap:6px;margin-left:auto}.result-pager span{white-space:nowrap}
+.result-groups{overflow:auto;max-height:48vh;border-top:1px solid #dbe6ec}
+.workbook-result-summary table{border-collapse:collapse;width:100%;font-size:12px;table-layout:fixed;min-width:680px;text-align:left}
+.workbook-result-summary th,.workbook-result-summary td{padding:8px 10px;vertical-align:top;border-bottom:1px solid #dfE8ee;line-height:1.6;overflow-wrap:anywhere;white-space:normal}
+.result-groups>table>thead>tr>th{position:sticky;top:0;z-index:1;background:#eaf3f8}.result-groups>table>thead th:first-child{width:23%}.result-groups>table>thead th:nth-child(2){width:48%}
+.workbook-result-summary td>b,.workbook-result-summary td>span{display:block}.workbook-result-summary td>span:not(.result-kind){color:#728694;font-size:11px;margin-top:3px}
+.workbook-result-summary .result-kind{display:inline-block;font-size:10px;padding:0 5px;margin:0 0 3px;border-radius:3px}.result-process{color:#88691a;background:#fff6df}.result-problem{color:#a24035;background:#fff0ec}
+.input-workspace .workbook-result-summary td p{margin:0;line-height:1.6}.input-workspace .workbook-result-summary td details{padding:5px 0 0}.result-groups summary{color:#286489;font-weight:600}
+.result-occurrences{overflow:auto;max-height:280px;margin:5px 0;border:1px solid #d3e1e9}.result-occurrences table{min-width:510px;table-layout:auto}.result-occurrences th{background:#f3f7fa}.result-occurrences td,.result-occurrences th{padding:5px 7px}.result-occurrences td>span{font-size:11px;color:#6d8190}.result-occurrences button{margin-top:3px;text-align:left;color:#28648a;background:#fff}
+.input-workspace .result-empty{margin:0;padding:10px 12px;color:#617b8b}
+@media(max-width:700px){.result-basis dl{grid-template-columns:1fr;gap:3px}.result-metrics>div{flex-basis:45%}.result-summary-actions{margin-left:0}.result-summary-heading{align-items:flex-start}}
