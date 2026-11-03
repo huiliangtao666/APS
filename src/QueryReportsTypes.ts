@@ -28,6 +28,7 @@ export function queryInitial(c:QueryCatalog):QueryDraft {
 }
 /** Removed filters must not survive in cached drafts or inherited navigation. */
 export function queryDraftForView(view:QueryView,draft:QueryDraft):QueryDraft{
+  if(view.id==='capacity.stops')return {...draft,q:'',includeBom:false,filters:Object.fromEntries(Object.entries(draft.filters).filter(([key])=>key==='资源编号'))};
   if(view.id==='inventory.summary'&&!['materialId','质量状态','unit'].includes(draft.sort))return {...draft,sort:'',direction:'asc'};
   if(!['demand.daily','demand.details','capacity.routes'].includes(view.id))return draft;
   const allowed=new Set(view.filters.map(f=>f.key));

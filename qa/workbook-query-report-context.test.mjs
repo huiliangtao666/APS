@@ -148,6 +148,29 @@ test('route master filters use imported route numbers and ignore removed materia
  assert.throws(()=>domain.query(value,{...q,view:'capacity.daily',knownAsOfDate:'invalid'}));
  assert.equal(hash(f.old),before);assert.equal(f.writes(),0);
 });
+test('stop query exposes resource and interval only; legacy hidden controls cannot narrow results or exports',()=>{
+ const f=connected();f.old.tables.设备与工装=[{资源编号:'EQ1',资源组编号:'G1'},{资源编号:'EQ2',资源组编号:'G2'}];
+ f.old.tables.停机安排=[
+  {停机编号:'S1',资源编号:'EQ1',开始日:'1',结束日:'2',可知日:'0',停机类型:'保养'},
+  {停机编号:'S2',资源编号:'EQ2',开始日:'2',结束日:'3',可知日:'9',停机类型:'故障'},
+  {停机编号:'S3',资源编号:'EQ1',开始日:'3',结束日:'4',可知日:'1',停机类型:'保养'}];
+ const value=workbookQueryContext(f.ctx,{datasetId:'fixture',version:1},'synthetic-actor'),before=hash(f.old),q={...f.draft,view:'capacity.stops'};
+ assert.deepEqual(domain.catalog(value).views.find(v=>v.id===q.view).filters,[{key:'资源编号',label:'资源',kind:'business'}]);
+ const clean=domain.query(value,q),legacy={...q,q:'SHOULD-NOT-FILTER',includeBom:true,bomAsOfDate:'invalid',knownAsOfDate:'invalid',filters:{'material:成品':{mode:'NONE'},'material:原辅料':{mode:'NONE'},停机类型:{mode:'NONE'},路线编号:{mode:'NONE'}}};
+ assert.equal(clean.total,3);assert.equal(domain.query(value,legacy).queryFingerprint,clean.queryFingerprint);
+ const options=domain.options(value,{query:legacy,field:'资源编号'});assert.deepEqual(options.items.map(i=>i.id).sort(),['EQ1','EQ2']);
+ const none=domain.options(value,{query:legacy,field:'资源编号',action:{kind:'none'}}).selection;
+ const selection=domain.options(value,{query:{...legacy,filters:{资源编号:none}},field:'资源编号',action:{kind:'searchAll',query:'EQ1'}}).selection;
+ const selected={...legacy,filters:{...legacy.filters,资源编号:selection}},page=domain.query(value,selected);
+ assert.equal(page.total,2);assert.ok(page.records.every(r=>r.values.资源编号==='EQ1'));
+ const empty=domain.options(value,{query:q,field:'资源编号',action:{kind:'none'}}).selection;assert.equal(domain.query(value,{...q,filters:{资源编号:empty}}).total,0);
+ assert.deepEqual(domain.query(value,{...q,fromDate:'2026-11-02',toDateInclusive:'2026-11-02'}).records.map(r=>r.id),['stop:S2']);
+ assert.deepEqual(domain.query(value,{...q,fromDate:'2026-11-03',toDateInclusive:'2026-11-03'}).records.map(r=>r.id),['stop:S3']);
+ assert.throws(()=>domain.query(value,{...q,fromDate:'invalid'}));
+ const detail=domain.detail(value,{query:selected,queryFingerprint:page.queryFingerprint,id:page.records[0].id,table:'sources'});assert.ok(detail.total>0);
+ const exported=[...domain.export(value,{...selected,queryFingerprint:page.queryFingerprint,scope:'ALL'})].join('').trim().split('\n').map(JSON.parse);assert.equal(exported.at(-1).total,2);
+ assert.equal(hash(f.old),before);assert.equal(f.writes(),0);
+});
 test('inventory summary exposes fixed dimensions and real date cells without business-key display',()=>{
  const f=connected();f.old.tables.期初库存=[{库存批次编号:'L1',物料编号:'M000',质量状态:'合格',数量单位:'千克',当前数量:'10',期初已占用量:'2',快照日:'0',放行日:'0',到期日:'9'},{库存批次编号:'L2',物料编号:'M000',质量状态:'待检',数量单位:'千克',当前数量:'5',期初已占用量:'0',快照日:'1',放行日:'0',到期日:'9'}];
  const value=workbookQueryContext(f.ctx,{datasetId:'fixture',version:1},'synthetic-actor'),q={...f.draft,view:'inventory.summary'},result=domain.query(value,q);

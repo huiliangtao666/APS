@@ -146,3 +146,5 @@
 .qr-inventory-summary :is(th,td).qr-sticky-unit{position:sticky;left:240px;min-width:60px;max-width:60px;background:#fff;z-index:2;border-right:1px solid #cbd8e2}
 .qr-inventory-summary th:is(.qr-sticky-material,.qr-sticky-quality,.qr-sticky-unit){background:#edf2f6;z-index:4}
 .qr-inventory-summary .qr-scroll td{font-variant-numeric:tabular-nums}
+
+.qr-workspace.qr-business .qr-stop-filters .qr-filter-groups{flex:0 1 160px;order:0}

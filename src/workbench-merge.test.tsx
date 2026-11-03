@@ -29,6 +29,13 @@ test('route master drops hidden cached categories and preserves route, product, 
  assert.deepEqual(Object.keys(queryDraftForView(view,draft).filters),keys);
  assert.equal(queryDraftForView({...view,id:'capacity.daily'},draft),draft);
 });
+test('stop query clears hidden keyword, BOM and filters while retaining resource and date interval',()=>{
+ const catalog={fromDate:'2026-11-02',toDateInclusive:'2026-11-08'} as QueryCatalog;
+ const draft={...queryInitial(catalog),q:'OLD',includeBom:true,filters:{资源编号:{mode:'NONE' as const},停机类型:{mode:'NONE' as const},'material:成品':{mode:'NONE' as const}}};
+ const view={id:'capacity.stops',report:'capacity',label:'停机安排',key:'id',columns:[],filters:[{key:'资源编号',label:'资源'}]};
+ const clean=queryDraftForView(view,draft);assert.deepEqual(clean,{...draft,q:'',includeBom:false,filters:{资源编号:{mode:'NONE'}}});
+ assert.equal(clean.fromDate,'2026-11-02');assert.equal(clean.toDateInclusive,'2026-11-08');
+});
 test('active app exposes only four consolidated workbench pages and no independent legacy data source',()=>{
  const html=renderToStaticMarkup(<App/>);
  assert.ok(!html.includes('class="hero"'));assert.ok(html.includes('class="workbook-navigation-host"'));
