@@ -1,0 +1,610 @@
+[
+  {
+    "original_path": "upload/pasted-2026-11-03T01-36-51.png",
+    "name": "pasted-2026-11-03T01-36-51.png",
+    "sha256": "b7b2a820e5c4b17a5a2865e0430da0a48ded74c4852bcc729523f45996c4e831",
+    "bytes": 6718,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T01-36-51.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T01-39-26.png",
+    "name": "pasted-2026-11-03T01-39-26.png",
+    "sha256": "ddd2ebc88ef11f0d09236968399bfbcc857d019826e4f0846eb87720f63c87ce",
+    "bytes": 14177,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T01-39-26.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T01-40-09.png",
+    "name": "pasted-2026-11-03T01-40-09.png",
+    "sha256": "6f92da3db851abd0b153e9375e6cbdb5d9973f918cd268d902bf84309d113e36",
+    "bytes": 14995,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T01-40-09.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T01-52-29.png",
+    "name": "pasted-2026-11-03T01-52-29.png",
+    "sha256": "fba0215517ce0b18609350d5925399abd561626fc0ec9a329c4c373aefccfe70",
+    "bytes": 44217,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T01-52-29.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T01-56-21.png",
+    "name": "pasted-2026-11-03T01-56-21.png",
+    "sha256": "0bd3d067e69f6acd8c55df78f9d097a340a2c298e113fd26f199f5409c07de39",
+    "bytes": 90198,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T01-56-21.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T02-29-08.png",
+    "name": "pasted-2026-11-03T02-29-08.png",
+    "sha256": "35d4ef49486c3dc8de9a098dff1148cd41ce05b86a03f8211afb17319bb2398d",
+    "bytes": 62057,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T02-29-08.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T02-30-58.png",
+    "name": "pasted-2026-11-03T02-30-58.png",
+    "sha256": "ad87bbc60e634437c519192153d88d29b9f19e152b01126d8e9909ef0c57d87c",
+    "bytes": 178368,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T02-30-58.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T02-31-42.png",
+    "name": "pasted-2026-11-03T02-31-42.png",
+    "sha256": "6d0990651b69a5cd030b49245ec23406247d8de40be8f1f2594df5481d576728",
+    "bytes": 148077,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T02-31-42.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T02-31-50.png",
+    "name": "pasted-2026-11-03T02-31-50.png",
+    "sha256": "c1c79e5f34e2796b647c4e8f682224f67cbeaa449e10b54543007345d3c7b158",
+    "bytes": 90855,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T02-31-50.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T02-50-38.png",
+    "name": "pasted-2026-11-03T02-50-38.png",
+    "sha256": "ed963229df652db7c42e6c4cfff5ee5f81223a65ea8b9b69dc6f2bbb1b8f932e",
+    "bytes": 35799,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T02-50-38.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T02-52-04.png",
+    "name": "pasted-2026-11-03T02-52-04.png",
+    "sha256": "20b1401ebfb5e912583ab9fd514a2dead7e2ee2125767c9941413f5bb44bfc66",
+    "bytes": 120867,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T02-52-04.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T03-00-20.png",
+    "name": "pasted-2026-11-03T03-00-20.png",
+    "sha256": "c6d5a77f372d7cd5771f2000ba7e4f62117a31c4b6f883aaff170d6e1e71b2c6",
+    "bytes": 119722,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-00-20.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T03-01-57.png",
+    "name": "pasted-2026-11-03T03-01-57.png",
+    "sha256": "8d6eee00ca533a497d03ca69293eaa8fcf6592ee4003c37de22928be8b52381d",
+    "bytes": 10372,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-01-57.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T03-09-14.png",
+    "name": "pasted-2026-11-03T03-09-14.png",
+    "sha256": "54b1c3b73f8371558f3507b1f37fd6866f70bc7f99c0da8d755eff2826849393",
+    "bytes": 91139,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-09-14.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T03-10-33.png",
+    "name": "pasted-2026-11-03T03-10-33.png",
+    "sha256": "409a531ec0f501e9b51b25dddcc716b60b1a040cb534296c68decd3494a677a2",
+    "bytes": 223773,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-10-33.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/APS五类业务查询_设计原型_R2_20261102.html",
+    "name": "APS五类业务查询_设计原型_R2_20261102.html",
+    "sha256": "3bbd8d510125e2f67da3e80b8887f63deeb5354fe451a1851b6f32677f132ffb",
+    "bytes": 3920548,
+    "repository_path": null,
+    "kind": "参考HTML（原件保留工作区，未公开内嵌数据）"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T03-20-16.png",
+    "name": "pasted-2026-11-03T03-20-16.png",
+    "sha256": "4bd6bca5ea5c0dc6d07aab0f58caf980c23638804512e41afc0a7d6589e07e3d",
+    "bytes": 204675,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-20-16.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T03-20-45.png",
+    "name": "pasted-2026-11-03T03-20-45.png",
+    "sha256": "9f5c786c05247d693c23ad71046d9a3477d89b29e4060d9fb0b7244f744794b9",
+    "bytes": 80834,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-20-45.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T03-21-36.png",
+    "name": "pasted-2026-11-03T03-21-36.png",
+    "sha256": "032c6af476fd2984a860fa378dc9f7476edac75c548dd3f24b6332ad597f4b23",
+    "bytes": 94935,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-21-36.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T03-21-50.png",
+    "name": "pasted-2026-11-03T03-21-50.png",
+    "sha256": "d0288b10860d965322507bb7ca6a519126ad0395ac1c1588ea5bd33b0c860b0e",
+    "bytes": 108941,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-21-50.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/企业微信截图_17936763231400.png",
+    "name": "企业微信截图_17936763231400.png",
+    "sha256": "a7243fa043b254003dd740a58154833c1390a4b744f0b59a5aa088c579247ca0",
+    "bytes": 70842,
+    "repository_path": "docs/issue-log/2026-11-03/assets/企业微信截图_17936763231400.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/企业微信截图_17936763414985.png",
+    "name": "企业微信截图_17936763414985.png",
+    "sha256": "5cc5981975776397e5645db04f08568b2efbd082aee17fcdce19d03e0a1c9214",
+    "bytes": 21875,
+    "repository_path": "docs/issue-log/2026-11-03/assets/企业微信截图_17936763414985.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/企业微信截图_17936763652619.png",
+    "name": "企业微信截图_17936763652619.png",
+    "sha256": "36f78c6d00e8efae3387b362f4dbd85d8261ca9ab776c64cb2fca3c2eb6aee9e",
+    "bytes": 32832,
+    "repository_path": "docs/issue-log/2026-11-03/assets/企业微信截图_17936763652619.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/企业微信截图_17936763807352.png",
+    "name": "企业微信截图_17936763807352.png",
+    "sha256": "b0f5011e9b54fd897fa9e1a1fe97e528250e96e2e9324d7e49f4605d6acac29d",
+    "bytes": 50188,
+    "repository_path": "docs/issue-log/2026-11-03/assets/企业微信截图_17936763807352.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T03-38-32.png",
+    "name": "pasted-2026-11-03T03-38-32.png",
+    "sha256": "48e8b00b79f7c4a21c0aae9ee1940e9888b2f4cbe55442d51f65a50a0485e3c3",
+    "bytes": 196731,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-38-32.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/APS设备排程_分钟排程半小时展示原型_20261102.html",
+    "name": "APS设备排程_分钟排程半小时展示原型_20261102.html",
+    "sha256": "7afd0c006a1013883acba475b2f404ebf82b034c97c3ae6d04f62047693f56be",
+    "bytes": 1250028,
+    "repository_path": null,
+    "kind": "参考HTML（原件保留工作区，未公开内嵌数据）"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T03-45-55.png",
+    "name": "pasted-2026-11-03T03-45-55.png",
+    "sha256": "f5b6e726b6fc67d329adba5b44f67cf1d4ddfd169da70a57dc93365e8afd6dd5",
+    "bytes": 89529,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-45-55.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T03-49-44.png",
+    "name": "pasted-2026-11-03T03-49-44.png",
+    "sha256": "868351b186faff0952fd0c8ee1ff77a262b31632f9efd2d3b1b368396ff92247",
+    "bytes": 267405,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-49-44.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T03-53-13.png",
+    "name": "pasted-2026-11-03T03-53-13.png",
+    "sha256": "613200276f806ed304352b839eec21700695bd915fda80ebc53e3341809b7845",
+    "bytes": 107231,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-53-13.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T03-56-41.png",
+    "name": "pasted-2026-11-03T03-56-41.png",
+    "sha256": "46e671be4084dd76941997ffb6c874a560cc88f58390dbfb5ca614b6dbb0fe64",
+    "bytes": 336387,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T03-56-41.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T05-55-54.png",
+    "name": "pasted-2026-11-03T05-55-54.png",
+    "sha256": "b389644df18b07349feade84b417e037cd3dd6ad23a60bfbf544e975a7bb1a7b",
+    "bytes": 34151,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T05-55-54.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T06-09-53.png",
+    "name": "pasted-2026-11-03T06-09-53.png",
+    "sha256": "6fc2d5bf8715c11049d59fb45814dfabb136e99b2f256c2d541ba054bc02fa58",
+    "bytes": 241992,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T06-09-53.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T06-11-47.png",
+    "name": "pasted-2026-11-03T06-11-47.png",
+    "sha256": "f224d1ac35ba1f0c0748b4294c06b1cd4d89578697fc0c6e05041566ad74c76c",
+    "bytes": 263843,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T06-11-47.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T06-14-26.png",
+    "name": "pasted-2026-11-03T06-14-26.png",
+    "sha256": "a78cde55a471a6d9767513147f27d73e9d4363cefa115b526c6e8a0f185acce0",
+    "bytes": 170590,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T06-14-26.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T06-18-09.png",
+    "name": "pasted-2026-11-03T06-18-09.png",
+    "sha256": "71ee7d735b55004dde740bbd6e7af2bf9368f63235758a8cca2da7fe73c34e4d",
+    "bytes": 166528,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T06-18-09.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T06-33-53.png",
+    "name": "pasted-2026-11-03T06-33-53.png",
+    "sha256": "c736e3d13fcbc59907102466d1ebd65c39ad1796116a967a6d2024b913f173ab",
+    "bytes": 182965,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T06-33-53.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T06-44-36.png",
+    "name": "pasted-2026-11-03T06-44-36.png",
+    "sha256": "ff6e7deed4bc53bde838e84de45177e77c13e0df42277bb261cb17ea67a2d63a",
+    "bytes": 260686,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T06-44-36.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T06-49-34.png",
+    "name": "pasted-2026-11-03T06-49-34.png",
+    "sha256": "bbeccb17e1a1e6cb4fca3278660774a03ac040e8bf169aaaeee335413d0ea1ea",
+    "bytes": 165435,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T06-49-34.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T06-59-53.png",
+    "name": "pasted-2026-11-03T06-59-53.png",
+    "sha256": "a4a72fca97d7fec4936f76e2a8ba6488d60d04988354dd86ec8a86e933b4120e",
+    "bytes": 215976,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T06-59-53.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T07-06-51.png",
+    "name": "pasted-2026-11-03T07-06-51.png",
+    "sha256": "2e3927be3b0920da6bb1d1e240cc7c303cc410791bc5ce7e32cd14d2c5058b98",
+    "bytes": 243797,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T07-06-51.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T07-10-24.png",
+    "name": "pasted-2026-11-03T07-10-24.png",
+    "sha256": "2956357197a05d655d14ee4fb1e2bcf1925e6e0b64382d731f784c324e1e9cce",
+    "bytes": 158024,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T07-10-24.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T07-12-31.png",
+    "name": "pasted-2026-11-03T07-12-31.png",
+    "sha256": "7b01a4221b7398de4da350fbb4bc5881861320683e22e013fe3224b4e82d6ea3",
+    "bytes": 174709,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T07-12-31.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T07-20-23.png",
+    "name": "pasted-2026-11-03T07-20-23.png",
+    "sha256": "3835be4a952b8672bec5c2944d44e0f8957c8278d09dde72ed05173ecdf931d0",
+    "bytes": 319054,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T07-20-23.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T07-44-41.png",
+    "name": "pasted-2026-11-03T07-44-41.png",
+    "sha256": "7b96c3d876571ac59aa0e25a28db7b8e33f5a5255e2c57363f118cfb236f94ef",
+    "bytes": 250764,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T07-44-41.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T07-49-43.png",
+    "name": "pasted-2026-11-03T07-49-43.png",
+    "sha256": "a8caf2b5620e87462ed6e15de62cc785c0d84fd7f5e3247eeaac95ec1a9cf63d",
+    "bytes": 375917,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T07-49-43.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T07-50-18.png",
+    "name": "pasted-2026-11-03T07-50-18.png",
+    "sha256": "19451fc9fb37001d25f767c66d03581bec66b3f78d551ad096eaa7acc205434a",
+    "bytes": 303467,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T07-50-18.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T07-50-59.png",
+    "name": "pasted-2026-11-03T07-50-59.png",
+    "sha256": "b56e007eb39d56a98bde441eb0c5542eb4b9ec1f2556ef160ecc34aeffdfd63a",
+    "bytes": 179845,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T07-50-59.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T08-00-56.png",
+    "name": "pasted-2026-11-03T08-00-56.png",
+    "sha256": "ead16d70eeaf931784ea390d05bd067749d5396cfdf14d94c613c036bc1ee7cc",
+    "bytes": 223338,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T08-00-56.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T08-04-28.png",
+    "name": "pasted-2026-11-03T08-04-28.png",
+    "sha256": "7ed3e0a42a4ed8d77c103544541a6b53a0b4dcada0af9427eada1e5812968520",
+    "bytes": 249694,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T08-04-28.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T08-14-39.png",
+    "name": "pasted-2026-11-03T08-14-39.png",
+    "sha256": "cd9786306d42aae8aaee12fe96be0644cc77ec23989d2b522ebf4d1744f11fca",
+    "bytes": 514220,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T08-14-39.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T09-00-00.png",
+    "name": "pasted-2026-11-03T09-00-00.png",
+    "sha256": "ff8cd7ecab329b369b934c88df0bcfadab77a44d98248c0550eee0465459968e",
+    "bytes": 40325,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T09-00-00.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T09-12-51.png",
+    "name": "pasted-2026-11-03T09-12-51.png",
+    "sha256": "84497a9668dd08fcee719b59b2473d7f437f8446c5e29133d3b93c225e8d8c68",
+    "bytes": 364350,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T09-12-51.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T09-24-43.png",
+    "name": "pasted-2026-11-03T09-24-43.png",
+    "sha256": "0053bfa1d433892fad45508a516140c68d27d38808bdd171122f49654bf925c7",
+    "bytes": 147008,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T09-24-43.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T09-48-04.png",
+    "name": "pasted-2026-11-03T09-48-04.png",
+    "sha256": "4d90c7d41b008dd7d1bfab1be919d64d52ba51737c32ff9425c9aedfd70ae3c6",
+    "bytes": 613526,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T09-48-04.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T10-21-05.png",
+    "name": "pasted-2026-11-03T10-21-05.png",
+    "sha256": "cbd4f5baf41225c9c4bc69911a7c24abbf13cb7ef8ce0f6ef020f13ed3bf2067",
+    "bytes": 74824,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T10-21-05.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T10-23-12.png",
+    "name": "pasted-2026-11-03T10-23-12.png",
+    "sha256": "99c7eb838bbb57337a0798c04475902f1c597845a36b790b99be8e32905d0444",
+    "bytes": 124592,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T10-23-12.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T11-01-11.png",
+    "name": "pasted-2026-11-03T11-01-11.png",
+    "sha256": "e84daad80338bd565dde49b517cbdee356bff7c8b186ff3f886aa1b764b4a2c4",
+    "bytes": 250185,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T11-01-11.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T11-02-26.png",
+    "name": "pasted-2026-11-03T11-02-26.png",
+    "sha256": "42d23a49d9e6b8fd185d0a2c9f2755931206ed0de9d4676479d04c988a7796ac",
+    "bytes": 561461,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T11-02-26.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T11-05-22.png",
+    "name": "pasted-2026-11-03T11-05-22.png",
+    "sha256": "4ab2ef1149f10461d8c21cbd003e0bc232db97fbb19e103508e58f3b3f074ad3",
+    "bytes": 81028,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T11-05-22.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T11-19-40.png",
+    "name": "pasted-2026-11-03T11-19-40.png",
+    "sha256": "2cd4ec125f95d218c0f798d666669623f2ac462e5d3c2ac1c42cc8ca3709d20c",
+    "bytes": 244765,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T11-19-40.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T11-24-18.png",
+    "name": "pasted-2026-11-03T11-24-18.png",
+    "sha256": "422715e8d0993ae801c4b9d8bad683c5f493f3654667afcdd7f945daa0ba0459",
+    "bytes": 212935,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T11-24-18.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T11-27-39.png",
+    "name": "pasted-2026-11-03T11-27-39.png",
+    "sha256": "a166e750cedeaa642e52fd4e893d9106a6e468342f5e384405f843bdf4c1a025",
+    "bytes": 176960,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T11-27-39.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T12-55-46.png",
+    "name": "pasted-2026-11-03T12-55-46.png",
+    "sha256": "4a959507f3fcc2aeaad2a11f7fd9682d2e6490f02d803eddf6ff9698ea1952c7",
+    "bytes": 385214,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T12-55-46.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T12-57-34.png",
+    "name": "pasted-2026-11-03T12-57-34.png",
+    "sha256": "17b520e71955b76863e9f723c83e03c6431c9429823b5a3012f52c4a395287ac",
+    "bytes": 118715,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T12-57-34.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T12-59-08.png",
+    "name": "pasted-2026-11-03T12-59-08.png",
+    "sha256": "a80ccbfe9e414d0373c6fb630c1922498ed39a19411034c6b6ce2c33a010f241",
+    "bytes": 117928,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T12-59-08.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T13-20-53.png",
+    "name": "pasted-2026-11-03T13-20-53.png",
+    "sha256": "e827a9e9209022096e28cf36db8ffe766e2716bce2e42fa5e423047524adcb87",
+    "bytes": 241354,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T13-20-53.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T13-22-11.png",
+    "name": "pasted-2026-11-03T13-22-11.png",
+    "sha256": "4a96ba218b80fc398151e90ede51850a1ea402ce226ebcc192ef76c6b979e889",
+    "bytes": 131975,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T13-22-11.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T13-22-19.png",
+    "name": "pasted-2026-11-03T13-22-19.png",
+    "sha256": "30b18cafa80d0b0014dfd65bf74ed8ef04926702be075974a25ce13a3f52cc99",
+    "bytes": 134579,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T13-22-19.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T13-22-28.png",
+    "name": "pasted-2026-11-03T13-22-28.png",
+    "sha256": "b785d649e902f41d0a0a40aef1db0c48fd91ba0f074384c1911798d8dfc6dd57",
+    "bytes": 83438,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T13-22-28.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T13-22-39.png",
+    "name": "pasted-2026-11-03T13-22-39.png",
+    "sha256": "4f0cbf5466c87542bcb63f470a1925e367d802dc3ac2566da56181321e581839",
+    "bytes": 130968,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T13-22-39.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T13-22-54.png",
+    "name": "pasted-2026-11-03T13-22-54.png",
+    "sha256": "09a8495d6a6f4a9533a34e7de1387dca268c6cad1109801c01859c264de43ee4",
+    "bytes": 163954,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T13-22-54.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T14-11-39.png",
+    "name": "pasted-2026-11-03T14-11-39.png",
+    "sha256": "57a175913aa809249390bce312f9cf16aa50b1335f15dfcb9fe160683a862442",
+    "bytes": 321880,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T14-11-39.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T14-15-56.png",
+    "name": "pasted-2026-11-03T14-15-56.png",
+    "sha256": "8af44fc017ff2f630602652a7149651fd7ec1535f11ffc08a51159ab61c3c3c1",
+    "bytes": 321192,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T14-15-56.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T14-19-36.png",
+    "name": "pasted-2026-11-03T14-19-36.png",
+    "sha256": "7adceb3b0a136f786757dd0f87467cb93a328c0c232d1cad060c848e2cbdd757",
+    "bytes": 27874,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T14-19-36.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T14-19-53.png",
+    "name": "pasted-2026-11-03T14-19-53.png",
+    "sha256": "1a9ef8a88543c32010626438fede8d0a706b59e06ccb03360f847a4edd42ec31",
+    "bytes": 28727,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T14-19-53.png",
+    "kind": "截图"
+  },
+  {
+    "original_path": "upload/pasted-2026-11-03T14-22-48.png",
+    "name": "pasted-2026-11-03T14-22-48.png",
+    "sha256": "bff3463df2cb70d2c6709d800540dd7aaf8bff9f67dd2c35b1a00ffab9a0fa9c",
+    "bytes": 432822,
+    "repository_path": "docs/issue-log/2026-11-03/assets/pasted-2026-11-03T14-22-48.png",
+    "kind": "截图"
+  }
+]
