@@ -89,6 +89,7 @@ main:has(.input-workspace) .hero-source{display:none}
 .input-workspace .workbook-range-fields label{display:flex;align-items:center;flex:none;gap:5px;white-space:nowrap}
 .input-workspace .workbook-range-fields input{width:90px;min-width:60px}
 .input-workspace .workbook-range-fields label:last-child input{width:165px}
+.input-workspace .workbook-range-fields input[type=date]{width:145px;min-width:145px}
 .input-workspace .workbook-range-actions,.input-workspace .workbook-run-action{display:flex;align-items:center;flex-wrap:nowrap;gap:7px;margin:5px 0;padding:6px;overflow-x:auto}
 .input-workspace .workbook-range-actions>*,.input-workspace .workbook-run-action>*{flex:none}
 .input-workspace .workbook-run-action button{min-height:34px}
