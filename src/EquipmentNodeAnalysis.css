@@ -12,6 +12,6 @@
 .input-workspace .equipment-node-analysis details{padding:7px 0;border-bottom:1px solid #dfE8ee}.equipment-node-analysis summary{font-size:12px;font-weight:600;color:#386682;cursor:pointer}.equipment-node-analysis ul{margin:5px 0;padding-left:18px;line-height:1.7;color:#7d693b}
 .node-analysis-table{overflow:auto;margin-top:5px}.node-analysis-table table{border-collapse:collapse;min-width:100%;font-size:12px}.node-analysis-table th,.node-analysis-table td{padding:5px 6px;border-bottom:1px solid #dce5ec;vertical-align:top;white-space:normal}.node-analysis-table th{background:#f0f6fa;text-align:left}
 .node-analysis-source{padding:5px 0;border-bottom:1px solid #e6edf2}.node-analysis-hash{font-size:10px!important;color:#899aa7!important;overflow-wrap:anywhere}
-.equipment-node-analysis footer{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:6px 10px;border-top:1px solid #ccdde8;background:#f5f9fc;flex:none}.equipment-node-analysis footer span{font-size:10px;color:#708798}
+.equipment-node-analysis footer{display:flex;align-items:center;justify-content:flex-end;gap:6px;padding:6px 10px;border-top:1px solid #ccdde8;background:#f5f9fc;flex:none}.equipment-node-analysis footer span{font-size:10px;color:#708798}
 .equipment-schedule .equipment-node-selected{outline:2px solid #7c3aed;outline-offset:1px;z-index:6}
 @media(max-width:600px){.node-analysis-facts{grid-template-columns:1fr}.node-analysis-step{grid-template-columns:75px minmax(0,1fr)}.equipment-node-analysis>header span{display:none}}

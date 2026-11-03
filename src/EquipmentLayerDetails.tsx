@@ -26,9 +26,9 @@ export function EquipmentLayerDetails({api,identity,query,fingerprint,node,onClo
  function keyTab(e:KeyboardEvent,index:number){const next=e.key==='ArrowRight'?(index+1)%5:e.key==='ArrowLeft'?(index+4)%5:e.key==='Home'?0:e.key==='End'?4:null;if(next===null)return;e.preventDefault();setTab(tabs[next][0]);nav.current?.querySelectorAll<HTMLButtonElement>('[role=tab]')[next]?.focus();}
  return <aside ref={panel} className="demand-task-details equipment-layer-details" role="dialog" aria-modal="false" aria-label={'设备节点联动明细 '+node.id} style={position} onKeyDown={e=>{if(e.key==='Escape'){e.stopPropagation();onClose();}}}>
  <header onPointerDown={e=>{if(e.button!==0||(e.target as HTMLElement).closest('button'))return;drag.current={x:e.clientX,y:e.clientY,...position};e.currentTarget.setPointerCapture(e.pointerId);}} onPointerMove={e=>{if(drag.current)setPosition(clamp(drag.current.left+e.clientX-drag.current.x,drag.current.top+e.clientY-drag.current.y));}} onPointerUp={e=>{drag.current=undefined;if(e.currentTarget.hasPointerCapture(e.pointerId))e.currentTarget.releasePointerCapture(e.pointerId);}} onPointerCancel={()=>{drag.current=undefined;}}><div><small>设备 / 保留 / 停机 / 来源联动 · 拖动标题移动</small><h3>{node.id} · {node.kind==='wip'?'WIP保留':'已知停机'}</h3></div><button ref={close} onClick={onClose} aria-label="关闭设备节点联动明细">关闭</button></header>
- <div className="task-detail-context">冻结 v{identity.version} · {node.kind==='wip'?'既有在制的物理保留；不代表已完工或已形成实物库存。':'运行观察时刻已知的设备不可用区间；不作为生产任务。'}</div>
+
  <nav ref={nav} role="tablist" aria-label="设备节点明细页签">{tabs.map(([key,label],index)=><button role="tab" id={id+'-'+key} aria-controls={id+'-panel'} aria-selected={tab===key} tabIndex={tab===key?0:-1} key={key} onClick={()=>setTab(key)} onKeyDown={e=>keyTab(e,index)}>{label}</button>)}</nav>
  <div ref={body} className="task-detail-body" role="tabpanel" id={id+'-panel'} aria-labelledby={id+'-'+tab}>{error&&<p role="alert">{error}</p>}{!current&&!error&&<p role="status">正在读取本节点的冻结计算依据…</p>}{current&&<LayerDetailContent data={current} tab={tab} kind={node.kind}/>}</div>
- <footer><span>只读冻结依据 · 现场状态不推测</span><button onClick={onClose}>收起弹窗</button><button onClick={onDetails}>查看设备关联明细</button></footer>
+ <footer><button onClick={onClose}>收起弹窗</button><button onClick={onDetails}>查看设备关联明细</button></footer>
  </aside>;
 }

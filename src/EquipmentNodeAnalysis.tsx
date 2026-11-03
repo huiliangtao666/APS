@@ -26,8 +26,8 @@ export function EquipmentNodeAnalysis({api,identity,query,fingerprint,node,onClo
    <strong>{node.id} · 节点计算分析</strong><span>拖动标题移动</span><button ref={close} onClick={onClose} aria-label="关闭节点计算分析">关闭</button>
   </header>
   <div className="node-analysis-body" ref={body}>
-   {error&&<p role="alert">{error}</p>}{!current&&!error&&<p role="status">正在读取本节点的冻结计算依据…</p>}
-   {current&&<><div className="node-analysis-title"><b>{current.headline}</b><span>{current.model} · 运行 {current.identity.runId} / v{current.identity.version}</span></div>
+   {error&&<p role="alert">{error}</p>}{!current&&!error&&<p role="status">正在读取本节点的计算依据…</p>}
+   {current&&<><div className="node-analysis-title"><b>{current.headline}</b></div>
     <dl className="node-analysis-facts">{current.facts.map((f:any,i:number)=><div key={i}><dt>{f.label}</dt><dd>{f.value}</dd></div>)}</dl>
     <section className="node-analysis-problems"><h4>问题与风险 · {current.problemTotal} 条</h4>{current.problems.length?current.problems.map((p:any,i:number)=><p key={i}><b>{p.scope}</b> {p.message}</p>):<p>未保存本节点或关联需求的问题记录；仍需核对下方依据缺失项。</p>}{current.problemTotal>current.problems.length&&<p>当前预览前20条；完整问题见排程结果汇总及物料风险。</p>}</section>
     <section><h4>如何计算</h4>{current.basis.map((b:any,i:number)=><div className="node-analysis-step" key={i}><b>{b.label}</b><div>{b.value}<small>{b.logic}</small></div></div>)}</section>
@@ -39,6 +39,6 @@ export function EquipmentNodeAnalysis({api,identity,query,fingerprint,node,onClo
     </details>
    </>}
   </div>
-  <footer><span>只读冻结依据 · 点击其他节点可切换</span><button onClick={onDetails}>{node.kind==='task'?'查看任务明细与来源':node.kind==='risk'?'查看风险明细与来源':'查看设备关联明细'}</button></footer>
+  <footer><button onClick={onDetails}>{node.kind==='task'?'查看任务明细与来源':node.kind==='risk'?'查看风险明细与来源':'查看设备关联明细'}</button></footer>
  </aside>;
 }
