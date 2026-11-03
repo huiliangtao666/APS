@@ -8,7 +8,7 @@ const input=parentPort?workerData:await new Promise(resolve=>process.once('messa
 const send=m=>{if(parentPort)parentPort.postMessage(m);else{process.send(m,()=>process.disconnect());}};
 try{
  const {buffer,sourcePath,oldRef,dataPath,id,name,expectedVersion,fileHash,ignored,adoptParameters,actor,importKind,fileName,overlayResolution}=input;
- const parsed=parseWorkbook(sourcePath?fs.readFileSync(sourcePath):Buffer.from(buffer),workbookSchema),old=oldRef?JSON.parse(gunzipSync(fs.readFileSync(oldRef)).toString('utf8')):null;
+ const parsed=parseWorkbook(sourcePath?fs.readFileSync(sourcePath):Buffer.from(buffer),workbookSchema,{dayBusinessOnly:importKind==='business'}),old=oldRef?JSON.parse(gunzipSync(fs.readFileSync(oldRef)).toString('utf8')):null;
  let d={...parsed,id,name,version:expectedVersion+1,profile:PROFILE,fileHash,mapping:old?.mapping||null,drafts:old?.drafts||[],createdAt:new Date().toISOString()};
  validateImportType(parsed,importKind);
  let parameterErrors=[];if(parsed.parameterWorkbook){const integrated=integrateParameterImport(parsed,old,{id,name,expectedVersion,fileHash,adoptParameters,actor,overlayResolution});d=integrated.d;parameterErrors=integrated.issues;}

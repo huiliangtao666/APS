@@ -16,7 +16,7 @@ const attrs=s=>Object.fromEntries([...s.matchAll(/([\w:]+)\s*=\s*(?:"([^"]*)"|'(
 const text=s=>[...s.matchAll(/<(?:\w+:)?t(?:\s[^>]*)?>([\s\S]*?)<\/(?:\w+:)?t>/g)].map(m=>unescape(m[1])).join('');
 const exactText=q=>{let n=q.n,d=q.d,sign=n<0n?'-':'';if(n<0n)n=-n;let out=String(n/d),r=n%d,places=0;if(r)out+='.';while(r&&places++<18){r*=10n;out+=String(r/d);r%=d;}return sign+out;};
 const asQ=v=>typeof v==='object'?v:/^\d+(?:\.\d+)?$/.test(v||'')?Q.q(v):v;
-export function parseWorkbook(buffer,schema){
+export function parseWorkbook(buffer,schema,{dayBusinessOnly=false}={}){
  const zip=unzip(buffer);const xml=name=>{const entry=zip.get(name);if(!entry)throw Error('缺少OOXML条目 '+name);const raw=entry.method===8?inflateRawSync(entry.source,{maxOutputLength:Math.max(1,entry.expanded)}):entry.source;if(raw.length!==entry.expanded||crc32(raw)!==entry.crc)throw Error('ZIP条目校验失败');const s=raw.toString('utf8');if(/<!DOCTYPE|<!ENTITY/i.test(s))throw Error('不支持XML实体');return s.replace(/(<\/?)[A-Za-z_][\w.-]*:/g,'$1');};
  const strings=zip.has('xl/sharedStrings.xml')?[...xml('xl/sharedStrings.xml').matchAll(/<si(?:\s[^>]*)?>([\s\S]*?)<\/si>/g)].map(m=>text(m[1])):[];
  const rels=new Map([...xml('xl/_rels/workbook.xml.rels').matchAll(/<Relationship\b([^>]*)\/?\s*>/g)].map(m=>attrs(m[1])).filter(a=>a.TargetMode!=='External').map(a=>[a.Id,a.Target]));
@@ -26,6 +26,7 @@ export function parseWorkbook(buffer,schema){
   cells.set(name,map);return map;
  }
  const isV2=names.includes('版本与使用')&&[...getCells('版本与使用').values()].some(c=>c.value==='APS-MEAT-202611-V2.0');
+ if(dayBusinessOnly&&isV2)throw Error('该文件是 APS-MEAT-202611-V2.0 分钟版；当前业务数据入口只接收按日工作簿。请改选“肉食品仿真数据_202611_合并图示版.xlsx”（v4），文件尚未导入。');
  if(names.includes('参数清单')||names.includes('仿真参数实例'))return {...parseParameterSheets(names,getCells),...(isV2?{productionContract:'workbook-minute-v2',datasetVersion:'APS-MEAT-202611-V2.0'}:{})};
  // Resolve parameter identity by Chinese headers, independently of sheet/column order.
  const headerCache=new Map();
