@@ -1,5 +1,6 @@
-import {hash,workbookSchema} from '../workbook-model.mjs';
-import {applyParameters,effectiveParameters,blockedParameter} from '../parameter-contract.mjs';
+import {workbookSchema} from '../workbook-model.mjs';
+import {sourceHash as hash,sourceJsonBytes,copyReportSource} from './source-copy.mjs';
+import {applyParameters,effectiveParameters,blockedParameter,atomicFields} from '../parameter-contract.mjs';
 import {canonical,digest,sourceRef} from '../workbook-preview.mjs';
 import {bounded} from '../workbook-preview-query.mjs';
 export {canonical,digest,bounded,workbookSchema};
@@ -31,6 +32,8 @@ export function minuteDay(identity,minute){const date=minuteCalendar(identity.mi
   return calendarDay(identity.dayZero,date.slice(0,10))+(Number(date.slice(11,13))*60+Number(date.slice(14,16))+Number(date.slice(17,19))/60)/1440;}
 const freeze=x=>{if(x&&typeof x==='object'&&!Object.isFrozen(x)){for(const v of Object.values(x))freeze(v);Object.freeze(x);}return x;};
 const snapshots=new WeakSet();
+const resolvedSnapshots=new WeakMap();
+const parameterTables=new Set(['工厂日历',...atomicFields.filter(s=>s.table&&!s.candidate).map(s=>s.table)]);
 /** Caller loads an explicit version using the existing snapshot store. Frozen mode
  * accepts ONLY its inputRef readback, never the current dataset as a fallback.
  * Scope/actor are server-owned after existing scopeFor/auth checks. No IO here. */
@@ -48,18 +51,28 @@ export function createReportSnapshot({dataset,frozenInput,run,datasetId,version,
   }else if(d.dayZero&&dayZero&&d.dayZero!==dayZero)fail('CONTEXT_MISMATCH',409);
   dayZero=dayZero||d.dayZero;epoch(dayZero);
   if(!run&&scope!=='dataset'&&!d.parameterTrials?.some(t=>'trial:'+t.id===scope&&t.actor===actor))fail('FORBIDDEN',403);
-  const bytes=Buffer.byteLength(JSON.stringify(d))+Buffer.byteLength(JSON.stringify(run||null));
+  // Bound the actual report sources. Import/readiness explanations and frozen
+  // provenance repeat the same parameter facts; counting those copies rejected
+  // full V2 inputs before any report was projected. Keep the complete snapshots
+  // below for source/identity checks, with the existing projection/response caps.
+  const bytes=sourceJsonBytes({tables:d.tables||{},mapping:d.mapping||null,result:run?.result||null});
   if(bytes>LIMITS.projectionBytes||Object.values(d.tables||{}).reduce((n,r)=>n+r.length,0)>LIMITS.records)fail('PROJECTION_TOO_LARGE',413);
   const identity={model:'workbook',datasetId:d.id,version:d.version,frozen:!!run,runId:run?.id||null,
     inputHash:run?.inputHash||hash(d),parameterHash:hash(table(d,'配置参数')),mappingHash:hash(d.mapping),resultHash:run?.resultHash||null,
     fileHash:d.fileHash||null,parameterDefinitionsHash:hash(d.parameterDefinitions||[]),scope,dayZero,
     timeUnit:run?.result?.timeUnit||d.timeUnit||'day',minuteOrigin:run?.result?.minuteOrigin||run?.provenance?.minuteOrigin||d.minuteOrigin||null,profile:d.profile||null};
-  const result={identity,fingerprint:digest(identity),input:structuredClone(d),run:run?structuredClone(run):null,actor};
+  const result={identity,fingerprint:digest(identity),input:copyReportSource(d),run:run?copyReportSource(run):null,actor};
   snapshots.add(result);return freeze(result);
 }
 export function assertSnapshot(s){if(!snapshots.has(s))fail('INVALID_SNAPSHOT',409);return s;}
-export function resolvedInput(s,day){assertSnapshot(s);const d=structuredClone(s.input);
+export function resolvedInput(s,day){assertSnapshot(s);
   const at=s.run?s.run.provenance?.effectiveAt??s.run.selection.startDay:day;
+  const cached=resolvedSnapshots.get(s);if(cached?.at===at)return cached.input;
+  // applyParameters writes scalar fields on target rows, appends base entries
+  // and replaces effectiveParameters. Everything else is the immutable source.
+  // One resolved day per snapshot bounds retention when users change the date.
+  const d={...s.input,tables:{...s.input.tables},parameterBaseFields:[...(s.input.parameterBaseFields||[])]};
+  for(const t of parameterTables)if(d.tables[t])d.tables[t]=d.tables[t].map(row=>({...row}));
   if(d.parameterContract){applyParameters(d,at,s.identity.scope);
     // Existing day-profile resolver assumes the simulation epoch. Re-evaluate
     // weekday-only CAL mapping with THIS snapshot's dayZero, preserving literals.
@@ -68,7 +81,7 @@ export function resolvedInput(s,day){assertSnapshot(s);const d=structuredClone(s
       const actual=ps.find(p=>p['参数名称']===(sunday?'周日班次数':'标准日班次数'));
       if(actual){for(const k of ['生产班次数','日产能分子']){if(blockedParameter(actual))delete c[k];else c[k]=actual['参数值'];}}}
   }
-  return d;
+  freeze(d);resolvedSnapshots.set(s,{at,input:d});return d;
 }
 export function anchor(s,t,r,field){const v=sourceRef(s.input,t,r,field);
   // Parameter sources must not inherit the business file's identity.

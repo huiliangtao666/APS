@@ -36,7 +36,7 @@ export function calculateWorkbook(data,selection) {
   if(!candidates.length||!crew||people>Number(crew['每班可用人数'])||toolCount>pool.length)return null;
   let left=qty,cursor=earliest,last=previous,firstStart;
   while(left>1e-9){let chosen;
-   if(isMinute)chosen=minuteResourceCandidate({d,route,quantity:left,earliest:cursor,end,occupancy,daily,resources,crew,pool,standardBatch,currentMinute});
+   if(isMinute)chosen=minuteResourceCandidate({d,route,quantity:left,earliest:cursor,end,occupancy,daily,resources,crew,pool,standardBatch,currentMinute,predecessor:tasks.find(t=>t.id===last)});
    for(let day=Math.max(start,Math.floor(cursor));!isMinute&&day<end&&!chosen;day++){
     const c=calendar.get(String(day));if(!c)continue;const ratio=parameterDayRatio(d,c,crew,day);if(ratio<=0)continue;
     for(const r of candidates){const id=r['资源编号'];if(activeStops.some(s=>s['资源编号']===id&&Number(s['开始日'])<=day&&day<Number(s['结束日'])))continue;

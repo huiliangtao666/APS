@@ -1,4 +1,5 @@
-import {hash,rows,PROFILE,dayDate} from './workbook-model.mjs';
+import {rows,PROFILE,dayDate} from './workbook-model.mjs';
+import {sourceHash as hash,copyReportSource} from './query-reports/source-copy.mjs';
 import {scopeFor} from './parameter-contract.mjs';
 import {sourceIdentity} from './workbook-workbench.mjs';
 
@@ -54,7 +55,7 @@ export function workbookQueryContext(ctx,ref,actor=''){
     timeUnit:run?.provenance?.timeUnit||input.timeUnit||(input.profile===PROFILE?'day':undefined)};
   identity.fingerprint=hash(identity);
   // Clones prevent a projection from mutating the shared in-memory authority.
-  return {identity,actor,input:structuredClone(input),run:run?structuredClone(run):undefined,sources:structuredClone(sources)};
+  return {identity,actor,input:copyReportSource(input),run:run?copyReportSource(run):undefined,sources:copyReportSource(sources)};
 }
 
 export function workbookQueryBoundContext(ctx,identity,actor=''){
