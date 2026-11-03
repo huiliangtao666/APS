@@ -3,7 +3,7 @@ import {DropdownDetails} from './DropdownDetails';
 import {queryUrl,sameQueryIdentity,queryValue,type QueryApi,type QueryColumn,type QueryIdentity,type QueryOptions,type QueryRecord,type QuerySelection} from './QueryReportsTypes';
 
 export function QueryColumns({columns,value,onChange}:{columns:QueryColumn[];value:string[];onChange:(v:string[])=>void}) {
-  return <DropdownDetails className="qr-columns"><summary>显示栏位（{value.length}/{columns.length}）</summary><p>业务标识列固定；隐藏栏位保留在原始记录。</p>{columns.map(c=><label key={c.key}><input type="checkbox" checked={c.fixed||value.includes(c.key)} disabled={c.fixed} onChange={e=>onChange(e.target.checked?[...value,c.key]:value.filter(k=>k!==c.key))}/>{c.label}{c.fixed?'（业务键固定）':''}</label>)}</DropdownDetails>;
+  return <DropdownDetails className="qr-columns"><summary>显示栏位（{value.length}/{columns.length}）</summary><p>{columns.some(c=>c.fixed)?'业务标识列固定；':''}隐藏栏位保留在原始记录。</p>{columns.map(c=><label key={c.key}><input type="checkbox" checked={c.fixed||value.includes(c.key)} disabled={c.fixed} onChange={e=>onChange(e.target.checked?[...value,c.key]:value.filter(k=>k!==c.key))}/>{c.label}{c.fixed?'（业务键固定）':''}</label>)}</DropdownDetails>;
 }
 
 export function QueryMultiselect({api,identity,view,field,label,value,onChange,query}:{api:QueryApi;identity:QueryIdentity;view:string;field:string;label:string;value:QuerySelection;onChange:(v:QuerySelection)=>void;query?:object}) {

@@ -26,9 +26,9 @@ export function sameQueryIdentity(a:QueryIdentity,b:QueryIdentity) {
 export function queryInitial(c:QueryCatalog):QueryDraft {
   return {q:'',filters:{},includeBom:false,fromDate:c.fromDate,toDateInclusive:c.toDateInclusive,bomAsOfDate:c.fromDate,knownAsOfDate:c.fromDate,sort:'',direction:'asc',pageSize:100,offset:0};
 }
-/** Removed detail filters must not survive in cached drafts or inherited navigation. */
+/** Removed demand filters must not survive in cached drafts or inherited navigation. */
 export function queryDraftForView(view:QueryView,draft:QueryDraft):QueryDraft{
-  if(view.id!=='demand.details')return draft;
+  if(!['demand.daily','demand.details'].includes(view.id))return draft;
   const allowed=new Set(view.filters.map(f=>f.key));
   return {...draft,filters:Object.fromEntries(Object.entries(draft.filters).filter(([key])=>allowed.has(key)))};
 }
