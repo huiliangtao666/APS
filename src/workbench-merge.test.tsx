@@ -5,8 +5,15 @@ import App from './App';
 import {QueryReports,QueryBomPreview,editableQuerySources} from './QueryReports';
 import {QueryTable} from './QueryReportsControls';
 import {pathProducts} from './BomPathProducts';
-import {queryDraftForView,queryInitial,type QueryCatalog} from './QueryReportsTypes';
+import {queryDraftForView,queryInitial,queryValue,type QueryCatalog,type QueryColumn} from './QueryReportsTypes';
 const api=async()=>{throw Error('Static rendering must not call any API');};
+test('inventory date cells distinguish unknowns from zero and show compact metrics without technical keys',()=>{
+ const cell:QueryColumn={key:'2026-11-01',label:'2026-11-01',format:'inventory',sortable:false};
+ assert.equal(queryValue({quantity:10,reserved:0,available:null},cell),'10 / 0 / —');assert.equal(queryValue(undefined,cell),'— 未提供');
+ const columns:QueryColumn[]=[{key:'materialId',label:'物料编码',fixed:true,fixedLabel:'固定维度',sticky:'material'},{key:'质量状态',label:'质量状态',fixed:true,fixedLabel:'固定维度',sticky:'quality'},cell];
+ const html=renderToStaticMarkup(<QueryTable id="INV" columns={columns} records={[{id:'group:internal',values:{materialId:'M1',质量状态:'待检','2026-11-01':{quantity:10,reserved:0,available:null}}}]} onOpen={()=>{}} onSort={()=>{}}/>);
+ assert.ok(!html.includes('<th>业务键'));assert.ok(!html.includes('>group:internal<'));assert.ok(html.includes('10 / 0 / —'));assert.ok(!html.includes('按2026-11-01排序'));assert.ok(html.includes('固定维度'));
+});
 test('daily and detailed demand drop removed cached filters and preserves product/customer/region selection',()=>{
  const catalog={identity:{datasetId:'SYN',version:1,fingerprint:'Q',dayZero:'2026-10-31'},preferenceScope:'SYN',views:[],fromDate:'2026-11-01',toDateInclusive:'2026-11-14'} as QueryCatalog;
  const draft={...queryInitial(catalog),filters:Object.fromEntries(['material:成品','material:半成品','material:原辅料','material:包装材料','客户等级','客户编号','区域编号'].map(key=>[key,{mode:'NONE' as const}]))};

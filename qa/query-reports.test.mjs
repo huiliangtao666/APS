@@ -180,8 +180,9 @@ test('inventory quality, release/expiry snapshot boundaries and units stay separ
   assert.equal(p.items.find(x=>x.id.endsWith('L1')).values.available,8);assert.equal(p.items.find(x=>x.id.endsWith('L2')).values.available,0);
   assert.equal(p.items.find(x=>x.id.endsWith('L3')).values.available,0);
   assert.ok(p.items.every(x=>x.values.snapshotDate==='2026-10-31'));
-  const summary=readReport(s,q('inventory.summary'),access);assert.equal(summary.total,2);
-  const rm=summary.items.find(x=>x.values.materialId==='RM1');assert.equal(rm.values.quantity,15);assert.equal(rm.values.reserved,3);assert.equal(rm.values.available,8);
+  const summary=readReport(s,q('inventory.summary'),access);assert.equal(summary.total,3);
+  const rm=summary.items.find(x=>x.values.materialId==='RM1'&&x.values['质量状态']==='合格');assert.deepEqual(rm.values['2026-10-31'],{quantity:10,reserved:2,available:8,records:1});
+  const pending=summary.items.find(x=>x.values.materialId==='RM1'&&x.values['质量状态']==='待检');assert.equal(pending.values['2026-10-31'].quantity,5);assert.equal(pending.values['2026-10-31'].available,0);
   const supply=readReport(s,q('inventory.supply'),access);assert.equal(supply.total,2);
   assert.equal(supply.items.find(x=>x.id.endsWith('IN1')).values.availableDate,'2026-11-03');assert.ok(supply.items.every(x=>x.values.physicalStock===false));
 });
@@ -191,6 +192,26 @@ test('unknown inventory field is null, frozen allocations never become fabricate
   assert.equal(p.items.find(x=>x.id.endsWith('L1')).values.available,null);
   const f=frozen(),projected=readReport(f,q('inventory.projected'),access);assert.ok(projected.items.every(x=>x.values.projectedBalance===null));assert.equal(projected.notProvided[0],'完整可推预计余额依据');
   const input=readReport(snapshot(),q('inventory.projected'),access);assert.equal(input.items[0].values.projectedBalance,20);assert.match(input.items[0].values.meaning,/输入数量演算/);
+});
+test('inventory matrix separates snapshot dates, quality and units; decimal sums, unknown fields, sources and exports remain exact',()=>{
+ const d=fixture(),base=d.tables['期初库存'][0];
+ const add=(id,changes)=>d.tables['期初库存'].push({...base,'库存批次编号':id,'仓库编号':'W2',...changes});
+ add('L4',{'快照日':'1','当前数量':'0.2','期初已占用量':'0.1','到期日':'9'});
+ add('L5',{'快照日':'1','当前数量':'0.1','期初已占用量':'0','到期日':'9'});
+ add('L6',{'快照日':'2','当前数量':'7','期初已占用量':'','到期日':'9'});
+ add('L7',{'快照日':'1','当前数量':'2','数量单位':'箱','期初已占用量':'0'});
+ const s=snapshot(d),query=q('inventory.summary'),p=readReport(s,query,access);
+ assert.equal(p.total,4);
+ const kg=p.items.find(r=>r.values.materialId==='RM1'&&r.values['质量状态']==='合格'&&r.values.unit==='千克');
+ assert.equal(kg.values['2026-10-31'].quantity,10);
+ assert.deepEqual(kg.values['2026-11-01'],{quantity:0.3,reserved:0.1,available:0.2,records:2});
+ assert.deepEqual(kg.values['2026-11-02'],{quantity:7,reserved:null,available:null,records:1});
+ const box=p.items.find(r=>r.values.unit==='箱');assert.equal(box.values['2026-11-01'].quantity,2);assert.equal(box.values['2026-10-31'],undefined);
+ const members=reportDetail(s,{...query,fingerprint:p.fingerprint},{recordId:kg.id,section:'members'},access);assert.equal(members.total,4);
+ const options=reportOptions(s,query,{field:'质量状态'},access);
+ const filtered=readReport(s,{...query,filters:{'质量状态':{...options.selection,mode:'VALUES',values:['待检']}}},access);assert.equal(filtered.total,1);assert.equal(filtered.items[0].values['质量状态'],'待检');
+ const exported=[...openReportExport(s,{...query,fingerprint:p.fingerprint},{},access).chunks].join('').trim().split('\n').map(JSON.parse);
+ const output=exported.find(r=>r.kind==='record'&&r.id===kg.id);assert.equal(output.values['2026-11-01'].value.quantity,0.3);assert.equal(exported.at(-1).total,4);
 });
 
 test('capacity calendar/known-date stops keep reference dimensions; missing run occupation is unknown',()=>{
@@ -315,9 +336,9 @@ test('exports cover full matched/selected rows and visible columns, with indepen
 });
 
 test('column selection fixes identity and source drilldown uses the exact inherited query fingerprint',()=>{
-  const s=snapshot(),query=q('inventory.summary',{columns:['quantity']}),p=readReport(s,query,access);assert.deepEqual(p.columns,['id','quantity']);
-  const r=p.items.find(x=>x.sourceCount===3),detail=reportDetail(s,{...query,fingerprint:p.fingerprint},{recordId:r.id,section:'sources',limit:1},access);
-  assert.equal(detail.total,3);assert.equal(detail.items.length,1);assert.equal(detail.nextOffset,1);
+  const s=snapshot(),query=q('inventory.summary',{columns:['2026-10-31']}),p=readReport(s,query,access);assert.deepEqual(p.columns,['id','2026-10-31']);
+  const r=p.items.find(x=>x.sourceCount===2),detail=reportDetail(s,{...query,fingerprint:p.fingerprint},{recordId:r.id,section:'sources',limit:1},access);
+  assert.equal(detail.total,2);assert.equal(detail.items.length,1);assert.equal(detail.nextOffset,1);
   assert.throws(()=>reportDetail(s,{...query,q:'different',fingerprint:p.fingerprint},{recordId:r.id},access),error('QUERY_CONTEXT_CHANGED'));
   assert.throws(()=>readReport(s,q('inventory.summary',{columns:['no-such-column']}),access),error('INVALID_COLUMNS'));
   const empty=readReport(s,{...query,materialSelections:materials(s,{}),columns:['quantity','available','snapshotDate']},access);assert.equal(empty.total,0);assert.ok(empty.columns.includes('snapshotDate'));

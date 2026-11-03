@@ -120,6 +120,13 @@ test('daily and detailed demand expose product/customer/region only and ignore r
  }else assert.ok(clean.columns.some(c=>c.key==='id'));
  }
 });
+test('inventory summary exposes fixed dimensions and real date cells without business-key display',()=>{
+ const f=connected();f.old.tables.期初库存=[{库存批次编号:'L1',物料编号:'M000',质量状态:'合格',数量单位:'千克',当前数量:'10',期初已占用量:'2',快照日:'0',放行日:'0',到期日:'9'},{库存批次编号:'L2',物料编号:'M000',质量状态:'待检',数量单位:'千克',当前数量:'5',期初已占用量:'0',快照日:'1',放行日:'0',到期日:'9'}];
+ const value=workbookQueryContext(f.ctx,{datasetId:'fixture',version:1},'synthetic-actor'),q={...f.draft,view:'inventory.summary'},result=domain.query(value,q);
+ assert.equal(result.total,2);assert.deepEqual(result.columns.map(c=>c.key),['materialId','质量状态','unit','2026-10-31','2026-11-01']);
+ assert.ok(result.columns.slice(0,3).every(c=>c.fixed&&c.sticky));assert.ok(result.columns.slice(3).every(c=>c.format==='inventory'&&c.sortable===false));
+ const records=[...domain.export(value,{...q,columns:result.columns.map(c=>c.key),queryFingerprint:result.queryFingerprint,scope:'ALL'})].join('').trim().split('\n').map(JSON.parse);assert.equal(records.at(-1).total,2);
+});
 test('canonical adapter stable pages, bounded long value and complete/selected exports share the original query',()=>{
  const f=connected();const a=domain.query(f.value,f.draft),b=domain.query(f.value,{...f.draft,offset:100,queryFingerprint:a.queryFingerprint});
  assert.equal(a.total,205);assert.equal(a.records.length,100);assert.equal(b.records.length,100);assert.equal(a.queryFingerprint,b.queryFingerprint);assert.notEqual(a.records[0].id,b.records[0].id);

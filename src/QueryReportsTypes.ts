@@ -5,7 +5,7 @@ export type QueryIdentity = QueryContext & {
   resultHash?:string; fileHash?:string; dayZero:string; timeUnit?:string; minuteOrigin?:string;
 };
 export type QuerySelection = {mode:'ALL'|'NONE'|'VALUES'|'MATCH';fingerprint?:string;values?:string[];queries?:string[];include?:string[];exclude?:string[]};
-export type QueryColumn = {key:string; label:string; fixed?:boolean; format?:'date'|'instant'|'duration'|'value';timeUnit?:'day'|'minute'};
+export type QueryColumn = {key:string; label:string; fixed?:boolean;fixedLabel?:string;sticky?:'material'|'quality'|'unit';sortable?:boolean; format?:'date'|'instant'|'duration'|'value'|'inventory';timeUnit?:'day'|'minute'};
 export type QueryFilter = {key:string; label:string; kind?:'material'|'business'};
 export type QueryView = {id:string; label:string; report:string; key:string; columns:QueryColumn[]; filters:QueryFilter[]; note?:string};
 export type QueryCatalog = {identity:QueryIdentity; preferenceScope:string; views:QueryView[]; fromDate:string; toDateInclusive:string; note?:string};
@@ -28,12 +28,14 @@ export function queryInitial(c:QueryCatalog):QueryDraft {
 }
 /** Removed demand filters must not survive in cached drafts or inherited navigation. */
 export function queryDraftForView(view:QueryView,draft:QueryDraft):QueryDraft{
+  if(view.id==='inventory.summary'&&!['materialId','质量状态','unit'].includes(draft.sort))return {...draft,sort:'',direction:'asc'};
   if(!['demand.daily','demand.details'].includes(view.id))return draft;
   const allowed=new Set(view.filters.map(f=>f.key));
   return {...draft,filters:Object.fromEntries(Object.entries(draft.filters).filter(([key])=>allowed.has(key)))};
 }
 export function queryValue(value:unknown,column:QueryColumn,identity?:QueryIdentity) {
   if(value===null||value===undefined||value==='')return '— 未提供';
+  if(column.format==='inventory'&&typeof value==='object'){const cell=value as Record<string,unknown>;return ['quantity','reserved','available'].map(key=>cell[key]===null||cell[key]===undefined?'—':String(cell[key])).join(' / ');}
   if((column.format==='date'||column.format==='instant')&&typeof value==='string'&&/^-?\d+(\.\d+)?$/.test(value))value=Number(value);
   if(typeof value==='number'&&Number.isFinite(value)&&identity&&(column.format==='date'||column.format==='instant')){
     if(column.timeUnit==='minute'){

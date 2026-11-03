@@ -45,6 +45,17 @@ export function aggregateRows(rows,keys,fields){
     ...Object.fromEntries(keys.map(k=>[k,members[0].values[k]??null])),...Object.fromEntries(fields.map(k=>[k,sumKnown(members.map(r=>r.values[k]))])),records:members.length},
     members.flatMap(r=>r.refs),{materialIds:[...new Set(members.flatMap(r=>r.materialIds||[]))],members:members.map(r=>r.id),runRefs:members.flatMap(r=>r.runRefs||[])}));
 }
+/** One material/quality/unit per row; dated stock snapshots are never summed across days. */
+export function inventorySummaryRows(rows){
+  const keys=['materialId','质量状态','unit'],groups=new Map();
+  for(const record of rows){const key=JSON.stringify(keys.map(k=>record.values[k]??null));if(!groups.has(key))groups.set(key,[]);groups.get(key).push(record);}
+  return [...groups].map(([key,members])=>{
+    const dates=new Map();for(const record of members){const date=record.values.snapshotDate||'日期未提供';if(!dates.has(date))dates.set(date,[]);dates.get(date).push(record);}
+    const values={...Object.fromEntries(keys.map(k=>[k,members[0].values[k]??null]))};
+    for(const [date,records]of dates)values[date]={...Object.fromEntries(['quantity','reserved','available'].map(field=>[field,sumKnown(records.map(r=>r.values[field]))])),records:records.length};
+    return row('group:'+digest([keys,key]),values,members.flatMap(r=>r.refs),{materialIds:[...new Set(members.flatMap(r=>r.materialIds||[]))],members:members.map(r=>r.id)});
+  });
+}
 function batches(s,d,w,scope){return table(d,'期初库存').filter(r=>scope.ids.has(r['物料编号'])).map(r=>{
   const q=number(r['当前数量']),used=number(r['期初已占用量']),release=number(r['放行日']),expiry=number(r['到期日']),snap=number(r['快照日']);
   const valid=q!==null&&used!==null&&release!==null&&expiry!==null&&snap!==null;

@@ -1,6 +1,6 @@
 import {assertSnapshot,permit,fail,digest,canonical,LIMITS,bounded,table,number,calendarDay,calendarWindow,resolvedInput,publicValues,anchor,rawRecord,ref,workbookSchema} from './context.mjs';
 import {parameterView} from '../parameter-contract.mjs';
-import {VIEWS,projectRows,aggregateRows,graphContext,materialUniverse,sumKnown} from './projections.mjs';
+import {VIEWS,projectRows,aggregateRows,inventorySummaryRows,graphContext,materialUniverse,sumKnown} from './projections.mjs';
 import {candidatePage,changeSelection,selectionPredicate,selectionFingerprint,searchText} from './selections.mjs';
 import {taskInterval} from './capacity.mjs';
 
@@ -65,14 +65,15 @@ function prepare(s,q,access){
     });
   });
   if(n.view==='demand.daily')matched=aggregateRows(matched,['materialId','day','需求日日期','unit'],['quantity']);
-  if(n.view==='inventory.summary')matched=aggregateRows(matched,['materialId','unit','snapshotDate'],['quantity','reserved','available']);
-  const columns=[...new Set(matched.flatMap(r=>Object.keys(r.values)))].sort();
+  if(n.view==='inventory.summary')matched=inventorySummaryRows(matched);
+  const matrixColumns=n.view==='inventory.summary'?['materialId','质量状态','unit',...rows.map(r=>r.values.snapshotDate||'日期未提供')]:[];
+  const columns=[...new Set([...matched.flatMap(r=>Object.keys(r.values)),...matrixColumns])].sort();
   // Empty results retain a useful schema from unfiltered projected rows.
   const availableColumns=[...new Set(['id',...columns,...rows.flatMap(r=>Object.keys(r.values)),...schemaColumns(d,n.view,s)])].filter(c=>c!=='refs').sort();
   const chosen=q.columns??['id',...columns];
-  if(!Array.isArray(chosen)||chosen.length>200||chosen.some(c=>typeof c!=='string'||!availableColumns.includes(c)))fail('INVALID_COLUMNS');
+  if(!Array.isArray(chosen)||chosen.length>(n.view==='inventory.summary'?LIMITS.windowDays+8:200)||chosen.some(c=>typeof c!=='string'||!availableColumns.includes(c)))fail('INVALID_COLUMNS');
   const displayColumns=[...new Set(['id',...chosen])];
-  const sorts=q.sort??[{field:'id',direction:'asc'}];
+  const sorts=q.sort??(n.view==='inventory.summary'?['materialId','质量状态','unit'].map(field=>({field,direction:'asc'})):[{field:'id',direction:'asc'}]);
   if(!Array.isArray(sorts)||!sorts.length||sorts.length>5||sorts.some(x=>!availableColumns.includes(x.field)||!['asc','desc'].includes(x.direction)))fail('INVALID_SORT');
   const stableSort=[...sorts.filter(x=>x.field!=='id'),{field:'id',direction:sorts.find(x=>x.field==='id')?.direction||'asc'}];
   matched.sort((a,b)=>{for(const x of stableSort){const v=compare(x.field==='id'?a.id:a.values[x.field],x.field==='id'?b.id:b.values[x.field]);if(v)return x.direction==='desc'?-v:v;}return 0;});
