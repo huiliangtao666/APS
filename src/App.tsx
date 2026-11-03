@@ -6,6 +6,7 @@ import {usePraetorEmbedded} from './praetor-embedded';
 export default function App(){
  const embedded=usePraetorEmbedded(),reason='共享工作台操作';
  const [message,setMessage]=useState(''),[session,setSession]=useState({role:'supervisor',canWrite:true,canExport:true});
+ const [navigationHost,setNavigationHost]=useState<HTMLDivElement|null>(null);
  const api=useCallback(async(path:string,body?:object)=>{
   const response=await fetch(appPath('/api'+path),body?{method:'POST',headers:{'Content-Type':'application/json','X-APS-Request':'workbench'},body:JSON.stringify({reason,...body})}:{cache:'no-store'});
   const result=await response.json();
@@ -15,5 +16,5 @@ export default function App(){
   }return result;
  },[]);
  useEffect(()=>{let live=true;api('/session').then(s=>{if(live)setSession(s);}).catch(e=>{if(live)setMessage(e.message);});return()=>{live=false;};},[api]);
- return <div className="app-shell"><header className={'topbar '+(embedded?'embedded-topbar':'')}><div className="brandmark">APS</div><div className="brand"><b>APS · 排程工作台</b></div><div className="top-status"><i/>预览环境</div></header><main><section className="hero"><div><h1>排程工作台</h1><p className="sub">以已导入的 Excel 业务数据和配置参数为准；样例数据仅用于软件验证。</p></div></section>{message&&<div className="toast" role="status"><span>{message}</span><button aria-label="关闭提示" onClick={()=>setMessage('')}>×</button></div>}<InputData api={api} canWrite={session.canWrite} canExport={session.canExport} reason={reason}/></main><footer>APS 排程工作台 · 演示数据仅用于软件验证</footer></div>;
+ return <div className="app-shell"><header className={'topbar '+(embedded?'embedded-topbar':'')}><div className="brandmark">APS</div><div className="brand"><b>APS · 排程工作台</b></div><div className="workbook-navigation-host" ref={setNavigationHost}/><div className="top-status"><i/>预览环境</div></header><main>{message&&<div className="toast" role="status"><span>{message}</span><button aria-label="关闭提示" onClick={()=>setMessage('')}>×</button></div>}<InputData navigationHost={navigationHost} api={api} canWrite={session.canWrite} canExport={session.canExport} reason={reason}/></main><footer>APS 排程工作台 · 演示数据仅用于软件验证</footer></div>;
 }

@@ -29,8 +29,8 @@ export function EquipmentSchedule({run,api,canExport}:{run:any;api:QueryApi;canE
  function exportRows(scope:'ALL'|'SELECTED'){if(!identity||!page||dirty||page._signature!==signature)return;const a=document.createElement('a');a.href=appPath('/api'+request('export',{identity,...query,queryFingerprint:page.queryFingerprint,columns:visible,scope,ids:selected}));a.download='设备排程-'+view+'-'+run.id+'.ndjson';document.body.appendChild(a);a.click();a.remove();}
  function locateTask(id:string){choose('E6');const q={...initial(),q:'',taskId:id};setDraft(q);setApplied(q);setRecord(undefined);}
  return <section className={'qr-workspace equipment-schedule '+(focus?'equipment-focus':'')} aria-label="设备排程六视图" data-run-id={run.id} data-input-hash={run.inputHash} data-result-hash={run.resultHash}>
- <header className="qr-heading"><div><h3>设备排程 · 六视图</h3><p>冻结 v{run.version} / {run.id} · {run.result.timeUnit==='minute'?'生产整数分钟 · 半开区间 [开始,结束)':'历史日模型 · 按原冻结语义解释'}</p></div><button onClick={()=>setFocus(!focus)}>{focus?'退出专注':'专注模式'}</button></header>
- <nav aria-label="设备排程视图">{views.map(([id,label])=><button key={id} aria-pressed={view===id} onClick={()=>choose(id)}>{label}</button>)}</nav>
+ <div className="qr-fixed-heading"><header className="qr-heading"><div><h3>设备排程 · 六视图</h3><p>冻结 v{run.version} / {run.id} · {run.result.timeUnit==='minute'?'生产整数分钟 · 半开区间 [开始,结束)':'历史日模型 · 按原冻结语义解释'}</p></div><button onClick={()=>setFocus(!focus)}>{focus?'退出专注':'专注模式'}</button></header>
+ <nav aria-label="设备排程视图">{views.map(([id,label])=><button key={id} aria-pressed={view===id} onClick={()=>choose(id)}>{label}</button>)}</nav></div>
  {error&&<p role="alert">{error}</p>}
  {applied.taskId&&<p>定位真实任务 {applied.taskId} <button onClick={reset}>清除任务定位</button></p>}
  <form className="qr-filters" onSubmit={e=>{e.preventDefault();apply();}}><div className="qr-filter-line">
