@@ -21,7 +21,7 @@ export function registerWorkbookRuns(router,ctx) {
  };
  router.get('/runs',permission('read'),(_req,res)=>res.json(read().runs.map(publicRun)));
  router.get('/runs/:id',permission('read'),handle((req,res)=>{const r=read().runs.find(r=>r.id===req.params.id);if(!r)return res.status(404).json({error:'run_not_found'});const error=resultProblem(r);if(error)return res.status(409).json({error});res.json(publicRun(r));}));
- router.get('/runs/:id/inputs',permission('read'),(req,res)=>{const r=read().runs.find(r=>r.id===req.params.id);if(!r)return res.status(404).json({error:'run_not_found'});if(hash(inputOf(r))!==r.inputHash)return res.status(409).json({error:'frozen_input_corrupt'});res.json({runId:r.id,input:inputOf(r),inputHash:r.inputHash,selection:r.selection});});
+ router.get('/runs/:id/inputs',permission('read'),(req,res)=>{const r=read().runs.find(r=>r.id===req.params.id);if(!r)return res.status(404).json({error:'run_not_found'});const input=inputOf(r);if(hash(input)!==r.inputHash)return res.status(409).json({error:'frozen_input_corrupt'});res.json({runId:r.id,input,inputHash:r.inputHash,selection:r.selection});});
  router.post('/datasets/:id/readiness',permission('read'),handle((req,res)=>{
   const d=dataset(read(),req.params.id);if(!d)return res.status(404).json({error:'dataset_not_found'});
   if(req.body.version!==d.version)return res.status(409).json({error:'INPUT_CHANGED',actualVersion:d.version});

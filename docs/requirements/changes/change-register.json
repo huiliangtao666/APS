@@ -3832,6 +3832,35 @@
         "旧运行回填",
         "以源码草稿或Design仿真冒签产品PASS/QA/UAT"
       ]
+    },
+    {
+      "id": "CR-DATA-READ-PERFORMANCE-20261104",
+      "title": "数据读取、版本重开及查询响应提速",
+      "baseline_id": "APS-BL-001",
+      "approval_status": "用户已批准整包实施、自测和通过后精确串行main整合",
+      "approved_on": "2026-11-04",
+      "effective": false,
+      "effective_scope": "已实现并完成定向回归和真实只读性能自测；未合main、未部署；完整一致性/保存重开/构建被单窗漂移保护停止",
+      "implementation_status": "IMPLEMENTED_TARGETED_TESTS_PASS_FINAL_RUNTIME_CHECKS_BLOCKED",
+      "primary_issue": "https://github.com/huiliangtao666/APS/issues/147",
+      "original_delivery_id": "dlv_096d96cd-8469-431e-ba90-92b9eaa61215",
+      "event_key": "dlv_096d96cd-8469-431e-ba90-92b9eaa61215:r1",
+      "source_owner": "APS-Dev",
+      "integration_owner": "APS-Dev",
+      "source_base_sha": "735f808f55e66852e2647047a7015835899390db",
+      "implementation_document": "docs/requirements/changes/CR-DATA-READ-PERFORMANCE-20261104/implementation.md",
+      "scope": [
+        "保留完整JSON语义的有界分块hash/字节计算与节点复制",
+        "每router解码快照LRU与state缓存，按文件身份失效；每次返回隔离副本",
+        "冻结输入同请求只读一次；真实完整工作簿读取和参数/查询基准、差分及缓存负面回归"
+      ],
+      "runtime_result": "63 targeted regressions PASS; 18 real read-only HTTP responses byte-identical; remaining runtime checks STOPPED_ON_OTHER_WINDOW",
+      "main_integration_status": "NOT_EXECUTED_FINAL_SELF_TEST_GATE_INCOMPLETE",
+      "deployment_status": "NOT_EXECUTED",
+      "exclusions": [
+        "业务/求解策略、缩减输入、改变P优先级/来源分页/完整导出/冻结run",
+        "新持久候选、preview/browser、求解Worker、旧实例restart或发布"
+      ]
     }
   ]
 }

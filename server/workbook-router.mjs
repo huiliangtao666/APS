@@ -11,7 +11,8 @@ import {importBinding,bindPreview,commitBinding,sourceIdentity} from './workbook
 import {changeParameter,cpOf,specification,objectKey,effectiveParameters,sourceRole} from './parameter-contract.mjs';
 import {registerParameterRoutes} from './parameter-router.mjs';
 import {supplyReadiness,transitIdentityIssues} from './workbook-supply.mjs';
-import {gzipSync,gunzipSync} from 'node:zlib';
+import {gzipSync} from 'node:zlib';
+import {createWorkbookSnapshotReader} from './workbook-snapshot-reader.mjs';
 import {registerWorkbookRuns} from './workbook-runtime.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -23,11 +24,12 @@ import {verifyWorkbookPlan} from './workbook-plan.mjs';
 export function createWorkbookRouter({dataDir,permission,actorKey,requestId,workerFactory,previewAccess=()=>({canEdit:false,canExport:false,csrfVerified:false}),importHeapMiB=180}) {
  if(!Number.isSafeInteger(importHeapMiB)||importHeapMiB<32||importHeapMiB>512)throw Error('Invalid workbook import heap limit');
  const router=Router(),dir=path.join(dataDir,'workbooks');fs.mkdirSync(dir,{recursive:true});const stateFile=path.join(dir,'state.json'),workers=new Map();
- const read=()=>{try{return JSON.parse(fs.readFileSync(stateFile,'utf8'));}catch(e){if(e.code!=='ENOENT')throw e;return {datasets:[],previews:[],runs:[],records:[]};}};
+ const readState=createWorkbookSnapshotReader(dir,{compressed:false,maxEntries:1,maxBytes:12*1024*1024});
+ const read=()=>{try{return readState('state.json');}catch(e){if(e.code!=='ENOENT')throw e;return {datasets:[],previews:[],runs:[],records:[]};}};
  const write=s=>{const tmp=stateFile+'.'+randomUUID()+'.tmp';try{fs.writeFileSync(tmp,Buffer.from(JSON.stringify(s)),{flag:'wx',mode:0o600});fs.renameSync(tmp,stateFile);}finally{if(fs.existsSync(tmp))fs.unlinkSync(tmp);}};
  const audit=(s,req,action,detail)=>s.records.push({id:randomUUID(),at:new Date().toISOString(),actor:actorKey(req),requestId:requestId(req),action,reason:req.body.reason,...detail});
  const recover=read();let interrupted=false;for(const r of recover.runs)if(['queued','running'].includes(r.status)){r.status='failed';r.failure='应用进程中断；冻结输入保留，可重新创建运行';interrupted=true;}if(interrupted)write(recover);
- const snapshot=ref=>JSON.parse(gunzipSync(fs.readFileSync(path.join(dir,ref))).toString('utf8'));
+ const snapshot=createWorkbookSnapshotReader(dir);
  const persist=d=>{const ref=randomUUID()+'.json.gz';fs.writeFileSync(path.join(dir,ref),gzipSync(Buffer.from(JSON.stringify(d))),{flag:'wx',mode:0o600});return ref;};
  const tableRefs=(d,ref)=>{const refs={};for(const [table,values]of Object.entries(d.tables)){const file=ref+'.'+hash(table).slice(0,16)+'.gz';fs.writeFileSync(path.join(dir,file),gzipSync(Buffer.from(JSON.stringify(values))),{flag:'wx',mode:0o600});refs[table]=file;}return refs;};
  const meta=(s,id,v)=>{const set=s.datasets.find(d=>d.id===id),base=v?set?.versions.find(d=>d.version===Number(v)):set?.versions.at(-1);return base?(set.parameterWorkspaces?.[base.version]||base):undefined;};
