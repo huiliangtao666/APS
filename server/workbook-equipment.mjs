@@ -4,6 +4,7 @@ import {effectiveBom,expandBom} from './query-reports/bom.mjs';
 import {selectionPredicate,changeSelection,candidatePage,searchText} from './query-reports/selections.mjs';
 import {minuteMode,minuteTime,knownMinuteStops,wipOccupations,eventPeak,unionMinutes,shiftWindows} from './workbook-minute.mjs';
 import {explainEquipmentNode} from './workbook-node-analysis.mjs';
+import {explainFinding,explainShortage} from '../src/lib/workbook-explanations.mjs';
 const rows=(d,t)=>d.tables?.[t]||[],error=(code,status=422)=>{throw Object.assign(Error(code),{code,status});};
 export const EQUIPMENT_VIEWS={E1:'设备甘特',E2:'需求交付',E3:'设备负荷',E4:'人员工装',E5:'物料风险',E6:'任务明细'};
 const labels={suggestionId:'采购建议编号',relationId:'供货关系',supplierId:'供应商',orderDate:'建议下单日期',availableDate:'建议可用日期',netGap:'原缺口',id:'业务键',machine:'设备编号',earliestArrivalDate:'最早要求到货日',latestArrivalDate:'最晚要求到货日',cleaningMinutes:'清洗自然分钟',dailyCapacityKg:'冻结日投产能力（kg）',workingOccupiedMinutes:'工作窗内占用分钟',peakOccupancy:'占用峰值',occupancyDimension:'占用量纲',occupancyCapacity:'占用容量',overlap:'超占提示',name:'名称',group:'设备组',taskCount:'真实任务数',wipCount:'WIP保留数',status:'结果状态',orderId:'需求编号',productId:'物料编号',productName:'物料名称',productionId:'生产批次',routeStepId:'路线工序',operation:'工序',label:'工序名称',start:'开始时刻',end:'结束时刻（不含）',duration:'历时（分钟）',quantity:'数量',unit:'单位',crew:'班组',people:'参与人数',tools:'实体工装',predecessor:'真实前序',physicalStatus:'现场进度',customer:'客户',region:'区域',grade:'等级',requiredDate:'需求日期',readyDate:'计划就绪日期',arrivalDate:'计划到货日期',lateDays:'迟到（天）',reason:'未排/条件原因',day:'日期',taskMinutes:'任务自然分钟',wipMinutes:'WIP自然分钟',occupiedMinutes:'自然占用并集分钟',startedBatchKg:'开工日投产量（kg）',availableWorkMinutes:'可用工作分钟',utilization:'工时利用率',peak:'并发峰值',available:'可用数量',remaining:'余量',dimension:'量纲',need:'需求/在制',materialId:'物料',needDate:'需料日期',sourceKind:'风险来源',conditional:'条件供给',meaning:'口径',source:'来源',key:'业务键',sheet:'工作表',row:'原行',fileHash:'文件hash',mappingHash:'映射hash',parameterHash:'参数hash',resultHash:'结果hash',inputHash:'输入hash',startDay:'开始日',endDay:'结束日',timeUnit:'时间单位',toolEndMinute:'工装释放时刻',resource:'资源',kind:'占用性质',code:'问题代码',message:'说明'};
@@ -111,9 +112,19 @@ export const equipmentDomain={
  detail(v,q){
   const query=q.query||q,{records,fp,a}=checked(v,{...query,queryFingerprint:q.queryFingerprint}),record=records.find(r=>r.id===q.id);if(!record)error('RECORD_NOT_FOUND',404);
   const p=v.run.result,ids=new Set(record.taskIds||[]),selectedTasks=a.tasks.filter(t=>ids.has(t.id)),task=selectedTasks[0],resource=record.resource||record.values.resource||record.values.machine,day=record.day??record.values.day;
+  // An unplanned E2 demand has no task IDs. Bind its details by the real demand
+  // ID as well; otherwise risks and route/parameter sources disappear entirely.
+  const needs=new Set([record.need,record.values.need,record.values.orderId,...selectedTasks.map(t=>t.orderId)].filter(Boolean));
+  const relatedFindings=(p.findings||[]).filter(f=>needs.has(f.need)||f.taskId&&ids.has(f.taskId));
+  const relatedShortages=(p.shortages||[]).filter(s=>needs.has(s.need)||s.taskId&&ids.has(s.taskId)),explanationPlan={...p,dayZero:v.identity.dayZero};
+  const explanations=[...relatedFindings.map(f=>explainFinding(f,explanationPlan)),...relatedShortages.map(s=>explainShortage(s,explanationPlan))];
   const own=a.occ.filter(o=>ids.has(o.taskId)||ids.has(o.parentTaskId)||o.resource===resource||o.crew===resource||o.tools?.includes(resource)).filter(o=>!Number.isInteger(day)||o.start<(day+1)*1440&&Math.max(o.end,o.toolEnd??o.end)>day*1440);
   const keys=new Set([resource,record.need,...(record.resourceContext?.crewIds||[]),...selectedTasks.flatMap(t=>[t.routeStepId,t.productId,t.machine,t.crew,...(t.tools||[])]),...own.flatMap(o=>[o.resource,o.crew,...(o.tools||[])]),...(record.refs||[]).map(r=>r?.key)].filter(Boolean));
+  for(const f of relatedFindings)for(const key of [f.routeStepId,f.materialId])if(key)keys.add(key);
+  for(const s of relatedShortages)if(s.materialId)keys.add(s.materialId);
+  for(const r of rows(v.input,'每日需求'))if(needs.has(r['需求编号'])){keys.add(r['成品编号']);keys.add(r['客户编号']);}
   const sourceRows=[...(record.refs||[]).filter(Boolean),...selectedTasks.map(t=>({...t.source,key:t.routeStepId})),...own.filter(o=>o.source).map(o=>o.source)];
+  for(const f of relatedFindings)if(f.evidence?.supplySource?.sheet)sourceRows.push({...f.evidence.supplySource,key:f.evidence.supplyId});
   for(const [sheet,key]of [['设备与工装','资源编号'],['班组资源','班组编号'],['工艺路线','路线工序编号']])for(const r of rows(v.input,sheet))if(keys.has(r[key]))sourceRows.push(sourceRef(sheet,r,r[key]));
   if(Number.isInteger(day))for(const sheet of ['工厂日历','生产班次'])for(const r of rows(v.input,sheet))if(sheet==='工厂日历'?Number(r['日序'])===day:Math.floor(Number(r['开始分钟偏移'])/1440)===day)sourceRows.push(sourceRef(sheet,r,r['班次日历编号']||String(day)));
   let values=[];const tab=q.table||'record';
@@ -122,6 +133,7 @@ export const equipmentDomain={
    return {queryFingerprint:fp,analysis:explainEquipmentNode(v,{record,a,c:setup(v,query),node:q.node})};
   }
   if(tab==='record')values=[record];
+  else if(tab==='rules')values=explanations.map((e,i)=>rec('rule:'+i,{'需求/在制':e.need,'问题类型':e.title,'处理规则':e.logic,'本次判定依据':e.facts.join('；')||'本记录未保存具体候选数值','结果处理':e.effect,'完善位置':e.action,'证据说明':e.limitation}));
   else if(tab==='chain'){
    // Follow real predecessor edges inside one production batch, never list order.
    const byId=new Map(a.tasks.map(t=>[t.id,t])),edges=new Map();
@@ -130,7 +142,6 @@ export const equipmentDomain={
    values=a.tasks.filter(t=>chain.has(t.id)).map(t=>rec(t.id,publicRow(t)));
   }else if(tab==='resources')values=own.map(o=>rec(o.taskId+'|'+o.kind,{...publicRow(o),labor:o.labor}));
   else if(tab==='risk'){
-   const needs=new Set([record.need,...selectedTasks.map(t=>t.orderId)].filter(Boolean));
    values=[...(p.shortages||[]),...(p.allocations||[]),...(p.findings||[]),...(p.suggestions||[])].filter(r=>needs.has(r.need)||r.taskId&&ids.has(r.taskId)).map((r,i)=>rec(String(i),publicRow(r)));
   }else if(tab==='parameters')values=(v.input.effectiveParameters?.values||[]).filter(r=>keys.has(r.object)||['CAL','GLOBAL'].includes(r.object)).map((r,i)=>rec(String(i),r));
   else if(tab==='basis'){
@@ -147,7 +158,8 @@ export const equipmentDomain={
   }else error('INVALID_DETAIL_SECTION');
   const offset=q.offset||0;if(!Number.isSafeInteger(offset)||offset<0)error('INVALID_PAGE');
   const part=[];let bytes=0;for(const r of values.slice(offset,offset+100)){const n=Buffer.byteLength(JSON.stringify(r));if(n>120000)error('DETAIL_RECORD_LIMIT',413);if(bytes+n>180000)break;part.push(r);bytes+=n;}
-  return {queryFingerprint:fp,records:part,total:values.length,nextOffset:offset+part.length<values.length?offset+part.length:null,columns:cols(values),note:'只读冻结来源；缺行号保留null，现场状态/损耗不推测',links:task?a.tasks.filter(t=>t.productionId===task.productionId&&(t.id===task.predecessor||t.predecessor===task.id)).map(t=>({id:t.id,label:t.id})):[]};
+  const explanationNote=explanations.length?'处理规则说明展示判定及撤销逻辑；历史未保存的候选数值明确标为缺失。':needs.size?'本对象没有保存计算问题记录；这不表示所有业务约束通过。':'请在需求交付或物料风险中打开具体需求，查看其处理规则。';
+  return {queryFingerprint:fp,records:part,total:values.length,nextOffset:offset+part.length<values.length?offset+part.length:null,columns:cols(values),ruleDetails:tab==='rules'?explanations.slice(offset,offset+part.length):[],explanations:tab==='record'?explanations.slice(0,3):[],explanationTotal:explanations.length,explanationNote,note:'只读冻结来源；缺行号保留null，现场状态/损耗不推测',links:task?a.tasks.filter(t=>t.productionId===task.productionId&&(t.id===task.predecessor||t.predecessor===task.id)).map(t=>({id:t.id,label:t.id})):[]};
  },
  export(v,q){const {records,fp}=checked(v,q),selected=q.scope==='SELECTED'?new Set(q.ids||[]):null;const columns=q.columns?.length?q.columns:cols(records).map(c=>c.key);if(columns.some(k=>!cols(records).some(c=>c.key===k)))error('INVALID_COLUMNS');return (function*(){yield JSON.stringify({type:'identity',identity:v.identity,queryFingerprint:fp,columns,total:records.filter(r=>!selected||selected.has(r.id)).length})+'\n';for(const r of records)if(!selected||selected.has(r.id)){const value=Object.fromEntries(columns.map(k=>[k,r.values[k]??null]));for(const key of ['start','end','toolEndMinute'])if(Object.hasOwn(value,key)){value[key+'Time']=displayInstant(value[key],v);}yield JSON.stringify({id:r.id,values:value})+'\n';}})();}
 };

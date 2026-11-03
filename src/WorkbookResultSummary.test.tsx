@@ -5,6 +5,8 @@ import {buildResultSummary,filterResultGroups} from './WorkbookResultSummaryMode
 import {WorkbookResultSummary} from './WorkbookResultSummary';
 import {WorkbookResult} from './InputData';
 import {SuggestionDraftAction} from './EquipmentSchedule';
+import {WorkbookRuleDetails} from './WorkbookFindingExplanation';
+import {explainFinding} from './lib/workbook-explanations.mjs';
 
 const demand=(id:string,status='unplanned',extra={})=>({id,productId:'FG-'+id,status,quantity:20,unit:'千克',arrivalDay:status==='scheduled'?4:null,latestArrivalDay:3,lateDays:status==='scheduled'?1:null,source:{sheet:'每日需求',row:2},...extra});
 const makeRun=(result={})=>({id:'SYNTHETIC-RESULT-ONLY',datasetId:'SYNTHETIC',version:6,status:'partial',inputHash:'fixture',result:{dayZero:'2026-10-31',timeUnit:'day',conditions:{startDay:1,endDay:15},tasks:[],demandResults:[demand('D1'),demand('D2','scheduled')],findings:[],shortages:[],verification:{status:'pass',scope:['测试范围'],notChecked:['未覆盖项目'],issues:[]},...result}});
@@ -54,4 +56,15 @@ test('suggestion action remains explicit and respects write permission and missi
  const suggestion={id:'SYNTHETIC-SUGGESTION'};
  const render=(canWrite:boolean,onDraft?:()=>void)=>renderToStaticMarkup(<SuggestionDraftAction suggestion={suggestion} canWrite={canWrite} onDraft={onDraft}/>);
  assert.ok(render(false,()=>{}).includes('disabled'));assert.ok(render(true).includes('disabled'));assert.ok(!render(true,()=>{}).includes('disabled'));assert.ok(render(true,()=>{}).includes('复制为模拟草稿'));assert.ok(render(true,()=>{}).includes('需显式纳入新试算'));
+});
+
+test('DE620 historical rule is readable in both summary and detail without invented numerical evidence',()=>{
+ const finding={need:'DE620',code:'MATERIAL_AT_ACTUAL_FEED',message:'原分配供给在投料时不适用'},run=makeRun({findings:[finding],demandResults:[demand('DE620')]});
+ const summary=renderToStaticMarkup(<WorkbookResultSummary run={run} onLocate={()=>{}}/>),detail=renderToStaticMarkup(<WorkbookRuleDetails explanations={[explainFinding(finding,run.result)]}/>);
+ for(const html of [summary,detail])for(const text of ['处理规则','结果处理','完善位置','证据说明','不自动重选其他供给批次','历史记录未保存具体候选时点'])assert.ok(html.includes(text));
+ assert.ok(detail.includes('到期边界不含'));assert.ok(!detail.includes('<table'));assert.ok(!detail.includes('判定：投料时已到期'));
+});
+test('new rejected supply evidence renders dates and verdict rather than raw JSON',()=>{
+ const e=explainFinding({code:'MATERIAL_AT_ACTUAL_FEED',need:'D1',evidence:{kind:'material-at-feed',timeUnit:'minute',supplyId:'inventory:TEST',quantity:10,unit:'千克',actualFeed:1927,ready:1440,expiry:1927}},{dayZero:'2026-10-31'});
+ const html=renderToStaticMarkup(<WorkbookRuleDetails explanations={[e]}/>);assert.ok(html.includes('2026-11-01 08:07'));assert.ok(html.includes('判定：投料时已到期'));assert.ok(html.includes('供给批次：inventory:TEST'));assert.ok(!html.includes('&quot;kind&quot;'));
 });

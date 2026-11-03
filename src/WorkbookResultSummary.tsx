@@ -3,6 +3,7 @@ import {buildResultSummary,filterResultGroups,resultCategories,type ResultGroup}
 import {workbookDate} from './lib/workbook-dates';
 import {workbookCheckLabel} from './lib/workbook-run-status.mjs';
 import './WorkbookResultSummary.css';
+import {WorkbookFindingExplanation} from './WorkbookFindingExplanation';
 
 const number=(value:number)=>value.toLocaleString('zh-CN',{maximumFractionDigits:3});
 function IssueGroup({group,origin,onLocate}:{group:ResultGroup;origin:string;onLocate:(source:any)=>void}){
@@ -12,7 +13,7 @@ function IssueGroup({group,origin,onLocate}:{group:ResultGroup;origin:string;onL
    <div className="result-occurrences"><table><thead><tr><th>需求 / 物料</th><th>最终状态 / 预计到货</th><th>原记录 / 来源</th></tr></thead><tbody>{group.entries.slice(safePage*size,(safePage+1)*size).map((e,i)=><tr key={safePage*size+i}>
     <td>{e.need||'未关联需求'}{(e.productId||e.demand?.productId)&&<span>{e.productId||e.demand?.productId}</span>}</td>
     <td>{e.demand?(e.demand.status==='scheduled'?'已排':e.demand.status==='unplanned'?'未排':'状态未识别'):'无对应需求结果'}<span>{workbookDate(e.demand?.arrivalDay,origin)||'到货未记录'}</span></td>
-    <td><p>{e.detail}</p>{e.source?.sheet&&<button onClick={()=>onLocate(e.source.message?e.source:{...e.source,message:e.detail})} title="打开来源维护入口；冻结结果保持不变">定位来源：{e.source.sheet}{e.source.row?` · 第${e.source.row}行`:''}{e.source.field?` · ${e.source.field}`:''}</button>}</td>
+    <td><p>{e.detail}</p>{e.explanation&&<WorkbookFindingExplanation explanation={e.explanation}/ >}{e.source?.sheet&&<button onClick={()=>onLocate(e.source.message?e.source:{...e.source,message:e.detail})} title="打开来源维护入口；冻结结果保持不变">定位来源：{e.source.sheet}{e.source.row?` · 第${e.source.row}行`:''}{e.source.field?` · ${e.source.field}`:''}</button>}</td>
    </tr>)}</tbody></table></div>
    {pages>1&&<div className="result-pager"><span>{safePage*size+1}–{Math.min((safePage+1)*size,count)} / {count} 条</span><button disabled={safePage===0} onClick={()=>setPage(safePage-1)}>上一页</button><button disabled={safePage+1>=pages} onClick={()=>setPage(safePage+1)}>下一页</button></div>}
   </details></td><td>{group.action}</td></tr>;

@@ -1,5 +1,6 @@
 import {parameterDayRatio} from './parameter-contract.mjs';
 import {routeMinutes,minuteTime} from './workbook-minute.mjs';
+import {findingRules,explainFinding} from '../src/lib/workbook-explanations.mjs';
 
 const rows=(d,t)=>d.tables?.[t]||[];
 const numeric=v=>v===undefined||v===null||String(v).trim()===''||!Number.isFinite(Number(v))?null:Number(v);
@@ -93,7 +94,13 @@ function populateFrozenRecords(out,{d,p,task,wp,need,problem,time,date,n,source}
  if(task||wp)out.basis.push({label:wp?'续作待投物料':'关联投料',value:`${linked.length} 条关联分配记录（本窗预览前20条）`,logic:'按有效BOM的工序产出 × 子项基准用量 ÷ 父项基准产出计算需料，个数向上取整；供给需满足质量、放行≤投料<到期及累计余额。没有关联记录不等于无需投料。'});
  const demand=(p.demandResults||[]).find(r=>r.id===need);
  if(demand){out.facts.push({label:'需求最终结果',value:`${demand.status==='scheduled'?'已排':demand.status==='unplanned'?'未排':'状态未识别'} · 到货 ${date(demand.arrivalDay)} · 最晚 ${date(demand.latestArrivalDay)} · 迟交 ${n(demand.lateDays)} 天`});if(demand.lateDays>0)problem('同需求交付',`预计到货 ${date(demand.arrivalDay)}，比最晚 ${date(demand.latestArrivalDay)} 晚 ${n(demand.lateDays)} 天；该节点已排不代表需求按期交付。`);}
- for(const f of (p.findings||[]).filter(f=>f.need===need&&need||f.taskId===task?.id&&task))problem(f.taskId===task?.id&&task?'本节点记录':'同需求/在制计算记录',f.message||f.code);
+ const related=(p.findings||[]).filter(f=>f.need===need&&need||f.taskId===task?.id&&task);
+ for(const f of related)problem(f.taskId===task?.id&&task?'本节点记录':'同需求/在制计算记录',f.message||f.code);
+ for(const f of related.slice(0,20))if(findingRules[f.code]){
+  const e=explainFinding(f,p);
+  out.basis.push({label:'处理规则 · '+e.title,value:e.facts.join('；')||e.limitation,logic:[e.logic,e.effect,e.action].join(' ')});
+ }
+ if(related.length>20)out.missing.push('本窗显示前20条处理规则；完整记录可在需求交付或物料风险的明细 → 处理规则说明中分页查看。');
  const shortage=(p.shortages||[]).filter(s=>s.need===need&&need);if(shortage.length)problem('同需求/在制缺料',`保存了 ${shortage.length} 条缺料记录；可能涉及其他工序，完整记录见物料风险。`);
  if(task){const raw=rows(d,'每日需求').find(r=>r['需求编号']===task.orderId);source('每日需求',raw,task.orderId,['需求箱数','每箱净重千克','需求千克','最早到货日','最晚到货日']);}
  const total=out.problems.length;out.problems=out.problems.slice(0,20);out.problemTotal=total;

@@ -1,8 +1,9 @@
 import {workbookDate} from './lib/workbook-dates';
+import {findingRule,findingRules,explainFinding,explainShortage,type FindingExplanation} from './lib/workbook-explanations.mjs';
 
 export type ResultCategory='delivery'|'material'|'resource'|'verification'|'other';
 export const resultCategories:Record<ResultCategory,string>={delivery:'需求与交付',material:'物料与供给',resource:'资源与工序',verification:'独立检查',other:'其他记录'};
-export type ResultEntry={need?:string;productId?:string;detail:string;source?:any;demand?:any};
+export type ResultEntry={need?:string;productId?:string;detail:string;source?:any;demand?:any;explanation?:FindingExplanation};
 export type ResultGroup={id:string;category:ResultCategory;kind:'结果异常'|'计算记录'|'检查问题';title:string;logic:string;action:string;entries:ResultEntry[];affected:number};
 export function filterResultGroups(groups:ResultGroup[],category:string,kind:string,query:string){
  const q=query.trim().toLowerCase();
@@ -12,13 +13,6 @@ export function filterResultGroups(groups:ResultGroup[],category:string,kind:str
   return entries.length?[{...g,entries,affected:new Set(entries.filter(e=>e.demand).map(e=>e.need)).size}]:[];
  });
 }
-const rules:Record<string,{category:ResultCategory;title:string;logic:string;action:string}>={
- MAX_WAIT:{category:'resource',title:'工序间等待超过上限',logic:'后序可开始时点与前序完成时点之间的等待超过适用配置上限，候选被撤销。历史日模型按其冻结日口径判断。',action:'在业务数据查询与维护 → 工艺与班组核对相应路线等待上限、班组及设备；结合设备甘特检查衔接。'},
- FINITE_CAPACITY:{category:'resource',title:'有限资源或排程窗口无法安排',logic:'设备、班组、实体工装、批量、日产能及窗口等约束下未找到可安排候选；此记录未单独判定哪一项是唯一瓶颈。',action:'在设备能力、工艺与班组、停机安排和工厂日历核对资源；结合设备负荷、人员工装视图分析。'},
- MATERIAL_AT_ACTUAL_FEED:{category:'material',title:'实际投料时供给不再适用',logic:'供给须满足可用时点 ≤ 实际投料时点 < 失效时点；候选投料时不成立，撤销候选。',action:'核对物料与BOM的投料位置、供应批次的放行和到期日期，并查看物料风险。'},
- DELIVERY_SHELF:{category:'delivery',title:'到货剩余保质期不足',logic:'产出可用时点 + 保质期须覆盖预计到货时点 + 要求的剩余保质期；不满足则撤销候选。',action:'核对每日需求的到货剩余保质天数、客户运输天数及物料保质期，调整后创建新运行。'},
- WIP_REMAINING:{category:'material',title:'在制续作未能形成供给',logic:'在制剩余工序的资源或待投物料未满足，撤销本次续作；该在制未计入可用供给。',action:'核对期初在制及剩余工序、待投BOM映射，再检查班组、工装和供料。'}
-};
 export function buildResultSummary(run:any){
  const p=run.result||{},demands:any[]=p.demandResults||[],byNeed=new Map(demands.map(d=>[d.id,d])),groups=new Map<string,ResultGroup>();
  const add=(id:string,category:ResultCategory,kind:ResultGroup['kind'],title:string,logic:string,action:string,entry:ResultEntry)=>{
@@ -31,10 +25,10 @@ export function buildResultSummary(run:any){
  }
  for(const issue of p.verification?.issues||[])add('VERIFY','verification','检查问题','冻结结果独立检查存在问题','独立检查复核冻结任务与原输入的一致性；检查通过仅限下方记录的检查范围。','查看具体检查项并核对冻结输入；必要时维护数据或配置后创建新运行。',{detail:String(issue)});
  for(const f of p.findings||[]){
-  const rule=rules[f.code]||{category:'other' as const,title:f.message||f.code||'未分类计算记录',logic:'按本运行保存的原始记录展示；未记录的约束数值和判定细节不作推算。',action:'展开查看原记录及来源，核对对应业务表或配置。'};
-  add('FINDING:'+f.code+(rules[f.code]?'':':'+f.message),rule.category,'计算记录',rule.title,rule.logic,rule.action,{need:f.need,detail:f.message||f.code||'未提供说明',source:f});
+  const rule=findingRule(f);
+  add('FINDING:'+f.code+(findingRules[f.code]?'':':'+f.message),rule.category as ResultCategory,'计算记录',rule.title,rule.logic,rule.action,{need:f.need,detail:f.message||f.code||'未提供说明',source:f,explanation:explainFinding(f,p)});
  }
- for(const s of p.shortages||[])add('SHORTAGE','material','计算记录','排程时记录的缺料','按BOM用量计算需料，扣除当时符合质量、可用期和余额的供给后记录缺口；个数单位按规则向上取整。各需求、物料和时点分开核对，不能跨单位累加。','在库存汇总、采购在途及供货条件核对供应；采购建议为参考，不会自动补成实物供给。',{need:s.need,productId:s.materialId,detail:`${s.materialId} · 缺 ${s.quantity} ${s.unit||'单位未提供'} · 需料 ${workbookDate(s.needDay,p.dayZero)||'未记录'}`,source:s.source});
+ for(const s of p.shortages||[])add('SHORTAGE','material','计算记录','排程时记录的缺料','按BOM用量计算需料，扣除当时符合质量、可用期和余额的供给后记录缺口；个数单位按规则向上取整。各需求、物料和时点分开核对，不能跨单位累加。','在库存汇总、采购在途及供货条件核对供应；采购建议为参考，不会自动补成实物供给。',{need:s.need,productId:s.materialId,detail:`${s.materialId} · 缺 ${s.quantity} ${s.unit||'单位未提供'} · 需料 ${workbookDate(s.needDay,p.dayZero)||'未记录'}`,source:s.source,explanation:explainShortage(s,p)});
  const resultGroups=[...groups.values()];
  for(const g of resultGroups)g.affected=new Set(g.entries.map(e=>e.need).filter(id=>id&&byNeed.has(id))).size;
  const scheduled=demands.filter(d=>d.status==='scheduled'),unplanned=demands.filter(d=>d.status==='unplanned'),late=scheduled.filter(d=>typeof d.lateDays==='number'&&d.lateDays>0);
