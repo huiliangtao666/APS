@@ -77,7 +77,9 @@ export default function App() {
   const [message,setMessage]=useState('');
   const [issues,setIssues]=useState<Finding[]>([]);
   const [inputVersion,setInputVersion]=useState(0);
-  const [reason,setReason]=useState('');
+  // The shared workbench records an automatic audit label; users do not need
+  // to type a reason for each import, edit, or run.
+  const reason='共享工作台操作';
   const [workbookWorkbench,setWorkbookWorkbench]=useState(true),[workbookOpened,setWorkbookOpened]=useState(true);
   useEffect(()=>{if(view==='input'||workbookWorkbench)setWorkbookOpened(true);},[view,workbookWorkbench]);
   const [busy,setBusy]=useState(false);
@@ -128,7 +130,6 @@ export default function App() {
   return <div className="app-shell">
     <header className={`topbar ${embedded?'embedded-topbar':''}`}><div className="brandmark">APS</div><div className="brand"><b>APS · 排程工作台</b><span>R1 原型 / v0.3 需求基线</span></div>{<nav><button className={view==='schedule'&&workbookWorkbench?'active':''} onClick={()=>{setView('schedule');setWorkbookWorkbench(true);}}>排程工作台</button></nav>}<div className="top-status"><i/>预览环境</div></header>
     <main>
-      <section className="panel"><h2>共享操作与记录</h2><p>当前无需应用账号，所有访问者共用数据及操作权限。记录仅标记共享工作台，不代表个人身份或独立审批。所有质量状态均为模拟数据；确认仅在本系统支持范围内生效。</p><label>操作原因（必填）<input aria-label="操作原因" value={reason} onChange={e=>setReason(e.target.value)}/></label><button onClick={()=>perform(refresh)}>刷新数据与记录</button><details><summary>操作记录（{operations.length}）</summary>{operations.map(r=><p key={r.id}>{r.at} · {r.actor} · {r.action} · {r.reason}</p>)}</details></section>
       <section className="hero"><div><p className="eyebrow">Excel 数据源 · 按日排程</p><h1>排程工作台</h1><p className="sub">以已导入的 Excel 业务数据和配置参数为准；样例数据仅用于软件验证。</p></div><div className="hero-source"><span>工作流程</span><b>数据准备 → 检查配置 → 计算 → 核对结果</b><small>业务数据和配置参数分别导入、确认</small></div></section>
       {message&&<div className="toast" role="status" aria-live="polite" aria-atomic="true"><span>{message}</span><button aria-label="关闭提示" onClick={()=>setMessage('')}>×</button></div>}
       {recordProblem&&<ProblemRecords key={recordProblemOpen} finding={recordProblem} data={data} identityContext={{inputVersionId:currentInputId,operations}} canWrite={!!session?.canWrite&&!busy} onClose={()=>setRecordProblem(null)} onQuery={(ref,current)=>{const resolved=current?currentRecord(ref,data,{inputVersionId:currentInputId,operations}):null;if(current&&!resolved)return;const id=ref.origin?.inputVersionId;const original=id?(checkedInputs[id]||plans.find(p=>(p as any).inputVersionId===id)?.inputSnapshot):undefined;if(!current&&!original){setMessage('原输入版本不可用；上方保留原检查值，不能使用当前同位记录替代。');return;}setQuerySnapshot(!current&&original&&id?{data:original,id}:undefined);setQueryOccurrence(current?resolved?.index:ref.origin?.occurrence.index);setQueryHistorical(!current);setQueryInputTable(ref.table);setQueryInputRow(current?resolved!.row:ref.row);setView('query');}} onEdit={ref=>{setTableKey(ref.table);setEditRecord(ref);setView('data');}}/>}

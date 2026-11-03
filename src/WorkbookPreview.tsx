@@ -98,7 +98,7 @@ export function WorkbookPreview(props:WorkbookPreviewProps){
   }
   if(!summary)return <section className="workbook-preview" aria-live="polite"><p>{error||'正在核验预览摘要…'}</p><button onClick={()=>setRefresh(x=>x+1)}>重试查询</button></section>;
     const counts=summary.counts,replaceDelete=summary.tables.some((t:any)=>t.replace+t.delete>0);
-  const disabled=!canWrite||!canExport||!summary.canCommit||!ack||!reason.trim()||(replaceDelete&&!risk)||(counts.warnings>0&&!warning)||commitState!=='idle';
+  const disabled=!canWrite||!canExport||!summary.canCommit||!ack||(replaceDelete&&!risk)||(counts.warnings>0&&!warning)||commitState!=='idle';
   return <section className="workbook-preview" aria-label="整批导入预览">
     <h3>整批预览 · {summary.status} {summary.simulation?'· SIMULATION 仿真':''}</h3>
     <p>目标 {summary.binding.datasetId} · 基底 v{summary.binding.expectedVersion} → 拟 v{summary.binding.expectedVersion+1} · {summary.binding.importKind} / {summary.binding.mode} / {summary.binding.scope}</p>
@@ -124,7 +124,7 @@ export function WorkbookPreview(props:WorkbookPreviewProps){
       <label><input type="checkbox" checked={ack} onChange={e=>setAck(e.target.checked)}/>我确认指定目标、用途与全部增改删范围；已按需查看重点记录，可取得完整清单。未逐条核对不代表系统已代我核实。</label>
       {replaceDelete&&<label><input type="checkbox" checked={risk} onChange={e=>setRisk(e.target.checked)}/>我知悉整批替代与删除范围。</label>}
       {counts.warnings>0&&<label><input type="checkbox" checked={warning} onChange={e=>setWarning(e.target.checked)}/>我知悉 {counts.warnings} 次警告及其影响。</label>}
-      <p>{summary.reasons.join(' / ')}{!canWrite?' / 当前角色只读':''}{!reason.trim()?' / 请填写操作原因':''}</p>
+      <p>{summary.reasons.join(' / ')}{!canWrite?' / 当前角色只读':''}</p>
       <button disabled={disabled} onClick={commit}>{commitState==='sending'?'正在提交…':commitState==='committed'?'已提交':'确认整批'}</button>
     </div>}
     {commitState==='unknown'&&<button onClick={status}>查询提交结果（保留原幂等键）</button>}
