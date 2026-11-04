@@ -5,7 +5,7 @@ import {SolverProblem,RAW_STATUSES} from './contract.mjs';
 import {validateMinuteModel} from './model.mjs';
 
 export const ORTOOLS_VERSION='9.15.6755';
-const runnerFile=fileURLToPath(new URL('./cp_sat.py',import.meta.url));
+const runnerFile=fileURLToPath(new URL(import.meta.url.endsWith('/solver-choice/runner.mjs')?'./cp_sat.py':'./solver-choice/cp_sat.py',import.meta.url));
 // Call from the application slot owner, not inside a disposable Node Worker:
 // killing a worker thread cannot reliably reap a native subprocess it spawned.
 export async function runCpSat(input,{python,budget,signal,maxInputBytes,maxOutputBytes,stopGraceSeconds,onOwned=()=>{},onReleased=()=>{}}){

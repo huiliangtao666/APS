@@ -1,9 +1,11 @@
 import {validateMinuteModel} from './model.mjs';
+import {checkWorkbookCandidate} from './workbook-checker.mjs';
 
 // Reconstruct every occupation/claim from the immutable model and the returned
 // assignments. No native interval list, cached peak, verification or status is
 // trusted. The existing workbook business checker is required in addition.
 export function checkMinuteCandidate(input,candidate){
+ if(input?.contract==='aps-cpsat-workbook:v2')return checkWorkbookCandidate(input,candidate);
  const m=validateMinuteModel(input),issues=[],add=s=>issues.push(s),tasks=new Map(m.tasks.map(t=>[t.id,t])),placed=new Map(),uses=new Map(m.resources.map(r=>[r.id,[]])),claims=new Map(),byNeed=new Map(),quotas=new Map();
  if(!candidate||!['tasks','allocations','cleaning','unplanned'].every(k=>Array.isArray(candidate[k])))return {status:'problem',issues:['候选格式不完整'],notChecked:[]};
  const reserve=(id,start,end,amount,source,calendar=true)=>{

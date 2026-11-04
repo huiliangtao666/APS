@@ -15,5 +15,5 @@ export function SolverChoice({value,onChange,budget,availability,disabled=false}
 }
 export function SolverRunSource({solver}:{solver?:any}){
  if(!solver)return <p>历史原流程，未记录求解器版本</p>;
- return <details><summary>实际求解器：{solver.actual==='cp-sat'?'CP-SAT':solver.actual==='basic'?'基础求解器':'未执行'} · {solver.version||'未记录'}</summary><dl><dt>请求选择</dt><dd>{solver.requested}</dd><dt>原始求解状态</dt><dd>{solver.rawStatus||solver.rawStatusMeaning||'未取得'}</dd><dt>停止原因</dt><dd>{solver.stopReason||'原流程记录'}</dd><dt>独立检查</dt><dd>{solver.independentCheck?.status||'未执行'}</dd></dl></details>;
+ return <details><summary>实际求解器：{solver.actual==='cp-sat'?'CP-SAT':solver.actual==='basic'?'基础求解器':'未执行'} · {solver.version||'未记录'}</summary><dl><dt>请求选择</dt><dd>{solver.requested}</dd><dt>原始求解状态</dt><dd>{solver.rawStatus||solver.rawStatusMeaning||'未取得'}</dd><dt>状态含义</dt><dd>{solver.label||solver.rawStatusMeaning||'等待实际执行'}</dd><dt>停止原因</dt><dd>{solver.stopReason||'原流程记录'}</dd><dt>独立检查</dt><dd>{solver.independentCheck?.status||'未执行'}</dd></dl></details>;
 }

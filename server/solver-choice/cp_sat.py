@@ -16,6 +16,15 @@ def solve(payload):
     if ortools.__version__ != "9.15.6755":
         raise RuntimeError("ORTOOLS_VERSION_MISMATCH")
     data = payload["model"]
+    if data["contract"] == "aps-cpsat-workbook:v2":
+        # -I excludes ambient import paths. Load only this committed sibling,
+        # never a request-provided module, cwd package or borrowed interpreter.
+        import importlib.util
+        from pathlib import Path
+        spec = importlib.util.spec_from_file_location("aps_workbook_cp_sat", Path(__file__).with_name("workbook_cp_sat.py"))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module.solve_workbook(payload, cp_model, ortools)
     if data["contract"] != "aps-cpsat-minute-model:v1":
         raise ValueError("MODEL_CONTRACT")
     if data["objective"]["kind"] != "feasibility":
