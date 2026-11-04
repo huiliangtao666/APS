@@ -12,4 +12,6 @@
 
 - [#148 生产排程Ontology三层HTML示例](https://github.com/huiliangtao666/APS/issues/148) — Closed / completed；独立HTML生成，结构、算术、浏览器及保存/导出检查通过。交付范围为示例文件，不是应用引擎改造。
 
-本日索引累计2条；原始参考HTML与交付HTML均未上传公开仓库。
+本日索引累计3条；原始参考HTML与交付HTML均未上传公开仓库。
+
+- [#149 APS Ontology v2完整实体与实际字段](https://github.com/huiliangtao666/APS/issues/149) — Closed / completed；[说明与五张原图](ontology-v2/README.md)，48类实体、594项条目、70项行动、789条关系；22张实际输入表337字段全绑定，11项结构/字段/导出检查及浏览器核对通过。仅独立HTML示例，非新增引擎功能或真实UAT。

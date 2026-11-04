@@ -1,0 +1,161 @@
+{
+  "event_key": "APS-USER-20261104-ONTOLOGY-ENTITY-FIELD-V2",
+  "verifiedAt": "2026-11-04T01:42:15.113319+00:00",
+  "scope": "Standalone HTML example, not APS runtime change or UAT",
+  "file": "APS_生产排程_Ontology_实体与实际字段_v2.html",
+  "bytes": 790527,
+  "sha256": "df4f31d199919a7b2ac6d58b1241f1d913daa9691e4704f8d52d096771507980",
+  "codeSha": "e0cd85084c7e3ff016656fa0c945f60b4288cd8d",
+  "model": {
+    "entities": 48,
+    "properties": 594,
+    "actions": 70,
+    "relations": 789,
+    "semanticRelations": 195,
+    "sourceTables": 65,
+    "inputTables": 22,
+    "inputFieldCount": 337,
+    "sourceFields": 764,
+    "boundSourceFields": 531,
+    "endpointChecks": "全部有效",
+    "ruleCount": 17,
+    "statusCounts": {
+      "mapped": 516,
+      "projection": 33,
+      "concept": 45
+    },
+    "metricCounts": {
+      "atomic": 9,
+      "derived": 19,
+      "load": 12
+    },
+    "notes": [
+      "覆盖率仅指本示例本体绑定，不是数据质量/上线验收通过率。",
+      "输入工作表按Schema全字段绑定；运行JSON为本次选定字段目录，非全部历史结构的承诺。未绑定字段仍完整列在实际表结构，允许继续建模；参考结果/说明表不强行映射为排程输入。",
+      "关系基数指适用范围内语义；日期/计算/行动关联不等同数据库外键。",
+      "未调用业务操作、没有改动排程程序和数据。"
+    ]
+  },
+  "checks": [
+    {
+      "name": "48 entities, 594 properties, 70 actions",
+      "status": "PASS"
+    },
+    {
+      "name": "All 39 declared workbook structures preserve real field names, types and optionality",
+      "status": "PASS"
+    },
+    {
+      "name": "All 337 fields in 22 actual input sheets have ontology bindings",
+      "status": "PASS"
+    },
+    {
+      "name": "All 789 field/action relationship endpoints resolve",
+      "status": "PASS"
+    },
+    {
+      "name": "Relations cover process, calculation, date, action, constraint and lineage",
+      "status": "PASS"
+    },
+    {
+      "name": "Concept source structures are explicit and never labeled existing",
+      "status": "PASS"
+    },
+    {
+      "name": "Standalone HTML embeds identical model JSON",
+      "status": "PASS"
+    },
+    {
+      "name": "No external scripts, stylesheets, fetch calls or business endpoints",
+      "status": "PASS"
+    },
+    {
+      "name": "Inline application JavaScript syntax",
+      "status": "PASS"
+    },
+    {
+      "name": "Browser JSON export reproduces full model",
+      "status": "PASS"
+    },
+    {
+      "name": "Browser saved HTML keeps full model, valid view state and removes preview scripts",
+      "status": "PASS"
+    }
+  ],
+  "browserChecks": [
+    "48-entity full card view rendered",
+    "Metric classification and load subset",
+    "Action relationship directory and action-to-run inspector",
+    "Source field search 当前数量 and exact snapshot path",
+    "Entity→source→entity bidirectional jump",
+    "Save HTML and JSON downloads completed",
+    "No browser error-level console entries"
+  ],
+  "exportEvidence": [
+    {
+      "name": "47c3132f-3126-4c82-bb94-734374f88197-APS_生产排程_Ontology_实体与实际字段_v2.html",
+      "bytes": 1205151,
+      "sha256": "952dc5635085bb52c9384d8b9d0768654df853f00c82f17aac25de388244529f"
+    },
+    {
+      "name": "b97e1b62-08b6-4cb3-9d45-ba7d8723630e-APS_Ontology_v2_模型.json",
+      "bytes": 1113758,
+      "sha256": "a21bd5341680df899dae78d27415014e107c271925f534c962f48de94117ff8b"
+    }
+  ],
+  "cleanup": {
+    "removed": [
+      {
+        "path": "temp/aps-ontology-v2/reference-model.json",
+        "beforeBytes": 4092865,
+        "afterBytes": 0,
+        "reason": "Extracted input or verified duplicate export; authoritative uploads, model and final HTML retained"
+      },
+      {
+        "path": "temp/aps-ontology-v2/v1-data.json",
+        "beforeBytes": 104077,
+        "afterBytes": 0,
+        "reason": "Extracted input or verified duplicate export; authoritative uploads, model and final HTML retained"
+      },
+      {
+        "path": "temp/aps-ontology-v2/schema-summary.txt",
+        "beforeBytes": 14426,
+        "afterBytes": 0,
+        "reason": "Extracted input or verified duplicate export; authoritative uploads, model and final HTML retained"
+      },
+      {
+        "path": "temp/browser-downloads-GydZ9C/47c3132f-3126-4c82-bb94-734374f88197-APS_生产排程_Ontology_实体与实际字段_v2.html",
+        "beforeBytes": 1205151,
+        "afterBytes": 0,
+        "reason": "Extracted input or verified duplicate export; authoritative uploads, model and final HTML retained"
+      },
+      {
+        "path": "temp/browser-downloads-GydZ9C/b97e1b62-08b6-4cb3-9d45-ba7d8723630e-APS_Ontology_v2_模型.json",
+        "beforeBytes": 1113758,
+        "afterBytes": 0,
+        "reason": "Extracted input or verified duplicate export; authoritative uploads, model and final HTML retained"
+      }
+    ],
+    "releasedLogicalBytes": 6530277,
+    "retained": [
+      {
+        "path": "upload/",
+        "reason": "original design HTML and user screenshots"
+      },
+      {
+        "path": "APS_生产排程_Ontology_实体与实际字段_v2.html",
+        "reason": "final standalone deliverable"
+      },
+      {
+        "path": "temp/aps-ontology-v2/model.py + model.json + app.js + style.css + page.html",
+        "reason": "reproducible authoring sources and verification evidence"
+      },
+      {
+        "path": "apps/aps-latest-current/temp/ontology-v2-preview/index.html",
+        "reason": "current agent preview remains available; identical final HTML copy"
+      }
+    ],
+    "pending": [],
+    "notes": "Logical bytes removed, not a claim of disk-block or memory recovery. No application state, uploads, other task directories, daemon or containers modified."
+  }
+}

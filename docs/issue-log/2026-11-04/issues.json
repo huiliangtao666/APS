@@ -22,5 +22,26 @@
     "sha256": "22f979f49df62faa1f9e9ca99efa0c40fce84eb3e3c2dbfb3624c94461b5385d",
     "bytes": 171169,
     "scope": "HTML示例交付；非应用功能实现或真实业务UAT"
+  },
+  {
+    "event_key": "APS-USER-20261104-ONTOLOGY-ENTITY-FIELD-V2",
+    "number": 149,
+    "url": "https://github.com/huiliangtao666/APS/issues/149",
+    "state": "closed",
+    "state_reason": "completed",
+    "closed_at": "2026-11-04T01:43:49Z",
+    "deliverable": "APS_生产排程_Ontology_实体与实际字段_v2.html",
+    "sha256": "df4f31d199919a7b2ac6d58b1241f1d913daa9691e4704f8d52d096771507980",
+    "bytes": 790527,
+    "scope": "Standalone HTML example, not APS runtime change or UAT",
+    "detail": "ontology-v2/README.md",
+    "validation": "ontology-v2/validation.json",
+    "originalScreenshots": [
+      "ontology-v2/assets/reference-1.png",
+      "ontology-v2/assets/reference-2.png",
+      "ontology-v2/assets/reference-3.png",
+      "ontology-v2/assets/reference-4.png",
+      "ontology-v2/assets/reference-5.png"
+    ]
   }
 ]
