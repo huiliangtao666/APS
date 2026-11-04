@@ -3861,6 +3861,56 @@
         "业务/求解策略、缩减输入、改变P优先级/来源分页/完整导出/冻结run",
         "新持久候选、preview/browser、求解Worker、旧实例restart或发布"
       ]
+    },
+    {
+      "id": "CR-MPS-REPORT-20261103",
+      "title": "生产主计划综合只读报表",
+      "classification": "批准只读能力实施；拟议PAB公式及未知默认未批准",
+      "baseline_id": "APS-BL-001",
+      "from_version": "v0.3",
+      "target_version": "v0.3+CR-MPS-REPORT-20261103",
+      "approval_status": "2026-11-04用户恢复相关GitHub任务及PM整包实施授权",
+      "effective": false,
+      "effective_scope": "已批准只读范围已精确组装main候选；新组合构建及router/父InputData入口验证待执行，未合main、未部署或发布；PAB及未知默认不启用",
+      "issue_url": "https://github.com/huiliangtao666/APS/issues/140",
+      "approval_url": "https://github.com/huiliangtao666/APS/issues/140#issuecomment-6609486134",
+      "primary_requirements": [
+        "FR-035"
+      ],
+      "related_requirements": [
+        "FR-014",
+        "FR-017",
+        "FR-020",
+        "FR-023",
+        "FR-024",
+        "FR-025",
+        "FR-026",
+        "FR-034"
+      ],
+      "acceptance_ids": [
+        "AC-17",
+        "AC-23",
+        "AC-26",
+        "AC-31",
+        "AC-32"
+      ],
+      "implementation_status": "EXACT_MAIN_MPS_CANDIDATE_ASSEMBLED_VALIDATION_PENDING",
+      "implementation_document": "docs/requirements/changes/CR-MPS-REPORT-20261103/implementation.md",
+      "formula_status": "PENDING_RULING",
+      "defaults_approved": false,
+      "original_delivery_id": "dlv_213b9093-b08d-4604-a8f5-f220059a06ce",
+      "design_zip_sha256": "8a7fc3cf437ade4de73b0a465f13487d8af1782fc5c423606b6789e41d395d93",
+      "design_git_sha": null,
+      "release_authorized": false,
+      "integration_delivery_id": "dlv_d0371ae1-b572-42df-b834-1a0bf2b93406",
+      "integration_event_key": "dlv_d0371ae1-b572-42df-b834-1a0bf2b93406:r2",
+      "integration_contract": "https://github.com/huiliangtao666/APS/issues/140#issuecomment-6623710328",
+      "candidate_parent_sha": "e7b6ba81438b77787477a189026695c98229c9f6",
+      "received_dev_source_sha": "80109609f6c9dc36789c6da8bfe97736e0c25835",
+      "validated_module_source_sha": "8b3fb98ac493255eeb52e493608320a30d4e431c",
+      "main_integration_status": "NOT_EXECUTED_PENDING_EXACT_CANDIDATE_VALIDATION",
+      "build_status": "NEW_MAIN_COMPOSITION_NOT_EXECUTED",
+      "entry_status": "MPS_ONLY_ROUTER_AND_PARENT_MOUNT_ASSEMBLED_NOT_EXECUTED"
     }
   ]
 }

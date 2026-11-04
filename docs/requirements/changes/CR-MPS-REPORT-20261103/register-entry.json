@@ -1,0 +1,41 @@
+{
+  "id": "CR-MPS-REPORT-20261103",
+  "title": "生产主计划综合只读报表",
+  "classification": "批准只读能力实施；拟议PAB公式及未知默认未批准",
+  "baseline_id": "APS-BL-001",
+  "from_version": "v0.3",
+  "target_version": "v0.3+CR-MPS-REPORT-20261103",
+  "approval_status": "2026-11-04用户恢复相关GitHub任务及PM整包实施授权",
+  "effective": true,
+  "effective_scope": "同版本只读总览、日期矩阵、来源与全量筛选导出；不据实施授权批准PAB公式、默认、预占账或发布",
+  "issue_url": "https://github.com/huiliangtao666/APS/issues/140",
+  "approval_url": "https://github.com/huiliangtao666/APS/issues/140#issuecomment-6609486134",
+  "primary_requirements": [
+    "FR-035"
+  ],
+  "related_requirements": [
+    "FR-014",
+    "FR-017",
+    "FR-020",
+    "FR-023",
+    "FR-024",
+    "FR-025",
+    "FR-026",
+    "FR-034"
+  ],
+  "acceptance_ids": [
+    "AC-17",
+    "AC-23",
+    "AC-26",
+    "AC-31",
+    "AC-32"
+  ],
+  "implementation_status": "执行中；逐项证据及最终阶段门读原卡，不据本文件推定产品PASS",
+  "implementation_document": "docs/requirements/changes/CR-MPS-REPORT-20261103/implementation.md",
+  "formula_status": "PENDING_RULING",
+  "defaults_approved": false,
+  "original_delivery_id": "dlv_213b9093-b08d-4604-a8f5-f220059a06ce",
+  "design_zip_sha256": "8a7fc3cf437ade4de73b0a465f13487d8af1782fc5c423606b6789e41d395d93",
+  "design_git_sha": null,
+  "release_authorized": false
+}

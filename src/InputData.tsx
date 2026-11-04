@@ -1,3 +1,4 @@
+import {MpsReport} from './MpsReport';
 import {appPath} from './app-path';
 import type {PreviewMemory} from './WorkbookPreview';
 import {WorkbookImportCards} from './WorkbookImportCards';
@@ -16,7 +17,7 @@ import {workbookRunLabel} from './lib/workbook-run-status.mjs';
 import {workbookDate,workbookDay} from './lib/workbook-dates';
 type Api=(path:string,body?:object)=>Promise<any>;
 type Props={api:Api;canWrite:boolean;canExport:boolean;reason:string;navigationHost?:HTMLElement|null};
-type Page='workflow'|'business'|'parameters'|'equipment';
+type Page='workflow'|'business'|'parameters'|'equipment'|'mps';
 const WORKSPACE_DATASET_ID='18477fde-464f-4c26-a343-c107c8ba9202';
 export function InputData({api,canWrite,canExport,reason,navigationHost}:Props){
  const initial=useRef(readWorkbenchContext()).current;
@@ -43,9 +44,10 @@ export function InputData({api,canWrite,canExport,reason,navigationHost}:Props){
  function previewMaintenance(target:any){if(target.entryId!=='existing-workbook-process-route'||target.table!=='工艺路线'||target.datasetId!==datasetId){setMessage('维护入口或数据集未核实，请更正原Excel后重传。');return;}manage({table:target.table,exactField:target.exactKeyFilter?.field,exactValue:target.exactKeyFilter?.value},'workflow');}
  async function download(url:string,filename:string){const a=document.createElement('a');a.href=appPath('/api'+url);a.download=filename;document.body.appendChild(a);a.click();a.remove();}
  const runPicker=<label className="workbook-run-picker"><select aria-label="重开冻结运行" title="选择已保存的排程运行" value={run?.id||''} onChange={e=>{if(e.target.value)perform(async()=>{setRun(await api('/workbooks/runs/'+e.target.value));setPage('equipment');setStage('A5');});}}><option value="">选择运行</option>{runs.map(r=><option key={r.id} value={r.id}>v{r.version} · {r.createdAt} · {workbookRunLabel(r.status)}</option>)}</select></label>;
- const navigation=<div className="workbook-page-toolbar"><nav className="workbook-feature-nav" aria-label="工作台功能页面">{([['workflow','排程流程'],['business','业务数据查询与维护'],['parameters','配置参数查询与维护'],['equipment','排程结果']] as const).map(([id,label])=><button key={id} disabled={id!=='workflow'&&!detail} aria-current={page===id?'page':undefined} onClick={()=>setPage(id)}>{label}</button>)}</nav>{page==='equipment'&&detail&&runPicker}</div>;
+ const navigation=<div className="workbook-page-toolbar"><nav className="workbook-feature-nav" aria-label="工作台功能页面">{([['workflow','排程流程'],['business','业务数据查询与维护'],['parameters','配置参数查询与维护'],['equipment','排程结果'],['mps','生产主计划']] as const).map(([id,label])=><button key={id} disabled={id!=='workflow'&&!detail} aria-current={page===id?'page':undefined} onClick={()=>setPage(id)}>{label}</button>)}</nav>{page==='equipment'&&detail&&runPicker}</div>;
  return <section className="input-workspace" aria-label="排程工作台" data-page={page}>
   {navigationHost?createPortal(navigation,navigationHost):navigation}
+  {page==='mps'&&detail&&<MpsReport key={detail.version+':'+(run?.id||'input')} api={api} context={{datasetId,version:detail.version,...(run?{runId:run.id}:{})}} canExport={canExport} onClose={()=>setPage('workflow')}/>}
   {(busy||message)&&<p role="status" aria-live="polite">{busy?'正在处理…':message}</p>}
   {issues.length>0&&<details className="input-errors"><summary>问题定位（{issues.length}）</summary>{issues.slice(0,60).map((i,n)=><button key={n} onClick={()=>locate(i)}>{i.sheet} {i.cell||i.field} · {i.message}</button>)}</details>}
   {detail&&(businessOpened||page==='business')&&<div hidden={page!=='business'}><QueryReports api={api} refreshKey={detail.parameterRevision||0} context={{datasetId,version:detail.version}} canExport={canExport} onRefresh={()=>perform(load)} onClose={()=>setPage('workflow')} onManageData={report=>manage({table:({bom:'物料主数据',demand:'每日需求',inventory:'期初库存',capacity:'设备与工装',replenishment:'既有采购在途'} as Record<string,string>)[report]||'每日需求'},'business')} maintenanceTables={Object.entries<any>(schema?.tables||{}).filter(([name,s])=>s.kind==='输入'&&name!=='配置参数').map(([name])=>name)} onMaintenance={canWrite?t=>t.table==='配置参数'?locate({sheet:t.table,record:t.key,message:'已定位同源配置参数。'}):manage(t,'business'):undefined}/></div>}
