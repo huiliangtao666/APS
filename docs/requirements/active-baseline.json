@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "baseline_id": "APS-BL-002",
+  "version": "V2",
+  "kind": "current_requirement_design_scope",
+  "approval_status": "USER_APPROVED_DESIGN_SCOPE_BASELINE",
+  "effective_on": "2026-11-04",
+  "approval_record": "baselines/APS-BL-002-V2.json#/approval",
+  "baseline_path": "baselines/APS-BL-002-V2.json",
+  "readme_path": "baselines/APS-BL-002-V2/README.md",
+  "human_readable_path": "baselines/APS-BL-002-V2/requirements-design.md",
+  "document_sha256": {
+    "APS需求设计说明_V2_20261104.docx": "25c3b49269b92d1b66433c3e816ad0e2230cd5cac43b800607355b5d1f92a778",
+    "APS需求设计说明_V2_20261104.html": "01d891a46229cd7be0c497d3159d0fed14f6df5557cf3b92a36971b1efa86f91",
+    "APS需求设计V2_追溯与字典_20261104.xlsx": "0ecbd5c20567c460e6876b09f6de140c280447e1a4e0cdb3029f4578cccb5769",
+    "APS需求设计V2_阅读说明_20261104.txt": "5aee58c4fe6fd5bf01f22605d8729127c7879f8e974c5f9ebad7ae78f3a64a1f",
+    "APS需求设计V2_来源与核对清单_20261104.json": "a036dab9dec699b695aae02610c64ccc4d1216cb914555708c1bec0f41e99078",
+    "APS需求设计说明_V2_完整交付包_20261104.zip": "6ced7d019271de8584759c7473d46f51a2169a10fb79a066ed5cb676c8515d65"
+  },
+  "history": {
+    "baseline_id": "APS-BL-001",
+    "path": "baselines/APS-BL-001-v0.3.json",
+    "read_only": true
+  },
+  "subsequent_changes_path": "changes/change-register.json",
+  "change_application_policy": "已经物化到V2正文的历史CR不再机械重复叠加。仅本基线截点之后、或截点前尚未采纳且后来明确获批的新增条款，按批准证据及受影响范围作为新增量。",
+  "implementation_project": {
+    "project_number": 2,
+    "project_id": "PVT_kwHOFM9WU84BpE1c",
+    "url": "https://github.com/users/huiliangtao666/projects/2",
+    "owner": "APS-PM",
+    "status_changed_by_this_record": false
+  },
+  "historical_registers_notice": "current-register.json / requirements-register.md / CSV沿旧口径的条文与实施快照保留作历史，不得替代V2当前范围或把历史Done迁签V2。",
+  "registered_at_utc": "2026-11-04T09:32:28.191876+00:00"
+}

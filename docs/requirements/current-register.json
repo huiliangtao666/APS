@@ -3057,5 +3057,13 @@
       "snapshot_at": "2026-10-31T14:47:30+08:00",
       "uat_owner": "QA"
     }
-  ]
+  ],
+  "scope_baseline_notice": {
+    "role": "historical_implementation_snapshot",
+    "active_baseline_id": "APS-BL-002",
+    "active_baseline_version": "V2",
+    "active_baseline_pointer": "active-baseline.json",
+    "legacy_scope_fields_are_current": false,
+    "note": "原有行/时间/状态/证据保留；旧current_text/current_version不是V2当前范围。"
+  }
 }

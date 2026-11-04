@@ -1,5 +1,9 @@
 # APS R1 单线最小排程原型
 
+## 当前需求设计范围基线
+
+用户2026-11-04已确认 **[APS-BL-002 / V2](docs/requirements/baselines/APS-BL-002-V2/README.md)** 为当前需求设计范围基线；[完整正文](docs/requirements/baselines/APS-BL-002-V2/requirements-design.md)及[需求入口](docs/requirements/README.md)。v0.3与历史验收保留，实施进度继续由Project2原卡维护。
+
 ## 启动与预览
 
 本项目位于轻应用工作区的 `apps/aps-r1`，使用 Vite + React + Express。当前已绑定 Workbench 预览，开发服务由平台启动；不要在其绑定端口手工再起一份服务。

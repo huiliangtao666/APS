@@ -1,68 +1,38 @@
-# APS 需求基线、变更与实施跟踪
+# APS需求设计范围基线、变更与实施跟踪
 
-本目录于2026-10-29依用户指令建立。**原始基线 + 已批准生效CR = 当前目标要求；已实现、已验收及已发布另外记录。**
+**当前需求设计范围基线：APS-BL-002 / V2，用户已于2026-11-04明确确认。**
 
-## 五角色职责迁移 2026-10-29
+用户原话：“请以此版本作为新的需求设计范围基线，并在github上更新”。V2为当前完整需求设计入口，后续按明确批准的增量变更管理；v0.3与历史CR继续保留追溯。
 
-最新用户指令：PM职责从APS-Design迁往APS-PM，PM统一调度、状态回写、清单与交接维护并观察效率、按需提出建议。Design只负责业务设计，提供业务原型、验证场景和mock，作为需求变更提出人。Test负责任务级功能/规则/接口/集成/回归及修复复测。相应UAT依赖任务完成后，由PM调度QA；QA主责UAT准备、测试和确认，在UAT中考虑独立代码审查，用户作为配合角色。此职责迁移不改变产品授权或历史验收结果。详情见[交接规则](operations/handoff-policy.md)及[责任记录](uat-ownership.json)。
+## 当前入口
 
-## 清单入口
+| 内容 | 权威入口与用途 |
+| --- | --- |
+| V2基线说明、批准依据及下载 | [APS-BL-002 / V2](baselines/APS-BL-002-V2/README.md) |
+| 完整需求设计正文 | [16章完整正文](baselines/APS-BL-002-V2/requirements-design.md)，含UI/UX专章 |
+| 当前基线指针 | [active-baseline.json](active-baseline.json) |
+| V2结构化范围 | [APS-BL-002-V2.json](baselines/APS-BL-002-V2.json)，保留61项原编号、20项CR及143项Issue采纳 |
+| 追溯与参数字典 | [V2追溯与字典xlsx](baselines/APS-BL-002-V2/APS需求设计V2_追溯与字典_20261104.xlsx)，181项参数目录、492源字段及AC/UAT/新增断言 |
+| 后续需求变更 | [受控CR记录](changes/change-register.json)，历史增量已物化到V2的部分不得机械重复叠加 |
+| 实时实施及证据 | [GitHub Project2](https://github.com/users/huiliangtao666/projects/2)，唯一实施主账，复用原卡 |
+| UAT责任 | [责任授权](uat-ownership.json)与[交接规则](operations/handoff-policy.md)：QA主责，用户配合，PM按依赖就绪调度 |
 
-| 内容 | 数量与入口 |
-|---|---|
-| 原始需求基线 | [61项：FR-001–043、BR-01–18](baseline-register.md)；[CSV](baseline-register.csv) |
-| 当前需求跟踪 | [61项唯一需求记录](requirements-register.md)；[CSV](requirements-register.csv)；[JSON](current-register.json) |
-| 已纳入需求变更 | [变更台账](change-register.md)；[CSV](change-register.csv)；[受控CR记录](changes/change-register.json) |
-| 原始验收与待决事项 | [基线结构化快照](baselines/APS-BL-001-v0.3.json)内保留AC32、UAT18、DEC9 |
-| 实时实施状态与证据 | [GitHub Project #2](https://github.com/users/huiliangtao666/projects/2)，复用原FR/BR卡，不新建开发或测试支线卡 |
-| UAT责任分工 | [18项UAT场景及负责人](uat-register.md)；全部UAT主责为 **QA**，用户配合；[责任分工授权](uat-ownership.json) |
+## 基线生效与历史保护
 
-UAT准备、测试与确认统一由QA主责，用户配合；PM在依赖任务完成后发起调度。该角色调整不新增产品CR，不修改原始基线或历史验收结果。
+- V2取代v0.3加历史CR拼接口径作为**当前设计范围**。V2中待决、候选、仅设计、不启用等明确限定仍按文内管理，不能用“成为基线”补造未知公式、现场默认值或联动准入。
+- 已确认的Word/HTML/Excel/ZIP原件不改写，本次批准记录单独追加，hash见V2目录。原始用户上传数据不因本次登记上传或覆盖。
+- [APS-BL-001 v0.3](baselines/APS-BL-001-v0.3.json)保留只读；[原61项基线表](baseline-register.md)仅为v0.3历史，不代表V2当前条文。
+- 需求范围批准、代码实现、任务级验证、QA/UAT和发布分别记录。旧卡Done和历史通过继续只对应原版本/原范围，不自动转为V2已验收。
+- 后续批准CR对V2的增量逐项叠加；历史CR中尚未获批/未采纳部分在后来获得明确批准时再按适用范围纳入。
 
-## 权威来源与版本
+## 旧派生表的口径
 
-- `baselines/APS-BL-001-v0.3.json`保存源文件条文、来源及SHA，登记后只读。原始DOCX、HTML和ZIP留在APS-Design工作区，不将完整附件上传公开仓库。
-- 源文件和旧台账标注评审稿，正式冻结签批的历史记录未找到。本次按用户指定建立受控基线清单，不补造批准人、发布日期或正式冻结记录；上传登记日不等于签批日。
-- `changes/change-register.json`维护提出、批准、增量、影响、验收和版本证据。当前登记2项CR：`CR-DEC02-03-20261029`（前台参数化实现与独立验收）；`CR-DEC04-05-06-20261029`（需求设计深化与mock准备，应用实现未派发）。逐项批准边界以变更台账为准。缺陷修复、权限/预览故障、补测及调度政策不作为新增产品CR。
-- 该CR属于新增/细化能力变更；基线原已有的数量、占用边界、人员阶段等要求仍保留，不重复计算为新增需求。
-- 用户已授权前台参数化能力及开发；Design补充的具体参数契约、建议默认值、迁移或模型限制不自动等于用户业务批准。未经确认的设计细化须留痕，交付限制不能静默缩小批准范围。
-- 当前目标版本标为`v0.3+CR-DEC02-03-20261029`，仅适用于受影响要求。它不是已发布应用版本，也不表示已经批准一个完整冻结的v0.4文档。
-- DEC04/05/06设计与mock入口：[CR设计包](changes/CR-DEC04-05-06-20261029/README.md)。当前要求按每条FR/BR的批准CR依次叠加，重叠要求同时保留各CR的进度/问题和已有代码版本，不能因新增设计覆盖旧缺陷。具体枚举、公式和仿真值为候选契约；来源/算术核验不等于产品通过。
+[旧需求跟踪表](requirements-register.md)、[CSV](requirements-register.csv)、[current-register.json](current-register.json)保存旧v0.3+CR口径的实施快照；其中旧“current_text/current_version”不是V2当前范围。其数据与验收内容本次不改写，当前范围请读取active-baseline.json指向的V2，实时状态读Project2。
 
-## 唯一记录和实施状态
+旧导出/同步工具仍沿历史基线组织字段。PM后续维护派生清单时应先支持当前基线指针和历史增量去重，再刷新范围字段；不能运行旧逻辑将V2入口退回v0.3，不能以刷新清单改变Status或迁签证据。
 
-一条FR/BR始终对应一张现有原卡。一个CR可影响多条需求，一条需求也可叠加多次CR；变更记录不复制成新的FR或DEV/TEST卡。
+## 职责与后续流转
 
-Project的Status继续表示实施阶段；新增文本字段表示需求编号、基线版本、当前要求版本、生效CR、当前环节、阻塞原因、验收结论、交付代码SHA和清单入口。`In progress`不自动解释为正在编码；BR卡未独立更新也不等于其规则完全未实现。
+Design维护业务设计及原型/场景/mock；PM维护CR、实施原卡、调度及同源清单。Dev在既有授权范围整包实现和自测；Test/QA按适用阶段及PM调度提供独立证据。最新各原卡授权优先，不因本次范围登记启动新的backlog、恢复巡检或发布应用。
 
-原卡的Done/历史通过结论保留原来的验收边界。新增范围重新验收。**批准能力、代码交付、有限测试通过、完整需求验收、业务UAT及生产发布分别记录。** 新表不将历史有限通过改写为全量版本验收。
-
-## 维护分工和变更流程
-
-1. Design作为需求变更提出人，提供业务增量与影响；APS-PM登记CR，写清基线前后差异、原因、受影响FR/BR/AC/UAT、数据兼容与计划影响。
-2. 已有会话授权作为批准证据记录，不要求用户重复批准同一件事。新增业务含义、范围扩大或验收标准变化须明确补充决策；工时、成本和未确认默认值保持待登记，不推定批准。
-3. 待审/暂缓/拒绝的CR不叠加当前有效要求。批准生效后更新当前目标版本和专项验收条件；基线条文和原AC条文不覆盖。
-4. APS-Dev交付普通push的分支/full SHA、报告和限制；APS-Test从GitHub独立固定版本验证。PM及时回写原卡、CR及相关Issue；问题按原两轮修复规则处理，缺口不伪造为缺陷。
-5. Test完整满足CR批准范围后登记该CR验收结论及版本，仍需核对原需求剩余条件再决定Done。纳入正式新基线时另建新版本快照，保留v0.3和CR历史。
-6. 其他未开始backlog仍暂停；本CR为用户明确授权范围，清单维护不恢复其他开发。
-
-## 刷新与导出
-
-CSV、Markdown、JSON当前清单及Excel都是从受控基线/CR与实时原卡生成的派生表，不另行手改形成第二主账。Excel只用于审阅和下载。
-
-在包含本目录及`tools/requirements/`的仓库目录中，使用已有GitHub权限运行：
-
-```bash
-python3 tools/requirements/export_register.py --pull-controlled --xlsx APS需求基线与变更跟踪清单.xlsx
-python3 tools/requirements/sync_project.py
-```
-
-导出器使用Python标准库，不安装依赖、不运行应用。同步脚本只更新现有61张原卡的跟踪字段，不创建任务、不改变Status。导出包含固定表头、筛选、冻结首行与可点击原卡链接。生成记录应与实际交付变化一起提交GitHub，避免只因时间戳变化产生重复提交。
-
-每次Dev/Test交付、CR批准/暂缓/验收或需求状态变化，PM同步原卡和变更台账并刷新清单。原5分钟巡检当前保持paused，未恢复；交付事件由PM处理；源条文/批准范围的变动必须有明确用户依据。
-
-## B16应用实现入口
-
-[#42多线MVP的配置、三步样例与验证边界](../b16/APPLICATION-MVP.md)。该文档随真实源码维护，不替代GitHub原卡状态或QA/用户UAT结论。
-
-本轮已批准专题基础能力与未启用边界：[P1 独立模拟首版](../P1-TOPICS-FOUNDATION.md)。十二CR当前业务包去向见[变更台账](change-register.md)和PM矩阵；原基线与历史证据不改写。
+本次GitHub更新仅需求设计资产、基线批准和导航元数据，没有改产品程序、原始仿真文件、实施Status或历史验收结论。
