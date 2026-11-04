@@ -3911,6 +3911,46 @@
       "main_integration_status": "NOT_EXECUTED_PENDING_EXACT_CANDIDATE_VALIDATION",
       "build_status": "NEW_MAIN_COMPOSITION_NOT_EXECUTED",
       "entry_status": "MPS_ONLY_ROUTER_AND_PARENT_MOUNT_ASSEMBLED_NOT_EXECUTED"
+    },
+    {
+      "id": "CR-URGENT-ORDER-20261103",
+      "title": "紧急插单提交、真实优先重排与影响说明",
+      "baseline_id": "APS-BL-001",
+      "approval_status": "用户已明确授权本CR登记及整包实施",
+      "approved_on": "2026-11-03",
+      "effective": false,
+      "effective_scope": "批准范围已登记；产品启用/验证未执行，不以批准推定effective",
+      "implementation_status": "SOURCE_WIRED_NOT_RUNTIME_VERIFIED",
+      "primary_issue": "https://github.com/huiliangtao666/APS/issues/67",
+      "original_delivery_id": "dlv_b9f21c16-2e90-4e78-aef5-0be9145ff7e1",
+      "event_key": "dlv_b9f21c16-2e90-4e78-aef5-0be9145ff7e1:r1",
+      "source_owner": "APS-Dev",
+      "integration_owner": "APS-Dev",
+      "source_base_sha": "0e9d593bbcab756bd37b81c596a657c79efe66fb",
+      "product_sha": null,
+      "design_git_sha": null,
+      "original_zip": {
+        "bytes": 24590,
+        "sha256": "55c25f21ce2c31df6594744ce146122e0504f7ece47206e9eb1fedcbb4db3cf1"
+      },
+      "implementation_document": "docs/requirements/changes/CR-URGENT-ORDER-20261103/implementation.md",
+      "acceptance_matrix": "docs/requirements/changes/CR-URGENT-ORDER-20261103/acceptance.csv",
+      "runtime_plan": "docs/requirements/changes/CR-URGENT-ORDER-20261103/runtime-plan.md",
+      "runtime_status": "NOT_EXECUTED",
+      "main_integration_status": "NOT_AUTHORIZED",
+      "deployment_status": "NOT_EXECUTED",
+      "permission_assertions": "UO-23 role/session/access OUT_OF_SCOPE_BY_USER; necessary backend profile remains in scope",
+      "scope": [
+        "选定计划上下文、17列需求增量与原子幂等生效",
+        "全部净剩余工作主程序优先重排及执行/供给/资源独立复核",
+        "四页签影响、任务谱系、保存重开、全量筛选同源导出"
+      ],
+      "exclusions": [
+        "未知默认、第三场景额外工艺、DEC04—06应用",
+        "新增main合并/部署/发布/旧实例或平台操作许可",
+        "以静态或原型结果代签真实功能、Test、QA或UAT"
+      ],
+      "initial_source_base_sha": "5a23d75f1e7c80114fc14e7c5a674c376e376e00"
     }
   ]
 }
