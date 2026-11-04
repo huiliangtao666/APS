@@ -61,6 +61,7 @@ export function exportPackage(d,nativeCatalog) {
     cumulative:materials.status,details:materials.gaps,multiTimeDailyBatch:'NEEDS_ADAPTATION',mainProgramReady:false};
   const payload={schema:VERSION,scenario:d.scenario,branch:d.branch,lineage:copy(d.lineage),revision:d.revision,
     source:copy(d.spec.source),sourceSpecHash:d.specHash,snapshot:copy(snap),
+    ...(d.spec.reference?{nativeSourceReference:copy(d.spec.reference)}:{}),
     history:d.checkpoints.map(c=>copy(c.snapshot)),
     // Full author scripts are deliberately excluded; only events actually known by this observation are visible.
     knownEvents:copy(d.spec.events.filter(e=>minute(e.knownAt)<minute(snap.cutoff))),

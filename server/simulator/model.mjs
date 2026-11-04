@@ -28,6 +28,11 @@ export function validateSpec(input) {
   need(s.source.parameters.precedence === 'SECOND_P', 'PARAMETER_PRECEDENCE', 'source.parameters', '须先解析并冻结第二份P优先配置');
   need(Number.isSafeInteger(s.planningWindowDays) && s.planningWindowDays > 0, 'WINDOW_REQUIRED', 'planningWindowDays', '排程窗口须来自显式有效配置');
   date(s.coverageEnd, 'coverageEnd'); need(s.endDate <= s.coverageEnd, 'COVERAGE_RANGE', 'endDate', '模拟日期超出声明的真实数据覆盖');
+  if(s.importIssues!==undefined){unique(s.importIssues,'importIssues');for(const issue of s.importIssues)
+    need(issue.reason&&issue.objectId&&issue.resolved===false,'IMPORT_ISSUE_REQUIRED','importIssues','未覆盖项须显式保留待处置状态');}
+  if(s.reference){need(Array.isArray(s.reference.bom)&&s.reference.timeBases?.dayZero&&s.reference.parameters&&
+    fingerprint(s.reference.parameters)===s.source.parameters.hash,'IMPORT_REFERENCE_MISMATCH','reference','原生P归档或BOM来源不符');
+    date(s.reference.timeBases.dayZero,'reference.timeBases.dayZero');}
   need(s.random?.enabled === false || (s.random?.enabled === true && Number.isSafeInteger(s.random.seed) &&
     s.random.generatorVersion && s.random.rulesVersion && s.random.materialized === true && Array.isArray(s.random.distributions) &&
     s.random.distributions.length > 0), 'RANDOM_NOT_MATERIALIZED', 'random', '随机模式必须显式参数化并物化事件后导入');
@@ -108,14 +113,15 @@ export const admittedAt = e => Math.max(minute(e.occurredAt),minute(e.knownAt),m
 export function initialState(s) {
   return {lots:copy(s.lots),purchases:copy(s.purchases),demands:copy(s.demands),
     tasks:s.tasks.map(t=>({...copy(t),status:'PLANNED',remainingMinutes:t.totalMinutes,processedMinutes:0,consumed:{},output:0,scrap:0,receivedOutput:0})),
-    resources:s.resources.map(r=>({...copy(r),ready:true})),holds:[],processed:{},issues:[],movements:[]};
+    resources:s.resources.map(r=>({...copy(r),ready:true})),holds:[],processed:{},issues:copy(s.importIssues??[]),movements:[]};
 }
 export function precheck(s, state=initialState(s), currentDate=s.startDate) {
   validateSpec(s);
   const days=(Date.parse(s.coverageEnd+'T00:00:00Z')-Date.parse(currentDate+'T00:00:00Z'))/86400000+1;
   return {canAdvance:currentDate<=s.endDate,productionSource: s.source.plan?'EXPLICIT_COPY':'NO_PRODUCTION',
     planningWindow:{required:s.planningWindowDays,covered:Math.max(0,days),complete:days>=s.planningWindowDays},
-    unresolved:state.issues.filter(i=>!i.resolved),mode:'INDEPENDENT',linked:false,mainProgramReady:false};
+    unresolved:state.issues.filter(i=>!i.resolved),importCoverage:copy(s.reference?.nativeCoverage??[]),
+    mode:'INDEPENDENT',linked:false,mainProgramReady:false};
 }
 export function freeQuantity(lot,at) {
   return minute(lot.expiresAt)<=at?0:Math.max(0,lot.qualified-lot.externalReserved);
@@ -128,7 +134,11 @@ export function snapshot(spec,state,day, inclusive=false) {
   const business={date:day,cutoff,cutoffInclusive:inclusive,source:copy(spec.source),timeZone:spec.timeZone,materials:copy(spec.materials),
     rulesVersion:VERSION,random:copy(spec.random),lots,purchases:copy(state.purchases),demands:copy(state.demands),
     tasks:copy(state.tasks),resources:copy(state.resources),holds:copy(state.holds),issues:copy(state.issues),
-    processed:copy(state.processed),movements:copy(state.movements),mainProgramReady:false};
+    processed:copy(state.processed),movements:copy(state.movements),
+    ...(spec.reference?{bom:copy(spec.reference.bom.filter(e=>{
+      const dayIndex=(Date.parse(day+'T00:00:00Z')-Date.parse(spec.reference.timeBases.dayZero+'T00:00:00Z'))/86400000;
+      return e.from<=dayIndex&&dayIndex<e.until;
+    }))}:{}),mainProgramReady:false};
   return {...business,businessHash:fingerprint(business)};
 }
 export function advanceDay(spec,state,day) {
