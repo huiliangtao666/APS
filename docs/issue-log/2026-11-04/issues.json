@@ -85,5 +85,19 @@
     "scope": "Standalone ontology artifact only; no scheduling engine/UI application deployment or real UAT",
     "detail": "ontology-v5/README.md",
     "validation": "ontology-v5/validation.json"
+  },
+  {
+    "event_key": "APS-USER-20261104-ONTOLOGY-FLOW-WIRES-V6",
+    "number": 153,
+    "url": "https://github.com/huiliangtao666/APS/issues/153",
+    "state": "closed",
+    "state_reason": "completed",
+    "closed_at": "2026-11-04T05:33:19Z",
+    "deliverable": "APS_生产排程_Ontology_排程流程与关系连线_v6.html",
+    "bytes": 4642542,
+    "sha256": "fc8290385e5e1cd521e5f20b8cf5cf5d54d33a48de56377857df1c39ca1a7fb7",
+    "scope": "Standalone ontology HTML; no APS engine change, application build/publish, real business execution or UAT conclusion",
+    "detail": "ontology-v6/README.md",
+    "validation": "ontology-v6/validation.json"
   }
 ]

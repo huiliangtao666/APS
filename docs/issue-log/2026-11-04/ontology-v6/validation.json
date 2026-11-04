@@ -1,0 +1,206 @@
+{
+  "event_key": "APS-USER-20261104-ONTOLOGY-FLOW-WIRES-V6",
+  "file": "APS_生产排程_Ontology_排程流程与关系连线_v6.html",
+  "bytes": 4642542,
+  "sha256": "fc8290385e5e1cd521e5f20b8cf5cf5d54d33a48de56377857df1c39ca1a7fb7",
+  "codeSha": "b45b7009ec793a56265e5873481a3d49cd247c54",
+  "verifiedAt": "2026-11-04T05:30:04.831256+00:00",
+  "scope": "Standalone ontology HTML; no APS engine change, application build/publish, real business execution or UAT conclusion",
+  "entitiesUnchanged": 17,
+  "fieldConnections": 166,
+  "processSteps": 12,
+  "processEdges": 24,
+  "checks": [
+    {
+      "assertion": "All 17 entity definitions, fields, actions and context definitions exactly preserved",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Existing 228 field dependencies, relation definitions, constraints and provenance bindings preserved",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Exactly five user-defined relation categories remain",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Relationship presentation defaults to field connections and retains all 166 meaningful field links",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Entity card renderer has no relationship-name catalog or data-rel links",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Five relation types use actual field/step endpoints, individual ports, and clickable/key-operable edges",
+      "result": "PASS"
+    },
+    {
+      "assertion": "12 explained process steps each carry inputs, outputs, decisions, detail and source evidence",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Success mainline skips the failure step and reaches results",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Qualified-supply shortcut, child recursion and next-operation loop are explicit",
+      "result": "PASS"
+    },
+    {
+      "assertion": "WIP versus ordinary-demand rollback continuation and new-run paths are distinct",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Failure joins all actual candidate rejection classes",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Flow links reference valid steps and entity headers, never field-level logical endpoints",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Frozen source evidence hashes match actual APS implementation",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Standalone HTML embeds identical model without external business-network dependency",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Final combined JavaScript parses",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Actual saved entity DOM retains every original field and zero embedded relation-name controls",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Actual saved graph contains all 166 meaningful dependency wires by default",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Actual exported JSON and saved HTML retain identical final model and checked field-connection state",
+      "result": "PASS"
+    }
+  ],
+  "browser": {
+    "startedEpoch": 1793769698397,
+    "screenshots": {
+      "overview": "screenshots/agent-browser-2026-11-04T05-28-46.jpg",
+      "network": "screenshots/agent-browser-2026-11-04T05-26-53.jpg",
+      "lineDetail": "screenshots/agent-browser-2026-11-04T05-26-52.jpg",
+      "process": "screenshots/agent-browser-2026-11-04T05-28-47.jpg"
+    },
+    "checks": [
+      "No relationship-name lists/data-rel controls inside entity cards",
+      "Field connections F103 and F226 appear by default; reset keeps field connections enabled",
+      "Mouse click on individual field port opens its related fields/definitions",
+      "Mouse click on F103 curve opens formula, endpoints and exact source paths; keyboard activation also works",
+      "Clicking process S08 binds only its relevant entity headers and field relationships",
+      "Failure step S11 explains ordinary-demand versus WIP continuation and retained historical locks",
+      "Date type filter retains date edges; logic-only filter hides all detailed field edges",
+      "Five type categories and original six-column full names retained",
+      "No error-level browser console entries during v6 verification"
+    ],
+    "fixes": [
+      "Transparent grid containers intercepted SVG port clicks: pointer-event routing corrected and actual mouse click rechecked",
+      "Curved-edge bounding boxes overlapped long action curves: data curves drawn above action curves; same-column arcs have a transparent interactive interior; actual mouse click rechecked"
+    ],
+    "downloads": [
+      {
+        "id": "5130ffc6-a7ea-4f16-b01c-19f23fb1eed8",
+        "frameId": "0B726C4304BDBDA3997C14C37A0AFC9D",
+        "filename": "APS_Ontology_v6_流程连线模型.json",
+        "state": "completed",
+        "receivedBytes": 7205711,
+        "startedAt": 1793770206664,
+        "path": "temp/browser-downloads-ZvmWwQ/63c33cd3-688e-4d2b-ada3-4fe40285b448-APS_Ontology_v6_流程连线模型.json",
+        "completedAt": 1793770206688
+      },
+      {
+        "id": "48dbf674-9592-4da4-8a41-0df9f2e0dff2",
+        "frameId": "0B726C4304BDBDA3997C14C37A0AFC9D",
+        "filename": "APS_生产排程_Ontology_排程流程与关系连线_v6.html",
+        "state": "completed",
+        "receivedBytes": 5218054,
+        "startedAt": 1793770206824,
+        "path": "temp/browser-downloads-ZvmWwQ/9e1b76ea-44d5-4c3b-9aaa-ed8194917dde-APS_生产排程_Ontology_排程流程与关系连线_v6.html",
+        "completedAt": 1793770206840
+      }
+    ],
+    "supersededDownloads": [
+      {
+        "id": "bef5057a-2d5e-4488-bd7e-af94a35a46bf",
+        "frameId": "0B726C4304BDBDA3997C14C37A0AFC9D",
+        "filename": "APS_Ontology_v6_流程连线模型.json",
+        "state": "completed",
+        "receivedBytes": 7205394,
+        "startedAt": 1793770128981,
+        "path": "temp/browser-downloads-ZvmWwQ/58c4b26f-03fa-4302-8e5f-0389589ea4a4-APS_Ontology_v6_流程连线模型.json",
+        "completedAt": 1793770129067
+      },
+      {
+        "id": "0a1fb3cf-495e-4f79-a7a2-8718bd669fd0",
+        "frameId": "0B726C4304BDBDA3997C14C37A0AFC9D",
+        "filename": "APS_生产排程_Ontology_排程流程与关系连线_v6.html",
+        "state": "completed",
+        "receivedBytes": 5229509,
+        "startedAt": 1793770129325,
+        "path": "temp/browser-downloads-ZvmWwQ/d22d5581-998c-40d9-bc27-08846541927b-APS_生产排程_Ontology_排程流程与关系连线_v6.html",
+        "completedAt": 1793770129355
+      }
+    ]
+  },
+  "exports": [
+    {
+      "file": "temp/browser-downloads-ZvmWwQ/63c33cd3-688e-4d2b-ada3-4fe40285b448-APS_Ontology_v6_流程连线模型.json",
+      "bytes": 7205711,
+      "sha256": "bf9ea8c033bfd014ef3d53e56851bbbd447a70d611554d2526b7fd359160602d"
+    },
+    {
+      "file": "temp/browser-downloads-ZvmWwQ/9e1b76ea-44d5-4c3b-9aaa-ed8194917dde-APS_生产排程_Ontology_排程流程与关系连线_v6.html",
+      "bytes": 5218054,
+      "sha256": "df2c9357be9778e2b9e8f1d16b0503ded9d63d406947e1f8cfdd183d726022f2"
+    }
+  ],
+  "cleanup": {
+    "taskDuBefore": "7.1M\ttemp/aps-ontology-v6\n",
+    "diskBefore": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5   460Gi   361Gi    58Gi    87%    4.8M  608M    1%   /System/Volumes/Data\n",
+    "removed": [
+      {
+        "path": "temp/browser-downloads-ZvmWwQ/63c33cd3-688e-4d2b-ada3-4fe40285b448-APS_Ontology_v6_流程连线模型.json",
+        "beforeBytes": 7205711,
+        "afterBytes": 0,
+        "reason": "Unused export compared with retained final model and HTML"
+      },
+      {
+        "path": "temp/browser-downloads-ZvmWwQ/9e1b76ea-44d5-4c3b-9aaa-ed8194917dde-APS_生产排程_Ontology_排程流程与关系连线_v6.html",
+        "beforeBytes": 5218054,
+        "afterBytes": 0,
+        "reason": "Unused export compared with retained final model and HTML"
+      },
+      {
+        "path": "temp/browser-downloads-ZvmWwQ/58c4b26f-03fa-4302-8e5f-0389589ea4a4-APS_Ontology_v6_流程连线模型.json",
+        "beforeBytes": 7205394,
+        "afterBytes": 0,
+        "reason": "Superseded preview export; current authoring source and final exports already verified"
+      },
+      {
+        "path": "temp/browser-downloads-ZvmWwQ/d22d5581-998c-40d9-bc27-08846541927b-APS_生产排程_Ontology_排程流程与关系连线_v6.html",
+        "beforeBytes": 5229509,
+        "afterBytes": 0,
+        "reason": "Superseded preview export; current authoring source and final exports already verified"
+      }
+    ],
+    "releasedLogicalBytes": 24858668,
+    "retained": [
+      "Final root HTML and all previous deliverables",
+      "Original user uploads and browser evidence",
+      "Authoring source, model, validation and active preview",
+      "All unrelated task files, runtime data and build outputs"
+    ],
+    "pending": [],
+    "note": "Own unused export copies only; logical bytes are not evidence of memory recovery."
+  }
+}
