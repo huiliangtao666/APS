@@ -13,6 +13,11 @@ def solve_workbook(payload, cp_model, ortools):
     limit = payload['solveSeconds']
     model = cp_model.CpModel()
     lo, hi = data['window']
+    # Source-bounded interval helpers retain all task/tool/cleaning endpoints.
+    # A giant unrelated 2**52 domain is not needed for minute intervals.
+    max_tail = max([0] + [o['toolTail'] for t in data['tasks'] for o in t['options']])
+    max_clean = max([0] + [r['minutes'] for s in data['sequences'] for r in s['transitions']])
+    interval_length_bound = hi + max_tail + max_clean
     resources = {r['id']: r for r in data['resources']}
     groups = {g['id']: g for g in data['groups']}
     inputs = {t['id']: t for t in data['tasks']}
@@ -43,7 +48,7 @@ def solve_workbook(payload, cp_model, ortools):
         return result
 
     def interval(a, b, resource, amount, on, name, calendar=True):
-        length = model.new_int_var(0, 2**52, name + ':length')
+        length = model.new_int_var(0, interval_length_bound, name + ':length')
         model.add(length == b - a).only_enforce_if(on)
         model.add(length == 0).only_enforce_if(on.negated())
         iv = model.new_optional_interval_var(a, length, b, on, name)

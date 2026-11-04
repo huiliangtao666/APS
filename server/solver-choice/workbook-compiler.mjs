@@ -7,7 +7,8 @@ import {urgentDemandOrder} from '../urgent-order-engine.mjs';
 import {effectiveParameters} from '../parameter-contract.mjs';
 import {SolverProblem,fingerprint} from './contract.mjs';
 import {validateWorkbookModel} from './workbook-model.mjs';
-import {quantityScales,encode,decode,coefficient,ratio,safe,lcm} from './exact.mjs';
+import {encode,coefficient,ratio,safe,lcm} from './exact.mjs';
+import {quantityLattice,nativeScales,decimalProduct,sourceLotQuantity,exactBatchBound} from './quantity-lattice.mjs';
 export const WORKBOOK_MODEL='aps-cpsat-workbook:v2';
 const reject=(code,message,details={})=>{throw new SolverProblem(code,message,details);};
 const int=(v,path,min=0)=>{if(String(v??'').trim()===''||!Number.isSafeInteger(Number(v))||Number(v)<min)reject('CP_WORKBOOK_INPUT','须有显式整数',{path,value:v});return Number(v);};
@@ -20,7 +21,11 @@ export function prepareSolverWorkbook(input,selection){
  if(s.currentMinute!==undefined&&(int(s.currentMinute,'currentMinute')<current*1440||s.currentMinute>=end*1440))reject('CP_WINDOW','观察分钟不在有效窗口');
  if(input.urgentOrder&&s.demandIds!==undefined)reject('CP_URGENT_SELECTION','插单必须保留全部原单与已生效插单');
  if(s.demandIds!==undefined&&(!Array.isArray(s.demandIds)||!s.demandIds.length||new Set(s.demandIds).size!==s.demandIds.length))reject('CP_DEMAND_COVERAGE','需求选择须非空且唯一');
- const resolved=refreshDerived(cloneForParameters(input),start),d=selectionDataset(resolved,s),ready=supplyReadiness(d,s);
+ const resolved=refreshDerived(cloneForParameters(input),start);
+ // Derived binary-float tails are not new source precision. Rebuild only the
+ // CP view from the already-resolved original decimal multiplicands.
+ for(const r of rows(resolved,'每日需求')){const m=rows(resolved,'物料主数据').find(m=>m['物料编号']===r['成品编号']);if(m)r['需求千克']=decimalProduct(r['需求箱数'],m['每箱净重千克']);}
+ const d=selectionDataset(resolved,s),ready=supplyReadiness(d,s);
  if(!ready.ready)reject('CP_WORKBOOK_NOT_READY','所选业务资料或必要约束不完整',{issues:ready.issues});
  const demands=urgentDemandOrder(d,rows(d,'每日需求').filter(r=>Number(r['需求日'])>=start&&Number(r['需求日'])<end&&(!s.demandIds||s.demandIds.includes(r['需求编号']))));
  if(!demands.length||s.demandIds&&s.demandIds.some(id=>!demands.some(r=>r['需求编号']===id)))reject('CP_DEMAND_COVERAGE','所选需求为空或已变化');
@@ -31,17 +36,12 @@ export function prepareSolverWorkbook(input,selection){
 // conditional manufactured supply and all selected demand reach the real model.
 export function compileWorkbookModel(input,selection,conditions){
  const prepared=prepareSolverWorkbook(input,selection),{input:d,demands,source}=prepared,start=selection.startDay*1440,end=selection.endDay*1440,current=selection.currentMinute??selection.currentDay*1440,u=d.urgentOrder;
- const scales=quantityScales(d),materials=new Map(rows(d,'物料主数据').map(r=>[r['物料编号'],r])),routes=rows(d,'工艺路线'),boms=rows(d,'物料清单');
+ const lattice=quantityLattice(d),scales=nativeScales(lattice),materials=new Map(rows(d,'物料主数据').map(r=>[r['物料编号'],r])),routes=rows(d,'工艺路线'),boms=rows(d,'物料清单');
  if(d.mapping.sfRoutes?.length)reject('CP_ROUTE_PROFILE_UNSUPPORTED','日粒度仿真补充路线不能冒充分钟路线',{routeIds:d.mapping.sfRoutes.map(r=>r['路线工序编号'])});
  // Propagate exact ratio denominators down an acyclic BOM. No kg or package is
  // rounded to fit the solver; an unsafe denominator is a located input block.
- const visited=new Set(),visiting=new Set(),order=[];
- function visit(id){if(visiting.has(id))reject('CP_BOM_CYCLE','BOM循环',{materialId:id});if(visited.has(id))return;visiting.add(id);for(const b of boms.filter(b=>b['父项编号']===id))visit(b['子项编号']);visiting.delete(id);visited.add(id);order.unshift(id);}
- for(const id of materials.keys())visit(id);
- let kgLattice=1n;for(const s of Object.values(scales))if(s.unit==='千克')kgLattice=lcm(kgLattice,BigInt(s.scale));for(const s of Object.values(scales))if(s.unit==='千克')s.scale=safe(kgLattice,'common source kg lattice');
- for(const id of order)for(const b of boms.filter(b=>b['父项编号']===id)){const child=b['子项编号'];if(!scales[child]||!scales[id])reject('CP_BOM_SOURCE','BOM物料缺失',{bomId:b['用量关系编号']});if(scales[child].unit!=='个'){const r=ratio(b['子项基准用量'],b['父项基准产出千克']);scales[child].scale=safe(lcm(BigInt(scales[child].scale),BigInt(scales[id].scale)*BigInt(r.d)),child);}}
  const qty=(id,value,path)=>encode(value,scales[id]?.scale,path),physical=rows(d,'设备与工装'),crews=rows(d,'班组资源'),resourceById=new Map(physical.map(r=>[r['资源编号'],r])),crewById=new Map(crews.map(r=>[r['班组编号'],r]));
- let weightScale=1n;for(const [id,s]of Object.entries(scales))if(s.unit==='千克')weightScale=lcm(weightScale,BigInt(s.scale));for(const r of physical)for(const f of ['同时占位上限千克','单次批量上限千克','标准日产能千克'])if(String(r[f]??'').trim()){const x=ratio(r[f]);weightScale=lcm(weightScale,BigInt(x.d));}
+ let weightScale=1n;for(const [id,s]of Object.entries(scales))if(s.unit==='千克'&&materials.get(id)['物料来源']==='制造')weightScale=lcm(weightScale,BigInt(s.scale));for(const r of physical)for(const f of ['同时占位上限千克','单次批量上限千克','标准日产能千克'])if(String(r[f]??'').trim()){const x=ratio(r[f]);weightScale=lcm(weightScale,BigInt(x.d));}
  const wscale=safe(weightScale,'weightScale'),weight=value=>encode(value,wscale,'resource kg');
  const resources=physical.filter(r=>Number(r['可用数量'])>0).map(r=>({id:r['资源编号'],capacity:r['资源类别']==='设备'&&weightSharedResource(r)?weight(r['同时占位上限千克']):1,unit:r['资源类别']==='设备'&&weightSharedResource(r)?'scaled-kg':'entity',calendar:[[start,end+Math.max(0,...routes.map(r=>Number(r['工装后延释放分钟'])))]]}));
  for(const c of crews){const windows=[];for(let day=selection.startDay;day<selection.endDay;day++)windows.push(...shiftWindows(d,c,day).map(x=>[x.start,x.end]));resources.push({id:'crew:'+c['班组编号'],capacity:int(c['每班可用人数'],'crew capacity'),unit:'person',calendar:merged(windows)});}
@@ -51,7 +51,7 @@ export function compileWorkbookModel(input,selection,conditions){
  for(const lot of supplyLots(d)){const record=rows(d,lot.source.sheet||'').find(r=>r._row===lot.source.row);let ready=lot.ready===null?null:lot.ready*1440+boundaryRelease;
   if(lot.id.startsWith('inventory:')&&Number(record?.['放行日'])<=Number(record?.['快照日'])&&Number(record?.['快照日'])===0)ready=1440;
   if(lot.id.startsWith('transit:')){const supplier=rows(d,'供应商与供货条件').find(r=>r['供货关系编号']===record?.['供货关系编号']);ready=Math.max(ready,Number(record['约定到货日'])*1440+boundaryArrival+Number(supplier['检验天数'])*1440);}
-  model.lots.push({id:lot.id,materialId:lot.material,quantity:qty(lot.material,lot.quantity,lot.id),reserved:0,ready,expiry:lot.expiry*1440+boundaryExpiry,qualityEligible:lot.quality&&ready!==null,conditional:lot.conditional,source:lot.source});
+  model.lots.push({id:lot.id,materialId:lot.material,quantity:qty(lot.material,sourceLotQuantity(lot,d),lot.id),reserved:0,ready,expiry:lot.expiry*1440+boundaryExpiry,qualityEligible:lot.quality&&ready!==null,conditional:lot.conditional,source:lot.source});
  }
  function reserve(id,resourceId,a,b,amount,source){if(b>a&&amount>0&&resources.some(r=>r.id===resourceId))model.reservations.push({id,resourceId,start:a,end:b,amount,source});}
  for(const w of wipOccupations(d,start,end)){const r=resourceById.get(w.resource);reserve(w.taskId+':physical',w.resource,w.start,w.end,weightSharedResource(r)?weight(w.quantity):1,w.source);for(const [i,l]of w.labor.entries())reserve(w.taskId+':labor:'+i,'crew:'+w.crew,l.start,l.end,w.people,w.source);for(const tool of w.tools)reserve(w.taskId+':tool:'+tool,tool,w.start,w.toolEnd,1,w.source);}
@@ -63,10 +63,9 @@ export function compileWorkbookModel(input,selection,conditions){
   if(!c)reject('CP_CREW_SOURCE','路线班组缺失',{routeId:route['路线工序编号']});
   for(const r of physical.filter(r=>r['资源类别']==='设备'&&r['资源组编号']===route['设备组编号']&&Number(r['可用数量'])>0&&(!seed||r['资源编号']===seed.machine)))for(const ts of tools){
    if(ts.length!==toolCount||ts.some(id=>!pool.includes(id)))continue;
-   const limit=Math.min(Number(r['单次批量上限千克']),Number(standard['参数值']),weightSharedResource(r)?Number(r['同时占位上限千克']):Infinity,...ts.map(id=>Number(resourceById.get(id)['单次批量上限千克'])*toolCount));
    // Capacity bounds are rationals. A floor is a bound on integer model units,
    // not truncation of a business input or a manufactured quantity.
-   const lr=ratio(limit),cap=safe(BigInt(lr.n)*BigInt(scales[group.materialId].scale)/BigInt(lr.d),'batch bound');if(cap<=0)continue;
+   const cap=exactBatchBound([r['单次批量上限千克'],standard['参数值'],...(weightSharedResource(r)?[r['同时占位上限千克']]:[])],ts.map(id=>resourceById.get(id)['单次批量上限千克']),toolCount,scales[group.materialId].scale);if(cap<=0)continue;
    const days=[];for(let day=selection.startDay;day<selection.endDay;day++){const cal=rows(d,'工厂日历').find(x=>Number(x['日序'])===day);if(!cal)continue;const shifts=shiftWindows(d,c,day),n=Number(cal['生产班次数']),den=Number(cal['日产能分母']);if(!Number.isFinite(n)||!(den>0))reject('CP_CALENDAR_SOURCE','日历容量缺少来源',{day});const ar=ratio(n,den),br=ratio(shifts.length,c['标准日班次数']),cr=BigInt(ar.n)*BigInt(br.d)<=BigInt(br.n)*BigInt(ar.d)?ar:br,base=ratio(r['标准日产能千克']);days.push([day,safe(BigInt(base.n)*BigInt(cr.n)*BigInt(wscale)/(BigInt(base.d)*BigInt(cr.d)),'daily capacity')]);}
    const windows=[];for(let day=selection.startDay;day<selection.endDay;day++)windows.push(...shiftWindows(d,c,day).map(x=>[x.start,x.end]));
    out.push({id:r['资源编号']+'|'+ts.join(','),resourceId:r['资源编号'],crewId:c['班组编号'],people:int(route['需求人数'],'people'),tools:ts,capacity:Math.min(maxQuantity,cap),shared:weightSharedResource(r),weightMultiplier:wscale/scales[group.materialId].scale,days,shifts:windows,deviceCalendar:r['生产日历方式']==='工厂班次'?merged(windows):[[start,end]],crossShift:route['允许跨班连续']==='是',toolTail:int(route['工装后延释放分钟'],'toolTail')});
