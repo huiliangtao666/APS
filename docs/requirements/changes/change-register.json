@@ -3954,6 +3954,46 @@
         "不写主程序实账、当前P或原Excel，不启B/真实接口/主求解/定时",
         "不新增运行预算，不借147预算，不合main、不部署发布或操作旧实例"
       ]
+    },
+    {
+      "id": "CR-SOLVER-CHOICE-20261103",
+      "title": "基础求解器默认、CP-SAT可选",
+      "baseline_id": "APS-BL-001",
+      "approval_status": "已批准整包实施；本阶段仅无应用负载源码及只读依赖核实",
+      "approved_on": "2026-11-04",
+      "effective": false,
+      "effective_scope": "产品尚未生效；独立kernel源码不是工作簿功能交付",
+      "implementation_status": "IN_PROGRESS_ISOLATED_KERNEL_WORKBOOK_COMPILER_AND_ENTRY_PENDING",
+      "primary_issue": "https://github.com/huiliangtao666/APS/issues/141",
+      "implementation_contract": "https://github.com/huiliangtao666/APS/issues/141#issuecomment-6621274864",
+      "original_delivery_id": "dlv_592a29cf-12e3-40f5-b8d3-dfbb0db6ba0d",
+      "source_owner": "APS-Dev",
+      "validation_owner": "APS-Dev",
+      "integration_owner": "APS-Dev",
+      "active_branch": "dev/aps-current",
+      "source_base_sha": "46b7299a3f20d437d000e17b54e3469bf3eaba7e",
+      "original_zip": {
+        "bytes": 17250,
+        "sha256": "1d7ac2fe67274d136862af67bc5d93ac6a15559082457ce9846a0b39247cc5f4"
+      },
+      "implementation_document": "docs/requirements/changes/CR-SOLVER-CHOICE-20261103/implementation.md",
+      "acceptance_matrix": "docs/requirements/changes/CR-SOLVER-CHOICE-20261103/acceptance.csv",
+      "dependency_plan": "docs/requirements/changes/CR-SOLVER-CHOICE-20261103/dependency-plan.md",
+      "runtime_status": "NOT_EXECUTED_NO_WINDOW",
+      "functional_status": "BLOCKED_NOT_READY",
+      "main_integration_status": "NOT_AUTHORIZED_SOURCE_PHASE",
+      "deployment_status": "NOT_EXECUTED",
+      "product_sha": null,
+      "build_sha": null,
+      "design_git_sha": null,
+      "permission_assertions": "OUT_OF_SCOPE_BY_USER; existing controls preserved",
+      "remaining": [
+        "工作簿共享数量/批处理/完整CP编译与同义结果decoder",
+        "重量共享/有向清洗等现有生产约束完整接入",
+        "页面/就绪token/原槽取消/保存重开导出比较接缝",
+        "官方Python3.11/OR-Tools依赖及#147优先后的明确运行窗",
+        "Dev原owner整链功能自测、修复及满足门后的main串行整合"
+      ]
     }
   ]
 }

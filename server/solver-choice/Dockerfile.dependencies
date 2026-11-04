@@ -1,0 +1,15 @@
+# PROPOSAL ONLY. No build/install/pull permission is implied by this file.
+# The platform must provide a new disposable application build target. Do not
+# run apt in any retained app container or install on the VM host.
+FROM node@sha256:48e4b67d85f87bd551df43704e24d252f56cc5f8e9718841aace50f19948f0f9
+RUN test "$(uname -m)" = aarch64 \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends python3 python3-venv ca-certificates \
+ && rm -rf /var/lib/apt/lists/* \
+ && python3 -c 'import sys; assert sys.version_info[:2] == (3, 11)' \
+ && python3 -m venv /opt/aps-solver141/venv
+COPY server/solver-choice/requirements-linux-aarch64-py311.lock /tmp/solver141.lock
+RUN /opt/aps-solver141/venv/bin/python -m pip install --require-hashes --only-binary=:all: --no-cache-dir -r /tmp/solver141.lock \
+ && /opt/aps-solver141/venv/bin/python -m pip check \
+ && /opt/aps-solver141/venv/bin/python -I -c 'import ortools; from ortools.sat.python import cp_model; assert ortools.__version__ == "9.15.6755"; print(ortools.__version__)' \
+ && rm /tmp/solver141.lock

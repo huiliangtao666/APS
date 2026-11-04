@@ -1,0 +1,3 @@
+# Official PyPI package; install only in the approved application-side venv.
+# A complete resolved wheel/hash lock is required before deployment.
+ortools==9.15.6755
