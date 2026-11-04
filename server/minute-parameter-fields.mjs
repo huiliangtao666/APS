@@ -1,6 +1,8 @@
 // Explicit executable fields for approved V2; free text remains metadata.
 const spec=(name,cp,unit,extra={})=>({name,cp,unit,min:0,inclusive:true,type:'number',integer:true,...extra});
 export const minuteAtomicFields=[
+ spec('重排保护时段','CP137','分钟',{global:true}),
+ spec('客户服务优先级排序方向','CP047','枚举',{global:true,type:'enum',values:['数值小优先','数值大优先']}),
  ...['基准加工分钟','固定准备分钟','最短工艺分钟','最大等待分钟','开始参与分钟','结束参与分钟','工装后延释放分钟'].map(n=>spec(n,'CP172','分钟',{table:'工艺路线',key:'路线工序编号'})),
  spec('基准加工量千克','CP172','千克',{table:'工艺路线',key:'路线工序编号',integer:false,inclusive:false}),
  ...[['工时模型',['按量加工','固定连续历时']],['允许跨班连续',['是','否']],['人员参与方式',['全程参与','首尾参与']]].map(([name,values])=>spec(name,'CP172','枚举',{table:'工艺路线',key:'路线工序编号',type:'enum',values})),

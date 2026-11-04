@@ -1,0 +1,18 @@
+--- a/server/workbook-router.mjs
++++ b/server/workbook-router.mjs
+@@ -1 +1,2 @@
++import {registerUrgentOrders} from './urgent-order-routes.mjs';
+ import {registerMpsReportRoutes} from './mps-report-routes.mjs';
+@@ -92,2 +93,3 @@
+  registerWorkbookConversions(router,{read,write,dataset,audit,summary,handle,permission,persist,snapshot,meta,tableRefs});
++ registerUrgentOrders(router,{read,write,dataset,audit,permission,workerFactory,workers,persist,snapshot,meta,actorKey});
+  return registerOperations(router,{read,write,dataset,audit,summary,handle,permission,workerFactory,workers,persist,snapshot,meta,tableRefs,actorKey});
+--- a/src/InputData.tsx
++++ b/src/InputData.tsx
+@@ -1 +1,2 @@
++import {UrgentOrders} from './UrgentOrders';
+ import {MpsReport} from './MpsReport';
+@@ -59,2 +60,3 @@
+   </div>}
++  {detail&&(page==='workflow'||page==='equipment')&&<UrgentOrders api={api} datasetId={datasetId} run={run} version={detail.version} parameterRevision={detail.parameterRevision||0} canWrite={writable} canExport={canExport} onRun={r=>{setRun(r);setStage('A4');}} onRefresh={load}/>}
+   {detail&&(parametersOpened||page==='parameters'||page==='workflow'&&['A2','A3'].includes(stage))&&<div hidden={page!=='parameters'&&!(page==='workflow'&&['A2','A3'].includes(stage))} className="workbook-parameter-page"><ParameterPanel key={datasetId} memory={parameterMemory.current} onBusy={setParameterBusy} locator={parameterLocator} api={api} datasetId={datasetId} version={detail.version} parameterRevision={detail.parameterRevision||0} canWrite={writable} canExport={canExport} scope={parameterScope} day={parameterDay} onRefresh={async()=>{setReady(undefined);await load();}} onDay={day=>{setParameterDay(day);setReady(undefined);}} step={page==='parameters'?undefined:stage} onScope={setParameterScope} onSaved={parameterSaved}/></div>}
