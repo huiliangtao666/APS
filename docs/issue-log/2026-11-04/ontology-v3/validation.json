@@ -1,0 +1,198 @@
+{
+  "event_key": "APS-USER-20261104-ONTOLOGY-BUSINESS-RELATIONS-V3",
+  "verifiedAt": "2026-11-04T02:43:19.580088+00:00",
+  "scope": "Standalone ontology artifact; no application engine modification and no production UAT",
+  "file": "APS_生产排程_Ontology_业务实体与关系_v3.html",
+  "bytes": 1249695,
+  "sha256": "d4e0d21c1dd6dc153e2073979fda8d35e7100dd1848d15b5c8a885873874f701",
+  "codeSha": "a89f6242dad939e868eaf2af72f67967ff225cde",
+  "counts": {
+    "entities": 17,
+    "properties": 501,
+    "contextProperties": 73,
+    "actions": 57,
+    "relations": 52,
+    "sourceMappings": 565,
+    "inputTables": 22,
+    "inputFields": 337,
+    "sourceTables": 65,
+    "sourceFields": 764,
+    "boundSourceFields": 533,
+    "referenceEntities": 19,
+    "referenceItems": 369,
+    "referenceRelations": 250,
+    "referenceRules": 125,
+    "checks": [
+      "17类底座实体均有独立业务身份；没有配置表/运行/源文件/模拟草稿业务实体",
+      "48类旧实体逐类有归并/关系化/上下文迁移记录",
+      "关系端点、输入/输出、关系属性均有效，带条件/公式/程序依据",
+      "全部22张实际输入表337字段仍可追溯，绑定不代表业务数据已完整或验收通过",
+      "源字段绑定与业务关系分开计数，未用技术映射边充当计算/推理关系"
+    ]
+  },
+  "checks": [
+    {
+      "name": "Seventeen business entities; no configuration/run/draft/file or join-table entities",
+      "status": "PASS"
+    },
+    {
+      "name": "Six columns exist and contain all entity full names",
+      "status": "PASS"
+    },
+    {
+      "name": "All previous 48 entity types have explicit migration decisions",
+      "status": "PASS"
+    },
+    {
+      "name": "Inherited material/BOM aliases and WIP references are deduplicated",
+      "status": "PASS"
+    },
+    {
+      "name": "All 52 semantic relations, inputs, outputs and qualifiers resolve valid endpoints",
+      "status": "PASS"
+    },
+    {
+      "name": "Supplier-to-material, inventory-to-task and three WIP resource relationships connect actual business entity types",
+      "status": "PASS"
+    },
+    {
+      "name": "WIP continuation, equipment, people and tool qualifiers have separate owners",
+      "status": "PASS"
+    },
+    {
+      "name": "Semantic relations never include source-binding edges",
+      "status": "PASS"
+    },
+    {
+      "name": "All 39 workbook structures preserve exact declared field names, types and optionality",
+      "status": "PASS"
+    },
+    {
+      "name": "All 22 input tables / 337 fields retain entity, relation or context mappings",
+      "status": "PASS"
+    },
+    {
+      "name": "Every source mapping resolves both its property and actual source field",
+      "status": "PASS"
+    },
+    {
+      "name": "All code paths cited by APS relations exist",
+      "status": "PASS"
+    },
+    {
+      "name": "Reference review covers each of 19 objects / 369 original properties, data, references and actions",
+      "status": "PASS"
+    },
+    {
+      "name": "Reference review retains all 250 associations and 125 rules including original expressions and variants",
+      "status": "PASS"
+    },
+    {
+      "name": "Reference-only assumptions are explicitly not adopted as APS rules",
+      "status": "PASS"
+    },
+    {
+      "name": "Standalone HTML embeds the exact final model and has no external business network calls",
+      "status": "PASS"
+    },
+    {
+      "name": "Application JavaScript parses and saved-state </script> roundtrip remains safe and exact",
+      "status": "PASS"
+    },
+    {
+      "name": "Actual browser JSON export and saved HTML retain identical complete models",
+      "status": "PASS"
+    },
+    {
+      "name": "Browser save strips preview scripts and preserves six-column adaptive state",
+      "status": "PASS"
+    },
+    {
+      "name": "BOM and qualified-supply example: 72, 0 or 22kg gap",
+      "status": "PASS"
+    },
+    {
+      "name": "MOQ and dates example: 40kg, order8, available11, late1",
+      "status": "PASS"
+    },
+    {
+      "name": "Fixed duration versus quantity-based example: 1440 and 132 minutes",
+      "status": "PASS"
+    }
+  ],
+  "browser": [
+    "Six columns with full business names rendered at 1920px agent viewport; default adaptive fit",
+    "Supplier R03 inspector reaches material and shows qualifiers/code",
+    "WIP scenario shows distinct equipment/personnel/tool relationships",
+    "Metric load filter and migration/context panel opened",
+    "Source 当前数量 search and entity→source→entity roundtrip",
+    "Reference item and rule panels rendered; P03 non-adoption boundary inspected",
+    "HTML and JSON download completed",
+    "No error-level console entries since 2026-11-04T02:32:00Z; older preview502/403 excluded as unrelated history"
+  ],
+  "exports": [
+    {
+      "path": "temp/browser-downloads-GydZ9C/f65941e4-da0f-499a-ba1f-dec73b44417c-APS_生产排程_Ontology_业务实体与关系_v3.html",
+      "bytes": 1674929,
+      "sha256": "d5242a4b6616ffc36bf80dc9fccc378f9787fcd03b51f18b6dd397cf1204d546"
+    },
+    {
+      "path": "temp/browser-downloads-GydZ9C/4a878173-da3d-46b2-97c7-9616066f1a2e-APS_Ontology_v3_业务模型.json",
+      "bytes": 1799071,
+      "sha256": "9287921530fd9a03a7781348266bbbc40da06380839d88cc9ce3afb1c84aec20"
+    }
+  ],
+  "priorArtifacts": {
+    "APS_生产排程_Ontology_实体与实际字段_v2.html": "df4f31d199919a7b2ac6d58b1241f1d913daa9691e4704f8d52d096771507980",
+    "APS_生产排程_Ontology_三层示例_v1.html": "22f979f49df62faa1f9e9ca99efa0c40fce84eb3e3c2dbfb3624c94461b5385d"
+  },
+  "cleanup": {
+    "removed": [
+      {
+        "path": "temp/aps-ontology-v3/reference.json",
+        "beforeBytes": 3216429,
+        "afterBytes": 0,
+        "reason": "Reconstructible reference extract, consumed authoring patch, or export verified against final model"
+      },
+      {
+        "path": "temp/aps-ontology-v3/augment.py",
+        "beforeBytes": 1758,
+        "afterBytes": 0,
+        "reason": "Reconstructible reference extract, consumed authoring patch, or export verified against final model"
+      },
+      {
+        "path": "temp/browser-downloads-GydZ9C/f65941e4-da0f-499a-ba1f-dec73b44417c-APS_生产排程_Ontology_业务实体与关系_v3.html",
+        "beforeBytes": 1674929,
+        "afterBytes": 0,
+        "reason": "Reconstructible reference extract, consumed authoring patch, or export verified against final model"
+      },
+      {
+        "path": "temp/browser-downloads-GydZ9C/4a878173-da3d-46b2-97c7-9616066f1a2e-APS_Ontology_v3_业务模型.json",
+        "beforeBytes": 1799071,
+        "afterBytes": 0,
+        "reason": "Reconstructible reference extract, consumed authoring patch, or export verified against final model"
+      }
+    ],
+    "releasedLogicalBytes": 6692187,
+    "retained": [
+      {
+        "path": "APS_生产排程_Ontology_业务实体与关系_v3.html",
+        "reason": "final standalone deliverable"
+      },
+      {
+        "path": "upload/",
+        "reason": "authoritative original reference HTML and screenshots"
+      },
+      {
+        "path": "temp/aps-ontology-v3/model.py,model.json,page.html,style.css,app.js,translate.json,verify.py,check-save-state.cjs",
+        "reason": "reproducible authoring sources and unique verification evidence"
+      },
+      {
+        "path": "apps/aps-latest-current/temp/ontology-v3-preview/index.html",
+        "reason": "current browser preview, identical final HTML copy"
+      }
+    ],
+    "pending": [],
+    "notes": "Recorded du/df and verified no open handles before deleting own scratch. Logical bytes, not a claim of freed disk blocks or memory recovery. No other task files, runtime state, containers or platform daemon modified."
+  }
+}

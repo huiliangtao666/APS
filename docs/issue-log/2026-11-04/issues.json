@@ -43,5 +43,19 @@
       "ontology-v2/assets/reference-4.png",
       "ontology-v2/assets/reference-5.png"
     ]
+  },
+  {
+    "event_key": "APS-USER-20261104-ONTOLOGY-BUSINESS-RELATIONS-V3",
+    "number": 150,
+    "url": "https://github.com/huiliangtao666/APS/issues/150",
+    "state": "closed",
+    "state_reason": "completed",
+    "closed_at": "2026-11-04T02:44:49Z",
+    "deliverable": "APS_生产排程_Ontology_业务实体与关系_v3.html",
+    "bytes": 1249695,
+    "sha256": "d4e0d21c1dd6dc153e2073979fda8d35e7100dd1848d15b5c8a885873874f701",
+    "scope": "Standalone ontology artifact; no application engine modification and no production UAT",
+    "detail": "ontology-v3/README.md",
+    "validation": "ontology-v3/validation.json"
   }
 ]
