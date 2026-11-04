@@ -25,7 +25,7 @@ export function parseWorkbook(buffer,schema,{dayBusinessOnly=false,onlySheets=nu
   for(const c of xml(paths.get(name)).matchAll(/<c\b([^>]*)(?:\/>|>([\s\S]*?)<\/c>)/g)){if(++count>800000)throw Error('单表单元格超限');const ca=attrs(c[1]),body=c[2]||'',v=body.match(/<v(?:\s[^>]*)?>([\s\S]*?)<\/v>/)?.[1]||'',f=/<f(?:\s[^>]*)?(?:\/?>)/.test(body)?(body.match(/<f(?:\s[^>]*)?>([\s\S]*?)<\/f>/)?.[1]??''):undefined;if(ca.t==='s'&&!strings[Number(v)]&&strings[Number(v)]!=='')throw Error('共享字符串索引无效');map.set(ca.r,{value:ca.t==='s'?strings[Number(v)]:ca.t==='inlineStr'?text(body):unescape(v),formula:f===undefined?null:unescape(f)});}
   cells.set(name,map);return map;
  }
- const isV2=names.includes('版本与使用')&&[...getCells('版本与使用').values()].some(c=>c.value==='APS-MEAT-202611-V2.0');
+ const isV2=!onlySheets&&names.includes('版本与使用')&&[...getCells('版本与使用').values()].some(c=>c.value==='APS-MEAT-202611-V2.0');
  if(dayBusinessOnly&&isV2)throw Error('该文件是 APS-MEAT-202611-V2.0 分钟版；当前业务数据入口只接收按日工作簿。请改选“肉食品仿真数据_202611_合并图示版.xlsx”（v4），文件尚未导入。');
  if(!onlySheets&&(names.includes('参数清单')||names.includes('仿真参数实例')))return {...parseParameterSheets(names,getCells),...(isV2?{productionContract:'workbook-minute-v2',datasetVersion:'APS-MEAT-202611-V2.0'}:{})};
  // Resolve parameter identity by Chinese headers, independently of sheet/column order.

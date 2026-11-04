@@ -5,19 +5,19 @@ import {EventEmitter} from 'node:events';
 import {hash,rows} from '../server/workbook-model.mjs';
 import {calculateWorkbook,verifyWorkbookPlan} from '../server/workbook-plan.mjs';
 import {previewUrgent,demandInput,targetToken,executionLedger,DEMAND_FIELDS} from '../server/urgent-order-input.mjs';
-import {freezeUrgent,urgentDemandOrder} from '../server/urgent-order-engine.mjs';
+import {freezeUrgent,urgentDemandOrder,verifyUrgent} from '../server/urgent-order-engine.mjs';
 import {urgentImpact,queryUrgentImpact,urgentCsv} from '../server/urgent-order-impact.mjs';
 import {registerUrgentOrders} from '../server/urgent-order-routes.mjs';
 import {workbookTables} from '../server/parameter-workbook-export.mjs';
 import {urgentBaseline,planOf,urgentRow,observed,selection} from './urgent-order-fixture.mjs';
 const workbook=(values,extra=[])=>workbookTables([['每日需求',DEMAND_FIELDS,values.map(r=>DEMAND_FIELDS.map(f=>r[f]??''))],...extra]);
 function withBatch(d,p,row=urgentRow()){p.batches.push({id:'B1',sequence:1,fileHash:'synthetic-urgent',fileName:'synthetic.xlsx',effectiveMinute:observed,demands:[row]});p.revision++;return demandInput(d,p);}
-function harness(d,result,{hold=false}={}){
+function harness(d,result,{hold=false,terminate=()=>{}}={}){
  const scheduled=new Map();let active;
  let state={datasets:[],records:[],runs:[{id:'BASE',status:result.status,datasetId:d.id,version:d.version,inputHash:hash(d),inputRef:'SOURCE',resultHash:hash(result),result,selection,provenance:{}}]};
  const blobs=new Map([['SOURCE',structuredClone(d)]]),handlers=new Map(),workers=new Map();
  const router=Object.fromEntries(['get','post'].map(method=>[method,(path,...fns)=>handlers.set(method+' '+path,fns.at(-1))]));
- registerUrgentOrders(router,{scheduleTimeout:fn=>{const id=scheduled.size+1;scheduled.set(id,fn);return id;},cancelTimeout:id=>scheduled.delete(id),read:()=>structuredClone(state),write:s=>{state=structuredClone(s);},snapshot:ref=>structuredClone(blobs.get(ref)),persist:value=>{const ref='REF-'+blobs.size;blobs.set(ref,structuredClone(value));return ref;},permission:()=>()=>{},actorKey:()=> 'SYNTHETIC-OWNER',audit:()=>{},workers,workerFactory:input=>{const w=new EventEmitter();active=w;w.terminate=()=>{};if(!hold)setImmediate(()=>w.emit('message',{kind:'result',plan:calculateWorkbook(input.workbookData,input.selection)}));return w;}});
+ registerUrgentOrders(router,{scheduleTimeout:fn=>{const id=scheduled.size+1;scheduled.set(id,fn);return id;},cancelTimeout:id=>scheduled.delete(id),dataset:()=>structuredClone(d),read:()=>structuredClone(state),write:s=>{state=structuredClone(s);},snapshot:ref=>structuredClone(blobs.get(ref)),persist:value=>{const ref='REF-'+blobs.size;blobs.set(ref,structuredClone(value));return ref;},permission:()=>()=>{},actorKey:()=> 'SYNTHETIC-OWNER',audit:()=>{},workers,workerFactory:input=>{const w=new EventEmitter();active=w;w.terminate=terminate;if(!hold)setImmediate(()=>w.emit('message',{kind:'result',plan:calculateWorkbook(input.workbookData,input.selection)}));return w;}});
  const call=(path,body={},params={})=>{let value,status=200;const res={status:n=>{status=n;return res;},json:x=>{value=x;return res;}};handlers.get('post '+path)({body,params},res,e=>{throw e;});return {status,value};};
  return {call,read:()=>structuredClone(state),workers,scheduled,send:message=>active.emit('message',message),timeout:()=>[...scheduled.values()][0]()};
 }
@@ -87,4 +87,73 @@ test('UO-15 cancellation, timeout and failure release only this run and retain b
  assert.equal(h.call('/urgent/runs/:id/cancel',{}, {id:first.id}).value.status,'cancelled');assert.equal(h.workers.size,0);assert.equal(h.scheduled.size,0);
  const second=run();h.timeout();assert.equal(h.read().runs.find(r=>r.id===second.id).status,'timed_out');assert.equal(h.workers.size,0);assert.equal(h.scheduled.size,0);
  const third=run();h.send({kind:'failure',message:'controlled failure'});assert.equal(h.read().runs.find(r=>r.id===third.id).status,'failed');assert.equal(h.workers.size,0);assert.equal(h.scheduled.size,0);assert.equal(h.read().urgentPlans[0].batches.length,1);
+});
+
+test('UO-02/04 empty input, overflow, unsupported day and ignored version sheet',()=>{
+ const {d,result}=urgentBaseline(),p=planOf(d,result),options={fileName:'boundary.xlsx',effectiveTime:'2026-11-01T09:17:00+08:00'};
+ const empty=previewUrgent(workbook([]),d,p,options);
+ assert.equal(empty.valid,false);assert.deepEqual(empty.demands,[]);
+ for(const row of [{...urgentRow(),'需求箱数':'1e308'},{...urgentRow(),'需求日':'0'}]){
+  const preview=previewUrgent(workbook([row]),d,p,options);
+  assert.equal(preview.valid,false);assert.ok(preview.issues.some(i=>i.row===3));
+ }
+ // An ignored worksheet has bad CRC deliberately. Demand-only parsing must
+ // never decode it, including the workbook version-detection shortcut.
+ const bytes=workbook([urgentRow()],[['版本与使用',['说明'],[['ignored-version-marker']]]]);
+ const at=bytes.indexOf('ignored-version-marker');assert.ok(at>=0);bytes[at]=88;
+ assert.equal(previewUrgent(bytes,d,p,options).valid,true);
+});
+
+test('UO-11/17 checker rejects filtered, nonfinite, negative and false-full coverage',()=>{
+ const {d,result:base}=urgentBaseline(),p=planOf(d,base),input=freezeUrgent(withBatch(d,p),p,base),plan=calculateWorkbook(input,selection);
+ assert.throws(()=>calculateWorkbook(input,{...selection,demandIds:['U1']}),/全部原单/);
+ const filtered=structuredClone(plan);filtered.conditions.demandIds=['U1'];
+ assert.ok(verifyUrgent(input,filtered).some(i=>i.includes('筛除')));
+ for(const value of [NaN,Infinity,-1]){
+  const corrupt=structuredClone(plan);corrupt.demandResults[0].scheduledQuantity=value;
+  assert.ok(verifyUrgent(input,corrupt).some(i=>i.includes('净量')));
+ }
+ const corrupt=structuredClone(plan),r=corrupt.demandResults[0];
+ r.scheduledQuantity=0;r.unplannedQuantity=r.quantity;r.status='scheduled';
+ assert.ok(verifyUrgent(input,corrupt).some(i=>i.includes('状态')));
+});
+
+test('UO-17/18 prior urgent tasks stay separate from original-order statistics',()=>{
+ const {d,result:base}=urgentBaseline(),p=planOf(d,base),input=freezeUrgent(withBatch(d,p),p,base),first=calculateWorkbook(input,selection),second=structuredClone(first);
+ const task=second.tasks.find(t=>t.orderId==='U1');task.start+=1;task.end+=1;
+ // This is only a comparison-unit fixture; it does not certify a schedule.
+ const impact=urgentImpact(input,first,second,'COMPARE-SECOND');
+ assert.equal(impact.tabs.urgent.length,1);assert.equal(impact.tabs.orders.length,3);
+ assert.equal(impact.stats.affectedOriginalDemands,0);
+ assert.equal(impact.stats.changedOriginalOperations,0);
+ assert.ok(impact.tabs.changes.some(c=>c.isUrgent&&c.changed));
+});
+
+test('UO-15 cancellation holds the busy gate until exact worker exit',async()=>{
+ let released;const pending=new Promise(resolve=>{released=resolve;});
+ const {d,result}=urgentBaseline(),h=harness(d,result,{hold:true,terminate:()=>pending}),p=submitted(h,result);
+ const first=h.call('/urgent/plans/:id/run',{targetToken:p.targetToken},{id:p.id}).value;
+ assert.equal(h.call('/urgent/runs/:id/cancel',{}, {id:first.id}).value.pendingWorker,true);
+ assert.equal(h.workers.size,1);assert.equal(h.scheduled.size,0);
+ assert.equal(h.call('/urgent/plans/:id/run',{targetToken:p.targetToken},{id:p.id}).status,429);
+ released();await pending;await Promise.resolve();assert.equal(h.workers.size,0);
+ assert.equal(h.read().urgentPlans[0].batches.length,1);
+});
+
+test('UO-15 unknown completion status and null worker message cannot complete a run',()=>{
+ const {d,result}=urgentBaseline(),h=harness(d,result,{hold:true}),p=submitted(h,result);
+ for(const message of [{kind:'result',plan:{status:'unknown'}},null]){
+  const run=h.call('/urgent/plans/:id/run',{targetToken:p.targetToken},{id:p.id}).value;
+  h.send(message);assert.equal(h.read().runs.find(r=>r.id===run.id).status,'failed');
+  assert.equal(h.workers.size,0);assert.equal(h.scheduled.size,0);
+ }
+});
+
+test('UO-19/22 explicit same-version configuration invalidates old preview tokens',()=>{
+ const {d,result}=urgentBaseline(),h=harness(d,result,{hold:true}),p=submitted(h,result),inputHash=h.read().runs.find(r=>r.id==='BASE').inputHash;
+ const changed=h.call('/urgent/plans/:id/configuration',{targetToken:p.targetToken,version:d.version,parameterRevision:0},{id:p.id});
+ assert.equal(changed.status,200);assert.notEqual(changed.value.targetToken,p.targetToken);
+ assert.equal(changed.value.revision,p.revision+1);
+ assert.equal(h.call('/urgent/plans/:id/run',{targetToken:p.targetToken},{id:p.id}).status,409);
+ assert.equal(h.read().runs.find(r=>r.id==='BASE').inputHash,inputHash);
 });

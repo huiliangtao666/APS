@@ -28,18 +28,19 @@ export function previewUrgent(buffer,base,p,{fileName,effectiveTime}){
   if(!m||m['物料来源']!=='制造'||['停用','无效','否'].includes(m['状态']??m['是否启用']))add(r,'成品编号','成品未知、不可用或无制造模型');
   if(!c||['停用','无效','否'].includes(c['状态']??c['是否启用']))add(r,'客户编号','客户未知或不可用');
   if(!Number.isFinite(Number(r['需求箱数']))||!(Number(r['需求箱数'])>0))add(r,'需求箱数','数量须为有限正数；不以负数改量');
-  if(!/^\d+$/.test(String(r['需求日']??''))||!Number.isInteger(Number(r['需求日']))||String(r['需求日']??'').trim()===''||Number(r['需求日'])<0||Number(r['需求日'])>=44)add(r,'需求日','日序超出当前数据模型支持的[0,44)范围');
+  if(!/^\d+$/.test(String(r['需求日']??''))||!Number.isInteger(Number(r['需求日']))||String(r['需求日']??'').trim()===''||Number(r['需求日'])<1||Number(r['需求日'])>=44)add(r,'需求日','日序超出当前数据模型支持的[1,44)范围');
   if(m&&(!(Number(m['每箱净重千克'])>0)||!Number.isFinite(Number(m['每箱净重千克']))))add(r,'每箱净重千克','权威物料资料缺少有效箱重');
   if(c&&['运输天数','允许提前天数','允许延后天数','到货剩余保质比例','服务优先级'].some(f=>String(c[f]??'').trim()===''||!Number.isFinite(Number(c[f]))))add(r,'客户编号','客户运输、交付或余保参数缺项');
   r._source={fileName,fileHash,sheet:'每日需求',row:r._row};
  }
  const candidate=structuredClone(d);candidate.tables['每日需求'].push(...demands);refreshDerived(candidate,p.selection.startDay);
- const resolved=rows(candidate,'每日需求').slice(-demands.length),outside=[];
+ const resolved=rows(candidate,'每日需求').slice(rows(d,'每日需求').length),outside=[];
  for(const [i,r]of resolved.entries()){
   const c=customers.get(r['客户编号']),m=materials.get(r['成品编号']);if(c&&m){for(const f of ['客户名称','区域编号','区域名称','客户等级'])r[f]=c[f];r['成品名称']=m['物料名称']||m['成品名称'];}
   for(const f of DEMAND_FIELDS.filter(f=>!required.includes(f)&&f!=='范围'))if(String(demands[i][f]??'')!==''&&String(demands[i][f])!==String(r[f]??''))warnings.push({sheet:'每日需求',row:r._row,field:f,cached:demands[i][f],value:r[f],message:'采用同版本主数据及有效参数，缓存仅供对照'});
   if(Number(r['需求日'])<p.selection.startDay||Number(r['需求日'])>=p.selection.endDay)outside.push({id:r['需求编号'],row:r._row,day:Number(r['需求日'])});
   if(Number(r['最早到货日'])>Number(r['最晚到货日']))add(r,'需求日','客户交付窗口矛盾');
+  if(!Number.isFinite(Number(r['需求千克']))||!(Number(r['需求千克'])>0))add(r,'需求箱数','箱数与权威箱重换算结果须为有限正数');
  }
  if(!issues.length){const ready=supplyReadiness(candidate,{...p.selection,demandIds:resolved.map(r=>r['需求编号'])});issues.push(...ready.issues);}
  return {fileHash,fileName,effectiveMinute,demands:resolved,issues,warnings,outside,valid:issues.length===0,targetToken:targetToken(p),contract:URGENT_CONTRACT};

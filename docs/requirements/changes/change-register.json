@@ -3951,6 +3951,96 @@
         "以静态或原型结果代签真实功能、Test、QA或UAT"
       ],
       "initial_source_base_sha": "5a23d75f1e7c80114fc14e7c5a674c376e376e00"
+    },
+    {
+      "id": "CR-DAILY-DATA-SIMULATOR-20261104",
+      "title": "每日数据模拟器独立场景与受控联动",
+      "baseline_id": "APS-BL-001",
+      "approval_status": "用户恢复backlog后已批准独立阶段实施；联动仍须A实证及原卡明确准入",
+      "approved_on": "2026-11-04",
+      "effective": false,
+      "effective_scope": "仅A源码和公共接缝；未经运行验证，A未Done，B保持禁用",
+      "implementation_status": "SOURCE_SEAM_WIRED_STATIC_ONLY_REAL_SOURCE_CONVERSION_PENDING",
+      "primary_issue": "https://github.com/huiliangtao666/APS/issues/146",
+      "implementation_contract": "https://github.com/huiliangtao666/APS/issues/146#issuecomment-6620470830",
+      "conversion_contract": "https://github.com/huiliangtao666/APS/issues/146#issuecomment-6620567653",
+      "original_delivery_id": "dlv_222ab280-ee1e-41c1-9b62-45ff7eb52485",
+      "source_event_key": "dlv_222ab280-ee1e-41c1-9b62-45ff7eb52485:r2",
+      "seam_delivery_id": "dlv_a33cd878-dba8-4d32-a134-f6486767aab2",
+      "seam_event_key": "dlv_a33cd878-dba8-4d32-a134-f6486767aab2:r1",
+      "source_owner": "APS-Test",
+      "common_seam_owner": "APS-Dev",
+      "integration_owner": "APS-Dev",
+      "source_base_sha": "223f2f0f855ba76f4488bda3644067663ee971b7",
+      "simulator_source_sha": "fb19ada5bbdde471020f81ef4c27040a45fdf32a",
+      "simulator_source_parent_sha": "f5f7cfe038425c1fe4411c47d1cda52d2a41dd24",
+      "implementation_document": "docs/simulator/README.md",
+      "source_copy_contract": "aps-simulator-frozen-source@1",
+      "source_copy_endpoint": "GET /api/workbooks/simulator/source-copy/:runId?inputHash=<frozen-input-hash>",
+      "source_copy_status": "NOT_CONVERTED; frozen input/plan copy only; missing fields explicit; does not adopt current P or invent BOM defaults",
+      "milestones": {
+        "A": "NOT_DONE; module/seam source only; SIM01—28 NOT_EXECUTED",
+        "B": "DISABLED; no target admission, solver or linkage enabled"
+      },
+      "runtime_status": "NOT_EXECUTED",
+      "main_integration_status": "NOT_AUTHORIZED_THIS_DELIVERY",
+      "deployment_status": "NOT_EXECUTED",
+      "product_sha": null,
+      "build_sha": null,
+      "design_git_sha": null,
+      "permission_assertions": "OUT_OF_SCOPE_BY_USER; preserve existing actor/permission/trusted-write/reason controls",
+      "scope": [
+        "独立场景、模拟时钟、日结、持久检查点、恢复新分支和导出模块的公共注册",
+        "真实schema/CSV defs、既有actor/permission/writeGuard及专属actor隔离存储",
+        "显式冻结输入/第二P/BOM来源副本合同；转换由APS-Test在原独立目录接续"
+      ],
+      "exclusions": [
+        "不以源码或18项测试源码代签实际运行、页面、自测、QA/UAT或A通过",
+        "不写主程序实账、当前P或原Excel，不启B/真实接口/主求解/定时",
+        "不新增运行预算，不借147预算，不合main、不部署发布或操作旧实例"
+      ]
+    },
+    {
+      "id": "CR-SOLVER-CHOICE-20261103",
+      "title": "基础求解器默认、CP-SAT可选",
+      "baseline_id": "APS-BL-001",
+      "approval_status": "已批准整包实施；本阶段仅无应用负载源码及只读依赖核实",
+      "approved_on": "2026-11-04",
+      "effective": false,
+      "effective_scope": "源码候选未运行/未合main/产品未生效；不迁签旧PASS",
+      "implementation_status": "SOURCE_CANDIDATE_STAGED_PENDING_OWNER_VALIDATION",
+      "primary_issue": "https://github.com/huiliangtao666/APS/issues/141",
+      "implementation_contract": "https://github.com/huiliangtao666/APS/issues/141#issuecomment-6622191393",
+      "original_delivery_id": "dlv_592a29cf-12e3-40f5-b8d3-dfbb0db6ba0d",
+      "source_owner": "APS-Dev",
+      "validation_owner": "APS-Dev",
+      "integration_owner": "APS-Dev",
+      "active_branch": "dev/aps-current",
+      "source_base_sha": "46b7299a3f20d437d000e17b54e3469bf3eaba7e",
+      "original_zip": {
+        "bytes": 17250,
+        "sha256": "1d7ac2fe67274d136862af67bc5d93ac6a15559082457ce9846a0b39247cc5f4"
+      },
+      "implementation_document": "docs/requirements/changes/CR-SOLVER-CHOICE-20261103/implementation.md",
+      "acceptance_matrix": "docs/requirements/changes/CR-SOLVER-CHOICE-20261103/acceptance.csv",
+      "dependency_plan": "docs/requirements/changes/CR-SOLVER-CHOICE-20261103/dependency-plan.md",
+      "runtime_status": "NOT_EXECUTED_NO_WINDOW",
+      "functional_status": "BLOCKED_NOT_READY",
+      "main_integration_status": "NOT_AUTHORIZED_SOURCE_PHASE",
+      "deployment_status": "NOT_EXECUTED",
+      "product_sha": null,
+      "build_sha": null,
+      "design_git_sha": null,
+      "permission_assertions": "OUT_OF_SCOPE_BY_USER; existing controls preserved",
+      "remaining": [
+        "官方应用侧Python3.11/OR-Tools依赖构建目标、已核环境回执及有效预算供给",
+        "Test #140 final释放后的原owner fresh运行窗，当前新增负载许可0",
+        "Dev原owner类型/build、真实native/肉食品主链与生命周期/保存重开导出比较自测及范围内自修",
+        "满足功能门后fresh核源及main串行精确整合，当前不合main"
+      ],
+      "source_done": false,
+      "functional_done": false,
+      "continuation_delivery_id": "dlv_6d61fe25-0f89-44b9-ac38-d47de288fd9e"
     }
   ]
 }

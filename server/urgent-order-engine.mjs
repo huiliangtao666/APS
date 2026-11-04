@@ -6,7 +6,7 @@ import {urgentError,URGENT_CONTRACT,requireMinute} from './urgent-order-input.mj
 export function freezeUrgent(d,p,base){
  requireMinute(d);if(p.facts.sourceResultHash!==hash(base))throw urgentError('URGENT_FACT_SOURCE_CHANGED','原计划结果已变化，请重新核对执行事实');
  const priorityDirection=minuteParameter(d,'GLOBAL','客户服务优先级排序方向',d.parameterContext?.effectiveDay??p.selection.startDay);if(!['数值小优先','数值大优先'].includes(priorityDirection))throw urgentError('URGENT_PRIORITY_DIRECTION','缺少明确的客户服务优先级排序方向，不猜测数值大/小优先');
- const protectionMinutes=boundary(d,'重排保护时段',p.selection.startDay);if(protectionMinutes<0)throw urgentError('URGENT_PROTECTION','重排保护时段不得负数');
+ const protectionMinutes=boundary(d,'重排保护时段',p.selection.startDay);if(!Number.isSafeInteger(protectionMinutes)||protectionMinutes<0)throw urgentError('URGENT_PROTECTION','重排保护时段须为明确的非负整数分钟');
  const factById=new Map(p.facts.tasks.map(f=>[f.id,f])),statuses=new Map(p.facts.tasks.map(f=>[f.id,f.status])),seedTasks=base.tasks.filter(t=>statuses.get(t.id)!=='not_started'||t.start<p.facts.observationMinute+protectionMinutes&&t.end>p.facts.observationMinute).map(t=>{const f=factById.get(t.id);return {...structuredClone(t),start:f?.startMinute??t.start,startMinute:f?.startMinute??t.start,end:f?.endMinute??t.end,endMinute:f?.endMinute??t.end,quantity:f?.quantity??t.quantity,cleaning:structuredClone(f?.cleaning??t.cleaning),laborIntervals:structuredClone(f?.laborIntervals??t.laborIntervals),toolEndMinute:f?.toolEndMinute??t.toolEndMinute,executionStatus:statuses.get(t.id)==='not_started'?'locked':statuses.get(t.id)};});
  const protectedIds=new Set(seedTasks.map(t=>t.id));
  for(const t of seedTasks)if(t.predecessor&&!protectedIds.has(t.predecessor))throw urgentError('URGENT_PREDECESSOR_FACT','受保护任务的前序须有明确保留事实 '+t.id);
@@ -50,11 +50,12 @@ export function urgentDemandOrder(d,demands){
 export function verifyUrgent(d,p){
  const u=d.urgentOrder;if(!u)return [];
  const issues=[],byId=new Map(p.tasks.map(t=>[t.id,t])),seeds=new Set(u.seedTasks.map(t=>t.id));
+ if(p.conditions?.demandIds!==undefined)issues.push('插单运行不能筛除原单或已生效插单');
  for(const t of u.seedTasks){const actual=byId.get(t.id);if(!actual||['id','orderId','productId','productionId','routeStepId','machine','start','end','quantity','crew','people','toolEndMinute','tools','laborIntervals','cleaning','predecessor'].some(k=>JSON.stringify(t[k])!==JSON.stringify(actual[k])))issues.push('执行/保护事实变化 '+t.id);}
  for(const t of p.tasks)if(!seeds.has(t.id)&&t.start<u.effectiveMinute)issues.push('新增任务早于生效/观察时刻 '+t.id);
  for(const a of u.seedAllocations)if(!(p.allocations||[]).some(x=>hash(x)===hash(a)))issues.push('已耗/锁定分配被释放 '+a.supplyId);
  const results=new Map(p.demandResults.map(r=>[r.id,r]));
- for(const r of rows(d,'每日需求')){const x=results.get(r['需求编号']);if(!x||x.completedQuantity!==(u.completed[x.id]||0)||Math.abs(x.completedQuantity+x.scheduledQuantity+x.unplannedQuantity-x.quantity)>1e-6)issues.push('插单/普通需求净量不守恒 '+r['需求编号']);}
+ for(const r of rows(d,'每日需求')){const x=results.get(r['需求编号']);if(!x||![x.quantity,x.completedQuantity,x.scheduledQuantity,x.unplannedQuantity].every(n=>Number.isFinite(n)&&n>=0)||x.completedQuantity!==(u.completed[x.id]||0)||Math.abs(x.completedQuantity+x.scheduledQuantity+x.unplannedQuantity-x.quantity)>1e-6||(x.status==='scheduled')!==(x.unplannedQuantity<1e-9))issues.push('插单/普通需求净量或状态不守恒 '+r['需求编号']);}
  if(p.urgentOrder?.factsHash!==u.factsHash||JSON.stringify(p.urgentOrder?.batchIds)!==JSON.stringify(u.batchIds))issues.push('冻结事实或批次不一致');
  const allProducts=new Map(rows(d,'工艺路线').map(r=>[r['成品编号'],rows(d,'工艺路线').filter(x=>x['成品编号']===r['成品编号']).sort((a,b)=>Number(a['工序顺序'])-Number(b['工序顺序']))]));
  const productions=new Map();for(const t of p.tasks)(productions.get(t.productionId)||productions.set(t.productionId,[]).get(t.productionId)).push(t);

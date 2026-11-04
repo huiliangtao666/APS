@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/dev.mjs",
-    "build": "tsc --noEmit && vite build && npx esbuild server/index.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs && npx esbuild server/calculation-worker.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/calculation-worker.mjs && npx esbuild server/workbook-import-worker.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/workbook-import-worker.mjs && cp server/workbook-schema.json server/workbook-simulation.json dist/",
+    "build": "tsc --noEmit && vite build && npx esbuild server/index.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs && npx esbuild server/calculation-worker.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/calculation-worker.mjs && npx esbuild server/workbook-import-worker.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/workbook-import-worker.mjs && cp server/workbook-schema.json server/workbook-simulation.json dist/ && mkdir -p dist/solver-choice && cp server/solver-choice/*.py dist/solver-choice/",
     "test": "node --test src/lib/*.test.mjs && node --experimental-strip-types --test server/auth/auth.test.mjs server/business.test.mjs",
     "test:verification": "node --test src/lib/independent-verification.test.mjs",
     "start": "NODE_ENV=production node --max-old-space-size=512 dist/server.mjs",
@@ -14,7 +14,7 @@
     "test:shared": "node --experimental-strip-types --test server/shared-access.test.mjs",
     "test:query-ui": "esbuild src/query-ui.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=cjs --outfile=.qa-query-ui.cjs && node --test .qa-query-ui.cjs",
     "build:frontend": "tsc --noEmit && vite build",
-    "build:server": "esbuild server/index.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs",
+    "build:server": "esbuild server/index.mjs --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs && mkdir -p dist/solver-choice && cp server/solver-choice/*.py dist/solver-choice/",
     "test:hosting": "esbuild src/app-path.ts --bundle --platform=node --format=esm --packages=external --outfile=.qa-app-path.mjs && node --max-old-space-size=192 qa/hosting-paths.mjs",
     "test:workbench-ui": "esbuild src/workbench-merge.test.tsx --jsx=automatic --bundle --platform=node --packages=external --format=esm --outfile=.qa-workbench-merge.mjs && node --test .qa-workbench-merge.mjs"
   },

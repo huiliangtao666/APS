@@ -10,6 +10,7 @@ const exact=v=>Q.exact(Q.q(String(v))),number=e=>Q.num(Q.fromExact(e));
 const overlap=(a,b)=>a.start<b.end&&b.start<a.end;
 export function workbookNeed(b,target) {let v=Q.div(Q.mul(Q.q(String(b['子项基准用量'])),Q.q(String(target))),Q.q(String(b['父项基准产出千克'])));if(b['数量单位']==='个')v=Q.ceil(v);return Q.exact(v);}
 export function calculateWorkbook(data,selection) {
+ if(data.urgentOrder&&selection.demandIds!==undefined)throw Error('插单运行须纳入全部原单与已生效插单，不接受需求筛选');
  const resolved=refreshDerived(structuredClone(data),selection.startDay??1),sourceIdentity={mappingHash:hash(data.mapping),parameterHash:hash(rows(data,'配置参数'))},d=selectionDataset(resolved,selection),ready=supplyReadiness(d);if(!ready.ready)throw Error('数据尚未就绪：'+ready.issues.map(i=>i.code+':'+i.message).join('；'));
  const current=selection.currentDay??1,start=selection.startDay??current,end=selection.endDay??start+14,isMinute=minuteMode(d),currentMinute=selection.currentMinute??current*1440;
  if(![current,start,end].every(Number.isInteger)||current<0||start<current||end<=start||end>44)throw Error('日窗口无效');
