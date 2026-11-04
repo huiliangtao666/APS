@@ -1,5 +1,6 @@
 import {useEffect,useState} from 'react';
 import {SimulatorTable,type SimRow,type SimColumn} from './SimulatorTable';
+import {SimulatorImport} from './SimulatorImport';
 import './simulator.css';
 
 type Api=(path:string,body?:object)=>Promise<any>;
@@ -47,6 +48,7 @@ export function SimulatorView({api,base='/workbooks/simulator',canWrite,canExpor
       ...(key==='purchases'?{unreceived:Number(r.ordered)-Number(r.received)-Number(r.cancelled)}:{}),
       ...(key==='demands'?{remaining:Number(r.required)+Number(r.change)-Number(r.cancelled)-Number(r.fulfillment==='SHIP'?r.shipped:r.signed),deliveryTransit:Number(r.shipped)-Number(r.signed)}:{})}));
     return <div key={key}><h3>{heading}</h3><SimulatorTable key={(current?.scenario??'')+':'+(current?.branch??'')+':'+key} table={key} columns={columns} rows={projected} onOpen={setDetail}
+      bom={(current?.current?.bom??[]).map((e:any)=>({parent:e.parent,child:e.child}))}
       context={{scenario:current?.scenario,branch:current?.branch,revision:current?.revision,source:current?.source,observation:current?.current?.cutoff,materials}} canExport={canExport}/></div>;}
   const snap=current?.current;
   return <main className="simulator"><header><div><h1>每日数据模拟器</h1><span className="sim-badge">独立调试 · 联动未启用</span></div>
@@ -67,7 +69,8 @@ export function SimulatorView({api,base='/workbooks/simulator',canWrite,canExpor
       <button disabled={!canWrite||!current} onClick={()=>{if(current)void api(prefix(current)+'/pause',{}).then(()=>setNotice('已请求在完整日结边界暂停')).catch(e=>setError(e.message));}}>暂停后续推进</button>
       <button disabled={!canWrite||busy||!current||!!request} onClick={()=>run(async()=>{if(current)setCurrent(await api(prefix(current)+'/resume',{expectedRevision:current.revision}));})}>解除暂停</button>
     </div>
-    {tab==='场景与规则'&&<section><p>选择已冻结的主数据、业务期初、第二份P及显式作业副本，导入独立场景JSON。脚本修改通过复制到新分支保存。</p>
+    {tab==='场景与规则'&&<section><p>选择已冻结的主数据、业务期初、第二份P及显式作业副本。脚本修改通过复制到新分支保存。</p>
+      <SimulatorImport api={api} base={base} canWrite={canWrite} canExport={canExport} onSpec={spec=>{setDraft(JSON.stringify(spec,null,2));setNotice('已载入真实来源转换草稿；尚未创建或推进');}}/>
       <div className="sim-toolbar"><label>场景编号<input value={scenario} onChange={e=>setScenario(e.target.value)}/></label><label>分支编号<input value={branch} onChange={e=>setBranch(e.target.value)}/></label>
         <label>读取场景文件<input type="file" accept="application/json,.json" onChange={e=>{const file=e.target.files?.[0];if(file){if(file.size>2*1024*1024){setError('场景文件上限2MiB');return;}void file.text().then(setDraft);}}}/></label>
         <button disabled={busy||!current} onClick={()=>run(async()=>{if(current){const out=await api(prefix(current)+'/script');setDraft(JSON.stringify(out.spec,null,2));setNotice('作者脚本含未来事件，与可见观测包分开');}})}>读取作者脚本</button>
