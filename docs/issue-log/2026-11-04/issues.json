@@ -57,5 +57,19 @@
     "scope": "Standalone ontology artifact; no application engine modification and no production UAT",
     "detail": "ontology-v3/README.md",
     "validation": "ontology-v3/validation.json"
+  },
+  {
+    "event_key": "APS-USER-20261104-ONTOLOGY-OWL-RELATIONS-V4",
+    "number": 151,
+    "url": "https://github.com/huiliangtao666/APS/issues/151",
+    "state": "closed",
+    "state_reason": "completed",
+    "closed_at": "2026-11-04T03:14:24Z",
+    "deliverable": "APS_生产排程_Ontology_关联定义与字段依赖_v4.html",
+    "bytes": 4296254,
+    "sha256": "6b90721fc56394d143e908a56c50739aa90c6290b9065be9f7d84248f26bcfef",
+    "scope": "Standalone ontology HTML documentation and examples; no scheduling engine modification, deployment or production UAT",
+    "detail": "ontology-v4/README.md",
+    "validation": "ontology-v4/validation.json"
   }
 ]

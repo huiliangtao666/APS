@@ -1,0 +1,313 @@
+{
+  "event_key": "APS-USER-20261104-ONTOLOGY-OWL-RELATIONS-V4",
+  "verifiedAt": "2026-11-04T03:12:48.115153+00:00",
+  "scope": "Standalone ontology HTML documentation and examples; no scheduling engine modification, deployment or production UAT",
+  "file": "APS_生产排程_Ontology_关联定义与字段依赖_v4.html",
+  "bytes": 4296254,
+  "sha256": "6b90721fc56394d143e908a56c50739aa90c6290b9065be9f7d84248f26bcfef",
+  "codeSha": "2188cfc15270900c64e58039773e1a8f5280e946",
+  "referenceOWL": {
+    "file": "Co-pack_Ontology知识图谱_v0.20_纯本体定义版_20261027.owl",
+    "sha256": "fa1e8eaa623d782e578017a8669a64b36295fbf7645373a8ebce9aad472d653f",
+    "counts": {
+      "classes": 162,
+      "entities": 19,
+      "businessEntries": 369,
+      "rules": 125,
+      "dependencies": 793,
+      "readPaths": 42,
+      "sharedReads": 42,
+      "analysisSteps": 14,
+      "sourceTables": 28,
+      "sourceColumns": 354,
+      "concreteRecords": 0
+    },
+    "relationFamilies": {
+      "schema": 250,
+      "logic": 21,
+      "binding": 64,
+      "source": 458
+    }
+  },
+  "counts": {
+    "entities": 17,
+    "properties": 501,
+    "contextProperties": 73,
+    "actions": 57,
+    "relations": 52,
+    "sourceMappings": 565,
+    "inputTables": 22,
+    "inputFields": 337,
+    "sourceTables": 65,
+    "sourceFields": 764,
+    "boundSourceFields": 533,
+    "referenceEntities": 19,
+    "referenceItems": 369,
+    "referenceRelations": 250,
+    "referenceRules": 125,
+    "checks": [
+      "17类底座实体均有独立业务身份；没有配置表/运行/源文件/模拟草稿业务实体",
+      "48类旧实体逐类有归并/关系化/上下文迁移记录",
+      "关系端点、输入/输出、关系属性均有效，带条件/公式/程序依据",
+      "全部22张实际输入表337字段仍可追溯，绑定不代表业务数据已完整或验收通过",
+      "源字段绑定与业务关系分开计数，未用技术映射边充当计算/推理关系",
+      "v4拆分共享关系定义、应用变体、逐字段依赖和关联读取路径；源字段映射另计。",
+      "修正库存概念字段与分配字段复用ID；本版所有对象内字段/行动ID唯一。",
+      "累计提前期展示未按atDay筛BOM，与实际投料有效BOM逻辑不同，已明示边界。"
+    ],
+    "relationDefinitions": 48,
+    "applicationVariants": 60,
+    "fieldDependencies": 225,
+    "readPaths": 16,
+    "referenceOWLDependencies": 793
+  },
+  "checks": [
+    {
+      "assertion": "17 business entities retain six-column placement, full names and non-document context boundary",
+      "result": "PASS"
+    },
+    {
+      "assertion": "All property and action identifiers are unique within their business/context owner",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Stock conceptual facts no longer collide with allocation source IDs",
+      "result": "PASS"
+    },
+    {
+      "assertion": "48 shared relation definitions own exactly 52 application definitions",
+      "result": "PASS"
+    },
+    {
+      "assertion": "New and historical device, people, tools, and stock/transit allocation reuse shared definitions",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Every application has role semantics, specific joins, reverse read, valid dependencies and variant scopes",
+      "result": "PASS"
+    },
+    {
+      "assertion": "225 explicit directed field dependencies resolve real property/action definitions and belong to one rule group",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Every dependency variant binding resolves within its own application",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Fixed processing never inherits quantity scaling; independent quantity preparation stays conceptual",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Capacity threshold and primary identity fields are not misreported as computed results",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Final graph drawing uses authored dependencies, not an inputs-by-outputs Cartesian product",
+      "result": "PASS"
+    },
+    {
+      "assertion": "16 read paths have field-level steps, source paths, scope and missing-data policy",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Actual engine boundaries remain explicit: FEFO, retained WIP, MOQ, standard upper bound, E3 alias, BOM lead-time mismatch",
+      "result": "PASS"
+    },
+    {
+      "assertion": "BOM lead-time mismatch is consistent across application and property definitions",
+      "result": "PASS"
+    },
+    {
+      "assertion": "All 39 workbook structures preserve exact original field names, types and optionality",
+      "result": "PASS"
+    },
+    {
+      "assertion": "22 actual input tables and 337 fields remain bound; 565 provenance mappings remain separately counted",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Every source binding resolves both the owning property and actual field",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Every referenced APS code file exists and evidence file hash matches current fixed source",
+      "result": "PASS"
+    },
+    {
+      "assertion": "All 793 OWL dependencies preserved exactly, including endpoints, rule bindings and definition JSON",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Reference families and hard/advisory counts are distinguished from business relations",
+      "result": "PASS"
+    },
+    {
+      "assertion": "All 125 original rule expressions, conditions and per-application variants preserved",
+      "result": "PASS"
+    },
+    {
+      "assertion": "OWL full business entries, source schemas, shared reads and analysis steps retained",
+      "result": "PASS"
+    },
+    {
+      "assertion": "OWL shared BOM identity, unit policy and schema properties retained without interpreting definitions as business instances",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Original reference OWL remains unchanged",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Missing conversion 1:1 reference assumption is explicitly not adopted into APS",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Standalone HTML embeds identical model and uses no external business/network dependencies",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Combined artifact JavaScript parses",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Independent BOM/supply/MOQ/dates examples are internally consistent, not real UAT",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Actual browser JSON export equals the complete final model",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Actual browser saved HTML embeds identical model, strips preview scripts and preserves adaptive layout state",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Actual save-handler expression safely roundtrips closing-script text without literal less-than",
+      "result": "PASS"
+    }
+  ],
+  "browser": {
+    "startEpoch": 1793761693788,
+    "screenshots": {
+      "sixColumns": "screenshots/agent-browser-2026-11-04T03-08-15.jpg",
+      "variants": "screenshots/agent-browser-2026-11-04T03-08-27.jpg",
+      "sourceTrace": "screenshots/agent-browser-2026-11-04T03-11-52.jpg",
+      "owl": "screenshots/agent-browser-2026-11-04T03-12-09.jpg"
+    },
+    "assertions": [
+      "Six full-name columns at default 94% fit rendered in browser",
+      "R34 fixed/quantity/conceptual prep variants displayed separately",
+      "F147 only binds R34.quantity and exact quantity/duration JSON paths",
+      "P05 allocation → transit → supply relation → inspection source paths opened",
+      "Source field inspection days → supplier property reverse jump and F065/F124/F220 inspected visually and using unique selector",
+      "OWL shared BOM definition shows original identity, scope, coefficients and rule references",
+      "OWL 793 dependency pagination advances to page 2 / 20",
+      "Reference P03 explicitly rejects missing-conversion 1:1 assumption",
+      "HTML and JSON downloads completed; validation follows"
+    ],
+    "toolNotes": [
+      "Duplicate anchor/button selectors corrected to unique a[data-readpath]",
+      "waitFor with multiple dep buttons narrowed to unique F065",
+      "Snapshot clamps text to 20000 characters; source inspector verified with screenshot and unique dependency selector, not truncated text"
+    ],
+    "downloads": [
+      {
+        "id": "7d5cd72c-793b-4943-8519-e19b01a904a9",
+        "frameId": "F7CE08FEF5F6B150C9A770CB0EF6E38B",
+        "filename": "APS_Ontology_v4_关联模型.json",
+        "state": "completed",
+        "receivedBytes": 6799217,
+        "startedAt": 1793761875311,
+        "path": "temp/browser-downloads-GydZ9C/1cd5e175-b1d8-4cd5-be4a-e3ef2ecb7b2a-APS_Ontology_v4_关联模型.json",
+        "completedAt": 1793761875358
+      },
+      {
+        "id": "ed8fac84-0152-43e4-b92e-4c98d93a303e",
+        "frameId": "F7CE08FEF5F6B150C9A770CB0EF6E38B",
+        "filename": "APS_生产排程_Ontology_关联定义与字段依赖_v4.html",
+        "state": "completed",
+        "receivedBytes": 4730968,
+        "startedAt": 1793761875564,
+        "path": "temp/browser-downloads-GydZ9C/c350d259-8a41-44b1-bb66-82af2e66d4e5-APS_生产排程_Ontology_关联定义与字段依赖_v4.html",
+        "completedAt": 1793761875584
+      }
+    ],
+    "console": "No error-level entries after this v4 browser check start; older history excluded."
+  },
+  "exports": [
+    {
+      "file": "temp/browser-downloads-GydZ9C/1cd5e175-b1d8-4cd5-be4a-e3ef2ecb7b2a-APS_Ontology_v4_关联模型.json",
+      "bytes": 6799217,
+      "sha256": "4cc85da529493d0a85d3a0c26a6801ef43aa3768c53090d7fe98f152f5ea274e"
+    },
+    {
+      "file": "temp/browser-downloads-GydZ9C/c350d259-8a41-44b1-bb66-82af2e66d4e5-APS_生产排程_Ontology_关联定义与字段依赖_v4.html",
+      "bytes": 4730968,
+      "sha256": "1c250b4e0f54987b8511c5954ecdd44feeaa056d17f35e458d694d172c9b05bb"
+    }
+  ],
+  "cleanup": {
+    "diskBefore": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5   460Gi   360Gi    59Gi    87%    4.8M  614M    1%   /System/Volumes/Data\n",
+    "taskDuBefore": " 11M\ttemp/aps-ontology-v4\n",
+    "candidates": [
+      {
+        "path": "temp/aps-ontology-v4/reference-owl.json",
+        "bytes": 4544084
+      },
+      {
+        "path": "temp/browser-downloads-GydZ9C/1cd5e175-b1d8-4cd5-be4a-e3ef2ecb7b2a-APS_Ontology_v4_关联模型.json",
+        "bytes": 6799217
+      },
+      {
+        "path": "temp/browser-downloads-GydZ9C/c350d259-8a41-44b1-bb66-82af2e66d4e5-APS_生产排程_Ontology_关联定义与字段依赖_v4.html",
+        "bytes": 4730968
+      }
+    ],
+    "removed": [
+      {
+        "path": "temp/aps-ontology-v4/reference-owl.json",
+        "beforeBytes": 4544084,
+        "afterBytes": 0,
+        "reason": "Reconstructible OWL extraction/bytecode, or browser export already verified equal to retained final model and HTML"
+      },
+      {
+        "path": "temp/browser-downloads-GydZ9C/1cd5e175-b1d8-4cd5-be4a-e3ef2ecb7b2a-APS_Ontology_v4_关联模型.json",
+        "beforeBytes": 6799217,
+        "afterBytes": 0,
+        "reason": "Reconstructible OWL extraction/bytecode, or browser export already verified equal to retained final model and HTML"
+      },
+      {
+        "path": "temp/browser-downloads-GydZ9C/c350d259-8a41-44b1-bb66-82af2e66d4e5-APS_生产排程_Ontology_关联定义与字段依赖_v4.html",
+        "beforeBytes": 4730968,
+        "afterBytes": 0,
+        "reason": "Reconstructible OWL extraction/bytecode, or browser export already verified equal to retained final model and HTML"
+      }
+    ],
+    "releasedLogicalBytes": 16074269,
+    "retained": [
+      {
+        "path": "APS_生产排程_Ontology_关联定义与字段依赖_v4.html",
+        "reason": "final delivered HTML"
+      },
+      {
+        "path": "upload/",
+        "reason": "unaltered original OWL, reference HTML and screenshots"
+      },
+      {
+        "path": "temp/aps-ontology-v4/",
+        "reason": "authoring model, XML parser, build/verification source and unique evidence"
+      },
+      {
+        "path": "apps/aps-latest-current/temp/ontology-v4-preview/index.html",
+        "reason": "active preview matching final HTML; browser uses it"
+      },
+      {
+        "path": "screenshots/",
+        "reason": "browser evidence paths retained in report; unrelated screenshots untouched"
+      }
+    ],
+    "pending": [],
+    "note": "Only own unused reconstructible files removed after lsof checks. Logical bytes do not imply recovered memory. No runtime state, other tasks, containers or platform daemon changed."
+  }
+}
