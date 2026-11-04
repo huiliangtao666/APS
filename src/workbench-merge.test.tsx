@@ -50,7 +50,10 @@ const heatHtml=(rows:ReturnType<typeof heatRow>[])=>renderToStaticMarkup(<Person
 const heatButton=(html:string,label:string)=>(html.match(/<button\b[^>]*>[\s\S]*?<\/button>/g)||[]).find(button=>button.includes('aria-label="'+label))||'';
 test('personnel and tool heatmap preserves each frozen daily value and separates people from physical sets',()=>{
  const rows=[heatRow('C1',1,'人',3,5),heatRow('T1',1,'实体套',2,3)],before=JSON.stringify(rows),html=heatHtml(rows);
- assert.ok(html.includes('人员工装逐日占用热力图'));assert.ok(html.includes('人员 · 人'));assert.ok(html.includes('工装 · 实体套'));
+ assert.ok(html.includes('人员工装逐日占用热力图'));
+ const resourceRows=html.match(/<tr\b[^>]*>[\s\S]*?<\/tr>/g)||[];
+ assert.ok(resourceRows.some(row=>row.includes('>C1<')&&row.includes('>班组<')&&row.includes('>人<')));
+ assert.ok(resourceRows.some(row=>row.includes('>T1<')&&row.includes('>工装<')&&row.includes('>实体套<')));
  assert.ok(heatButton(html,'C1 / 2026-11-01 / 并发峰值：3 人').includes('余量：2 人'));
  assert.ok(heatButton(html,'T1 / 2026-11-01 / 并发峰值：2 实体套').includes('余量：1 实体套'));
  assert.equal(JSON.stringify(rows),before);
