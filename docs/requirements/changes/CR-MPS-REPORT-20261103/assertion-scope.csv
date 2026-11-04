@@ -1,0 +1,25 @@
+assertion,topic,planned_evidence,current_verdict
+MPS-01,整体验证,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-02,冻结与输入参考分开,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-03,独立需求及插单去重,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-04,相关需求与BOM,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-05,客户日与工厂日,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-06,到货及放行,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-07,主计划跨午夜,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-08,在制与主计划去重,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-09,未下达建议不作供给,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-10,建议转正式及部分收货,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-11,库存及占用双扣,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-12,归属未知,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-13,负投影与实物库存,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-14,安全库存不足包含缺口,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-15,效期扣剩余,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-16,日末正余额仍有时点风险,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-17,客户批次适用性,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-18,快照及期前未清,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-19,无结果/窗外/未知,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-20,物料单位与来源,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-21,时点与流量汇总,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-22,界面规范,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-23,导出及权限,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code
+MPS-24,缺配置及附件边界,qa/mps-report*.mjs; real preserved source; integrated UI pending,NOT_EXECUTED; no product PASS inferred from code

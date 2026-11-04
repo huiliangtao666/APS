@@ -1,3 +1,5 @@
+import {MpsReport} from './MpsReport';
+import {SimulatorView} from './simulator/SimulatorView';
 import {appPath} from './app-path';
 import type {PreviewMemory} from './WorkbookPreview';
 import {WorkbookImportCards} from './WorkbookImportCards';
@@ -16,12 +18,13 @@ import {workbookRunLabel} from './lib/workbook-run-status.mjs';
 import {workbookDate,workbookDay} from './lib/workbook-dates';
 type Api=(path:string,body?:object)=>Promise<any>;
 type Props={api:Api;canWrite:boolean;canExport:boolean;reason:string;navigationHost?:HTMLElement|null};
-type Page='workflow'|'business'|'parameters'|'equipment';
+type Page='workflow'|'business'|'parameters'|'equipment'|'mps'|'simulator';
 const WORKSPACE_DATASET_ID='18477fde-464f-4c26-a343-c107c8ba9202';
 export function InputData({api,canWrite,canExport,reason,navigationHost}:Props){
  const initial=useRef(readWorkbenchContext()).current;
  const [sets,setSets]=useState<any[]>([]),[schema,setSchema]=useState<any>(),[detail,setDetail]=useState<any>(),[busy,setBusy]=useState(false),[message,setMessage]=useState(''),[issues,setIssues]=useState<any[]>([]),[runs,setRuns]=useState<any[]>([]),[run,setRun]=useState<any>(),[start,setStart]=useState<number>(initial.start??1),[windowDays,setWindowDays]=useState<number>(initial.windowDays??14),[current,setCurrent]=useState<number>(initial.current??1),[demandId,setDemandId]=useState<string>(initial.demandId||''),[drafts,setDrafts]=useState<any[]>([]),[draftEdit,setDraftEdit]=useState<any>(),[stage,setStage]=useState(initial.stage||'A1'),[parameterScope,setParameterScope]=useState(initial.parameterScope||'dataset'),[parameterDay,setParameterDay]=useState(initial.start??1);
  const [page,setPage]=useState<Page>('workflow'),[ready,setReady]=useState<any>(),[importBusy,setImportBusy]=useState(false),[parameterBusy,setParameterBusy]=useState(false),[historyDetail,setHistoryDetail]=useState<any>(),[parameterLocator,setParameterLocator]=useState<{record:string;sequence:number}>(),[maintenance,setMaintenance]=useState<MaintenanceTarget>(),[businessOpened,setBusinessOpened]=useState(false),[parametersOpened,setParametersOpened]=useState(false);
+ const [simulatorRunId,setSimulatorRunId]=useState(''),[simulatorSource,setSimulatorSource]=useState<any>();
  useEffect(()=>{if(page==='business')setBusinessOpened(true);if(page==='parameters'||page==='workflow'&&['A2','A3'].includes(stage))setParametersOpened(true);},[page,stage]);
  const datasetId=WORKSPACE_DATASET_ID,restoredRun=useRef(false),returnPage=useRef<Page>('business');
  const cardMemory=useRef<Record<string,any>>({}),previewMemory=useRef<Record<string,PreviewMemory>>({}),parameterMemory=useRef(new Map<string,any>()),maintenanceMemory=useRef(new Map<string,any>());
@@ -43,12 +46,23 @@ export function InputData({api,canWrite,canExport,reason,navigationHost}:Props){
  function previewMaintenance(target:any){if(target.entryId!=='existing-workbook-process-route'||target.table!=='工艺路线'||target.datasetId!==datasetId){setMessage('维护入口或数据集未核实，请更正原Excel后重传。');return;}manage({table:target.table,exactField:target.exactKeyFilter?.field,exactValue:target.exactKeyFilter?.value},'workflow');}
  async function download(url:string,filename:string){const a=document.createElement('a');a.href=appPath('/api'+url);a.download=filename;document.body.appendChild(a);a.click();a.remove();}
  const runPicker=<label className="workbook-run-picker"><select aria-label="重开冻结运行" title="选择已保存的排程运行" value={run?.id||''} onChange={e=>{if(e.target.value)perform(async()=>{setRun(await api('/workbooks/runs/'+e.target.value));setPage('equipment');setStage('A5');});}}><option value="">选择运行</option>{runs.map(r=><option key={r.id} value={r.id}>v{r.version} · {r.createdAt} · {workbookRunLabel(r.status)}</option>)}</select></label>;
- const navigation=<div className="workbook-page-toolbar"><nav className="workbook-feature-nav" aria-label="工作台功能页面">{([['workflow','排程流程'],['business','业务数据查询与维护'],['parameters','配置参数查询与维护'],['equipment','排程结果']] as const).map(([id,label])=><button key={id} disabled={id!=='workflow'&&!detail} aria-current={page===id?'page':undefined} onClick={()=>setPage(id)}>{label}</button>)}</nav>{page==='equipment'&&detail&&runPicker}</div>;
+ const navigation=<div className="workbook-page-toolbar"><nav className="workbook-feature-nav" aria-label="工作台功能页面">{([['workflow','排程流程'],['business','业务数据查询与维护'],['parameters','配置参数查询与维护'],['equipment','排程结果'],['mps','生产主计划'],['simulator','每日数据模拟器']] as const).map(([id,label])=><button key={id} disabled={id!=='workflow'&&id!=='simulator'&&!detail} aria-current={page===id?'page':undefined} onClick={()=>setPage(id)}>{label}</button>)}</nav>{page==='equipment'&&detail&&runPicker}</div>;
  return <section className="input-workspace" aria-label="排程工作台" data-page={page}>
   {navigationHost?createPortal(navigation,navigationHost):navigation}
   {(busy||message)&&<p role="status" aria-live="polite">{busy?'正在处理…':message}</p>}
   {issues.length>0&&<details className="input-errors"><summary>问题定位（{issues.length}）</summary>{issues.slice(0,60).map((i,n)=><button key={n} onClick={()=>locate(i)}>{i.sheet} {i.cell||i.field} · {i.message}</button>)}</details>}
   {detail&&(businessOpened||page==='business')&&<div hidden={page!=='business'}><QueryReports api={api} refreshKey={detail.parameterRevision||0} context={{datasetId,version:detail.version}} canExport={canExport} onRefresh={()=>perform(load)} onClose={()=>setPage('workflow')} onManageData={report=>manage({table:({bom:'物料主数据',demand:'每日需求',inventory:'期初库存',capacity:'设备与工装',replenishment:'既有采购在途'} as Record<string,string>)[report]||'每日需求'},'business')} maintenanceTables={Object.entries<any>(schema?.tables||{}).filter(([name,s])=>s.kind==='输入'&&name!=='配置参数').map(([name])=>name)} onMaintenance={canWrite?t=>t.table==='配置参数'?locate({sheet:t.table,record:t.key,message:'已定位同源配置参数。'}):manage(t,'business'):undefined}/></div>}
+  {page==='mps'&&detail&&<MpsReport key={detail.version+':'+(run?.id||'input')} api={api} context={{datasetId,version:detail.version,...(run?{runId:run.id}:{})}} canExport={canExport} onClose={()=>setPage('workflow')}/>}
+  {page==='simulator'&&<>
+   <section className="panel"><h2>冻结来源副本</h2><p>显式选择已保存运行，仅复制该运行冻结的业务数据、参数和计划。当前工作台数据保持独立。真实来源转换尚未完成；此副本不能作为下方的独立场景脚本导入。</p>
+    <label>来源运行<select value={simulatorRunId} disabled={busy} onChange={e=>{setSimulatorRunId(e.target.value);setSimulatorSource(undefined);}}><option value="">请选择冻结运行</option>{runs.map(r=><option key={r.id} value={r.id}>v{r.version} · {r.createdAt} · {workbookRunLabel(r.status)}</option>)}</select></label>
+    <button disabled={busy||!simulatorRunId} onClick={()=>perform(async()=>{const selected=runs.find(r=>r.id===simulatorRunId);if(!selected?.inputHash)throw Error('所选运行缺少冻结输入身份，不能复制。');setSimulatorSource(undefined);setSimulatorSource(await api('/workbooks/simulator/source-copy/'+encodeURIComponent(selected.id)+'?inputHash='+encodeURIComponent(selected.inputHash)));})}>读取冻结副本</button>
+    {simulatorSource&&<><p>冻结运行 {simulatorSource.run.id} · 数据版本 v{simulatorSource.run.version} · 输入指纹 {simulatorSource.run.inputHash} · 尚未转换为模拟场景</p>
+     <details><summary>来源身份与待补字段</summary><pre>{JSON.stringify({run:simulatorSource.run,gaps:simulatorSource.gaps,parameterSources:simulatorSource.input.parameterSources,parameterPrecedence:simulatorSource.input.parameterPrecedence},null,2)}</pre></details>
+     <button disabled={!canExport||busy} onClick={()=>download('/workbooks/simulator/source-copy/'+encodeURIComponent(simulatorSource.run.id)+'/export?inputHash='+encodeURIComponent(simulatorSource.run.inputHash),'simulator-frozen-source.json')}>导出冻结来源副本</button></>}
+   </section>
+   <SimulatorView api={api} canWrite={writable} canExport={canExport}/>
+  </>}
   {maintenance&&detail&&schema&&<WorkbookDataMaintenance api={api} datasetId={datasetId} version={detail.version} schema={schema} canWrite={writable} target={maintenance} memory={maintenanceMemory.current} onRefresh={async()=>{setReady(undefined);await load();}} onClose={()=>{setMaintenance(undefined);setPage(returnPage.current);}} onSaved={async r=>{setReady(undefined);await load();setMessage('已保存数据集 v'+r.version+'；业务查询已更新，请重新检查本次排程范围。');}}/>}
   <div className="panel workbook-journey" hidden={page!=='workflow'}><h2>排程步骤</h2><nav className="workbook-steps" aria-label="Excel六步工作台">{['A1 数据准备','A2 就绪补缺','A3 本次配置','A4 计算','A5 结果核对','A6 保存导出'].map(x=><button key={x} aria-current={stage===x.slice(0,2)?'step':undefined} disabled={!detail&&x.slice(0,2)!=='A1'} onClick={()=>setStage(x.slice(0,2))}>{x}</button>)}</nav><details className="workbook-status-key"><summary>步骤说明</summary><p>业务文件与参数文件分别导入并确认。检查当前范围后创建运行，再核对并导出冻结结果；候选资料不参与计算。</p></details></div>
   {page==='workflow'&&stage==='A1'&&<WorkbookImportCards cardMemory={cardMemory} previewMemory={previewMemory} download={download} onMaintenance={previewMaintenance} api={api} sets={sets} datasetId={datasetId} version={detail?.version} canWrite={writable} canExport={canExport} reason={reason} onBusy={setImportBusy} onCommitted={async()=>{setReady(undefined);await load();}}/>}

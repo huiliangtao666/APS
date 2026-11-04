@@ -1,3 +1,6 @@
+import {registerMpsReportRoutes} from './mps-report-routes.mjs';
+import {registerSimulatorRoutes} from './simulator/routes.mjs';
+import {defs as csvDefs} from './planner.ts';
 import {parameterMaintenanceUnit} from './parameter-maintenance.mjs';
 import {relationParameterHelp} from './parameter-help.mjs';
 import {equipmentDomain} from './workbook-equipment.mjs';
@@ -88,6 +91,41 @@ export function createWorkbookRouter({dataDir,permission,actorKey,requestId,work
  registerWorkbookPreviewRoutes(router,{read,write,permission,actorKey,access:previewAccess,applyImport});
  // Mutations, freeze/run, drafts and native exports are registered below.
  registerWorkbookQueryReportRoutes(router,{read,dataset,snapshot,permission,actorKey});
+ registerMpsReportRoutes(router,{read,dataset,snapshot,permission,actorKey});
+ // #146 reads only the explicitly selected frozen run, never the current P
+ // workspace. The independent converter remains owned by APS-Test.
+ const readFrozenSource=({runId,expectedInputHash})=>{
+  if(typeof runId!=='string'||!runId)fail('SIMULATOR_RUN_REQUIRED',422,{message:'请选择已冻结运行，不自动采用当前数据集。'});
+  const r=read().runs.find(r=>r.id===runId);
+  if(!r)return fail('SIMULATOR_RUN_NOT_FOUND',404);
+  if(!r.inputRef||!r.inputHash)fail('SIMULATOR_FROZEN_INPUT_REQUIRED',409);
+  if(expectedInputHash!==undefined&&expectedInputHash!==r.inputHash)fail('SIMULATOR_SOURCE_CHANGED',409);
+  const input=snapshot(r.inputRef);
+  if(hash(input)!==r.inputHash||input.id!==r.datasetId||input.version!==r.version)fail('SIMULATOR_FROZEN_INPUT_CORRUPT',409);
+  if(r.result&&!r.resultHash)fail('SIMULATOR_FROZEN_RESULT_HASH_REQUIRED',409);
+  if(r.result&&hash(r.result)!==r.resultHash)fail('SIMULATOR_FROZEN_RESULT_CORRUPT',409);
+  // Preserve missing fields and original units/origins. This is a source copy,
+  // not a simulator spec, P resolution, BOM calculation or a production write.
+  const gaps=[];
+  for(const key of ['parameterDefinitions','parameterSources','parameterPrecedence','parameterContext','effectiveParameters','minuteOrigin','timeUnit']){
+   if(input[key]===undefined||input[key]===null)gaps.push({path:'input.'+key,status:'MISSING_SOURCE'});
+  }
+  for(const table of ['物料主数据','物料清单','配置参数']){
+   if(!Array.isArray(input.tables?.[table]))gaps.push({path:'input.tables.'+table,status:'MISSING_SOURCE'});
+  }
+  if(!r.result)gaps.push({path:'plan',status:'NO_FROZEN_PLAN'});
+  return {contract:'aps-simulator-frozen-source@1',mode:'INDEPENDENT',linked:false,conversionStatus:'NOT_CONVERTED',conversionOwner:'APS-Test',
+   run:{id:r.id,datasetId:r.datasetId,version:r.version,status:r.status,inputHash:r.inputHash,resultHash:r.resultHash,selection:r.selection,provenance:r.provenance},
+   input,plan:r.result??null,workbookSchema:structuredClone(workbookSchema),gaps};
+ };
+ for(const [suffix,action]of [['','read'],['/export','export']])router.get('/simulator/source-copy/:runId'+suffix,permission(action),handle((req,res)=>{
+  const source=readFrozenSource({runId:req.params.runId,expectedInputHash:req.query.inputHash});
+  if(action==='export')return res.type('application/json').attachment('simulator-frozen-source.json').send(JSON.stringify(source));
+  res.json(source);
+ }));
+ // permission('edit') is the existing role + trusted-write/CSRF + reason
+ // middleware in business.mjs; do not replace it with an unconditional next.
+ registerSimulatorRoutes(router,{root:path.resolve(dataDir,'independent-simulator'),permission,actorKey,writeGuard:permission('edit'),workbookSchema,csvDefs,readFrozenSource});
  registerWorkbookQueryReportRoutes(router,{read,dataset,snapshot,permission,actorKey},equipmentDomain,'/equipment');
  registerWorkbookConversions(router,{read,write,dataset,audit,summary,handle,permission,persist,snapshot,meta,tableRefs});
  return registerOperations(router,{read,write,dataset,audit,summary,handle,permission,workerFactory,workers,persist,snapshot,meta,tableRefs,actorKey});
