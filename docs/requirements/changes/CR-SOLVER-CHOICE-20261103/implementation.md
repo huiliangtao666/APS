@@ -81,3 +81,26 @@ Test 当前 #140 只持重窗；两共享入口已于 [6620959345](https://githu
 
 官方 API 仅只读核查 [v9.15 Python 源码](https://github.com/google/or-tools/blob/v9.15/ortools/sat/python/cp_model.py)，
 包括可变区间/cumulative、整数除法、min/max equality 和 hint；不是安装或引擎执行证据。
+
+## 2026-11-04 #141 r3 有界功能接续
+
+按 [6631380480](https://github.com/huiliangtao666/APS/issues/141#issuecomment-6631380480)
+接续原600秒额度。上述静态阶段的未授窗/未自测描述保留为历史，不再作为本次全部能力未验的依据。
+本次在官方standalone有限容器及私有state中，实际基础分钟Worker（仅1个）完成18千克合成需求，
+同一业务checker、保存重开新OS进程、原CSV及求解来源导出通过。编译器/decoder/checker另用明示人工候选核验，
+五状态及取消槽用受控状态/关闭promise核验；这些都不是native CP-SAT执行证据。
+实际UI组件handler的受控hook/API检查覆盖新建默认、步骤往返、时限变化后旧检查失效；未运行浏览器。
+
+修复求解来源JSON导出及比较入口：除冻结输入/结果hash外，再核请求选择、实际引擎、版本和条件hash
+与已保存结果的同源关系，混合来源返回409；旧无求解信息run保持未知、不回填。
+`qa/solver-choice-source.test.mjs`覆盖五类来源变异、两个比较方向与旧run不变。
+
+真实CP-SAT仍未执行：本次官方有限应用容器的`python3`查询为ENOENT；未安装、pull、供给回执或替换目标。
+目标仍按原dependency-plan/11包hash锁，官方应用侧Python3.11/Linux aarch64/OR-Tools9.15.6755，
+须具来源的预算预留、解释器/IO/停止上限与实际导入回执；不能从本次基础或人工候选PASS签整CR。
+当前逐SOL实际证据、原数据就绪结论、预算及释放以本次根目录正式报告/矩阵为准；独立QA/UAT未代签。
+
+原冻结V2（inputHash `5a4a72eb97b907b52900f7a67c019def7c743220807c19f2cb72a8d235aa927e`）
+日窗[1,2)只读就绪：基础0问题、CP明确拒绝`CP_QUANTITY_OVERFLOW`，路径RM001，
+当前有理数格点传播需表达的scale为`1000000000000000000000`，超安全整数；未截断、改参数或回退。
+这保留为当前精确表示能力限制，不能只报“缺native”。该真实V2未求解，不能把合成18千克结果迁签为V2计划。

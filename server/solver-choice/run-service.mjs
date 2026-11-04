@@ -7,6 +7,16 @@ import {compileWorkbookModel} from './workbook-compiler.mjs';
 import {decodeWorkbookCandidate} from './workbook-decoder.mjs';
 import {ORTOOLS_VERSION} from './runner.mjs';
 import {isAbsolute} from 'node:path';
+// Export and comparison must enforce the same frozen solver identity as the
+// run detail endpoint. A valid plan hash alone cannot authenticate metadata
+// stored beside that plan, or permit it to relabel the actual engine.
+function solverSourceProblem(run){
+ if(!run.solverConditions)return null;
+ const conditions=run.solverConditions,requested=conditions.request?.requested;
+ if(run.solver?.requested!==requested)return 'solver_request_mismatch';
+ if(run.result&&(run.result.solver?.actual!==requested||fingerprint(run.result.solver)!==fingerprint(run.solver)||run.result.solver?.conditionsHash!==conditions.conditionsHash))return 'solver_result_mismatch';
+ return null;
+}
 // Environment comes only from application-owned, verified provisioning. Never
 // accept an interpreter, availability claim, coverage or model from an HTTP body.
 export function createSolverRunService(ctx){
@@ -59,6 +69,7 @@ export function createSolverRunService(ctx){
   router.get('/runs/:id/solver-export',ctx.permission('export'),ctx.handle((req,res)=>{
    const run=ctx.read().runs.find(r=>r.id===req.params.id);if(!run)return res.status(404).json({error:'run_not_found'});
    if(hash(ctx.snapshot(run.inputRef))!==run.inputHash||run.result&&hash(run.result)!==run.resultHash)return res.status(409).json({error:'frozen_source_corrupt'});
+   const error=solverSourceProblem(run);if(error)return res.status(409).json({error});
    res.type('application/json').attachment('求解冻结来源-'+run.id+'.json').send(JSON.stringify({contract:'aps-solver-native-source:v1',runId:run.id,inputHash:run.inputHash,resultHash:run.resultHash??null,status:run.status,selection:run.selection,provenance:run.provenance,conditions:run.solverConditions??null,solver:solverHistory(run),failure:run.failure??null},null,2));
   }));
   router.post('/runs/:id/cancel',ctx.permission('calculate'),ctx.handle(async(req,res)=>{
@@ -71,6 +82,7 @@ export function createSolverRunService(ctx){
   router.get('/runs/:id/solver-comparison',ctx.permission('read'),ctx.handle((req,res)=>{
    const state=ctx.read(),a=state.runs.find(r=>r.id===req.params.id),b=state.runs.find(r=>r.id===String(req.query.other));if(!a||!b)return res.status(404).json({error:'run_not_found'});
    for(const r of [a,b])if(hash(ctx.snapshot(r.inputRef))!==r.inputHash||r.result&&hash(r.result)!==r.resultHash)return res.status(409).json({error:'frozen_source_corrupt'});
+   for(const r of [a,b]){const error=solverSourceProblem(r);if(error)return res.status(409).json({error});}
    const conditions=comparisonConditions(a.solverConditions,b.solverConditions),summary=r=>({runId:r.id,inputHash:r.inputHash,resultHash:r.resultHash,solver:solverHistory(r),coverage:r.result?.demandSummary??null,demands:r.result?.demandResults??[],tasks:r.result?.tasks??[],allocations:r.result?.allocations??[],findings:r.result?.findings??[]});
    res.json({...conditions,runs:[summary(a),summary(b)],meaning:'按各自基础单位比较；合法排序可不同；不承诺CP-SAT更快或更优'});
   }));
