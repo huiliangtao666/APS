@@ -71,5 +71,19 @@
     "scope": "Standalone ontology HTML documentation and examples; no scheduling engine modification, deployment or production UAT",
     "detail": "ontology-v4/README.md",
     "validation": "ontology-v4/validation.json"
+  },
+  {
+    "event_key": "APS-USER-20261104-ONTOLOGY-FIVE-RELATION-TYPES-V5",
+    "number": 152,
+    "url": "https://github.com/huiliangtao666/APS/issues/152",
+    "state": "closed",
+    "state_reason": "completed",
+    "closed_at": "2026-11-04T03:28:06Z",
+    "deliverable": "APS_生产排程_Ontology_五类关联与约束_v5.html",
+    "bytes": 4583891,
+    "sha256": "54ea2c80525e726751d49981c94757dda7561ffbd77a1d93d8e212eeee9ffdb4",
+    "scope": "Standalone ontology artifact only; no scheduling engine/UI application deployment or real UAT",
+    "detail": "ontology-v5/README.md",
+    "validation": "ontology-v5/validation.json"
   }
 ]

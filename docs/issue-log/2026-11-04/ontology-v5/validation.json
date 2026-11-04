@@ -1,0 +1,166 @@
+{
+  "event_key": "APS-USER-20261104-ONTOLOGY-FIVE-RELATION-TYPES-V5",
+  "file": "APS_生产排程_Ontology_五类关联与约束_v5.html",
+  "bytes": 4583891,
+  "sha256": "54ea2c80525e726751d49981c94757dda7561ffbd77a1d93d8e212eeee9ffdb4",
+  "codeSha": "f9f1957e09501d795e1816d360521add378efd17",
+  "verifiedAt": "2026-11-04T03:25:35.441312+00:00",
+  "scope": "Standalone ontology artifact only; no scheduling engine/UI application deployment or real UAT",
+  "types": [
+    "逻辑关联",
+    "计算关联",
+    "日期关联",
+    "行动关联",
+    "约束"
+  ],
+  "fieldCategories": {
+    "identity/read evidence only": 62,
+    "约束": 67,
+    "计算关联": 58,
+    "日期关联": 28,
+    "行动关联": 13
+  },
+  "logicalLinks": 46,
+  "constraints": 435,
+  "actions": 57,
+  "checks": [
+    {
+      "assertion": "Exactly the five user-defined categories; no entity/version/conversion/inference extra type",
+      "result": "PASS"
+    },
+    {
+      "assertion": "All logical connections are flow objects or foundation entities; no property endpoint",
+      "result": "PASS"
+    },
+    {
+      "assertion": "All 17 foundation entities have top-flow logical entry links",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Logical application definitions do not retain detailed field endpoints",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Identity and version reads remain provenance; no field dependency is a logical line",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Original 225 field records preserved by ID and endpoint; three explicit scheduling date dependencies added",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Every dependency endpoint and scope remains resolvable",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Every application condition and exception is included in the unified constraint registry",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Every variant applicability condition is separately registered as a constraint",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Every action capability has actors, inputs, effects and unified prerequisite constraints",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Source bindings, source structures and original OWL remain unchanged",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Graph logic uses entity/flow endpoints and independently scoped logical filtering",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Standalone final HTML has the identical embedded model and no external business-network dependency",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Final combined JavaScript parses",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Actual browser JSON export and saved HTML retain the identical final model, without preview script dependencies",
+      "result": "PASS"
+    }
+  ],
+  "browser": {
+    "browserChecks": [
+      "Five legend entries and five filter options rendered; six full-name columns retained",
+      "All category views exercised: 46 logic, 58 quantity/calculation dependencies, 28 date dependencies, 57 action capabilities, 435 constraint definitions",
+      "Resource flow links remain visible under logic-only filter; logic targets are entity cards",
+      "Logic L003 detail explicitly stops at entity, not properties",
+      "Date view includes start plus duration to end, predecessor-end to next-start, delivery and tool-release dependencies",
+      "Constraint C001 detail shows boundary/rule/requirement",
+      "HTML and JSON exports completed; model comparison recorded below"
+    ],
+    "screenshots": {
+      "sixColumns": "screenshots/agent-browser-2026-11-04T03-26-06.jpg",
+      "logicDetail": "screenshots/agent-browser-2026-11-04T03-26-08.jpg"
+    },
+    "downloads": [
+      {
+        "id": "da4a50ba-87b7-4928-b41b-bc7c77c19b54",
+        "frameId": "F7CE08FEF5F6B150C9A770CB0EF6E38B",
+        "filename": "APS_Ontology_v5_五类关联模型.json",
+        "state": "completed",
+        "receivedBytes": 7151703,
+        "startedAt": 1793762769516,
+        "path": "temp/browser-downloads-GydZ9C/760963dc-781b-45e1-8669-03c4845f681e-APS_Ontology_v5_五类关联模型.json",
+        "completedAt": 1793762769536
+      },
+      {
+        "id": "39a05d91-7abc-4882-9d11-f075986b93e8",
+        "frameId": "F7CE08FEF5F6B150C9A770CB0EF6E38B",
+        "filename": "APS_生产排程_Ontology_五类关联与约束_v5.html",
+        "state": "completed",
+        "receivedBytes": 5006663,
+        "startedAt": 1793762769753,
+        "path": "temp/browser-downloads-GydZ9C/a68ac08d-c22e-4e89-a144-5305df224d5b-APS_生产排程_Ontology_五类关联与约束_v5.html",
+        "completedAt": 1793762769770
+      }
+    ],
+    "consoleErrorsSinceStart": 0,
+    "startedEpoch": 1793762465076
+  },
+  "exports": [
+    {
+      "file": "temp/browser-downloads-GydZ9C/760963dc-781b-45e1-8669-03c4845f681e-APS_Ontology_v5_五类关联模型.json",
+      "bytes": 7151703,
+      "sha256": "3a3beed80d68bc36994c943ec9e384bae7677abab33cd135dd24708e3cd1e13a"
+    },
+    {
+      "file": "temp/browser-downloads-GydZ9C/a68ac08d-c22e-4e89-a144-5305df224d5b-APS_生产排程_Ontology_五类关联与约束_v5.html",
+      "bytes": 5006663,
+      "sha256": "65506e2641632bb108565eda840f4a790b82133c57c8a9cefa9fc57c5daf9532"
+    }
+  ],
+  "cleanup": {
+    "taskDuBefore": "7.0M\ttemp/aps-ontology-v5\n",
+    "diskBefore": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5   460Gi   360Gi    59Gi    87%    4.8M  614M    1%   /System/Volumes/Data\n",
+    "removed": [
+      {
+        "path": "temp/browser-downloads-GydZ9C/760963dc-781b-45e1-8669-03c4845f681e-APS_Ontology_v5_五类关联模型.json",
+        "beforeBytes": 7151703,
+        "afterBytes": 0,
+        "reason": "Browser export already compared equal to retained final model and HTML; unused exact duplicate"
+      },
+      {
+        "path": "temp/browser-downloads-GydZ9C/a68ac08d-c22e-4e89-a144-5305df224d5b-APS_生产排程_Ontology_五类关联与约束_v5.html",
+        "beforeBytes": 5006663,
+        "afterBytes": 0,
+        "reason": "Browser export already compared equal to retained final model and HTML; unused exact duplicate"
+      }
+    ],
+    "releasedLogicalBytes": 12158366,
+    "retained": [
+      "Root final v5 HTML and prior v1-v4 artifacts",
+      "Original upload image and OWL/HTML references",
+      "Authoring model, build/verification source and browser evidence",
+      "Active v5 preview copy; runtime data and all unrelated task files untouched"
+    ],
+    "pending": [],
+    "note": "Own verified-unused duplicate exports only. Logical bytes do not prove memory recovery."
+  }
+}

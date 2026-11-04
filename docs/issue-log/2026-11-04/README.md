@@ -12,10 +12,12 @@
 
 - [#148 生产排程Ontology三层HTML示例](https://github.com/huiliangtao666/APS/issues/148) — Closed / completed；独立HTML生成，结构、算术、浏览器及保存/导出检查通过。交付范围为示例文件，不是应用引擎改造。
 
-本日索引累计5条；原始参考HTML与交付HTML均未上传公开仓库。
+本日索引累计6条；原始参考HTML与交付HTML均未上传公开仓库。
 
 - [#149 APS Ontology v2完整实体与实际字段](https://github.com/huiliangtao666/APS/issues/149) — Closed / completed；[说明与五张原图](ontology-v2/README.md)，48类实体、594项条目、70项行动、789条关系；22张实际输入表337字段全绑定，11项结构/字段/导出检查及浏览器核对通过。仅独立HTML示例，非新增引擎功能或真实UAT。
 
 - [#150 APS Ontology v3业务实体与关系重构](https://github.com/huiliangtao666/APS/issues/150) — Closed / completed；[详细记录](ontology-v3/README.md)。17类业务实体、52条详细关系、22张输入表337字段保持追溯；六列全名、逐项参考对照和22项检查。仅独立HTML示例。
 
 - [#151 APS Ontology v4 OWL关联与字段依赖](https://github.com/huiliangtao666/APS/issues/151) — Closed / completed；[详细记录](ontology-v4/README.md)。48个共享定义、52个应用、225条明确字段依赖；完整保留793条参考定义对照，31项检查及浏览器核对。仅独立HTML示例。
+
+- [#152 APS Ontology v5五类关联](https://github.com/huiliangtao666/APS/issues/152) — Closed / completed；[本次截图与解决](ontology-v5/README.md)。逻辑止于实体，计算/日期分开，行动前提和各类边界统一列为约束；15项检查及浏览器核对。
