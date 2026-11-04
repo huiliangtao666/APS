@@ -3870,13 +3870,13 @@
       "approved_on": "2026-11-03",
       "effective": false,
       "effective_scope": "批准范围已登记；产品启用/验证未执行，不以批准推定effective",
-      "implementation_status": "INDEPENDENT_SOURCE_ENTRY_HANDOFF_PENDING",
+      "implementation_status": "SOURCE_WIRED_NOT_RUNTIME_VERIFIED",
       "primary_issue": "https://github.com/huiliangtao666/APS/issues/67",
       "original_delivery_id": "dlv_b9f21c16-2e90-4e78-aef5-0be9145ff7e1",
-      "event_key": "dlv_b9f21c16-2e90-4e78-aef5-0be9145ff7e1:r2",
+      "event_key": "dlv_b9f21c16-2e90-4e78-aef5-0be9145ff7e1:r3",
       "source_owner": "APS-Dev",
       "integration_owner": "APS-Dev",
-      "source_base_sha": "2b9caa1fa1b4390a91797109b613daa5b1029e5e",
+      "source_base_sha": "98aea09775ebf03bd67b1522ab712b772b046a3c",
       "product_sha": null,
       "design_git_sha": null,
       "original_zip": {
@@ -3887,7 +3887,7 @@
       "acceptance_matrix": "docs/requirements/changes/CR-URGENT-ORDER-20261103/acceptance.csv",
       "runtime_plan": "docs/requirements/changes/CR-URGENT-ORDER-20261103/runtime-plan.md",
       "runtime_status": "NOT_EXECUTED",
-      "main_integration_status": "NOT_EXECUTED_SELF_TEST_AND_SEAM_GATE",
+      "main_integration_status": "NOT_EXECUTED_NO_CURRENT_AUTHORIZATION_AND_SELF_TEST_PENDING",
       "deployment_status": "NOT_EXECUTED",
       "permission_assertions": "UO-23 role/session/access OUT_OF_SCOPE_BY_USER; necessary backend profile remains in scope",
       "scope": [
@@ -3902,9 +3902,9 @@
       ],
       "initial_source_base_sha": "5a23d75f1e7c80114fc14e7c5a674c376e376e00",
       "continuation_delivery_id": "dlv_5e3ba523-86cb-425d-bada-ce74e1615302",
-      "implementation_contract": "https://github.com/huiliangtao666/APS/issues/67#issuecomment-6620394577",
+      "implementation_contract": "https://github.com/huiliangtao666/APS/issues/67#issuecomment-6620959772",
       "prior_source_sha": "36b8ff75edfaaec0c293688b4bba452a70f1ba61",
-      "entry_status": "router/InputData pending #140 serial handback; not mounted",
+      "entry_status": "router/InputData source registered/mounted after explicit serial handback; runtime NOT_EXECUTED",
       "validation_owner": "APS-Dev"
     },
     {

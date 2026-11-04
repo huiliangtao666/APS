@@ -1,3 +1,4 @@
+import {registerUrgentOrders} from './urgent-order-routes.mjs';
 import {registerMpsReportRoutes} from './mps-report-routes.mjs';
 import {registerSimulatorRoutes} from './simulator/routes.mjs';
 import {defs as csvDefs} from './planner.ts';
@@ -128,6 +129,7 @@ export function createWorkbookRouter({dataDir,permission,actorKey,requestId,work
  registerSimulatorRoutes(router,{root:path.resolve(dataDir,'independent-simulator'),permission,actorKey,writeGuard:permission('edit'),workbookSchema,csvDefs,readFrozenSource});
  registerWorkbookQueryReportRoutes(router,{read,dataset,snapshot,permission,actorKey},equipmentDomain,'/equipment');
  registerWorkbookConversions(router,{read,write,dataset,audit,summary,handle,permission,persist,snapshot,meta,tableRefs});
+ registerUrgentOrders(router,{read,write,dataset,audit,permission,workerFactory,workers,persist,snapshot,meta,actorKey});
  return registerOperations(router,{read,write,dataset,audit,summary,handle,permission,workerFactory,workers,persist,snapshot,meta,tableRefs,actorKey});
 }
 function rowKey(table,r){return table==='单位换算'?[r['物料编号'],r['换算前单位'],r['换算后单位']].join('|'):String(r[workbookSchema.tables[table]?.key]);}
