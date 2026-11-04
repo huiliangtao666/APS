@@ -1,3 +1,4 @@
+import {copyReportSource} from './query-reports/source-copy.mjs';
 import {minuteMode} from './workbook-minute.mjs';
 import {parameterSpec,sourceTable,cpOf} from './parameter-contract.mjs';
 const rows=(d,t)=>d.tables?.[t]||[];
@@ -6,7 +7,9 @@ const rows=(d,t)=>d.tables?.[t]||[];
 // selection never creates a new copy of supply or a new capacity pool.
 export function selectionDataset(data,selection){
  if(!selection||!data.parameterPrecedence)return data;
- const d=structuredClone(data),mapping=d.mapping||{},demands=rows(d,'每日需求').filter(r=>Number(r['需求日'])>=selection.startDay&&Number(r['需求日'])<selection.endDay&&(!selection.demandIds||selection.demandIds.includes(r['需求编号'])));
+ // Build a read-only dependency view first. Only the selected result is
+ // detached; discarded rows never require an intermediate full workbook copy.
+ const d={...data,tables:{...data.tables}},mapping=d.mapping||{},demands=rows(d,'每日需求').filter(r=>Number(r['需求日'])>=selection.startDay&&Number(r['需求日'])<selection.endDay&&(!selection.demandIds||selection.demandIds.includes(r['需求编号'])));
  const materials=new Set(demands.map(r=>r['成品编号'])),wips=new Set(),resourceIds=new Set(),crewIds=new Set(),toolTypes=new Set(),routeIds=new Set(),bomIds=new Set();
  const routes=[...rows(d,'工艺路线'),...(mapping.sfRoutes||[])],resources=[...rows(d,'设备与工装'),...(mapping.resources||[]).map(r=>({'资源编号':r.id,'资源组编号':r.group}))];
  let changed=true;
@@ -54,7 +57,7 @@ export function selectionDataset(data,selection){
   return rows(d,table).some(r=>String(r[spec?.key||keys[table]])===p['对象编号']||table==='物料清单'&&r['清单版本编号']===p['对象编号']);
  });
  d._selectionClosure={version:'selected-dependencies-r1',demandIds:demands.map(r=>r['需求编号']),materialIds:[...materials],resourceIds:[...resourceIds],crewIds:[...crewIds],wipIds:[...wips],supplierIds:[...supplierIds],routeIds:[...routeIds],bomIds:[...bomIds]};
- return d;
+ return copyReportSource(d);
 }
 
 export function selectedFactIssues(d){

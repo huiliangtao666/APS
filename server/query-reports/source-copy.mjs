@@ -52,9 +52,13 @@ export function copyReportSource(value){
   // only the detached object/array nodes and retains every source property.
   if(value===null||typeof value!=='object')return value;
   if(Array.isArray(value))return value.map(copyReportSource);
-  const result={};
+  // Spread allocates the complete own-property shape up front. Adding the
+  // wide workbook rows one key at a time creates much larger dictionaries
+  // for every retained source/derived copy. JSON properties keep their order.
+  const result={...value};
   for(const key of Object.keys(value)){
     // Assignment to __proto__ would change the prototype and lose source data.
+    if(value[key]===null||typeof value[key]!=='object')continue;
     const copy=copyReportSource(value[key]);
     if(key==='__proto__')Object.defineProperty(result,key,{value:copy,enumerable:true,writable:true,configurable:true});
     else result[key]=copy;

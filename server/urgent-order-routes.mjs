@@ -1,3 +1,4 @@
+import {copyReportSource} from './query-reports/source-copy.mjs';
 import {createSolverRunService} from './solver-choice/run-service.mjs';
 import {solverRequest} from './solver-choice/contract.mjs';
 import {supplyReadiness} from './workbook-supply.mjs';
@@ -28,8 +29,10 @@ export function registerUrgentOrders(router,ctx){
  };
  const plans=s=>s.urgentPlans||[],plan=(s,id)=>{const p=plans(s).find(p=>p.id===id);if(!p)throw urgentError('URGENT_PLAN_NOT_FOUND','插单计划不存在',{},404);return p;};
  const publicPlan=p=>{const {baseInputRef,inputHash,...rest}=p;return {...rest,inputHash,targetToken:targetToken(p)};};
- const frozen=r=>{if(!r)throw urgentError('URGENT_RUN_NOT_FOUND','所选运行不存在',{},404);const d=snapshot(r.inputRef);if(hash(d)!==r.inputHash||r.result&&hash(r.result)!==r.resultHash)throw urgentError('URGENT_FROZEN_CORRUPT','冻结输入或结果指纹不符',{},409);return d;};
- const source=(s,p)=>{const d=snapshot(p.baseInputRef);if(hash(d)!==p.inputHash)throw urgentError('URGENT_SOURCE_CORRUPT','计划输入指纹不符');const r=s.runs.find(r=>r.id===p.headRunId);frozen(r);return {d,r};};
+ // Reuse only this request's verified, detached input when both ref and hash
+ // match the head. Always verify the head input/result and retain its identity.
+ const frozen=(r,verified)=>{if(!r)throw urgentError('URGENT_RUN_NOT_FOUND','所选运行不存在',{},404);const d=verified&&verified.ref===r.inputRef&&verified.hash===r.inputHash?verified.d:snapshot(r.inputRef);if(hash(d)!==r.inputHash||r.result&&hash(r.result)!==r.resultHash)throw urgentError('URGENT_FROZEN_CORRUPT','冻结输入或结果指纹不符',{},409);return d;};
+ const source=(s,p)=>{const d=snapshot(p.baseInputRef);if(hash(d)!==p.inputHash)throw urgentError('URGENT_SOURCE_CORRUPT','计划输入指纹不符');const r=s.runs.find(r=>r.id===p.headRunId);frozen(r,{ref:p.baseInputRef,hash:p.inputHash,d});return {d,r};};
  const readImpact=(s,id)=>{const r=s.runs.find(r=>r.id===id),d=frozen(r);if(!r.urgentImpact||hash(r.urgentImpact)!==r.urgentImpactHash)throw urgentError('URGENT_IMPACT_NOT_READY','同源影响尚未就绪');if(r.urgentImpact.runId!==r.id||r.urgentImpact.inputHash!==r.inputHash||r.urgentImpact.baseResultHash!==d.urgentOrder?.baseResultHash)throw urgentError('URGENT_IMPACT_IDENTITY','影响来源不一致');return {r,d,impact:r.urgentImpact};};
  router.get('/urgent/template',permission('export'),(_req,res)=>res.type('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet').attachment('紧急插单每日需求.xlsx').send(workbookTables([['每日需求',DEMAND_FIELDS,[],'紧急插单每日需求；第2行原17列表头，第3行起数据；日序沿所选数据集原点。']])));
  router.get('/urgent/plans',permission('read'),handle((req,res)=>res.json(plans(read()).filter(p=>!req.query.datasetId||p.datasetId===req.query.datasetId).map(publicPlan))));
@@ -56,7 +59,7 @@ export function registerUrgentOrders(router,ctx){
   const s=read(),p=plan(s,req.params.id);assertTarget(p,req.body.targetToken);
   if(req.body.version!==p.version)throw urgentError('URGENT_CONFIGURATION_VERSION','参数采用只限原业务版本；业务版本变化须重新选定计划');
   const current=ctx.dataset(s,p.datasetId,req.body.version);if(!current||(current.parameterRevision||0)!==req.body.parameterRevision)throw urgentError('URGENT_CONFIGURATION_CHANGED','当前参数修订变化，请刷新后核对',{},409);
-  requireMinute(current);const old=snapshot(p.baseInputRef),next=structuredClone(old);
+  requireMinute(current);const old=snapshot(p.baseInputRef),next=copyReportSource(old);
   // Import only the explicitly acknowledged configuration layer. Authoritative
   // master-data/stock/demands remain those selected by the original plan.
   const scope=old.parameterContext?.scope||'dataset';next.tables['配置参数']=structuredClone(rows(current,'配置参数').filter(x=>scopeOf(x)==='dataset'||scopeOf(x)===scope));

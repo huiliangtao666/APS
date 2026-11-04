@@ -1,3 +1,4 @@
+import {copyReportSource} from './query-reports/source-copy.mjs';
 import {parseWorkbook} from './workbook-parse.mjs';
 import {hash,rows,refreshDerived,workbookSchema} from './workbook-model.mjs';
 import {minuteMode,MINUTE_ENGINE,instantMinute} from './workbook-minute.mjs';
@@ -10,7 +11,7 @@ export function urgentError(code,message,detail={},status=422){const e=Error(mes
 export function requireMinute(d){if(!minuteMode(d))throw urgentError('URGENT_PROFILE_UNSUPPORTED','当前计划不支持插单必需的整数分钟、执行事实保护及有限资源；请选用受支持的分钟计划。',{required:[MINUTE_ENGINE,'execution-ledger','finite-resources'],actual:d.productionContract||'day'});}
 export function targetToken(p){return hash({id:p.id,baseRunId:p.baseRunId,headRunId:p.headRunId,revision:p.revision,factsRevision:p.factsRevision,inputHash:p.inputHash,facts:p.facts});}
 export function assertTarget(p,token){if(!p||token!==targetToken(p))throw urgentError('URGENT_TARGET_CHANGED','目标计划、批次或执行事实已变化，请重新核对。',{},409);}
-export function demandInput(base,p){const d=structuredClone(base);delete d.urgentOrder;d.tables['每日需求']=[...rows(d,'每日需求').filter(r=>!p.originalDemandIds||p.originalDemandIds.includes(r['需求编号'])),...p.batches.flatMap(b=>b.demands.map(r=>({...r,_urgent:{batchId:b.id,effectiveMinute:b.effectiveMinute,sequence:b.sequence,fileHash:b.fileHash,fileName:b.fileName}})))];return refreshDerived(d,p.selection.startDay);}
+export function demandInput(base,p){const d=copyReportSource(base);delete d.urgentOrder;d.tables['每日需求']=[...rows(d,'每日需求').filter(r=>!p.originalDemandIds||p.originalDemandIds.includes(r['需求编号'])),...p.batches.flatMap(b=>b.demands.map(r=>({...r,_urgent:{batchId:b.id,effectiveMinute:b.effectiveMinute,sequence:b.sequence,fileHash:b.fileHash,fileName:b.fileName}})))];return refreshDerived(d,p.selection.startDay);}
 export function previewUrgent(buffer,base,p,{fileName,effectiveTime}){
  requireMinute(base);
  const effectiveMinute=instantMinute(effectiveTime,base.minuteOrigin),observed=p.facts.observationMinute;
@@ -33,8 +34,10 @@ export function previewUrgent(buffer,base,p,{fileName,effectiveTime}){
   if(c&&['运输天数','允许提前天数','允许延后天数','到货剩余保质比例','服务优先级'].some(f=>String(c[f]??'').trim()===''||!Number.isFinite(Number(c[f]))))add(r,'客户编号','客户运输、交付或余保参数缺项');
   r._source={fileName,fileHash,sheet:'每日需求',row:r._row};
  }
- const candidate=structuredClone(d);candidate.tables['每日需求'].push(...demands);refreshDerived(candidate,p.selection.startDay);
- const resolved=rows(candidate,'每日需求').slice(rows(d,'每日需求').length),outside=[];
+ // demandInput already detached the complete source. Extend that private
+ // candidate in place instead of keeping a second full workbook alive.
+ const originalLength=rows(d,'每日需求').length,candidate=d;candidate.tables['每日需求'].push(...demands);refreshDerived(candidate,p.selection.startDay);
+ const resolved=rows(candidate,'每日需求').slice(originalLength),outside=[];
  for(const [i,r]of resolved.entries()){
   const c=customers.get(r['客户编号']),m=materials.get(r['成品编号']);if(c&&m){for(const f of ['客户名称','区域编号','区域名称','客户等级'])r[f]=c[f];r['成品名称']=m['物料名称']||m['成品名称'];}
   for(const f of DEMAND_FIELDS.filter(f=>!required.includes(f)&&f!=='范围'))if(String(demands[i][f]??'')!==''&&String(demands[i][f])!==String(r[f]??''))warnings.push({sheet:'每日需求',row:r._row,field:f,cached:demands[i][f],value:r[f],message:'采用同版本主数据及有效参数，缓存仅供对照'});
