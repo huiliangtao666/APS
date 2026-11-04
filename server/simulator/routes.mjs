@@ -5,10 +5,11 @@ import {validateSpec, precheck, visibleEvents} from './model.mjs';
 import {catalog, exportPackage, tableTemplate} from './export.mjs';
 import {threeDaySpec} from './example.mjs';
 import {convertNative} from './import.mjs';
+import {copyReportSource} from '../query-reports/source-copy.mjs';
 
 /** No listener, app mount, data imports, solver, exchange adapter or background job is started here.
  * Mount only through the existing authenticated router and its write guard. */
-export function registerSimulatorRoutes(router,{root,permission,actorKey,writeGuard,workbookSchema,csvDefs}) {
+export function registerSimulatorRoutes(router,{root,permission,actorKey,writeGuard,workbookSchema,csvDefs,readFrozenSource}) {
   for(const [k,v] of Object.entries({permission,actorKey,writeGuard}))need(typeof v==='function','CONTEXT_REQUIRED',k,'须复用现有身份/权限/写入控制');
   need(path.isAbsolute(root)&&path.basename(root)==='independent-simulator','STORE_ROOT','root','须显式专属模拟根目录');
   const fields=catalog(workbookSchema,csvDefs);
@@ -31,7 +32,18 @@ export function registerSimulatorRoutes(router,{root,permission,actorKey,writeGu
   // Explicit files supplied by the user; no live dataset lookup or source writes.
   post('/imports/preview',async(req,res)=>{
     const b=keys(req,['source']);need(b.source&&typeof b.source==='object','SOURCE_REQUIRED','source','须选择冻结副本或B/P原件');
-    const input=copy(b.source);
+    // Native hashes use original JSON insertion order, unlike simulator fingerprints.
+    const input=copyReportSource(b.source);
+    if(input.kind==='SELECTED_FROZEN_RUN'){
+      need(typeof readFrozenSource==='function','FROZEN_READER_UNAVAILABLE','source.runId','当前公共接缝未注入冻结读取回调',503);
+      need(typeof input.runId==='string'&&input.runId.trim()&&/^[a-f0-9]{64}$/.test(input.expectedInputHash),
+        'FROZEN_SELECTION_REQUIRED','source.runId/expectedInputHash','须显式选定运行及已读取的冻结输入hash');
+      const allowed=['kind','runId','expectedInputHash','calendar','opening','script','production'];
+      for(const key of Object.keys(input))need(allowed.includes(key),'UNSUPPORTED_FIELD','source.'+key,'选定运行转换不接受客户端替换input/plan/P/schema');
+      const selection={runId:input.runId,expectedInputHash:input.expectedInputHash};
+      const frozenSource=await readFrozenSource(selection);
+      return res.json(convertNative({...input,kind:'FROZEN_SOURCE_COPY',selection,frozenSource},workbookSchema));
+    }
     if(input.kind==='WORKBOOK_BYTES_COPY')for(const role of ['business','parameters']){
       const file=input.workbooks?.[role];need(file&&typeof file.base64==='string'&&/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(file.base64),
         'SOURCE_BYTES_REQUIRED',role,'须完整base64原件');

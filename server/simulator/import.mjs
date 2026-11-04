@@ -1,6 +1,6 @@
 import {VERSION, SimulationError, requireThat as need, copy, fingerprint, date, minute, id} from './contract.mjs';
 import {validateSpec} from './model.mjs';
-import {IMPORT_VERSION, frozenSource, workbookSource, resolveSource} from './source.mjs';
+import {IMPORT_VERSION, frozenSource, frozenSourceCopy, workbookSource, resolveSource} from './source.mjs';
 import {blockedParameter} from '../parameter-contract.mjs';
 
 const number=(value,path)=>{
@@ -16,10 +16,11 @@ function timeAt(origin,n){const value=minute(origin)+integer(n,'minuteOffset');r
 /** Conversion preview never persists a branch. Partial mappings are inspectable,
  * but only a complete validated spec can be passed to the existing create API. */
 export function convertNative(request,schema) {
-  const source=request.kind==='FROZEN_RUN_COPY'?frozenSource(request.frozen,schema):
+  const source=request.kind==='FROZEN_SOURCE_COPY'?frozenSourceCopy(request.frozenSource,request.selection):
+    request.kind==='FROZEN_RUN_COPY'?frozenSource(request.frozen,schema):
     request.kind==='WORKBOOK_BYTES_COPY'?workbookSource(request.workbooks,schema):null;
-  need(source,'SOURCE_KIND_REQUIRED','kind','选择FROZEN_RUN_COPY或WORKBOOK_BYTES_COPY');
-  return convertSource(source,request,schema);
+  need(source,'SOURCE_KIND_REQUIRED','kind','选择冻结来源副本、原run/input或B/P原件');
+  return convertSource(source,request,request.kind==='FROZEN_SOURCE_COPY'?request.frozenSource.workbookSchema:schema);
 }
 
 export function convertSource(source,{calendar,opening,script,production},schema) {
@@ -30,7 +31,8 @@ export function convertSource(source,{calendar,opening,script,production},schema
     need(Array.isArray(d.tables[t]),'NATIVE_TABLE_REQUIRED',t,'源表缺失不等于空表');return d.tables[t];};
   const field=(table,row,name)=>{need(schema.tables[table].fields.some(f=>f.name===name),'NATIVE_FIELD_UNMAPPED',table+'.'+name,'当前schema未声明该字段');
     return row[name];};
-  const ref=(table,row)=>({kind:source.kind,inputHash:source.identity.inputHash,table,key:row[schema.tables[table].key],row:row._row??null});
+  const ref=(table,row)=>({kind:source.kind,datasetId:source.identity.datasetId,version:source.identity.version,
+    runId:source.identity.runId??null,inputHash:source.identity.inputHash,table,key:row[schema.tables[table].key],row:row._row??null});
   const requiredFields={物料主数据:['物料编号','物料名称','基础单位'],期初库存:['库存批次编号','物料编号','数量单位','当前数量','期初已占用量','质量状态','快照日','放行日','到期日','库位编号'],
     既有采购在途:['在途记录编号','物料编号','数量单位','订购数量','采购订单编号','订单行号','约定到货日'],每日需求:['需求编号','成品编号','需求千克','客户编号','需求日'],
     物料清单:['用量关系编号','父项编号','子项编号','清单版本编号','生效日','失效日','数量单位','父项基准产出千克','子项基准用量','标准收率']};
@@ -66,7 +68,11 @@ export function convertSource(source,{calendar,opening,script,production},schema
   const references={bom:[],parameters:archive,sourceIdentity:copy(source.identity),timeBases:{dayZero:calendar.dayZero,minuteOrigin:calendar.minuteOrigin,
     csvMinuteOrigin:'2026-11-02T08:00:00+08:00',timeZone:'Asia/Shanghai',interval:'[start,end)'},
     nativeCoverage:[],bomLossProfiles:copy(d.bomLossProfiles??[]),
-    openingIdentity:{asOf:opening.asOf,version:opening.version,source:opening.source,hash:fingerprint(opening)}};
+    openingIdentity:{asOf:opening.asOf,version:opening.version,source:opening.source,hash:fingerprint(opening)},
+    ...(source.seam?{frozenSource:copy(source.seam)}:{}),
+    sourceTimeMetadata:{input:{minuteOrigin:source.input.minuteOrigin??null,timeUnit:source.input.timeUnit??null,dayZero:source.input.dayZero??null},
+      provenance:copy(source.run?.provenance??null),plan:{minuteOrigin:source.run?.result?.minuteOrigin??null,timeUnit:source.run?.result?.timeUnit??null,dayZero:source.run?.result?.dayZero??null}}};
+  for(const gap of source.seam?.gaps??[])report('FROZEN_SOURCE_GAP',gap.path,String(gap.status),'NOT_COVERED');
   // Mapping sections are deliberately separate from author-supplied facts.
   for(const r of rows('期初库存'))attempt('期初库存',()=>{
     const key=id(field('期初库存',r,'库存批次编号'),'库存批次编号'),m=material(r['物料编号'],r['数量单位'],key),q=number(r['当前数量'],key+'.当前数量');
@@ -194,7 +200,9 @@ function assembleConversion(c) {
       tasks.push({id:id(t.id,key),outputMaterialId:m.id,outputLimit:number(t.quantity,key+'.quantity'),balanceUnit:m.unit,
         totalMinutes:processing,startRequirements:[...requirements].map(([lotId,cumulative])=>({lotId,cumulative})),resources:rs,
         plannedStart,plannedEnd,predecessor:t.predecessor??null,productionId:t.productionId??null,
-        lineage:{runId:run.id,resultHash:run.resultHash,taskId:t.id,source:copy(t.source??{}),explicitFacts:copy(f)}});
+        lineage:{runId:run.id,inputHash:run.inputHash,resultHash:run.resultHash,taskId:t.id,source:copy(t.source??{}),
+          nativeTask:copy(t),allocations:copy(feeds),inventoryBasis:opening.inventoryBasis,
+          bomRelations:references.bom.filter(e=>e.parent===t.productId&&e.effective).map(e=>e.id),explicitFacts:copy(f)}});
     });
   }
   let spec=null;

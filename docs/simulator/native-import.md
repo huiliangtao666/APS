@@ -6,11 +6,13 @@
 
 Test 拥有 `server/simulator/`、`src/simulator/`、`qa/simulator/`、`docs/simulator/`。Dev 保持唯一公共接缝 owner：`server/workbook-router.mjs`、`src/InputData.tsx`、`docs/requirements/changes/change-register.json`。转换业务由 Test 实现并负责自测修复；Dev 无需再实现字段转换，不并改上述 Test 文件。
 
-入口保持 `registerSimulatorRoutes(router, {root, permission, actorKey, writeGuard, workbookSchema, csvDefs})` 和 `<SimulatorView api={api} canWrite={canWrite} canExport={canExport}/>`。没有新增 context 参数。现有真实 schema/defs、会话 actor/permission/writeGuard 和专属 `independent-simulator` 根目录仍必须由公共 router 注入。UI 调用既有 API helper；只在明确点击时转换、创建、推进，没有自动取当前数据集或自动采用计划。
+入口为 `registerSimulatorRoutes(router, {root, permission, actorKey, writeGuard, workbookSchema, csvDefs, readFrozenSource})` 和 `<SimulatorView api={api} canWrite={canWrite} canExport={canExport}/>`。本轮消费 Dev 固定 `98aea09775ebf03bd67b1522ab712b772b046a3c` 已注入的 `readFrozenSource({runId,expectedInputHash?})`，无需 Dev 再改公共文件。现有真实 schema/defs、会话 actor/permission/writeGuard 和专属 `independent-simulator` 根目录仍由公共 router 注入。UI 调用既有 API helper；只在明确点击时转换、创建、推进，没有自动取当前数据集或自动采用计划。
 
 新增 POST `/api/workbooks/simulator/imports/preview`，沿既有 edit/writeGuard，输入 `{source: request, reason?: 既有写入理由}`。preview 不创建分支、不写源表或任何实账。整体 JSON 上限 8MiB，原件 UI 合计上限 5MiB；原生解析器单件 12MiB 限制继续生效。现有 `server/index.mjs` 的 20MiB JSON parser 可容纳，不需修改公共 parser。场景创建仍走原 `/simulator/branches`，上限 2MiB；转换输出超上限须报具体错误，不能截断 P/来源。存储完整文档 32MiB 门保持。
 
-Dev 在原公共入口接入上述两个模块即可获得文件选择及转换预览。不要从 live dataset 拼出“冻结”对象，不要新增会调用求解器的取源端点。用户显式取件可沿已有 `/runs/:id` 与 `/runs/:id/inputs` 得到所选 run 和 inputRef 副本；必须保留 JSON 属性顺序以复核原生 SHA256。现有 `/runs/:id/export` 是 CSV，不是这个冻结 JSON 合同。
+Dev 在原公共入口接入上述两个模块即可获得文件选择及转换预览。UI 在 simulator 专属目录提供明确 runId/可选预期输入 hash，GET `/api/workbooks/simulator/source-copy/:runId?inputHash=...` 读取已核公共接缝，显示身份/缺项。再显式点击转换，POST 只交 `{source:{kind:'SELECTED_FROZEN_RUN',runId,expectedInputHash,calendar,opening,script,production}}`，服务器重新调用该回调并核所选身份，拒绝客户端夹入 input/plan/P/schema。未注入回调返回503，不回退当前数据集。公共三文件不在本轮改动范围。
+
+也可上传 Dev GET 的导出原件 `aps-simulator-frozen-source@1`，选择 `FROZEN_SOURCE_COPY`，把原 envelope 放在 `frozenSource`；使用 envelope 的真实 workbookSchema。它的 run 不含 result，适配器只把原 plan 接成 result 后核 inputHash/resultHash/来源/条件；plan=null 保原样，生产模式拒绝，无计划不会产生任务。所有 gaps 保留为来源诊断，不能因字段存在签功能通过。原 run/input 文件及 B/P 文件入口保留。原生 SHA256 必须按原 JSON 插入顺序复核，路由用保键序副本；模拟器 fingerprint 是另一种排序规范，不能用于替代原 hash。现有 `/runs/:id/export` 是 CSV，不能当冻结 JSON。
 
 纯模块调用：`convertNative(request, workbookSchema)`。其中 `kind=FROZEN_RUN_COPY` 消费 `frozen:{input,run}`；`kind=WORKBOOK_BYTES_COPY` 消费 `workbooks:{business:{name,hash,bytes:Buffer},parameters:{name,hash,bytes:Buffer},identity:{id,version,capturedAt,mapping?}}`。HTTP 时把 bytes 替换为原件 `base64`；UI 用实际文件字节计算 SHA256，服务端再核。capturedAt 是明确来源快照元数据，整数分钟含时区；同一输入重复转换不生成新当前时间进入业务指纹。
 
@@ -32,7 +34,7 @@ request 还须显式包含以下内容；不是预先写好的模拟 spec，转�
 
 ## P、BOM 与保留规则
 
-原件解析复用 `parseWorkbook`、`prepareBusinessImport`、`integrateParameterImport`；有效配置复用原 `effectiveParameters/applyParameters` 和原定义边界校验，不造第二套优先级。P 覆盖 B，已有明确在线 EDIT 覆盖按既有合同保留，trial 冻结尚未适配则拒绝。P 明确待补不回退 B。完整 definitions/categories/annotations、全层实例、候选定义/实例、pending、采用值、来源和半开有效期进入 reference.parameters 并有独立 hash；未知执行规则只保留资料性质。
+原件解析复用 `parseWorkbook`、`prepareBusinessImport`、`integrateParameterImport`；有效配置复用原 `effectiveParameters/applyParameters` 和原定义边界校验，不造第二套优先级。P 覆盖 B，已有明确在线 EDIT 覆盖按既有合同保留，trial 冻结尚未适配则拒绝。P 明确待补不回退 B，只有 P 来源声明而没有实例也拒绝。公共冻结副本须有原 parameterContext/effectiveParameters/parameterPrecedence，按冻结 effectiveDay/scope 核原层解析值与原有效值 hash，而非按模拟新日期取另一套 P；不一致409，缺失422。完整 definitions/categories/annotations、全层实例、候选定义/实例、pending、采用值、来源和半开有效期、原 context/effectiveParameters 及其原生 hash 进入 reference.parameters；模拟日与冻结生效日分列。未知执行规则只保留资料性质。
 
 BOM 从原 `物料清单` 生成父子/关系/版本/生效失效/定额/单位/收率及 raw/lineage；校验引用、循环、重复关系、同日多版本及量纲。snapshot 按业务日期选择生效边，UI 递归去重只影响显示。当前适配限定 `excel-qualified-output-202611-r1`：原定额已含本层收率，保标准收率元数据，不再除收率、不生成第二次损耗。标准投入 kg 另 profile 拒绝，原 bomLossProfiles 保留引用、不擅启未映射公式。实际工艺报废继续由显式事件单记。
 
@@ -40,7 +42,7 @@ BOM 从原 `物料清单` 生成父子/关系/版本/生效失效/定额/单位/
 
 ## 待窗口的验证与实际原件
 
-域/store 原测试留原未验结论。新增 `qa/simulator/import.test.mjs` 是显式工程夹具的正常/负面源码；`real-import.test.mjs` 需在授权容器显式设置 `SIMULATOR_REAL_SOURCE_DIR`，读取实际两份 V2 原件。没有目录会标 skip/NOT_EXECUTED，不回退工程数据。这些测试本次均未执行，真实转换成功、源隔离、创建保存重开、UI、构建均不能签 PASS。
+域/store 原测试留原未验结论。`qa/simulator/import.test.mjs` 是显式工程夹具的正常/负面源码；本轮 `frozen-seam.test.mjs` 新增9项，覆盖实际 envelope 形状、plan/null、原键序 hash、按 runId 回调、拒绝身份漂移/客户端夹带、冻结 P 上下文、BOM/作业谱系及累计30→80只扣50/重放扣0。工程夹具不是实际冻结 run。`real-import.test.mjs` 需在授权容器显式设置 `SIMULATOR_REAL_SOURCE_DIR`，读取实际两份 V2 原件。没有目录会标 skip/NOT_EXECUTED，不回退工程数据。共39项测试源码，本次全部未执行，真实转换成功、源隔离、创建保存重开、UI、构建均不能签 PASS。
 
 已核字节的来源：本工作区 Git 受控原 Excel `docs/requirements/proposals/CR-INPUT-DATA-20261031/r1/肉食品仿真数据_202611_合并图示版.xlsx`，1672626 bytes，SHA256 `c4c2d40b82fd63a60b7ebbe269aecd4208e49f1f612ee0164b963b948a8b56d0`。自身 upload `APS肉食品仿真数据_完整V2.0_20261102.zip/dataset.zip` 内完整 B 2202570 bytes / `247423ea73d441e8ef6d03f538f393973287e17acb93d81ec1353abc4283d247`，P 356351 bytes / `f9a4fea37b2c50038cc7c7bd9ad513d2c73b981d8ef0cd1cc2d8f47a775b176e`，与包内版本清单逐一匹配。只验字节，未执行产品导入。V2 是明确仿真数据来源，非现场默认，不冒称设计所读旧 R2/P。
 

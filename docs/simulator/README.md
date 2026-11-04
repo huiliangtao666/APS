@@ -2,7 +2,7 @@
 
 唯一原卡 [#146](https://github.com/huiliangtao666/APS/issues/146)，当前实施合同 [6620567653](https://github.com/huiliangtao666/APS/issues/146#issuecomment-6620567653)。原任务 `dlv_222ab280-ee1e-41c1-9b62-45ff7eb52485`，本次续行 `dlv_9406df41-9be2-49d5-8253-5012a50f29be`。Test负责独立模块开发、自测及修复，Dev是唯一main整合者。
 
-这是零应用负载下提交的源码。尚未构建、运行自测、验证页面或接入公共入口；不能据此关闭A或整CR。阶段B在协议和路由均未提供启用操作。
+这是零应用负载下提交的源码。Dev 公共接缝已固定为 `98aea09775ebf03bd67b1522ab712b772b046a3c` 并由PM核收；本轮在独立目录消费其冻结来源回调及GET。尚未构建、运行自测、验证页面或实际整合本转换版本；不能据此关闭A或整CR。阶段B在协议和路由均未提供启用操作。
 
 ## 来源与范围
 
@@ -22,13 +22,13 @@
 - `src/simulator/SimulatorView.tsx`、`SimulatorTable.tsx`、`simulator.css`：独立中文操作界面，沿现有 `api(path, body?)`，默认base `/workbooks/simulator`。搜索、多选、清空/重置、独立栏位、100/200/500分页、日历日期、来源抽屉；BOM递归去重辅助支持显式edges，从转换场景冻结的真实BOM关系按日期提供展示；尚未运行验证。
 - `qa/simulator/*`：手写三日工程夹具及定向测试源码，尚未执行。
 
-公共文件均未修改。Dev串行接入应明确以下精确文件和上下文：
+公共文件本轮均未修改，Dev固定接缝已提供以下上下文，本轮只更新专属模块：
 
-1. `server/workbook-router.mjs`：在既有会话/权限和写入原因校验之后注册上述路由；注入 `root`（专属绝对路径，末段必须为 `independent-simulator`）、现有 `permission`、实际会话 `actorKey`、既有可信写入/原因 `writeGuard`、当前 `workbookSchema` 与真实CSV `defs`。模块内部路径为 `/simulator/*`，外层仍是 `/api/workbooks`。不得用无条件next作为写入控制。
+1. `server/workbook-router.mjs`：在既有会话/权限和写入原因校验之后注册上述路由；注入 `root`（专属绝对路径，末段必须为 `independent-simulator`）、现有 `permission`、实际会话 `actorKey`、既有可信写入/原因 `writeGuard`、当前 `workbookSchema` 与真实CSV `defs`、只读 `readFrozenSource({runId,expectedInputHash?})`。模块内部路径为 `/simulator/*`，外层仍是 `/api/workbooks`。不得用无条件next作为写入控制。
 2. `src/InputData.tsx`：既有导航中提供独立模拟器入口，使用同一API helper并传入既有canWrite/canExport。不得把当前用户数据集自动选为写入目标。真实冻结副本/第二P转换和BOM均由Test专属模块承担，Dev只挂既有模块入口，无需并写转换代码；完整I/O见native-import.md。
 3. `docs/requirements/changes/change-register.json`：Dev随真实整合记录本CR最新实施授权、A源码未验/B关闭和原卡引用；本轮未触碰此公共登记文件，避免与#147并写。不修改历史FR Done或基线条文。
 
-Test继续承担上述模块自测与修复；这不是将本卡开发责任转交Dev。公共接缝未完成前，不交“仅模块”冒称整包可用。
+Test继续承担上述模块自测与修复；公共接缝源码及独立转换源码不等于整合或整包可用。GET仍原样交 `NOT_CONVERTED`，只有显式转换后才能载入场景草稿。
 
 ## 独立场景输入
 

@@ -60,6 +60,27 @@ export function frozenSource({input,run},schema) {
       resultHash:run.resultHash??null,fileHash:input.fileHash,profile:input.profile,schemaVersion:schema.version,schemaHash:rawHash(schema)}};
 }
 
+/** Adapt the public seam's detached envelope, never a current workbook. The
+ * public run deliberately omits result; only envelope.plan is its hashed result. */
+export function frozenSourceCopy(envelope,selection={}) {
+  need(envelope?.contract==='aps-simulator-frozen-source@1'&&envelope.mode==='INDEPENDENT'&&envelope.linked===false&&
+    envelope.conversionStatus==='NOT_CONVERTED','FROZEN_CONTRACT_REQUIRED','frozenSource','须为公共接缝的未转换冻结副本');
+  const {run,input,plan,workbookSchema:schema,gaps}=envelope;
+  need(run&&Object.hasOwn(envelope,'plan')&&Array.isArray(gaps),'FROZEN_ENVELOPE_REQUIRED','frozenSource','缺run/plan/gaps；无计划须显式null');
+  need(!Object.hasOwn(run,'result'),'FROZEN_RESULT_AMBIGUOUS','frozenSource.run.result','公共接缝计划只能来自plan');
+  need((selection.runId===undefined||run.id===selection.runId)&&
+    (selection.expectedInputHash===undefined||run.inputHash===selection.expectedInputHash),
+    'FROZEN_SELECTION_MISMATCH','frozenSource.run','与明确选择的运行或输入hash不符',409);
+  need(plan===null||(plan&&typeof plan==='object'&&!Array.isArray(plan)),'FROZEN_PLAN_REQUIRED','frozenSource.plan','须为原冻结结果或null');
+  need(plan!==null||run.resultHash==null,'FROZEN_RESULT_MISMATCH','frozenSource.plan','存在结果hash但缺原冻结计划',409);
+  const source=frozenSource({input,run:{...run,result:plan}},schema);
+  // Preserve original frozen context verbatim, even when conversion is blocked.
+  source.seam={contract:envelope.contract,conversionStatus:envelope.conversionStatus,gaps:clean(gaps),
+    run:clean(run),schemaHash:rawHash(schema)};
+  source.identity.publicContract=envelope.contract;
+  return source;
+}
+
 export function resolveSource(source,calendar) {
   date(calendar.dayZero,'calendar.dayZero'); date(calendar.startDate,'calendar.startDate');
   minute(calendar.minuteOrigin,'calendar.minuteOrigin');
@@ -69,21 +90,40 @@ export function resolveSource(source,calendar) {
   const zero=r?.result?.dayZero??r?.provenance?.dayZero??d.dayZero;
   need(!origin||origin===calendar.minuteOrigin,'MINUTE_ORIGIN_MISMATCH','calendar.minuteOrigin','不能改写来源分钟原点',409);
   need(!zero||zero===calendar.dayZero,'DAY_ZERO_MISMATCH','calendar.dayZero','不能改写来源日序原点',409);
+  for(const [where,value]of [['input',d],['run.provenance',r?.provenance],['plan',r?.result]]){
+    if(value?.minuteOrigin!==undefined)need(value.minuteOrigin===calendar.minuteOrigin,'MINUTE_ORIGIN_MISMATCH',where+'.minuteOrigin','冻结来源间的分钟原点不一致',409);
+    if(value?.dayZero!==undefined)need(value.dayZero===calendar.dayZero,'DAY_ZERO_MISMATCH',where+'.dayZero','冻结来源间的日序原点不一致',409);
+  }
   need(d.parameterContract&&d.parameterSources?.some(s=>s.mode==='dataset'&&s.role==='P')&&d.parameterDefinitions?.length,
     'SECOND_P_REQUIRED','parameters','须含实际采用第二份P、完整目录定义及缺项，不接仅声明SECOND_P');
+  need(d.tables?.['配置参数']?.some(p=>p._sourceRole==='P'||p._source?.role==='P'),
+    'SECOND_P_ROWS_REQUIRED','input.tables.配置参数','第二P来源声明不能替代原P实例行');
   need(!d.parameterContext?.scope||d.parameterContext.scope==='dataset','PARAMETER_SCOPE_UNSUPPORTED','parameters.scope','trial冻结须另行明确适配，不混入dataset');
   const day=(Date.parse(calendar.startDate+'T00:00:00Z')-Date.parse(calendar.dayZero+'T00:00:00Z'))/86400000;
-  const active=effectiveParameters(d,day,'dataset');
+  const frozenContext=source.kind==='FROZEN_RUN_COPY'?source.input.parameterContext:null;
+  if(source.seam)need(frozenContext?.scope&&Number.isSafeInteger(frozenContext.effectiveDay)&&
+    source.input.parameterPrecedence&&source.input.effectiveParameters&&Array.isArray(source.input.effectiveParameters.values),
+    'FROZEN_PARAMETER_CONTEXT_REQUIRED','input.parameterContext/effectiveParameters','冻结参数上下文及有效值缺失，不能按当前模拟日重算替代');
+  const parameterDay=frozenContext?.effectiveDay??day;
+  need(Number.isSafeInteger(parameterDay),'FROZEN_PARAMETER_CONTEXT_REQUIRED','input.parameterContext.effectiveDay','冻结参数生效日须为原整数日序');
+  if(source.seam&&r.selection?.startDay!==undefined)need(parameterDay===r.selection.startDay,
+    'FROZEN_PARAMETER_CONTEXT_MISMATCH','input.parameterContext.effectiveDay','冻结参数日与所选运行起始日不一致',409);
+  const active=effectiveParameters(d,parameterDay,'dataset');
   const pOrigin=active.find(p=>p['对象编号']==='GLOBAL'&&p['参数名称']==='分钟原点');
   if(pOrigin)need(!blockedParameter(pOrigin)&&pOrigin['参数值']===calendar.minuteOrigin,
     'MINUTE_ORIGIN_MISMATCH','parameters.分钟原点','所选原点不符第二P有效来源',409);
   need(calendar.dayZero==='2026-10-31','DAY_ZERO_UNSUPPORTED','calendar.dayZero','当前Excel模型日序原点固定10.31；其他模型待适配');
   const issues=parameterIssues(d,{completeness:false}).filter(i=>i.severity==='error');
   need(!issues.length,'PARAMETER_CONTRACT_BLOCKED','parameters',JSON.stringify(issues));
-  applyParameters(d,day,'dataset');
+  applyParameters(d,parameterDay,'dataset');
+  if(source.seam)need(rawHash(d.effectiveParameters)===rawHash(source.input.effectiveParameters),
+    'FROZEN_PARAMETERS_MISMATCH','input.effectiveParameters','冻结有效参数与原P层/上下文不一致，不能换成当前P',409);
   const archive=clean({definitions:d.parameterDefinitions,categories:d.parameterCategories??[],annotations:d.parameterAnnotations??{},
     layers:source.input.tables['配置参数'],candidates:d.parameterCandidates??[],candidateDefinitions:d.parameterCandidateDefinitions??[],pending:d.parameterPending??[],
-    active:active.map(p=>({...p,blocked:!!blockedParameter(p)})),effectiveDay:day,precedenceVersion:d.parameterPrecedence,
-    sources:d.parameterSources,baseline:d.parameterBaseline??null});
+    active:active.map(p=>({...p,blocked:!!blockedParameter(p)})),effectiveDay:parameterDay,simulationDay:day,precedenceVersion:d.parameterPrecedence,
+    sources:d.parameterSources,baseline:d.parameterBaseline??null,context:source.input.parameterContext??null,
+    frozenEffectiveParameters:source.input.effectiveParameters??null,
+    frozenEffectiveParametersHash:source.input.effectiveParameters?rawHash(source.input.effectiveParameters):null,resolutionDay:parameterDay,
+    resolutionScope:'dataset',sourceLayersHash:rawHash(source.input.tables['配置参数'])});
   return {input:d,day,active,archive,parameterHash:fingerprint(archive)};
 }
