@@ -19,3 +19,15 @@ CSV 与 Excel 2003 SpreadsheetML XML 都导出全量筛选物料、完整日矩�
 本 CR 初始有限负载累计不超过 600 秒、每命令不超过 180 秒，必须等 #147 final RELEASED/owned0/pending0 及 PM 窗口，再 fresh 核容量和保护。持久候选、preview、浏览器、实际主求解、install、pull、旧实例操作和发布的新增授权均为 0。公开发布及用户 UAT 不属于本实现结论。
 
 恢复：本报表只读，不需要库存/方案数据回滚。临时编译产物写独立 temp 路径；不覆盖旧 dist、state、native 或冻结输入。唯一 main writer APS-Dev 精确串行整合 source 差分；现有分支普通 push，不 force/reset/revert。新受控 register 项见本目录 `register-entry.json`，与真实接入同时串行登记；该准备文件本身不等于共享 change-register 已更新。
+
+## 2026-11-04 连续功能自测修订
+
+原产品 event `dlv_213b9093-b08d-4604-a8f5-f220059a06ce:r4`；接续合同为 #140 评论 6623078955。模块/注册路由 14 项及页面 SSR/分页助手 4 项通过；真实既有 v2/v3 各 140 件物料，冻结来源、只读 HTTP、全筛选导出及关闭重开已执行。这里只记录开发自测，不代签独立 QA、UAT 或发布。
+
+真实完整导出发现 SpreadsheetML 2003 单表超过行数上限；已改为每表最多 60000 行、连续多工作表，不改变 CSV、筛选、来源或业务数值。65537 行边界自测与实际 67928 行导出解析均通过，后者拆为 60000/7928 两表，140 件物料、2240 条矩阵行和 65535 条来源字段行完整一致。安全库存查询按有效日期建立物料索引；保留冻结/参考、真实零与未知含义，不引入 PAB 或占用默认。
+
+构建基于 Dev 后继 `5ec346bd67f411bbb0fe0904b16bca294425999b` 的独立源码、依赖及 state 副本，叠加本修订 MPS 窄差分；Dev 后继自身 `UrgentOrders.tsx` 的 TS6133 另有单字符 `_a` 窄修正，仅在隔离候选验证，交唯一 writer 精确应用，未改公共产品文件。该组合完整 build 通过，不能将未修正 Dev 原 SHA 或当前分支整树冒签为相同已构建树。
+
+最后补工作台父入口 SSR 前，原受保护 exited 容器 `5af6de07197021e432e08c7d37d6a6ad79e7dcc2fb4220fdd53887c8a0cbb8ca` 消失，并出现新 APS-Test2-dev `14e331a8f1d8830a58adf755a790c59cb5d988815fc2aec15f2b079818fe43c5`。已 STOP，补测未启动；此前最后一次 XML/build 结束保护全等。保留已通过结果，后续运行由 PM 协调当前 owner/保护事实。
+
+权限仍 OUT_OF_SCOPE_BY_USER；PAB、占用归属/批次投影/执行衔接数值及浏览器交互未升签。XML 非 XLSX，精确维护上下文链接仍未接入。原件在 APS-Test 的 `APS-ISSUE140-Test-r4-REPORT.txt`、`-RESULT.json`、`-MATRIX.csv` 与 `-EVIDENCE.zip`。main/公共文件仅 Dev 串行精确整合，不盲合整个源分支。

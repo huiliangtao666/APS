@@ -30,6 +30,19 @@ function detailRows(c,q){
 function csv(value){const s=mpsDisplay(value);return '"'+(/^[=+\-@\t\r]/.test(s)&&typeof value!=='number'?"'":'')+s.replaceAll('"','""')+'"';}
 const xml=v=>mpsDisplay(v).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g,'');
 const xmlRow=values=>'<Row>'+values.map(v=>'<Cell><Data ss:Type="'+(typeof v==='number'?'Number':'String')+'">'+xml(v)+'</Data></Cell>').join('')+'</Row>\n';
+/** SpreadsheetML 2003 worksheets cannot exceed 65,536 rows. Keep source
+ * records intact across bounded sheets while retaining one complete export. */
+export function* mpsExcelChunks(rows){
+ yield '<?xml version="1.0" encoding="UTF-8"?>\n<?mso-application progid="Excel.Sheet"?>\n<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">';
+ let sheet=0,count=0;
+ for(const row of rows){
+  if(count===0){sheet++;yield '<Worksheet ss:Name="生产主计划'+sheet+'"><Table>\n';}
+  yield xmlRow(row);count++;
+  if(count===60000){yield '</Table></Worksheet>\n';count=0;}
+ }
+ if(count)yield '</Table></Worksheet>\n';
+ yield '</Workbook>';
+}
 function* outputRows(c,q){
  yield ['报表','生产主计划只读报表'];yield ['同源身份',JSON.stringify(c.meta.identity)];yield ['上下文',JSON.stringify(c.meta)];yield ['查询指纹',c.queryFingerprint];
  const visible=Array.isArray(q.columns)?q.columns:MPS_COLUMNS.map(c=>c.key);
@@ -73,7 +86,7 @@ export const mpsReportDomain={
   if(q.columns!==undefined&&(!Array.isArray(q.columns)||q.columns.some(k=>!MPS_COLUMNS.some(c=>c.key===k))))mpsFail('MPS_COLUMNS_INVALID');
   function* chunks(){
    if(q.format==='csv'){yield '\ufeff';for(const row of outputRows(c,q))yield row.map(csv).join(',')+'\r\n';}
-   else {yield '<?xml version="1.0" encoding="UTF-8"?>\n<?mso-application progid="Excel.Sheet"?>\n<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Worksheet ss:Name="生产主计划"><Table>\n';for(const row of outputRows(c,q))yield xmlRow(row);yield '</Table></Worksheet></Workbook>';}
+   else yield* mpsExcelChunks(outputRows(c,q));
   }
   return {chunks:chunks(),filename:q.format==='csv'?'mps-report.csv':'mps-report.xml',type:q.format==='csv'?'text/csv; charset=utf-8':'application/vnd.ms-excel; charset=utf-8',fingerprint:sourceHash({query:c.queryFingerprint,columns:q.columns??null})};
  }
