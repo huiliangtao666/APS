@@ -84,6 +84,8 @@ export function validateSpec(input) {
     for(const c of e.causes) need(eventIds.has(c) && c!==e.id,'CAUSE_REQUIRED',e.id,'找不到前因或事件自引用');
     if(productionTypes.has(e.type)) reference(tasks,e.data.taskId,e.id+'.taskId');
   }
+  // Validate declared opening execution before exposing a runnable scenario.
+  validateOpening(s);
   // Causal cycles, reversed time dependencies and unknown fields are never repaired by an arbitrary sort.
   orderedEvents(s.events);
   return s;
@@ -111,9 +113,44 @@ export function orderedEvents(events) {
 }
 export const admittedAt = e => Math.max(minute(e.occurredAt),minute(e.knownAt),minute(e.effectiveAt));
 export function initialState(s) {
-  return {lots:copy(s.lots),purchases:copy(s.purchases),demands:copy(s.demands),
-    tasks:s.tasks.map(t=>({...copy(t),status:'PLANNED',remainingMinutes:t.totalMinutes,processedMinutes:0,consumed:{},output:0,scrap:0,receivedOutput:0})),
-    resources:s.resources.map(r=>({...copy(r),ready:true})),holds:[],processed:{},issues:copy(s.importIssues??[]),movements:[]};
+  const holds=[];
+  const tasks=s.tasks.map(t=>{
+    const o=t.opening;
+    if(!o)return {...copy(t),status:'PLANNED',remainingMinutes:t.totalMinutes,processedMinutes:0,consumed:{},output:0,scrap:0,receivedOutput:0};
+    for(const h of o.holds??[])holds.push({...copy(h),taskId:t.id});
+    return {...copy(t),status:o.status,remainingMinutes:o.remainingMinutes,processedMinutes:o.processedMinutes,
+      consumed:copy(o.consumed),output:o.output,scrap:o.scrap,receivedOutput:o.receivedOutput,
+      ...(o.status==='RUNNING'?{activeSince:o.asOf}:{}),...(o.startedAt?{startedAt:o.startedAt}:{})};
+  });
+  return {lots:copy(s.lots),purchases:copy(s.purchases),demands:copy(s.demands),tasks,
+    resources:s.resources.map(r=>({...copy(r),ready:r.openingReady??true})),holds,processed:{},issues:copy(s.importIssues??[]),movements:[]};
+}
+function validateOpening(s) {
+  const at=minute(s.startDate+'T00:00:00'+s.offset);
+  for(const t of s.tasks)if(t.opening!==undefined){
+    const o=t.opening;
+    need(o&&o.source&&minute(o.asOf)===at&&['PLANNED','RUNNING','PAUSED','COMPLETED'].includes(o.status),
+      'OPENING_TASK_REQUIRED',t.id,'期初执行须本观测时点、来源及明确状态');
+    need(Number.isSafeInteger(o.processedMinutes)&&o.processedMinutes>=0&&Number.isSafeInteger(o.remainingMinutes)&&o.remainingMinutes>=0&&
+      o.processedMinutes+o.remainingMinutes===t.totalMinutes&&o.consumed&&typeof o.consumed==='object'&&!Array.isArray(o.consumed)&&Array.isArray(o.holds),
+      'OPENING_PROGRESS_REQUIRED',t.id,'期初加工/剩余分钟、分批累计耗料及资源持有须明确');
+    const m=s.materials.find(m=>m.id===t.outputMaterialId);
+    for(const k of ['output','scrap','receivedOutput'])atoms(o[k],m,t.id+'.opening.'+k);
+    need(o.output<=t.outputLimit&&(o.status!=='COMPLETED'||o.remainingMinutes===0), 'OPENING_TASK_RANGE',t.id,'累计产出/状态与剩余分钟冲突');
+    if(o.status==='PLANNED')need(o.processedMinutes===0&&o.remainingMinutes===t.totalMinutes&&Object.keys(o.consumed).length===0&&
+      o.output===0&&o.scrap===0&&o.receivedOutput===0&&o.holds.length===0,'OPENING_PLANNED_CONFLICT',t.id,'未开工状态不能抹去已有执行');
+    if(o.status!=='PLANNED')need(o.startedAt&&minute(o.startedAt)<=at,'OPENING_START_REQUIRED',t.id,'须明确已开工时间，不能推0');
+    const held=new Set();
+    for(const h of o.holds){
+      const r=s.resources.find(r=>r.id===h.resourceId),requirement=t.resources.find(r=>r.id===h.resourceId);
+      need(r&&requirement&&!held.has(h.resourceId)&&h.quantity===requirement.quantity&&h.endAt===null&&minute(h.startAt)<=at,
+        'OPENING_HOLD_REQUIRED',t.id,'资源持有须显式引用本任务实体、数量及有效开始时间');held.add(h.resourceId);
+    }
+    if(['RUNNING','PAUSED'].includes(o.status))need(t.resources.every(r=>held.has(r.id)),
+      'OPENING_HOLD_REQUIRED',t.id,'在制运行/暂停仍须保留全部必要资源');
+  }
+  for(const r of s.resources)need(r.openingReady===undefined||typeof r.openingReady==='boolean','OPENING_RESOURCE_READY',r.id,'就绪须显式布尔值');
+  validateBalances(s,initialState(s));
 }
 export function precheck(s, state=initialState(s), currentDate=s.startDate) {
   validateSpec(s);

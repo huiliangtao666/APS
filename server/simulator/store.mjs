@@ -135,7 +135,8 @@ export class SimulatorStore {
       const spec=replacementSpec?validateSpec(replacementSpec):copy(d.spec);
       if(cp) {
         need(fingerprint(spec.source.baseline)===fingerprint(d.spec.source.baseline)&&fingerprint(spec.source.parameters)===fingerprint(d.spec.source.parameters)&&
-          fingerprint(spec.materials)===fingerprint(d.spec.materials)&&fingerprint(spec.tasks)===fingerprint(d.spec.tasks)&&fingerprint(spec.resources)===fingerprint(d.spec.resources),
+          fingerprint(spec.lots)===fingerprint(d.spec.lots)&&fingerprint(spec.purchases)===fingerprint(d.spec.purchases)&&
+          fingerprint(spec.demands)===fingerprint(d.spec.demands)&&fingerprint(spec.materials)===fingerprint(d.spec.materials)&&fingerprint(spec.tasks)===fingerprint(d.spec.tasks)&&fingerprint(spec.resources)===fingerprint(d.spec.resources),
           'FORK_BASELINE_CONFLICT','replacementSpec','检查点恢复须同基线/参数/主数据；改基线请另建场景');
         for(const [eventId,receipt] of Object.entries(cp.state.processed))
           need(spec.events.some(e=>e.id===eventId&&fingerprint(e)===receipt.hash),'HISTORY_CONFLICT',eventId,'已应用历史不能修改；须从更早检查点新分支重放');

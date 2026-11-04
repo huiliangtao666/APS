@@ -1,3 +1,17 @@
+# 当前 #146 单一 Dev 接续状态（2026-11-04）
+
+有效合同：[#146 / 6628016267](https://github.com/huiliangtao666/APS/issues/146#issuecomment-6628016267)。APS-Dev 唯一负责开发、自测、修复与 main 串行整合；下文历史 Test 文件边界已由该合同覆盖。
+
+本次候选在隔离官方有限容器完成 41 项模块检查、实际 workbook router 三日工程场景、暂停、守恒/分钟、持久回执、新进程重开续推、新分支恢复、差异/兼容包和失败原子恢复。工程场景与真实数据分列。完整 V2 BASE 冻结 inputHash `5a4a72eb97b907b52900f7a67c019def7c743220807c19f2cb72a8d235aa927e` / resultHash `8d6ca209a7eb4cb8ac51d85ec938347bd3792271564ce3c47032970223509b4e` 的实际转换保留181定义、9292参数行、317BOM及真实来源，缺期初资料时明确BLOCKED，不签真实导入通过。
+
+显式 task.opening 现在可保留观测时点、累计耗料/产出/报废/入库、加工/剩余分钟及暂停资源；期初库存为扣后实物，历史累计不重扣。原V2在制映射不能自动当完整执行事实。冻结P上下文可从原effectiveParameters读取，禁止改用当前模拟日。原生公历日期接受YYYYMMDD并核日序。检查点新分支禁止更换期初库存/需求/采购。
+
+后续完整类型检查在192MiB堆发生真实V8 OOM，首异常已停止；没有重试或增堆、build、main合入、部署或发布。新增最后一条原生在制接缝测试源码未执行，不能计入41 PASS；最终候选未通过完整验证。A / 整CR 均 NOT_READY；B 仍关闭。本目录是可审阅候选，不替代当前main或真实用户入口。
+
+完整原件/命令/逐项结果/账/保护/恢复由本次交付 APS-ISSUE146-Dev-r2-REPORT.txt、RESULT.json、MATRIX.csv、EVIDENCE.zip 固定；只读原输入不在本补丁中公开。
+
+---
+
 # 每日数据模拟器：独立源码及接入合同
 
 唯一原卡 [#146](https://github.com/huiliangtao666/APS/issues/146)，当前实施合同 [6620567653](https://github.com/huiliangtao666/APS/issues/146#issuecomment-6620567653)。原任务 `dlv_222ab280-ee1e-41c1-9b62-45ff7eb52485`，本次续行 `dlv_9406df41-9be2-49d5-8253-5012a50f29be`。Test负责独立模块开发、自测及修复，Dev是唯一main整合者。

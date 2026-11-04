@@ -18,8 +18,38 @@ export function canonical(value) {
   if (Array.isArray(value)) return '[' + value.map(canonical).join(',') + ']';
   return '{' + Object.keys(value).sort().map(k => JSON.stringify(k) + ':' + canonical(value[k])).join(',') + '}';
 }
-export const fingerprint = value => createHash('sha256').update(canonical(value)).digest('hex');
-export const copy = value => JSON.parse(canonical(value));
+// Hash canonical tokens in bounded chunks. Native parameter archives can exceed
+// 15MB: retaining their complete canonical string beside two detached source
+// trees exhausts the fixed 192MiB import process. Sorted keys and scalar JSON
+// spelling remain exactly those of canonical(), including its validation.
+function writeCanonical(value,write) {
+  if(value===null||typeof value!=='object'){write(canonical(value));return;}
+  if(Array.isArray(value)){
+    write('[');for(let i=0;i<value.length;i++){if(i)write(',');if(i in value)writeCanonical(value[i],write);}write(']');return;
+  }
+  write('{');let first=true;
+  for(const key of Object.keys(value).sort()){
+    if(!first)write(',');first=false;write(JSON.stringify(key));write(':');writeCanonical(value[key],write);
+  }
+  write('}');
+}
+export function fingerprint(value) {
+  const h=createHash('sha256');let parts=[],length=0;
+  const flush=()=>{if(parts.length)h.update(parts.join(''));parts=[];length=0;};
+  writeCanonical(value,text=>{parts.push(text);length+=text.length;if(length>=16384)flush();});flush();
+  return h.digest('hex');
+}
+// The copy has the same canonical object-key order and JSON scalar behavior,
+// without allocating then parsing a second complete serialized model.
+export function copy(value) {
+  if(value===null||typeof value!=='object')return JSON.parse(canonical(value));
+  if(Array.isArray(value)){
+    // Preserve legacy rejection/normalization of sparse canonical array input.
+    for(let i=0;i<value.length;i++)if(!(i in value))return JSON.parse(canonical(value));
+    return value.map(copy);
+  }
+  const out={};for(const key of Object.keys(value).sort())Object.defineProperty(out,key,{value:copy(value[key]),enumerable:true,writable:true,configurable:true});return out;
+}
 export function id(value, path) {
   requireThat(typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_-]{0,95}$/.test(value),
     'INVALID_ID', path, '编号须为字母数字、短横或下划线，最长96字符'); return value;

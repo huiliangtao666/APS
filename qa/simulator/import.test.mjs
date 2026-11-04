@@ -50,7 +50,7 @@ test('BOM cycles and conflicting active versions blocked; no additional yield de
 test('opaque WIP remains visible in non-production issues and is not initialized as fresh task',()=>{
   const f=nativeFixture();f.frozen.input.tables['期初在制']=[{'在制批次编号':'WIP','已投料口径':'未提供累计事实'}];
   const out=convertNative(rehash(f),schema);assert.equal(out.status,'READY_WITH_UNCOVERED_NON_PRODUCTION');
-  assert.equal(out.spec.tasks.length,0);assert.equal(initialState(out.spec).issues[0].id,'IMPORT-G01');
+  assert.equal(out.spec.tasks.length,0);assert.equal(initialState(out.spec).issues[0].id,'IMPORT-G01-WIP');
   assert.equal(out.references.nativeContext['期初在制'][0]['在制批次编号'],'WIP');
 });
 test('source conversion is deterministic and preserves two separate minute axes',()=>{

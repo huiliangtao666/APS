@@ -1,3 +1,13 @@
+# 当前接续补充
+
+唯一开发自测 owner 已统一 APS-Dev；下方原接缝合同的历史 Test 归属只作来源。当前候选部分功能已实测，但受类型检查真实OOM停止，完整A和真实导入未通过，B关闭。
+
+FROZEN_TASKS 的 `opening.taskFacts[taskId].opening` 可显式给 `asOf/source/status/startedAt/processedMinutes/remainingMinutes/consumed/output/scrap/receivedOutput/holds`。运行或暂停的必要资源须全部明确保留；累计消耗引用真实批次且期初实物为已扣耗口径。关联原在制须给 `nativeWipId` 并匹配原产品/当前占用设备。缺字段不会清零为新任务；未知重量共享容量/累计执行仍具名拒绝。`csvMapping` 只保留显式提供的映射，不自动造事实身份。
+
+冻结源的有效参数上下文可由原 `parameterContext` 或原 `effectiveParameters.day/scope` 核对；重算验证仍须与冻结有效值一致，不改run/input/P原件。原BOM及原生业务表作为只读来源保留，不因缺精度而丢失BOM。
+
+---
+
 # #146 真实输入转换与 Dev 公共接缝合同
 
 原 event `dlv_222ab280-ee1e-41c1-9b62-45ff7eb52485`，本次接续 `dlv_9406df41-9be2-49d5-8253-5012a50f29be`。执行依据 [6620567653](https://github.com/huiliangtao666/APS/issues/146#issuecomment-6620567653)。本文件描述未运行源码；A 未通过，B 关闭，预算仍为原 600 秒未使用。

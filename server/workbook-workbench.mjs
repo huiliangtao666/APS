@@ -30,8 +30,8 @@ export function sourceIdentity(d) {
  const businessLinked=d.profile!=='parameter-catalog-202611-r1',sourceFiles=[...(businessLinked?[{kind:'business',fileHash:d.fileHash,name:d.businessFileName||d.name}]:[]),...(d.parameterSources||[]).map(p=>({kind:'parameter',...p}))];
  return {sourceFiles,businessLinked,precedenceVersion:d.parameterPrecedence||'legacy',parameterDefinitionsHash:hash(d.parameterDefinitions||[]),parameterLayerHash:hash(rows(d,'配置参数')),overlay:d.overlay||[],mappingHash:hash(d.mapping),parameterHash:hash(rows(d,'配置参数'))};
 }
-export function prepareBusinessImport(incoming,old) {
- const d=tagParameterSources(structuredClone(incoming));
+export function prepareBusinessImport(incoming,old,copyValue=structuredClone) {
+ const d=tagParameterSources(copyValue(incoming));
  d.parameterContract='CR-PARAM-UI-20261101:r1';
  d.sourceFiles=[{kind:'business',fileHash:d.fileHash},...(old?.sourceFiles||[]).filter(p=>p.kind!=='business')];
  compileBusinessBindings(d);

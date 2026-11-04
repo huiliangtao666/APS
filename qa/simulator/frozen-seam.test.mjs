@@ -75,7 +75,7 @@ test('frozen effective day remains the selected run context when simulation star
   assert.deepEqual(out.references.parameters.frozenEffectiveParameters,d.effectiveParameters);
 });
 test('missing frozen P context, inconsistent effective values, unsupported trial and origin conflict do not fall back',()=>{
-  const a=seamFixture();delete a.envelope.input.parameterContext;a.envelope.run.inputHash=rawHash(a.envelope.input);
+  const a=seamFixture();delete a.envelope.input.parameterContext;delete a.envelope.input.effectiveParameters;a.envelope.run.inputHash=rawHash(a.envelope.input);
   assert.throws(()=>convertNative(request(a),schema),{code:'FROZEN_PARAMETER_CONTEXT_REQUIRED'});
   const b=seamFixture();b.envelope.input.effectiveParameters.values[0].value='999';b.envelope.run.inputHash=rawHash(b.envelope.input);
   assert.throws(()=>convertNative(request(b),schema),{code:'FROZEN_PARAMETERS_MISMATCH'});

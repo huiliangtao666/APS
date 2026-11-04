@@ -23,9 +23,9 @@ export function parseParameterSheets(names,getCells){
  result.parameterCounts={definitions:result.parameterDefinitions.length,categories:result.parameterCategories.length,instances:result.tables['配置参数'].length,discussions:result.parameterAnnotations.discussions.length,questions:result.parameterAnnotations.questions.length};
  return result;
 }
-export function integrateParameterImport(parsed,old,{id,name,expectedVersion,fileHash,adoptParameters=false,actor,overlayResolution='keep'}){
+export function integrateParameterImport(parsed,old,{id,name,expectedVersion,fileHash,adoptParameters=false,actor,overlayResolution='keep',copyValue=structuredClone}){
  if(!['keep','replace'].includes(overlayResolution))throw Error('在线覆盖处置须为keep或replace');
- const d=tagParameterSources(old?structuredClone(old):{id,name,profile:'parameter-catalog-202611-r1',tables:{},bindings:[],mapping:null,drafts:[]});
+ const d=tagParameterSources(old?copyValue(old):{id,name,profile:'parameter-catalog-202611-r1',tables:{},bindings:[],mapping:null,drafts:[]});
  Object.assign(d,{id,name,version:expectedVersion+1,createdAt:new Date().toISOString(),parameterContract:'CR-PARAM-UI-20261101:r1'});
  d.fileHash=old?.fileHash||fileHash;
  const source={fileHash,mappingVersion:parsed.schemaVersion,mode:adoptParameters?'dataset':'candidate',role:'P',counts:parsed.parameterCounts};

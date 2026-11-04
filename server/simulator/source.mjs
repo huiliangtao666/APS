@@ -11,8 +11,24 @@ export const rawHash=sourceHash;
 const clean=value=>{
   if(value===null||typeof value!=='object')return value;
   if(Array.isArray(value))return value.map(v=>v===undefined?null:clean(v));
-  return Object.fromEntries(Object.entries(value).filter(([,v])=>v!==undefined).map(([k,v])=>[k,clean(v)]));
+  const out={...value};
+  for(const key of Object.keys(value)){if(value[key]===undefined)delete out[key];else if(value[key]!==null&&typeof value[key]==='object')Object.defineProperty(out,key,{value:clean(value[key]),enumerable:true,writable:true,configurable:true});}
+  return out;
 };
+
+// Native workbook values are plain JSON-like trees (including undefined source
+// properties). Copy mutable nodes without structuredClone's serialized string
+// buffer. Preserve own-property order, holes and aliases within the detached copy.
+export function copyNativeSource(value,seen=new WeakMap()) {
+  if(value===null||typeof value!=='object')return value;
+  if(seen.has(value))return seen.get(value);
+  const out=Array.isArray(value)?new Array(value.length):{...value};seen.set(value,out);
+  for(const key of Object.keys(value)){
+    const item=copyNativeSource(value[key],seen);
+    Object.defineProperty(out,key,{value:item,enumerable:true,writable:true,configurable:true});
+  }
+  return out;
+}
 
 /** In-memory copies only. Callers supply explicit bytes or an explicitly selected
  * immutable input/run pair. No filesystem, current dataset fallback or solver. */
@@ -28,14 +44,17 @@ export function workbookSource({business,parameters,identity},schema) {
   };
   need(identity?.id&&Number.isSafeInteger(identity.version)&&identity.version>0,'SOURCE_IDENTITY_REQUIRED','identity','须显式独立来源身份和版本');
   minute(identity.capturedAt,'identity.capturedAt');
-  const b=parse(business,'business'),p=parse(parameters,'parameters');
-  need(b.datasetVersion===p.datasetVersion,'SOURCE_VERSION_MISMATCH','parameters','B/P版本必须明确兼容');
+  let b=parse(business,'business');const businessVersion=b.datasetVersion;
   let d=prepareBusinessImport({...b,id:identity.id,version:identity.version,name:business.name,fileHash:business.hash,
-    profile:'excel-qualified-output-202611-r1',mapping:identity.mapping??null,parameterSources:[]},null);
-  let merged;try{merged=integrateParameterImport(p,d,{...identity,name:business.name,expectedVersion:identity.version-1,fileHash:parameters.hash,adoptParameters:true,actor:'independent-source-copy',overlayResolution:'keep'});}
+    profile:'excel-qualified-output-202611-r1',mapping:identity.mapping??null,parameterSources:[]},null,copyNativeSource);
+  b=null;
+  let p=parse(parameters,'parameters');
+  need(businessVersion===p.datasetVersion,'SOURCE_VERSION_MISMATCH','parameters','B/P版本必须明确兼容');
+  let merged;try{merged=integrateParameterImport(p,d,{...identity,name:business.name,expectedVersion:identity.version-1,fileHash:parameters.hash,adoptParameters:true,actor:'independent-source-copy',overlayResolution:'keep',copyValue:copyNativeSource});}
   catch(e){need(false,'PARAMETER_IMPORT_BLOCKED','parameters',e.message);}
   need(!merged.issues.some(i=>i.severity==='error'),'PARAMETER_IMPORT_BLOCKED','parameters',JSON.stringify(merged.issues));
-  d=clean(merged.d);
+  d=null;p=null;
+  d=clean(merged.d);merged=null;
   d.createdAt=identity.capturedAt;d.parameterBaseline.importedAt=identity.capturedAt;
   return {kind:'WORKBOOK_BYTES_COPY',input:d,run:null,identity:{kind:'WORKBOOK_BYTES_COPY',datasetId:d.id,version:d.version,
     inputHash:rawHash(d),businessFile:{name:business.name,hash:business.hash,bytes:business.bytes.length},
@@ -100,13 +119,18 @@ export function resolveSource(source,calendar) {
     'SECOND_P_ROWS_REQUIRED','input.tables.配置参数','第二P来源声明不能替代原P实例行');
   need(!d.parameterContext?.scope||d.parameterContext.scope==='dataset','PARAMETER_SCOPE_UNSUPPORTED','parameters.scope','trial冻结须另行明确适配，不混入dataset');
   const day=(Date.parse(calendar.startDate+'T00:00:00Z')-Date.parse(calendar.dayZero+'T00:00:00Z'))/86400000;
-  const frozenContext=source.kind==='FROZEN_RUN_COPY'?source.input.parameterContext:null;
+  // Older frozen V2 sources carry the same context in effectiveParameters.
+  // Read that frozen metadata; never substitute the simulation/current P day.
+  const ep=source.input.effectiveParameters;
+  const frozenContext=source.kind==='FROZEN_RUN_COPY'?(source.input.parameterContext??
+    (ep&&Number.isSafeInteger(ep.day)?{scope:ep.scope,effectiveDay:ep.day}:null)):null;
   if(source.seam)need(frozenContext?.scope&&Number.isSafeInteger(frozenContext.effectiveDay)&&
     source.input.parameterPrecedence&&source.input.effectiveParameters&&Array.isArray(source.input.effectiveParameters.values),
     'FROZEN_PARAMETER_CONTEXT_REQUIRED','input.parameterContext/effectiveParameters','冻结参数上下文及有效值缺失，不能按当前模拟日重算替代');
+  need(!frozenContext||frozenContext.scope==='dataset','PARAMETER_SCOPE_UNSUPPORTED','parameters.scope','冻结试算参数须显式适配，不替换为dataset');
   const parameterDay=frozenContext?.effectiveDay??day;
   need(Number.isSafeInteger(parameterDay),'FROZEN_PARAMETER_CONTEXT_REQUIRED','input.parameterContext.effectiveDay','冻结参数生效日须为原整数日序');
-  if(source.seam&&r.selection?.startDay!==undefined)need(parameterDay===r.selection.startDay,
+  if(frozenContext&&r.selection?.startDay!==undefined)need(parameterDay===r.selection.startDay,
     'FROZEN_PARAMETER_CONTEXT_MISMATCH','input.parameterContext.effectiveDay','冻结参数日与所选运行起始日不一致',409);
   const active=effectiveParameters(d,parameterDay,'dataset');
   const pOrigin=active.find(p=>p['对象编号']==='GLOBAL'&&p['参数名称']==='分钟原点');
@@ -116,12 +140,13 @@ export function resolveSource(source,calendar) {
   const issues=parameterIssues(d,{completeness:false}).filter(i=>i.severity==='error');
   need(!issues.length,'PARAMETER_CONTRACT_BLOCKED','parameters',JSON.stringify(issues));
   applyParameters(d,parameterDay,'dataset');
-  if(source.seam)need(rawHash(d.effectiveParameters)===rawHash(source.input.effectiveParameters),
+  if(frozenContext&&source.input.effectiveParameters)need(rawHash(d.effectiveParameters)===rawHash(source.input.effectiveParameters),
     'FROZEN_PARAMETERS_MISMATCH','input.effectiveParameters','冻结有效参数与原P层/上下文不一致，不能换成当前P',409);
   const archive=clean({definitions:d.parameterDefinitions,categories:d.parameterCategories??[],annotations:d.parameterAnnotations??{},
     layers:source.input.tables['配置参数'],candidates:d.parameterCandidates??[],candidateDefinitions:d.parameterCandidateDefinitions??[],pending:d.parameterPending??[],
     active:active.map(p=>({...p,blocked:!!blockedParameter(p)})),effectiveDay:parameterDay,simulationDay:day,precedenceVersion:d.parameterPrecedence,
     sources:d.parameterSources,baseline:d.parameterBaseline??null,context:source.input.parameterContext??null,
+    resolvedFrozenContext:frozenContext,contextSource:source.input.parameterContext?'parameterContext':frozenContext?'effectiveParameters':'explicit-simulation-day',
     frozenEffectiveParameters:source.input.effectiveParameters??null,
     frozenEffectiveParametersHash:source.input.effectiveParameters?rawHash(source.input.effectiveParameters):null,resolutionDay:parameterDay,
     resolutionScope:'dataset',sourceLayersHash:rawHash(source.input.tables['配置参数'])});

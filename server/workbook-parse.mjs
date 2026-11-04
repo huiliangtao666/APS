@@ -11,7 +11,7 @@ function unzip(buf){if(buf.length>12*1024*1024)throw Error('工作簿超过12MB'
   const start=local+30+buf.readUInt16LE(local+26)+buf.readUInt16LE(local+28);if(start+size>buf.length)throw Error('ZIP条目越界');const source=buf.subarray(start,start+size);files.set(name,{source,method,expanded,crc});
  }return files;
 }
-const unescape=s=>String(s??'').replace(/&(#x[\da-fA-F]+|#\d+|amp|lt|gt|quot|apos);/g,(_,t)=>t[0]==='#'?String.fromCodePoint(t[1]==='x'?parseInt(t.slice(2),16):Number(t.slice(1))):({amp:'&',lt:'<',gt:'>',quot:'"',apos:"'"}[t]));
+const unescape=s=>Buffer.from(String(s??'').replace(/&(#x[\da-fA-F]+|#\d+|amp|lt|gt|quot|apos);/g,(_,t)=>t[0]==='#'?String.fromCodePoint(t[1]==='x'?parseInt(t.slice(2),16):Number(t.slice(1))):({amp:'&',lt:'<',gt:'>',quot:'"',apos:"'"}[t])),'utf16le').toString('utf16le');
 const attrs=s=>Object.fromEntries([...s.matchAll(/([\w:]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g)].map(m=>[m[1],unescape(m[2]??m[3])]));
 const text=s=>[...s.matchAll(/<(?:\w+:)?t(?:\s[^>]*)?>([\s\S]*?)<\/(?:\w+:)?t>/g)].map(m=>unescape(m[1])).join('');
 const exactText=q=>{let n=q.n,d=q.d,sign=n<0n?'-':'';if(n<0n)n=-n;let out=String(n/d),r=n%d,places=0;if(r)out+='.';while(r&&places++<18){r*=10n;out+=String(r/d);r%=d;}return sign+out;};

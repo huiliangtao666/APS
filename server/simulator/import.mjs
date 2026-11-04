@@ -113,7 +113,8 @@ export function convertSource(source,{calendar,opening,script,production},schema
 function assembleConversion(c) {
   const {source,resolved,calendar,opening,script,production,d,day,diagnostics,report,attempt,rows,ref,globalValue,
     material,materials,lots,purchases,demands,resources,tasks,references}=c;
-  const rawBom=rows('物料清单'),materialsById=new Map(materials.map(m=>[m.id,m]));
+  // BOM identity/unit references do not depend on missing execution precision.
+  const rawBom=rows('物料清单'),materialsById=new Map(rows('物料主数据').map(r=>[r['物料编号'],{id:r['物料编号'],unit:r['基础单位']}]));
   const allRelations=new Set(),versions=new Map(),pairs=new Set();
   for(const r of rawBom)attempt('物料清单',()=>{
     const from=integer(r['生效日'],'物料清单.生效日'),until=integer(r['失效日'],'物料清单.失效日');
@@ -144,7 +145,7 @@ function assembleConversion(c) {
   references.nativeCoverage=[...Object.entries(d.tables).map(([table,values])=>({table,rows:values.length,
     status:['物料主数据','物料清单','期初库存','既有采购在途','每日需求','配置参数'].includes(table)?'MAPPED_WITH_EXPLICIT_FACT_REQUIREMENTS':'REFERENCE_ONLY'}))];
   references.nativeContext={};
-  for(const t of ['期初在制','在制剩余映射','工艺路线','设备与工装','班组资源','生产班次','停机安排','工厂日历','日业务时点规则','单位换算']){
+  for(const t of ['物料主数据','期初库存','既有采购在途','每日需求','期初在制','在制剩余映射','工艺路线','设备与工装','班组资源','生产班次','停机安排','工厂日历','日业务时点规则','单位换算']){
     if(Array.isArray(d.tables[t]))references.nativeContext[t]=copy(d.tables[t]);
     else report('NATIVE_CONTEXT_NOT_COVERED',t,'来源无此表，未生造配套输入','NOT_COVERED');
   }
@@ -152,14 +153,12 @@ function assembleConversion(c) {
   attempt('calendar.coverageEnd',()=>{
     const available=new Set();for(const r of rows('工厂日历')){
       const actual=shiftDate(calendar.dayZero,r['日序']);
-      need(String(r['公历日期']).replaceAll('.','-')===actual,'NATIVE_CALENDAR_MISMATCH','工厂日历.'+r['日序'],'原生日期与日序不符');available.add(actual);
+      const normalize=v=>String(v).replaceAll('.','-').replace(/^(\d{4})(\d{2})(\d{2})$/,'$1-$2-$3');
+      need(normalize(r['公历日期'])===actual&&(r['日历日期']===undefined||normalize(r['日历日期'])===actual),'NATIVE_CALENDAR_MISMATCH','工厂日历.'+r['日序'],'原生日期与日序不符');available.add(actual);
     }
     need(calendar.startDate<=calendar.endDate&&calendar.endDate<=calendar.coverageEnd,'COVERAGE_RANGE','calendar','模拟范围越界');
     for(let at=calendar.startDate;at<=calendar.coverageEnd;at=shiftDate(at,1))need(available.has(at),'COVERAGE_GAP','calendar.'+at,'实际日历资料不覆盖声明范围；不补假日历');
   });
-  if(rows('期初在制').length){const message='期初在制/剩余映射不是完整累计执行与资源持有账；须提供逐批执行事实，当前不假造为未开工作业';
-    report('G01','期初在制',message,production.mode==='NON_PRODUCTION'?'NOT_COVERED':'BLOCKED');
-    uncovered.push({id:'IMPORT-G01',objectId:'期初在制',reason:message,date:calendar.startDate,resolved:false});}
   if(production.mode==='FROZEN_TASKS'){
     const run=source.run,p=run?.result;
     need(p&&['completed','partial'].includes(run.status)&&p.timeUnit==='minute'&&p.minuteOrigin===calendar.minuteOrigin&&
@@ -179,8 +178,8 @@ function assembleConversion(c) {
     for(const key of production.taskIds)attempt(key,()=>{
       const t=p.tasks?.find(t=>t.id===key);need(t,'FROZEN_TASK_MISSING',key,'所选task不在冻结结果中');
       need(Number.isSafeInteger(t.start)&&Number.isSafeInteger(t.end)&&t.end>t.start,'TASK_TIME_REQUIRED',key,'须源作业整数分钟边界');
-      const plannedStart=timeAt(calendar.minuteOrigin,t.start),plannedEnd=timeAt(calendar.minuteOrigin,t.end);
-      need(minute(plannedStart)>=minute(opening.asOf),'PAST_TASK_REQUIRES_FACTS',key,'已开始/已完成作业不能清零后重新投料');
+      const plannedStart=timeAt(calendar.minuteOrigin,t.start),plannedEnd=timeAt(calendar.minuteOrigin,t.end),f=opening.taskFacts?.[key];
+      need(minute(plannedStart)>=minute(opening.asOf)||f?.opening,'PAST_TASK_REQUIRES_FACTS',key,'已开始/已完成作业须显式期初执行，不得清零重扣');
       const m=material(t.productId,'千克',key),rs=[{id:addResource(t.machine,'machine'),quantity:1}];
       need(Array.isArray(t.tools)&&Number.isSafeInteger(t.people)&&t.people>=0,'TASK_RESOURCE_FACTS',key,'工装/人员需求缺失');
       if(t.people>0)rs.push({id:addResource(t.crew,'crew'),quantity:t.people});
@@ -193,17 +192,32 @@ function assembleConversion(c) {
         const n=number(a.quantity,key+'.allocation.quantity');need(n>=0,'FEED_QUANTITY',key,'投料数量不得负');
         requirements.set(lot.id,(requirements.get(lot.id)||0)+n);
       }
-      const f=opening.taskFacts?.[key];
       need(f?.source&&f.confirmAllocationsComplete===true,'FEED_COMPLETENESS_REQUIRED',key,'须明确所选作业分批投料清单完整；空分配不推定零用料');
       const processing=integer(f.totalProcessingMinutes,key+'.totalProcessingMinutes');
       need(processing>0&&processing<=t.end-t.start,'PROCESSING_MINUTES_REQUIRED',key,'须显式加工工时，不把跨班/等待历时直接当加工');
       tasks.push({id:id(t.id,key),outputMaterialId:m.id,outputLimit:number(t.quantity,key+'.quantity'),balanceUnit:m.unit,
         totalMinutes:processing,startRequirements:[...requirements].map(([lotId,cumulative])=>({lotId,cumulative})),resources:rs,
+        ...(f.opening?{opening:copy(f.opening)}:{}),
+        ...(f.csvMapping?{csvMapping:copy(f.csvMapping)}:{}),
         plannedStart,plannedEnd,predecessor:t.predecessor??null,productionId:t.productionId??null,
         lineage:{runId:run.id,inputHash:run.inputHash,resultHash:run.resultHash,taskId:t.id,source:copy(t.source??{}),
           nativeTask:copy(t),allocations:copy(feeds),inventoryBasis:opening.inventoryBasis,
           bomRelations:references.bom.filter(e=>e.parent===t.productId&&e.effective).map(e=>e.id),explicitFacts:copy(f)}});
     });
+  }
+  // Do not erase initial WIP merely because selected production tasks are future.
+  for(const w of rows('期初在制')){
+    const key=w['在制批次编号'],matched=tasks.filter(t=>t.lineage.explicitFacts.nativeWipId===key&&t.opening);
+    if(matched.length===1){
+      const t=matched[0],map=rows('在制剩余映射').find(r=>r['在制批次编号']===key);
+      if(t.outputMaterialId!==w['成品编号']||!map||!t.resources.some(r=>r.id===map['当前占用设备编号']))
+        report('G01',key,'显式期初执行与原在制产品/占用设备或剩余映射不一致');
+      else references.nativeCoverage.push({table:'期初在制',key,status:'EXPLICIT_OPENING_EXECUTION',taskId:t.id});
+    }else{
+      const message='缺本在制累计执行/精度/实体持有事实；原预计完工与剩余映射不可推定零累计';
+      report('G01','期初在制.'+key,message,production.mode==='NON_PRODUCTION'?'NOT_COVERED':'BLOCKED');
+      uncovered.push({id:'IMPORT-G01-'+key,objectId:key,reason:message,date:calendar.startDate,resolved:false});
+    }
   }
   let spec=null;
   const windowDays=attempt('窗口天数',()=>{const value=integer(globalValue('窗口天数'),'窗口天数');need(value>0,'WINDOW_REQUIRED','窗口天数','窗口须大于0');return value;});
