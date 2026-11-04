@@ -1,0 +1,201 @@
+{
+  "event_key": "APS-USER-20261104-ONTOLOGY-THREE-LAYERS-V7",
+  "file": "APS_生产排程_Ontology_三层字段连线_v7.html",
+  "bytes": 4887908,
+  "sha256": "201ed2e9a501efbab5b6bee602b2b5dc8e914eaf9316e92fb077fe2cc3522dc5",
+  "codeSha": "2d31053aae94804c4a25b2efa91e696b9a643d54",
+  "verifiedAt": "2026-11-04T05:50:50.036567+00:00",
+  "scope": "Standalone ontology HTML; no application engine/state change, build/publish or real UAT conclusion",
+  "counts": {
+    "entities": 19,
+    "originalEntitiesUnchanged": 17,
+    "promotedEntities": 2,
+    "sourceConnections": 565,
+    "processEntityLinks": 82,
+    "businessFieldLinks": 166,
+    "actions": 66
+  },
+  "checks": [
+    {
+      "assertion": "Original 17 business entity definitions and every field/action exactly preserved",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Exactly two original context types promoted once to ontology entities",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Promoted governance retains all original field semantics, IDs, source paths and actions",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Promoted evidence retains all original field semantics, IDs, source paths and actions",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Original business field dependencies, source schemas, bindings and OWL reference unchanged",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Existing action/constraint definitions preserved; promoted actions added with explicit preconditions",
+      "result": "PASS"
+    },
+    {
+      "assertion": "All five business types preserved; provenance has no sixth category",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Every process binding terminates only on an existing entity, never a detailed field",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Both promoted entities are connected to actual business steps",
+      "result": "PASS"
+    },
+    {
+      "assertion": "565 source connections exactly reproduce explicit table-field to ontology-property bindings",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Every source connection has two valid detailed endpoints and a declared source path",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Six columns keep original entity assignments, wider 80px gutters and sufficient width",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Referenced scheduling evidence hashes match the inspected source revision",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Standalone deliverable embeds exact final model and no external scripts or business API",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Final combined script parses",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Actual browser JSON and saved HTML contain identical final model",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Actual saved DOM has exactly 19 ontology cards, unique IDs and every original/new field/action",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Actual saved SVG renders all 565 exact source connections",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Actual saved SVG renders all 82 process-to-entity bindings",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Actual saved SVG retains all 166 business field connections and 66 actions",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Actual saved view defaults both detailed and interlayer lines on, no injected dev scripts",
+      "result": "PASS"
+    },
+    {
+      "assertion": "Actual saved HTML reopens with source and entity-level process links; mouse/keyboard trace and filters verified",
+      "result": "PASS"
+    }
+  ],
+  "exports": [
+    {
+      "file": "temp/browser-downloads-ZvmWwQ/32b83a6a-e01a-4bf2-ad89-1a54aba5a876-APS_Ontology_v7_三层连线模型.json",
+      "bytes": 7515424,
+      "sha256": "379db629540a634766929417d97d3c99c3703e8f1db04a1379d6e82fbf21caad"
+    },
+    {
+      "file": "temp/browser-downloads-ZvmWwQ/6d740223-5cfe-4529-9685-9c64e074a9ef-APS_生产排程_Ontology_三层字段连线_v7.html",
+      "bytes": 6250702,
+      "sha256": "7a80c0a1e9c1ce3428873b8b00279ce767ab6aa0e9a9668cb28ae266911a7a79"
+    }
+  ],
+  "browser": {
+    "startedEpoch": 1793771110000,
+    "screenshots": {
+      "processFocus": "screenshots/agent-browser-2026-11-04T05-49-23.jpg",
+      "entities": "screenshots/agent-browser-2026-11-04T05-49-24.jpg",
+      "sourceTrace": "screenshots/agent-browser-2026-11-04T05-49-52.jpg",
+      "overview": "screenshots/agent-browser-2026-11-04T05-51-13.jpg"
+    },
+    "checks": [
+      "Default SVG contains precise source and entity-level process links",
+      "Business S02 focus highlights bindings without targeting detailed fields",
+      "Both promoted ontology cards render original fields and actions",
+      "Native source port click opens reverse mappings",
+      "Native mouse click on T001 curve highlights exact source and target fields after hit-area correction",
+      "Keyboard Enter on source curve opens detailed provenance",
+      "Evidence code field links to exact source T554",
+      "Date filter retains F226 while excluding non-date F204",
+      "Turning layer links off removes business bindings and source traces while retaining business field connections; reset restores all",
+      "Searching exact customer source path keeps both ends of T001",
+      "No error-level browser console entries during v7 verification",
+      "Actual saved HTML reopened and default source/business connections regenerated correctly"
+    ],
+    "fixes": [
+      "Same-column long source curves had too-narrow mouse hit area; transparent interior hit area added and native mouse click rechecked"
+    ],
+    "downloads": [
+      {
+        "id": "9028b72d-93ee-4498-b67a-e0c1b7299981",
+        "frameId": "0B726C4304BDBDA3997C14C37A0AFC9D",
+        "filename": "APS_Ontology_v7_三层连线模型.json",
+        "state": "completed",
+        "receivedBytes": 7515424,
+        "startedAt": 1793771392859,
+        "path": "temp/browser-downloads-ZvmWwQ/32b83a6a-e01a-4bf2-ad89-1a54aba5a876-APS_Ontology_v7_三层连线模型.json",
+        "completedAt": 1793771392886
+      },
+      {
+        "id": "045c4a85-8fa8-4f03-b643-6fcb825dbd30",
+        "frameId": "0B726C4304BDBDA3997C14C37A0AFC9D",
+        "filename": "APS_生产排程_Ontology_三层字段连线_v7.html",
+        "state": "completed",
+        "receivedBytes": 6250702,
+        "startedAt": 1793771393020,
+        "path": "temp/browser-downloads-ZvmWwQ/6d740223-5cfe-4529-9685-9c64e074a9ef-APS_生产排程_Ontology_三层字段连线_v7.html",
+        "completedAt": 1793771393036
+      }
+    ]
+  },
+  "cleanup": {
+    "taskDuBefore": "7.4M\ttemp/aps-ontology-v7\n",
+    "diskBefore": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5   460Gi   361Gi    58Gi    87%    4.8M  607M    1%   /System/Volumes/Data\n",
+    "removed": [
+      {
+        "path": "temp/browser-downloads-ZvmWwQ/32b83a6a-e01a-4bf2-ad89-1a54aba5a876-APS_Ontology_v7_三层连线模型.json",
+        "reason": "Verified unused browser export; final artifact/model retained",
+        "beforeBytes": 7515424,
+        "afterBytes": 0
+      },
+      {
+        "path": "temp/browser-downloads-ZvmWwQ/6d740223-5cfe-4529-9685-9c64e074a9ef-APS_生产排程_Ontology_三层字段连线_v7.html",
+        "reason": "Verified unused browser export; final artifact/model retained",
+        "beforeBytes": 6250702,
+        "afterBytes": 0
+      },
+      {
+        "path": "apps/aps-latest-current/temp/ontology-v7-preview/saved.html",
+        "reason": "Duplicate saved-HTML reopen probe, browser returned to current index",
+        "beforeBytes": 6250702,
+        "afterBytes": 0
+      }
+    ],
+    "releasedLogicalBytes": 20016828,
+    "retained": [
+      "Final v7 HTML and all previous deliverables",
+      "Original uploads, browser screenshots and source references",
+      "Authoring source/model, verification records and active v7 index",
+      "Runtime data, dependencies, build outputs and unrelated task files untouched"
+    ],
+    "pending": [],
+    "note": "Only this task unused reconstructible copies removed; logical bytes do not establish memory recovery."
+  }
+}

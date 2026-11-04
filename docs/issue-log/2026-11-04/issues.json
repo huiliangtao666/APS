@@ -99,5 +99,19 @@
     "scope": "Standalone ontology HTML; no APS engine change, application build/publish, real business execution or UAT conclusion",
     "detail": "ontology-v6/README.md",
     "validation": "ontology-v6/validation.json"
+  },
+  {
+    "event_key": "APS-USER-20261104-ONTOLOGY-THREE-LAYERS-V7",
+    "number": 154,
+    "url": "https://github.com/huiliangtao666/APS/issues/154",
+    "state": "closed",
+    "state_reason": "completed",
+    "closed_at": "2026-11-04T05:52:34Z",
+    "deliverable": "APS_生产排程_Ontology_三层字段连线_v7.html",
+    "bytes": 4887908,
+    "sha256": "201ed2e9a501efbab5b6bee602b2b5dc8e914eaf9316e92fb077fe2cc3522dc5",
+    "scope": "Standalone ontology HTML; no application engine/state change, build/publish or real UAT conclusion",
+    "detail": "ontology-v7/README.md",
+    "validation": "ontology-v7/validation.json"
   }
 ]
