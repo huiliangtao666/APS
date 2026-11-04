@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createMpsReport,MPS_METRICS,mpsSelected} from '../server/mps-report.mjs';
-import {mpsReportDomain} from '../server/mps-report-domain.mjs';
+import {mpsReportDomain,mpsExcelChunks} from '../server/mps-report-domain.mjs';
 import {workbookQueryContext,workbookQueryBoundContext} from '../server/workbook-query-report-context.mjs';
 import {sourceHash} from '../server/query-reports/source-copy.mjs';
 import {mpsFixture,mpsRun,mpsContext} from './mps-report-fixture.mjs';
@@ -68,4 +68,27 @@ test('MPS-22: single material matrix independent of overview paging; source supp
  const v=mpsContext(),q={...query,materialId:'FG1',pageSize:100,table:'inventory'};const matrix=mpsReportDomain.matrix(v,q);assert.equal(matrix.records.length,16);
  const detail=mpsReportDomain.detail(v,q);const source=mpsReportDomain.source(v,{...q,id:detail.records[0].id});assert.match(source.text,/库存批次编号/);assert.match(source.text,/fingerprint/);
  assert.throws(()=>mpsReportDomain.query(v,{...q,pageSize:20}),e=>e.code==='MPS_PAGE_INVALID');assert.throws(()=>mpsReportDomain.matrix(v,{...q,filters:{materialId:{mode:'NONE'}}}),e=>e.code==='MPS_MATERIAL_NOT_SELECTED');
+});
+test('MPS-24: indexed safety lookup retains zero, unknown and independent frozen/input values over all dates',()=>{
+ const d=mpsFixture();d.tables['物料主数据'][0]['安全库存量']='0';
+ const frozen=mpsContext(d,mpsRun(d)),report=createMpsReport(frozen,query);
+ for(const date of report.days){
+  assert.equal(cell(report,'FG1','safety',date).value,0);
+  assert.equal(cell(report,'RM1','safety',date).value,10);
+  assert.equal(cell(report,'PK1','safety',date).state,'PENDING_REVIEW');
+ }
+ const later=structuredClone(d);later.tables['物料主数据'][0]['安全库存量']='999';
+ const current=createMpsReport(mpsContext(later),query);
+ assert.equal(cell(current,'FG1','safety','2026-11-03').value,999);
+ assert.equal(cell(report,'FG1','safety','2026-11-03').value,0);
+});
+
+test('MPS-23: Excel 2003 XML splits large exports without dropping the 65,537th row',()=>{
+ function* rows(){for(let i=0;i<65537;i++)yield ['来源',i];}
+ const counts=[];let seen=0,last=-1;
+ for(const chunk of mpsExcelChunks(rows())){
+  if(chunk.startsWith('<Worksheet'))counts.push(0);
+  if(chunk.startsWith('<Row>')){counts[counts.length-1]++;seen++;assert.ok(++last<65537);if(seen===65537)assert.match(chunk,/>65536<\/Data>/);}
+ }
+ assert.deepEqual(counts,[60000,5537]);assert.equal(seen,65537);assert.ok(counts.every(n=>n<=65536));
 });

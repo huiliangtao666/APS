@@ -130,6 +130,18 @@ function finishReport(c){
  const days=Array.from({length:window.end-window.start},(_,i)=>at(v,window.start+i));
  const planStart=number(v.run?.selection.startDay),planEnd=number(v.run?.selection.endDay);
  const coverage=date=>ready&&planStart!==null&&planEnd!==null&&date>=at(v,planStart)&&date<at(v,planEnd);
+ // Resolve effective safety parameters once per date, rather than cloning and
+ // resolving the complete frozen workbook for every material and cell.
+ const safetyMaterials=new Map();
+ const safetyFor=date=>{
+  const day=(Date.parse(date)-Date.parse(v.identity.dayZero))/86400000;
+  const effective=v.run?v.run.provenance?.effectiveAt??planStart:day;
+  if(!safetyMaterials.has(effective)){
+   const active=v.run?c.d:resolvedInput(c.snapshot,effective);
+   safetyMaterials.set(effective,new Map(table(active,'物料主数据').map(r=>[r['物料编号'],r])));
+  }
+  return safetyMaterials.get(effective);
+ };
  const eventIndex=new Map();for(const e of events){const key=JSON.stringify([e.materialId,e.metric]);if(!eventIndex.has(key))eventIndex.set(key,[]);eventIndex.get(key).push(e);}
  const metric=(material,key,date)=>{
   if(['opening','balance','shortage','safetyGap'].includes(key))return unknown('拟议PAB公式未裁决；占用归属/执行衔接/批次投影需逐项核对');
@@ -139,9 +151,7 @@ function finishReport(c){
   if(v.run&&!ready)return unknown('选定运行尚无成功结果，冻结原始输入仅供参考','NOT_COVERED');
   if(key==='independent'&&p&&!Array.isArray(p.demandResults))return unknown('运行未提供需求选择结果集合','NOT_PROVIDED');
   if(key==='safety'){
-   const day=(Date.parse(date)-Date.parse(v.identity.dayZero))/86400000;
-   const active=resolvedInput(c.snapshot,v.run? v.run.provenance?.effectiveAt??planStart:day);
-   const m=table(active,'物料主数据').find(r=>r['物料编号']===material['物料编号']);
+   const m=safetyFor(date).get(material['物料编号']);
    return finite(m?.['安全库存量'])?known(number(m['安全库存量'])):unknown('有效参数未提供安全库存目标');
   }
   if(key==='demand')return sum([metric(material,'independent',date),metric(material,'dependent',date)]);

@@ -18,7 +18,7 @@ test('Chinese presentation keeps true zero, unknown, uncovered and NA distinct',
 });
 test('read-only report shell renders using existing API prop and explicit version',()=>{
  const html=renderToString(<MpsReport api={async()=>{throw Error('SSR must not issue requests');}} context={{datasetId:'DS1',version:9}} canExport={false} onClose={()=>{}}/>);
- assert.match(html,/生产主计划/);assert.match(html,/输入参考/);assert.match(html,/v9/);assert.doesNotMatch(html,/自动下单|自动修改库存/);
+ assert.match(html,/生产主计划/);assert.match(html,/输入参考/);assert.match(html.replace(/<!--.*?-->/g,''),/v9/);assert.doesNotMatch(html,/自动下单|自动修改库存/);
 });
 test('logical 500-row page assembles bounded source chunks and rejects a changed identity',async()=>{
  const identity={datasetId:'DS',version:1,dayZero:'2026-10-31',fingerprint:'F'};
