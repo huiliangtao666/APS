@@ -37,13 +37,15 @@ export function createSolverRunService(ctx){
   const request=solverRequest(body);let e;try{e=environment();}catch(error){if(request.requested==='cp-sat')throw error;e={budget:null};}
   if(request.requested==='basic')return freezeSolverConditions({body,input:d,selection,effectiveBudget:e.budget?solverBudget(request,e.budget):null,coverage:null,availability:null});
   const preliminary={inputHash:fingerprint(d),selectionHash:fingerprint(selection),objective:{kind:'feasibility',source:'本CR不新增优化目标；复用现有业务规则，不将排序变成隐藏最短工期'}};
-  const model=compileWorkbookModel(d,selection,preliminary);
+  ctx.diagnostic?.('readiness.freeze-before-compile',{});
+  const model=compileWorkbookModel(d,selection,preliminary,{diagnostic:ctx.diagnostic});ctx.diagnostic?.('readiness.freeze-after-compile',{});
   return freezeSolverConditions({body,input:d,selection,effectiveBudget:e.budget,coverage:model.rules,availability:e.availability});
  };
  function readiness(d,body,actor){
-  const check=checkSelection(d,body,actor);let conditions,request,availability=null,budget=null,modelHash=null;
-  try{request=solverRequest(body);let e;try{e=environment();}catch(error){if(request.requested==='cp-sat')throw error;e={budget:null,availability:{available:false,reason:error.message}};}availability=e.availability;if(e.budget)budget=solverBudget({...request,maxSeconds:request.maxSeconds},e.budget);const input=frozenInput(d,body,actor,check.selection);
-   if(check.ready){conditions=freeze(input,check.selection,body);if(request.requested==='cp-sat')modelHash=compileWorkbookModel(input,check.selection,conditions).modelHash;}
+  ctx.diagnostic?.('readiness.before-check-selection',{});
+  const check=checkSelection(d,body,actor);ctx.diagnostic?.('readiness.after-check-selection',{});let conditions,request,availability=null,budget=null,modelHash=null;
+  try{request=solverRequest(body);let e;try{e=environment();}catch(error){if(request.requested==='cp-sat')throw error;e={budget:null,availability:{available:false,reason:error.message}};}availability=e.availability;if(e.budget)budget=solverBudget({...request,maxSeconds:request.maxSeconds},e.budget);ctx.diagnostic?.('readiness.before-frozen-input',{});const input=frozenInput(d,body,actor,check.selection);ctx.diagnostic?.('readiness.after-frozen-input',{});
+   if(check.ready){conditions=freeze(input,check.selection,body);if(request.requested==='cp-sat')modelHash=compileWorkbookModel(input,check.selection,conditions,{diagnostic:ctx.diagnostic}).modelHash;}
   }catch(error){check.issues.push({code:error.code||'SOLVER_NOT_READY',severity:'error',sheet:'本次配置',field:'求解器',message:error.message,details:error.details});}
   const token=hash({baseToken:check.token,request:request??null,conditionsHash:conditions?.conditionsHash??null,environment:request?.requested==='cp-sat'?availability:null,modelHash});
   return {...check,ready:check.issues.length===0,token,checkedRef:{...check.checkedRef,solver:request??null,solverConditionsHash:conditions?.conditionsHash??null,modelHash},solver:{request,availability,budget,coverage:conditions?.coverage??null}};

@@ -1,10 +1,11 @@
+import {sourceHash} from './query-reports/source-copy.mjs';
 import {projectMinuteInputs,minuteMode,minuteIssues} from './workbook-minute.mjs';
 import {applyParameters,parameterIssues,scopeOf,blockedParameter} from './parameter-contract.mjs';
 import {validateBomRelations} from './workbook-relation-validation.mjs';
 import {createHash} from 'node:crypto';
 import fs from 'node:fs';
 export const workbookSchema=JSON.parse(fs.readFileSync(new URL('./workbook-schema.json',import.meta.url),'utf8'));
-export const hash=v=>createHash('sha256').update(Buffer.isBuffer(v)?v:Buffer.from(typeof v==='string'?v:JSON.stringify(v))).digest('hex');
+export const hash=sourceHash;
 export const PROFILE='excel-qualified-output-202611-r1';
 export const dayMinute=d=>1440*(d-2)-480;
 export const dayDate=d=>new Date(Date.UTC(2026,9,31)+d*86400000).toISOString().slice(0,10);

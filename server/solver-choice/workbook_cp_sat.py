@@ -8,10 +8,17 @@ import signal
 
 
 def solve_workbook(payload, cp_model, ortools):
-    data = payload['model']
+    exact = payload['model']['contract'] == 'aps-cpsat-workbook:v3'
+    if exact:
+        import importlib.util
+        from pathlib import Path
+        spec = importlib.util.spec_from_file_location('aps_limb_cp_sat', Path(__file__).with_name('limb_cp_sat.py'))
+        adapter = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(adapter)
+    data = adapter.decode_model(payload['model']) if exact else payload['model']
     started = time.monotonic()
     limit = payload['solveSeconds']
-    model = cp_model.CpModel()
+    model = adapter.ExactModel(cp_model.CpModel()) if exact else cp_model.CpModel()
     lo, hi = data['window']
     # Source-bounded interval helpers retain all task/tool/cleaning endpoints.
     # A giant unrelated 2**52 domain is not needed for minute intervals.
@@ -407,7 +414,7 @@ def solve_workbook(payload, cp_model, ortools):
         model.add(sum(quota['values']) + retained <= quota['capacity'])
         for flag, capacity in quota['limits']:
             model.add(sum(quota['values']) + retained <= capacity).only_enforce_if(flag)
-    primary = {demand_vars[d['id']]['quantity'].index for d in data['demands']}
+    primary = ({i for d in data['demands'] for i in model.indices(demand_vars[d['id']]['quantity'])} if exact else {demand_vars[d['id']]['quantity'].index for d in data['demands']})
     rest = [model.get_int_var_from_proto_index(i) for i in range(len(model.proto.variables)) if i not in primary]
     if rest:
         # v9.15 requires the union of fixed-search strategies to instantiate
@@ -433,12 +440,12 @@ def solve_workbook(payload, cp_model, ortools):
 
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
-    status = solver.solve(model)
+    status = solver.solve(model.native if exact else model)
     if cancelled:
         return {**base, 'kind': 'cancelled', 'rawStatus': None, 'candidate': None, 'reason': 'user_cancelled', 'wallSeconds': time.monotonic() - started}
     candidate = None
     if status in (cp_model.OPTIMAL, cp_model.FEASIBLE):
-        value = lambda x: x if isinstance(x, int) else solver.value(x)
+        value = (lambda x: model.value(solver, x)) if exact else (lambda x: x if isinstance(x, int) else solver.value(x))
         candidate = {'tasks': [], 'groups': [], 'allocations': [], 'cleaning': [], 'demands': [], 'unplanned': []}
         for tid, job in jobs.items():
             if not value(job['present']):
@@ -456,4 +463,8 @@ def solve_workbook(payload, cp_model, ortools):
         for row in clean_rows:
             if value(row['selected']):
                 candidate['cleaning'].append({'resourceId': row['resourceId'], 'before': row['before'], 'after': row['after'], 'start': value(row['start']), 'end': value(row['end']), 'rule': row['rule']['source'], 'crew': row['crewId'], 'people': row['rule']['people'], 'source': {'sheet': '换型清洗', 'row': row['rule']['row']}})
+    if exact:
+        candidate = adapter.encode_candidate(candidate)
+        base['integerProtocol'] = data['integerProtocol']
+        base['integerAdapter'] = {'contract': 'aps-limb-bounds:v1', 'base': adapter.BASE, 'checkedLinearRows': model.linear_rows, 'maxActivity': str(model.max_activity)}
     return {**base, 'rawStatus': solver.status_name(status), 'candidate': candidate, 'reason': 'search_completed' if status in (cp_model.OPTIMAL, cp_model.INFEASIBLE) else 'search_stopped', 'wallSeconds': time.monotonic() - started}

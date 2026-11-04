@@ -1,10 +1,11 @@
+import {jsonFingerprint} from './json-stream.mjs';
 import {createHash} from 'node:crypto';
 
 export const SOLVER_CONTRACT='CR-SOLVER-CHOICE-20261103:r1';
 export const MODEL_CONTRACT='aps-cpsat-minute-model:v1';
 export const ENGINE_IDS=Object.freeze(['basic','cp-sat']);
 export const RAW_STATUSES=Object.freeze(['OPTIMAL','FEASIBLE','INFEASIBLE','UNKNOWN','MODEL_INVALID']);
-export const fingerprint=value=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
+export const fingerprint=jsonFingerprint;
 export class SolverProblem extends Error {
  constructor(code,message,details={}){super(message);this.name='SolverProblem';this.code=code;this.details=details;}
 }

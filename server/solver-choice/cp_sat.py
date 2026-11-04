@@ -16,7 +16,7 @@ def solve(payload):
     if ortools.__version__ != "9.15.6755":
         raise RuntimeError("ORTOOLS_VERSION_MISMATCH")
     data = payload["model"]
-    if data["contract"] == "aps-cpsat-workbook:v2":
+    if data["contract"] in ("aps-cpsat-workbook:v2", "aps-cpsat-workbook:v3"):
         # -I excludes ambient import paths. Load only this committed sibling,
         # never a request-provided module, cwd package or borrowed interpreter.
         import importlib.util

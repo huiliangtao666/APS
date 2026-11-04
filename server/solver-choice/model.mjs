@@ -10,7 +10,7 @@ function ranges(list,path){if(!Array.isArray(list))fail(path,'缺少显式分钟
 // The workbook compiler must account for every selected demand and enabled
 // rule. A caller cannot set supported=true to bypass the business checker.
 export function validateMinuteModel(model){
- if(model?.contract==='aps-cpsat-workbook:v2')return validateWorkbookModel(model);
+ if(['aps-cpsat-workbook:v2','aps-cpsat-workbook:v3'].includes(model?.contract))return validateWorkbookModel(model);
  if(model?.contract!==MODEL_CONTRACT)fail('contract','未知分钟模型合同');
  if(model.objective?.kind!=='feasibility'||!model.objective.source)fail('objective','仅接已声明的无优化目标；不默认最短工期或猜测权重');
  if(!model.source?.inputHash||!model.source?.configurationHash||!model.source?.selectionHash)fail('source','缺少冻结输入、参数或范围指纹');
