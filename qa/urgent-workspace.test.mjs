@@ -34,6 +34,11 @@ test('UW-08 gap candidates protect whole original tasks and retain independent c
  for(const t of result.tasks){const kept=next.tasks.find(x=>x.id===t.id);assert.ok(kept);assert.deepEqual([kept.start,kept.end,kept.machine],[t.start,t.end,t.machine]);}
  assert.equal(verifyWorkbookPlan(input,next).status,'pass');
 });
+test('UW-08 gap policy does not infer consumption for an actually started task',()=>{
+ const {d,result}=urgentBaseline(),p=planOf(d,result);batch(p);p.workspace=policy(p,{strategy:'gap',scope:'full'});
+ p.facts.tasks[0].status='started';
+ assert.throws(()=>freezeUrgent(demandInput(d,p),p,result),e=>e.code==='URGENT_CONSUMPTION_FACT_MISSING');
+});
 test('UW-10 10:00 fault/10:05 known preserves 60 elapsed minutes; only confirmed 14:00 resumes',()=>{
  const {d,result}=urgentBaseline(),p=planOf(d,result),t=structuredClone(result.tasks[0]),rt=d.tables['工艺路线'].find(r=>r['路线工序编号']===t.routeStepId);
  rt['基准加工分钟']='120';rt['最短工艺分钟']='120';Object.assign(t,{start:1980,end:2100,startMinute:1980,endMinute:2100,executionStatus:'started'});

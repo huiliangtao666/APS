@@ -14,7 +14,10 @@ export function freezeUrgent(d,p,base,override){
  for(const t of seedTasks)if(t.predecessor&&!protectedIds.has(t.predecessor))throw urgentError('URGENT_PREDECESSOR_FACT','受保护任务的前序须有明确保留事实 '+t.id);
  const seedAllocations=[];
  const allocationFacts=p.facts.allocations||[];
- if(seedTasks.length&&!allocationFacts.length&&(base.allocations||[]).length)throw urgentError('URGENT_CONSUMPTION_FACT_MISSING','有执行/锁定任务时必须明确实际耗料及锁定供给，不能按计划比例推定');
+ // Future tasks held by the workspace policy retain their planned allocations
+ // below. Only factual/protection locks require an explicit consumption ledger.
+ const factualLocks=seedTasks.filter(t=>!workspace?.fixedTaskIds.includes(t.id)||statuses.get(t.id)!=='not_started');
+ if(factualLocks.length&&!allocationFacts.length&&(base.allocations||[]).length)throw urgentError('URGENT_CONSUMPTION_FACT_MISSING','有执行/锁定任务时必须明确实际耗料及锁定供给，不能按计划比例推定');
  for(const f of allocationFacts.filter(f=>f.quantity>0)){
   const a=base.allocations[f.index];if(!a||hash(a)!==f.sourceHash)throw urgentError('URGENT_CONSUMPTION_SOURCE','耗料或锁定供给来源变化');
   const actual={...structuredClone(a),quantity:f.quantity,exactQuantity:Q.exact(Q.q(String(f.quantity))),feedMinute:f.feedMinute,feedDay:Math.floor(f.feedMinute/1440),urgentProtected:true,executionConsumed:f.kind==='consumed',protectionKind:f.kind};
