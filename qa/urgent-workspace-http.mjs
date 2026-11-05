@@ -20,9 +20,9 @@ async function listen(){server=app().listen(0,'127.0.0.1');await new Promise((re
 async function close(){if(server){await new Promise((resolve,reject)=>server.close(e=>e?reject(e):resolve()));server=undefined;}}
 let origin;async function call(method,url,body){const response=await fetch(origin+url,{method,headers:{'Content-Type':'application/json'},...(body?{body:JSON.stringify({reason:'synthetic #155 feature verification',...body})}:{})}),content=await response.text();let value;try{value=JSON.parse(content);}catch{value=content;}receipts.push({method,url,status:response.status,value});assert.ok(response.ok,JSON.stringify(receipts.at(-1)));return value;}
 try{
- const {d,result}=urgentBaseline();assert.equal(result.verification.status,'pass');const sourceRef='fixture.json.gz';fs.writeFileSync(path.join(dir,sourceRef),gzipSync(JSON.stringify(d)));
+ const {d,result}=urgentBaseline();assert.equal(result.verification.status,'pass');const stateDir=path.join(dir,'workbooks');fs.mkdirSync(stateDir,{recursive:true});const sourceRef='fixture.json.gz';fs.writeFileSync(path.join(stateDir,sourceRef),gzipSync(JSON.stringify(d)));
  const base={id:'BASE',datasetId:d.id,version:d.version,status:result.status,selection,inputHash:hash(d),inputRef:sourceRef,resultHash:hash(result),result,provenance:{}};
- fs.writeFileSync(path.join(dir,'state.json'),JSON.stringify({datasets:[{id:d.id,name:d.name,versions:[{version:d.version,ref:sourceRef}]}],previews:[],records:[],runs:[base]}));
+ fs.writeFileSync(path.join(stateDir,'state.json'),JSON.stringify({datasets:[{id:d.id,name:d.name,versions:[{version:d.version,ref:sourceRef}]}],previews:[],records:[],runs:[base]}));
  origin=await listen();let p=await call('POST','/urgent/plans',{runId:'BASE',expectedResultHash:base.resultHash,facts:{observationTime:'2026-11-01T09:17:00+08:00',tasks:result.tasks.map(t=>({id:t.id,status:'not_started'})),allocations:result.allocations.map((a,index)=>({index,sourceResultHash:base.resultHash,quantity:0,kind:'none',feedMinute:a.feedMinute})),completed:Object.fromEntries(result.demandResults.map(r=>[r.id,0]))}});
  const url='/urgent/plans/'+p.id;
  p=(await call('POST',url+'/workspace',{targetToken:p.targetToken,workspace:{freezeMinute:p.facts.observationMinute,semiFreezeMinute:p.facts.observationMinute,strategy:'delay',scope:'local',seedTaskIds:[],events:[],exceptions:[],overtime:[]}})).plan;
@@ -39,6 +39,6 @@ try{
  while(owned.size&&Date.now()<deadline)await new Promise(r=>setTimeout(r,20));assert.equal(owned.size,0);
  p=await call('GET',url);const adopted=await call('POST','/urgent/runs/'+run.id+'/candidate',{targetToken:p.targetToken,action:'adopt'});assert.equal(adopted.state,'adopted');assert.equal(adopted.plan.planVersions.length,1);
  await close();origin=await listen();const reopened=await call('GET','/runs/'+run.id);assert.equal(reopened.inputHash,run.inputHash);assert.equal(reopened.resultHash,run.resultHash);assert.equal((await call('GET',url)).headRunId,run.id);
- const state=JSON.parse(fs.readFileSync(path.join(dir,'state.json')));assert.equal(hash(state.runs.find(r=>r.id==='BASE')),hash(base));assert.equal(hash(JSON.parse((await import('node:zlib')).gunzipSync(fs.readFileSync(path.join(dir,sourceRef))))),hash(d));
+ const state=JSON.parse(fs.readFileSync(path.join(stateDir,'state.json')));assert.equal(hash(state.runs.find(r=>r.id==='BASE')),hash(base));assert.equal(hash(JSON.parse((await import('node:zlib')).gunzipSync(fs.readFileSync(path.join(stateDir,sourceRef))))),hash(d));
  console.log(JSON.stringify({result:'PASS',scope:'synthetic actual router/loopback HTTP/one actual basic Worker/independent check/adoption/fresh-router reopen/frozen export',platformSession:'OUT_OF_SCOPE_BY_USER',realV2:'NOT_EXECUTED',browser:'NOT_EXECUTED',workerStarts:starts,owned:owned.size,receipts},null,2));
 }finally{for(const w of owned)await w.terminate();await close();fs.rmSync(dir,{recursive:true,force:true});}
