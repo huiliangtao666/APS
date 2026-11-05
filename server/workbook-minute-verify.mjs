@@ -29,7 +29,7 @@ export function verifyMinutePlan(d,p){
    if(rt['允许跨班连续']==='否'&&!windows.some(w=>w.start<=segment.start&&segment.end<=w.end))add('不允许跨班 '+t.id);
    if(stops.some(s=>s.resource===t.machine&&overlap(s,segment)))add('可知停机冲突 '+t.id);
   }
-  if(d.urgentWorkspace?.strategy==='overtime'&&unionMinutes(windows.filter(w=>!w.overtime),t.start,t.end)<t.end-t.start&&!t.interruption&&!windows.filter(w=>w.overtime).some(w=>w.start<=t.start&&t.end<=w.end&&w.people>=t.people&&t.tools.every(id=>w.tools.includes(id))))add('加班配套容量/工装不完整 '+t.id);
+  if((d.urgentWorkspace?.strategy==='overtime'||d.scenarioConditions?.overtime.length)&&unionMinutes(windows.filter(w=>!w.overtime),t.start,t.end)<t.end-t.start&&!t.interruption&&!windows.filter(w=>w.overtime).some(w=>w.start<=(t.cleaning?.start??t.start)&&t.end<=w.end&&w.people>=Math.max(t.people,t.cleaning?.people||0)&&(!t.cleaning||t.cleaning.crew===t.crew)&&t.tools.every(id=>w.tools.includes(id))))add('加班配套容量/工装不完整 '+t.id);
   const prev=byId.get(t.predecessor);if(t.predecessor&&!prev)add('前序不存在 '+t.id);
   if(prev&&(prev.productionId!==t.productionId||prev.end>t.start||prev.routeStepId!==t.routeStepId&&t.start-prev.end>Number(rt['最大等待分钟'])))add('工序链/最大等待错误 '+t.id);
   occ.push({start:t.start,end:t.end,toolEnd:t.toolEndMinute,resource:t.machine,quantity:t.quantity,tools:t.tools,crew:t.crew,people:t.people,labor,taskId:t.id,productId:t.productId});
@@ -43,8 +43,10 @@ export function verifyMinutePlan(d,p){
  for(const [id,r]of resources){const own=occ.filter(o=>o.resource===id);if(weightSharedResource(r)){if(eventPeak(own.map(o=>({...o,amount:o.quantity})),start,end)>Number(r['同时占位上限千克']))add('共享重量超占 '+id);}else if(eventPeak(own,start,end)>1)add('独占设备超占 '+id);
   if(r['资源类别']==='工装'&&eventPeak(occ.filter(o=>o.tools.includes(id)).map(o=>({...o,end:o.toolEnd??o.end})),start,end)>1)add('实体工具重用 '+id);
  }
- for(const [id,c]of crews)if(eventPeak(occ.filter(o=>o.crew===id).flatMap(o=>o.labor.map(l=>({...l,amount:o.people}))),start,end)>Number(c['每班可用人数']))add('人员并发超占 '+id);
- for(const [key,qty]of daily){const [id,dayText]=key.split('|'),day=Number(dayText),r=resources.get(id),cal=rows(d,'工厂日历').find(x=>Number(x['日序'])===day),extra=d.urgentWorkspace?.strategy==='overtime'?d.urgentWorkspace.overtime.filter(o=>o.resource===id&&Math.floor(o.start/1440)===day).reduce((n,o)=>n+o.capacityKg,0):0;if(!cal||qty>Number(r['标准日产能千克'])*Number(cal['生产班次数'])/Number(cal['日产能分母'])+extra+1e-6)add('日投产量超限 '+key);}
+ // Independent sweep reconstructs actual usage and changing capacity; it does
+ // not consume the planner's cached peak or crewLoadFits verdict.
+ for(const [id,c]of crews){const usage=occ.filter(o=>o.crew===id).flatMap(o=>o.labor.map(l=>({...l,amount:o.people}))),extra=(d.scenarioConditions?.personnel||[]).filter(x=>x.crew===id),points=[start,...usage.flatMap(x=>[x.start,x.end]),...extra.flatMap(x=>[x.start,x.end])].filter(n=>start<=n&&n<end);if(points.some(at=>usage.filter(x=>x.start<=at&&at<x.end).reduce((n,x)=>n+x.amount,0)>Number(c['每班可用人数'])+extra.filter(x=>x.start<=at&&at<x.end).reduce((n,x)=>n+x.after-x.before,0)))add('人员并发超占 '+id);}
+ for(const [key,qty]of daily){const [id,dayText]=key.split('|'),day=Number(dayText),r=resources.get(id),cal=rows(d,'工厂日历').find(x=>Number(x['日序'])===day),extra=[...(d.urgentWorkspace?.strategy==='overtime'?d.urgentWorkspace.overtime:[]),...(d.scenarioConditions?.overtime||[])].filter(o=>o.resource===id&&Math.floor(o.start/1440)===day).reduce((n,o)=>n+o.capacityKg,0);if(!cal||qty>Number(r['标准日产能千克'])*Number(cal['生产班次数'])/Number(cal['日产能分母'])+extra+1e-6)add('日投产量超限 '+key);}
  const selected=rows(d,'每日需求').filter(r=>Number(r['需求日'])>=p.conditions.startDay&&Number(r['需求日'])<p.conditions.endDay&&(!p.conditions.demandIds||p.conditions.demandIds.includes(r['需求编号']))),demands=new Map((p.demandResults||[]).map(r=>[r.id,r]));
  if(demands.size!==selected.length||p.demandResults.length!==selected.length)add('需求覆盖不完整');
  for(const r of selected){const x=demands.get(r['需求编号']);if(!x||x.quantity!==Number(r['需求千克'])||x.productId!==r['成品编号']||!['scheduled','unplanned'].includes(x.status))add('需求身份/数量错误 '+r['需求编号']);}

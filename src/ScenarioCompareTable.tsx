@@ -1,0 +1,12 @@
+import {useState} from 'react';
+import {QueryTable} from './QueryReportsControls';
+type Row=Record<string,any>&{id:string};
+// All rows come from the shared group filter. Paging changes presentation;
+// export includes every sorted row and the same frozen scope/identity.
+export function ScenarioCompareTable({id,rows,labels,canExport,identity,onOpen}:{id:string;rows:Row[];labels:Record<string,string>;canExport:boolean;identity:any;onOpen?:(row:Row)=>void}){
+ const [size,setSize]=useState(100),[offset,setOffset]=useState(0),[sort,setSort]=useState('id'),[direction,setDirection]=useState<'asc'|'desc'>('asc'),[visible,setVisible]=useState<string[]>(Object.keys(labels));
+ const sorted=[...rows].sort((a,b)=>{const x=a[sort],y=b[sort];return (typeof x==='number'&&typeof y==='number'?x-y:String(x??'').localeCompare(String(y??''),'zh-CN',{numeric:true}))*(direction==='asc'?1:-1)||a.id.localeCompare(b.id);});
+ const effectiveOffset=offset<sorted.length?offset:0;
+ function download(){const quote=(v:any)=>'"'+String(typeof v==='object'&&v!==null?JSON.stringify(v):v??'').replaceAll('"','""')+'"',columns=visible,body=[columns.concat('冻结来源'),...sorted.map(r=>[...columns.map(k=>r[k]),identity])].map(r=>r.map(quote).join(',')).join('\r\n');const url=URL.createObjectURL(new Blob(['\ufeff'+body],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download=id+'.csv';a.click();window.setTimeout(()=>URL.revokeObjectURL(url),1000);}
+ return <section className="scenario-table"><div className="scenario-toolbar"><span>同范围 {sorted.length} 条</span><label>每页<select value={size} onChange={e=>{setSize(Number(e.target.value));setOffset(0);}}>{[100,200,500].map(n=><option key={n}>{n}</option>)}</select></label><button disabled={!effectiveOffset} onClick={()=>setOffset(Math.max(0,effectiveOffset-size))}>上一页</button><button disabled={effectiveOffset+size>=sorted.length} onClick={()=>setOffset(effectiveOffset+size)}>下一页</button><button disabled={!canExport} onClick={download}>导出全部同范围记录</button></div><QueryTable id={id} columns={Object.entries(labels).map(([key,label])=>({key,label,fixed:key==='id'}))} records={sorted.slice(effectiveOffset,effectiveOffset+size).map(r=>({id:r.id,values:r}))} sort={sort} direction={direction} onSort={key=>{setSort(key);setDirection(sort===key&&direction==='asc'?'desc':'asc');setOffset(0);}} onVisible={setVisible} onOpen={onOpen?r=>onOpen(rows.find(x=>x.id===r.id)!):undefined}/></section>;
+}

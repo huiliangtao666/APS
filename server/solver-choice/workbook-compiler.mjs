@@ -19,6 +19,7 @@ const int=(v,path,min=0)=>{if(String(v??'').trim()===''||!Number.isSafeInteger(N
 const combos=(list,n)=>{if(n===0)return [[]];if(n>list.length)return [];return list.flatMap((x,i)=>combos(list.slice(i+1),n-1).map(xs=>[x,...xs]));};
 const merged=windows=>{const result=[];for(const [a,b]of windows.sort((x,y)=>x[0]-y[0])){const last=result.at(-1);if(last&&last[1]>=a)last[1]=Math.max(last[1],b);else result.push([a,b]);}return result;};
 export function prepareSolverWorkbook(input,selection,diagnostic=null){
+ if((input.scenarioConditions?.personnel.length||input.scenarioConditions?.overtime.length))reject('CP_SCENARIO_COVERAGE','当前CP-SAT编译器未覆盖本次逐时增人/加班条件；请显式选择基础引擎，不静默回退');
  if(!minuteMode(input))reject('CP_TIME_CONTRACT_UNSUPPORTED','CP-SAT仅支持已批准的真实分钟工作簿',{actual:input.productionContract});
  const s={...selection},start=int(s.startDay,'startDay'),end=int(s.endDay,'endDay'),current=int(s.currentDay,'currentDay');
  if(start<current||end<=start||end>44)reject('CP_WINDOW','日窗口无效');

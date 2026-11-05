@@ -4114,6 +4114,86 @@
         "现场默认",
         "发布"
       ]
+    },
+    {
+      "id": "CR-SCENARIO-COMPARE-20261105",
+      "title": "E02同基准多情景串行试算、KPI比较与选定",
+      "classification": "V2基线后的用户批准增量",
+      "baseline_id": "APS-BL-002",
+      "from_version": "V2",
+      "target_version": "V2+CR-SCENARIO-COMPARE-20261105:R1",
+      "approval_status": "PM_DISPATCHED_IMPLEMENTATION_PER_USER_CURRENT_155_156",
+      "approved_by": "项目用户；PM原卡6661303017明确唯一Dev整包实施",
+      "approved_on": "2026-11-05",
+      "effective": true,
+      "effective_scope": "已批准源码范围，不等于运行/验收/部署通过",
+      "implementation_status": "SOURCE_CANDIDATE_PENDING_PRODUCT_VALIDATION",
+      "issue_url": "https://github.com/huiliangtao666/APS/issues/156",
+      "related_issue_urls": [
+        "https://github.com/huiliangtao666/APS/issues/155",
+        "https://github.com/huiliangtao666/APS/issues/47"
+      ],
+      "primary_requirements": [
+        "FR-026",
+        "FR-028",
+        "FR-025",
+        "FR-030",
+        "FR-032",
+        "FR-035"
+      ],
+      "acceptance_ids": [
+        "SC-01",
+        "SC-02",
+        "SC-03",
+        "SC-04",
+        "SC-05",
+        "SC-06",
+        "SC-07",
+        "SC-08",
+        "SC-09",
+        "SC-10",
+        "SC-11",
+        "SC-12",
+        "SC-13",
+        "SC-14",
+        "SC-15",
+        "SC-16",
+        "SC-17",
+        "SC-18"
+      ],
+      "event_key": "design:scenario-compare-cr:20261105:r1",
+      "dev_delivery": "dlv_0a50584d-b16c-411a-bb29-55db792bb721",
+      "business_contract": "CR-SCENARIO-COMPARE-20261105/business-contract.md",
+      "implementation_notes": "CR-SCENARIO-COMPARE-20261105/README.md",
+      "code_branch": "dev/aps-current",
+      "code_sha": null,
+      "code_sha_note": "完整候选SHA见同delivery结果，避免自引用",
+      "validated_product_sha": null,
+      "deployed_sha": null,
+      "acceptance_result": "SC-01—18产品NOT_EXECUTED；只做AST/语法/导入存在性，未做类型检查/build/测试/HTTP/Worker/browser",
+      "runtime_budget_added": 0,
+      "main_integration_authorized": false,
+      "limitations": [
+        "新增批量链仅显式基础引擎及同引擎基准，CP-SAT原能力保留但不静默混比/回退",
+        "缺明确服务端预算或官方依赖时禁止启动",
+        "增人只原班组明确全部原路线技能及原有效班次，不推断新技能",
+        "费用只明确加班已知项目小计；工装日历不足可用率未知"
+      ],
+      "asset": {
+        "bytes": 59460,
+        "sha256": "036a026e665384bf51ed065d10f5921a4570a825b23a8530951b235827cc6653",
+        "internal_manifest_files_verified": 7
+      },
+      "excluded": [
+        "E03",
+        "E04",
+        "E05",
+        "新优化目标或权重",
+        "新增现场默认",
+        "真实每日联动",
+        "main合并",
+        "部署发布"
+      ]
     }
   ]
 }

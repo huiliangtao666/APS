@@ -1,4 +1,5 @@
 import {copyReportSource} from './query-reports/source-copy.mjs';
+import {appendWorkbookPlanVersion} from './workbook-candidate.mjs';
 import {createSolverRunService} from './solver-choice/run-service.mjs';
 import {solverRequest} from './solver-choice/contract.mjs';
 import {supplyReadiness} from './workbook-supply.mjs';
@@ -132,8 +133,7 @@ export function registerUrgentOrders(router,ctx){
   if(action==='adopt'&&r.candidateState!=='adopted'){
    const stale=candidateStaleness(ctx,s,p,r);if(stale.stale)throw urgentError('URGENT_CANDIDATE_STALE',stale.reasons.join('；')+'，请重查后再采用',{},409);
    const check=verifyWorkbookPlan(refreshDerived(cloneForParameters(d),r.selection.startDay),r.result);if(check.status!=='pass'||check.notChecked?.length)throw urgentError('URGENT_CONFIRM_BLOCKED','关键约束或检查未通过，不能采用',{issues:check.issues});
-   p.planVersions??=[];p.planVersions.push({version:p.planVersions.length+1,previousRunId:p.headRunId,runId:r.id,inputHash:r.inputHash,resultHash:r.resultHash,workspaceIdentity:r.workspaceIdentity,at:new Date().toISOString()});
-   p.headRunId=r.id;p.facts={...p.facts,sourceResultHash:hash(r.result),tasks:r.result.tasks.map(t=>({id:t.id,status:d.urgentOrder.seedTasks.find(s=>s.id===t.id)?.executionStatus||'not_started',startMinute:t.start,endMinute:t.end,quantity:t.quantity,cleaning:t.cleaning,laborIntervals:t.laborIntervals,toolEndMinute:t.toolEndMinute})),allocations:r.result.allocations.map((a,index)=>({index,sourceHash:hash(a),quantity:a.urgentProtected?a.quantity:0,kind:a.urgentProtected?a.protectionKind:'none',feedMinute:a.feedMinute})),completed:Object.fromEntries(r.result.demandResults.map(x=>[x.id,p.facts.completed[x.id]||0]))};if(p.workspace)p.workspace.seedTaskIds=p.workspace.seedTaskIds.filter(id=>r.result.tasks.some(t=>t.id===id));p.replacementHistory??=[];p.replacementHistory.push(...(p.replacements||[]));p.replacements=[];p.factsRevision++;p.revision++;
+   appendWorkbookPlanVersion(p,r,d);
   }
   r.candidateState=({save:'saved',discard:'discarded',adopt:'adopted'})[action];audit(s,req,'urgent_candidate_'+action,{runId:r.id,planId:p.id});write(s);res.json({state:r.candidateState,plan:publicPlan(p),externalDispatch:false});
  }));

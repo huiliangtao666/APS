@@ -1,4 +1,5 @@
 import {registerUrgentOrders} from './urgent-order-routes.mjs';
+import {registerScenarioCompare} from './scenario-compare-routes.mjs';
 import {registerMpsReportRoutes} from './mps-report-routes.mjs';
 import {registerSimulatorRoutes} from './simulator/routes.mjs';
 import {defs as csvDefs} from './planner.ts';
@@ -25,7 +26,7 @@ import {fork} from 'node:child_process';
 import {Router} from 'express';
 import {hash,workbookSchema,refreshDerived,validateWorkbook,workbookReadiness,rows,procurement,PROFILE} from './workbook-model.mjs';
 import {verifyWorkbookPlan} from './workbook-plan.mjs';
-export function createWorkbookRouter({dataDir,permission,actorKey,requestId,workerFactory,previewAccess=()=>({canEdit:false,canExport:false,csrfVerified:false}),importHeapMiB=180,solverEnvironment=null}) {
+export function createWorkbookRouter({dataDir,permission,actorKey,requestId,workerFactory,previewAccess=()=>({canEdit:false,canExport:false,csrfVerified:false}),importHeapMiB=180,solverEnvironment=null,scenarioEnvironment=null}) {
  if(!Number.isSafeInteger(importHeapMiB)||importHeapMiB<32||importHeapMiB>512)throw Error('Invalid workbook import heap limit');
  const router=Router(),dir=path.join(dataDir,'workbooks');fs.mkdirSync(dir,{recursive:true});const stateFile=path.join(dir,'state.json'),workers=new Map();
  const readState=createWorkbookSnapshotReader(dir,{compressed:false,maxEntries:1,maxBytes:12*1024*1024});
@@ -130,6 +131,7 @@ export function createWorkbookRouter({dataDir,permission,actorKey,requestId,work
  registerWorkbookQueryReportRoutes(router,{read,dataset,snapshot,permission,actorKey},equipmentDomain,'/equipment');
  registerWorkbookConversions(router,{read,write,dataset,audit,summary,handle,permission,persist,snapshot,meta,tableRefs});
  registerUrgentOrders(router,{read,write,dataset,audit,permission,workerFactory,workers,persist,snapshot,meta,actorKey,solverEnvironment});
+ registerScenarioCompare(router,{read,write,dataset,audit,permission,workerFactory,workers,persist,snapshot,meta,actorKey,solverEnvironment,scenarioEnvironment});
  return registerOperations(router,{read,write,dataset,audit,summary,handle,permission,workerFactory,workers,persist,snapshot,meta,tableRefs,actorKey,solverEnvironment});
 }
 function rowKey(table,r){return table==='单位换算'?[r['物料编号'],r['换算前单位'],r['换算后单位']].join('|'):String(r[workbookSchema.tables[table]?.key]);}

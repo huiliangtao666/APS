@@ -46,7 +46,8 @@ export function calculateWorkbook(data,selection) {
  function resourceJobs(route,qty,earliest,previous,need,productId,productionId){
   const candidates=resources.filter(r=>r['资源类别']==='设备'&&r['资源组编号']===route['设备组编号']&&(!d.parameterContract||r['可用数量']===undefined||Number(r['可用数量'])>0));
   const crew=rows(d,'班组资源').find(r=>r['班组编号']===route['班组编号']),people=Number(route['需求人数']),toolCount=Number(route['每批工装套数']),pool=(d.mapping.tool_pools[route['所需工装类型']]||[]).filter(id=>!d.parameterContract||Number(resources.find(r=>r['资源编号']===id)?.['可用数量'])>0);
-  if(!candidates.length||!crew||people>Number(crew['每班可用人数'])||toolCount>pool.length)return null;
+  const maxPeople=Number(crew?.['每班可用人数'])+Math.max(0,...(isMinute?d.scenarioConditions?.personnel||[]:[]).filter(x=>x.crew===crew?.['班组编号']).map(x=>x.after-x.before));
+  if(!candidates.length||!crew||people>maxPeople||toolCount>pool.length)return null;
   let left=qty,cursor=Math.max(earliest,urgent?urgent.effectiveMinute/1440:earliest),last=previous,firstStart;
   while(left>1e-9){let chosen;
    if(isMinute)chosen=minuteResourceCandidate({d,route,quantity:left,earliest:cursor,end,occupancy,daily,resources,crew,pool,standardBatch,currentMinute,predecessor:tasks.find(t=>t.id===last),orderId:need});

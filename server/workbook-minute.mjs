@@ -51,7 +51,13 @@ export function shiftWindows(d,crew,day,resource){
  const definitions=rows(d,'生产班次').filter(r=>Math.floor(Number(r['开始分钟偏移'])/1440)===day).sort((a,b)=>Number(a['开始分钟偏移'])-Number(b['开始分钟偏移']));
  const regular=definitions.slice(0,count).map((r,i)=>({start:day*1440+boundary(d,(i?'第二':'第一')+'班开始分钟',day,'CAL'),end:day*1440+boundary(d,(i?'第二':'第一')+'班结束分钟',day,'CAL'),source:{sheet:'生产班次',row:r._row,key:r['班次日历编号']}}));
  const extra=d.urgentWorkspace?.strategy==='overtime'?d.urgentWorkspace.overtime.filter(o=>o.crew===crew['班组编号']&&(!resource||o.resource===resource)&&Math.floor(o.start/1440)===day).map(o=>({...o,overtime:true})):[];
- return [...regular,...extra];
+ const scenario=(d.scenarioConditions?.overtime||[]).filter(o=>o.crew===crew['班组编号']&&(!resource||o.resource===resource)&&Math.floor(o.start/1440)===day).map(o=>({...o,overtime:true}));
+ return [...regular,...extra,...scenario];
+}
+export function crewLoadFits(d,crew,usage,start,end){
+ const extra=(d.scenarioConditions?.personnel||[]).filter(x=>x.crew===crew['班组编号']);
+ const points=[start,...usage.flatMap(x=>[x.start,x.end]),...extra.flatMap(x=>[x.start,x.end])].filter(n=>start<=n&&n<end);
+ return points.every(at=>usage.filter(x=>x.start<=at&&at<x.end).reduce((n,x)=>n+x.amount,0)<=Number(crew['每班可用人数'])+extra.filter(x=>x.start<=at&&at<x.end).reduce((n,x)=>n+x.after-x.before,0));
 }
 export function laborSegments(route,start,end){
  if(route['人员参与方式']!=='首尾参与')return [{start,end}];
@@ -71,12 +77,13 @@ export function minuteResourceCandidate({d,route,quantity,earliest,end,occupancy
   const allShifts=[];for(let n=Math.floor(lower/1440);n<end;n++)allShifts.push(...shiftWindows(d,crew,n,resource['资源编号']));
   const inShifts=(a,b)=>a===b||unionMinutes(allShifts,a,b)>=b-a;
   const id=resource['资源编号'],key=id+'|'+day,calendar=rows(d,'工厂日历').find(r=>Number(r['日序'])===day);if(!calendar)continue;
-  const regular=shiftWindows(d,crew,day,id).filter(s=>!s.overtime),extra=d.urgentWorkspace?.strategy==='overtime'?d.urgentWorkspace.overtime.filter(o=>o.resource===id&&o.crew===crewId&&Math.floor(o.start/1440)===day):[];
+  const regular=shiftWindows(d,crew,day,id).filter(s=>!s.overtime),extra=shiftWindows(d,crew,day,id).filter(s=>s.overtime);
   const ratio=Math.min(Number(calendar['生产班次数'])/Number(calendar['日产能分母']),regular.length/Number(crew['标准日班次数'])),capacity=Number(resource['标准日产能千克'])*ratio+extra.reduce((n,o)=>n+o.capacityKg,0),available=capacity-(daily.get(key)||0);
   const toolCap=count?Math.max(0,...pool.map(id=>Number(resources.find(r=>r['资源编号']===id)?.['单次批量上限千克'])))*count:Infinity;
   const batch=Math.min(quantity,Number(resource['单次批量上限千克']),weightSharedResource(resource)?Number(resource['同时占位上限千克']):Infinity,available,toolCap,standardBatch);
   if(!(batch>0))continue;const duration=routeMinutes(route,batch),tail=Number(route['结束参与分钟']),head=Number(route['开始参与分钟']);
   const points=new Set([Math.max(lower,day*1440)]);
+  for(const c of d.scenarioConditions?.personnel||[])if(c.crew===crewId)for(const n of [c.start,c.end])if(n>=day*1440&&n<(day+1)*1440)points.add(Math.max(lower,n));
   for(const s of allShifts){for(const n of [s.start,s.end-duration,s.start-duration+tail,s.end-head])if(n>=day*1440&&n<(day+1)*1440)points.add(Math.max(lower,n));}
   for(const o of busy)for(const n of [o.end,o.toolEnd,o.end-duration+tail,...(o.labor||[]).flatMap(l=>[l.end,l.end-duration+tail])])if(Number.isFinite(n)&&n>=day*1440&&n<(day+1)*1440)points.add(Math.max(lower,n));
   for(const s of stops)if(s.resource===id&&s.end>=day*1440&&s.end<(day+1)*1440)points.add(Math.max(lower,s.end));
@@ -110,12 +117,12 @@ export function minuteResourceCandidate({d,route,quantity,earliest,end,occupancy
    if(weightSharedResource(resource)){if(eventPeak([...same.map(o=>({...o,amount:o.quantity})),{...physical,amount:batch}],x,until)>Number(resource['同时占位上限千克']))continue;}
    else if(same.length)continue;
    const peopleAt=busy.filter(o=>o.crew===crewId).flatMap(o=>(o.labor||[{start:o.start,end:o.end}]).map(l=>({...l,amount:o.people})));
-   if(eventPeak([...peopleAt,...labor.map(l=>({...l,amount:people})),...(cleaning&&cleanCrew===crewId?[{start:x,end:at,amount:cleanPeople}]:[])],x,until)>Number(crew['每班可用人数']))continue;
-   if(cleaning&&cleanCrew!==crewId){const pc=rows(d,'班组资源').find(c=>c['班组编号']===cleanCrew);if(!pc||eventPeak([...busy.filter(o=>o.crew===cleanCrew).flatMap(o=>(o.labor||[{start:o.start,end:o.end}]).map(l=>({...l,amount:o.people}))),{start:x,end:at,amount:cleanPeople}],x,at)>Number(pc['每班可用人数']))continue;}
+   if(!crewLoadFits(d,crew,[...peopleAt,...labor.map(l=>({...l,amount:people})),...(cleaning&&cleanCrew===crewId?[{start:x,end:at,amount:cleanPeople}]:[])],x,until))continue;
+   if(cleaning&&cleanCrew!==crewId){const pc=rows(d,'班组资源').find(c=>c['班组编号']===cleanCrew);if(!pc||!crewLoadFits(d,pc,[...busy.filter(o=>o.crew===cleanCrew).flatMap(o=>(o.labor||[{start:o.start,end:o.end}]).map(l=>({...l,amount:o.people}))),{start:x,end:at,amount:cleanPeople}],x,at))continue;}
    const toolEnd=until+integer(route['工装后延释放分钟'],'工装释放'),tools=pool.filter(t=>Number(resources.find(r=>r['资源编号']===t)?.['单次批量上限千克'])*count>=batch&&!busy.some(o=>o.tools?.includes(t)&&overlap({start:at,end:toolEnd},{start:o.start,end:o.toolEnd??o.end}))).slice(0,count);
    if(tools.length<count)continue;
    const regularMinutes=unionMinutes(allShifts.filter(s=>!s.overtime),x,until);
-   if(d.urgentWorkspace?.strategy==='overtime'&&regularMinutes<until-x&&!extra.some(o=>o.start<=x&&until<=o.end&&o.people>=people&&(!cleaning||cleanCrew===crewId&&o.people>=cleanPeople)&&tools.every(t=>o.tools.includes(t))))continue;
+   if((d.urgentWorkspace?.strategy==='overtime'||d.scenarioConditions?.overtime.length)&&regularMinutes<until-x&&!extra.some(o=>o.start<=x&&until<=o.end&&o.people>=people&&(!cleaning||cleanCrew===crewId&&o.people>=cleanPeople)&&tools.every(t=>o.tools.includes(t))))continue;
    if(semi.length&&!semi.some(t=>t.machine===id&&t.quantity===batch&&JSON.stringify(t.tools)===JSON.stringify(tools)))continue;
    return {start:at/1440,end:until/1440,resource:id,crew:crewId,people,tools,quantity:batch,key,route,labor,toolEnd,productId:route['成品编号'],cleaning:cleaning?{start:x,end:at,resource:id,crew:cleanCrew,people:cleanPeople,quantity:0,rule:clean['清洗规则编号'],source:{sheet:'换型清洗',row:clean._row}}:null};
   }

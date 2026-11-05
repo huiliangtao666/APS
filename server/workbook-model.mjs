@@ -16,6 +16,12 @@ export function problem(sheet,row,field,message,code='INPUT_INVALID') {return {c
 export function refreshDerived(d,atDay=0) {
  const active=d.parameterContract?applyParameters(d,atDay):null,params=index(d,'配置参数','参数编号');
  for(const b of d.parameterContract?[]:d.bindings||[]){const row=rows(d,b.sheet).find(r=>b.recordKey?(b.sheet==='单位换算'?[r['物料编号'],r['换算前单位'],r['换算后单位']].join('|'):r[workbookSchema.tables[b.sheet].key])===b.recordKey:r._row===b.row),original=params.get(b.parameterId),p=original&&(active||rows(d,'配置参数')).find(p=>p['对象编号']===original['对象编号']&&p['参数名称']===original['参数名称']&&Number(p['生效日'])<=atDay&&atDay<Number(p['失效日']));if(row&&p&&!blockedParameter(p))row[b.field]=p['参数值'];}
+ // Explicit scenario overlays follow the already-resolved shared P layer.
+ // This is an isolated frozen input; the authoritative P/receipt is retained.
+ for(const c of d.scenarioConditions?.changes||[])if(c.type==='arrival'&&c.status!=='withdrawn'){
+  const r=rows(d,'既有采购在途').find(r=>r['在途记录编号']===c.object);if(!r)throw Error('情景预计供给来源已变化');
+  r['约定到货日']=String(c.after);r['预计放行日']=String(c.releaseAfter);
+ }
  const materials=index(d,'物料主数据','物料编号'),suppliers=index(d,'供应商与供货条件','供货关系编号');
  const children=new Map();for(const b of rows(d,'物料清单')){if(!children.has(b['父项编号']))children.set(b['父项编号'],[]);children.get(b['父项编号']).push(b);}
  const memo=new Map(),visiting=new Set();
