@@ -9,16 +9,16 @@ export const DEMAND_FIELDS=['需求编号','需求日','客户编号','客户名
 const required=['需求编号','需求日','客户编号','成品编号','需求箱数'];
 export function urgentError(code,message,detail={},status=422){const e=Error(message);Object.assign(e,{code,status,detail});return e;}
 export function requireMinute(d){if(!minuteMode(d))throw urgentError('URGENT_PROFILE_UNSUPPORTED','当前计划不支持插单必需的整数分钟、执行事实保护及有限资源；请选用受支持的分钟计划。',{required:[MINUTE_ENGINE,'execution-ledger','finite-resources'],actual:d.productionContract||'day'});}
-export function targetToken(p){return hash({id:p.id,baseRunId:p.baseRunId,headRunId:p.headRunId,revision:p.revision,factsRevision:p.factsRevision,inputHash:p.inputHash,facts:p.facts});}
+export function targetToken(p){return hash({id:p.id,baseRunId:p.baseRunId,headRunId:p.headRunId,revision:p.revision,factsRevision:p.factsRevision,inputHash:p.inputHash,facts:p.facts,...(p.workspace?{workspace:p.workspace,trace:p.trace||[],replacements:p.replacements||[]}:{} )});}
 export function assertTarget(p,token){if(!p||token!==targetToken(p))throw urgentError('URGENT_TARGET_CHANGED','目标计划、批次或执行事实已变化，请重新核对。',{},409);}
-export function demandInput(base,p){const d=copyReportSource(base);delete d.urgentOrder;d.tables['每日需求']=[...rows(d,'每日需求').filter(r=>!p.originalDemandIds||p.originalDemandIds.includes(r['需求编号'])),...p.batches.flatMap(b=>b.demands.map(r=>({...r,_urgent:{batchId:b.id,effectiveMinute:b.effectiveMinute,sequence:b.sequence,fileHash:b.fileHash,fileName:b.fileName}})))];return refreshDerived(d,p.selection.startDay);}
+export function demandInput(base,p){const d=copyReportSource(base);delete d.urgentOrder;delete d.urgentWorkspace;d.tables['每日需求']=[...rows(d,'每日需求').filter(r=>!p.originalDemandIds||p.originalDemandIds.includes(r['需求编号'])),...p.batches.filter(b=>b.status!=='withdrawn').flatMap(b=>b.demands.map(r=>({...r,_urgent:{batchId:b.id,effectiveMinute:b.effectiveMinute,sequence:b.sequence,fileHash:b.fileHash,fileName:b.fileName}})))];return refreshDerived(d,p.selection.startDay);}
 export function previewUrgent(buffer,base,p,{fileName,effectiveTime}){
  requireMinute(base);
  const effectiveMinute=instantMinute(effectiveTime,base.minuteOrigin),observed=p.facts.observationMinute;
  if(effectiveMinute<observed||effectiveMinute<p.selection.startDay*1440||effectiveMinute>=p.selection.endDay*1440)throw urgentError('URGENT_EFFECTIVE_TIME','生效时刻须不早于观察时点，且在选定窗口内。');
  const spec={version:workbookSchema.version,tables:{'每日需求':{...workbookSchema.tables['每日需求'],fields:DEMAND_FIELDS.map(name=>({name}))}}};
  const parsed=parseWorkbook(buffer,spec,{onlySheets:['每日需求'],literalFields:required}),issues=[...parsed.issues],warnings=[...parsed.warnings];
- const fileHash=hash(buffer),d=demandInput(base,p),existing=new Set(rows(d,'每日需求').map(r=>r['需求编号'])),seen=new Set();
+ const fileHash=hash(buffer),d=demandInput(base,p),existing=new Set([...rows(d,'每日需求').map(r=>r['需求编号']),...p.batches.flatMap(b=>b.demands.map(r=>r['需求编号']))]),seen=new Set();
  const customers=new Map(rows(d,'客户与交付').map(r=>[r['客户编号'],r])),materials=new Map(rows(d,'物料主数据').map(r=>[r['物料编号'],r]));
  const add=(r,field,message,code='URGENT_INPUT')=>issues.push({code,sheet:'每日需求',row:r?._row||0,field,cell:r?._cells?.[field]||'',message});
  const demands=rows(parsed,'每日需求');if(!demands.length)add(null,'需求编号','每日需求页没有数据');

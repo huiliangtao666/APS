@@ -22,6 +22,7 @@ export function calculateWorkbook(data,selection) {
  const tasks=(urgent?.seedTasks||[]).map(t=>({...structuredClone(t),start:t.start/1440,end:t.end/1440,duration:(t.end-t.start)/1440,durationMinutes:t.end-t.start})),allocations=structuredClone(urgent?.seedAllocations||[]),shortages=[],suggestions=[],findings=[],occupancy=[],daily=new Map(),lots=[];let serial=0;
  const activeStops=rows(d,'停机安排').filter(r=>Number(r['可知日'])<=current);
  lots.push(...supplyLots(d));
+ if(d.urgentWorkspace)for(const lot of lots)if(d.urgentWorkspace.qualityAffected.includes(lot.id))lot.quality=false;
  if(urgent){for(const a of allocations){const lot=lots.find(l=>l.id===a.supplyId);if(lot){lot.used+=a.quantity;if(lot.used>lot.quantity+1e-6)throw Error('执行投料/锁定量超过原供给 '+a.supplyId);}}for(const t of tasks){occupancy.push({start:t.start,end:t.end,resource:t.machine,quantity:t.quantity,tools:t.tools,toolEnd:t.toolEndMinute,crew:t.crew,people:t.people,labor:t.laborIntervals,productId:t.productId,cleaning:t.cleaning,taskId:t.id});if(t.cleaning)occupancy.push({...t.cleaning,start:t.cleaning.start/1440,end:t.cleaning.end/1440,tools:[],labor:[{start:t.cleaning.start,end:t.cleaning.end}],taskId:t.id+'-CLEAN'});const key=t.machine+'|'+Math.floor(t.start);daily.set(key,(daily.get(key)||0)+t.quantity);}}
  if(isMinute)for(const l of lots){const r=rows(d,l.source.sheet).find(r=>r._row===l.source.row);l.ready=l.ready===null?null:(l.id.startsWith('inventory:')&&Number(r?.['放行日'])<=Number(r?.['快照日'])&&Number(r?.['快照日'])===0?1440:l.ready*1440+boundary(d,'日粒度放行时点分钟',start,'CAL'))/1440;l.expiry=(l.expiry*1440+boundary(d,'批次到期日内失效分钟',start))/1440;if(l.id.startsWith('transit:')){const supplier=rows(d,'供应商与供货条件').find(x=>x['供货关系编号']===r?.['供货关系编号']);l.ready=Math.max(l.ready,(Number(r?.['约定到货日'])*1440+boundary(d,'日粒度到货时点分钟',start,'CAL')+Number(supplier?.['检验天数'])*1440)/1440);}}
  // Reserve every relevant already-started physical occupation before planning
@@ -48,7 +49,7 @@ export function calculateWorkbook(data,selection) {
   if(!candidates.length||!crew||people>Number(crew['每班可用人数'])||toolCount>pool.length)return null;
   let left=qty,cursor=Math.max(earliest,urgent?urgent.effectiveMinute/1440:earliest),last=previous,firstStart;
   while(left>1e-9){let chosen;
-   if(isMinute)chosen=minuteResourceCandidate({d,route,quantity:left,earliest:cursor,end,occupancy,daily,resources,crew,pool,standardBatch,currentMinute,predecessor:tasks.find(t=>t.id===last)});
+   if(isMinute)chosen=minuteResourceCandidate({d,route,quantity:left,earliest:cursor,end,occupancy,daily,resources,crew,pool,standardBatch,currentMinute,predecessor:tasks.find(t=>t.id===last),orderId:need});
    for(let day=Math.max(start,Math.floor(cursor));!isMinute&&day<end&&!chosen;day++){
     const c=calendar.get(String(day));if(!c)continue;const ratio=parameterDayRatio(d,c,crew,day);if(ratio<=0)continue;
     for(const r of candidates){const id=r['资源编号'];if(activeStops.some(s=>s['资源编号']===id&&Number(s['开始日'])<=day&&day<Number(s['结束日'])))continue;

@@ -46,6 +46,7 @@ export function queryUrgentImpact(impact,query={},d){
   records=records.filter(r=>key==='resources'?r.resources?.some(x=>chosen.has(x)):chosen.has(String(r[key]??'')));
  }
  if(query.q)records=records.filter(r=>JSON.stringify(r).toLocaleLowerCase().includes(String(query.q).toLocaleLowerCase()));
+ if(query.sort){const keys=new Set(impact.tabs[tab].flatMap(r=>Object.keys(r)));if(!keys.has(query.sort)||!['asc','desc'].includes(query.direction||'asc'))throw urgentError('URGENT_QUERY_SORT','请选择当前业务表栏位及升降序');const direction=query.direction==='desc'?-1:1;records=[...records].sort((a,b)=>{const x=a[query.sort],y=b[query.sort];return (typeof x==='number'&&typeof y==='number'?x-y:String(x??'').localeCompare(String(y??'')))*direction||String(a.id).localeCompare(String(b.id));});}
  const options=Object.fromEntries(allowed.map(k=>[k,[...new Set(impact.tabs[tab].flatMap(r=>k==='resources'?r.resources||[]:r[k]===undefined?[]:[String(r[k])]))].sort()]));
  return {tab,total:records.length,records,options,identity:{runId:impact.runId,inputHash:impact.inputHash,baseRunId:impact.baseRunId,planId:impact.planId,factsHash:impact.factsHash,parameterHash:impact.parameterHash,mappingHash:impact.mappingHash}};
 }

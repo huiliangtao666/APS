@@ -45,11 +45,13 @@ export function minuteIssues(d){
  for(const [object,field]of [['GLOBAL','生产计算精度分钟'],['GLOBAL','甘特显示刻度分钟'],['CAL','第一班开始分钟'],['CAL','第一班结束分钟'],['CAL','第二班开始分钟'],['CAL','第二班结束分钟'],['CAL','日粒度放行时点分钟'],['CAL','日粒度到货时点分钟'],['GLOBAL','最早交付日内时点分钟'],['GLOBAL','最晚交付日内时点分钟'],['GLOBAL','批次到期日内失效分钟']])try{boundary(d,field,0,object);}catch(e){add('配置参数',null,field,e.message);}
  return out;
 }
-export function shiftWindows(d,crew,day){
+export function shiftWindows(d,crew,day,resource){
  const cal=rows(d,'工厂日历').find(r=>Number(r['日序'])===day);if(!cal)return [];
  const sunday=new Date(Date.UTC(2026,9,31)+day*86400000).getUTCDay()===0,count=Math.min(Number(cal['生产班次数']),Number(crew[sunday?'周日班次数':'标准日班次数']));
  const definitions=rows(d,'生产班次').filter(r=>Math.floor(Number(r['开始分钟偏移'])/1440)===day).sort((a,b)=>Number(a['开始分钟偏移'])-Number(b['开始分钟偏移']));
- return definitions.slice(0,count).map((r,i)=>({start:day*1440+boundary(d,(i?'第二':'第一')+'班开始分钟',day,'CAL'),end:day*1440+boundary(d,(i?'第二':'第一')+'班结束分钟',day,'CAL'),source:{sheet:'生产班次',row:r._row,key:r['班次日历编号']}}));
+ const regular=definitions.slice(0,count).map((r,i)=>({start:day*1440+boundary(d,(i?'第二':'第一')+'班开始分钟',day,'CAL'),end:day*1440+boundary(d,(i?'第二':'第一')+'班结束分钟',day,'CAL'),source:{sheet:'生产班次',row:r._row,key:r['班次日历编号']}}));
+ const extra=d.urgentWorkspace?.strategy==='overtime'?d.urgentWorkspace.overtime.filter(o=>o.crew===crew['班组编号']&&(!resource||o.resource===resource)&&Math.floor(o.start/1440)===day).map(o=>({...o,overtime:true})):[];
+ return [...regular,...extra];
 }
 export function laborSegments(route,start,end){
  if(route['人员参与方式']!=='首尾参与')return [{start,end}];
@@ -62,14 +64,15 @@ export function laborSegments(route,start,end){
 export function routeMinutes(route,quantity){const base=integer(route['基准加工分钟'],'基准加工'),prepare=integer(route['固定准备分钟'],'准备'),minimum=integer(route['最短工艺分钟'],'最短工艺');const process=route['工时模型']==='固定连续历时'?base:Math.ceil(quantity/Number(route['基准加工量千克'])*base);const duration=Math.max(minimum,prepare+process);if(!(duration>0))throw Error('生产历时须>0');return duration;}
 export function knownMinuteStops(d,currentMinute){return rows(d,'停机安排').filter(r=>instantMinute(r['信息可知时刻'])<=currentMinute).map(r=>({id:r['停机编号'],resource:r['资源编号'],start:integer(r['开始分钟偏移'],'停机开始'),end:integer(r['结束分钟偏移'],'停机结束'),source:{sheet:'停机安排',row:r._row}}));}
 export function wipOccupations(d,start,end){return (d.mapping?.wip_remaining||[]).filter(w=>w.current_occupancy_minute_interval?.[0]<end&&Math.max(w.current_occupancy_minute_interval?.[1],w.tool_release??-Infinity)>start).map(w=>{const [a,b]=w.current_occupancy_minute_interval;return {start:Math.max(a,start),end:Math.max(b,start),resource:w.resource,quantity:w.quantity,crew:w.remaining_labor_pool,people:w.remaining_labor_count,labor:[{start:Math.max(a,b-w.labor_end_minutes,start),end:b}],tools:w.current_tools,toolEnd:w.tool_release,taskId:w.id,kind:'WIP物理保留',source:w.source};});}
-export function minuteResourceCandidate({d,route,quantity,earliest,end,occupancy,daily,resources,crew,pool,standardBatch,currentMinute,predecessor}){
+export function minuteResourceCandidate({d,route,quantity,earliest,end,occupancy,daily,resources,crew,pool,standardBatch,currentMinute,predecessor,orderId}){
  const lower=Math.ceil(earliest*1440-1e-7),limit=end*1440,people=Number(route['需求人数']),count=Number(route['每批工装套数']),stops=knownMinuteStops(d,currentMinute),busy=occupancy.map(o=>({...o,start:Math.round(o.start*1440),end:Math.round(o.end*1440)}));
  const candidates=resources.filter(r=>r['资源类别']==='设备'&&r['资源组编号']===route['设备组编号']&&Number(r['可用数量'])>0),crewId=crew['班组编号'];
- const allShifts=[];for(let day=Math.floor(lower/1440);day<end;day++)allShifts.push(...shiftWindows(d,crew,day));
- const inShifts=(a,b)=>a===b||unionMinutes(allShifts,a,b)>=b-a;
  for(let day=Math.floor(lower/1440);day<end;day++)for(const resource of candidates){
+  const allShifts=[];for(let n=Math.floor(lower/1440);n<end;n++)allShifts.push(...shiftWindows(d,crew,n,resource['资源编号']));
+  const inShifts=(a,b)=>a===b||unionMinutes(allShifts,a,b)>=b-a;
   const id=resource['资源编号'],key=id+'|'+day,calendar=rows(d,'工厂日历').find(r=>Number(r['日序'])===day);if(!calendar)continue;
-  const ratio=Math.min(Number(calendar['生产班次数'])/Number(calendar['日产能分母']),shiftWindows(d,crew,day).length/Number(crew['标准日班次数'])),capacity=Number(resource['标准日产能千克'])*ratio,available=capacity-(daily.get(key)||0);
+  const regular=shiftWindows(d,crew,day,id).filter(s=>!s.overtime),extra=d.urgentWorkspace?.strategy==='overtime'?d.urgentWorkspace.overtime.filter(o=>o.resource===id&&o.crew===crewId&&Math.floor(o.start/1440)===day):[];
+  const ratio=Math.min(Number(calendar['生产班次数'])/Number(calendar['日产能分母']),regular.length/Number(crew['标准日班次数'])),capacity=Number(resource['标准日产能千克'])*ratio+extra.reduce((n,o)=>n+o.capacityKg,0),available=capacity-(daily.get(key)||0);
   const toolCap=count?Math.max(0,...pool.map(id=>Number(resources.find(r=>r['资源编号']===id)?.['单次批量上限千克'])))*count:Infinity;
   const batch=Math.min(quantity,Number(resource['单次批量上限千克']),weightSharedResource(resource)?Number(resource['同时占位上限千克']):Infinity,available,toolCap,standardBatch);
   if(!(batch>0))continue;const duration=routeMinutes(route,batch),tail=Number(route['结束参与分钟']),head=Number(route['开始参与分钟']);
@@ -82,6 +85,8 @@ export function minuteResourceCandidate({d,route,quantity,earliest,end,occupancy
    const previous=busy.filter(o=>o.resource===id&&o.end<=x&&o.productId).sort((a,b)=>b.end-a.end||String(a.taskId).localeCompare(String(b.taskId)))[0];
    let clean=null,cleaning=0;if(previous){clean=rows(d,'换型清洗').find(c=>c['设备组编号']===route['设备组编号']&&c['前产品编号']===previous.productId&&c['后产品编号']===route['成品编号']);if(!clean)throw Error('缺少有向清洗规则：'+route['设备组编号']+'/'+previous.productId+'/'+route['成品编号']);cleaning=integer(clean['清洗分钟'],'清洗');}
    const at=x+cleaning,until=at+duration;if(until>limit||Math.floor(at/1440)!==day)continue;
+   const semi=d.urgentWorkspace?.semiTasks.filter(t=>t.orderId===orderId&&t.routeStepId===route['路线工序编号'])||[];
+   if(semi.length&&!semi.some(t=>t.machine===id&&t.crew===crewId&&t.quantity===batch&&t.end-t.start===duration&&at>=t.start))continue;
    // WIP and material-delayed operations use the actual previous task finish,
    // rather than resetting the waiting clock to the new material-ready time.
    if(predecessor&&predecessor.routeStepId!==route['路线工序编号']&&at-predecessor.endMinute>integer(route['最大等待分钟'],'最大等待'))continue;
@@ -109,6 +114,9 @@ export function minuteResourceCandidate({d,route,quantity,earliest,end,occupancy
    if(cleaning&&cleanCrew!==crewId){const pc=rows(d,'班组资源').find(c=>c['班组编号']===cleanCrew);if(!pc||eventPeak([...busy.filter(o=>o.crew===cleanCrew).flatMap(o=>(o.labor||[{start:o.start,end:o.end}]).map(l=>({...l,amount:o.people}))),{start:x,end:at,amount:cleanPeople}],x,at)>Number(pc['每班可用人数']))continue;}
    const toolEnd=until+integer(route['工装后延释放分钟'],'工装释放'),tools=pool.filter(t=>Number(resources.find(r=>r['资源编号']===t)?.['单次批量上限千克'])*count>=batch&&!busy.some(o=>o.tools?.includes(t)&&overlap({start:at,end:toolEnd},{start:o.start,end:o.toolEnd??o.end}))).slice(0,count);
    if(tools.length<count)continue;
+   const regularMinutes=unionMinutes(allShifts.filter(s=>!s.overtime),x,until);
+   if(d.urgentWorkspace?.strategy==='overtime'&&regularMinutes<until-x&&!extra.some(o=>o.start<=x&&until<=o.end&&o.people>=people&&(!cleaning||cleanCrew===crewId&&o.people>=cleanPeople)&&tools.every(t=>o.tools.includes(t))))continue;
+   if(semi.length&&!semi.some(t=>t.machine===id&&t.quantity===batch&&JSON.stringify(t.tools)===JSON.stringify(tools)))continue;
    return {start:at/1440,end:until/1440,resource:id,crew:crewId,people,tools,quantity:batch,key,route,labor,toolEnd,productId:route['成品编号'],cleaning:cleaning?{start:x,end:at,resource:id,crew:cleanCrew,people:cleanPeople,quantity:0,rule:clean['清洗规则编号'],source:{sheet:'换型清洗',row:clean._row}}:null};
   }
  }

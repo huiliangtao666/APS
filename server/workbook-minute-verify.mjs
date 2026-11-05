@@ -20,11 +20,16 @@ export function verifyMinutePlan(d,p){
   if(!(t.quantity>0)||t.quantity>Number(r['单次批量上限千克'])||Number(r['可用数量'])<=0)add('批量/资源可用数错误 '+t.id);
   const pool=d.mapping.tool_pools[rt['所需工装类型']]||[];if(new Set(t.tools).size!==t.tools.length||t.tools.some(id=>!pool.includes(id)||Number(resources.get(id)?.['可用数量'])<=0||t.quantity>Number(resources.get(id)?.['单次批量上限千克'])*t.tools.length))add('实体工具/批容量错误 '+t.id);
   const labor=executed?t.laborIntervals:laborSegments(rt,t.start,t.end);if(!equal(labor,t.laborIntervals))add('人员参与分钟失配 '+t.id);
-  const windows=[];for(let day=Math.floor(t.start/1440);day<=Math.floor(t.end/1440);day++)windows.push(...shiftWindows(d,c,day));
+  const windows=[];for(let day=Math.floor(t.start/1440);day<=Math.floor(t.end/1440);day++)windows.push(...shiftWindows(d,c,day,t.machine));
   if(labor.some(l=>unionMinutes(windows,l.start,l.end)<l.end-l.start))add('人员班次外占用 '+t.id);
-  if(r['生产日历方式']==='工厂班次'&&unionMinutes(windows,t.start,t.end)<t.end-t.start)add('设备班次外占用 '+t.id);
-  if(rt['允许跨班连续']==='否'&&!windows.some(w=>w.start<=t.start&&t.end<=w.end))add('不允许跨班 '+t.id);
-  if(stops.some(s=>s.resource===t.machine&&overlap(s,t)))add('可知停机冲突 '+t.id);
+  const segments=t.interruption?t.executionSegments:[t];
+  if(!Array.isArray(segments)||segments.some(s=>!Number.isSafeInteger(s.start)||!Number.isSafeInteger(s.end)||s.end<=s.start))add('生产分段不合法 '+t.id);
+  else for(const segment of segments){
+   if(r['生产日历方式']==='工厂班次'&&unionMinutes(windows,segment.start,segment.end)<segment.end-segment.start)add('设备班次外占用 '+t.id);
+   if(rt['允许跨班连续']==='否'&&!windows.some(w=>w.start<=segment.start&&segment.end<=w.end))add('不允许跨班 '+t.id);
+   if(stops.some(s=>s.resource===t.machine&&overlap(s,segment)))add('可知停机冲突 '+t.id);
+  }
+  if(d.urgentWorkspace?.strategy==='overtime'&&unionMinutes(windows.filter(w=>!w.overtime),t.start,t.end)<t.end-t.start&&!t.interruption&&!windows.filter(w=>w.overtime).some(w=>w.start<=t.start&&t.end<=w.end&&w.people>=t.people&&t.tools.every(id=>w.tools.includes(id))))add('加班配套容量/工装不完整 '+t.id);
   const prev=byId.get(t.predecessor);if(t.predecessor&&!prev)add('前序不存在 '+t.id);
   if(prev&&(prev.productionId!==t.productionId||prev.end>t.start||prev.routeStepId!==t.routeStepId&&t.start-prev.end>Number(rt['最大等待分钟'])))add('工序链/最大等待错误 '+t.id);
   occ.push({start:t.start,end:t.end,toolEnd:t.toolEndMinute,resource:t.machine,quantity:t.quantity,tools:t.tools,crew:t.crew,people:t.people,labor,taskId:t.id,productId:t.productId});
@@ -39,7 +44,7 @@ export function verifyMinutePlan(d,p){
   if(r['资源类别']==='工装'&&eventPeak(occ.filter(o=>o.tools.includes(id)).map(o=>({...o,end:o.toolEnd??o.end})),start,end)>1)add('实体工具重用 '+id);
  }
  for(const [id,c]of crews)if(eventPeak(occ.filter(o=>o.crew===id).flatMap(o=>o.labor.map(l=>({...l,amount:o.people}))),start,end)>Number(c['每班可用人数']))add('人员并发超占 '+id);
- for(const [key,qty]of daily){const [id,dayText]=key.split('|'),day=Number(dayText),r=resources.get(id),cal=rows(d,'工厂日历').find(x=>Number(x['日序'])===day);if(!cal||qty>Number(r['标准日产能千克'])*Number(cal['生产班次数'])/Number(cal['日产能分母'])+1e-6)add('日投产量超限 '+key);}
+ for(const [key,qty]of daily){const [id,dayText]=key.split('|'),day=Number(dayText),r=resources.get(id),cal=rows(d,'工厂日历').find(x=>Number(x['日序'])===day),extra=d.urgentWorkspace?.strategy==='overtime'?d.urgentWorkspace.overtime.filter(o=>o.resource===id&&Math.floor(o.start/1440)===day).reduce((n,o)=>n+o.capacityKg,0):0;if(!cal||qty>Number(r['标准日产能千克'])*Number(cal['生产班次数'])/Number(cal['日产能分母'])+extra+1e-6)add('日投产量超限 '+key);}
  const selected=rows(d,'每日需求').filter(r=>Number(r['需求日'])>=p.conditions.startDay&&Number(r['需求日'])<p.conditions.endDay&&(!p.conditions.demandIds||p.conditions.demandIds.includes(r['需求编号']))),demands=new Map((p.demandResults||[]).map(r=>[r.id,r]));
  if(demands.size!==selected.length||p.demandResults.length!==selected.length)add('需求覆盖不完整');
  for(const r of selected){const x=demands.get(r['需求编号']);if(!x||x.quantity!==Number(r['需求千克'])||x.productId!==r['成品编号']||!['scheduled','unplanned'].includes(x.status))add('需求身份/数量错误 '+r['需求编号']);}
@@ -70,7 +75,8 @@ export function verifyMinutePlan(d,p){
   else if(kind==='wip'){const w=d.mapping.wip_remaining.find(w=>w.id===id),r=rows(d,'期初在制').find(r=>r['在制批次编号']===id),finals=tasks.filter(t=>t.productionId===id);if(!w||!r||!w.remaining_route_steps.filter(x=>x!==w.current_route_step).every(rid=>finals.some(t=>t.routeStepId===rid))){add('在制续作未完成');continue;}qty=Number(r['预计合格产出']);ready=d.urgentOrder?w.releaseMinute:Math.max(w.releaseMinute,...finals.map(t=>t.end));material=w.product;expiry=Math.max(w.completeMinute,...finals.map(t=>t.end))+Number(rows(d,'物料主数据').find(r=>r['物料编号']===material)?.['保质天数'])*1440;}
   else if(kind==='draft'){const r=d.drafts?.find(r=>r.id===id&&r.status==='adopted');if(!r){add('未采用草稿');continue;}qty=r.quantity;material=r.materialId;ready=r.availableDay*1440+boundary(d,'日粒度放行时点分钟',0,'CAL');expiry=r.expiryDay*1440+boundary(d,'批次到期日内失效分钟',0);}
   else {add('未知供给类别');continue;}
-  const total=(used.get(a.supplyId)||0)+a.quantity;used.set(a.supplyId,total);if(material!==a.materialId||!quality||feed<ready||feed>=expiry||total>qty+1e-6||['production','wip'].includes(kind)&&d.urgentOrder&&!productionValid.get(a))add('供给资格/余额不符 '+a.supplyId);
+  const preservedConsumption=d.urgentWorkspace&&a.executionConsumed&&d.urgentOrder.seedAllocations.some(x=>JSON.stringify(x)===JSON.stringify(a));
+  const total=(used.get(a.supplyId)||0)+a.quantity;used.set(a.supplyId,total);if(material!==a.materialId||!quality&&!preservedConsumption||feed<ready||feed>=expiry||total>qty+1e-6||['production','wip'].includes(kind)&&d.urgentOrder&&!productionValid.get(a))add('供给资格/余额不符 '+a.supplyId);
   if(a.taskId){const t=byId.get(a.taskId);if(!t||t.start!==feed)add('实际投料时刻失配 '+a.supplyId);}
  }
  const groups=new Map();for(const t of tasks){const k=t.productionId+'|'+t.routeStepId;(groups.get(k)||groups.set(k,[]).get(k)).push(t);}

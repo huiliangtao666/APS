@@ -4041,6 +4041,79 @@
       "source_done": false,
       "functional_done": false,
       "continuation_delivery_id": "dlv_6d61fe25-0f89-44b9-ac38-d47de288fd9e"
+    },
+    {
+      "id": "CR-URGENT-WORKSPACE-20261105",
+      "title": "E01插单独立抬头入口、策略与影响追溯",
+      "classification": "V2基线后的用户批准增量",
+      "baseline_id": "APS-BL-002",
+      "from_version": "V2",
+      "target_version": "V2+CR-URGENT-WORKSPACE-20261105:R1",
+      "approval_status": "USER_APPROVED_E01_IMPLEMENTATION",
+      "approved_by": "项目用户（原#155批准记录）",
+      "approved_on": "2026-11-05",
+      "effective": true,
+      "effective_scope": "当前批准需求增量；不等于源码/运行/验收/部署通过",
+      "implementation_status": "SOURCE_CANDIDATE_PENDING_PRODUCT_VALIDATION",
+      "issue_url": "https://github.com/huiliangtao666/APS/issues/155",
+      "related_issue_urls": [
+        "https://github.com/huiliangtao666/APS/issues/67"
+      ],
+      "primary_requirements": [
+        "FR-029"
+      ],
+      "acceptance_ids": [
+        "UW-01",
+        "UW-02",
+        "UW-03",
+        "UW-04",
+        "UW-05",
+        "UW-06",
+        "UW-07",
+        "UW-08",
+        "UW-09",
+        "UW-10",
+        "UW-11",
+        "UW-12",
+        "UW-13",
+        "UW-14",
+        "UW-15",
+        "UW-16",
+        "UW-17",
+        "UW-18"
+      ],
+      "event_key": "design:urgent-workspace-cr:20261105:r1",
+      "dev_delivery": "dlv_afe05f96-5875-42ab-b90e-b2134b03496b",
+      "business_contract": "CR-URGENT-WORKSPACE-20261105/business-contract.md",
+      "implementation_notes": "CR-URGENT-WORKSPACE-20261105/README.md",
+      "code_branch": "dev/aps-current",
+      "code_sha": null,
+      "code_sha_note": "固定候选完整SHA及父见同delivery交付报告；不在自引用提交中伪填本提交SHA",
+      "validated_product_sha": null,
+      "deployed_sha": null,
+      "acceptance_result": "UW-01—18产品NOT_EXECUTED；仅源码语法/AST/本地导入检查；未签QA/UAT",
+      "runtime_budget_added": 0,
+      "main_integration_authorized": false,
+      "limitations": [
+        "当前CP-SAT拒绝本CR策略约束，不静默回退；基础分钟源码待实测",
+        "故障仅单次中断净剩余续作；多次中断要求完整分段事实",
+        "局部闭包为保守共享依赖固定点；全V2真实重排未验与#67原记录保持"
+      ],
+      "historical_boundary": "#67旧阶段Done及原SHA/未验/预算/缺陷轮次保留，不重开或迁签",
+      "asset": {
+        "bytes": 41904,
+        "sha256": "21d2c2f3c8e3efcd73de0faa710752e4360d67574622ebdb34d5dd1262f50d60",
+        "internal_manifest_files_verified": 7
+      },
+      "excluded": [
+        "E02",
+        "E03",
+        "E04",
+        "E05",
+        "DEC04—06新专题",
+        "现场默认",
+        "发布"
+      ]
     }
   ]
 }
