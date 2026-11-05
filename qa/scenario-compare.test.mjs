@@ -19,6 +19,8 @@ function metricFixture(){
 test('SC07 8/10 is 80%, unplanned remains denominator and has no invented zero delay',()=>{
  const {d,result}=metricFixture(),m=scenarioMetrics(d,result,result,definition);
  assert.equal(m.summary.onTimeRate,.8);assert.equal(m.summary.N,10);assert.equal(m.summary.unplanned,1);assert.equal(m.summary.unknown,0);assert.equal(m.summary.coverage,1);assert.equal(m.summary.delayDays,1);assert.equal(m.demands.at(-1).lateDays,null);
+ assert.equal(m.demands.at(-1).uncoveredQuantity,null); // Status is known; residual quantity is not inferred.
+ const missing=structuredClone(result);missing.demandResults.pop();const unknown=scenarioMetrics(d,missing,result,definition);assert.equal(unknown.summary.unknown,1);assert.equal(unknown.summary.unplanned,0);assert.equal(unknown.summary.N,10);
  const empty=scenarioMetrics(d,result,result,definition,{demandIds:[]});assert.equal(empty.summary.N,0);assert.equal(empty.summary.onTimeRate,null);
 });
 test('SC08 one changed of four original lineages is 25%, new task excluded',()=>{
