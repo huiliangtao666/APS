@@ -350,48 +350,109 @@ def solve_workbook(payload, cp_model, ortools):
             required = conjunction(eligible, row['feedId'] + ':' + lid + ':mustExhaust')
             model.add(sum(available_before) + earlier['input']['reserved'] == earlier['quantity']).only_enforce_if(required)
 
-    for seq in data['sequences']:
-        members = seq['members']
-        rules = {(r['from'], r['to']): r for r in seq['transitions']}
-        for j, after in enumerate(members):
-            following = jobs[after['taskId']]
-            if following['input'].get('seed'):
-                continue
-            for i, before in enumerate(members):
-                if before['taskId'] == after['taskId']:
+    if exact:
+        # Compact bookkeeping sorts events without serializing shared production.
+        spec = importlib.util.spec_from_file_location('aps_compact_cleaning', Path(__file__).with_name('compact_cleaning.py'))
+        compact = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(compact)
+        for seq in data['sequences']:
+            members = seq['members']
+            rules = {(r['from'], r['to']): r for r in seq['transitions']}
+            times = {m['taskId']: None for m in members}
+            for tid in times:
+                times[tid] = {key: model.affine(jobs[tid][key]) for key in ['start', 'end']}
+            predecessors = compact.predecessor_indices(seq, jobs, model, adapter, hi, times)
+            crewnames = sorted({m['crewId'] for m in members})
+            grouped = {}
+            for member in members:
+                grouped.setdefault(member['taskId'], []).append(member)
+
+            def lookup(index, values, upper, stem):
+                target = model.raw(0, upper, stem)
+                model.native.add_element(index, values, target)
+                return adapter.Expr(model, {target.index: 1})
+
+            for tid, options in grouped.items():
+                following = jobs[tid]
+                if following['input'].get('seed'):
                     continue
-                prior = jobs[before['taskId']]
-                flags = [prior['choices'][before['optionId']], following['choices'][after['optionId']], compare(prior['end'], following['start'], 'clean:' + str(i) + ':' + str(j) + ':' + seq['resourceId'])]
-                for k, middle in enumerate(members):
-                    if middle['taskId'] in (before['taskId'], after['taskId']):
+                assert len({m['productId'] for m in options}) == 1
+                product = options[0]['productId']
+                pred = predecessors[tid]
+                pred_expr = adapter.Expr(model, {pred.index: 1})
+                active = present(pred_expr, tid + ':compactHasPrevious')
+                device_flags = [following['choices'][m['optionId']] for m in options]
+                on = model.new_bool_var(tid + ':compactDeviceOn:' + seq['resourceId'])
+                model.add(sum(device_flags) == on)
+                selected = conjunction([active, on], tid + ':compactSelected:' + seq['resourceId'])
+                rule_values = [rules[(m['productId'], product)] for m in members]
+                minutes = lookup(pred, [0] + [r['minutes'] for r in rule_values], max([0] + [r['minutes'] for r in rule_values]), tid + ':compactMinutes')
+                people = lookup(pred, [0] + [r['people'] for r in rule_values], max([0] + [r['people'] for r in rule_values]), tid + ':compactPeople')
+                crew = lookup(pred, [0] + [crewnames.index(m['crewId']) + 1 for m in members], len(crewnames), tid + ':compactCrew')
+                previous_end = lookup(pred, [0] + [times[m['taskId']]['end'] for m in members], hi, tid + ':compactPreviousEnd')
+                a, b = following['start'] - minutes, following['start']
+                model.add(a >= previous_end).only_enforce_if(selected)
+                nonzero = conjunction([selected, present(minutes, tid + ':compactNonzero')], tid + ':compactHasInterval')
+                interval(a, b, seq['resourceId'], 0 if seq['shared'] else 1, nonzero, tid + ':compactMachine', False)
+                for ci, cname in enumerate(crewnames, 1):
+                    is_crew = conjunction([compare(crew, ci, tid + ':compactCrewLE'), compare(ci, crew, tid + ':compactCrewGE')], tid + ':compactCrewIs')
+                    uses_crew = conjunction([nonzero, is_crew, present(people, tid + ':compactPeopleOn')], tid + ':compactUsesCrew')
+                    interval(a, b, 'crew:' + cname, people, uses_crew, tid + ':compactCrewInterval:' + cname)
+                for m in options:
+                    option = next(o for o in following['input']['options'] if o['id'] == m['optionId'])
+                    chosen = conjunction([nonzero, following['choices'][m['optionId']]], tid + ':compactOption')
+                    within(a, b, option['deviceCalendar'], chosen, tid + ':compactDeviceCalendar')
+                    within(a, b, resources['crew:' + m['crewId']]['calendar'], chosen, tid + ':compactCurrentCrewCalendar')
+                    if not option['crossShift']:
+                        within(a, following['end'], option['shifts'], chosen, tid + ':compactNonCrossShift')
+                for stop in data['stops']:
+                    if stop['resource'] == seq['resourceId']:
+                        model.add_bool_or([compare(b, stop['start'], tid + ':compactStopBefore'), compare(stop['end'], a, tid + ':compactStopAfter')]).only_enforce_if(nonzero)
+                clean_rows.append({'selected': selected, 'resourceId': seq['resourceId'], 'after': tid, 'pred': pred_expr, 'members': members, 'rules': rule_values, 'start': a, 'end': b})
+
+    else:
+        for seq in data['sequences']:
+            members = seq['members']
+            rules = {(r['from'], r['to']): r for r in seq['transitions']}
+            for j, after in enumerate(members):
+                following = jobs[after['taskId']]
+                if following['input'].get('seed'):
+                    continue
+                for i, before in enumerate(members):
+                    if before['taskId'] == after['taskId']:
                         continue
-                    candidate = jobs[middle['taskId']]
-                    # Latest completed predecessor; deterministic ties use the
-                    # source task order, matching the independent reconstruction.
-                    tie = 0 if k < i else 1
-                    intervenes = conjunction([candidate['choices'][middle['optionId']], compare(prior['end'] + tie, candidate['end'], 'cleanBetweenEnd:' + str(i) + ':' + str(j) + ':' + str(k)), compare(candidate['end'], following['start'], 'cleanBetweenStart:' + str(i) + ':' + str(j) + ':' + str(k))], 'cleanBetween:' + str(i) + ':' + str(j) + ':' + str(k) + ':' + seq['resourceId'])
-                    flags.append(intervenes.negated())
-                selected = conjunction(flags, 'cleanPrevious:' + str(i) + ':' + str(j) + ':' + seq['resourceId'])
-                rule = rules[(before['productId'], after['productId'])]
-                a, b = following['start'] - rule['minutes'], following['start']
-                model.add(a >= prior['end']).only_enforce_if(selected)
-                if rule['minutes']:
-                    # Shared-weight cleaning keeps the existing zero-product
-                    # occupation semantics. It still has time, crew, calendar,
-                    # stoppage and predecessor obligations; no exclusive rewrite.
-                    interval(a, b, seq['resourceId'], 0 if seq['shared'] else 1, selected, 'cleanMachine:' + str(i) + ':' + str(j) + ':' + seq['resourceId'], False)
-                    option = next(o for o in following['input']['options'] if o['id'] == after['optionId'])
-                    within(a, b, option['deviceCalendar'], selected, 'cleanDeviceCalendar:' + str(i) + ':' + str(j))
-                    within(a, b, resources['crew:' + after['crewId']]['calendar'], selected, 'cleanCurrentCrewCalendar:' + str(i) + ':' + str(j))
-                    within(a, following['end'], option['shifts'], selected, 'cleanNonCrossShift:' + str(i) + ':' + str(j)) if not option['crossShift'] else None
-                    # Existing semantics use the previous production crew.
-                    crew = 'crew:' + before['crewId']
-                    if rule['people']:
-                        interval(a, b, crew, rule['people'], selected, 'cleanCrew:' + str(i) + ':' + str(j) + ':' + seq['resourceId'])
-                    for stop in data['stops']:
-                        if stop['resource'] == seq['resourceId']:
-                            model.add_bool_or([compare(b, stop['start'], 'cleanStopBefore:' + str(i) + ':' + str(j)), compare(stop['end'], a, 'cleanStopAfter:' + str(i) + ':' + str(j))]).only_enforce_if(selected)
-                clean_rows.append({'selected': selected, 'resourceId': seq['resourceId'], 'before': before['taskId'], 'after': after['taskId'], 'start': a, 'end': b, 'rule': rule, 'crewId': before['crewId']})
+                    prior = jobs[before['taskId']]
+                    flags = [prior['choices'][before['optionId']], following['choices'][after['optionId']], compare(prior['end'], following['start'], 'clean:' + str(i) + ':' + str(j) + ':' + seq['resourceId'])]
+                    for k, middle in enumerate(members):
+                        if middle['taskId'] in (before['taskId'], after['taskId']):
+                            continue
+                        candidate = jobs[middle['taskId']]
+                        # Latest completed predecessor; deterministic ties use the
+                        # source task order, matching the independent reconstruction.
+                        tie = 0 if k < i else 1
+                        intervenes = conjunction([candidate['choices'][middle['optionId']], compare(prior['end'] + tie, candidate['end'], 'cleanBetweenEnd:' + str(i) + ':' + str(j) + ':' + str(k)), compare(candidate['end'], following['start'], 'cleanBetweenStart:' + str(i) + ':' + str(j) + ':' + str(k))], 'cleanBetween:' + str(i) + ':' + str(j) + ':' + str(k) + ':' + seq['resourceId'])
+                        flags.append(intervenes.negated())
+                    selected = conjunction(flags, 'cleanPrevious:' + str(i) + ':' + str(j) + ':' + seq['resourceId'])
+                    rule = rules[(before['productId'], after['productId'])]
+                    a, b = following['start'] - rule['minutes'], following['start']
+                    model.add(a >= prior['end']).only_enforce_if(selected)
+                    if rule['minutes']:
+                        # Shared-weight cleaning keeps the existing zero-product
+                        # occupation semantics. It still has time, crew, calendar,
+                        # stoppage and predecessor obligations; no exclusive rewrite.
+                        interval(a, b, seq['resourceId'], 0 if seq['shared'] else 1, selected, 'cleanMachine:' + str(i) + ':' + str(j) + ':' + seq['resourceId'], False)
+                        option = next(o for o in following['input']['options'] if o['id'] == after['optionId'])
+                        within(a, b, option['deviceCalendar'], selected, 'cleanDeviceCalendar:' + str(i) + ':' + str(j))
+                        within(a, b, resources['crew:' + after['crewId']]['calendar'], selected, 'cleanCurrentCrewCalendar:' + str(i) + ':' + str(j))
+                        within(a, following['end'], option['shifts'], selected, 'cleanNonCrossShift:' + str(i) + ':' + str(j)) if not option['crossShift'] else None
+                        # Existing semantics use the previous production crew.
+                        crew = 'crew:' + before['crewId']
+                        if rule['people']:
+                            interval(a, b, crew, rule['people'], selected, 'cleanCrew:' + str(i) + ':' + str(j) + ':' + seq['resourceId'])
+                        for stop in data['stops']:
+                            if stop['resource'] == seq['resourceId']:
+                                model.add_bool_or([compare(b, stop['start'], 'cleanStopBefore:' + str(i) + ':' + str(j)), compare(stop['end'], a, 'cleanStopAfter:' + str(i) + ':' + str(j))]).only_enforce_if(selected)
+                    clean_rows.append({'selected': selected, 'resourceId': seq['resourceId'], 'before': before['taskId'], 'after': after['taskId'], 'start': a, 'end': b, 'rule': rule, 'crewId': before['crewId']})
 
     for task in data['tasks']:
         seed = task.get('seed')
@@ -462,7 +523,14 @@ def solve_workbook(payload, cp_model, ortools):
                 candidate['allocations'].append({'feedId': row['feedId'], 'lotId': row['lotId'], 'quantity': value(row['amount']), 'feedMinute': value(row['at'])})
         for row in clean_rows:
             if value(row['selected']):
-                candidate['cleaning'].append({'resourceId': row['resourceId'], 'before': row['before'], 'after': row['after'], 'start': value(row['start']), 'end': value(row['end']), 'rule': row['rule']['source'], 'crew': row['crewId'], 'people': row['rule']['people'], 'source': {'sheet': '换型清洗', 'row': row['rule']['row']}})
+                if 'pred' in row:
+                    index = value(row['pred']) - 1
+                    before = row['members'][index]
+                    rule = row['rules'][index]
+                else:
+                    before = {'taskId': row['before'], 'crewId': row['crewId']}
+                    rule = row['rule']
+                candidate['cleaning'].append({'resourceId': row['resourceId'], 'before': before['taskId'], 'after': row['after'], 'start': value(row['start']), 'end': value(row['end']), 'rule': rule['source'], 'crew': before['crewId'], 'people': rule['people'], 'source': {'sheet': '换型清洗', 'row': rule['row']}})
     if exact:
         candidate = adapter.encode_candidate(candidate)
         base['integerProtocol'] = data['integerProtocol']

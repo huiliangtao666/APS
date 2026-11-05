@@ -131,3 +131,14 @@ Optional synchronous diagnostics run before large allocation boundaries and
 sparse expression expansions; production compilation does not install hooks
 or force GC. Finite frozen-model evidence is distinct from native feasibility,
 solution statuses, stop/cancel and fair engine comparison, which remain untested.
+
+
+## 2026-11-05 用户自测交版：小域原生资格与紧凑清洗
+
+沿原 #141 / `dlv_592a29cf-12e3-40f5-b8d3-dfbb0db6ba0d:r8`，最新用户合同为 #141 comment 6647481206；基础求解器默认及已有访问控制不变。本提交只吸收已受测的紧凑有向清洗实现，按设备对每个任务的结束/开始事件建立 inverse/element 排序簿记，不串行化重量共享生产。保最近已结束前驱、同 end 原成员优先、可选/多 option、seed、清洗分钟/前 crew/日历/stop 与原清洗结果身份。
+
+官方 standalone 独立容器真实导入 CPython 3.11.18 / OR-Tools 9.15.6755，解释器资产 SHA256 `ecf28575cd67fa7a53c7bf2355bae5cff2c496efeb51780d50a8b54441cdce74`，沿原 11-wheel 锁 `ac80eae45c3b15a60dbf4acc900bf0a9ceed9be728227a19eb370670eaded533`；私有 prefix/venv 不是现有应用或系统安装。7 个真实小域前驱用例、17 分钟/10kg native OPTIMAL、61 分钟任务在 60 分钟窗 native INFEASIBLE，以及工作簿 v2/v3 实际构模、validate、发射域/线性行 int64、decoder/独立业务 checker、保存导出均通过。v3 正向受控用例固定三组数量，原生给出 P1→P2 三分钟清洗及三条完整需求覆盖。未固定数量用例允许真实部分排程；OPTIMAL 仅表示声明的可行性目标，不表示最大覆盖。
+
+这些检查只证明上述小域资格。完整冻结 V2 的 native 构造、validate 和求解仍 NOT_EXECUTED；旧 11b 保守变量界不构成全量放行，未启动完整 V2 native。私有环境未接入应用级 environment receipt，当前部署及其可选求解器可用状态没有因此变化；缺少真实环境回执时仍由现有功能明确报不可用，不暗回退。浏览器、发布、旧实例生命周期及真实现场联动未执行。原冻结 V2 JavaScript 编译/证书证据保原 SHA，不迁签为 native 全量 PASS。
+
+同次串行交付的 #67/#146 保既有路径：#67 样本 CP137=0、CP047 小数字优先仅限用户批准样本，原 P/全局默认不改；其 43 天全剩余工作短重排在工具调用时限内未交付结果，状态是工具超时/结果未可靠交付，不是业务无解。#146 A 工程 Done 保留，现场事实及 B 继续分列。详细源→main 身份、每卡独立耗时与可读原件由本次根目录交付报告给出。
