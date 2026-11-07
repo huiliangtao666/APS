@@ -1,0 +1,312 @@
+{
+  "document_version": "V2.1",
+  "document_date": "2026-11-07",
+  "event_key": "design:requirements-v21:20261107:r1",
+  "active_scope_baseline": "APS-BL-002/V2",
+  "scope_pointer_modified": false,
+  "remote_main": "928423216bd10e0dbb5f73205639d3babd1301e6",
+  "source_cutoff": "2026-11-07 read snapshot; historical V2 unchanged",
+  "issues": [
+    {
+      "number": 155,
+      "title": "[CR][插单升级] CR-URGENT-WORKSPACE-20261105 抬头栏独立入口、策略评估与影响追溯",
+      "url": "https://github.com/huiliangtao666/APS/issues/155",
+      "body_sha256": "5d161d8d4f2789b4f68dd27ded3b6a02ee140574e20f4e37f29dd36bfa1b9aa8",
+      "reported_commit_shas": [
+        "cb2f5bd0b95aa73f76eb13d4ff198c887c739ac4",
+        "928423216bd10e0dbb5f73205639d3babd1301e6"
+      ],
+      "provenance": "GitHub Issue body read on 2026-11-07; reported author/local evidence, not independent product verification",
+      "local_evidence_workspace": null
+    },
+    {
+      "number": 156,
+      "title": "[CR][多方案试算] CR-SCENARIO-COMPARE-20261105 同基准情景管理、批量试算与指标差异比较",
+      "url": "https://github.com/huiliangtao666/APS/issues/156",
+      "body_sha256": "4416b559f1547a0ae64c8174a9d640043c5290682ae8f10b49c45c411d4a03c4",
+      "reported_commit_shas": [
+        "3d76bc6770934e749c781f995a52178b4596f727",
+        "928423216bd10e0dbb5f73205639d3babd1301e6"
+      ],
+      "provenance": "GitHub Issue body read on 2026-11-07; reported author/local evidence, not independent product verification",
+      "local_evidence_workspace": null
+    },
+    {
+      "number": 157,
+      "title": "[CR][日/分钟双能力] CR-PLAN-GRANULARITY-20261106 详细编制与三包调度",
+      "url": "https://github.com/huiliangtao666/APS/issues/157",
+      "body_sha256": "b0b910a939f6d19cd6ad0c0f7f7da577170081326b622a8ef9ce4bbdefa33b03",
+      "reported_commit_shas": [
+        "928423216bd10e0dbb5f73205639d3babd1301e6"
+      ],
+      "provenance": "GitHub Issue body read on 2026-11-07; reported author/local evidence, not independent product verification",
+      "local_evidence_workspace": null
+    },
+    {
+      "number": 158,
+      "title": "[用户优化][2026-11-05—07][已关闭] 生产主计划页面统一、字段释义与版本恢复",
+      "url": "https://github.com/huiliangtao666/APS/issues/158",
+      "body_sha256": "17ba8fdcdade4bd3b87fa772a62a8566ba8bb439ecdb448777193609cd05ce9e",
+      "reported_commit_shas": [
+        "c58f01e6524e1e2a4cbbb6f5b22fd2de75e85bdd",
+        "d7e104b49fa2238f1a3723d697c90e5f7e774bb5",
+        "df7b62511322f661ee2e3adce6edfe8fcf90b0f2"
+      ],
+      "provenance": "GitHub Issue body read on 2026-11-07; reported author/local evidence, not independent product verification",
+      "local_evidence_workspace": "APS-Test2"
+    },
+    {
+      "number": 159,
+      "title": "[用户优化][2026-11-05—07][已关闭] 生产主计划直接显示取数结果与缺省符号统一",
+      "url": "https://github.com/huiliangtao666/APS/issues/159",
+      "body_sha256": "d1ccea1f728854ffbe46dcbc019ff90a90292ce97e9f00e8721331b14e201acb",
+      "reported_commit_shas": [
+        "bf3634defb0e8269b4b06d63b36d0db551f919c6",
+        "e7365a8fec5c576c54691cdf64a7539b51211db2",
+        "72e0374eda93fb5929951118b10a5d0d19f66750"
+      ],
+      "provenance": "GitHub Issue body read on 2026-11-07; reported author/local evidence, not independent product verification",
+      "local_evidence_workspace": "APS-Test2"
+    },
+    {
+      "number": 160,
+      "title": "[用户优化][2026-11-05—07][已关闭] 日期矩阵按所点指标打开浮动说明与支撑明细",
+      "url": "https://github.com/huiliangtao666/APS/issues/160",
+      "body_sha256": "cfbbd881628b925605ab74bc47c72e855f612e561081d69e0e422d9360a895a5",
+      "reported_commit_shas": [
+        "856152f626aefcff81fa56e8818db579bcb057b2",
+        "5d9dd7c2f453775f79e2678e050d2a4c9c625886"
+      ],
+      "provenance": "GitHub Issue body read on 2026-11-07; reported author/local evidence, not independent product verification",
+      "local_evidence_workspace": "APS-Test2"
+    },
+    {
+      "number": 161,
+      "title": "[用户优化][2026-11-05—07][已关闭] 主线同步构建、发布入口恢复与历史数据清理",
+      "url": "https://github.com/huiliangtao666/APS/issues/161",
+      "body_sha256": "a72457a2c15a87f11bfe06eb64dcef8c42e5eb996fc7e69fe87db49111a7d357",
+      "reported_commit_shas": [
+        "e7365a8fec5c576c54691cdf64a7539b51211db2",
+        "928423216bd10e0dbb5f73205639d3babd1301e6",
+        "729ee0bc1961e30e1a4a4373454b76e34f234096"
+      ],
+      "provenance": "GitHub Issue body read on 2026-11-07; reported author/local evidence, not independent product verification",
+      "local_evidence_workspace": "APS-Test2"
+    },
+    {
+      "number": 162,
+      "title": "[用户优化][2026-11-05—07][已关闭] 插单沿用按天排程、四种任务状态与可处理的校验提示",
+      "url": "https://github.com/huiliangtao666/APS/issues/162",
+      "body_sha256": "1e4b3667c2b69a88954505951af90d1a30544b2998018d6abad80ea9d4277415",
+      "reported_commit_shas": [
+        "539e90dc80a9e23a56f027f7598152aeeaa6b36c",
+        "607e1a0de43a87f15b1fb18495f3aecbb8696432",
+        "05d742546e160988c0e70ff63d5c4456f1d14ece",
+        "341608dc21c5bdce124ddcf483af6ce3cf84fc21",
+        "c6009bd1dc308e9373a69ce59a8e892fa82250d3",
+        "d134b71aa01b53f3a01bb6bea4ae5483940821b3",
+        "89205b24c9f6595a27378d4e04f0c663d33dce66",
+        "90dbb10c7201702e699d3a163678d60c7f5d5975"
+      ],
+      "provenance": "GitHub Issue body read on 2026-11-07; reported author/local evidence, not independent product verification",
+      "local_evidence_workspace": "APS-Test2"
+    },
+    {
+      "number": 163,
+      "title": "[用户优化][2026-11-05—07][已关闭] 插单 Excel 按抬头灵活映射、紧凑导入与业务语言结果",
+      "url": "https://github.com/huiliangtao666/APS/issues/163",
+      "body_sha256": "2fff61b64af82a58b7079e3532fbbfba898d8c5b70e97fe0594e0dd9175bf793",
+      "reported_commit_shas": [
+        "73806e318563969d4b95cf8aa3912fc5b589e927",
+        "6bc64258dd691c6da675b0efd1d03a000ec574d3",
+        "fe8b6103d571afd4bd4a70c3a299a9827e8fcb95"
+      ],
+      "provenance": "GitHub Issue body read on 2026-11-07; reported author/local evidence, not independent product verification",
+      "local_evidence_workspace": "APS-Test2"
+    },
+    {
+      "number": 164,
+      "title": "[用户优化][2026-11-05—07][已关闭] 插单五步单页流程、任务批量维护与确认清单保留",
+      "url": "https://github.com/huiliangtao666/APS/issues/164",
+      "body_sha256": "be8adfd05e4768533f25a8d1948ff0cdb61b6eed7ffbfa3c96260283c846f5cc",
+      "reported_commit_shas": [
+        "7d5833de19b74a61342bd6b8e5a30db53165ceaf",
+        "96112b36e2f4990d06f4bb646c100935456ad8d2",
+        "a33e738536f0cbbaf3a542905557ef82fbe77a4b"
+      ],
+      "provenance": "GitHub Issue body read on 2026-11-07; reported author/local evidence, not independent product verification",
+      "local_evidence_workspace": "APS-Test2"
+    },
+    {
+      "number": 165,
+      "title": "[用户优化][2026-11-05—07][已关闭] 排程采用前可反复修改导入，需求交付中插单优先",
+      "url": "https://github.com/huiliangtao666/APS/issues/165",
+      "body_sha256": "78e744a509c1f221f83f08b4f9d9eae765de0f03fcaa4114a914b4362f4ea2c9",
+      "reported_commit_shas": [
+        "729ee0bc1961e30e1a4a4373454b76e34f234096"
+      ],
+      "provenance": "GitHub Issue body read on 2026-11-07; reported author/local evidence, not independent product verification",
+      "local_evidence_workspace": "APS-Test2"
+    },
+    {
+      "number": 166,
+      "title": "[用户优化][2026-11-05—07][已关闭] 完成比例可维护，区分实际已消耗与实际已完成物料",
+      "url": "https://github.com/huiliangtao666/APS/issues/166",
+      "body_sha256": "5cf456e6401a6d5bb9b7f6dc3f9fa8c5ad91e963b8cc3ddd7760a05e7ad4ccff",
+      "reported_commit_shas": [
+        "36a531e81a18b4f9ac58c1d871642a3b772198ac"
+      ],
+      "provenance": "GitHub Issue body read on 2026-11-07; reported author/local evidence, not independent product verification",
+      "local_evidence_workspace": "APS-Test2"
+    },
+    {
+      "number": 167,
+      "title": "[用户优化][2026-11-05—07][已关闭] 插单结果九项可点击指标、严格已排口径与浮动明细",
+      "url": "https://github.com/huiliangtao666/APS/issues/167",
+      "body_sha256": "27c737c5d9f6b4735485e4abda9635fc6ac7b74704881fe2cc72715177cab854",
+      "reported_commit_shas": [
+        "2cb8c6b635ce6824e3d777dcab98aa1165dd113a",
+        "14eaa837a86448fafd97cffb13d59d2ce06689f8"
+      ],
+      "provenance": "GitHub Issue body read on 2026-11-07; reported author/local evidence, not independent product verification",
+      "local_evidence_workspace": "APS-Test2"
+    },
+    {
+      "number": 168,
+      "title": "[用户优化][2026-11-05—07][已关闭] 多方案试算比较调整为按天计划并补齐操作反馈",
+      "url": "https://github.com/huiliangtao666/APS/issues/168",
+      "body_sha256": "fb17e6cfdf4735d98a990640462feab0d1e240ee07da71e96ebd95926e7487ea",
+      "reported_commit_shas": [
+        "acdf70f2863ac59cceb624135104fe51f7429bc6"
+      ],
+      "provenance": "GitHub Issue body read on 2026-11-07; reported author/local evidence, not independent product verification",
+      "local_evidence_workspace": "APS-Test2"
+    },
+    {
+      "number": 169,
+      "title": "[用户优化][2026-11-05—07][已关闭] 物料可导入及手工维护留痕，完整显示140物料与317条BOM",
+      "url": "https://github.com/huiliangtao666/APS/issues/169",
+      "body_sha256": "c109f5440fd4d51573c118726756e03ccc090e95cd92aa530697fbe82f48e187",
+      "reported_commit_shas": [
+        "0b65627bbbd001e7e4f00e82696cbd98f2688964"
+      ],
+      "provenance": "GitHub Issue body read on 2026-11-07; reported author/local evidence, not independent product verification",
+      "local_evidence_workspace": "APS-Test2"
+    }
+  ],
+  "files": [
+    {
+      "path": "docs/requirements/active-baseline.json",
+      "snapshot_bytes": 2121,
+      "snapshot_sha256": "f1bfaeaf34aa2ef794a777b2cd1db92641fb13ecf32694cf0d001c2e10786003",
+      "git_blob_sha": "3d76bc6770934e749c781f995a52178b4596f727",
+      "ref": "928423216bd10e0dbb5f73205639d3babd1301e6",
+      "url": "https://github.com/huiliangtao666/APS/blob/928423216bd10e0dbb5f73205639d3babd1301e6/docs/requirements/active-baseline.json"
+    },
+    {
+      "path": "docs/requirements/README.md",
+      "snapshot_bytes": 3488,
+      "snapshot_sha256": "9dcf5d47281d34be7518c9e644368b72145dffc4130f0dc3afa66383d2a7e0b4",
+      "git_blob_sha": "d7c85b87fcac70420e9678abec96b64159603476",
+      "ref": "928423216bd10e0dbb5f73205639d3babd1301e6",
+      "url": "https://github.com/huiliangtao666/APS/blob/928423216bd10e0dbb5f73205639d3babd1301e6/docs/requirements/README.md"
+    },
+    {
+      "path": "docs/requirements/baselines/APS-BL-002-V2/requirements-design.md",
+      "snapshot_bytes": 189299,
+      "snapshot_sha256": "dd883d6a1e5994baf821d541c9f98f4fe10d9f48022e68d02db351dd6e2a2d54",
+      "git_blob_sha": "2c2ecc03f01cc66b1630a947bc3ce24db73ac3e1",
+      "ref": "928423216bd10e0dbb5f73205639d3babd1301e6",
+      "url": "https://github.com/huiliangtao666/APS/blob/928423216bd10e0dbb5f73205639d3babd1301e6/docs/requirements/baselines/APS-BL-002-V2/requirements-design.md"
+    },
+    {
+      "path": "src/App.tsx",
+      "snapshot_bytes": 2569,
+      "snapshot_sha256": "f8af69c6a555ac7b458923f49289e6c52a278b6c895980d21e8b9e13f8253a46",
+      "git_blob_sha": "e5fc77e784237155d29bb68118715d244da6b0e8",
+      "ref": "928423216bd10e0dbb5f73205639d3babd1301e6",
+      "url": "https://github.com/huiliangtao666/APS/blob/928423216bd10e0dbb5f73205639d3babd1301e6/src/App.tsx"
+    },
+    {
+      "path": "src/InputData.css",
+      "snapshot_bytes": 16678,
+      "snapshot_sha256": "940d2d7ec5a20aad53c10a73012f43687b3efeabbd64e0c1369c80d7dc0bba22",
+      "git_blob_sha": "8113bfb3f437adb38422686719cbee547cc06d74",
+      "ref": "928423216bd10e0dbb5f73205639d3babd1301e6",
+      "url": "https://github.com/huiliangtao666/APS/blob/928423216bd10e0dbb5f73205639d3babd1301e6/src/InputData.css"
+    },
+    {
+      "path": "src/InputData.tsx",
+      "snapshot_bytes": 26903,
+      "snapshot_sha256": "72d9ad790863136174715d3df43258c651f569b49264db159681d7c03e76dcc7",
+      "git_blob_sha": "660607ff0562f299070f0525f5fc1b95250d8a45",
+      "ref": "928423216bd10e0dbb5f73205639d3babd1301e6",
+      "url": "https://github.com/huiliangtao666/APS/blob/928423216bd10e0dbb5f73205639d3babd1301e6/src/InputData.tsx"
+    },
+    {
+      "path": "src/MpsReport.css",
+      "snapshot_bytes": 2324,
+      "snapshot_sha256": "66516b8ef691cb84ecaac7dc5c6ec5949fb1694d841b8510c957f5328e068b98",
+      "git_blob_sha": "f992fa45fb6483b61e54f97025661a11521a39a9",
+      "ref": "928423216bd10e0dbb5f73205639d3babd1301e6",
+      "url": "https://github.com/huiliangtao666/APS/blob/928423216bd10e0dbb5f73205639d3babd1301e6/src/MpsReport.css"
+    },
+    {
+      "path": "src/MpsReport.tsx",
+      "snapshot_bytes": 12285,
+      "snapshot_sha256": "dbbb723e74e6b781955ec25dec5c07b548322335f765694cf71047c9c0900667",
+      "git_blob_sha": "2722b32b42f802beb5295f99fe506bf5a9af0ada",
+      "ref": "928423216bd10e0dbb5f73205639d3babd1301e6",
+      "url": "https://github.com/huiliangtao666/APS/blob/928423216bd10e0dbb5f73205639d3babd1301e6/src/MpsReport.tsx"
+    },
+    {
+      "path": "src/ScenarioCompare.tsx",
+      "snapshot_bytes": 21591,
+      "snapshot_sha256": "4a676dca8bb3d2fa136f894c436451309957d829941ffe2ede40e71ec4b526da",
+      "git_blob_sha": "0773627ee155804f29bd591882518dc61bc5503e",
+      "ref": "928423216bd10e0dbb5f73205639d3babd1301e6",
+      "url": "https://github.com/huiliangtao666/APS/blob/928423216bd10e0dbb5f73205639d3babd1301e6/src/ScenarioCompare.tsx"
+    },
+    {
+      "path": "src/UrgentOrders.tsx",
+      "snapshot_bytes": 34607,
+      "snapshot_sha256": "ece957246663d85dc56500f5ad74fb57ec38a0de7ad73f3441902ae2075fae27",
+      "git_blob_sha": "e72f6253c1f6c2c9ced101c97c5c2e3819353553",
+      "ref": "928423216bd10e0dbb5f73205639d3babd1301e6",
+      "url": "https://github.com/huiliangtao666/APS/blob/928423216bd10e0dbb5f73205639d3babd1301e6/src/UrgentOrders.tsx"
+    },
+    {
+      "path": "src/UrgentWorkspaceControls.tsx",
+      "snapshot_bytes": 14680,
+      "snapshot_sha256": "3c378fd83fb9d2d1fde7a7ba3718de462e6d89ae91a577ddcb3fe0464d57e1c2",
+      "git_blob_sha": "ec248454f893dce5a6cc44cb22f000b6e3d955db",
+      "ref": "928423216bd10e0dbb5f73205639d3babd1301e6",
+      "url": "https://github.com/huiliangtao666/APS/blob/928423216bd10e0dbb5f73205639d3babd1301e6/src/UrgentWorkspaceControls.tsx"
+    }
+  ],
+  "gaps": [
+    {
+      "object": "APS-Test2 local code and evidence originals",
+      "status": "NOT_INDEPENDENTLY_FETCHED",
+      "reason": "Workspace Files API 403: Workspace token cannot act for another workspace",
+      "effect": "Latest design reflects published user-change logs; no assertion all local SHAs are merged/deployed/tested by Design"
+    },
+    {
+      "object": "GitHub documentation write",
+      "status": "PENDING_AUTHORIZED_WRITER",
+      "reason": "Current integration repository permissions.push=false",
+      "next": "APS-PM route docs-only publish; return actual commit and URLs"
+    }
+  ],
+  "validation_claim": "Document static/structural review only; no product tests or UAT executed",
+  "historical_v2_zip_sha256": "6ced7d019271de8584759c7473d46f51a2169a10fb79a066ed5cb676c8515d65",
+  "included_prototypes": [
+    {
+      "path": "docs/ui/prototypes/APS日计划与分钟计划_R1_20261107.html",
+      "bytes": 75167,
+      "sha256": "67831219c06c4aac5311f011bb7c31b119c173a812bf016fe912e1586dc4a159",
+      "scope": "Design mock only; unchanged prior deliverable; not current product implementation",
+      "event_key": "design:day-minute-interactive-prototype:20261107:r1"
+    }
+  ]
+}

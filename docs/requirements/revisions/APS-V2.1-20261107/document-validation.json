@@ -1,0 +1,156 @@
+{
+  "kind": "DESIGN_DOCUMENT_VALIDATION_ONLY",
+  "product_tests": "NOT_EXECUTED",
+  "uat": "NOT_EXECUTED",
+  "checks": [
+    {
+      "check": "16 complete numbered chapters",
+      "passed": true,
+      "detail": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16"
+      ]
+    },
+    {
+      "check": "FR original identifiers preserved",
+      "passed": true,
+      "detail": 43
+    },
+    {
+      "check": "BR original identifiers preserved",
+      "passed": true,
+      "detail": 18
+    },
+    {
+      "check": "AC original identifiers preserved",
+      "passed": true,
+      "detail": 32
+    },
+    {
+      "check": "UAT original identifiers preserved",
+      "passed": true,
+      "detail": 18
+    },
+    {
+      "check": "DEC original identifiers preserved",
+      "passed": true,
+      "detail": 9
+    },
+    {
+      "check": "24 UI21 assertions",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "15 targeted later Issue sources",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "No scope pointer, status or product file in publish tree",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "Original approved V2 archive unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "Word readback: 五步单页",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "Word readback: 已开工可调",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "Word readback: 25/50/100",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "Word readback: 九项可点击指标",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "Word readback: 未采用",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "Word readback: 2026.11.07",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "Word readback: UI21-24",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "Word readback: 16.7 文档来源与发布约定",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "DOCX ZIP CRC",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "16 Word chapter bookmarks",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "HTML all chapter navigation anchors resolve",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "HTML standalone no remote executable scripts",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "Word/HTML publish copies match originals",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "New Markdown internal links resolve",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "check": "Latest nine metric labels retained",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "New UI page pagination and import precedence explicit",
+      "passed": true,
+      "detail": null
+    }
+  ],
+  "passed": 26,
+  "failed": 0
+}
