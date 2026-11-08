@@ -1,0 +1,191 @@
+{
+  "read_date": "2026-11-08",
+  "main_sha": "a3195e83d14f08c36793dc2298643d749dcae30b",
+  "baseline": "APS-BL-002 / V2",
+  "files": [
+    {
+      "path": "src/InputData.tsx",
+      "blob_sha": "660607ff0562f299070f0525f5fc1b95250d8a45",
+      "sha256": "72d9ad790863136174715d3df43258c651f569b49264db159681d7c03e76dcc7",
+      "bytes": 26903,
+      "lines": 105,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/InputData.tsx"
+    },
+    {
+      "path": "src/UrgentOrders.tsx",
+      "blob_sha": "e72f6253c1f6c2c9ced101c97c5c2e3819353553",
+      "sha256": "ece957246663d85dc56500f5ad74fb57ec38a0de7ad73f3441902ae2075fae27",
+      "bytes": 34607,
+      "lines": 86,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/UrgentOrders.tsx"
+    },
+    {
+      "path": "src/simulator/SimulatorView.tsx",
+      "blob_sha": "d64637fdda46ee68077e0e42b43ced9a90a7046d",
+      "sha256": "f30b418fce3e9197e45865839a4edb7bf156d27e8ce7059e0f7ac03aba53c669",
+      "bytes": 14995,
+      "lines": 103,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/simulator/SimulatorView.tsx"
+    },
+    {
+      "path": "src/WorkbookDrafts.tsx",
+      "blob_sha": "68ec57becc2716b3b6ebc3233d9c48f074544c31",
+      "sha256": "8a66d2116749a560849d30f1306ca289ace132b79424d775c83f3bb9db625950",
+      "bytes": 2580,
+      "lines": 18,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/WorkbookDrafts.tsx"
+    },
+    {
+      "path": "src/MpsReport.tsx",
+      "blob_sha": "2722b32b42f802beb5295f99fe506bf5a9af0ada",
+      "sha256": "dbbb723e74e6b781955ec25dec5c07b548322335f765694cf71047c9c0900667",
+      "bytes": 12285,
+      "lines": 45,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/MpsReport.tsx"
+    },
+    {
+      "path": "src/ScenarioCompare.tsx",
+      "blob_sha": "0773627ee155804f29bd591882518dc61bc5503e",
+      "sha256": "4a676dca8bb3d2fa136f894c436451309957d829941ffe2ede40e71ec4b526da",
+      "bytes": 21591,
+      "lines": 60,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/ScenarioCompare.tsx"
+    },
+    {
+      "path": "server/workbook-router.mjs",
+      "blob_sha": "afe9004f6292391f9303d191e74767e929030871",
+      "sha256": "4603e2173c0d77afa46d1a10ad690da87672e3d591fe09e4a58d635c04fd5175",
+      "bytes": 28754,
+      "lines": 170,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/workbook-router.mjs"
+    },
+    {
+      "path": "server/workbook-runtime.mjs",
+      "blob_sha": "116b52734dddbf839df917bd05ef21694970e684",
+      "sha256": "e0ee201023f2ea2194c160ec6d86d65f4a186df59165913486a813a893f8d3f4",
+      "bytes": 16645,
+      "lines": 102,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/workbook-runtime.mjs"
+    },
+    {
+      "path": "server/workbook-workbench.mjs",
+      "blob_sha": "8d2c2c7961a915267390f5a0866f2f65614eaeeb",
+      "sha256": "76f47d9b635ad26802be9499739ae4471b4a4899cfd4b76e2f47f354cc08bed0",
+      "bytes": 11111,
+      "lines": 118,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/workbook-workbench.mjs"
+    },
+    {
+      "path": "server/workbook-drafts.mjs",
+      "blob_sha": "b4bd99075d7e0f4ec3c12110e27d3ace7188d5db",
+      "sha256": "386a98e6d078ae9a0bb23f51f36307ae06a16c4370f3fd25f8747dc167573988",
+      "bytes": 4282,
+      "lines": 37,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/workbook-drafts.mjs"
+    },
+    {
+      "path": "server/workbook-supply.mjs",
+      "blob_sha": "bb189e1b508295758bda402472391baa65523631",
+      "sha256": "8dbabeded7cc2e7c90ad4fe885d44823cd4c84c381724ad948c95e53866ce404",
+      "bytes": 7946,
+      "lines": 65,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/workbook-supply.mjs"
+    },
+    {
+      "path": "server/simulator/contract.mjs",
+      "blob_sha": "646be62dd21f640824f225a9e50d2dd50cf65568",
+      "sha256": "0f6d84ddd9f55c0fca7f9bd3a56cd4fd474210213e4636b0053fe673bb6ed8f2",
+      "bytes": 4916,
+      "lines": 87,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/simulator/contract.mjs"
+    },
+    {
+      "path": "server/simulator/routes.mjs",
+      "blob_sha": "870b158b711a9c5ecd36579665d24994f92d2946",
+      "sha256": "6f5a31fbdeae00804c2b0ebb8cdc562a0524e9fe0f1c03bbab5b9da9419d29dc",
+      "bytes": 6878,
+      "lines": 77,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/simulator/routes.mjs"
+    },
+    {
+      "path": "server/simulator/model.mjs",
+      "blob_sha": "8b6a2582cbf1e89f5d96565b322ae67e1ddda929",
+      "sha256": "c6a80981ea7ad8c2d2927acbc468bbf7d73a0de292d3692cc6f3e8d49307888e",
+      "bytes": 29131,
+      "lines": 329,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/simulator/model.mjs"
+    },
+    {
+      "path": "server/simulator/source.mjs",
+      "blob_sha": "351714b84231fd73dfa064a51120395e9c2ef216",
+      "sha256": "950851f1c6ab7cfae8a43fb87218d6b025662fadc6b41ffcb3356b92c7be24f6",
+      "bytes": 13350,
+      "lines": 154,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/simulator/source.mjs"
+    },
+    {
+      "path": "server/simulator/store.mjs",
+      "blob_sha": "26c033d0fdc78398728df224ddb9b1eb5e26daf5",
+      "sha256": "255a988cea85b25c7a1a3ff856370bc20f04bed9fb8d791d66387ed6d162fccf",
+      "bytes": 11685,
+      "lines": 162,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/simulator/store.mjs"
+    },
+    {
+      "path": "server/exchange-adapters/index.mjs",
+      "blob_sha": "6599b061fe1816fa786e7bb80d442393755c8af7",
+      "sha256": "f7bb2c1c246d18a1a25eec12e647b2e270ff9088065304e26e81be9682d2485d",
+      "bytes": 7786,
+      "lines": 117,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/exchange-adapters/index.mjs"
+    },
+    {
+      "path": "server/mps-report-routes.mjs",
+      "blob_sha": "43155fb12775142a52d7aa6f72e022ad08f4d36c",
+      "sha256": "7bd6ca7288aa7c6fdaf985e06e1606cc47755332bb4992ae4644b98b2634a6ff",
+      "bytes": 2394,
+      "lines": 22,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/mps-report-routes.mjs"
+    },
+    {
+      "path": "server/solver-choice/contract.mjs",
+      "blob_sha": "641463e6d25106de609646bb25361462550e3024",
+      "sha256": "1f306ea2a2de9485a98e647ebb75b9cc7580c94f80bfe970e8dd20e4ede83d55",
+      "bytes": 5598,
+      "lines": 67,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/solver-choice/contract.mjs"
+    },
+    {
+      "path": "src/lib/execution-facts.mjs",
+      "blob_sha": "f6854145d4d235d389b4f85996b4a4149d414420",
+      "sha256": "fe424f3af22bd45c5587c6e1a4b81ad5158ccec98c0299aa592dd78d3c81802f",
+      "bytes": 28921,
+      "lines": 189,
+      "read_ref": "a3195e83d14f08c36793dc2298643d749dcae30b",
+      "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/lib/execution-facts.mjs"
+    }
+  ],
+  "evidence_grades": "源码存在、日志报告、用户确认设计和实际运行分别记录；不是产品测试或部署核验。",
+  "local_runtime": "NOT_INDEPENDENTLY_VERIFIED; APS-Test2 Files API 403",
+  "product_test": "NOT_EXECUTED",
+  "new_product_sha": null
+}

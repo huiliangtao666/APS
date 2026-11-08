@@ -1,0 +1,212 @@
+[
+  {
+    "file": "src/InputData.tsx",
+    "line": 61,
+    "blob_sha": "660607ff0562f299070f0525f5fc1b95250d8a45",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/InputData.tsx#L61",
+    "content": " const navigation=<div className=\"workbook-page-toolbar\"><nav className=\"workbook-feature-nav\" aria-label=\"工作台功能页面\">{([['workflow','排程流程'],['urgent','插单'],['scenario','多方案试算比较'],['business','业务数据查询与维护'],['parameters','配置参数查询与维护'],['equipment','排程结果'],['mps','生产主计划'],['simulator','每日数据模拟器']] as const).map(([id,label])=><button key={id} disabled={id!=='workflow'&&id!=='urgent'&&id!=='scenario'&&id!=='simulator'&&!detail} aria-current={page===id?'page':undefined} onClick={()=>navigate(id)}>{label}</button>)}</nav>{(page==='equipment'||page==='urgent'||page==='scenario')&&detail&&runPicker}</div>;"
+  },
+  {
+    "file": "src/InputData.tsx",
+    "line": 79,
+    "blob_sha": "660607ff0562f299070f0525f5fc1b95250d8a45",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/InputData.tsx#L79",
+    "content": "  {maintenance&&detail&&schema&&<WorkbookDataMaintenance api={api} datasetId={datasetId} version={detail.version} schema={schema} canWrite={writable} target={maintenance} memory={maintenanceMemory.current} onRefresh={async()=>{setReady(undefined);await load();}} onClose={()=>{setMaintenance(undefined);setPage(returnPage.current);}} onSaved={async r=>{setReady(undefined);await load();setMessage('已保存数据集 v'+r.version+'；业务查询已更新，请重新检查本次排程范围。');}}/>}"
+  },
+  {
+    "file": "src/InputData.tsx",
+    "line": 80,
+    "blob_sha": "660607ff0562f299070f0525f5fc1b95250d8a45",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/InputData.tsx#L80",
+    "content": "  <div className=\"panel workbook-journey\" hidden={page!=='workflow'}><h2>排程步骤</h2><nav className=\"workbook-steps\" aria-label=\"Excel六步工作台\">{['A1 数据准备','A2 就绪补缺','A3 本次配置','A4 计算','A5 结果核对','A6 保存导出'].map(x=><button key={x} aria-current={stage===x.slice(0,2)?'step':undefined} disabled={!detail&&x.slice(0,2)!=='A1'} onClick={()=>setStage(x.slice(0,2))}>{x}</button>)}</nav><details className=\"workbook-status-key\"><summary>步骤说明</summary><p>业务文件与参数文件分别导入并确认。检查当前范围后创建运行，再核对并导出冻结结果；候选资料不参与计算。</p></details></div>"
+  },
+  {
+    "file": "src/InputData.tsx",
+    "line": 101,
+    "blob_sha": "660607ff0562f299070f0525f5fc1b95250d8a45",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/InputData.tsx#L101",
+    "content": "  {run&&(page==='equipment'||page==='workflow'&&['A4','A5','A6'].includes(stage))&&<WorkbookResult run={run} runs={runs} onCopy={()=>{const c=run.solverConditions?.request;setSolverSelection(c?{solver:c.requested,...(c.maxSeconds!==undefined?{solverMaxSeconds:c.maxSeconds}:{})}:{solver:'basic'});setCopiedDemandIds(run.selection.demandIds);setCopiedCurrentMinute(run.selection.currentMinute);setStart(run.selection.startDay);setCurrent(run.selection.currentDay);setWindowDays(run.selection.endDay-run.selection.startDay);setDemandId(run.selection.demandIds?.length===1?run.selection.demandIds[0]:'');setReady(undefined);setRun(undefined);setStage('A3');setPage('workflow');setMessage('已复制为新试算；采用当前业务版本，须重新检查依赖、参数与求解条件。');}} canWrite={writable} canExport={canExport} api={api} perform={perform} onRun={setRun} onLocate={locate} onDraft={(s:any)=>perform(async()=>{await api('/workbooks/datasets/'+datasetId+'/draft',{expectedVersion:detail.version,sourceRun:run.id,suggestionId:s.id,currentDay:current});await load();setPage('business');setMessage('已复制为模拟补单草稿，尚未纳入试算。');})} onExport={()=>download('/workbooks/runs/'+run.id+'/export','冻结排程结果.csv')}/>}"
+  },
+  {
+    "file": "src/InputData.tsx",
+    "line": 102,
+    "blob_sha": "660607ff0562f299070f0525f5fc1b95250d8a45",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/InputData.tsx#L102",
+    "content": "  {detail&&page==='business'&&drafts.length>0&&<details><summary>模拟补单草稿（{drafts.length}）</summary><WorkbookDrafts drafts={drafts} draftEdit={draftEdit} canWrite={writable} datasetId={datasetId} version={detail.version} currentDay={current} api={api} perform={perform} onEdit={setDraftEdit} onSaved={load}/></details>}"
+  },
+  {
+    "file": "src/UrgentOrders.tsx",
+    "line": 48,
+    "blob_sha": "e72f6253c1f6c2c9ced101c97c5c2e3819353553",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/UrgentOrders.tsx#L48",
+    "content": "  <nav aria-label=\"插单工作页面\">{[['events','事件与插单'],['strategy','策略与影响'],['gantt','设备甘特'],['trace','批次追溯']].map(([id,label])=><button key={id} aria-pressed={workspaceTab===id} onClick={()=>setWorkspaceTab(id)}>{label}</button>)}</nav>"
+  },
+  {
+    "file": "src/simulator/SimulatorView.tsx",
+    "line": 54,
+    "blob_sha": "d64637fdda46ee68077e0e42b43ced9a90a7046d",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/simulator/SimulatorView.tsx#L54",
+    "content": "  return <main className=\"simulator\"><header><div><h1>每日数据模拟器</h1><span className=\"sim-badge\">独立调试 · 联动未启用</span></div>"
+  },
+  {
+    "file": "src/simulator/SimulatorView.tsx",
+    "line": 66,
+    "blob_sha": "d64637fdda46ee68077e0e42b43ced9a90a7046d",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/simulator/SimulatorView.tsx#L66",
+    "content": "      <button disabled={!canWrite||busy||!current||!!request} onClick={()=>run(()=>advance(1))}>推进一天</button>"
+  },
+  {
+    "file": "src/simulator/SimulatorView.tsx",
+    "line": 68,
+    "blob_sha": "d64637fdda46ee68077e0e42b43ced9a90a7046d",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/simulator/SimulatorView.tsx#L68",
+    "content": "      <button disabled={!canWrite||busy||!current||!!request||!Number.isInteger(days)||days<1||days>366} onClick={()=>run(()=>advance(days))}>串行推进 {days} 天</button>"
+  },
+  {
+    "file": "src/simulator/SimulatorView.tsx",
+    "line": 89,
+    "blob_sha": "d64637fdda46ee68077e0e42b43ced9a90a7046d",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/simulator/SimulatorView.tsx#L89",
+    "content": "    {tab==='快照与接口检查'&&<section><div className=\"sim-toolbar\"><label>恢复检查点<select value={checkpoint} onChange={e=>setCheckpoint(e.target.value)}><option value=\"\">初始基线</option>{current?.checkpoints.map(c=><option key={c.id} value={c.id}>{c.date}</option>)}</select></label>"
+  },
+  {
+    "file": "src/simulator/SimulatorView.tsx",
+    "line": 91,
+    "blob_sha": "d64637fdda46ee68077e0e42b43ced9a90a7046d",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/src/simulator/SimulatorView.tsx#L91",
+    "content": "      <button disabled={!canWrite||busy||!current||!newBranch||!!request} onClick={()=>run(async()=>{if(!current)return;const out=await api(prefix(current)+'/fork',{newBranch,checkpointId:checkpoint||null,expectedRevision:current.revision,...(draft?{replacementSpec:JSON.parse(draft)}:{})});await refresh();await open(out);setNotice('原历史保留，已创建恢复分支');})}>恢复 / 修改脚本为新分支</button>"
+  },
+  {
+    "file": "server/workbook-drafts.mjs",
+    "line": 17,
+    "blob_sha": "b4bd99075d7e0f4ec3c12110e27d3ace7188d5db",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/workbook-drafts.mjs#L17",
+    "content": " const draft=structuredClone(prior||{id:randomUUID(),status:'draft',sourceRun:run.id,suggestionId:source.id,sourceVersion:run.version,netGap:source.netGap,needDay:source.needDay,materialId:source.materialId,unit:source.unit,quantity:source.quantity,relationId:source.relationId,orderDay:source.orderDay,availableDay:source.availableDay,expiryDay:source.availableDay+Number(rows(d,'物料主数据').find(m=>m['物料编号']===source.materialId)?.['保质天数'])});"
+  },
+  {
+    "file": "server/workbook-drafts.mjs",
+    "line": 32,
+    "blob_sha": "b4bd99075d7e0f4ec3c12110e27d3ace7188d5db",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/workbook-drafts.mjs#L32",
+    "content": "  draft.status=body.action==='adopt'?'adopted':'draft';"
+  },
+  {
+    "file": "server/workbook-drafts.mjs",
+    "line": 36,
+    "blob_sha": "b4bd99075d7e0f4ec3c12110e27d3ace7188d5db",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/workbook-drafts.mjs#L36",
+    "content": " return {draft,externalDispatch:false};"
+  },
+  {
+    "file": "server/workbook-supply.mjs",
+    "line": 63,
+    "blob_sha": "bb189e1b508295758bda402472391baa65523631",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/workbook-supply.mjs#L63",
+    "content": " for(const r of d.drafts||[])if(r.status==='adopted')lots.push({id:'draft:'+r.id,material:r.materialId,quantity:r.quantity,used:0,ready:r.availableDay,expiry:r.expiryDay,quality:true,conditional:true,source:{draft:r.id,run:r.sourceRun,version:r.sourceVersion,suggestion:r.suggestionId,status:r.status}});"
+  },
+  {
+    "file": "server/simulator/source.mjs",
+    "line": 85,
+    "blob_sha": "351714b84231fd73dfa064a51120395e9c2ef216",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/simulator/source.mjs#L85",
+    "content": "  need(envelope?.contract==='aps-simulator-frozen-source@1'&&envelope.mode==='INDEPENDENT'&&envelope.linked===false&&"
+  },
+  {
+    "file": "server/simulator/store.mjs",
+    "line": 74,
+    "blob_sha": "26c033d0fdc78398728df224ddb9b1eb5e26daf5",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/simulator/store.mjs#L74",
+    "content": "      lineage:copy(d.lineage),source:copy(d.spec.source),mode:'INDEPENDENT',linked:false,"
+  },
+  {
+    "file": "server/simulator/store.mjs",
+    "line": 94,
+    "blob_sha": "26c033d0fdc78398728df224ddb9b1eb5e26daf5",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/simulator/store.mjs#L94",
+    "content": "  async advance(scenario,branch,{requestId,expectedRevision,days}) {"
+  },
+  {
+    "file": "server/simulator/store.mjs",
+    "line": 100,
+    "blob_sha": "26c033d0fdc78398728df224ddb9b1eb5e26daf5",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/simulator/store.mjs#L100",
+    "content": "        need(operation.content===content,'REQUEST_CONFLICT','requestId','同推进身份内容不同，须先对账',409);"
+  },
+  {
+    "file": "server/simulator/store.mjs",
+    "line": 113,
+    "blob_sha": "26c033d0fdc78398728df224ddb9b1eb5e26daf5",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/simulator/store.mjs#L113",
+    "content": "          const result=advanceDay(d.spec,d.state,day), checkpoint={id:'CP-'+day,date:day,state:result.state,snapshot:result.snapshot,operationId:requestId};"
+  },
+  {
+    "file": "server/simulator/store.mjs",
+    "line": 118,
+    "blob_sha": "26c033d0fdc78398728df224ddb9b1eb5e26daf5",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/simulator/store.mjs#L118",
+    "content": "          // A failed rename/fsync has an unknown outcome; do not overwrite the last file or automatically replay it."
+  },
+  {
+    "file": "server/exchange-adapters/index.mjs",
+    "line": 6,
+    "blob_sha": "6599b061fe1816fa786e7bb80d442393755c8af7",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/exchange-adapters/index.mjs#L6",
+    "content": "export const realConnection = Object.freeze({status:'NOT_CONFIGURED', enabled:false, productionWrites:false});"
+  },
+  {
+    "file": "server/exchange-adapters/index.mjs",
+    "line": 48,
+    "blob_sha": "6599b061fe1816fa786e7bb80d442393755c8af7",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/exchange-adapters/index.mjs#L48",
+    "content": "// Pass the same Map across adapter recreation in one mock session. No durable"
+  },
+  {
+    "file": "server/exchange-adapters/index.mjs",
+    "line": 50,
+    "blob_sha": "6599b061fe1816fa786e7bb80d442393755c8af7",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/exchange-adapters/index.mjs#L50",
+    "content": "export function createExchangeAdapter({transport,scope,journal=new Map()}={}) {"
+  },
+  {
+    "file": "server/exchange-adapters/index.mjs",
+    "line": 51,
+    "blob_sha": "6599b061fe1816fa786e7bb80d442393755c8af7",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/exchange-adapters/index.mjs#L51",
+    "content": "  if (!transport || transport.kind!=='explicit-local-mock' || !text(scope) || !(journal instanceof Map)) throw new Error('explicit_mock_and_trusted_session_scope_required');"
+  },
+  {
+    "file": "server/workbook-runtime.mjs",
+    "line": 19,
+    "blob_sha": "116b52734dddbf839df917bd05ef21694970e684",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/workbook-runtime.mjs#L19",
+    "content": "  if(hash(d)!==r.inputHash)return 'frozen_input_corrupt';"
+  },
+  {
+    "file": "server/workbook-runtime.mjs",
+    "line": 24,
+    "blob_sha": "116b52734dddbf839df917bd05ef21694970e684",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/workbook-runtime.mjs#L24",
+    "content": "  if(!['completed','partial'].includes(r.status)||p.status!==r.status||p.source?.datasetId!==d.id||p.source?.version!==d.version||p.source?.fileHash!==d.fileHash||p.source?.mappingHash!==hash(d.mapping)||p.source?.parameterHash!==hash(rows(d,'配置参数'))||hash(p.conditions)!==hash({...r.selection,interval:'[start,end)'}))return 'frozen_result_source_mismatch';"
+  },
+  {
+    "file": "server/workbook-runtime.mjs",
+    "line": 29,
+    "blob_sha": "116b52734dddbf839df917bd05ef21694970e684",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/workbook-runtime.mjs#L29",
+    "content": " router.get('/runs/:id/inputs',permission('read'),(req,res)=>{const r=read().runs.find(r=>r.id===req.params.id);if(!r)return res.status(404).json({error:'run_not_found'});const input=inputOf(r);if(hash(input)!==r.inputHash)return res.status(409).json({error:'frozen_input_corrupt'});res.json({runId:r.id,input,inputHash:r.inputHash,selection:r.selection});});"
+  },
+  {
+    "file": "server/workbook-runtime.mjs",
+    "line": 47,
+    "blob_sha": "116b52734dddbf839df917bd05ef21694970e684",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/workbook-runtime.mjs#L47",
+    "content": "   const latest=ctx.meta(s,req.params.id);if(latest?.version!==req.body.version)return res.status(409).json({error:'INPUT_CHANGED',actualVersion:latest?.version});"
+  },
+  {
+    "file": "server/workbook-runtime.mjs",
+    "line": 48,
+    "blob_sha": "116b52734dddbf839df917bd05ef21694970e684",
+    "url": "https://github.com/huiliangtao666/APS/blob/a3195e83d14f08c36793dc2298643d749dcae30b/server/workbook-runtime.mjs#L48",
+    "content": "   const check=solvers.readiness(d,req.body,ctx.actorKey(req));if(!req.body.readinessToken||check.token!==req.body.readinessToken)return res.status(409).json({error:'READINESS_CHANGED'});"
+  }
+]

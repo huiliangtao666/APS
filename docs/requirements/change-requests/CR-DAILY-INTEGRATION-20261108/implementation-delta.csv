@@ -1,0 +1,19 @@
+﻿条目,能力/界面,刷新后现状,依据/位置,证据等级,R3目标,本CR差异处理,新CR断言
+R01,B/P Excel接入,整本双文件预览/确认、对象维护、有效参数与冻结run已在main存在,src/InputData.tsx:79; server/workbook-router.mjs:47—52; server/workbook-workbench.mjs:33—102,MAIN_SOURCE_CONFIRMED,每日按需求/库存/生产/补货领域接纳并确认,复用导入/维护/校验，新增业务日与领域接入协调；不重写原B/P格式,DI02/DI03
+R02,物料/BOM与配置,主数据同源维护已有；后续日志有有效期、参考值、重导保留、140/317完整显示,Issue #169；V2.1 UI/UX 10.12,LOG_REPORTED,在库存/生产/补货就近引用同一对象，冻结run不取latest,作为复用项；仅改入口、业务日生效绑定及必要接缝,DI01/DI03
+R03,五类查询与六结果,main有五类18子视图与六结果及来源/栏位/筛选,src/InputData.tsx:61/101; 原#49/#50,MAIN_SOURCE_CONFIRMED,归入六个模块，保持原查询与结果能力,原组件/字段/来源保留；新增跨日上下文和当前/冻结来源展示,DI01/DI10
+R04,排程单页流程,用户已确认单页简化与R2；main源码仍有A1—A6旧结构，不代表最新本地页面缺失,用户2026.11.08单页确认；src/InputData.tsx:80仅为远端参照,USER_CONFIRMED_DESIGN / LOCAL_RUNTIME_UNVERIFIED,保留当前单页排程，整合四类本日输入与结果采用,不要求退回六步切页或重新造一套布局；开工先核owner最新代码,DI01/DI04
+R05,插单最新UI/规则,五步默认展开、四态/比例、表头映射、重导保护、九指标已在后续日志报告完成,Issues #162—167；V2.1 UI/UX 10.10；main UrgentOrders.tsx:48仍旧四页签,LOG_REPORTED,同一日上下文及基准/候选复用，新增跨日身份/事实衔接,不把五步/九指标再列新增；不把R3原型待核误判成产品缺失,DI04/DI07/DI10
+R06,多方案日计划,main有情景比较；#168报告日模型、状态/耗料、保存采用和反馈更新,src/ScenarioCompare.tsx；Issue #168,MAIN_SOURCE_CONFIRMED + LOG_REPORTED,各情景冻结同业务日底本，不修改共享实绩/采购/库存,复用现有日情景，仅接业务日/父计划与日报来源,DI04/DI10
+R07,生产主计划报表,main有MPS域/路由/页面；#158—160报告直接值、0/缺省、专属指标浮窗,src/MpsReport.tsx；server/mps-report-routes.mjs；Issues #158—160,MAIN_SOURCE_CONFIRMED + LOG_REPORTED,增加每日真实收发、采用计划参考、在途/建议及对账来源,不重建MPS；扩充日循环事实与跨日钻取，沿既定余额定义,DI10
+R08,执行事实保护,main有执行事实领域/剩余/保护及库存分配；#166报告比例及累计样例,src/lib/execution-facts.mjs:96/156/174—187；Issue #166,MAIN_SOURCE_CONFIRMED + LOG_REPORTED,四领域日输入和日结共用累计执行/领料/产出/发货身份,复用事实机制，补领域日批与增量对账；不按R3一次性样例重写引擎,DI05/DI07/DI08
+R09,采购草稿,main草稿可adopt并作为conditional supply；externalDispatch明确false,server/workbook-drafts.mjs:17/32/36；server/workbook-supply.mjs:63,MAIN_SOURCE_CONFIRMED,采购草稿、生效订单、部分/全部收货及未收余量独立状态,补真实采购业务状态及到期默认仿真收货；不把adopted条件供应当实际收货,DI06/DI08
+R10,模拟器A独立阶段,已有场景/分支、单日/N日推进、事件、守恒、检查点、失败/重开/幂等及导出,server/simulator/model.mjs/store.mjs/routes.mjs；#146最新PM记录,MAIN_SOURCE_CONFIRMED / STAGE_EVIDENCE_REFERENCED,跨六域统一业务日并调用现有计划链路,A能力复用，不重建模拟器或重跑未变全套；B接缝归属由PM唯一映射,DI09/DI11/DI12
+R11,模拟器主程序联动B,页面明示独立调试/联动未启用；冻结来源须INDEPENDENT/linked:false,src/simulator/SimulatorView.tsx:54；server/simulator/source.mjs:85；#146,MAIN_SOURCE_CONFIRMED,指定隔离仿真目标的接纳/对账/求解采用/下日基础闭环,本CR主要增量；按原#146准入补真实接缝，不直接启用户当前生产实例,DI02—DI12
+R12,外部系统通道,现适配器explicit-local-mock、journal Map；realConnection未配置,server/exchange-adapters/index.mjs:6/48—51,MAIN_SOURCE_CONFIRMED,四领域来源契约、日批、幂等及未知回执处理,复用已给适配器；首轮用显式mock验证业务合同，真实连接按目标就绪，不造连接成功,DI02/DI03/DI12
+R13,冻结运行与旧版本,main已有输入hash、readiness token、版本/结果来源校验,server/workbook-runtime.mjs:19—24/29/47—49,MAIN_SOURCE_CONFIRMED,贯通业务日、父计划、累计事实、参数及跨日来源,扩展上下文关联，不复制一套run/检查/采用存储业务,DI03/DI04/DI09
+R14,基础/CP-SAT,main有真实引擎选择；#141小native与精确整合阶段Done，整V2 native/应用环境回执未验,server/solver-choice/contract.mjs；#141#issuecomment-6647929459,MAIN_SOURCE_CONFIRMED / LIMITED_STAGE,新流程复用实际可用引擎，不静默降级,不是新增求解器；不可因R3禁用CP预览就重复开发#141,DI04/DI13
+R15,全局日/分钟能力,main有分钟模型/执行；#157仍详细编制，原评论明确产品实施未授权,Issue #157#issuecomment-6684130840；server/workbook-runtime.mjs,PARTIAL_EXISTING / ORIGINAL_BACKLOG,业务日不混原粒度；全局双模式按#157共享接缝接入,新CR不复制DG01—24，也不因本卡擅自启动整个#157产品实施,DI13
+R16,六模块业务日入口,main抬头八入口，未见六领域业务日总览/四确认的统一流程,src/InputData.tsx:61；R3六模块原型/设计第2—4章,NEW_INTEGRATION_DELTA,六域导航、场景/分支/业务日、状态总览和就近维护,以现UI组件整合，快捷入口同一状态，不新建独立风格或隐藏原功能,DI01/DI03
+R17,期末/日结与日报,独立模拟器有日结和历史；尚不是主程序每日输入/采用/采购/执行共用日结,server/simulator/store.mjs:94—121；R3第10—11章,NEW_INTEGRATION_DELTA,四确认、原子日结、先已知事件再收货、次日待确认、月底冻结,复用检查点和事件；新增主程序目标及跨域守恒，不自动执行计划,DI08—DI12
+R18,真实运行/本地优化版本,远端main固定；#158—169本地SHA不能视作远端/部署；读取APS-Test2返回403,fresh main a3195e8；test2-access-check.txt；Issue来源说明,UNVERIFIED_RUNTIME,开工前核最新本地owner/变更、固定目标SHA并保护用户数据,归资料核对，不登记产品FAIL、不反复索方向确认、不把旧mainUI覆盖最新本地,DI01/DI15

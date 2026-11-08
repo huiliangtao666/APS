@@ -42,3 +42,9 @@ Design维护业务设计及原型/场景/mock；PM维护CR、实施原卡、调�
 [V2.1完整需求与设计说明](revisions/APS-V2.1-20261107/README.md)综合后续CR及最新UI/UX；[UI/UX专章](../ui/aps-ui-ux-v2.1.md)可单独查阅，新增页面核对见该修订UI21验收表。
 
 该修订保留正式范围基线APS-BL-002/V2及active-baseline.json不变；最新用户优化日志含本地提交，未自动当作已合main/部署或完整UAT。实时实施仍读Project2，详细来源和差异见V2.1第15—16章。
+
+## 每日六域整合差异 CR（2026.11.08）
+
+[CR-DAILY-INTEGRATION-20261108：完整正文、18项差异、DI01—15与DLY01—40映射](change-requests/CR-DAILY-INTEGRATION-20261108/README.md)。管理与实施唯一入口：[Issue #170](https://github.com/huiliangtao666/APS/issues/170)；用户方向和PM调度依据见原卡，提出人APS-Design不等于批准人。
+
+本次为CR设计资料登记；正式范围基线APS-BL-002/V2及active-baseline.json不变，未登记产品effective或验证通过。最新本地UI须经owner交接后扣除已实现差异，设计提交不证明已合入、部署或UAT；产品Test/UAT仍为NOT_EXECUTED。
