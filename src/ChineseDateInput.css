@@ -1,0 +1,10 @@
+.chinese-month-input{display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+.chinese-month-input select{min-width:0!important;max-width:105px!important}
+button.chinese-date-input,.app-shell main button.chinese-date-input{display:inline-flex;align-items:center;justify-content:space-between;gap:7px;min-height:30px;padding:4px 8px;background:#fff;color:#294c62;border:1px solid #ccdae5;border-radius:4px;font:inherit;white-space:nowrap}
+.chinese-date-input:disabled{opacity:1;color:#647b8a!important;cursor:default}.chinese-date-input>span{color:#8299a7}
+.chinese-date-popup{z-index:2147482000;width:280px;box-sizing:border-box;padding:9px;background:#fff;color:#294c62;border:1px solid #bacdda;border-radius:5px;box-shadow:0 5px 18px #17384b33;font:12px/1.4 system-ui,sans-serif;max-height:calc(100vh - 16px);overflow:auto}
+.chinese-date-popup select{height:29px;padding:2px 5px;border:1px solid #ccdae5;background:#fff;border-radius:3px;color:inherit}
+.chinese-date-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;margin:7px 0}
+.chinese-date-grid>b{text-align:center;font-weight:500;font-size:11px;color:#738c9a}
+.chinese-date-popup button{min-width:0;min-height:27px;border:1px solid #e0e9ef;border-radius:3px;background:#fff;color:#294c62;cursor:pointer;font:12px/1.4 system-ui,sans-serif;padding:3px}
+.chinese-date-popup button[aria-pressed=true]{background:#196084;color:#fff;border-color:#196084}.chinese-date-popup button:hover{border-color:#3a91b6}

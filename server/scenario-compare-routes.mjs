@@ -1,3 +1,6 @@
+import {DAY_ENGINE} from './urgent-order-day.mjs';
+import {dayWorkspaceDefaults} from './scenario-day-defaults.mjs';
+import {dayConditionOptions,DAY_SCENARIO_LIMIT_SECONDS} from './scenario-compare-day.mjs';
 import {randomUUID} from 'node:crypto';
 import {hash,rows,refreshDerived} from './workbook-model.mjs';
 import {cloneForParameters} from './workbook-workbench.mjs';
@@ -21,8 +24,8 @@ export function registerScenarioCompare(router,ctx){
  const expected=(g,token)=>{if(token!==stamp(g))throw scError('REVISION','对比组已变化，请重读后核对','token',409);};
  function frozen(ref,expectedHash){const value=snapshot(ref);if(hash(value)!==expectedHash)throw scError('FROZEN','冻结来源指纹不符','source',409);return structuredClone(value);}
  function source(s,g){const r=s.runs.find(r=>r.id===g.baseRunId);if(!r||r.resultHash!==g.baseIdentity.resultHash||hash(r.result)!==r.resultHash)throw scError('BASE_CHANGED','基准运行结果损坏或变化','baseRunId',409);return {base:r,d:frozen(g.baseInputRef,g.baseIdentity.inputHash),plan:frozen(g.planRef,g.planHash)};}
- function stale(s,g){const {base}=source(s,g),now=compareStamp(ctx,s,base);return now.baseAlreadyStale||hash(now)!==hash(g.liveIdentity);}
- function visible(s,g){const {baseInputRef,planRef,...publicGroup}=g;return {...publicGroup,token:stamp(g),stale:stale(s,g),pendingOwned:g.batches.some(b=>active.has(b.id)),scenarios:g.scenarios.map(c=>({...c,attempts:c.attempts.map(a=>({...a,run:s.runs.find(r=>r.id===a.runId)?publicRun(s.runs.find(r=>r.id===a.runId)):null}))}))};}
+ function stale(s,g){const {base}=source(s,g),now=compareStamp(ctx,s,base);return g.purpose!=='capacity-bottleneck'&&now.baseAlreadyStale||hash(now)!==hash(g.liveIdentity);}
+ function visible(s,g){const {baseInputRef,planRef,...publicGroup}=g;return {...publicGroup,...(g.definition.timeUnit==='day'?{conditionOptions:dayConditionOptions(source(s,g).d)}:{}),token:stamp(g),stale:stale(s,g),pendingOwned:g.batches.some(b=>active.has(b.id)),scenarios:g.scenarios.map(c=>({...c,attempts:c.attempts.map(a=>({...a,run:s.runs.find(r=>r.id===a.runId)?publicRun(s.runs.find(r=>r.id===a.runId)):null}))}))};}
  const publicRun=r=>{const {inputRef,...visible}=r;return visible;};
  const changed=(s,g,req,action)=>{g.revision++;audit(s,req,action,{groupId:g.id,revision:g.revision});write(s);};
  const current=g=>{if(g.batches.some(b=>active.has(b.id)))throw scError('BUSY','当前串行队列尚未最终释放','batch',409);};
@@ -34,23 +37,27 @@ export function registerScenarioCompare(router,ctx){
   for(const id of b.scenarioIds){const c=scene(g,id),a=c.attempts.find(a=>a.batchId===b.id),r=recovered.runs.find(r=>r.id===a?.runId);if(r&&!terminal(r.status)){r.status='failed';r.failure='应用重启中断，未自动重试';r.finishedAt=new Date().toISOString();}if(!terminal(c.status))c.status='interrupted';}recovery=true;
  }
  if(recovery)write(recovered);
- router.get('/scenario/groups',permission('read'),handle((req,res)=>{const s=read();res.json((s.scenarioGroups||[]).filter(g=>!req.query.datasetId||g.datasetId===req.query.datasetId).map(g=>visible(s,g)));}));
- router.get('/scenario/environment',permission('read'),handle((_req,res)=>{const e=ctx.scenarioEnvironment?.();res.json({available:!!e,execution:e?validateCompareConfig(e):null,kpiDefinition:KPI_DEFINITION,meaning:'运行容量与预算由当前服务供给，缺失则不可启动；无隐藏5情景或费率默认'});}));
+ router.get('/scenario/groups',permission('read'),handle((req,res)=>{const s=read();res.json((s.scenarioGroups||[]).filter(g=>(!req.query.datasetId||g.datasetId===req.query.datasetId)&&(req.query.purpose?req.query.purpose===g.purpose:!g.purpose)&&(!req.query.baseRunId||req.query.baseRunId===g.baseRunId)).map(g=>visible(s,g)));}));
+ router.get('/scenario/environment',permission('read'),handle((_req,res)=>{const e=ctx.scenarioEnvironment?.();res.json({available:!!e,dayAvailable:true,dayLimits:{runSeconds:DAY_SCENARIO_LIMIT_SECONDS,concurrency:1,source:'沿用按天排程单项90秒保护；情景容量和单项秒数由用户明确填写'},execution:e?validateCompareConfig(e):null,kpiDefinition:KPI_DEFINITION,meaning:'运行容量与预算由当前服务供给，缺失则不可启动；无隐藏5情景或费率默认'});}));
  router.post('/scenario/groups',permission('edit'),handle((req,res)=>{
   const s=read(),r=s.runs.find(r=>r.id===req.body.runId);
   if(!r?.result||!['completed','partial'].includes(r.status)||r.resultHash!==req.body.expectedResultHash||hash(r.result)!==r.resultHash)throw scError('BASE','请选择已保存且来源核实的基准运行','runId');
   const d=frozen(r.inputRef,r.inputHash),config=validateCompareConfig(req.body.config);
-  if(r.result.timeUnit!=='minute'||r.result.verification?.status!=='pass')throw scError('BASE','基准须为独立检查通过的分钟计划','runId');
+  const daily=r.result.timeUnit==='day';if(!['day','minute'].includes(r.result.timeUnit)||r.result.verification?.status!=='pass')throw scError('BASE','基准须为独立检查通过的按天或分钟计划','runId');
+  if(daily&&config.runSeconds>DAY_SCENARIO_LIMIT_SECONDS)throw scError('BUDGET','按天单情景最长试算不能超过90秒；请调低试算秒数','runSeconds');
   if(r.solver?.requested&&r.solver.requested!=='basic'||r.solver?.actual&&r.solver.actual!=='basic')throw scError('BASE_ENGINE','当前新增接缝只覆盖同基础引擎基准；不能将CP-SAT基准与基础试算标为相同求解条件','runId');
   const old=(s.urgentPlans||[]).find(p=>p.headRunId===r.id),facts=old?structuredClone(old.facts):executionLedger(r.result,req.body.facts);
   if(old&&req.body.planRevision!==old.revision)throw scError('FACTS_CHANGED','原计划事实或修订已变化，请刷新','planRevision',409);
-  const selection={...r.selection,currentMinute:facts.observationMinute};delete selection.demandIds;
-  const plan=old?structuredClone(old):{id:randomUUID(),contract:URGENT_CONTRACT,datasetId:r.datasetId,version:r.version,baseRunId:r.id,headRunId:r.id,baseInputRef:r.inputRef,inputHash:r.inputHash,selection,facts,factsRevision:1,revision:1,batches:[],previews:[],runs:[],originalDemandIds:r.result.demandResults.map(r=>r.id)};
+  const selection={...r.selection,...(daily?{}:{currentMinute:facts.observationMinute})};delete selection.demandIds;
+  const plan=old?structuredClone(old):{id:randomUUID(),contract:URGENT_CONTRACT,...(daily?{timeUnit:'day',workspace:dayWorkspaceDefaults(facts.observationDay,d)}:{}),datasetId:r.datasetId,version:r.version,baseRunId:r.id,headRunId:r.id,baseInputRef:r.inputRef,inputHash:r.inputHash,selection,facts,factsRevision:1,revision:1,batches:[],previews:[],runs:[],originalDemandIds:r.result.demandResults.map(r=>r.id)};
+  if(daily){plan.timeUnit='day';plan.workspace??=dayWorkspaceDefaults(facts.observationDay,d);}
   // Freeze execution protection using existing factual ledger. The supplied
   // base selection is kept, including an explicit demand scope; no latest run.
   const demandIds=r.result.demandResults.map(r=>r.id);
-  const definition={...config,kpiDefinition:KPI_DEFINITION,selection,demandIds,costs:[],interval:'[start,end)',timeUnit:'minute',quantityUnit:'千克'};
-  const g={id:randomUUID(),name:String(req.body.name||'').trim(),contract:SC_CONTRACT,revision:1,datasetId:r.datasetId,baseRunId:r.id,baseInputRef:r.inputRef,baseIdentity:{inputHash:r.inputHash,resultHash:r.resultHash,selectionHash:hash(r.selection),parameterHash:hash(rows(d,'配置参数')),parameterContext:d.parameterContext||null,solverConditions:r.solverConditions||null,solver:r.solver||null,factsHash:hash(facts),observationMinute:facts.observationMinute,minuteOrigin:d.minuteOrigin},planRef:persist(plan),planHash:hash(plan),linkedPlanId:old?.id||null,linkedPlanRevision:old?.revision||null,liveIdentity:compareStamp(ctx,s,r),definition,scenarios:[],batches:[],preference:null,createdAt:new Date().toISOString(),actor:actorKey(req)};
+  const definition={...config,kpiDefinition:KPI_DEFINITION,selection,demandIds,costs:[],interval:'[start,end)',timeUnit:daily?'day':'minute',quantityUnit:'千克'};
+  if(req.body.purpose&&req.body.purpose!=='capacity-bottleneck')throw scError('PURPOSE','不支持的分析用途','purpose');
+  if(req.body.purpose==='capacity-bottleneck'&&!daily)throw scError('TIME_UNIT','排产瓶颈模拟目前使用按天排程','runId');
+  const g={...(req.body.purpose?{purpose:req.body.purpose}:{}),id:randomUUID(),name:String(req.body.name||'').trim(),contract:SC_CONTRACT,revision:1,datasetId:r.datasetId,baseRunId:r.id,baseInputRef:r.inputRef,baseIdentity:{inputHash:r.inputHash,resultHash:r.resultHash,selectionHash:hash(r.selection),parameterHash:hash(rows(d,'配置参数')),parameterContext:d.parameterContext||null,solverConditions:r.solverConditions||null,solver:r.solver||null,factsHash:hash(facts),...(daily?{observationDay:facts.observationDay,dayZero:r.result.dayZero}:{observationMinute:facts.observationMinute,minuteOrigin:d.minuteOrigin})},planRef:persist(plan),planHash:hash(plan),linkedPlanId:old?.id||null,linkedPlanRevision:old?.revision||null,liveIdentity:compareStamp(ctx,s,r),definition,scenarios:[],batches:[],preference:null,createdAt:new Date().toISOString(),actor:actorKey(req)};
   if(!g.name)throw scError('NAME','请填写对比组名称','name');
   s.scenarioGroups??=[];s.scenarioGroups.push(g);audit(s,req,'scenario_group_created',{groupId:g.id,baseRunId:r.id});write(s);res.status(201).json(visible(s,g));
  }));
@@ -61,7 +68,7 @@ export function registerScenarioCompare(router,ctx){
   const existing=req.body.scenarioId?scene(g,req.body.scenarioId):null;
   if(!existing&&g.scenarios.filter(c=>!c.withdrawn).length>=g.definition.maxScenarios)throw scError('CAPACITY','达到本组显式情景容量','maxScenarios');
   const name=String(req.body.name||'').trim();if(!name)throw scError('NAME','请填写情景名称','name');
-  scenarioInput(d,req.body.conditions,g.definition.selection,g.baseIdentity.observationMinute);
+  scenarioInput(d,req.body.conditions,g.definition.selection,g.definition.timeUnit==='day'?g.baseIdentity.observationDay:g.baseIdentity.observationMinute);
   const c=existing||{id:randomUUID(),revision:0,attempts:[],history:[],status:'draft'};
   c.history.push({revision:c.revision,name:c.name||null,conditions:c.conditions||[],withdrawn:c.withdrawn||false,at:new Date().toISOString()});
   Object.assign(c,{name,conditions:structuredClone(req.body.conditions),revision:c.revision+1,withdrawn:req.body.withdrawn===true,status:req.body.withdrawn?'withdrawn':'draft'});
@@ -75,13 +82,14 @@ export function registerScenarioCompare(router,ctx){
  }));
  function prepared(s,g,c){
   const {d,base,plan}=source(s,g);d.tables['每日需求']=rows(d,'每日需求').filter(r=>g.definition.demandIds.includes(r['需求编号']));
-  const input=scenarioInput(d,c.conditions,g.definition.selection,g.baseIdentity.observationMinute);
+  const input=scenarioInput(d,c.conditions,g.definition.selection,g.definition.timeUnit==='day'?g.baseIdentity.observationDay:g.baseIdentity.observationMinute);
   plan.selection=structuredClone(g.definition.selection);
-  freezeUrgent(input,plan,base.result);return input;
+  return freezeUrgent(input,plan,base.result);
  }
  function exactResult(r){
   if(!r?.result||!['completed','partial'].includes(r.status)||hash(r.result)!==r.resultHash)throw scError('RESULT','没有该尝试的完整同源结果','runId',409);
   const d=frozen(r.inputRef,r.inputHash);
+  if(r.provenance?.timeUnit&&r.result.timeUnit!==r.provenance.timeUnit)throw scError('TIME_UNIT','结果与冻结求解时间单位不一致','runId',409);
   if(hash(r.result.conditions)!==hash({...r.selection,interval:'[start,end)'})||r.result.source?.datasetId!==d.id||r.result.source?.parameterHash!==hash(rows(d,'配置参数'))||r.result.source?.mappingHash!==hash(d.mapping)||hash(r.solver)!==hash(r.result.solver))throw scError('RESULT_IDENTITY','实际引擎/范围/参数或结果身份不符','runId',409);
   return d;
  }
@@ -99,8 +107,8 @@ export function registerScenarioCompare(router,ctx){
   let input,conditions;
   try{input=prepared(s,g,next);conditions=solver.freeze(input,g.definition.selection,{solver:'basic'});}
   catch(e){next.status='failed';Object.assign(next.attempts.find(a=>a.batchId===batchId),{status:'failed',failure:e.message});write(s);queueMicrotask(()=>scheduleBatch(batchId,req));return;}
-  const base=source(s,g).base;
-  const run={id:randomUUID(),datasetId:g.datasetId,version:input.version,status:'queued',createdAt:new Date().toISOString(),inputRef:persist(input),inputHash:hash(input),selection:structuredClone(g.definition.selection),solverConditions:conditions,solver:{requested:'basic',actual:null,version:null,conditionsHash:conditions.conditionsHash},scenarioGroupId:g.id,scenarioId:next.id,scenarioRevision:next.revision,baseRunId:g.baseRunId,provenance:{model:'workbook',engineIdentity:MINUTE_ENGINE,timeUnit:'minute',minuteOrigin:input.minuteOrigin,dayZero:base.result.dayZero,fileHash:input.fileHash,mappingHash:hash(input.mapping),parameterHash:hash(rows(input,'配置参数')),timezone:input.timezone||base.result.timezone,profile:input.profile,contract:SC_CONTRACT,baseIdentity:g.baseIdentity,definitionHash:hash(g.definition),conditions:structuredClone(next.conditions),conditionsHash:hash(next.conditions),executionBudget:b.execution,planFactsHash:g.baseIdentity.factsHash},result:null};
+  const base=source(s,g).base,engine=g.definition.timeUnit==='day'?DAY_ENGINE:MINUTE_ENGINE;
+  const run={id:randomUUID(),actor:actorKey(req),datasetId:g.datasetId,version:input.version,status:'queued',createdAt:new Date().toISOString(),inputRef:persist(input),inputHash:hash(input),selection:structuredClone(g.definition.selection),solverConditions:conditions,solver:{requested:'basic',actual:null,version:null,conditionsHash:conditions.conditionsHash},scenarioGroupId:g.id,scenarioId:next.id,scenarioRevision:next.revision,baseRunId:g.baseRunId,provenance:{...(g.purpose?{purpose:g.purpose}:{}),model:'workbook',parameterScope:input.parameterContext?.scope||'dataset',engineIdentity:engine,timeUnit:g.definition.timeUnit||'minute',minuteOrigin:input.minuteOrigin,dayZero:base.result.dayZero,fileHash:input.fileHash,mappingHash:hash(input.mapping),parameterHash:hash(rows(input,'配置参数')),timezone:input.timezone||base.result.timezone,profile:input.profile,contract:SC_CONTRACT,baseIdentity:g.baseIdentity,definitionHash:hash(g.definition),conditions:structuredClone(next.conditions),conditionsHash:hash(next.conditions),executionBudget:b.execution,planFactsHash:g.baseIdentity.factsHash},result:null};
   const attempt=next.attempts.find(a=>a.batchId===batchId);attempt.runId=run.id;attempt.status='running';next.status='running';s.runs.unshift(run);owned.runId=run.id;b.status='running';audit(s,req,'scenario_attempt_created',{groupId:g.id,batchId,runId:run.id});write(s);
   let timer,worker,settled=false;
   const release=async()=>{
@@ -113,7 +121,7 @@ export function registerScenarioCompare(router,ctx){
   const finish=(status,result,failure)=>{
    if(settled)return;settled=true;const latest=read(),gg=group(latest,g.id),cc=scene(gg,next.id),rr=latest.runs.find(r=>r.id===run.id),aa=cc.attempts.find(a=>a.id===attempt.id);
    if(rr&&['queued','running'].includes(rr.status)){
-    if(result){result.solver={requested:'basic',actual:'basic',version:MINUTE_ENGINE,conditionsHash:conditions.conditionsHash,budget:b.execution,objective:conditions.objective,stopReason:status,startedAt:rr.startedAt||rr.createdAt,finishedAt:new Date().toISOString(),independentCheck:result.verification};rr.solver=result.solver;}
+    if(result){result.solver={requested:'basic',actual:'basic',version:engine,conditionsHash:conditions.conditionsHash,budget:b.execution,objective:conditions.objective,stopReason:status,startedAt:rr.startedAt||rr.createdAt,finishedAt:new Date().toISOString(),independentCheck:result.verification};rr.solver=result.solver;}
     Object.assign(rr,{status,result,resultHash:result?hash(result):null,failure,finishedAt:new Date().toISOString()});cc.status=status;aa.status=status;aa.failure=failure;
     audit(latest,req,'scenario_attempt_'+status,{runId:rr.id,groupId:g.id});write(latest);
    }
@@ -125,10 +133,10 @@ export function registerScenarioCompare(router,ctx){
    timer=setTimeout(()=>finish('timed_out',null,'达到本次显式单项预算；不代表业务无解'),b.execution.runSeconds*1000);
    worker.on('message',m=>{
     if(settled)return;
-    if(m?.kind==='progress'){const latest=read(),rr=latest.runs.find(r=>r.id===run.id);if(rr?.status==='queued'){rr.status='running';rr.startedAt=new Date().toISOString();rr.solver.actual='basic';rr.solver.version=MINUTE_ENGINE;write(latest);}return;}
+    if(m?.kind==='progress'){const latest=read(),rr=latest.runs.find(r=>r.id===run.id);if(rr?.status==='queued'){rr.status='running';rr.startedAt=new Date().toISOString();rr.solver.actual='basic';rr.solver.version=engine;write(latest);}return;}
     if(m?.kind!=='result'||!m.plan)return finish('failed',null,'真实Worker未返回可用结果；未以基准填充');
     try{const check=verifyWorkbookPlan(refreshDerived(cloneForParameters(input),run.selection.startDay),m.plan);
-     if(check.status!=='pass'||check.notChecked?.length||!['completed','partial'].includes(m.plan.status)||hash(m.plan.conditions)!==hash({...run.selection,interval:'[start,end)'})||m.plan.source?.datasetId!==input.id||m.plan.source?.version!==input.version||m.plan.source?.fileHash!==input.fileHash||m.plan.source?.mappingHash!==hash(input.mapping)||m.plan.source?.parameterHash!==hash(rows(input,'配置参数')))return finish('failed',null,'同源全局约束/数量独立检查失败：'+(check.issues||[]).join('；'));
+     if(m.plan.timeUnit!==g.definition.timeUnit||check.status!=='pass'||check.notChecked?.length||!['completed','partial'].includes(m.plan.status)||hash(m.plan.conditions)!==hash({...run.selection,interval:'[start,end)'})||m.plan.source?.datasetId!==input.id||m.plan.source?.version!==input.version||m.plan.source?.fileHash!==input.fileHash||m.plan.source?.mappingHash!==hash(input.mapping)||m.plan.source?.parameterHash!==hash(rows(input,'配置参数')))return finish('failed',null,'同源全局约束/数量独立检查失败：'+(check.issues||[]).join('；'));
      m.plan.verification=check;finish(m.plan.status,m.plan,null);
     }catch(e){finish('failed',null,'独立检查失败：'+e.message);}
    });
@@ -142,8 +150,8 @@ export function registerScenarioCompare(router,ctx){
   const prior=g.batches.find(b=>b.requestId===req.body.requestId);if(prior){if(prior.requestHash!==requestHash)throw scError('REQUEST_CONFLICT','同请求编号不能覆盖不同情景集合','requestId',409);return res.json({...visible(s,g),idempotent:true});}
   expected(g,req.body.token);current(g);if(stale(s,g))throw scError('STALE','底本或事实已变化，请另建组','group',409);
   if(req.body.solver!=='basic')throw scError('ENGINE','本新增多情景接缝首轮仅支持显式基础引擎；CP-SAT选择能力保留于原功能，不在此静默回退','solver');
-  const environment=ctx.scenarioEnvironment?.();if(!environment)throw scError('BUDGET_MISSING','当前服务未供给本功能有效运行容量/预算，未启动任何负载','execution',409);
-  const execution=validateCompareConfig(environment);if(g.definition.runSeconds>execution.runSeconds||g.definition.maxScenarios>execution.maxScenarios||g.definition.budgetSource!==execution.budgetSource)throw scError('BUDGET_CHANGED','对比组预算来源或容量超过当前有效服务合同','execution',409);
+  const environment=ctx.scenarioEnvironment?.(),daily=g.definition.timeUnit==='day';if(!environment&&!daily)throw scError('BUDGET_MISSING','当前服务未供给本功能有效运行容量/预算，未启动任何负载','execution',409);
+  const execution=validateCompareConfig(environment||g.definition);if(daily&&g.definition.runSeconds>DAY_SCENARIO_LIMIT_SECONDS)throw scError('BUDGET','按天单项计算不能超过90秒','runSeconds');if(g.definition.runSeconds>execution.runSeconds||g.definition.maxScenarios>execution.maxScenarios||g.definition.budgetSource!==execution.budgetSource)throw scError('BUDGET_CHANGED','对比组预算来源或容量超过当前有效服务合同','execution',409);
   if(!Array.isArray(req.body.scenarioIds)||!req.body.scenarioIds.length||new Set(req.body.scenarioIds).size!==req.body.scenarioIds.length||req.body.scenarioIds.length>execution.maxScenarios)throw scError('SELECTION','请选择明确、唯一且未超容量的情景','scenarioIds');
   if(workers.size||s.runs.some(r=>!terminal(r.status)))throw scError('BUSY','已有运行或待释放Worker，不抢占','execution',409);
   for(const id of req.body.scenarioIds){const c=scene(g,id);if(c.withdrawn)throw scError('WITHDRAWN','撤回情景不可启动','scenarioIds');if(c.attempts.some(a=>a.revision===c.revision&&['completed','partial'].includes(a.status)))throw scError('COMPLETED','本修订已完成，不重复创建相同运行；修改条件后再试算','scenarioIds',409);}
@@ -178,6 +186,7 @@ export function registerScenarioCompare(router,ctx){
  router.post('/scenario/groups/:id/definition',permission('edit'),handle((req,res)=>{
   const s=read(),g=group(s,req.params.id);expected(g,req.body.token);current(g);
   if(g.scenarios.some(c=>c.attempts.length))throw scError('DEFINITION_FROZEN','已有尝试的指标/费用定义不可覆盖，请明确另建比较组','definition',409);
+  if(g.definition.timeUnit==='day'&&req.body.costs?.length)throw scError('COST','按天模型不记录实际加班小时，不能按小时费率推算费用','costs');
   if(!Array.isArray(req.body.costs))throw scError('COST','费用类别须为明确列表','costs');
   for(const r of req.body.costs)if(typeof r.enabled!=='boolean'||r.category!=='overtime'||!r.resource||typeof r.currency!=='string'||!r.currency.trim()||r.unit!=='元/小时'||typeof r.rate!=='number'||!Number.isFinite(r.rate)||r.rate<0||!Number.isSafeInteger(r.start)||!Number.isSafeInteger(r.end)||r.end<=r.start||typeof r.source!=='string'||!r.source.trim())throw scError('COST','费率须明确启用、类别/设备/币种/小时基准/有效期及来源，缺失不能填0','costs');
   g.definition.costs=structuredClone(req.body.costs);changed(s,g,req,'scenario_definition_saved');res.json(visible(s,g));

@@ -88,7 +88,7 @@ export function validateWorkbook(d,{completeness=true}={}) {
  for(const r of rows(d,'停机安排'))if(!minuteMode(d)&&!(Number(r['结束日'])>Number(r['开始日'])))add('停机安排',r,'结束日','结束日须晚于开始日');
  for(const r of rows(d,'每日需求'))if(!Number.isInteger(Number(r['需求日']))||Number(r['需求日'])<1||Number(r['需求日'])>43||!(Number(r['需求箱数'])>0))add('每日需求',r,'需求箱数','本profile需求日须1～43且需求箱数为正');
  for(const t of d.parameterContract?['物料清单']:['配置参数','物料清单'])for(const r of rows(d,t))if(!numeric(r['生效日'])||!numeric(r['失效日'])||!(Number(r['失效日'])>Number(r['生效日'])))add(t,r,'失效日','有效区间须为非空半开区间');
- for(const r of rows(d,'物料主数据'))if(!['千克','个'].includes(r['基础单位']))add('物料主数据',r,'基础单位','本来源profile只支持食品千克、包装个数，不能猜测换算');
+ for(const r of rows(d,'物料主数据'))if(!(d.dailyContext?['千克','个','米']:['千克','个']).includes(r['基础单位']))add('物料主数据',r,'基础单位','本来源profile须使用明确基础单位；每日隔离目标另支持米，不猜测单位换算');
  if(d.parameterContract)issues.push(...parameterIssues(d,{completeness}));
  return completeness?issues:issues.filter(i=>!['FOREIGN_KEY','PARAMETER_OBJECT_UNMAPPED','PARAMETER_REQUIRED'].includes(i.code)&&!((i.code==='INPUT_INVALID')&&String(rows(d,i.sheet).find(r=>r._row===i.row)?.[i.field]??'').trim()===''));
 }

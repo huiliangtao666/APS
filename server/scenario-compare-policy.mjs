@@ -1,3 +1,4 @@
+import {dayScenarioInput} from './scenario-compare-day.mjs';
 import {hash,rows,refreshDerived,workbookSchema} from './workbook-model.mjs';
 import {scopeOf} from './parameter-contract.mjs';
 import {minuteMode,shiftWindows,overlap} from './workbook-minute.mjs';
@@ -16,7 +17,7 @@ export function validateCompareConfig(value){
 // These are detached candidate overrides. They never update shared P, actual
 // receipts, master records, execution facts or another scenario's mutable data.
 export function scenarioInput(base,conditions,selection,observationMinute){
- if(!minuteMode(base))fail('基准','本比较首轮需要已支持的完整分钟工作簿');
+ if(!minuteMode(base))return dayScenarioInput(base,conditions,selection,observationMinute);
  if(!Array.isArray(conditions))fail('条件','条件须为明确列表；空列表为同条件对照');
  const d=structuredClone(base),overtime=structuredClone(base.scenarioConditions?.overtime||[]),personnel=structuredClone(base.scenarioConditions?.personnel||[]),changes=structuredClone(base.scenarioConditions?.changes||[]).map(c=>({...c,origin:'baseline'})),keys=new Set(changes.map(c=>c.id));
  for(const original of conditions){

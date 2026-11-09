@@ -1,8 +1,9 @@
+import {factoryCalendarHelp} from './factory-calendar-help.mjs';
 import {atomicFields,parameterCatalog,sourceTable,canonicalCp} from './parameter-contract.mjs';
 import {minuteAtomicFields} from './minute-parameter-fields.mjs';
 import {cpImpacts,fieldGuides,enumGuides} from './parameter-help-content.mjs';
 const minuteNames=new Set(minuteAtomicFields.map(f=>f.name));
-const inputSpec=s=>s&&!s.readonly?Object.fromEntries(['type','values','min','max','inclusive','integer','unit'].filter(k=>s[k]!==undefined).map(k=>[k,s[k]])):undefined;
+const inputSpec=s=>s&&!s.readonly?Object.fromEntries(['type','values','min','max','inclusive','integer','unit','sharedOnly'].filter(k=>s[k]!==undefined).map(k=>[k,s[k]])):undefined;
 const relationPosition=c=>sourceTable(c['参数编号']);
 export function parameterHelp(c,s,context={}){
  const cp=canonicalCp(c['参数编号']),field=s?.name||c['中文配置项'],guide=fieldGuides[field],table=s?.table||relationPosition(c),input=inputSpec(s);
@@ -18,11 +19,11 @@ export function parameterHelp(c,s,context={}){
  const candidate=s?.candidate;
  const usage=inactive?'仅用于分钟模型；当前数据按日模型计算，保存此值不会切换模型或改变日模型的独占规则。':candidate?'当前仅保存候选参考资料，不参与排程计算。':guide?.[3]||(!input?'此目录项没有独立可执行值；查看或维护同源业务记录，不通过保存说明文字启用规则。':'保存后需重新检查并创建新运行；原有运行保留冻结配置。');
  return {cp,field,title:field,meaning,impact:cpImpacts[cp]||c['业务领域']||'对应业务对象与查询',usage,
-  maintain:input?`${table?'在“'+table+'”对应对象行':'在对应全局对象'}维护“${field}”。${options.length?'选择下拉选项。':'按单位填写数值，不填写算式。'}`:table?'通过“维护'+table+'”查看或维护结构化来源；派生值应修改其来源字段。':'只读或规则资料；使用对应业务入口维护来源，不手填派生值。',
+  maintain:input?`${table?'在“'+table+'”对应对象行':'在对应全局对象'}维护“${field}”。${options.length?'选择下拉选项。':'按字段要求填写，不填写算式。'}`:table?'通过“维护'+table+'”查看或维护结构化来源；派生值应修改其来源字段。':'只读或规则资料；使用对应业务入口维护来源，不手填派生值。',
   bounds,zero:guide?.[1]||(input?.type==='number'?s.min!==null&&s.min!==undefined&&(s.min>0||s.min===0&&!s.inclusive)?'0不合法。':'数值为0；不是通用的关闭开关。':'未定义为0/1开关，不用0替代空值或对象引用。'),
   one:guide?.[2]||(input?.type==='number'?s.max!==undefined&&s.max<1||s.min!==null&&s.min!==undefined&&(s.min>1||s.min===1&&!s.inclusive)?'1不合法。':'数值为1；不是通用的启用开关。':'未定义为0/1开关，不用1代替对象引用。'),
   blank:'空白表示未维护或未知，不等于0、关闭或继承。关键缺项会在本次依赖检查中提示；候选值不会自动采用。',options,inputSpec:input,
-  period:'生效日期和最后有效日期均包含；共享配置影响后续使用它的新运行，仅试算覆盖只影响该试算。'};
+  period:'生效日期和最后有效日期均包含；共享配置影响后续使用它的新运行，仅试算覆盖只影响该试算。',...(factoryCalendarHelp(field,cp)||{})};
 }
 const refGuides={
  '路线工序编号':'一道具体工序记录的唯一身份，供前序和投料映射引用。',

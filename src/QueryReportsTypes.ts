@@ -11,7 +11,7 @@ export type QueryView = {id:string; label:string; report:string; key:string; col
 export type QueryCatalog = {identity:QueryIdentity; preferenceScope:string; views:QueryView[]; fromDate:string; toDateInclusive:string; note?:string};
 export type QueryDraft = {q:string; filters:Record<string,QuerySelection>; includeBom:boolean; fromDate:string; toDateInclusive:string; bomAsOfDate:string; knownAsOfDate:string; sort:string; direction:'asc'|'desc'; pageSize:number; offset:number;unit?:string};
 export type QueryRecord = {id:string; values:Record<string,unknown>; rootMaterial?:{id:string;name:string;category:string}|null; [key:string]:unknown};
-export type QueryPage = {identity:QueryIdentity; queryFingerprint:string; view:string; records:QueryRecord[]; total:number; offset:number; nextOffset:number|null; columns:QueryColumn[]; summaryByUnit?:unknown; diagnostics?:{code:string;message:string}[]; notProvided?:string[]; note?:string};
+export type QueryPage = {materialSelections?:Record<string,{selection:QuerySelection;selectedCount:number;total:number}>;identity:QueryIdentity; queryFingerprint:string; view:string; records:QueryRecord[]; total:number; offset:number; nextOffset:number|null; columns:QueryColumn[]; summaryByUnit?:unknown; diagnostics?:{code:string;message:string}[]; notProvided?:string[]; note?:string};
 export type QueryOptions = {identity:QueryIdentity; items:{id:string;label:string;selected:boolean}[]; total:number; selectedTotal:number; nextOffset:number|null; selection:QuerySelection;matched:number};
 export const queryReports = [['bom','物料BOM'],['demand','需求'],['inventory','库存'],['capacity','产能'],['replenishment','补料']] as const;
 

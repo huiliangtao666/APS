@@ -3,3 +3,7 @@ button.parameter-help-trigger,.app-shell main button.parameter-help-trigger,.qr-
 .parameter-help-trigger:focus-visible{outline:2px solid #277ca7;outline-offset:2px}
 .parameter-help-popup{z-index:2147483000;box-sizing:border-box;overflow:auto;padding:8px 10px;border:1px solid #bdccda;border-radius:5px;background:#fff;color:#253e50;box-shadow:0 5px 20px #16354b33;font:12px/1.5 system-ui,sans-serif;white-space:normal;overflow-wrap:anywhere;text-align:left}
 .parameter-help-popup>b{display:block;font-size:12px;border-bottom:1px solid #e1e9ef;padding-bottom:4px;margin-bottom:4px}.parameter-help-popup dl{display:grid;grid-template-columns:64px minmax(0,1fr);gap:3px 6px;margin:0}.parameter-help-popup dt{font-weight:600;color:#516c7d}.parameter-help-popup dd{margin:0}.parameter-help-option{display:contents}
+button.parameter-help-trigger.parameter-hint-brief,.app-shell main button.parameter-help-trigger.parameter-hint-brief,.qr-workspace button.parameter-help-trigger.parameter-hint-brief{width:13px;height:13px;min-width:13px;min-height:13px;max-height:13px;margin:0!important;border-color:#a8b5bd!important;background:transparent!important;color:#87969f!important;font:600 10px/1 sans-serif!important;box-shadow:none}
+.parameter-hint-popup p{margin:4px 0 0;color:#516d7e;white-space:normal;font:12px/1.6 system-ui,sans-serif}
+
+.parameter-concise-meaning{margin:3px 0 7px;font-size:12px;line-height:1.5;color:#2f5265}

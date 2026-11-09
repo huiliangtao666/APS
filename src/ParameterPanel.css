@@ -36,3 +36,12 @@
 .parameter-panel .parameter-value-cell small{display:inline;max-width:none}
 .parameter-calendar-day{min-height:58px}
 .parameter-calendar-day .parameter-value-cell{flex-wrap:nowrap}
+
+.parameter-panel .parameter-result-bar{display:flex;flex-wrap:wrap;overflow:visible;white-space:normal}
+.parameter-panel .parameter-result-bar label{margin-left:0}
+.parameter-panel .parameter-result-bar select{width:auto;min-width:68px}
+.parameter-panel .parameter-object-matrix td{max-width:340px;white-space:normal;overflow-wrap:anywhere}
+
+.capacity-parameter-area .parameter-panel>.qr-fixed-heading{position:static}.capacity-parameter-area .parameter-panel{margin:0;padding:0}.capacity-parameter-area .parameter-panel .qr-page-title h2{font-size:15px}.capacity-parameter-area .parameter-definition-list{top:170px}
+
+.parameter-factory-settings{display:flex;flex-wrap:wrap;gap:6px;padding:7px;border-bottom:1px solid #dce7ef;background:#f7fafc}.parameter-factory-settings>div{display:flex;align-items:center;gap:6px;border:1px solid #e0e8ef;border-radius:4px;background:#fff;padding:4px 6px;font-size:12px}.parameter-factory-settings b{display:flex;align-items:center;gap:3px;font-weight:500}.parameter-factory-settings .parameter-value-cell{flex-direction:row;flex-wrap:wrap;align-items:center;gap:4px}.parameter-factory-settings .parameter-state{display:none}.parameter-calendar-rule{margin:5px 8px!important;font-size:11px;color:#627d90;line-height:1.5}.parameter-calendar-rule a{margin-left:5px}.parameter-calendar-source{display:block;white-space:normal;line-height:1.4;color:#7c8f9a;font-size:10px;margin:2px 0 4px}.parameter-calendar-day .parameter-value-cell{gap:3px}

@@ -7,7 +7,7 @@ export type MpsCell={value:number|null;state:string;reason:string};
 export function mpsUrl(kind:string,value:object){const payload=JSON.stringify(value);if(payload.length>12000)throw Error('筛选条件过长，请恢复全选');return '/workbooks/mps-report/'+kind+'?request='+encodeURIComponent(payload);}
 export function mpsValue(value:unknown):string{
  if(value===null||value===undefined||value==='')return '未提供';
- if(typeof value==='object'&&'state' in value){const c=value as MpsCell;const labels:Record<string,string>={NOT_APPLICABLE:'不适用',NOT_COVERED:'未覆盖',NOT_PROVIDED:'未提供',PENDING_REVIEW:'待核对'};return c.state==='KNOWN'?String(c.value):(labels[c.state]||c.state)+(c.reason?' · '+c.reason:'');}
+ if(typeof value==='object'&&'state' in value){const c=value as MpsCell;const labels:Record<string,string>={NOT_APPLICABLE:'-',NOT_COVERED:'-',NOT_PROVIDED:'未提供',PENDING_REVIEW:'未提供'};return c.state==='KNOWN'?String(c.value):(labels[c.state]||c.state)+(c.reason?' · '+c.reason:'');}
  return typeof value==='object'?JSON.stringify(value):String(value);
 }
 export function mpsChecked(s:MpsSelection,id:string){return s.mode==='ALL'?!s.exclude?.includes(id):s.mode==='VALUES'?!!s.values?.includes(id):false;}

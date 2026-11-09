@@ -141,3 +141,25 @@ main:has(.input-workspace) .hero-source{display:none}
 .input-workspace .parameter-trial summary{padding:3px 0}
 .parameter-panel .input-scroll table{background:#fff}
 @media(max-width:650px){.maintenance-overlay .maintenance-dialog{width:100vw;padding:10px}.maintenance-dialog .input-actions{flex-wrap:wrap}.maintenance-dialog .input-grid{grid-template-columns:1fr 1fr}}
+/* The normal plan uses the same compact, independently collapsible flow as urgent orders. */
+.workbook-workflow .urgent-flow-step:first-child{margin-top:0}
+.workbook-workflow .workflow-task-toolbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:7px 0;font-size:12px}
+.workbook-workflow .workflow-task-toolbar label{display:inline-flex;align-items:center;gap:6px}
+.workbook-workflow .workflow-task-toolbar input{width:230px;padding:5px 7px}
+.workbook-workflow .workflow-task-summary{display:flex;align-items:center;flex-wrap:wrap;gap:16px;margin:7px 0;padding:7px 9px;background:#f0f6fa;border:1px solid #dce5ed;border-radius:5px;font-size:12px}
+.workbook-workflow .workflow-task-summary b{color:#175b8c}
+.workbook-workflow .workflow-task-list .input-scroll{max-height:360px}
+.workbook-workflow .workflow-task-list td,.workbook-workflow .workflow-task-list th{padding:5px 8px}
+.workbook-workflow .workflow-task-list input[type=checkbox]{width:15px;height:15px;accent-color:#194e77}
+.workbook-workflow .workflow-task-list th[scope=row]{position:static}
+.workbook-workflow .workflow-task-list td small{font-size:11px}
+.workbook-workflow .workflow-outside{color:#81909e;background:#f7f9fb}
+.workbook-workflow .workflow-confirm-state{display:inline-block;margin-left:9px;color:#60758a;font-size:12px}
+.workbook-workflow .workbook-range-panel{border:0;padding:0;margin:0;background:transparent}
+.workbook-workflow .workbook-range-panel fieldset{display:flex;gap:9px;align-items:center;flex-wrap:wrap;border:1px solid #dce5ed;border-radius:5px;margin:8px 0;padding:8px}
+.workbook-workflow .workbook-range-panel fieldset label{display:inline-flex;gap:5px;align-items:center}
+.workbook-workflow .workbook-range-panel fieldset legend{font-size:12px;color:#526a7e}
+.workbook-workflow .workbook-range-fields{flex-wrap:wrap;overflow:visible}
+.workbook-workflow .workbook-range-fields label:last-child input{width:88px}
+.workbook-workflow .workbook-result-panel{padding:0;border:0;box-shadow:none}
+.workbook-workflow .workbook-run-action,.workbook-workflow .workbook-range-actions{flex-wrap:wrap;overflow:visible}

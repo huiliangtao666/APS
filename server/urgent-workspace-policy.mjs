@@ -8,6 +8,7 @@ export const STRATEGIES=['gap','delay','overtime'];
 const fail=(field,message)=>{throw urgentError('URGENT_WORKSPACE_POLICY',message,{issues:[{sheet:'插单策略',field,message}]});};
 const integer=(n,field)=>{if(!Number.isSafeInteger(n))fail(field,field+'须明确为日历整数分钟，空白不代表0');return n;};
 export function validateWorkspace(value,p,d){
+ if(p.timeUnit==='day')return validateDayWorkspace(value,p);
  if(!value||typeof value!=='object'||Array.isArray(value))fail('策略','请明确冻结边界与策略');
  const w=structuredClone(value),observed=p.facts.observationMinute;
  integer(w.freezeMinute,'冻结截止');integer(w.semiFreezeMinute,'半冻结截止');
@@ -42,7 +43,7 @@ export function validateWorkspace(value,p,d){
  for(const x of w.exceptions)if(!x.taskId||!String(x.reason||'').trim()||!Number.isSafeInteger(x.revision)||x.revision<1||!Array.isArray(x.attributes)||x.attributes.some(a=>!['resumeAfterFault'].includes(a)))fail('冻结例外','须明确任务、仅续作属性、原因及修订；不得解除已发生事实');
  return {...w,contract:WORKSPACE_CONTRACT};
 }
-export function taskZone(t,p,w){const f=p.facts.tasks.find(f=>f.id===t.id);return ['started','completed','locked'].includes(f?.status)?'fact':t.start<w.freezeMinute?'frozen':t.start<w.semiFreezeMinute?'semi':'free';}
+export function taskZone(t,p,w){const f=p.facts.tasks.find(f=>f.id===t.id);return ['started','completed','locked'].includes(f?.status)?'fact':t.start<(p.timeUnit==='day'?w.freezeDay:w.freezeMinute)?'frozen':t.start<(p.timeUnit==='day'?w.semiFreezeDay:w.semiFreezeMinute)?'semi':'free';}
 
 // Conservative fixed point over actual route/production, shared resources and
 // allocated supply. BOM only supplies possible resource groups, never a claim
@@ -67,7 +68,10 @@ export function prepareWorkspace(d,p,base,override){
  if(!p.workspace)return null; // Historical #67 inputs keep their original model.
  const w=validateWorkspace({...p.workspace,...override},p,d),closure=impactClosure(d,p,base,w),inside=new Set(closure.taskIds),zones=Object.fromEntries(base.tasks.map(t=>[t.id,taskZone(t,p,w)]));
  const withdrawn=new Set(p.batches.filter(b=>b.status==='withdrawn').flatMap(b=>b.demands.map(r=>r['需求编号'])));
- const fixed=base.tasks.filter(t=>!withdrawn.has(t.orderId)&&(zones[t.id]==='frozen'||w.strategy==='gap'&&!p.batches.some(b=>b.demands.some(r=>r['需求编号']===t.orderId))||w.scope==='local'&&!inside.has(t.id)));
+ const fixed=base.tasks.filter(t=>{
+  const f=p.facts.tasks.find(f=>f.id===t.id),expired=p.facts.statusPolicy==='daily-adjustable-started-v2'&&(f?.status==='not_started'&&t.start<p.facts.observationDay||f?.status==='started'&&f.endDay<=p.facts.observationDay);
+  return !expired&&!withdrawn.has(t.orderId)&&(zones[t.id]==='frozen'||w.strategy==='gap'&&!p.batches.some(b=>b.demands.some(r=>r['需求编号']===t.orderId))||w.scope==='local'&&!inside.has(t.id));
+ });
  const semi=base.tasks.filter(t=>zones[t.id]==='semi'&&!fixed.includes(t));
  const result={...w,policyHash:hash(w),closure,zones,fixedTaskIds:fixed.map(t=>t.id),semiTasks:structuredClone(semi),baselineTasks:structuredClone(base.tasks),eventsHash:hash(w.events),configurationHash:hash(rows(d,'配置参数'))};
  result.qualityAffected=[...new Set([...batchTrace(d,p,base).nodes.filter(n=>n.affected).map(n=>n.id),...w.events.filter(e=>e.type==='quality'&&e.knownMinute<=p.facts.observationMinute).map(e=>e.supplyId)])];
@@ -112,4 +116,16 @@ export function workspaceCheck(d,plan){
   if(!x||hash(x.executionSegments)!==hash(t.executionSegments)||!e?.recoveryConfirmed||x.start!==t.start||x.end!==e.recoveryMinute+t.interruption.remainingMinutes||x.executionSegments.reduce((n,s)=>n+s.end-s.start,0)!==routeMinutes(rt,x.quantity))issues.push('故障续作执行/净剩余不守恒 '+t.id);
  }
  return issues;
+}
+
+function validateDayWorkspace(value,p){
+ if(!value||typeof value!=='object'||Array.isArray(value))fail('策略','请明确按天插单策略');
+ const w=structuredClone(value);
+ if(!Number.isSafeInteger(w.freezeDay)||!Number.isSafeInteger(w.semiFreezeDay)||w.freezeDay<p.facts.observationDay||w.freezeDay>p.selection.endDay||w.semiFreezeDay!==w.freezeDay)fail('冻结截止','按天冻结截止须在观察日至窗口结束之间；半冻结截止沿用同日');
+ if(!['gap','delay'].includes(w.strategy)||!['full','local'].includes(w.scope))fail('策略','按天插单请选择空隙插入/允许顺延和局部/全量范围');
+ if(!['数值小优先','数值大优先'].includes(w.priorityDirection))fail('客户优先级','请明确客户服务优先级的排序方向');
+ if(!Array.isArray(w.seedTaskIds)||w.seedTaskIds.some(id=>typeof id!=='string'))fail('影响起点','须明确任务列表');
+ for(const key of ['events','exceptions','overtime'])if(!Array.isArray(w[key])||w[key].length)fail(key,'按天插单沿用原日历、停机和质量资料；不接受分钟事件、分段续作或额外班次');
+ if(['freezeMinute','semiFreezeMinute'].some(k=>Object.hasOwn(w,k)))fail('时间单位','按天策略不能填写分钟边界');
+ return {...w,timeUnit:'day',contract:WORKSPACE_CONTRACT};
 }

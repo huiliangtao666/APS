@@ -105,7 +105,7 @@ export function checkSelection(data,body,actor) {
  const {startDay:start,endDay:end,currentDay:current}=selection;
  if(![start,end,current].every(Number.isInteger)||start<current||current<0||end<=start||end>44)throw Error('日窗口无效');
  d.parameterContext={scope,effectiveDay:start};refreshDerived(d,start);
- const ready=supplyReadiness(computationInput(d),selection),demands=rows(d,'每日需求').filter(r=>Number(r['需求日'])>=start&&Number(r['需求日'])<end);
+ const ready=supplyReadiness(computationInput(d),selection),demands=rows(d,'每日需求').filter(r=>(d.dailyContext||Number(r['需求日'])>=start)&&Number(r['需求日'])<end);
  if(!demands.length)ready.issues.push({code:'EMPTY_SELECTION',sheet:'每日需求',field:'需求日',message:'所选窗口无需求',severity:'error'});
  if(selection.demandIds!==undefined&&(!Array.isArray(selection.demandIds)||!selection.demandIds.length||new Set(selection.demandIds).size!==selection.demandIds.length||selection.demandIds.some(id=>!demands.some(r=>r['需求编号']===id))))ready.issues.push({code:'DEMAND_CHANGED',sheet:'每日需求',field:'需求编号',message:'所选需求已不存在或超出日窗，请显式重选',severity:'error'});
  const checkedRef={model:'workbook',datasetId:d.id,version:d.version,inputHash:hash(data),...sourceIdentity(d),scope,effectiveAt:start,selectionHash:hash(selection),actualRecordsHash:hash(d.effectiveParameters||rows(d,'配置参数'))};

@@ -53,7 +53,7 @@ export function registerUrgentWorkspace(router,ctx,helpers){
  });
  router.post('/urgent/plans/:id/drafts/:draft/preview',permission('edit'),handle((req,res)=>{
   const s=read(),p=plan(s,req.params.id);assertTarget(p,req.body.targetToken);const draft=p.drafts?.find(x=>x.id===req.params.draft);if(!draft||draft.status!=='draft')throw urgentError('URGENT_DRAFT_STATE','请选择未接纳草稿');
-  const {d}=source(s,p),fileName='手工需求-'+draft.id+'.xlsx',buffer=workbookTables([['每日需求',DEMAND_FIELDS,[DEMAND_FIELDS.map(k=>draft.row[k]??'')],'手工需求；沿原17列合同校验']]),preview=previewUrgent(buffer,d,p,{fileName,effectiveTime:draft.effectiveTime});
+  const {d,r}=source(s,p),fileName='手工需求-'+draft.id+'.xlsx',buffer=workbookTables([['每日需求',DEMAND_FIELDS,[DEMAND_FIELDS.map(k=>draft.row[k]??'')],'手工需求；沿原17列合同校验']]),preview=previewUrgent(buffer,d,p,{fileName,effectiveTime:draft.effectiveTime,headResult:r.result});
   const item={...preview,id:randomUUID(),actor:actorKey(req),createdAt:new Date().toISOString(),fileRef:persist({fileBase64:buffer.toString('base64')}),draftId:draft.id,draftRevision:draft.revision,status:'preview'};
   p.previews.push(item);audit(s,req,'urgent_manual_preview',{planId:p.id,draftId:draft.id,previewId:item.id});write(s);const {fileRef,...visible}=item;res.json(visible);
  }));

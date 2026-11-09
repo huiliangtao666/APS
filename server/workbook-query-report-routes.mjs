@@ -33,7 +33,7 @@ export function registerWorkbookQueryReportRoutes(router,ctx,domain=workbookRepo
     const q=parse(req),value=workbookQueryContext(ctx,q,ctx.actorKey(req));
     respond(res,{...domain.catalog(value),preferenceScope:hash(ctx.actorKey(req)),identity:value.identity});
   }));
-  for(const kind of ['options','query','detail','value'])router.get(prefix+'/'+kind,ctx.permission('read'),handle((req,res)=>{
+  for(const kind of ['options','query','detail','value',...['process','products','parameters'].filter(key=>typeof domain[key]==='function')])router.get(prefix+'/'+kind,ctx.permission('read'),handle((req,res)=>{
     const q=parse(req),value=source(q,req);
     respond(res,{...domain[kind](value,q),identity:value.identity});
   }));

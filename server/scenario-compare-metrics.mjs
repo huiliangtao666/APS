@@ -1,3 +1,4 @@
+import {scenarioDayMetrics} from './scenario-compare-day-metrics.mjs';
 import {hash,rows,dayDate} from './workbook-model.mjs';
 import {shiftWindows,unionMinutes,weightSharedResource,wipOccupations} from './workbook-minute.mjs';
 import {KPI_DEFINITION,scError} from './scenario-compare-policy.mjs';
@@ -5,14 +6,16 @@ const numeric=n=>typeof n==='number'&&Number.isFinite(n);
 const signature=t=>({start:t.start,end:t.end,machine:t.machine,crew:t.crew,people:t.people,tools:t.tools,quantity:t.quantity,status:t.executionStatus??null});
 const lineage=t=>t.productionId&&t.routeStepId&&t.orderId?[t.orderId,t.productionId,t.routeStepId].join('|'):null;
 export function taskChanges(base,candidate,ids){
- const groups=ts=>{const m=new Map();for(const t of ts.filter(t=>!ids||ids.has(t.orderId))){const key=lineage(t);if(!key)return null;(m.get(key)||m.set(key,[]).get(key)).push(t);}return m;};
+ const daily=base.timeUnit==='day'||candidate.timeUnit==='day',keyOf=t=>daily?(t.orderId&&t.productId&&t.routeStepId?[t.orderId,t.productId,t.routeStepId].join('|'):null):lineage(t);
+ const groups=ts=>{const m=new Map();for(const t of ts.filter(t=>!ids||ids.has(t.orderId))){const key=keyOf(t);if(!key)return null;(m.get(key)||m.set(key,[]).get(key)).push(t);}return m;};
  const a=groups(base.tasks||[]),b=groups(candidate.tasks||[]);if(!a||!b)return {comparable:false,rate:null,total:null,changed:null,records:[],reason:'缺少稳定需求/生产批/路线工序谱系'};
- const encode=ts=>hash(ts.map(signature).sort((a,b)=>a.start-b.start||a.end-b.end||String(a.machine).localeCompare(String(b.machine))));
+ const encode=ts=>hash(ts.map(t=>{const value=signature(t);if(daily)delete value.status;return value;}).sort((a,b)=>a.start-b.start||a.end-b.end||String(a.machine).localeCompare(String(b.machine))));
  const records=[...a].map(([id,before])=>{const after=b.get(id)||[],changed=encode(before)!==encode(after);return {id,demandId:before[0].orderId,materialId:before[0].productId,changed,removed:!after.length,before,after,reason:changed?'同基准重新计算产生差异；条件与资源/供给证据如下，未证明单一因果':'未变化'};});
- const changed=records.filter(r=>r.changed).length;return {comparable:true,total:records.length,changed,rate:records.length?changed/records.length:null,records,newTasks:[...b].filter(([key])=>!a.has(key)).flatMap(([,v])=>v)};
+ const total=daily?records.reduce((n,r)=>n+r.before.length,0):records.length,changed=records.filter(r=>r.changed).reduce((n,r)=>n+(daily?r.before.length:1),0);return {comparable:true,method:daily?'同需求/产品/工序组核对拆合变化，组内变化计入全部原任务':'稳定生产批/工序谱系',total,changed,rate:total?changed/total:null,records,newTasks:[...b].filter(([key])=>!a.has(key)).flatMap(([,v])=>v)};
 }
 export function scenarioMetrics(input,result,base,definition,filter={}){
  if(definition.kpiDefinition!==KPI_DEFINITION)throw scError('KPI_DEFINITION','指标定义不同，须另建比较组','kpiDefinition',409);
+ if(definition.timeUnit&&[result.timeUnit,base.timeUnit].some(unit=>unit!==definition.timeUnit))throw scError('TIME_UNIT','比较结果与冻结基准的时间单位不一致','timeUnit',409);
  const selected=new Set(definition.demandIds),materialIds=filter.materialIds===undefined?null:new Set(filter.materialIds),demandIds=filter.demandIds===undefined?null:new Set(filter.demandIds);
  const source=rows(input,'每日需求').filter(r=>selected.has(r['需求编号'])&&(!materialIds||materialIds.has(r['成品编号']))&&(!demandIds||demandIds.has(r['需求编号']))),ids=new Set(source.map(r=>r['需求编号'])),byId=new Map((result.demandResults||[]).map(r=>[r.id,r]));
  const demands=source.map(s=>{
@@ -22,6 +25,7 @@ export function scenarioMetrics(input,result,base,definition,filter={}){
   return {id:s['需求编号'],materialId:s['成品编号'],unit:'千克',quantity,uncoveredQuantity:uncovered,requiredDate:Number.isFinite(due)?dayDate(due):null,arrivalDate:arrival!==null?dayDate(arrival):null,lateDays:known?Math.max(0,arrival-due):null,status:r?.status==='unplanned'||uncovered>0?'unplanned':!known?'unknown':arrival<=due?'on_time':'late',known,source:s._source||{sheet:'每日需求',row:s._row},allocations:(result.allocations||[]).filter(a=>a.need===s['需求编号']),findings:(result.findings||[]).filter(a=>a.need===s['需求编号'])};
  });
  const known=demands.filter(r=>r.known),onTime=demands.filter(r=>r.status==='on_time'),tasks=(result.tasks||[]).filter(t=>ids.has(t.orderId)),changes=taskChanges(base,result,ids),start=definition.selection.startDay*1440,end=definition.selection.endDay*1440;
+ if(result.timeUnit==='day')return scenarioDayMetrics(input,result,definition,demands,changes,tasks);
  const resourceRecords=[],wip=wipOccupations(input,start,end);
  for(const r of rows(input,'设备与工装').filter(r=>r['资源类别']==='设备')){
   const own=tasks.filter(t=>t.machine===r['资源编号']),windows=[],crewIds=[...new Set(rows(input,'工艺路线').filter(rt=>rt['设备组编号']===r['资源组编号']).map(rt=>rt['班组编号']))];

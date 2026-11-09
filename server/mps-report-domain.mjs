@@ -1,9 +1,11 @@
 import {createMpsReport,MPS_METRICS,MPS_TABLES,mpsFail,mpsSelected,mpsDisplay,mpsPublicRow,mpsSource} from './mps-report.mjs';
 import {sourceHash} from './query-reports/source-copy.mjs';
+import {mpsDetailRows,mpsDetailExplanation,mpsDetailSections} from './mps-report-detail.mjs';
 
 export const MPS_COLUMNS=[['id','物料编号'],['name','物料名称'],['category','类别'],['source','来源'],['unit','基础单位'],['snapshotDate','库存快照日期'],['snapshotPhysical','快照实物（非查询起点库存）'],['snapshotFree','快照自由量'],['sourceDemand','区间原始独立需求（非执行净余）'],['sourceOrdered','区间到货单订购量（非净在途）'],['sourceWIP','快照在制预计产出（非入库净余）'],['queryOpening','查询起点库存'],...MPS_METRICS.map(([k,l])=>[k,l]),['ownLead','本级提前期（天）'],['cumulativeLead','BOM累计提前期（天）'],['risk','风险'],['coverage','覆盖说明'],['bomRoots','BOM展示来源根']].map(([key,label])=>({key,label}));
-const fields={kind:'类型',quantity:'数量',original:'原数量',ordered:'订购数量',received:'已收数量',occupied:'占用总量',free:'快照自由量',unit:'单位',needDate:'工厂需料日',customerDate:'客户要求到货日',customer:'客户',earliestArrival:'最早到货日',latestArrival:'最晚到货日',plannedArrival:'计划到货日',status:'状态',condition:'条件与未覆盖',overdue:'期前未清状态待核对',feedTime:'投料分钟',parent:'父批次',need:'关联需求',task:'任务',production:'制造批次',snapshotDate:'快照日期',releaseDate:'放行日期',expiryDate:'到期日期',quality:'质量',warehouse:'仓库',location:'库位',po:'采购单',line:'行号',supplier:'供应商',arrivalDate:'预计到货日',availableDate:'预计可用日',inspectionDays:'检验天数',completionDate:'预计完工日',completionTime:'完工分钟',releaseTime:'放行分钟',startTime:'开工分钟',productionId:'制造批次',taskIds:'关联任务',orderDate:'建议下单/开工日',lateDays:'迟到天数',MOQ:'最小订货量',multiple:'订货倍数',parameterId:'参数编号',object:'对象',name:'名称',value:'参数值',effectiveDate:'生效日期',scope:'范围',sourceRole:'来源层',message:'说明',ownLead:'本级导期（天）',cumulativeLead:'累计导期（天）'};
-const columns=records=>[...new Set(records.flatMap(r=>Object.keys(r.values)))].map(key=>({key,label:fields[key]||({id:'来源记录',materialId:'物料编号'}[key])||key}));
+const fields={kind:'类型',quantity:'数量',original:'原数量',ordered:'订购数量',received:'已收数量',occupied:'占用总量',free:'快照自由量',unit:'单位',needDate:'工厂需料日',customerDate:'客户要求到货日',customer:'客户',earliestArrival:'最早到货日',latestArrival:'最晚到货日',plannedArrival:'计划到货日',status:'状态',condition:'条件与未覆盖',overdue:'是否期前需求',feedTime:'投料分钟',parent:'父批次',need:'关联需求',task:'任务',production:'制造批次',snapshotDate:'快照日期',releaseDate:'放行日期',expiryDate:'到期日期',quality:'质量',warehouse:'仓库',location:'库位',po:'采购单',line:'行号',supplier:'供应商',arrivalDate:'预计到货日',availableDate:'预计可用日',inspectionDays:'检验天数',completionDate:'预计完工日',completionTime:'完工分钟',releaseTime:'放行分钟',startTime:'开工分钟',productionId:'制造批次',taskIds:'关联任务',orderDate:'建议下单/开工日',lateDays:'迟到天数',MOQ:'最小订货量',multiple:'订货倍数',parameterId:'参数编号',object:'对象',name:'名称',value:'参数值',effectiveDate:'生效日期',scope:'范围',sourceRole:'来源层',message:'说明',ownLead:'本级导期（天）',cumulativeLead:'累计导期（天）'};
+const detailLabels={id:'来源记录',materialId:'物料编号',countedQuantity:'计入指标数量',calculationDate:'统计日期',initialQuantity:'纳入推演量',consumedQuantity:'此前已消耗量（含补缺）',executed:'已执行数量',netRemaining:'来源净余量',leadMeaning:'提前期口径',safetyPolicy:'安全库存策略',safetyDays:'安全覆盖天数',lotSize:'生产批量',planner:'计划员',ATP:'可承诺量（ATP）',forecast:'预测冲减',fences:'围栏规则',child:'子项编号',baseOutput:'父项基准产出量'};
+const columns=records=>[...new Set(records.flatMap(r=>Object.keys(r.values)))].map(key=>({key,label:fields[key]||detailLabels[key]||MPS_COLUMNS.find(c=>c.key===key)?.label||key}));
 function page(records,q){
  const offset=q.offset??0,size=q.pageSize??100;
  if(!Number.isSafeInteger(offset)||offset<0||![100,200,500].includes(size))mpsFail('MPS_PAGE_INVALID');
@@ -20,16 +22,10 @@ function matrixRows(c,q){
  return {materialId:q.materialId,unit:material['基础单位']??null,dates:days,dateOffset,nextDateOffset:dateOffset+days.length<c.days.length?dateOffset+days.length:null,
   records:MPS_METRICS.map(([key,label,kind])=>({id:key,values:{id:label,kind,unit:material['基础单位']??null,...Object.fromEntries(days.map(date=>[date,c.metric(material,key,date)]))}}))};
 }
-function detailRows(c,q){
- if(!Object.hasOwn(MPS_TABLES,q.table))mpsFail('MPS_TABLE_INVALID');
- if(!c.scope.ids.has(q.materialId))mpsFail('MPS_MATERIAL_NOT_SELECTED',404);
- let rows=c.details[q.table].filter(r=>r.materialId===q.materialId||q.table==='parameters'&&r.id.startsWith('parameter:')&&['CAL','GLOBAL',q.materialId].includes(r.materialId));
- if(q.date&&q.metric){const ids=new Set(c.events.filter(e=>e.materialId===q.materialId&&e.metric===q.metric&&(e.date===q.date||e.date===null)).map(e=>e.record));rows=rows.filter(r=>ids.has(r.id));}
- return rows;
-}
-function csv(value){const s=mpsDisplay(value);return '"'+(/^[=+\-@\t\r]/.test(s)&&typeof value!=='number'?"'":'')+s.replaceAll('"','""')+'"';}
+const scalar=value=>value&&typeof value==='object'&&value.state==='KNOWN'?value.value:value;
+function csv(value){const raw=scalar(value),s=mpsDisplay(raw);return '"'+(/^[=+\-@\t\r]/.test(s)&&typeof raw!=='number'?"'":'')+s.replaceAll('"','""')+'"';}
 const xml=v=>mpsDisplay(v).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g,'');
-const xmlRow=values=>'<Row>'+values.map(v=>'<Cell><Data ss:Type="'+(typeof v==='number'?'Number':'String')+'">'+xml(v)+'</Data></Cell>').join('')+'</Row>\n';
+const xmlRow=values=>'<Row>'+values.map(v=>{const value=scalar(v);return '<Cell><Data ss:Type="'+(typeof value==='number'?'Number':'String')+'">'+xml(value)+'</Data></Cell>';}).join('')+'</Row>\n';
 /** SpreadsheetML 2003 worksheets cannot exceed 65,536 rows. Keep source
  * records intact across bounded sheets while retaining one complete export. */
 export function* mpsExcelChunks(rows){
@@ -64,7 +60,7 @@ function* outputRows(c,q){
  }
 }
 export const mpsReportDomain={
- catalog(v){const c=createMpsReport(v);return {meta:c.meta,fromDate:c.from,toDateInclusive:c.to,preferenceScope:sourceHash(v.actor||''),metrics:MPS_METRICS,tables:MPS_TABLES,columns:MPS_COLUMNS};},
+ catalog(v){const c=createMpsReport(v);return {daily:v.input.dailySnapshot||null,meta:c.meta,fromDate:c.from,toDateInclusive:c.to,preferenceScope:sourceHash(v.actor||''),metrics:MPS_METRICS,tables:MPS_TABLES,columns:MPS_COLUMNS};},
  options(v,q){
   if(!['materialId','category','source','risk'].includes(q.field))mpsFail('MPS_FILTER_INVALID');
   const c=createMpsReport(v,q),search=String(q.search||'').toLowerCase();if(search.length>200)mpsFail('MPS_SEARCH_LIMIT');
@@ -75,8 +71,8 @@ export const mpsReportDomain={
  },
  query(v,q){const c=createMpsReport(v,q);bound(c,q);return {...page(c.records,q),columns:MPS_COLUMNS,meta:c.meta,queryFingerprint:c.queryFingerprint,diagnostics:c.diagnostics};},
  matrix(v,q){const c=createMpsReport(v,q);bound(c,q);return {...matrixRows(c,q),queryFingerprint:c.queryFingerprint,meta:c.meta};},
- detail(v,q){const c=createMpsReport(v,q);bound(c,q);const rows=detailRows(c,q),out=page(rows,q);return {...out,columns:columns(out.records),queryFingerprint:c.queryFingerprint,meta:c.meta};},
- source(v,q){const c=createMpsReport(v,q);bound(c,q);const row=detailRows(c,q).find(r=>r.id===q.id);if(!row)mpsFail('MPS_RECORD_NOT_FOUND',404);
+ detail(v,q){const c=createMpsReport(v,q);bound(c,q);const rows=mpsDetailRows(c,q),out=page(rows,q);return {...out,columns:columns(out.records),...mpsDetailSections(q),explanation:mpsDetailExplanation(c,q,rows),queryFingerprint:c.queryFingerprint,meta:c.meta};},
+ source(v,q){const c=createMpsReport(v,q);bound(c,q);const row=mpsDetailRows(c,q).find(r=>r.id===q.id);if(!row)mpsFail('MPS_RECORD_NOT_FOUND',404);
   const value=JSON.stringify({identity:v.identity,refs:row.refs.map(ref=>mpsSource(c,ref)),record:row.raw||row.values}),offset=q.valueOffset??0;
   if(!Number.isSafeInteger(offset)||offset<0)mpsFail('MPS_OFFSET_INVALID');
   return {text:value.slice(offset,offset+8192),nextOffset:offset+8192<value.length?offset+8192:null,queryFingerprint:c.queryFingerprint};

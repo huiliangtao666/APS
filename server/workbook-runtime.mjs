@@ -1,4 +1,6 @@
+import {dailyRunContext,dayIndex} from './daily-workbook.mjs';
 import {createSolverRunService} from './solver-choice/run-service.mjs';
+import {workflowTasks} from './workflow-tasks.mjs';
 import {solverRequest} from './solver-choice/contract.mjs';
 import {minuteMode,MINUTE_ENGINE,MINUTE_ORIGIN,minuteTime} from './workbook-minute.mjs';
 import {checkSelection,sourceIdentity,cloneForParameters,computationInput} from './workbook-workbench.mjs';
@@ -9,7 +11,7 @@ import {randomUUID} from 'node:crypto';
 import {hash,rows,workbookSchema,refreshDerived,dayDate,dayMinute} from './workbook-model.mjs';
 import {verifyWorkbookPlan} from './workbook-plan.mjs';
 export function registerWorkbookRuns(router,ctx) {
- const {read,write,dataset,audit,handle,permission,workerFactory,workers,saveVersion}=ctx;
+ const {read,readMetadata=read,write,dataset,audit,handle,permission,workerFactory,workers,saveVersion}=ctx;
  const solvers=createSolverRunService(ctx);solvers.register(router);
  const inputOf=r=>ctx.snapshot(r.inputRef);
  const publicRun=r=>{const {inputRef,...result}=r;return result;};
@@ -24,11 +26,16 @@ export function registerWorkbookRuns(router,ctx) {
   if(!['completed','partial'].includes(r.status)||p.status!==r.status||p.source?.datasetId!==d.id||p.source?.version!==d.version||p.source?.fileHash!==d.fileHash||p.source?.mappingHash!==hash(d.mapping)||p.source?.parameterHash!==hash(rows(d,'配置参数'))||hash(p.conditions)!==hash({...r.selection,interval:'[start,end)'}))return 'frozen_result_source_mismatch';
   return null;
  };
- router.get('/runs',permission('read'),(_req,res)=>res.json(read().runs.map(publicRun)));
+ router.get('/runs',permission('read'),(req,res)=>{const compact=req.query.summary==='1',runs=(compact?readMetadata():read()).runs.filter(r=>!req.query.datasetId||r.datasetId===req.query.datasetId);res.json(compact?runs:runs.map(publicRun));});
  router.get('/runs/:id',permission('read'),handle((req,res)=>{const r=read().runs.find(r=>r.id===req.params.id);if(!r)return res.status(404).json({error:'run_not_found'});const error=resultProblem(r);if(error)return res.status(409).json({error});res.json(publicRun(r));}));
  router.get('/runs/:id/inputs',permission('read'),(req,res)=>{const r=read().runs.find(r=>r.id===req.params.id);if(!r)return res.status(404).json({error:'run_not_found'});const input=inputOf(r);if(hash(input)!==r.inputHash)return res.status(409).json({error:'frozen_input_corrupt'});res.json({runId:r.id,input,inputHash:r.inputHash,selection:r.selection});});
+ router.get('/datasets/:id/scheduling-tasks',permission('read'),handle((req,res)=>{
+  const d=dataset(readMetadata(),req.params.id);if(!d)return res.status(404).json({error:'dataset_not_found'});
+  try{res.json(workflowTasks(d,req.query,ctx.actorKey(req)));}catch(e){if(e.status===409)return res.status(409).json({error:'INPUT_CHANGED',message:e.message});throw e;}
+ }));
  router.post('/datasets/:id/readiness',permission('read'),handle((req,res)=>{
   const d=dataset(read(),req.params.id);if(!d)return res.status(404).json({error:'dataset_not_found'});
+  if(req.body.expectedParameterRevision!==undefined&&req.body.expectedParameterRevision!==(d.parameterRevision||0))return res.status(409).json({error:'PARAMETERS_CHANGED',message:'配置已变化，请刷新并重新确认任务清单'});
   if(req.body.version!==d.version)return res.status(409).json({error:'INPUT_CHANGED',actualVersion:d.version});
   res.json(solvers.readiness(d,req.body,ctx.actorKey(req)));
  }));
@@ -43,23 +50,26 @@ export function registerWorkbookRuns(router,ctx) {
   if(!Number.isSafeInteger(req.body.version)||req.body.version<1)return res.status(400).json({error:'explicit_version_required'});
   solverRequest(req.body);
   const s=read();let d=dataset(s,req.params.id,req.body.version);if(!d)return res.status(404).json({error:'dataset_not_found'});
+  if(req.body.expectedParameterRevision!==undefined&&req.body.expectedParameterRevision!==(d.parameterRevision||0))return res.status(409).json({error:'PARAMETERS_CHANGED',message:'配置已变化，请重新确认本次任务清单'});
   if(req.body.currentVersion===true||req.body.readinessToken){
    const latest=ctx.meta(s,req.params.id);if(latest?.version!==req.body.version)return res.status(409).json({error:'INPUT_CHANGED',actualVersion:latest?.version});
    const check=solvers.readiness(d,req.body,ctx.actorKey(req));if(!req.body.readinessToken||check.token!==req.body.readinessToken)return res.status(409).json({error:'READINESS_CHANGED'});
    if(!check.ready)return res.status(422).json({error:'not_ready',issues:check.issues});
   }
   if(workers.size>=2)return res.status(429).json({error:'run_capacity'});
+  const dailyContext=dailyRunContext(s,d);
   const selection=req.body.selection??{};if(!selection||typeof selection!=='object'||Array.isArray(selection)||Object.keys(selection).some(k=>!['startDay','endDay','currentDay','currentMinute','demandIds'].includes(k)))throw Error('运行选择包含未知字段');
   const scope=scopeFor(d,req.body.parameterScope,ctx.actorKey(req));const globals=d.parameterContract?effectiveParameters(d,selection.startDay??0,scope):[];const global=n=>globals.find(p=>p['对象编号']==='GLOBAL'&&p['参数名称']===n)?.['参数值'];
   const start=selection.startDay??Number(global('计划起始日')??1),end=selection.endDay??start+Number(global('窗口天数')??14),current=selection.currentDay??start;
   if(![start,end,current].every(Number.isInteger)||start<current||current<0||end<=start||end>44)throw Error('日窗口无效');
   if(d.parameterContract){d=cloneForParameters(d);d.tables['配置参数']=rows(d,'配置参数').filter(p=>scopeOf(p)==='dataset'||scopeOf(p)===scope);d.parameterContext={scope,effectiveDay:start};delete d.parameterCandidates;delete d.parameterTrials;refreshDerived(d,start);}
   const ready=supplyReadiness(computationInput(d),{...selection,startDay:start,endDay:end,currentDay:current});if(!ready.ready)return res.status(422).json({error:'not_ready',issues:ready.issues});
-  const inWindow=rows(d,'每日需求').filter(r=>Number(r['需求日'])>=start&&Number(r['需求日'])<end);
+  const inWindow=rows(d,'每日需求').filter(r=>(d.dailyContext||Number(r['需求日'])>=start)&&Number(r['需求日'])<end);
   if(Object.hasOwn(selection,'demandIds')&&(!Array.isArray(selection.demandIds)||!selection.demandIds.length||new Set(selection.demandIds).size!==selection.demandIds.length||selection.demandIds.some(id=>typeof id!=='string'||!inWindow.some(r=>r['需求编号']===id))))throw Error('需求选择须唯一且属于所选半开日窗');
   if(!inWindow.length)return res.status(422).json({error:'empty_demand_selection',message:'所选日窗没有需求，未创建成功运行'});
+  if(dailyContext&&(start!==dayIndex(dailyContext.date)||current!==start))return res.status(409).json({error:'DAILY_RUN_DATE',message:'运行日期须与当前业务日一致'});
   const normalizedSelection={...selection,startDay:start,endDay:end,currentDay:current},solverConditions=solvers.freeze(d,normalizedSelection,req.body);
-  const run={solverConditions,solver:{requested:solverConditions.request.requested,actual:null,version:null,rawStatus:null,conditionsHash:solverConditions.conditionsHash},id:randomUUID(),status:'queued',createdAt:new Date().toISOString(),inputRef:ctx.persist(d),inputHash:hash(d),datasetId:d.id,version:d.version,selection:{...selection,startDay:start,endDay:end,currentDay:current},provenance:{model:'workbook',engineIdentity:minuteMode(d)?MINUTE_ENGINE:'workbook-day-v1',...sourceIdentity(d),selectionHash:hash({...selection,startDay:start,endDay:end,currentDay:current}),actualRecordsHash:hash(d.effectiveParameters||rows(d,'配置参数')),dependencyClosure:ready.dependencyClosure,effectiveAt:start,profile:d.profile,fileHash:d.fileHash,mappingHash:hash(d.mapping),parameterHash:hash(rows(d,'配置参数')),mappingVersion:d.mapping?.version,...(d.parameterContract?{parameterContract:d.parameterContract,parameterScope:scope,effectiveParameters:d.effectiveParameters}:{}),timeUnit:minuteMode(d)?'minute':'day',dayZero:dayDate(0),minuteOrigin:minuteMode(d)?MINUTE_ORIGIN:'2026-11-02T08:00:00+08:00',...(minuteMode(d)?{datasetVersion:d.datasetVersion,timezone:d.timezone,productionContract:d.productionContract}:{}),startDate:dayDate(start),endDate:dayDate(end),startMinute:minuteMode(d)?start*1440:dayMinute(start),endMinute:minuteMode(d)?end*1440:dayMinute(end),interval:'[start,end)'},result:null};s.runs.unshift(run);audit(s,req,'workbook_run_created',{runId:run.id,inputHash:run.inputHash});write(s);
+  const run={dailyContext,solverConditions,solver:{requested:solverConditions.request.requested,actual:null,version:null,rawStatus:null,conditionsHash:solverConditions.conditionsHash},id:randomUUID(),status:'queued',createdAt:new Date().toISOString(),inputRef:ctx.persist(d),inputHash:hash(d),datasetId:d.id,version:d.version,selection:{...selection,startDay:start,endDay:end,currentDay:current},provenance:{model:'workbook',engineIdentity:minuteMode(d)?MINUTE_ENGINE:'workbook-day-v1',...sourceIdentity(d),selectionHash:hash({...selection,startDay:start,endDay:end,currentDay:current}),actualRecordsHash:hash(d.effectiveParameters||rows(d,'配置参数')),dependencyClosure:ready.dependencyClosure,effectiveAt:start,profile:d.profile,fileHash:d.fileHash,mappingHash:hash(d.mapping),parameterHash:hash(rows(d,'配置参数')),mappingVersion:d.mapping?.version,...(d.parameterContract?{parameterContract:d.parameterContract,parameterScope:scope,effectiveParameters:d.effectiveParameters}:{}),timeUnit:minuteMode(d)?'minute':'day',dayZero:dayDate(0),minuteOrigin:minuteMode(d)?MINUTE_ORIGIN:'2026-11-02T08:00:00+08:00',...(minuteMode(d)?{datasetVersion:d.datasetVersion,timezone:d.timezone,productionContract:d.productionContract}:{}),startDate:dayDate(start),endDate:dayDate(end),startMinute:minuteMode(d)?start*1440:dayMinute(start),endMinute:minuteMode(d)?end*1440:dayMinute(end),interval:'[start,end)'},result:null};s.runs.unshift(run);if(dailyContext){const b=s.dailyBranches.find(b=>b.id===dailyContext.branchId);b.candidate={runId:run.id,status:'generated',stale:false};}audit(s,req,'workbook_run_created',{runId:run.id,inputHash:run.inputHash});write(s);
   let timer;
   const finish=(status,result,failure)=>{const state=read(),r=state.runs.find(r=>r.id===run.id);if(!r||!['queued','running'].includes(r.status))return;if(result&&run.solverConditions.request.requested==='basic'){result.solver={requested:'basic',actual:'basic',version:minuteMode(d)?MINUTE_ENGINE:'workbook-day-v1',rawStatus:null,rawStatusMeaning:'基础引擎未使用CP-SAT原始状态',objective:solverConditions.objective,budget:solverConditions.budget,conditionsHash:solverConditions.conditionsHash,coverage:result.demandSummary,independentCheck:result.verification,startedAt:r.startedAt??r.createdAt,finishedAt:new Date().toISOString(),durationMs:Date.now()-Date.parse(r.startedAt??r.createdAt)};r.solver=result.solver;}else if(result?.solver)r.solver=result.solver;Object.assign(r,{status,result,resultHash:result?hash(result):null,failure,finishedAt:new Date().toISOString()});audit(state,req,'workbook_run_'+status,{runId:r.id,inputHash:r.inputHash});write(state);clearTimeout(timer);const w=workers.get(run.id);if(w?.solver!=='cp-sat'){try{const stopped=w?.terminate();if(stopped?.then)stopped.then(()=>{if(workers.get(run.id)===w)workers.delete(run.id);},()=>{});else if(workers.get(run.id)===w)workers.delete(run.id);}catch{/* Keep the slot until actual termination. */}}};
   if(solverConditions.request.requested==='cp-sat'){solvers.startCp(run,d,req,finish);res.status(202).json(publicRun(read().runs.find(r=>r.id===run.id)));return;}
@@ -96,7 +106,7 @@ export function registerWorkbookRuns(router,ctx) {
   const run=read().runs.find(r=>r.id===req.body.sourceRun);if(run){const error=resultProblem(run);if(error)throw Error(error);}
   return saveVersion(req,res,next=>changeDraft(next,req.body,run));
  }));
- router.get('/datasets/:id/drafts',permission('read'),(req,res)=>{const m=ctx.meta(read(),req.params.id,req.query.version);if(!m)return res.status(404).end();res.json(m.drafts||[]);});
+ router.get('/datasets/:id/drafts',permission('read'),(req,res)=>{const m=ctx.meta(readMetadata(),req.params.id,req.query.version);if(!m)return res.status(404).end();res.json(m.drafts||[]);});
  return router;
 }
 function summaryForDraft(d){return {id:d.id,version:d.version};}

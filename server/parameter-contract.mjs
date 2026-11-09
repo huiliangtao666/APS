@@ -1,4 +1,6 @@
+import {factoryCalendarFields,resolveFactoryCalendar} from './factory-calendar.mjs';
 import {minuteAtomicFields} from './minute-parameter-fields.mjs';
+import {materialAtomicFields} from './material-parameter-fields.mjs';
 import {randomUUID} from 'node:crypto';
 import {parameterCatalog} from '../src/lib/parameter-catalog.mjs';
 export {parameterCatalog};
@@ -18,7 +20,8 @@ const groups=[
 ];
 export const atomicFields=groups.flatMap(([table,key,fields])=>Object.entries(fields).map(([name,[cp,min,inclusive,max]])=>({table,key,name,cp,min,inclusive,max,integer:/天数|班次|人数|套数|可用数量|优先级/.test(name),type:'number'})));
 atomicFields.push({name:'计划起始日',cp:'CP005',min:0,inclusive:true,integer:true,type:'number',global:true},{name:'窗口天数',cp:'CP006',min:0,inclusive:false,integer:true,type:'number',global:true},{name:'标准生产批量千克',cp:'CP101',min:0,inclusive:false,type:'number',global:true},{name:'供应延期概率',cp:'CP159',min:0,inclusive:true,max:1,type:'number',candidate:true},{name:'延期天数上限',cp:'CP160',min:0,inclusive:true,integer:true,type:'number',candidate:true});
-atomicFields.push(...minuteAtomicFields);
+atomicFields.push(...minuteAtomicFields,...factoryCalendarFields);
+atomicFields.push(...materialAtomicFields);
 export const specification=(name,cp)=>atomicFields.find(s=>s.name===name&&(!cp||canonicalCp(cp)===s.cp));
 export const canonicalCp=cp=>cp==='CP063'?'CP074':cp;
 export const definition=cp=>{const d=byId.get(cp);if(!d)throw Error('未知CP目录编号');return d;};
@@ -51,12 +54,13 @@ export const blockedParameter=p=>p._blocked||['待补','暂停采用','未配置
 export function businessDefinition(d,cp){
  const system=definition(cp),uploaded=d.parameterDefinitions?.find(p=>p['参数编号']===cp),merged={...system,...uploaded};
  for(const key of ['参数编号','统一配置页签','流程步骤入口','呈现与编辑模式','参数条目'])merged[key]=system[key];
+ if(cp==='CP014')merged['中文配置项']='基础单位';
  const note=String(uploaded?.['权威来源及校验备注']||'');
  return {...merged,sourceDefinition:uploaded,definitionSource:uploaded?'P':'SYSTEM',ruleDisposition:!uploaded?'内置受控规则':/建议|待评审|须说明|须指定/.test(note)?'原子字段按受控映射；建议/额外规则待编译':atomicFields.some(s=>s.cp===canonicalCp(cp))?'已采用原子类型/数值边界；文字规则未执行':'业务定义已采用；执行规则未支持'};
 }
 export function adoptDefinitionBounds(d,p){
  const spec=parameterSpec(p);if(!spec||blockedParameter(p)||p._candidate)return;
- if(spec.type==='enum')return;
+ if(spec.type==='enum'||spec.type==='text')return;
  const c=businessDefinition(d,cpOf(p)),value=finiteNumber(p['参数值']);
  // A catalog boundary may be a comparison (SYSTEM CP016 uses ">0").
  // Parse its operator separately; parameter values remain strict numeric literals.
@@ -85,7 +89,7 @@ export const objectKey=(row,spec)=>spec.key==='_unitKey'?[row['物料编号'],ro
 export const parameterIdentity=p=>JSON.stringify([scopeOf(p),semanticIdentity(p)]);
 export function finiteNumber(value){const text=String(value??'').trim();if(!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(text)||!Number.isFinite(Number(text)))throw Error('须为有限数值字面值；空白不代表0');return Number(text);}
 export function validateUnit(spec,unit){if(spec.unit){if(String(unit)!==spec.unit)throw Error(spec.name+'单位须为'+spec.unit);return;}const allowed=/^计划起始日$/.test(spec.name)?['日序']:/^可用数量$/.test(spec.name)?['个','套']:/^标准日产能千克$/.test(spec.name)?['千克/标准日','kg/标准日']:/千克$/.test(spec.name)&&!/^每箱|^每件/.test(spec.name)?['千克','kg']:/^子项基准用量$/.test(spec.name)?['千克','kg','个']:/^最小订货量$|^订货倍数$/.test(spec.name)?['本行数量单位','千克','kg','个']:/^最大容量$/.test(spec.name)?['本行容量单位','千克','kg','个']:/温度/.test(spec.name)?['摄氏度','℃']:/班次/.test(spec.name)?['班/天','班']:/人数/.test(spec.name)?['人']:/套数/.test(spec.name)?['套']:/比例|收率|概率|率$/.test(spec.name)?['比例']:/天数/.test(spec.name)?['天']:/优先级/.test(spec.name)?['顺序','优先级','无量纲']:/每箱净重/.test(spec.name)?['千克/箱','千克','kg/箱']:/每件净重/.test(spec.name)?['千克/件','千克','kg/件']:null;if(allowed&&!allowed.includes(String(unit)))throw Error(spec.name+'单位不匹配：'+unit);}
-export function validateAtomic(spec,value){if(spec.type==='enum'){if(!spec.values.includes(String(value)))throw Error(spec.name+'须为'+spec.values.join('/'));return String(value); }const n=finiteNumber(value);if(spec.integer&&!Number.isInteger(n))throw Error(spec.name+'须为整数');if(spec.min!==null&&spec.min!==undefined&&(spec.inclusive?n<spec.min:n<=spec.min))throw Error(spec.name+(spec.inclusive?'须≥':'须>')+spec.min);if(spec.max!==undefined&&n>spec.max)throw Error(spec.name+'须≤'+spec.max);return String(value).trim();}
+export function validateAtomic(spec,value){if(spec.type==='enum'){if(!spec.values.includes(String(value)))throw Error(spec.name+'须为'+spec.values.join('/'));return String(value); }if(spec.type==='text'){if(typeof value!=='string'||!value.trim()||value.trim().length>200)throw Error(spec.name+'须填写1至200字的业务说明');return value.trim();}const n=finiteNumber(value);if(spec.integer&&!Number.isInteger(n))throw Error(spec.name+'须为整数');if(spec.min!==null&&spec.min!==undefined&&(spec.inclusive?n<spec.min:n<=spec.min))throw Error(spec.name+(spec.inclusive?'须≥':'须>')+spec.min);if(spec.max!==undefined&&n>spec.max)throw Error(spec.name+'须≤'+spec.max);return String(value).trim();}
 export function validateComposite(cp,value){
  if(!value||typeof value!=='object'||Array.isArray(value))throw Error('组合参数须按命名字段维护');
  const exact=keys=>{if(Object.keys(value).some(k=>!keys.includes(k))||keys.some(k=>!Object.hasOwn(value,k)))throw Error('组合字段缺少或包含未知字段：'+keys.join('、'));};
@@ -99,6 +103,7 @@ export function validateComposite(cp,value){
 }
 export function sourceTable(cp){const n=Number(canonicalCp(cp).slice(2));if(n>=11&&n<=22||n===80)return n===15?'单位换算':'物料主数据';if(n>=30&&n<=35)return null;if(n>=23&&n<=39)return '物料清单';if(n>=40&&n<=52)return n<=42||n===52?'每日需求':'客户与交付';if(n>=53&&n<=64)return n>=58&&n<=62?'期初库存':'物料主数据';if(n>=65&&n<=70)return '库区库位';if(n>=71&&n<=84)return '供应商与供货条件';if(n>=85&&n<=98)return '工艺路线';if(n>=99&&n<=118)return '设备与工装';if(n>=119&&n<=128)return '班组资源';if(n>=129&&n<=136)return n>=134&&n<=135?'停机安排':'工厂日历';return null;}
 export function isImmutable(cp){return /派生\/系统/.test(definition(cp)['呈现与编辑模式'])||['CP018','CP021','CP023','CP029','CP037','CP038','CP062'].includes(cp);}
+export function canMaintainParameter(d,cp){return !isImmutable(cp)||cp==='CP080'||cp==='CP036'&&d.profile==='excel-qualified-output-202611-r1';}
 export function scopeFor(d,value,actor){if(!value||value==='dataset')return 'dataset';if(typeof value!=='string'||!value.startsWith('trial:'))throw Error('作用范围须明确为数据集或已建立试算');const trial=d.parameterTrials?.find(t=>'trial:'+t.id===value);if(!trial||trial.actor!==actor)throw Error('试算不存在或无权维护他人试算');return value;}
 export function parameterIssues(d,{completeness=true}={}){
  const issues=[],seen=new Set(),scopes=new Map(),ps=d.tables?.['配置参数']||[],winning=new Set(effectiveParameters(d,d.parameterContext?.effectiveDay??0,d.parameterContext?.scope||'dataset'));
@@ -129,10 +134,12 @@ export function effectiveParameters(d,day=0,scope='dataset'){
 }
 export function applyParameters(d,day=0,scope=d.parameterContext?.scope||'dataset'){
  const ps=effectiveParameters(d,day,scope),changes=[];
+ for(const row of d.tables?.['工厂日历']||[])if(row._factoryCalendarBase){row['生产班次数']=row._factoryCalendarBase.actual;row['日产能分子']=row._factoryCalendarBase.numerator;}
+
  // Keep literal business inputs separate from resolved values. Re-evaluating a
  // later period or removing a trial override must not inherit the last resolution.
  if(d.parameterContract){const base=d.parameterBaseFields??=[],byKey=new Map(base.map(b=>[[b.table,b.object,b.field].join('|'),b]));for(const spec of atomicFields.filter(s=>s.table&&!s.candidate))for(const row of d.tables?.[spec.table]||[]){const object=objectKey(row,spec);const key=[spec.table,object,spec.name].join('|');let saved=byKey.get(key);if(!saved&&!(d.tables?.['配置参数']||[]).some(p=>!p._candidate&&p['参数名称']===spec.name&&(p['对象编号']===object||spec.table==='物料清单'&&p['对象编号']===row['清单版本编号'])))continue;if(!saved){saved={table:spec.table,object,field:spec.name,present:Object.hasOwn(row,spec.name),value:row[spec.name]};base.push(saved);byKey.set(key,saved);}if(saved.present)row[spec.name]=saved.value;else delete row[spec.name];}d.parameterBaseFields=base;}
- for(const p of ps){const spec=parameterSpec(p);if(!spec?.table||spec.candidate)continue;
+ for(const p of ps){const spec=parameterSpec(p);if(!spec?.table||spec.candidate||spec.cp==='CP129')continue;
   if(spec.factory){for(const row of d.tables?.['工厂日历']||[]){if(!row._factoryBase)row._factoryBase={actual:row['生产班次数'],numerator:row['日产能分子'],denominator:row['日产能分母']};}continue;}
   for(const row of d.tables?.[spec.table]||[])if(objectKey(row,spec)===p['对象编号']||(spec.table==='物料清单'&&row['清单版本编号']===p['对象编号'])){if(blockedParameter(p))delete row[spec.name];else row[spec.name]=p['参数值'];changes.push({id:p['参数编号'],cp:spec.cp,object:p['对象编号'],field:spec.name,value:p['参数值'],unit:p['单位'],scope:scopeOf(p),from:p['生效日'],to:p['失效日'],source:p._source,sourceRole:sourceRole(p),blocked:!!blockedParameter(p)});}
  }
@@ -144,6 +151,15 @@ export function applyParameters(d,day=0,scope=d.parameterContext?.scope||'datase
   const isSunday=new Date(Date.UTC(2026,9,31)+Number(row['日序'])*86400000).getUTCDay()===0,actual=isSunday?sunday:standard;
   if(standard){if(blockedParameter(standard))delete row['日产能分母'];else row['日产能分母']=validateAtomic({...parameterSpec(standard),min:0,inclusive:false},standard['参数值']);}
   if(actual){if(blockedParameter(actual)){delete row['生产班次数'];delete row['日产能分子'];}else row['生产班次数']=row['日产能分子']=actual['参数值'];}
+ }
+ const dateParameters=(d.tables?.['配置参数']||[]).filter(p=>cpOf(p)==='CP129'||p['参数名称']==='生产班次数'),dateSource={tables:{配置参数:dateParameters}};
+ for(const row of d.tables?.['工厂日历']||[]){
+  const at=Number(row['日序']),daily=dateParameters.length?effectiveParameters(dateSource,at,scope):[];
+  const managed=daily.some(p=>cpOf(p)==='CP129'&&!blockedParameter(p))||[row['生产班次数'],row['日产能分子']].every(value=>value===undefined||value===null||value==='');
+  for(const p of daily.filter(p=>cpOf(p)==='CP129'&&p['对象编号']===String(at)))changes.push({id:p['参数编号'],cp:'CP129',object:p['对象编号'],field:p['参数名称'],value:p['参数值'],scope:scopeOf(p),from:p['生效日'],to:p['失效日'],sourceRole:sourceRole(p)});
+  const dateValue=daily.find(p=>p['对象编号']===String(at)&&p['参数名称']==='生产班次数');
+  if(dateValue&&!blockedParameter(dateValue))row['生产班次数']=row['日产能分子']=dateValue['参数值'];
+  if(managed){row._factoryCalendarBase??={actual:row['生产班次数'],numerator:row['日产能分子']};const resolved=resolveFactoryCalendar(d,row,daily);if(resolved.shifts===null){delete row['生产班次数'];delete row['日产能分子'];}else row['生产班次数']=row['日产能分子']=String(resolved.shifts);}
  }
  for(const p of factory)changes.push({id:p['参数编号'],cp:cpOf(p),object:'CAL',field:p['参数名称'],value:blockedParameter(p)?null:p['参数值'],unit:p['单位'],scope:scopeOf(p),from:p['生效日'],to:p['失效日'],source:p._source,sourceRole:sourceRole(p),blocked:!!blockedParameter(p)});
  if(d.parameterContract){for(const p of ps){const spec=specification(p['参数名称'],cpOf(p));if(spec?.global||spec?.calendarGlobal)changes.push({id:p['参数编号'],cp:spec.cp,object:p['对象编号'],field:spec.name,value:p['参数值'],unit:p['单位'],scope:scopeOf(p),from:p['生效日'],to:p['失效日'],source:p._source,sourceRole:sourceRole(p),blocked:!!blockedParameter(p)});}d.effectiveParameters={day,scope,version:d.version,precedenceVersion,values:changes};}
@@ -161,8 +177,8 @@ export function parameterView(d,query={},actor=''){
  for(const p of raw)if(Number(p['生效日'])<=day&&day<Number(p['失效日'])){const key=sourceRole(p)+'|'+identity(p);if(!sourceValues.has(key))sourceValues.set(key,p);}
  const defs=parameterCatalog.map(p=>businessDefinition(d,p['参数编号']));
  const accepted=c=>(!query.topic||c['统一配置页签']===query.topic)&&(!query.domain||c['业务领域']===query.domain)&&(!cp||canonicalCp(c['参数编号'])===cp)&&(!query.step||c['流程步骤入口'].includes(query.step));
- const catalog=defs.map(c=>({...c,fields:atomicFields.filter(s=>s.cp===canonicalCp(c['参数编号'])),sourceTables:[...new Set([sourceTable(c['参数编号']),...atomicFields.filter(s=>s.cp===canonicalCp(c['参数编号'])).map(s=>s.table)].filter(Boolean))],immutable:isImmutable(c['参数编号'])})).filter(accepted).filter(c=>!filter||Object.values(c).some(x=>String(x).includes(filter)));
- let records=raw.filter(p=>(!cp||canonicalCp(cpOf(p))===cp)&&(!query.object||p['对象编号']===query.object)).map(p=>{const key=identity(p),base=baseByIdentity.get(key),actual=actualByIdentity.get(key),specBase=specification(p['参数名称'],cpOf(p)),literal=specBase?.table&&((d.parameterBaseFields||[]).find(b=>b.table===specBase.table&&b.object===p['对象编号']&&b.field===p['参数名称'])||{value:(d.tables?.[specBase.table]||[]).find(r=>objectKey(r,specBase)===p['对象编号'])?.[specBase.name]});const id=cpOf(p),c=id?businessDefinition(d,id):null,spec=parameterSpec(p),mapped=!spec?.table||spec.factory&&(d.tables?.['工厂日历']||[]).length||(d.tables?.[spec.table]||[]).some(r=>objectKey(r,spec)===p['对象编号']||spec.table==='物料清单'&&r['清单版本编号']===p['对象编号']),status=!mapped&&!p._candidate?'采用受阻需定位':blockedParameter(p)?'已导入待补；不回退B':p._candidate||spec?.candidate?'候选，未启用':Number(p['生效日'])>day?'未来生效':effectiveIds.has(p)?'当前有效':'未采用/已失效';return {...p,recordKey:[sourceRole(p),scopeOf(p),p['参数编号'],p['生效日']].join('|'),sourceRole:sourceRole(p),businessValue:sourceValues.get('B|'+key)?.['参数值'],parameterValue:sourceValues.get('P|'+key)?.['参数值'],ruleDisposition:c?.ruleDisposition,cp:id,definition:c,status,scope:scopeOf(p),baseValue:base?.['参数值']??literal?.value,overrideValue:actual&&scopeOf(actual)!=='dataset'?actual['参数值']:undefined,effectiveValue:!mapped||actual&&blockedParameter(actual)?null:actual?.['参数值']??literal?.value,effectiveSource:actual?sourceRole(actual)+' / '+scopeOf(actual):literal?'业务表基础输入':undefined,editable:!!id&&(!isImmutable(id)||(id==='CP036'&&d.profile==='excel-qualified-output-202611-r1')),adoptable:!!spec&&!spec.candidate&&!p._candidate};}).filter(p=>(!cp||canonicalCp(p.cp)===cp)&&(!query.object||p['对象编号']===query.object)&&(!query.status||p.status===query.status)&&(!p.definition||accepted(p.definition))&&(!filter||JSON.stringify(p).includes(filter)));
+ const catalog=defs.map(c=>({...c,fields:atomicFields.filter(s=>s.cp===canonicalCp(c['参数编号'])),sourceTables:[...new Set([sourceTable(c['参数编号']),...atomicFields.filter(s=>s.cp===canonicalCp(c['参数编号'])).map(s=>s.table)].filter(Boolean))],immutable:!canMaintainParameter(d,c['参数编号'])})).filter(accepted).filter(c=>!filter||Object.values(c).some(x=>String(x).includes(filter)));
+ let records=raw.filter(p=>(!cp||canonicalCp(cpOf(p))===cp)&&(!query.object||p['对象编号']===query.object)).map(p=>{const key=identity(p),base=baseByIdentity.get(key),actual=actualByIdentity.get(key),specBase=specification(p['参数名称'],cpOf(p)),literal=specBase?.table&&((d.parameterBaseFields||[]).find(b=>b.table===specBase.table&&b.object===p['对象编号']&&b.field===p['参数名称'])||{value:(d.tables?.[specBase.table]||[]).find(r=>objectKey(r,specBase)===p['对象编号'])?.[specBase.name]});const id=cpOf(p),c=id?businessDefinition(d,id):null,spec=parameterSpec(p),mapped=!spec?.table||spec.factory&&(d.tables?.['工厂日历']||[]).length||(d.tables?.[spec.table]||[]).some(r=>objectKey(r,spec)===p['对象编号']||spec.table==='物料清单'&&r['清单版本编号']===p['对象编号']),status=!mapped&&!p._candidate?'采用受阻需定位':blockedParameter(p)?'已导入待补；不回退B':p._candidate||spec?.candidate?'候选，未启用':Number(p['生效日'])>day?'未来生效':effectiveIds.has(p)?'当前有效':'未采用/已失效';return {...p,recordKey:[sourceRole(p),scopeOf(p),p['参数编号'],p['生效日']].join('|'),sourceRole:sourceRole(p),businessValue:sourceValues.get('B|'+key)?.['参数值'],parameterValue:sourceValues.get('P|'+key)?.['参数值'],ruleDisposition:c?.ruleDisposition,cp:id,definition:c,status,scope:scopeOf(p),baseValue:base?.['参数值']??literal?.value,overrideValue:actual&&scopeOf(actual)!=='dataset'?actual['参数值']:undefined,effectiveValue:!mapped||actual&&blockedParameter(actual)?null:actual?.['参数值']??literal?.value,effectiveSource:actual?sourceRole(actual)+' / '+scopeOf(actual):literal?'业务表基础输入':undefined,editable:!!id&&canMaintainParameter(d,id),adoptable:!!spec&&!spec.candidate&&!p._candidate};}).filter(p=>(!cp||canonicalCp(p.cp)===cp)&&(!query.object||p['对象编号']===query.object)&&(!query.status||p.status===query.status)&&(!p.definition||accepted(p.definition))&&(!filter||JSON.stringify(p).includes(filter)));
  const offset=Math.max(0,Number(query.offset)||0),limit=Math.min(100,Math.max(1,Number(query.limit)||25));
  if(query.layer==='catalog')records=catalog;
  if(query.layer==='categories')records=d.parameterCategories||[];
@@ -177,11 +193,11 @@ function logParameterChange(d,body,actor,before,after){
 }
 export function changeParameter(d,body,actor){
  const {cp,objectId,field,value,from,to,id,operation='save',candidate=false}=body,c=businessDefinition(d,cp),canonical=canonicalCp(cp),scope=scopeFor(d,body.scope,actor),spec=parameterSpec({'对象编号':objectId,'参数名称':field,_cp:canonical});
- if(isImmutable(cp)&&!(cp==='CP036'&&d.profile==='excel-qualified-output-202611-r1'))throw Error('派生/系统/固定契约只读，请维护其来源');
+ if(!canMaintainParameter(d,cp))throw Error('派生/系统/固定契约只读，请维护其来源');
  tagParameterSources(d);
  if(!String(objectId||'').trim()||typeof field!=='string')throw Error('对象及参数字段必填');
  const start=finiteNumber(from),end=finiteNumber(to);if(!Number.isInteger(start)||!Number.isInteger(end)||end<=start)throw Error('有效期须为整数非空半开区间');
- if(scope!=='dataset'&&(!spec||spec.global||spec.candidate))throw Error('此参数不支持仅本次试算覆盖');
+ if(scope!=='dataset'&&(!spec||spec.global||spec.candidate||spec.sharedOnly))throw Error('此参数不支持仅本次试算覆盖');
  const target=candidate?(d.parameterCandidates??=[]):(d.tables['配置参数']??=[]),existing=id?target.find(p=>p['参数编号']===id&&(!body.sourceRole||sourceRole(p)===body.sourceRole)&&(!body.sourceFrom||p['生效日']===body.sourceFrom)):undefined;
  if(id&&!existing)throw Error('原参数记录不存在');
  if(existing&&(scopeOf(existing)!==scope||canonicalCp(cpOf(existing))!==canonical||existing['对象编号']!==objectId||existing['参数名称']!==field))throw Error('不能改变既有参数身份或作用范围');
@@ -201,7 +217,8 @@ export function changeParameter(d,body,actor){
  if(target.some(p=>p!==own&&sourceRole(p)==='EDIT'&&p['参数编号']===nextId))throw Error('在线参数编号已存在');
  const p={...(existing||{}),...probe,'参数编号':nextId,'对象编号':objectId,'对象名称':existing?.['对象名称']||objectId,'参数名称':field,'参数值':stored,'单位':unit,'生效日':String(start),'失效日':String(end),_cp:canonical,_scope:scope,_candidate:!!candidate,_blocked:false,_pendingReason:undefined,'资料状态':candidate?'candidate':'dataset',_source:{role:'EDIT',kind:'维护',actor,reason:body.reason,version:body.configuration?d.version:d.version+1,parameterRevision:(d.parameterRevision||0)+1,previous:existing?._source},_formulas:{}};
  adoptDefinitionBounds(d,p);
- const previous=existing||effectiveParameters(d,start,scope).find(old=>parameterIdentity(old)===parameterIdentity(probe))||((spec?.table&&(d.tables[spec.table]||[]).find(r=>objectKey(r,spec)===objectId))?{'参数值':(d.parameterBaseFields||[]).find(b=>b.table===spec.table&&b.object===objectId&&b.field===field)?.value??(d.tables[spec.table]||[]).find(r=>objectKey(r,spec)===objectId)?.[field],'单位':unit}:null);
+ let previous=existing||effectiveParameters(d,start,scope).find(old=>parameterIdentity(old)===parameterIdentity(probe))||((spec?.table&&(d.tables[spec.table]||[]).find(r=>objectKey(r,spec)===objectId))?{'参数值':(d.parameterBaseFields||[]).find(b=>b.table===spec.table&&b.object===objectId&&b.field===field)?.value??(d.tables[spec.table]||[]).find(r=>objectKey(r,spec)===objectId)?.[field],'单位':unit}:null);
+ if(spec?.cp==='CP129'&&!existing&&!effectiveParameters(d,start,scope).some(old=>parameterIdentity(old)===parameterIdentity(probe))){const row=spec.table?(d.tables[spec.table]||[]).find(r=>objectKey(r,spec)===objectId):undefined;const before=spec.name==='是否开工'&&row?resolveFactoryCalendar(d,row,effectiveParameters(d,Number(objectId),scope)).mode:spec.value;previous={'参数值':before,'单位':unit};}
  logParameterChange(d,body,actor,previous,p);
  if(own)Object.assign(own,p);else target.push(p);
  d.parameterContract='CR-PARAM-UI-20261101:r1';d.checkedAt=null;d.checksInvalidated=true;

@@ -42,7 +42,7 @@ function actual(v){const p=v.run?.result;if(!p)return {tasks:[],occ:[],stops:[]}
   return {...t,start:minute?t.start:t.start*1440,end:minute?t.end:t.end*1440,duration:minute?t.end-t.start:(t.end-t.start)*1440,toolEndMinute:minute?t.toolEndMinute:t.end*1440,laborIntervals:minute?t.laborIntervals:[{start:t.start*1440,end:t.end*1440}]};
  });
  const facts=new Map((v.input.mapping?.wip_remaining||[]).map(w=>[w.id,w]));
- const wip=(minute?wipOccupations(v.input,-Infinity,Infinity):(v.input.mapping?.wip_remaining||[]).map(w=>({start:w.current_occupancy_day_interval[0]*1440,end:w.current_occupancy_day_interval[1]*1440,resource:w.resource,crew:w.remaining_labor_pool,people:w.remaining_labor_count,tools:w.current_tools||[],toolsKnown:Array.isArray(w.current_tools),taskId:w.id,kind:'WIP物理保留',labor:[{start:w.current_occupancy_day_interval[0]*1440,end:w.current_occupancy_day_interval[1]*1440}]}))).map(o=>({...o,toolsKnown:Array.isArray(o.tools),productId:facts.get(o.taskId)?.product,orderId:o.taskId,productionId:o.taskId,routeStepId:facts.get(o.taskId)?.current_route_step}));
+ const wip=(minute?wipOccupations(v.input,-Infinity,Infinity):(v.input.mapping?.wip_remaining||[]).map(w=>({start:w.current_occupancy_day_interval[0]*1440,end:w.current_occupancy_day_interval[1]*1440,resource:w.resource,crew:w.remaining_labor_pool,people:w.remaining_labor_count,tools:w.current_tools||[],toolsKnown:Array.isArray(w.current_tools),taskId:w.id,kind:'WIP物理保留',labor:[{start:w.current_occupancy_day_interval[0]*1440,end:w.current_occupancy_day_interval[1]*1440}]}))).map(o=>({...o,toolsKnown:o.toolsKnown??Array.isArray(o.tools),productId:facts.get(o.taskId)?.product,orderId:o.taskId,productionId:o.taskId,routeStepId:facts.get(o.taskId)?.current_route_step}));
  const occ=[...tasks.map(t=>({...t,resource:t.machine,taskId:t.id,labor:t.laborIntervals||[],tools:t.tools||[],toolsKnown:Array.isArray(t.tools),toolEnd:t.toolEndMinute,kind:'真实任务'})),...tasks.filter(t=>t.cleaning).map(t=>({...t.cleaning,labor:[{start:t.cleaning.start,end:t.cleaning.end}],tools:[],taskId:t.id+'-CLEAN',parentTaskId:t.id,productId:t.productId,orderId:t.orderId,kind:'清洗'})),...wip];
  const stops=minute?knownMinuteStops(v.input,v.run.selection.currentMinute??v.run.selection.currentDay*1440):rows(v.input,'停机安排').filter(r=>Number(r['可知日'])<=v.run.selection.currentDay).map(r=>({id:r['停机编号'],resource:r['资源编号'],start:Number(r['开始日'])*1440,end:Number(r['结束日'])*1440}));return {tasks,occ,stops};}
 function project(v,q){const date=n=>Number.isFinite(n)?dateAt(n,v.identity.dayZero):null;const c=setup(v,q),d=v.input,p=v.run?.result,a=actual(v),materials=new Map(rows(d,'物料主数据').map(r=>[r['物料编号'],r])),res=new Map(rows(d,'设备与工装').map(r=>[r['资源编号'],r]));
@@ -99,7 +99,8 @@ function project(v,q){const date=n=>Number.isFinite(n)?dateAt(n,v.identity.dayZe
  if(empty)out=[];
  if(out.length>50000)error('PROJECTION_LIMIT',413);
  if(c.q)out=out.filter(r=>JSON.stringify(r.values).toLowerCase().includes(c.q));
- const key=q.sort||'id',direction=q.direction==='desc'?-1:1;out.sort((a,b)=>{const x=a.values[key],y=b.values[key];return ((typeof x==='number'&&typeof y==='number'?x-y:String(x??'').localeCompare(String(y??''),'zh-CN',{numeric:true}))||a.id.localeCompare(b.id))*direction;});
+ const urgentIds=q.view==='E2'?new Set(rows(d,'每日需求').filter(row=>row._urgent?.batchId).map(row=>row['需求编号'])):new Set();
+ const key=q.sort||'id',direction=q.direction==='desc'?-1:1;out.sort((a,b)=>{const priority=Number(urgentIds.has(b.values.orderId))-Number(urgentIds.has(a.values.orderId));if(priority)return priority;const x=a.values[key],y=b.values[key];return ((typeof x==='number'&&typeof y==='number'?x-y:String(x??'').localeCompare(String(y??''),'zh-CN',{numeric:true}))||a.id.localeCompare(b.id))*direction;});
  return {records:out,c,a,note:'全部为同run冻结结果；计算完成不代表生产完成/已交付。日量、自然历时与工作利用率分别解释。'};
 }
 function intersections(a,b,start,end){return unionMinutes(a.flatMap(x=>b.map(y=>({start:Math.max(start,x.start,y.start),end:Math.min(end,x.end,y.end)}))),start,end);}
@@ -222,3 +223,5 @@ export const equipmentDomain={
  },
  export(v,q){const {records,fp}=checked(v,q),selected=q.scope==='SELECTED'?new Set(q.ids||[]):null;const columns=q.columns?.length?q.columns:cols(records).map(c=>c.key);if(columns.some(k=>!cols(records).some(c=>c.key===k)))error('INVALID_COLUMNS');return (function*(){yield JSON.stringify({type:'identity',identity:v.identity,queryFingerprint:fp,columns,total:records.filter(r=>!selected||selected.has(r.id)).length})+'\n';for(const r of records)if(!selected||selected.has(r.id)){const value=Object.fromEntries(columns.map(k=>[k,r.values[k]??null]));for(const key of ['start','end','toolEndMinute'])if(Object.hasOwn(value,key)){value[key+'Time']=displayInstant(value[key],v);}yield JSON.stringify({id:r.id,values:value})+'\n';}})();}
 };
+
+export {actual as equipmentActual};

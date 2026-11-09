@@ -9,7 +9,7 @@ export function selectionDataset(data,selection){
  if(!selection||!data.parameterPrecedence)return data;
  // Build a read-only dependency view first. Only the selected result is
  // detached; discarded rows never require an intermediate full workbook copy.
- const d={...data,tables:{...data.tables}},mapping=d.mapping||{},demands=rows(d,'每日需求').filter(r=>Number(r['需求日'])>=selection.startDay&&Number(r['需求日'])<selection.endDay&&(!selection.demandIds||selection.demandIds.includes(r['需求编号'])));
+ const d={...data,tables:{...data.tables}},mapping=d.mapping||{},demands=rows(d,'每日需求').filter(r=>(d.dailyContext||Number(r['需求日'])>=selection.startDay)&&Number(r['需求日'])<selection.endDay&&(!selection.demandIds||selection.demandIds.includes(r['需求编号'])));
  const materials=new Set(demands.map(r=>r['成品编号'])),wips=new Set(),resourceIds=new Set(),crewIds=new Set(),toolTypes=new Set(),routeIds=new Set(),bomIds=new Set();
  const routes=[...rows(d,'工艺路线'),...(mapping.sfRoutes||[])],resources=[...rows(d,'设备与工装'),...(mapping.resources||[]).map(r=>({'资源编号':r.id,'资源组编号':r.group}))];
  let changed=true;

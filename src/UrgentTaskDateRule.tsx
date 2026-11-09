@@ -1,0 +1,10 @@
+import {useState} from 'react';
+import {urgentTaskDateRule,type UrgentTaskDateResult} from './lib/urgent-task-date-rule.mjs';
+import {urgentFactMinute} from './lib/urgent-run-eligibility.mjs';
+export function UrgentTaskDateRule({result,statuses,savedTasks=[],observationDate,disabled,onApply}:{result:any;statuses:Record<string,string>;savedTasks?:any[];observationDate:string;disabled:boolean;onApply:(value:UrgentTaskDateResult)=>void}){
+ const [cutoffDate,setCutoffDate]=useState('2026-11-04'),[applied,setApplied]=useState(false),[throughStatus,setThroughStatus]=useState<'started'|'locked'>('started');
+ const throughLabel=throughStatus==='started'?'已开工（可调）':'已锁定（不可调）';
+ let preview:UrgentTaskDateResult|undefined,error='';try{preview=urgentTaskDateRule(result,statuses,cutoffDate,savedTasks,throughStatus);}catch(e:any){error=e.message;}
+ const observed=urgentFactMinute(observationDate,{result}),dateConflicts=preview&&Number.isFinite(observed)?(result.tasks||[]).filter((t:any)=>preview!.throughIds.includes(t.id)&&(throughStatus==='started'?Math.floor(t.start)>observed:Math.floor(t.start)<observed)).length:0;
+ return <div className="urgent-task-date-rule"><b>按日期批量设置状态</b><p>按原任务开始日期划分：分界日及之前使用所选状态，之后设为“未开工可调”。</p><div className="urgent-toolbar"><label>状态分界日期（含当天）<input type="date" value={cutoffDate} onChange={e=>{setCutoffDate(e.target.value);setApplied(false);}}/></label><label>分界日及之前状态<select value={throughStatus} onChange={e=>{setThroughStatus(e.target.value as 'started'|'locked');setApplied(false);}}><option value="started">已开工（可调）</option><option value="locked">已锁定（不可调）</option></select></label>{preview&&<span>{throughLabel} {preview.throughIds.length} 个 · 未开工可调 {preview.afterIds.length} 个</span>}<button type="button" disabled={disabled||!preview} onClick={()=>{if(preview){onApply(preview);setApplied(true);}}}>按日期应用任务状态</button></div>{error&&<p role="alert">{error}</p>}{applied&&<p role="status">任务状态已填入，尚未保存。保存前请核对状态更正明细和工序完成量；已交付量及耗料记录保持原值。</p>}{applied&&dateConflicts>0&&<p role="status">按当前观察日期 {observationDate}，有 {dateConflicts} 个“{throughLabel}”任务与观察日期及原任务区间不一致；保存前需核对实际日期，不能将预填状态直接视为已执行事实。</p>}</div>;
+}

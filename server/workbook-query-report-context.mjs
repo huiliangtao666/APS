@@ -52,7 +52,7 @@ export function workbookQueryContext(ctx,ref,actor=''){
     inputHash:hash(input),fileHash:input.fileHash,parameterHash:sources.parameterHash,mappingHash:sources.mappingHash,
     ...(run?.resultHash?{resultHash:run.resultHash}:{}),dayZero:origin,
     ...(run?.provenance?.minuteOrigin||run?.result?.minuteOrigin||input.minuteOrigin?{minuteOrigin:run?.provenance?.minuteOrigin||run?.result?.minuteOrigin||input.minuteOrigin}:{}),
-    timeUnit:run?.provenance?.timeUnit||input.timeUnit||(input.profile===PROFILE?'day':undefined)};
+    timeUnit:run?.provenance?.timeUnit||run?.result?.timeUnit||input.timeUnit||(input.profile===PROFILE?'day':undefined)};
   identity.fingerprint=hash(identity);
   // Clones prevent a projection from mutating the shared in-memory authority.
   return {identity,actor,input:copyReportSource(input),run:run?copyReportSource(run):undefined,sources:copyReportSource(sources)};
